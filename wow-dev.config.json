@@ -1,0 +1,12 @@
+{
+  "$comment": "Single source of truth for this dev environment. Scripts read these values.",
+  "gamePath": "C:\\Program Files (x86)\\World of Warcraft",
+  "flavorDir": "_classic_beta_",
+  "product": "wow_classic_beta",
+  "clientName": "World of Warcraft: Forever (beta)",
+  "codename": "Camelot",
+  "interface": "16001",
+  "tocSuffix": "Camelot",
+  "author": "kirk.lennstrom@gmail.com",
+  "deployMode": "junction"
+}

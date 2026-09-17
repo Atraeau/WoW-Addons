@@ -1,0 +1,8 @@
+## Interface: 16001
+## Title: Hello Forever
+## Notes: Example addon for the WoW: Forever dev environment
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.1.0
+## SavedVariables: HelloForeverDB
+
+Core.lua

@@ -1,0 +1,13 @@
+{
+  "Lua.runtime.version": "Lua 5.1",
+  "Lua.diagnostics.globals": [
+    "SLASH_HELLOFOREVER1",
+    "SLASH_HELLOFOREVER2"
+  ],
+  "Lua.workspace.library": [],
+  "files.eol": "\n",
+  "[lua]": {
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4
+  }
+}
