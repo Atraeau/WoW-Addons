@@ -2,7 +2,7 @@
 
 Generated from the client's own `APIDocumentation` (build 69913, interface 16001) on 2026-09-20 13:15:25.
 
-**408** systems · **6577** functions · **1802** events · **792** types, organized into **18** groups.
+**408** systems · **6577** functions · **1802** events · **792** types, organized into **19** groups.
 
 | Group | Namespaces | Functions | Events | Types |
 |-------|-----------|-----------|--------|-------|
@@ -18,7 +18,8 @@ Generated from the client's own `APIDocumentation` (build 69913, interface 16001
 | [Map, Instances & World](Map-Instances-World/README.md) | 30 | 320 | 111 | 60 |
 | [Guild, Social & Chat](Guild-Social-Chat/README.md) | 28 | 749 | 380 | 126 |
 | [Achievements & Progression](Achievements-Progression/README.md) | 24 | 200 | 65 | 50 |
-| [UI, Frames & Input](UI-Frames-Input/README.md) | 97 | 1519 | 88 | 155 |
+| [UI Widgets & Frames](UI-Widgets-Frames/README.md) | 58 | 1164 | 6 | 108 |
+| [UI Systems & Input](UI-Systems-Input/README.md) | 39 | 355 | 82 | 47 |
 | [AddOns & Scripting](AddOns-Scripting/README.md) | 14 | 111 | 7 | 10 |
 | [Store, Account & Services](Store-Account-Services/README.md) | 6 | 198 | 26 | 18 |
 | [Core & Shared Libraries](Core-Shared-Libraries/README.md) | 32 | 276 | 9 | 14 |
