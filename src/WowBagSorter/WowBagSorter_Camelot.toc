@@ -1,0 +1,13 @@
+## Interface: 16001
+## Title: BagSorter
+## Author: Kirk Lennstrom
+## Version: 3.0
+## Notes: Sorts items in your bags and bank so items are easy to find .
+## SavedVariablesPerCharacter: g_BagSorterSettings
+## SavedVariables: g_BagSorter_GlobalSettings
+## X-License: MIT
+## X-Website: https://github.com/Atraeau/WowBagSorter
+
+WowBagSorter.xml
+SortFunctions.lua
+WowBagSortInit.lua

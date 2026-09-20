@@ -1,0 +1,8 @@
+# Run /run print((select(4, GetBuildInfo()))) to get the latest interface number
+# Get the latest FrameXML for TBC classic from https://github.com/Gethe/wow-ui-source/tree/classic/Interface_TBC/AddOns
+## Interface: 20502
+## Title: Suicide Kings
+## Notes: Suicide Kings Addon for Grey Parse
+## Version: 0.1
+## SavedVariables: SuicideKingsList
+SuicideKings.xml
