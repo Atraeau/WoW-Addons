@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**28** namespaces · **318** functions · **110** events · **58** types
+**30** namespaces · **320** functions · **111** events · **60** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -23,6 +23,8 @@
 | [C_SuperTrack](C_SuperTrack.md) | 20 | 2 | 0 |
 | [C_TaxiMap](C_TaxiMap.md) | 3 | 3 | 4 |
 | [C_VignetteInfo](C_VignetteInfo.md) | 6 | 2 | 1 |
+| [C_Weather](C_Weather.md) | 1 | 1 | 1 |
+| [C_WorldSafeLocsUIInternal](C_WorldSafeLocsUIInternal.md) | 1 | 0 | 1 |
 | [C_WorldStateInfo](C_WorldStateInfo.md) | 0 | 6 | 0 |
 | [C_ZoneAbility](C_ZoneAbility.md) | 2 | 0 | 1 |
 | [FrameAPIFogOfWarFrame](FrameAPIFogOfWarFrame.md) | 12 | 0 | 0 |

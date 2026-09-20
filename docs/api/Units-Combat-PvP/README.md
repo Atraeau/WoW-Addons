@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**25** namespaces · **525** functions · **254** events · **52** types
+**30** namespaces · **544** functions · **264** events · **54** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -22,12 +22,17 @@
 | [C_EncounterJournal](C_EncounterJournal.md) | 22 | 3 | 5 |
 | [C_EncounterTimeline](C_EncounterTimeline.md) | 34 | 11 | 4 |
 | [C_EncounterWarnings](C_EncounterWarnings.md) | 10 | 1 | 1 |
+| [C_IncomingSummon](C_IncomingSummon.md) | 2 | 0 | 1 |
 | [C_InstanceEncounter](C_InstanceEncounter.md) | 4 | 6 | 0 |
 | [C_LossOfControl](C_LossOfControl.md) | 5 | 6 | 1 |
 | [C_PvP](C_PvP.md) | 113 | 42 | 28 |
 | [C_RaidLocks](C_RaidLocks.md) | 4 | 0 | 0 |
+| [C_Roleset](C_Roleset.md) | 3 | 0 | 0 |
+| [C_SummonInfo](C_SummonInfo.md) | 7 | 0 | 0 |
+| [C_Vehicle](C_Vehicle.md) | 0 | 10 | 0 |
 | [FrameAPIUnitPositionFrame](FrameAPIUnitPositionFrame.md) | 12 | 0 | 0 |
 | [Threat](Threat.md) | 2 | 0 | 0 |
+| [Totem](Totem.md) | 7 | 0 | 1 |
 | [Unit](Unit.md) | 217 | 142 | 8 |
 | [UnitHealPredictionCalculatorAPI](UnitHealPredictionCalculatorAPI.md) | 35 | 0 | 0 |
 | [UnitRole](UnitRole.md) | 6 | 2 | 0 |

@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**13** namespaces · **216** functions · **62** events · **34** types
+**14** namespaces · **217** functions · **63** events · **35** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -11,6 +11,7 @@
 | [C_CampaignInfo](C_CampaignInfo.md) | 10 | 0 | 4 |
 | [C_DelvesUI](C_DelvesUI.md) | 40 | 6 | 5 |
 | [C_GossipInfo](C_GossipInfo.md) | 20 | 7 | 10 |
+| [C_LoreText](C_LoreText.md) | 1 | 1 | 1 |
 | [C_QuestHub](C_QuestHub.md) | 2 | 0 | 0 |
 | [C_QuestInfoSystem](C_QuestInfoSystem.md) | 9 | 0 | 0 |
 | [C_QuestLine](C_QuestLine.md) | 7 | 0 | 2 |

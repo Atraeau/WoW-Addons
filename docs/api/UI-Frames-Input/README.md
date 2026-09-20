@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**64** namespaces · **1129** functions · **74** events · **152** types
+**97** namespaces · **1519** functions · **88** events · **155** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -32,10 +32,16 @@
 | [C_NamePlate](C_NamePlate.md) | 4 | 0 | 0 |
 | [C_NamePlateManager](C_NamePlateManager.md) | 4 | 7 | 0 |
 | [C_Sound](C_Sound.md) | 6 | 2 | 2 |
+| [C_SplashScreen](C_SplashScreen.md) | 5 | 1 | 1 |
+| [C_TalkingHead](C_TalkingHead.md) | 0 | 2 | 0 |
 | [C_Texture](C_Texture.md) | 11 | 1 | 4 |
 | [C_TooltipComparison](C_TooltipComparison.md) | 3 | 1 | 2 |
 | [C_TooltipInfo](C_TooltipInfo.md) | 82 | 3 | 0 |
+| [C_UIActionHandler](C_UIActionHandler.md) | 0 | 1 | 0 |
+| [C_UIFileAsset](C_UIFileAsset.md) | 3 | 0 | 0 |
 | [C_UIWidgetManager](C_UIWidgetManager.md) | 42 | 2 | 91 |
+| [C_VideoOptions](C_VideoOptions.md) | 11 | 9 | 2 |
+| [Camera](Camera.md) | 2 | 0 | 0 |
 | [Cinematic](Cinematic.md) | 7 | 6 | 0 |
 | [Console](Console.md) | 10 | 7 | 4 |
 | [DurationTextBindingObjectAPI](DurationTextBindingObjectAPI.md) | 30 | 0 | 0 |
@@ -55,18 +61,45 @@
 | [FrameAPITooltip](FrameAPITooltip.md) | 9 | 0 | 0 |
 | [FrameScript](FrameScript.md) | 38 | 0 | 6 |
 | [GameCursor](GameCursor.md) | 19 | 0 | 0 |
+| [GameError](GameError.md) | 2 | 0 | 0 |
+| [GameUI](GameUI.md) | 2 | 0 | 0 |
+| [Input](Input.md) | 29 | 1 | 0 |
 | [Movie](Movie.md) | 6 | 0 | 0 |
+| [Screen](Screen.md) | 5 | 0 | 0 |
+| [SimpleAnimFlipBookAPI](SimpleAnimFlipBookAPI.md) | 10 | 0 | 0 |
+| [SimpleAnimPathAPI](SimpleAnimPathAPI.md) | 5 | 0 | 0 |
+| [SimpleAnimRadialProgressAPI](SimpleAnimRadialProgressAPI.md) | 4 | 0 | 0 |
+| [SimpleAnimRotationAPI](SimpleAnimRotationAPI.md) | 6 | 0 | 0 |
+| [SimpleAnimScaleAPI](SimpleAnimScaleAPI.md) | 8 | 0 | 0 |
+| [SimpleAnimScaleLineAPI](SimpleAnimScaleLineAPI.md) | 0 | 0 | 0 |
 | [SimpleAnimTextureCoordTranslationAPI](SimpleAnimTextureCoordTranslationAPI.md) | 2 | 0 | 0 |
+| [SimpleAnimTranslationAPI](SimpleAnimTranslationAPI.md) | 2 | 0 | 0 |
+| [SimpleAnimTranslationLineAPI](SimpleAnimTranslationLineAPI.md) | 0 | 0 | 0 |
+| [SimpleAnimVertexColorAPI](SimpleAnimVertexColorAPI.md) | 4 | 0 | 0 |
+| [SimpleBrowserAPI](SimpleBrowserAPI.md) | 12 | 0 | 0 |
+| [SimpleButtonAPI](SimpleButtonAPI.md) | 42 | 0 | 0 |
+| [SimpleCheckboxAPI](SimpleCheckboxAPI.md) | 6 | 0 | 0 |
+| [SimpleColorSelectAPI](SimpleColorSelectAPI.md) | 19 | 0 | 0 |
 | [SimpleEditBoxAPI](SimpleEditBoxAPI.md) | 79 | 0 | 0 |
 | [SimpleFontAPI](SimpleFontAPI.md) | 24 | 0 | 0 |
 | [SimpleFontStringAPI](SimpleFontStringAPI.md) | 57 | 0 | 0 |
 | [SimpleFrameAPI](SimpleFrameAPI.md) | 126 | 0 | 2 |
 | [SimpleFrameScriptObjectAPI](SimpleFrameScriptObjectAPI.md) | 21 | 0 | 0 |
+| [SimpleHTMLAPI](SimpleHTMLAPI.md) | 23 | 0 | 0 |
+| [SimpleLineAPI](SimpleLineAPI.md) | 9 | 0 | 0 |
 | [SimpleMaskTextureAPI](SimpleMaskTextureAPI.md) | 0 | 0 | 0 |
 | [SimpleMessageFrameAPI](SimpleMessageFrameAPI.md) | 33 | 0 | 0 |
+| [SimpleModelAPI](SimpleModelAPI.md) | 65 | 0 | 0 |
+| [SimpleModelFFXAPI](SimpleModelFFXAPI.md) | 4 | 0 | 0 |
 | [SimpleMovieAPI](SimpleMovieAPI.md) | 4 | 0 | 0 |
+| [SimpleObjectAPI](SimpleObjectAPI.md) | 5 | 0 | 0 |
 | [SimpleOffScreenFrameAPI](SimpleOffScreenFrameAPI.md) | 8 | 0 | 0 |
+| [SimpleRegionAPI](SimpleRegionAPI.md) | 16 | 0 | 0 |
+| [SimpleScriptRegionAPI](SimpleScriptRegionAPI.md) | 55 | 0 | 0 |
+| [SimpleScriptRegionResizingAPI](SimpleScriptRegionResizingAPI.md) | 13 | 0 | 0 |
 | [SimpleScrollFrameAPI](SimpleScrollFrameAPI.md) | 9 | 0 | 0 |
+| [SimpleSliderAPI](SimpleSliderAPI.md) | 19 | 0 | 0 |
 | [SimpleStatusBarAPI](SimpleStatusBarAPI.md) | 28 | 0 | 0 |
 | [SimpleTextureAPI](SimpleTextureAPI.md) | 4 | 0 | 0 |
 | [SimpleTextureBaseAPI](SimpleTextureBaseAPI.md) | 52 | 0 | 0 |
+| [SimpleVectorGraphicsAPI](SimpleVectorGraphicsAPI.md) | 4 | 0 | 0 |

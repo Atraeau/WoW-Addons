@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**15** namespaces · **445** functions · **100** events · **51** types
+**16** namespaces · **445** functions · **100** events · **51** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -17,6 +17,7 @@
 | [C_SpellActivationOverlay](C_SpellActivationOverlay.md) | 1 | 4 | 0 |
 | [C_SpellBook](C_SpellBook.md) | 51 | 19 | 2 |
 | [C_SpellDiminish](C_SpellDiminish.md) | 4 | 1 | 2 |
+| [C_TraitConfig](C_TraitConfig.md) | 0 | 0 | 0 |
 | [C_Traits](C_Traits.md) | 53 | 15 | 16 |
 | [C_UnitAuras](C_UnitAuras.md) | 37 | 6 | 0 |
 | [FrameAPICooldown](FrameAPICooldown.md) | 46 | 0 | 0 |

@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**8** namespaces · **111** functions · **60** events · **11** types
+**9** namespaces · **128** functions · **65** events · **13** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -13,4 +13,5 @@
 | [C_PetBattles](C_PetBattles.md) | 5 | 0 | 0 |
 | [C_PetInfo](C_PetInfo.md) | 13 | 11 | 1 |
 | [C_PetJournal](C_PetJournal.md) | 25 | 15 | 3 |
+| [C_StableInfo](C_StableInfo.md) | 17 | 5 | 2 |
 | [C_ToyBoxInfo](C_ToyBoxInfo.md) | 6 | 2 | 0 |

@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**27** namespaces · **734** functions · **375** events · **119** types
+**28** namespaces · **749** functions · **380** events · **126** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -23,6 +23,7 @@
 | [C_PartyPose](C_PartyPose.md) | 4 | 1 | 1 |
 | [C_Ping](C_Ping.md) | 6 | 1 | 1 |
 | [C_PingSecure](C_PingSecure.md) | 19 | 2 | 11 |
+| [C_RecentAllies](C_RecentAllies.md) | 15 | 5 | 7 |
 | [C_RecruitAFriend](C_RecruitAFriend.md) | 16 | 5 | 17 |
 | [C_ReportSystem](C_ReportSystem.md) | 12 | 2 | 0 |
 | [C_ScrappingMachineUI](C_ScrappingMachineUI.md) | 11 | 4 | 0 |

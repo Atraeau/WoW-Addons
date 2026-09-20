@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**15** namespaces · **177** functions · **7** events · **10** types
+**14** namespaces · **111** functions · **7** events · **10** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -18,6 +18,5 @@
 | [DebugToggle](DebugToggle.md) | 9 | 0 | 0 |
 | [MirrorTimer](MirrorTimer.md) | 2 | 0 | 1 |
 | [PerformanceScript](PerformanceScript.md) | 9 | 0 | 0 |
-| [SimpleScriptRegionAPI](SimpleScriptRegionAPI.md) | 55 | 0 | 0 |
-| [SimpleScriptRegionResizingAPI](SimpleScriptRegionResizingAPI.md) | 13 | 0 | 0 |
+| [SlashCommand](SlashCommand.md) | 2 | 0 | 0 |
 | [TargetScript](TargetScript.md) | 24 | 0 | 0 |
