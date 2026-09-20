@@ -416,6 +416,23 @@ foreach ($g in $orderedGroups) {
 }
 ($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
 
+# --- Machine-readable data for the Pages site and external tools -----------
+# api.json: the full structured API (the authoritative, client-confirmed surface).
+# categories.json: the namespace -> group mapping used by the site nav.
+$siteDir = Split-Path -Parent $OutDir
+$json | Set-Content -Path (Join-Path $siteDir 'api.json') -Encoding UTF8
+$catObj = [ordered]@{
+    meta   = $meta
+    groups = @(foreach ($g in $orderedGroups) {
+        [ordered]@{
+            name       = $g
+            slug       = $groups[$g].Slug
+            namespaces = @($groups[$g].Rows | Sort-Object Namespace | ForEach-Object { $_.Namespace })
+        }
+    })
+}
+($catObj | ConvertTo-Json -Depth 6) | Set-Content -Path (Join-Path $siteDir 'categories.json') -Encoding UTF8
+
 $nsCount = ($groups.Values | ForEach-Object { $_.Rows.Count } | Measure-Object -Sum).Sum
 Write-Host "Generated $nsCount namespace files in $($orderedGroups.Count) groups into $OutDir" -ForegroundColor Green
 Write-Host "Curated examples applied: $($script:UsedExamples.Count) / $($Examples.Count)" -ForegroundColor Gray

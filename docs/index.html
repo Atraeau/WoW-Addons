@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WoW: Forever API</title>
+<meta name="description" content="Browsable, machine-readable reference for the WoW: Forever (Camelot) client API, generated from the client's own APIDocumentation.">
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1c20; --muted: #5c6370; --border: #e2e5ea;
+    --panel: #f6f7f9; --accent: #2f6feb; --code-bg: #f0f2f5; --tag: #eef1f6;
+    --nil: #b0562e; --type: #7a3ea8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1115; --fg: #e6e8ec; --muted: #9aa2ad; --border: #262b33;
+      --panel: #161a20; --accent: #6ea8fe; --code-bg: #1a1f27; --tag: #1e242d;
+      --nil: #e0915f; --type: #c99be6;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1115; --fg: #e6e8ec; --muted: #9aa2ad; --border: #262b33;
+    --panel: #161a20; --accent: #6ea8fe; --code-bg: #1a1f27; --tag: #1e242d;
+    --nil: #e0915f; --type: #c99be6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  code, pre, .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header { position: sticky; top: 0; z-index: 5; background: var(--bg);
+    border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex;
+    align-items: center; gap: 14px; flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; white-space: nowrap; }
+  header .meta { color: var(--muted); font-size: 12.5px; }
+  header .links { margin-left: auto; display: flex; gap: 14px; font-size: 13px; flex-wrap: wrap; }
+  #search { flex: 1 1 260px; min-width: 180px; padding: 8px 11px; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--panel); color: var(--fg); font-size: 14px; }
+  .layout { display: flex; align-items: flex-start; }
+  nav { width: 300px; flex: none; border-right: 1px solid var(--border);
+    height: calc(100vh - 58px); overflow-y: auto; padding: 10px 0 40px; position: sticky; top: 58px; }
+  nav .group > summary { cursor: pointer; padding: 6px 16px; font-weight: 600; font-size: 13px;
+    color: var(--fg); list-style: none; }
+  nav .group > summary::-webkit-details-marker { display: none; }
+  nav .group > summary:hover { background: var(--panel); }
+  nav .group > summary .count { color: var(--muted); font-weight: 400; font-size: 12px; }
+  nav .ns { display: block; padding: 4px 16px 4px 28px; font-size: 13px; color: var(--fg);
+    cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
+  nav .ns:hover { background: var(--panel); }
+  nav .ns.active { background: var(--tag); color: var(--accent); font-weight: 600; }
+  main { flex: 1 1 auto; padding: 22px 28px 80px; max-width: 900px; min-width: 0; }
+  .crumb { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  h2.ns-title { font-size: 24px; margin: 4px 0 4px; }
+  .ns-doc { color: var(--muted); margin: 0 0 8px; }
+  .counts { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .sec { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+    border-bottom: 1px solid var(--border); padding-bottom: 5px; margin: 30px 0 14px; }
+  .item { margin: 0 0 22px; padding-bottom: 4px; scroll-margin-top: 68px; }
+  .item h3 { font-size: 15.5px; margin: 0 0 4px; }
+  .item .doc { color: var(--muted); margin: 2px 0 8px; }
+  pre.sig { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; overflow-x: auto; margin: 6px 0; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 4px; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .t-type { color: var(--type); }
+  .t-nil { color: var(--nil); font-size: 12px; }
+  .tag { display: inline-block; background: var(--tag); border-radius: 5px; padding: 1px 6px;
+    font-size: 11.5px; color: var(--muted); margin-left: 6px; }
+  .results .r { padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px;
+    cursor: pointer; background: var(--panel); }
+  .results .r:hover { border-color: var(--accent); }
+  .results .r .k { color: var(--muted); font-size: 12px; }
+  .loading { padding: 40px 28px; color: var(--muted); }
+  .toolbanner { background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; margin-bottom: 22px; font-size: 13.5px; }
+  .toolbanner code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .hide { display: none; }
+  @media (max-width: 720px) {
+    nav { position: fixed; left: 0; top: 58px; background: var(--bg); z-index: 4;
+      transform: translateX(-100%); transition: transform .2s; box-shadow: 0 0 30px rgba(0,0,0,.3); }
+    nav.open { transform: none; }
+    #menuToggle { display: inline-block; }
+    main { padding: 18px 16px 80px; }
+  }
+  #menuToggle { display: none; background: var(--panel); border: 1px solid var(--border);
+    color: var(--fg); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <button id="menuToggle" aria-label="Toggle navigation">☰</button>
+  <h1>WoW: Forever API</h1>
+  <span class="meta" id="meta"></span>
+  <input id="search" type="search" placeholder="Search functions, events, types…" autocomplete="off">
+  <span class="links">
+    <a id="apiLink" href="api.json">api.json</a>
+    <a href="https://github.com/Atraeau/WoW-Addons">repo</a>
+    <a href="https://github.com/Atraeau/WoW-Addons/blob/main/types/WowForeverAPI.lua">lua defs</a>
+  </span>
+</header>
+<div class="layout">
+  <nav id="nav" aria-label="Namespaces"></nav>
+  <main id="main"><div class="loading">Loading the API (this pulls a few MB the first time)…</div></main>
+</div>
+<script>
+"use strict";
+const $ = (s, r=document) => r.querySelector(s);
+const el = (t, props={}, ...kids) => {
+  const n = document.createElement(t);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") n.className = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const kid of kids) n.append(kid);
+  return n;
+};
+const PRIM = { string:"string", cstring:"string", wowguid:"string", number:"number", luaindex:"number",
+  fileid:"number", time_t:"number", wowmoney:"number", bool:"boolean", boolean:"boolean", table:"table" };
+const typeStr = f => { if (!f) return "any"; if (f.innerType) return typeStr({type:f.innerType})+"[]";
+  return f.type || "any"; };
+
+let API = null, CATS = null, SYS = new Map(), FN_INDEX = [];
+
+function keyOf(s){ return s.namespace || s.name; }
+
+function mergeSystems(systems){
+  const m = new Map();
+  for (const s of systems){
+    const k = keyOf(s);
+    if (!m.has(k)) m.set(k, { name:k, namespace:s.namespace, documentation:s.documentation||"",
+      functions:[], events:[], tables:[] });
+    const o = m.get(k);
+    if (!o.documentation && s.documentation) o.documentation = s.documentation;
+    (s.functions||[]).forEach(x=>o.functions.push(x));
+    (s.events||[]).forEach(x=>o.events.push(x));
+    (s.tables||[]).forEach(x=>o.tables.push(x));
+  }
+  return m;
+}
+
+function signature(ns, fn){
+  const pre = fn._ns ? fn._ns + "." : (ns && ns.startsWith("C_") ? ns + "." : "");
+  const rets = (fn.returns||[]).map(r=>r.name).join(", ");
+  const args = (fn.arguments||[]).map(a=> a.nilable ? "["+a.name+"]" : a.name).join(", ");
+  return (rets ? rets + " = " : "") + pre + fn.name + "(" + args + ")";
+}
+
+function fieldTable(rows, cols){
+  if (!rows || !rows.length) return null;
+  const head = el("tr"); cols.forEach(c=>head.append(el("th",{},c)));
+  const t = el("table", {}, el("thead",{},head));
+  const tb = el("tbody");
+  for (const r of rows){
+    const nm = el("td",{}, el("code",{}, r.name || ""));
+    if (r.nilable) nm.append(el("span",{class:"t-nil"}," ?"));
+    const ty = el("td",{}, el("span",{class:"t-type mono"}, typeStr(r)));
+    const desc = el("td",{}, (r.documentation||"") + (r.default!=null&&r.default!==""?` (default: ${r.default})`:""));
+    t.append(el("tbody",{}, el("tr",{}, nm, ty, desc)));
+  }
+  return t;
+}
+
+function renderNamespace(key){
+  const s = SYS.get(key);
+  const main = $("#main");
+  main.innerHTML = "";
+  if (!s){ main.append(el("p",{},"Not found.")); return; }
+  location.hash = encodeURIComponent(key);
+  document.querySelectorAll("nav .ns").forEach(b=>b.classList.toggle("active", b.dataset.k===key));
+  const prefix = s.namespace ? s.namespace + "." : "";
+  main.append(el("div",{class:"crumb"}, s.namespace ? "namespace" : "global functions"));
+  main.append(el("h2",{class:"ns-title mono"}, key));
+  if (s.documentation) main.append(el("p",{class:"ns-doc"}, s.documentation));
+  main.append(el("div",{class:"counts"},
+    `${s.functions.length} functions · ${s.events.length} events · ${s.tables.length} types`));
+
+  if (s.functions.length){
+    main.append(el("div",{class:"sec"},"Functions"));
+    s.functions.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(fn=>{
+      const item = el("div",{class:"item", id:"fn-"+fn.name});
+      item.append(el("h3",{}, el("code",{}, prefix + fn.name)));
+      if (fn.documentation) item.append(el("div",{class:"doc"}, fn.documentation));
+      const sig = signature(s.namespace, fn);
+      item.append(el("pre",{class:"sig mono"}, sig));
+      const at = fieldTable(fn.arguments, ["Argument","Type","Description"]);
+      if (at){ item.append(el("div",{class:"sec"},"")); item.append(labeled("Arguments", at)); }
+      const rt = fieldTable(fn.returns, ["Returns","Type","Description"]);
+      if (rt) item.append(labeled("Returns", rt));
+      main.append(item);
+    });
+  }
+  if (s.events.length){
+    main.append(el("div",{class:"sec"},"Events"));
+    s.events.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(ev=>{
+      const item = el("div",{class:"item"});
+      item.append(el("h3",{}, el("code",{}, ev.literalName || ev.name)));
+      if (ev.documentation) item.append(el("div",{class:"doc"}, ev.documentation));
+      const pt = fieldTable(ev.payload, ["Payload","Type","Description"]);
+      if (pt) item.append(pt);
+      main.append(item);
+    });
+  }
+  if (s.tables.length){
+    main.append(el("div",{class:"sec"},"Types"));
+    s.tables.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(tb=>{
+      const item = el("div",{class:"item"});
+      item.append(el("h3",{}, tb.name + " ", el("span",{class:"tag"}, tb.type||"")));
+      if (tb.documentation) item.append(el("div",{class:"doc"}, tb.documentation));
+      const ft = fieldTable(tb.fields, ["Field","Type","Description"]);
+      if (ft) item.append(ft);
+      main.append(item);
+    });
+  }
+  main.scrollIntoView({block:"start"});
+  window.scrollTo(0,0);
+  if (window.innerWidth <= 720) $("#nav").classList.remove("open");
+}
+function labeled(label, node){ const d = el("div"); d.append(el("div",{class:"sec"},label), node); return d; }
+
+function buildNav(){
+  const nav = $("#nav");
+  nav.innerHTML = "";
+  for (const g of CATS.groups){
+    const det = el("details",{class:"group"});
+    det.append(el("summary",{}, g.name + " ", el("span",{class:"count"}, "("+g.namespaces.length+")")));
+    for (const ns of g.namespaces){
+      const b = el("button",{class:"ns", "data-k":ns}, ns);
+      b.onclick = ()=>renderNamespace(ns);
+      det.append(b);
+    }
+    nav.append(det);
+  }
+}
+
+function buildIndex(){
+  FN_INDEX = [];
+  for (const [k, s] of SYS){
+    for (const fn of s.functions) FN_INDEX.push({k, kind:"fn", name:(s.namespace?s.namespace+".":"")+fn.name, target:k});
+    for (const ev of s.events) FN_INDEX.push({k, kind:"event", name:ev.literalName||ev.name, target:k});
+    for (const tb of s.tables) FN_INDEX.push({k, kind:"type", name:tb.name, target:k});
+  }
+}
+
+function search(q){
+  q = q.trim().toLowerCase();
+  const main = $("#main");
+  if (!q){ main.innerHTML = intro(); return; }
+  const hits = [];
+  for (const e of FN_INDEX){ if (e.name.toLowerCase().includes(q)){ hits.push(e); if (hits.length>=200) break; } }
+  main.innerHTML = "";
+  main.append(el("div",{class:"counts"}, `${hits.length}${hits.length>=200?"+":""} matches for “${q}”`));
+  const wrap = el("div",{class:"results"});
+  for (const h of hits){
+    const r = el("div",{class:"r"});
+    r.append(el("code",{}, h.name), el("span",{class:"tag"}, h.kind), el("div",{class:"k"}, h.target));
+    r.onclick = ()=>renderNamespace(h.target);
+    wrap.append(r);
+  }
+  main.append(wrap);
+}
+
+function intro(){
+  const m = API.meta || {};
+  return `
+  <div class="toolbanner">
+    <b>For tools / agents:</b> the entire API is machine-readable at
+    <a href="api.json"><code>api.json</code></a> — objects with <code>namespace</code>,
+    <code>functions[]</code> (each with <code>arguments</code>/<code>returns</code> typed and documented),
+    <code>events[]</code> and <code>tables[]</code>. Enum/struct types resolve against the
+    <code>tables</code> entries. A LuaCATS definition file for editors/LSP is
+    <a href="https://github.com/Atraeau/WoW-Addons/blob/main/types/WowForeverAPI.lua">here</a>.
+  </div>
+  <h2 class="ns-title">WoW: Forever API reference</h2>
+  <p class="ns-doc">Generated from the client's own <code>APIDocumentation</code>
+     (build ${m.build||"?"}, interface ${m.interface||"?"}).
+     <b>${m.functionCount||0}</b> functions, <b>${m.eventCount||0}</b> events,
+     <b>${m.tableCount||0}</b> types across <b>${SYS.size}</b> namespaces.</p>
+  <p>Pick a namespace on the left, or search above. Deep links use the URL hash
+     (e.g. <code>#C_Spell</code>).</p>`;
+}
+
+async function main(){
+  try {
+    const [api, cats] = await Promise.all([
+      fetch("api.json").then(r=>r.json()),
+      fetch("categories.json").then(r=>r.json())
+    ]);
+    API = api; CATS = cats;
+    SYS = mergeSystems(api.systems || []);
+    buildIndex();
+    buildNav();
+    $("#meta").textContent = `build ${api.meta.build} · interface ${api.meta.interface}`;
+    const hash = decodeURIComponent(location.hash.replace(/^#/,""));
+    if (hash && SYS.has(hash)) renderNamespace(hash); else $("#main").innerHTML = intro();
+  } catch (e) {
+    $("#main").innerHTML = `<div class="loading">Failed to load api.json / categories.json.<br>` +
+      `On GitHub Pages this works automatically; opening the file directly (file://) will not, because browsers block local fetch.<br><br>${e}</div>`;
+  }
+}
+let searchTimer;
+$("#search").addEventListener("input", e=>{ clearTimeout(searchTimer);
+  const v = e.target.value; searchTimer = setTimeout(()=>search(v), 120); });
+$("#menuToggle").addEventListener("click", ()=>$("#nav").classList.toggle("open"));
+window.addEventListener("hashchange", ()=>{ const h=decodeURIComponent(location.hash.replace(/^#/,""));
+  if (h && SYS.has(h)) renderNamespace(h); });
+main();
+</script>
+</body>
+</html>
