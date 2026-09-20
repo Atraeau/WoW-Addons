@@ -82,9 +82,35 @@ is nil, so opening the Priority Marker color picker crashed.
   alpha directly, so the `1 - a` conversions were removed.
 - `cancelFunc` now receives a `{ r, g, b, a }` table (was a positional array via `unpack`).
 
-## Potential future issue (not patched)
-`UnitHealth` can return a **secret value** on this engine. Health is fed straight into
-StatusBar setters (fine), but several places also do arithmetic like
-`UnitHealth(unit) / UnitHealthMax(unit)` (e.g. `PriorityMarker.lua`, `Threat.lua`,
-`MobStatus.lua`). If a future error mentions secret values there, that arithmetic will
-need reworking. It was left as-is because it isn't currently erroring.
+### 6. `BlizzThreatPlates.lua` — guard threat reads against WoW 12.0 Secret Values
+`UnitDetailedThreatSituation` now returns **secret values** for enemy units. Addon
+("tainted") code cannot compare or do arithmetic on a secret value, so
+`if threatPct > 100` at line ~243 crashed with:
+`attempt to compare local 'threatPct' (a secret number value ...)`.
+
+Added an `issecretvalue()` guard right after the call that falls back to the default
+visual when the data is secret:
+
+```lua
+local isTanking, status, threatPct, rawThreatPct, threatValue = UnitDetailedThreatSituation("player", unit)
+if issecretvalue(status) or issecretvalue(threatPct) or issecretvalue(threatValue) then
+    ShowDefaultVisual(unitFrame)
+    return
+end
+```
+
+## Known limitation — the addon's core feature is engine-restricted now
+WoW 12.0 **Secret Values** + secure-action protection curtail what BlizzThreatPlates
+was built to do:
+- **Threat data is secret** for enemy units, so the threat indicator / threat-based
+  coloring cannot be computed in addon code. The guard above stops the crash but those
+  units just get the default visual.
+- **"Blocked from an action only available to the Blizzard UI"** — recoloring/replicating
+  the protected nameplate health bar is now a Blizzard-UI-only (secure) action.
+
+Making these features work again is an **upstream redesign**, not a local patch — likely
+impossible for the parts that read threat. Treat BlizzThreatPlates as *loads without
+errors but threat features are largely inert* on this client. See the `WowApiExport`
+addon in this repo to enumerate which APIs are available/secret, and Warcraft Wiki's
+[Secret Values](https://warcraft.wiki.gg/wiki/Secret_Values) page for the rules
+(`issecretvalue()`, secret-safe APIs).

@@ -240,6 +240,15 @@ local function UpdateUnitNamePlate(unit)
         local mobGUID = UnitGUID(unit)
         local isTanking, status, threatPct, rawThreatPct, threatValue = UnitDetailedThreatSituation("player", unit)
 
+        -- WoW 12.0 Secret Values: threat data is secret for enemy units, and addon
+        -- (tainted) code cannot compare or do arithmetic on secret values. Bail to the
+        -- default visual instead of crashing. This disables threat coloring/indicators
+        -- for such units -- reading threat is now a Blizzard-UI-only capability.
+        if issecretvalue(status) or issecretvalue(threatPct) or issecretvalue(threatValue) then
+            ShowDefaultVisual(unitFrame)
+            return
+        end
+
         if threatPct == nil or threatPct > 100 then
             threatPct = 0
         end
