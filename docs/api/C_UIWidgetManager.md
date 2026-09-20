@@ -1,0 +1,53 @@
+# C_UIWidgetManager
+
+> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
+> This lists the functions that exist on the client. Full signatures, arguments,
+> returns and examples require the rich APIDocumentation export (re-run /apiexport
+> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+
+**42** functions
+
+```lua
+C_UIWidgetManager.GetAllWidgetsBySetID()
+C_UIWidgetManager.GetBelowMinimapWidgetSetID()
+C_UIWidgetManager.GetBulletTextListWidgetVisualizationInfo()
+C_UIWidgetManager.GetButtonHeaderWidgetVisualizationInfo()
+C_UIWidgetManager.GetCaptureBarWidgetVisualizationInfo()
+C_UIWidgetManager.GetCaptureZoneVisualizationInfo()
+C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo()
+C_UIWidgetManager.GetDoubleIconAndTextWidgetVisualizationInfo()
+C_UIWidgetManager.GetDoubleStateIconRowVisualizationInfo()
+C_UIWidgetManager.GetDoubleStatusBarWidgetVisualizationInfo()
+C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo()
+C_UIWidgetManager.GetHorizontalCurrenciesWidgetVisualizationInfo()
+C_UIWidgetManager.GetIconAndTextWidgetVisualizationInfo()
+C_UIWidgetManager.GetIconTextAndBackgroundWidgetVisualizationInfo()
+C_UIWidgetManager.GetIconTextAndCurrenciesWidgetVisualizationInfo()
+C_UIWidgetManager.GetItemDisplayVisualizationInfo()
+C_UIWidgetManager.GetMapPinAnimationWidgetVisualizationInfo()
+C_UIWidgetManager.GetObjectiveTrackerWidgetSetID()
+C_UIWidgetManager.GetPowerBarWidgetSetID()
+C_UIWidgetManager.GetPreyHuntProgressWidgetVisualizationInfo()
+C_UIWidgetManager.GetScenarioHeaderCurrenciesAndBackgroundWidgetVisualizationInfo()
+C_UIWidgetManager.GetScenarioHeaderDelvesWidgetVisualizationInfo()
+C_UIWidgetManager.GetScenarioHeaderTimerWidgetVisualizationInfo()
+C_UIWidgetManager.GetSpacerVisualizationInfo()
+C_UIWidgetManager.GetSpellDisplayVisualizationInfo()
+C_UIWidgetManager.GetStackedResourceTrackerWidgetVisualizationInfo()
+C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo()
+C_UIWidgetManager.GetTextColumnRowVisualizationInfo()
+C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo()
+C_UIWidgetManager.GetTextureAndTextVisualizationInfo()
+C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo()
+C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo()
+C_UIWidgetManager.GetTextWithSubtextWidgetVisualizationInfo()
+C_UIWidgetManager.GetTopCenterWidgetSetID()
+C_UIWidgetManager.GetTugOfWarWidgetVisualizationInfo()
+C_UIWidgetManager.GetUnitPowerBarWidgetVisualizationInfo()
+C_UIWidgetManager.GetWidgetSetInfo()
+C_UIWidgetManager.GetZoneControlVisualizationInfo()
+C_UIWidgetManager.RegisterUnitForWidgetUpdates()
+C_UIWidgetManager.SetProcessingUnit()
+C_UIWidgetManager.SetProcessingUnitGuid()
+C_UIWidgetManager.UnregisterUnitForWidgetUpdates()
+```

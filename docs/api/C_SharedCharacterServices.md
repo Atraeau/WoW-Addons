@@ -1,0 +1,21 @@
+# C_SharedCharacterServices
+
+> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
+> This lists the functions that exist on the client. Full signatures, arguments,
+> returns and examples require the rich APIDocumentation export (re-run /apiexport
+> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+
+**10** functions
+
+```lua
+C_SharedCharacterServices.GetLastSeenCharacterUpgradePopup()
+C_SharedCharacterServices.GetLastSeenExpansionTrialPopup()
+C_SharedCharacterServices.GetUpgradeDistributions()
+C_SharedCharacterServices.HasFreePromotionalUpgrade()
+C_SharedCharacterServices.HasSeenFreePromotionalUpgradePopup()
+C_SharedCharacterServices.IsPurchaseIDPendingUpgrade()
+C_SharedCharacterServices.QueryClassTrialBoostResult()
+C_SharedCharacterServices.SetCharacterUpgradePopupSeen()
+C_SharedCharacterServices.SetExpansionTrialPopupSeen()
+C_SharedCharacterServices.SetPromotionalPopupSeen()
+```

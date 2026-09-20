@@ -152,7 +152,63 @@ if (Test-Path $OutDir) { Remove-Item $OutDir -Recurse -Force }
 New-Item -ItemType Directory -Path $OutDir -Force | Out-Null
 
 $meta = $data.meta
-$systems = @($data.systems) | Sort-Object { if ($_.namespace) { $_.namespace } else { $_.name } }
+$systemsRaw = @($data.systems)
+
+# --- Fallback: no rich APIDocumentation, but we have the _G inventory --------
+if ($systemsRaw.Count -eq 0) {
+    Write-Host "APIDocumentation not present in dump -- generating a name-only inventory from the _G capture." -ForegroundColor Yellow
+    $g = $data.globals
+    $namespaces = @{}
+    $globalFns = [System.Collections.Generic.List[string]]::new()
+    foreach ($p in $g.PSObject.Properties) {
+        if ($p.Value -is [string]) { $globalFns.Add($p.Name) }
+        else { $namespaces[$p.Name] = @($p.Value) }
+    }
+
+    $note = @(
+        "> Inventory from the WoW: Forever client (build $($meta.build), interface $($meta.interface)) on $($meta.exportedAt).",
+        "> This lists the functions that exist on the client. Full signatures, arguments,",
+        "> returns and examples require the rich APIDocumentation export (re-run /apiexport",
+        "> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation)."
+    )
+
+    $indexRows = @()
+    foreach ($ns in ($namespaces.Keys | Sort-Object)) {
+        $fns = @($namespaces[$ns] | Sort-Object)
+        $md = @("# $ns", "") + $note + @("", "**$($fns.Count)** functions", "", '```lua')
+        foreach ($fn in $fns) { $md += "$ns.$fn()" }
+        $md += '```'
+        ($md -join "`n") | Set-Content -Path (Join-Path $OutDir ((Sanitize $ns) + '.md')) -Encoding UTF8
+        $indexRows += [pscustomobject]@{ Namespace = $ns; File = (Sanitize $ns) + '.md'; Functions = $fns.Count }
+    }
+
+    $gf = @($globalFns | Sort-Object)
+    $md = @("# Global Functions", "") + $note + @("", "**$($gf.Count)** functions", "", '```lua')
+    foreach ($fn in $gf) { $md += "$fn()" }
+    $md += '```'
+    ($md -join "`n") | Set-Content -Path (Join-Path $OutDir 'GlobalFunctions.md') -Encoding UTF8
+    $indexRows += [pscustomobject]@{ Namespace = 'Global Functions'; File = 'GlobalFunctions.md'; Functions = $gf.Count }
+
+    $idx = @('# WoW: Forever API Reference (inventory)', '')
+    $idx += "Captured from the client's `_G` on $($meta.exportedAt) (build $($meta.build), interface $($meta.interface))."
+    $idx += ''
+    $idx += "> ⚠️ Names only. `APIDocumentation` was not loaded, so signatures/examples are pending."
+    $idx += 'Re-run the export with the updated addon (which force-loads the docs) for full detail.'
+    $idx += ''
+    $idx += "- Namespaces: **$($namespaces.Count)** · Global functions: **$($gf.Count)**"
+    $idx += ''
+    $idx += '| Namespace | Functions |'
+    $idx += '|-----------|-----------|'
+    foreach ($row in ($indexRows | Sort-Object Namespace)) {
+        $idx += "| [$($row.Namespace)]($($row.File)) | $($row.Functions) |"
+    }
+    ($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
+
+    Write-Host "Generated $($indexRows.Count) inventory files into $OutDir" -ForegroundColor Green
+    return
+}
+
+$systems = $systemsRaw | Sort-Object { if ($_.namespace) { $_.namespace } else { $_.name } }
 
 $indexRows = @()
 

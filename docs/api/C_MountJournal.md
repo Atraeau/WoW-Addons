@@ -1,0 +1,61 @@
+# C_MountJournal
+
+> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
+> This lists the functions that exist on the client. Full signatures, arguments,
+> returns and examples require the rich APIDocumentation export (re-run /apiexport
+> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+
+**50** functions
+
+```lua
+C_MountJournal.ApplyMountEquipment()
+C_MountJournal.AreMountEquipmentEffectsSuppressed()
+C_MountJournal.ClearFanfare()
+C_MountJournal.ClearRecentFanfares()
+C_MountJournal.Dismiss()
+C_MountJournal.GetAllCreatureDisplayIDsForMountID()
+C_MountJournal.GetAppliedMountEquipmentID()
+C_MountJournal.GetCollectedDragonridingMounts()
+C_MountJournal.GetCollectedFilterSetting()
+C_MountJournal.GetDisplayedMountAllCreatureDisplayInfo()
+C_MountJournal.GetDisplayedMountID()
+C_MountJournal.GetDisplayedMountInfo()
+C_MountJournal.GetDisplayedMountInfoExtra()
+C_MountJournal.GetDynamicFlightModeSpellID()
+C_MountJournal.GetIsFavorite()
+C_MountJournal.GetMountAllCreatureDisplayInfoByID()
+C_MountJournal.GetMountEquipmentUnlockLevel()
+C_MountJournal.GetMountFromItem()
+C_MountJournal.GetMountFromSpell()
+C_MountJournal.GetMountIDs()
+C_MountJournal.GetMountInfoByID()
+C_MountJournal.GetMountInfoExtraByID()
+C_MountJournal.GetMountLink()
+C_MountJournal.GetMountUsabilityByID()
+C_MountJournal.GetNumDisplayedMounts()
+C_MountJournal.GetNumMounts()
+C_MountJournal.GetNumMountsNeedingFanfare()
+C_MountJournal.HasDisplayableMount()
+C_MountJournal.IsDragonridingUnlocked()
+C_MountJournal.IsItemMountEquipment()
+C_MountJournal.IsMountEquipmentApplied()
+C_MountJournal.IsSourceChecked()
+C_MountJournal.IsTypeChecked()
+C_MountJournal.IsUsingDefaultFilters()
+C_MountJournal.IsValidSourceFilter()
+C_MountJournal.IsValidTypeFilter()
+C_MountJournal.MountEquipmentAvailable()
+C_MountJournal.NeedsFanfare()
+C_MountJournal.Pickup()
+C_MountJournal.PickupDynamicFlightMode()
+C_MountJournal.SetAllSourceFilters()
+C_MountJournal.SetAllTypeFilters()
+C_MountJournal.SetCollectedFilterSetting()
+C_MountJournal.SetDefaultFilters()
+C_MountJournal.SetIsFavorite()
+C_MountJournal.SetSearch()
+C_MountJournal.SetSourceFilter()
+C_MountJournal.SetTypeFilter()
+C_MountJournal.SummonByID()
+C_MountJournal.SwapDynamicFlightMode()
+```

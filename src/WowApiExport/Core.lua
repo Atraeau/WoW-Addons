@@ -119,7 +119,17 @@ local function ExtractField(fld)
 	}
 end
 
+-- APIDocumentation is provided by a load-on-demand Blizzard addon; force it in.
+local function EnsureAPIDocumentationLoaded()
+	local load = (C_AddOns and C_AddOns.LoadAddOn) or LoadAddOn
+	if not load then return end
+	for _, name in ipairs({ "Blizzard_APIDocumentation", "Blizzard_APIDocumentationGenerated" }) do
+		pcall(load, name)
+	end
+end
+
 local function ExtractAPIDocumentation()
+	EnsureAPIDocumentationLoaded()
 	local result = {}
 	if not APIDocumentation or not APIDocumentation.systems then
 		return result, false

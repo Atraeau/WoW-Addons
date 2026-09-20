@@ -1,0 +1,63 @@
+# C_SpellBook
+
+> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
+> This lists the functions that exist on the client. Full signatures, arguments,
+> returns and examples require the rich APIDocumentation export (re-run /apiexport
+> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+
+**52** functions
+
+```lua
+C_SpellBook.AbortSpellIntro()
+C_SpellBook.CastSpellBookItem()
+C_SpellBook.ContainsAnyDisenchantSpell()
+C_SpellBook.FindBaseSpellByID()
+C_SpellBook.FindFlyoutSlotBySpellID()
+C_SpellBook.FindSpellBookSlotForSpell()
+C_SpellBook.FindSpellOverrideByID()
+C_SpellBook.GetClassSkillLineInfo()
+C_SpellBook.GetCurrentLevelSpells()
+C_SpellBook.GetNumSpellBookSkillLines()
+C_SpellBook.GetSkillLineIndexByID()
+C_SpellBook.GetSpellBookItemAutoCast()
+C_SpellBook.GetSpellBookItemCastCount()
+C_SpellBook.GetSpellBookItemChargeDuration()
+C_SpellBook.GetSpellBookItemCharges()
+C_SpellBook.GetSpellBookItemCooldown()
+C_SpellBook.GetSpellBookItemCooldownDuration()
+C_SpellBook.GetSpellBookItemDescription()
+C_SpellBook.GetSpellBookItemInfo()
+C_SpellBook.GetSpellBookItemLevelLearned()
+C_SpellBook.GetSpellBookItemLink()
+C_SpellBook.GetSpellBookItemLossOfControlCooldown()
+C_SpellBook.GetSpellBookItemLossOfControlCooldownDuration()
+C_SpellBook.GetSpellBookItemLossOfControlCooldownInfo()
+C_SpellBook.GetSpellBookItemName()
+C_SpellBook.GetSpellBookItemPowerCost()
+C_SpellBook.GetSpellBookItemSkillLineIndex()
+C_SpellBook.GetSpellBookItemTexture()
+C_SpellBook.GetSpellBookItemTradeSkillLink()
+C_SpellBook.GetSpellBookItemType()
+C_SpellBook.GetSpellBookSkillLineInfo()
+C_SpellBook.HasPetSpells()
+C_SpellBook.IsAutoAttackSpellBookItem()
+C_SpellBook.IsClassTalentSpellBookItem()
+C_SpellBook.IsPvPTalentSpellBookItem()
+C_SpellBook.IsRangedAutoAttackSpellBookItem()
+C_SpellBook.IsSpellBookItemHarmful()
+C_SpellBook.IsSpellBookItemHelpful()
+C_SpellBook.IsSpellBookItemInRange()
+C_SpellBook.IsSpellBookItemLooseFlyoutMember()
+C_SpellBook.IsSpellBookItemLowRank()
+C_SpellBook.IsSpellBookItemOffSpec()
+C_SpellBook.IsSpellBookItemPassive()
+C_SpellBook.IsSpellBookItemUsable()
+C_SpellBook.IsSpellInSpellBook()
+C_SpellBook.IsSpellKnown()
+C_SpellBook.IsSpellKnownOrInSpellBook()
+C_SpellBook.PickupSpellBookItem()
+C_SpellBook.SetBarSlotFromIntro()
+C_SpellBook.SetSpellBookItemAutoCastEnabled()
+C_SpellBook.SpellBookItemHasRange()
+C_SpellBook.ToggleSpellBookItemAutoCast()
+```
