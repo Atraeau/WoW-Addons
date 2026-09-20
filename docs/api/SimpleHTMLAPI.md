@@ -18,7 +18,7 @@ height = GetContentHeight()
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetContentHeight()
@@ -44,7 +44,7 @@ fontFile, height, flags = GetFont(textType)
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontFile, height, flags = GetFont(textType)
@@ -68,7 +68,7 @@ font = GetFontObject(textType)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObject(textType)
@@ -86,7 +86,7 @@ format = GetHyperlinkFormat()
 |------|------|---------|-------------|
 | `format` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local format = GetHyperlinkFormat()
@@ -110,7 +110,7 @@ wordWrap = GetIndentedWordWrap(textType)
 |------|------|---------|-------------|
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wordWrap = GetIndentedWordWrap(textType)
@@ -134,7 +134,7 @@ justifyH = GetJustifyH(textType)
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyH = GetJustifyH(textType)
@@ -158,7 +158,7 @@ justifyV = GetJustifyV(textType)
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyV = GetJustifyV(textType)
@@ -185,7 +185,7 @@ colorR, colorG, colorB, colorA = GetShadowColor(textType)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetShadowColor(textType)
@@ -210,7 +210,7 @@ offsetX, offsetY = GetShadowOffset(textType)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetShadowOffset(textType)
@@ -234,7 +234,7 @@ spacing = GetSpacing(textType)
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spacing = GetSpacing(textType)
@@ -261,7 +261,7 @@ colorR, colorG, colorB, colorA = GetTextColor(textType)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetTextColor(textType)
@@ -279,7 +279,7 @@ content = GetTextData()
 |------|------|---------|-------------|
 | `content` | HTMLContentNode[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local content = GetTextData()
@@ -300,7 +300,7 @@ SetFont(textType, fontFile, height, flags)
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFont(textType, "", height, flags)
@@ -319,7 +319,7 @@ SetFontObject(textType, font)
 | `textType` | HTMLTextType | no |  |
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontObject(textType, font)
@@ -337,7 +337,7 @@ SetHyperlinkFormat(format)
 |------|------|---------|-------------|
 | `format` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHyperlinkFormat("")
@@ -356,7 +356,7 @@ SetIndentedWordWrap(textType, wordWrap)
 | `textType` | HTMLTextType | no |  |
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIndentedWordWrap(textType, false)
@@ -375,7 +375,7 @@ SetJustifyH(textType, justifyH)
 | `textType` | HTMLTextType | no |  |
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyH(textType, justifyH)
@@ -394,7 +394,7 @@ SetJustifyV(textType, justifyV)
 | `textType` | HTMLTextType | no |  |
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyV(textType, justifyV)
@@ -416,7 +416,7 @@ SetShadowColor(textType, colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowColor(textType, 0, 0, 0)
@@ -436,10 +436,10 @@ SetShadowOffset(textType, offsetX, offsetY)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetShadowOffset(textType, 0, 0)
+SetShadowOffset(textType, 1, 1)
 ```
 
 ### SimpleHTMLAPI.SetSpacing
@@ -455,7 +455,7 @@ SetSpacing(textType, spacing)
 | `textType` | HTMLTextType | no |  |
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpacing(textType, spacing)
@@ -474,7 +474,7 @@ SetText(text, ignoreMarkup)
 | `text` | cstring | no |  |
 | `ignoreMarkup` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetText("", false)
@@ -496,7 +496,7 @@ SetTextColor(textType, colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColor(textType, 0, 0, 0)

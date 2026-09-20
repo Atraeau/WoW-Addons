@@ -18,10 +18,10 @@ C_ClubFinder.ApplicantAcceptClubInvite(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubFinderGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.ApplicantAcceptClubInvite("Creature-0-0000-0-0-0-0")
+C_ClubFinder.ApplicantAcceptClubInvite(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.ApplicantDeclineClubInvite
@@ -36,10 +36,10 @@ C_ClubFinder.ApplicantDeclineClubInvite(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubFinderGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.ApplicantDeclineClubInvite("Creature-0-0000-0-0-0-0")
+C_ClubFinder.ApplicantDeclineClubInvite(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.CancelMembershipRequest
@@ -54,10 +54,10 @@ C_ClubFinder.CancelMembershipRequest(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubFinderGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.CancelMembershipRequest("Creature-0-0000-0-0-0-0")
+C_ClubFinder.CancelMembershipRequest(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.CheckAllPlayerApplicantSettings
@@ -66,7 +66,7 @@ C_ClubFinder.CancelMembershipRequest("Creature-0-0000-0-0-0-0")
 C_ClubFinder.CheckAllPlayerApplicantSettings()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.CheckAllPlayerApplicantSettings()
@@ -78,7 +78,7 @@ C_ClubFinder.CheckAllPlayerApplicantSettings()
 C_ClubFinder.ClearAllFinderCache()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.ClearAllFinderCache()
@@ -90,7 +90,7 @@ C_ClubFinder.ClearAllFinderCache()
 C_ClubFinder.ClearClubApplicantsCache()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.ClearClubApplicantsCache()
@@ -102,7 +102,7 @@ C_ClubFinder.ClearClubApplicantsCache()
 C_ClubFinder.ClearClubFinderPostingsCache()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.ClearClubFinderPostingsCache()
@@ -126,10 +126,10 @@ belongsToClub = C_ClubFinder.DoesPlayerBelongToClubFromClubGUID(clubFinderGUID)
 |------|------|---------|-------------|
 | `belongsToClub` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local belongsToClub = C_ClubFinder.DoesPlayerBelongToClubFromClubGUID("Creature-0-0000-0-0-0-0")
+local belongsToClub = C_ClubFinder.DoesPlayerBelongToClubFromClubGUID(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.GetClubFinderDisableReason
@@ -144,7 +144,7 @@ disableReason = C_ClubFinder.GetClubFinderDisableReason()
 |------|------|---------|-------------|
 | `disableReason` | ClubFinderDisableReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local disableReason = C_ClubFinder.GetClubFinderDisableReason()
@@ -162,7 +162,7 @@ settings = C_ClubFinder.GetClubRecruitmentSettings()
 |------|------|---------|-------------|
 | `settings` | ClubSettingsInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local settings = C_ClubFinder.GetClubRecruitmentSettings()
@@ -186,10 +186,10 @@ clubType = C_ClubFinder.GetClubTypeFromFinderGUID(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubType` | ClubFinderRequestType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local clubType = C_ClubFinder.GetClubTypeFromFinderGUID("Creature-0-0000-0-0-0-0")
+local clubType = C_ClubFinder.GetClubTypeFromFinderGUID(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.GetFocusIndexFromFlag
@@ -210,7 +210,7 @@ index = C_ClubFinder.GetFocusIndexFromFlag(flags)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = C_ClubFinder.GetFocusIndexFromFlag(0)
@@ -228,7 +228,7 @@ localeFlags = C_ClubFinder.GetPlayerApplicantLocaleFlags()
 |------|------|---------|-------------|
 | `localeFlags` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localeFlags = C_ClubFinder.GetPlayerApplicantLocaleFlags()
@@ -246,7 +246,7 @@ settings = C_ClubFinder.GetPlayerApplicantSettings()
 |------|------|---------|-------------|
 | `settings` | ClubSettingsInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local settings = C_ClubFinder.GetPlayerApplicantSettings()
@@ -270,10 +270,10 @@ clubStatus = C_ClubFinder.GetPlayerClubApplicationStatus(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubStatus` | PlayerClubRequestStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local clubStatus = C_ClubFinder.GetPlayerClubApplicationStatus("Creature-0-0000-0-0-0-0")
+local clubStatus = C_ClubFinder.GetPlayerClubApplicationStatus(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.GetPlayerSettingsFocusFlagsSelectedCount
@@ -288,7 +288,7 @@ focusCount = C_ClubFinder.GetPlayerSettingsFocusFlagsSelectedCount()
 |------|------|---------|-------------|
 | `focusCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local focusCount = C_ClubFinder.GetPlayerSettingsFocusFlagsSelectedCount()
@@ -312,10 +312,10 @@ postingID = C_ClubFinder.GetPostingIDFromClubFinderGUID(clubFinderGUID)
 |------|------|---------|-------------|
 | `postingID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local postingID = C_ClubFinder.GetPostingIDFromClubFinderGUID("Creature-0-0000-0-0-0-0")
+local postingID = C_ClubFinder.GetPostingIDFromClubFinderGUID(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.GetRecruitingClubInfoFromClubID
@@ -336,7 +336,7 @@ clubInfo = C_ClubFinder.GetRecruitingClubInfoFromClubID(clubId)
 |------|------|---------|-------------|
 | `clubInfo` | RecruitingClubInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clubInfo = C_ClubFinder.GetRecruitingClubInfoFromClubID(clubId)
@@ -360,10 +360,10 @@ clubInfo = C_ClubFinder.GetRecruitingClubInfoFromFinderGUID(clubFinderGUID)
 |------|------|---------|-------------|
 | `clubInfo` | RecruitingClubInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local clubInfo = C_ClubFinder.GetRecruitingClubInfoFromFinderGUID("Creature-0-0000-0-0-0-0")
+local clubInfo = C_ClubFinder.GetRecruitingClubInfoFromFinderGUID(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.GetStatusOfPostingFromClubId
@@ -384,7 +384,7 @@ postingFlags = C_ClubFinder.GetStatusOfPostingFromClubId(postingID)
 |------|------|---------|-------------|
 | `postingFlags` | ClubFinderClubPostingStatusFlags[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local postingFlags = C_ClubFinder.GetStatusOfPostingFromClubId(postingID)
@@ -402,7 +402,7 @@ totalSize = C_ClubFinder.GetTotalMatchingCommunityListSize()
 |------|------|---------|-------------|
 | `totalSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalSize = C_ClubFinder.GetTotalMatchingCommunityListSize()
@@ -420,7 +420,7 @@ totalSize = C_ClubFinder.GetTotalMatchingGuildListSize()
 |------|------|---------|-------------|
 | `totalSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalSize = C_ClubFinder.GetTotalMatchingGuildListSize()
@@ -444,10 +444,10 @@ hasAlreadyApplied = C_ClubFinder.HasAlreadyAppliedToLinkedPosting(clubFinderGUID
 |------|------|---------|-------------|
 | `hasAlreadyApplied` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasAlreadyApplied = C_ClubFinder.HasAlreadyAppliedToLinkedPosting("Creature-0-0000-0-0-0-0")
+local hasAlreadyApplied = C_ClubFinder.HasAlreadyAppliedToLinkedPosting(UnitGUID("player"))
 ```
 
 ### C_ClubFinder.HasPostingBeenDelisted
@@ -468,7 +468,7 @@ postingDelisted = C_ClubFinder.HasPostingBeenDelisted(postingID)
 |------|------|---------|-------------|
 | `postingDelisted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local postingDelisted = C_ClubFinder.HasPostingBeenDelisted(postingID)
@@ -486,7 +486,7 @@ isEnabled = C_ClubFinder.IsCommunityFinderEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_ClubFinder.IsCommunityFinderEnabled()
@@ -504,7 +504,7 @@ isEnabled = C_ClubFinder.IsEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_ClubFinder.IsEnabled()
@@ -528,7 +528,7 @@ isListed = C_ClubFinder.IsListingEnabledFromFlags(flags)
 |------|------|---------|-------------|
 | `isListed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isListed = C_ClubFinder.IsListingEnabledFromFlags(0)
@@ -552,7 +552,7 @@ postingBanned = C_ClubFinder.IsPostingBanned(postingID)
 |------|------|---------|-------------|
 | `postingBanned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local postingBanned = C_ClubFinder.IsPostingBanned(postingID)
@@ -576,7 +576,7 @@ isApproved = C_ClubFinder.IsValidSearchString(name)
 |------|------|---------|-------------|
 | `isApproved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApproved = C_ClubFinder.IsValidSearchString("")
@@ -595,10 +595,10 @@ C_ClubFinder.LookupClubPostingFromClubFinderGUID(clubFinderGUID, isLinkedPosting
 | `clubFinderGUID` | WOWGUID | no |  |
 | `isLinkedPosting` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.LookupClubPostingFromClubFinderGUID("Creature-0-0000-0-0-0-0", false)
+C_ClubFinder.LookupClubPostingFromClubFinderGUID(UnitGUID("player"), false)
 ```
 
 ### C_ClubFinder.PlayerGetClubInvitationList
@@ -613,7 +613,7 @@ inviteList = C_ClubFinder.PlayerGetClubInvitationList()
 |------|------|---------|-------------|
 | `inviteList` | RecruitingClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inviteList = C_ClubFinder.PlayerGetClubInvitationList()
@@ -631,10 +631,10 @@ C_ClubFinder.PlayerRequestPendingClubsList(type)
 |------|------|---------|-------------|
 | `type` | ClubFinderRequestType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.PlayerRequestPendingClubsList(type)
+C_ClubFinder.PlayerRequestPendingClubsList(Enum.ClubFinderRequestType.None)
 ```
 
 ### C_ClubFinder.PlayerReturnPendingCommunitiesList
@@ -649,7 +649,7 @@ info = C_ClubFinder.PlayerReturnPendingCommunitiesList()
 |------|------|---------|-------------|
 | `info` | RecruitingClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ClubFinder.PlayerReturnPendingCommunitiesList()
@@ -667,7 +667,7 @@ info = C_ClubFinder.PlayerReturnPendingGuildsList()
 |------|------|---------|-------------|
 | `info` | RecruitingClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ClubFinder.PlayerReturnPendingGuildsList()
@@ -698,10 +698,10 @@ succesful = C_ClubFinder.PostClub(clubId, itemLevelRequirement, name, descriptio
 |------|------|---------|-------------|
 | `succesful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local succesful = C_ClubFinder.PostClub(clubId, 6948, "", "", 0, specs, type, false)
+local succesful = C_ClubFinder.PostClub(clubId, 6948, "", "", 0, specs, Enum.ClubFinderRequestType.None, false)
 ```
 
 ### C_ClubFinder.RequestApplicantList
@@ -716,10 +716,10 @@ C_ClubFinder.RequestApplicantList(type)
 |------|------|---------|-------------|
 | `type` | ClubFinderRequestType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.RequestApplicantList(type)
+C_ClubFinder.RequestApplicantList(Enum.ClubFinderRequestType.None)
 ```
 
 ### C_ClubFinder.RequestClubsList
@@ -736,7 +736,7 @@ C_ClubFinder.RequestClubsList(guildListRequested, searchString, specIDs)
 | `searchString` | string | no |  |
 | `specIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.RequestClubsList(false, "", specIDs)
@@ -756,10 +756,10 @@ C_ClubFinder.RequestMembershipToClub(clubFinderGUID, comment, specIDs)
 | `comment` | string | no |  |
 | `specIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.RequestMembershipToClub("Creature-0-0000-0-0-0-0", "", specIDs)
+C_ClubFinder.RequestMembershipToClub(UnitGUID("player"), "", specIDs)
 ```
 
 ### C_ClubFinder.RequestNextCommunityPage
@@ -775,7 +775,7 @@ C_ClubFinder.RequestNextCommunityPage(startingIndex, pageSize)
 | `startingIndex` | number | no |  |
 | `pageSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.RequestNextCommunityPage(1, 0)
@@ -794,7 +794,7 @@ C_ClubFinder.RequestNextGuildPage(startingIndex, pageSize)
 | `startingIndex` | number | no |  |
 | `pageSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.RequestNextGuildPage(1, 0)
@@ -818,7 +818,7 @@ success = C_ClubFinder.RequestPostingInformationFromClubId(clubId)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClubFinder.RequestPostingInformationFromClubId(clubId)
@@ -830,7 +830,7 @@ local success = C_ClubFinder.RequestPostingInformationFromClubId(clubId)
 C_ClubFinder.RequestSubscribedClubPostingIDs()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.RequestSubscribedClubPostingIDs()
@@ -842,7 +842,7 @@ C_ClubFinder.RequestSubscribedClubPostingIDs()
 C_ClubFinder.ResetClubPostingMapCache()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.ResetClubPostingMapCache()
@@ -866,10 +866,10 @@ C_ClubFinder.RespondToApplicant(clubFinderGUID, playerGUID, shouldAccept, reques
 | `forceAccept` | bool | no |  |
 | `reported` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.RespondToApplicant("Creature-0-0000-0-0-0-0", "Creature-0-0000-0-0-0-0", false, requestType, "", false)
+C_ClubFinder.RespondToApplicant(UnitGUID("player"), UnitGUID("player"), false, Enum.ClubFinderRequestType.None, "", false)
 ```
 
 ### C_ClubFinder.ReturnClubApplicantList
@@ -890,7 +890,7 @@ info = C_ClubFinder.ReturnClubApplicantList(clubId)
 |------|------|---------|-------------|
 | `info` | ClubFinderApplicantInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ClubFinder.ReturnClubApplicantList(clubId)
@@ -908,7 +908,7 @@ recruitingClubs = C_ClubFinder.ReturnMatchingCommunityList()
 |------|------|---------|-------------|
 | `recruitingClubs` | RecruitingClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recruitingClubs = C_ClubFinder.ReturnMatchingCommunityList()
@@ -926,7 +926,7 @@ recruitingClubs = C_ClubFinder.ReturnMatchingGuildList()
 |------|------|---------|-------------|
 | `recruitingClubs` | RecruitingClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recruitingClubs = C_ClubFinder.ReturnMatchingGuildList()
@@ -950,7 +950,7 @@ info = C_ClubFinder.ReturnPendingClubApplicantList(clubId)
 |------|------|---------|-------------|
 | `info` | ClubFinderApplicantInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ClubFinder.ReturnPendingClubApplicantList(clubId)
@@ -971,10 +971,10 @@ C_ClubFinder.SendChatWhisper(clubFinderGUID, playerGUID, applicantType, name)
 | `applicantType` | ClubFinderRequestType | no |  |
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ClubFinder.SendChatWhisper("Creature-0-0000-0-0-0-0", "Creature-0-0000-0-0-0-0", applicantType, "")
+C_ClubFinder.SendChatWhisper(UnitGUID("player"), UnitGUID("player"), Enum.ClubFinderRequestType.None, "")
 ```
 
 ### C_ClubFinder.SetAllRecruitmentSettings
@@ -989,7 +989,7 @@ C_ClubFinder.SetAllRecruitmentSettings(value)
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.SetAllRecruitmentSettings(0)
@@ -1007,7 +1007,7 @@ C_ClubFinder.SetPlayerApplicantLocaleFlags(localeFlags)
 |------|------|---------|-------------|
 | `localeFlags` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.SetPlayerApplicantLocaleFlags(0)
@@ -1026,7 +1026,7 @@ C_ClubFinder.SetPlayerApplicantSettings(index, checked)
 | `index` | number | no |  |
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.SetPlayerApplicantSettings(1, false)
@@ -1044,7 +1044,7 @@ C_ClubFinder.SetRecruitmentLocale(locale)
 |------|------|---------|-------------|
 | `locale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.SetRecruitmentLocale(0)
@@ -1063,7 +1063,7 @@ C_ClubFinder.SetRecruitmentSettings(index, checked)
 | `index` | number | no |  |
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClubFinder.SetRecruitmentSettings(1, false)
@@ -1081,7 +1081,7 @@ shouldShow = C_ClubFinder.ShouldShowClubFinder()
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_ClubFinder.ShouldShowClubFinder()

@@ -12,7 +12,7 @@
 DrawAll()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DrawAll()
@@ -31,7 +31,7 @@ DrawBlob(questID, draw)
 | `questID` | number | no |  |
 | `draw` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DrawBlob(0, false)
@@ -43,7 +43,7 @@ DrawBlob(0, false)
 DrawNone()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DrawNone()
@@ -61,7 +61,7 @@ EnableMerging(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableMerging(false)
@@ -79,7 +79,7 @@ EnableSmoothing(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableSmoothing(false)
@@ -97,7 +97,7 @@ uiMapID = GetMapID()
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = GetMapID()
@@ -115,7 +115,7 @@ SetBorderAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBorderAlpha(0)
@@ -133,7 +133,7 @@ SetBorderScalar(scalar)
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBorderScalar(0)
@@ -151,7 +151,7 @@ SetBorderTexture(asset)
 |------|------|---------|-------------|
 | `asset` | FileAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBorderTexture(asset)
@@ -169,7 +169,7 @@ SetFillAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFillAlpha(0)
@@ -187,7 +187,7 @@ SetFillTexture(asset)
 |------|------|---------|-------------|
 | `asset` | FileAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFillTexture(asset)
@@ -205,7 +205,7 @@ SetMapID(uiMapID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMapID(0)
@@ -223,7 +223,7 @@ SetMergeThreshold(threshold)
 |------|------|---------|-------------|
 | `threshold` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMergeThreshold(0)
@@ -241,7 +241,7 @@ SetNumSplinePoints(numSplinePoints)
 |------|------|---------|-------------|
 | `numSplinePoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNumSplinePoints(0)

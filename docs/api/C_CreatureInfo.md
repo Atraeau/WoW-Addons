@@ -24,7 +24,7 @@ classInfo = C_CreatureInfo.GetClassInfo(classID)
 |------|------|---------|-------------|
 | `classInfo` | ClassInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classInfo = C_CreatureInfo.GetClassInfo(0)
@@ -42,7 +42,7 @@ creatureFamilyIDs = C_CreatureInfo.GetCreatureFamilyIDs()
 |------|------|---------|-------------|
 | `creatureFamilyIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureFamilyIDs = C_CreatureInfo.GetCreatureFamilyIDs()
@@ -66,7 +66,7 @@ creatureFamilyInfo = C_CreatureInfo.GetCreatureFamilyInfo(creatureFamilyID)
 |------|------|---------|-------------|
 | `creatureFamilyInfo` | CreatureFamilyInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureFamilyInfo = C_CreatureInfo.GetCreatureFamilyInfo(0)
@@ -90,10 +90,10 @@ creatureID = C_CreatureInfo.GetCreatureID(creatureGUID)
 |------|------|---------|-------------|
 | `creatureID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local creatureID = C_CreatureInfo.GetCreatureID("Creature-0-0000-0-0-0-0")
+local creatureID = C_CreatureInfo.GetCreatureID(UnitGUID("player"))
 ```
 
 ### C_CreatureInfo.GetCreatureTypeIDs
@@ -108,7 +108,7 @@ creatureTypeIDs = C_CreatureInfo.GetCreatureTypeIDs()
 |------|------|---------|-------------|
 | `creatureTypeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureTypeIDs = C_CreatureInfo.GetCreatureTypeIDs()
@@ -132,7 +132,7 @@ creatureTypeInfo = C_CreatureInfo.GetCreatureTypeInfo(creatureTypeID)
 |------|------|---------|-------------|
 | `creatureTypeInfo` | CreatureTypeInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureTypeInfo = C_CreatureInfo.GetCreatureTypeInfo(0)
@@ -156,7 +156,7 @@ factionInfo = C_CreatureInfo.GetFactionInfo(raceID)
 |------|------|---------|-------------|
 | `factionInfo` | FactionInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionInfo = C_CreatureInfo.GetFactionInfo(0)
@@ -180,7 +180,7 @@ raceInfo = C_CreatureInfo.GetRaceInfo(raceID)
 |------|------|---------|-------------|
 | `raceInfo` | RaceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local raceInfo = C_CreatureInfo.GetRaceInfo(0)

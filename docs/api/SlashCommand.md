@@ -18,7 +18,7 @@ allowed = AreDangerousScriptsAllowed()
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = AreDangerousScriptsAllowed()
@@ -36,7 +36,7 @@ SetAllowDangerousScripts(allowed)
 |------|------|---------|-------------|
 | `allowed` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowDangerousScripts(false)

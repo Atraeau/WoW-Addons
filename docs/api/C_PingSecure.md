@@ -12,7 +12,7 @@
 C_PingSecure.ClearHitTestPingInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.ClearHitTestPingInfo()
@@ -24,7 +24,7 @@ C_PingSecure.ClearHitTestPingInfo()
 C_PingSecure.CreateFrame()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.CreateFrame()
@@ -42,7 +42,7 @@ C_PingSecure.DisplayError(error)
 |------|------|---------|-------------|
 | `error` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.DisplayError("")
@@ -67,7 +67,7 @@ frame = C_PingSecure.GetTargetPingReceiver(mousePosX, mousePosY)
 |------|------|---------|-------------|
 | `frame` | ScriptRegion | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frame = C_PingSecure.GetTargetPingReceiver(0, 0)
@@ -91,7 +91,7 @@ result = C_PingSecure.SendHitTestPing([type])
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_PingSecure.SendHitTestPing()
@@ -115,7 +115,7 @@ result = C_PingSecure.SendPlayerItemPing(itemID)
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_PingSecure.SendPlayerItemPing(6948)
@@ -139,10 +139,10 @@ result = C_PingSecure.SendPlayerSpellCategoryPing(spellCategoryID)
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_PingSecure.SendPlayerSpellCategoryPing(12345)
+local result = C_PingSecure.SendPlayerSpellCategoryPing(2050)
 ```
 
 ### C_PingSecure.SendPlayerSpellPing
@@ -163,10 +163,10 @@ result = C_PingSecure.SendPlayerSpellPing(spellID)
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_PingSecure.SendPlayerSpellPing(12345)
+local result = C_PingSecure.SendPlayerSpellPing(2050)
 ```
 
 ### C_PingSecure.SendUnitPing
@@ -189,10 +189,10 @@ result = C_PingSecure.SendUnitPing(target, [type], [isPlayerResource])
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_PingSecure.SendUnitPing(target)
+local result = C_PingSecure.SendUnitPing(UnitGUID("player"))
 ```
 
 ### C_PingSecure.SetHitTestPingTarget
@@ -215,7 +215,7 @@ state = C_PingSecure.SetHitTestPingTarget(mousePosX, mousePosY, [forcePointPing]
 |------|------|---------|-------------|
 | `state` | PingSetTargetState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_PingSecure.SetHitTestPingTarget(0, 0)
@@ -233,7 +233,7 @@ result = C_PingSecure.SetHitTestTargetAndSendPing()
 |------|------|---------|-------------|
 | `result` | SendPingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_PingSecure.SetHitTestTargetAndSendPing()
@@ -251,7 +251,7 @@ C_PingSecure.SetPendingPingOffScreenCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PendingPingOffScreenCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPendingPingOffScreenCallback(cb)
@@ -269,7 +269,7 @@ C_PingSecure.SetPingCooldownStartedCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PingCooldownStartedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPingCooldownStartedCallback(cb)
@@ -287,7 +287,7 @@ C_PingSecure.SetPingPinFrameAddedCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PingPinFrameAddedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPingPinFrameAddedCallback(cb)
@@ -305,7 +305,7 @@ C_PingSecure.SetPingPinFrameRemovedCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PingPinFrameRemovedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPingPinFrameRemovedCallback(cb)
@@ -323,7 +323,7 @@ C_PingSecure.SetPingPinFrameScreenClampStateUpdatedCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PingPinFrameScreenClampStateUpdatedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPingPinFrameScreenClampStateUpdatedCallback(cb)
@@ -341,7 +341,7 @@ C_PingSecure.SetPingRadialWheelCreatedCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PingRadialWheelCreatedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetPingRadialWheelCreatedCallback(cb)
@@ -359,7 +359,7 @@ C_PingSecure.SetSendMacroPingCallback(cb)
 |------|------|---------|-------------|
 | `cb` | SendMacroPingCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetSendMacroPingCallback(cb)
@@ -377,7 +377,7 @@ C_PingSecure.SetTogglePingListenerCallback(cb)
 |------|------|---------|-------------|
 | `cb` | TogglePingListenerCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PingSecure.SetTogglePingListenerCallback(cb)

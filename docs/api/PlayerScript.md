@@ -12,7 +12,7 @@
 AcceptAreaSpiritHeal()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AcceptAreaSpiritHeal()
@@ -24,7 +24,7 @@ AcceptAreaSpiritHeal()
 AcceptGuild()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AcceptGuild()
@@ -36,7 +36,7 @@ AcceptGuild()
 AcceptResurrect()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AcceptResurrect()
@@ -61,7 +61,7 @@ result = Ambiguate(fullName, context)
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = Ambiguate("", "")
@@ -73,7 +73,7 @@ local result = Ambiguate("", "")
 AutoEquipCursorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AutoEquipCursorItem()
@@ -85,7 +85,7 @@ AutoEquipCursorItem()
 BeginTrade()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 BeginTrade()
@@ -97,7 +97,7 @@ BeginTrade()
 CancelAreaSpiritHeal()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelAreaSpiritHeal()
@@ -115,7 +115,7 @@ CancelPendingEquip(index)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelPendingEquip(1)
@@ -127,7 +127,7 @@ CancelPendingEquip(1)
 CancelTrade()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelTrade()
@@ -145,7 +145,7 @@ result = CanDualWield()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanDualWield()
@@ -169,10 +169,10 @@ result = CanInspect(targetGUID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = CanInspect("Creature-0-0000-0-0-0-0")
+local result = CanInspect(UnitGUID("player"))
 ```
 
 ### PlayerScript.CanLootUnit
@@ -194,7 +194,7 @@ hasLoot, canLoot = CanLootUnit(targetUnit)
 | `hasLoot` | bool | no |  |
 | `canLoot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasLoot, canLoot = CanLootUnit("player")
@@ -212,7 +212,7 @@ canPortGraveyard = CanPortGraveyard()
 |------|------|---------|-------------|
 | `canPortGraveyard` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPortGraveyard = CanPortGraveyard()
@@ -237,7 +237,7 @@ result = CheckInteractDistance(unitGUID, distIndex)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CheckInteractDistance("player", 1)
@@ -255,7 +255,7 @@ result = CheckTalentMasterDist()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CheckTalentMasterDist()
@@ -267,7 +267,7 @@ local result = CheckTalentMasterDist()
 ClearPendingBindConversionItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPendingBindConversionItem()
@@ -279,7 +279,7 @@ ClearPendingBindConversionItem()
 ConfirmTalentWipe()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ConfirmTalentWipe()
@@ -291,7 +291,7 @@ ConfirmTalentWipe()
 ConvertItemToBindToAccount()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ConvertItemToBindToAccount()
@@ -303,7 +303,7 @@ ConvertItemToBindToAccount()
 DeclineGuild()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DeclineGuild()
@@ -315,7 +315,7 @@ DeclineGuild()
 DeclineResurrect()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DeclineResurrect()
@@ -327,7 +327,7 @@ DeclineResurrect()
 Dismount()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Dismount()
@@ -345,7 +345,7 @@ EquipPendingItem(index)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EquipPendingItem(1)
@@ -364,7 +364,7 @@ FollowUnit(name, exactMatch)
 | `name` | cstring | no | (default: 0) |
 | `exactMatch` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FollowUnit("", false)
@@ -382,7 +382,7 @@ result = GetAllowLowLevelRaid()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAllowLowLevelRaid()
@@ -400,7 +400,7 @@ allowRecentAlliesSeeLocation = GetAllowRecentAlliesSeeLocation()
 |------|------|---------|-------------|
 | `allowRecentAlliesSeeLocation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowRecentAlliesSeeLocation = GetAllowRecentAlliesSeeLocation()
@@ -418,7 +418,7 @@ result = GetAreaSpiritHealerTime()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAreaSpiritHealerTime()
@@ -436,7 +436,7 @@ result = GetArmorPenetration()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetArmorPenetration()
@@ -461,10 +461,10 @@ result = GetAttackPowerForStat(stat, value)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = GetAttackPowerForStat(stat, 0)
+local result = GetAttackPowerForStat(1, 0)
 ```
 
 ### PlayerScript.GetAutoDeclineGuildInvites
@@ -479,7 +479,7 @@ result = GetAutoDeclineGuildInvites()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAutoDeclineGuildInvites()
@@ -497,7 +497,7 @@ result = GetAutoDeclineNeighborhoodInvites()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAutoDeclineNeighborhoodInvites()
@@ -515,7 +515,7 @@ result = GetAvoidance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAvoidance()
@@ -533,7 +533,7 @@ result = GetBindLocation()
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetBindLocation()
@@ -551,7 +551,7 @@ result = GetBlockChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetBlockChance()
@@ -569,7 +569,7 @@ result = GetCemeteryPreference()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCemeteryPreference()
@@ -587,7 +587,7 @@ cost = GetCollapsingStarCost()
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = GetCollapsingStarCost()
@@ -611,7 +611,7 @@ result = GetCombatRating(ratingIndex)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCombatRating(1)
@@ -635,7 +635,7 @@ result = GetCombatRatingBonus(ratingIndex)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCombatRatingBonus(1)
@@ -660,7 +660,7 @@ result = GetCombatRatingBonusForCombatRatingValue(ratingIndex, value)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCombatRatingBonusForCombatRatingValue(1, 0)
@@ -678,7 +678,7 @@ result = GetCorpseRecoveryDelay()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCorpseRecoveryDelay()
@@ -696,7 +696,7 @@ result = GetCorruption()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCorruption()
@@ -714,7 +714,7 @@ result = GetCorruptionResistance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCorruptionResistance()
@@ -732,7 +732,7 @@ result = GetCritChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCritChance()
@@ -757,10 +757,10 @@ critChance = GetCritChanceFromStat(stat, value)
 |------|------|---------|-------------|
 | `critChance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local critChance = GetCritChanceFromStat(stat, 0)
+local critChance = GetCritChanceFromStat(1, 0)
 ```
 
 ### PlayerScript.GetCritChanceProvidesParryEffect
@@ -775,7 +775,7 @@ result = GetCritChanceProvidesParryEffect()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCritChanceProvidesParryEffect()
@@ -793,7 +793,7 @@ result = GetDodgeChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetDodgeChance()
@@ -811,7 +811,7 @@ result = GetDodgeChanceFromAttribute()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetDodgeChanceFromAttribute()
@@ -829,7 +829,7 @@ result = GetEvictionTimeRemaining()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetEvictionTimeRemaining()
@@ -849,7 +849,7 @@ mainhandExpertise, offhandExpertise, rangedExpertise = GetExpertise()
 | `offhandExpertise` | number | no |  |
 | `rangedExpertise` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mainhandExpertise, offhandExpertise, rangedExpertise = GetExpertise()
@@ -869,7 +869,7 @@ mainhandExpertisePercent, offhandExpertisePercent, rangedExpertisePercent = GetE
 | `offhandExpertisePercent` | number | no |  |
 | `rangedExpertisePercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mainhandExpertisePercent, offhandExpertisePercent, rangedExpertisePercent = GetExpertisePercent()
@@ -887,7 +887,7 @@ result = GetHaste()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetHaste()
@@ -906,7 +906,7 @@ healthRegen, combatHealthRegen = GetHealthRegen()
 | `healthRegen` | number | no |  |
 | `combatHealthRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local healthRegen, combatHealthRegen = GetHealthRegen()
@@ -925,7 +925,7 @@ healthRegen, combatHealthRegen = GetHealthRegenFromSpirit()
 | `healthRegen` | number | no |  |
 | `combatHealthRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local healthRegen, combatHealthRegen = GetHealthRegenFromSpirit()
@@ -943,7 +943,7 @@ result = GetHitModifier()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetHitModifier()
@@ -961,7 +961,7 @@ result = GetJailersTowerLevel()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetJailersTowerLevel()
@@ -979,7 +979,7 @@ result = GetLifesteal()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetLifesteal()
@@ -997,7 +997,7 @@ specializationID = GetLootSpecialization()
 |------|------|---------|-------------|
 | `specializationID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specializationID = GetLootSpecialization()
@@ -1016,7 +1016,7 @@ baseManaRegen, castingManaRegen = GetManaRegen()
 | `baseManaRegen` | number | no |  |
 | `castingManaRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local baseManaRegen, castingManaRegen = GetManaRegen()
@@ -1035,7 +1035,7 @@ powerRegen, combatPowerRegen = GetManaRegenFromSpirit()
 | `powerRegen` | number | no |  |
 | `combatPowerRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerRegen, combatPowerRegen = GetManaRegenFromSpirit()
@@ -1053,7 +1053,7 @@ result = GetMastery()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetMastery()
@@ -1072,7 +1072,7 @@ masteryEffect, bonusCoefficient = GetMasteryEffect()
 | `masteryEffect` | number | no |  |
 | `bonusCoefficient` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local masteryEffect, bonusCoefficient = GetMasteryEffect()
@@ -1090,7 +1090,7 @@ maxPlayerLevel = GetMaxPlayerLevel()
 |------|------|---------|-------------|
 | `maxPlayerLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxPlayerLevel = GetMaxPlayerLevel()
@@ -1108,7 +1108,7 @@ result = GetMeleeHaste()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetMeleeHaste()
@@ -1126,7 +1126,7 @@ result = GetModResilienceDamageReduction()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetModResilienceDamageReduction()
@@ -1144,7 +1144,7 @@ result = GetMoney()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetMoney()
@@ -1162,7 +1162,7 @@ result = GetNormalizedRealmName()
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetNormalizedRealmName()
@@ -1180,7 +1180,7 @@ result = GetOverrideAPBySpellPower()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetOverrideAPBySpellPower()
@@ -1198,7 +1198,7 @@ result = GetOverrideSpellPowerByAP()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetOverrideSpellPowerByAP()
@@ -1216,7 +1216,7 @@ result = GetParryChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetParryChance()
@@ -1234,7 +1234,7 @@ result = GetParryChanceFromAttribute()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetParryChanceFromAttribute()
@@ -1252,7 +1252,7 @@ result = GetPetHitChanceModifier()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPetHitChanceModifier()
@@ -1270,7 +1270,7 @@ result = GetPetMeleeHaste()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPetMeleeHaste()
@@ -1288,7 +1288,7 @@ result = GetPetSpellBonusDamage()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPetSpellBonusDamage()
@@ -1306,7 +1306,7 @@ result = GetPetSpellHitChanceModifier()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPetSpellHitChanceModifier()
@@ -1324,7 +1324,7 @@ result = GetPlayerFacing()
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPlayerFacing()
@@ -1355,10 +1355,10 @@ localizedClass, englishClass, localizedRace, englishRace, sex, name, realmName, 
 | `realmName` | cstring | no |  |
 | `level` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local localizedClass, englishClass, localizedRace, englishRace, sex, name, realmName, level = GetPlayerInfoByGUID("Creature-0-0000-0-0-0-0")
+local localizedClass, englishClass, localizedRace, englishRace, sex, name, realmName, level = GetPlayerInfoByGUID(UnitGUID("player"))
 ```
 
 ### PlayerScript.GetPowerRegen
@@ -1374,7 +1374,7 @@ basePowerRegen, castingPowerRegen = GetPowerRegen()
 | `basePowerRegen` | number | no |  |
 | `castingPowerRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local basePowerRegen, castingPowerRegen = GetPowerRegen()
@@ -1399,7 +1399,7 @@ basePowerRegen, castingPowerRegen = GetPowerRegenForPowerType(powerType)
 | `basePowerRegen` | number | no |  |
 | `castingPowerRegen` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local basePowerRegen, castingPowerRegen = GetPowerRegenForPowerType(0)
@@ -1417,7 +1417,7 @@ result = GetPVPDesired()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPVPDesired()
@@ -1435,7 +1435,7 @@ result = GetPVPGearStatRules()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPVPGearStatRules()
@@ -1454,7 +1454,7 @@ lifetimeHonorableKills, lifetimeMaxPVPRank = GetPVPLifetimeStats()
 | `lifetimeHonorableKills` | number | no |  |
 | `lifetimeMaxPVPRank` | PvPRanks | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lifetimeHonorableKills, lifetimeMaxPVPRank = GetPVPLifetimeStats()
@@ -1472,7 +1472,7 @@ result = GetPvpPowerDamage()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPvpPowerDamage()
@@ -1490,7 +1490,7 @@ result = GetPvpPowerHealing()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPvpPowerHealing()
@@ -1509,7 +1509,7 @@ honorableKills, dishonorableKills = GetPVPSessionStats()
 | `honorableKills` | number | no |  |
 | `dishonorableKills` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honorableKills, dishonorableKills = GetPVPSessionStats()
@@ -1527,7 +1527,7 @@ result = GetPVPTimer()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetPVPTimer()
@@ -1546,7 +1546,7 @@ honorableKills, dishonorableKills = GetPVPYesterdayStats()
 | `honorableKills` | number | no |  |
 | `dishonorableKills` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honorableKills, dishonorableKills = GetPVPYesterdayStats()
@@ -1571,10 +1571,10 @@ result = GetRangedAttackPowerForStat(stat, value)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = GetRangedAttackPowerForStat(stat, 0)
+local result = GetRangedAttackPowerForStat(1, 0)
 ```
 
 ### PlayerScript.GetRangedCritChance
@@ -1589,7 +1589,7 @@ result = GetRangedCritChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetRangedCritChance()
@@ -1608,7 +1608,7 @@ result, quiverHaste = GetRangedHaste()
 | `result` | number | no |  |
 | `quiverHaste` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, quiverHaste = GetRangedHaste()
@@ -1626,7 +1626,7 @@ result = GetRangedHitModifier()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetRangedHitModifier()
@@ -1644,7 +1644,7 @@ result = GetReleaseTimeRemaining()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetReleaseTimeRemaining()
@@ -1662,7 +1662,7 @@ result = GetResSicknessDuration()
 |------|------|---------|-------------|
 | `result` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetResSicknessDuration()
@@ -1682,7 +1682,7 @@ maxLevel, maxMoney, professionCap = GetRestrictedAccountData()
 | `maxMoney` | WOWMONEY | no |  |
 | `professionCap` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLevel, maxMoney, professionCap = GetRestrictedAccountData()
@@ -1702,7 +1702,7 @@ exhaustionID, name, factor = GetRestState()
 | `name` | cstring | no |  |
 | `factor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exhaustionID, name, factor = GetRestState()
@@ -1728,7 +1728,7 @@ startTime, duration, isRuneReady = GetRuneCooldown(runeIndex)
 | `duration` | number | no |  |
 | `isRuneReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime, duration, isRuneReady = GetRuneCooldown(1)
@@ -1752,7 +1752,7 @@ result = GetRuneCount(runeIndex)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetRuneCount(1)
@@ -1770,7 +1770,7 @@ result = GetSheathState()
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSheathState()
@@ -1788,7 +1788,7 @@ result = GetShieldBlock()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetShieldBlock()
@@ -1806,7 +1806,7 @@ result = GetSpeed()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSpeed()
@@ -1830,10 +1830,10 @@ result = GetSpellBonusDamage(school)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = GetSpellBonusDamage(school)
+local result = GetSpellBonusDamage(1)
 ```
 
 ### PlayerScript.GetSpellBonusHealing
@@ -1848,7 +1848,7 @@ result = GetSpellBonusHealing()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSpellBonusHealing()
@@ -1866,7 +1866,7 @@ result = GetSpellCritChance()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSpellCritChance()
@@ -1891,10 +1891,10 @@ spellCritChance = GetSpellCritChanceFromStat(stat, value)
 |------|------|---------|-------------|
 | `spellCritChance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellCritChance = GetSpellCritChanceFromStat(stat, 0)
+local spellCritChance = GetSpellCritChanceFromStat(1, 0)
 ```
 
 ### PlayerScript.GetSpellHitModifier
@@ -1909,7 +1909,7 @@ result = GetSpellHitModifier()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSpellHitModifier()
@@ -1927,7 +1927,7 @@ result = GetSpellPenetration()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSpellPenetration()
@@ -1945,7 +1945,7 @@ result = GetSturdiness()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetSturdiness()
@@ -1963,7 +1963,7 @@ result = GetTaxiBenchmarkMode()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetTaxiBenchmarkMode()
@@ -1987,10 +1987,10 @@ result = GetVersatilityBonus(combatRating)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = GetVersatilityBonus(combatRating)
+local result = GetVersatilityBonus(1)
 ```
 
 ### PlayerScript.GetXPExhaustion
@@ -2005,7 +2005,7 @@ result = GetXPExhaustion()
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetXPExhaustion()
@@ -2023,7 +2023,7 @@ result = HasAPEffectsSpellPower()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = HasAPEffectsSpellPower()
@@ -2041,7 +2041,7 @@ result = HasDualWieldPenalty()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = HasDualWieldPenalty()
@@ -2059,7 +2059,7 @@ result = HasFullControl()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = HasFullControl()
@@ -2077,7 +2077,7 @@ result = HasIgnoreDualWieldWeapon()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = HasIgnoreDualWieldWeapon()
@@ -2095,7 +2095,7 @@ hasKey = HasKey()
 |------|------|---------|-------------|
 | `hasKey` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasKey = HasKey()
@@ -2115,7 +2115,7 @@ hasCannotReleaseEffect, longestDuration, hasUntilCancelledDuration = HasNoReleas
 | `longestDuration` | number | no |  |
 | `hasUntilCancelledDuration` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasCannotReleaseEffect, longestDuration, hasUntilCancelledDuration = HasNoReleaseAura()
@@ -2133,7 +2133,7 @@ result = HasSPEffectsAttackPower()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = HasSPEffectsAttackPower()
@@ -2151,10 +2151,10 @@ InitiateTrade(guid)
 |------|------|---------|-------------|
 | `guid` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-InitiateTrade("Creature-0-0000-0-0-0-0")
+InitiateTrade(UnitGUID("player"))
 ```
 
 ### PlayerScript.IsAccountSecured
@@ -2169,7 +2169,7 @@ result = IsAccountSecured()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsAccountSecured()
@@ -2187,7 +2187,7 @@ result = IsAdvancedFlyableArea()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsAdvancedFlyableArea()
@@ -2205,7 +2205,7 @@ result = IsCemeterySelectionAvailable()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsCemeterySelectionAvailable()
@@ -2223,7 +2223,7 @@ newlyBoosted = IsCharacterNewlyBoosted()
 |------|------|---------|-------------|
 | `newlyBoosted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newlyBoosted = IsCharacterNewlyBoosted()
@@ -2241,7 +2241,7 @@ result = IsDrivableArea()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsDrivableArea()
@@ -2259,7 +2259,7 @@ result = IsDualWielding()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsDualWielding()
@@ -2277,7 +2277,7 @@ result = IsFlyableArea()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsFlyableArea()
@@ -2295,7 +2295,7 @@ result = IsGuildLeader()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsGuildLeader()
@@ -2313,7 +2313,7 @@ result = IsIndoors()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsIndoors()
@@ -2331,7 +2331,7 @@ result = IsInGuild()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsInGuild()
@@ -2349,7 +2349,7 @@ result = IsInJailersTower()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsInJailersTower()
@@ -2367,7 +2367,7 @@ result = IsInsane()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsInsane()
@@ -2391,7 +2391,7 @@ isItemPreferredArmorType = IsItemPreferredArmorType(itemLocation)
 |------|------|---------|-------------|
 | `isItemPreferredArmorType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemPreferredArmorType = IsItemPreferredArmorType(6948)
@@ -2415,7 +2415,7 @@ result = IsJailersTowerLayerTimeLocked(layerLevel)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsJailersTowerLayerTimeLocked(0)
@@ -2433,7 +2433,7 @@ result = IsLoggedIn()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsLoggedIn()
@@ -2451,7 +2451,7 @@ result = IsMounted()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsMounted()
@@ -2469,7 +2469,7 @@ result = IsOnGroundFloorInJailersTower()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsOnGroundFloorInJailersTower()
@@ -2487,7 +2487,7 @@ result = IsOutdoors()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsOutdoors()
@@ -2505,7 +2505,7 @@ result = IsOutOfBounds()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsOutOfBounds()
@@ -2523,7 +2523,7 @@ result = IsPlayerInWorld()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsPlayerInWorld()
@@ -2541,7 +2541,7 @@ result = IsPlayerMoving()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsPlayerMoving()
@@ -2559,7 +2559,7 @@ result = IsPVPTimerRunning()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsPVPTimerRunning()
@@ -2577,7 +2577,7 @@ result = IsRangedWeapon()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsRangedWeapon()
@@ -2595,7 +2595,7 @@ result = IsResting()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsResting()
@@ -2613,7 +2613,7 @@ result = IsRestrictedAccount()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsRestrictedAccount()
@@ -2631,7 +2631,7 @@ result = IsStealthed()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsStealthed()
@@ -2649,7 +2649,7 @@ result = IsXPUserDisabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsXPUserDisabled()
@@ -2667,7 +2667,7 @@ result = NoPlayTime()
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = NoPlayTime()
@@ -2685,10 +2685,10 @@ NotifyInspect(targetGUID)
 |------|------|---------|-------------|
 | `targetGUID` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-NotifyInspect("Creature-0-0000-0-0-0-0")
+NotifyInspect(UnitGUID("player"))
 ```
 
 ### PlayerScript.PartialPlayTime
@@ -2703,7 +2703,7 @@ result = PartialPlayTime()
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = PartialPlayTime()
@@ -2721,7 +2721,7 @@ result = PlayerCanTeleport()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = PlayerCanTeleport()
@@ -2743,7 +2743,7 @@ mainHandAttackPower, offHandAttackPower, rangedAttackPower, baseAttackPower, bas
 | `baseAttackPower` | number | no |  |
 | `baseRangedAttackPower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mainHandAttackPower, offHandAttackPower, rangedAttackPower, baseAttackPower, baseRangedAttackPower = PlayerEffectiveAttackPower()
@@ -2761,7 +2761,7 @@ timerunningSeasonID = PlayerGetTimerunningSeasonID()
 |------|------|---------|-------------|
 | `timerunningSeasonID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timerunningSeasonID = PlayerGetTimerunningSeasonID()
@@ -2779,7 +2779,7 @@ playerIsInCombat = PlayerIsInCombat()
 |------|------|---------|-------------|
 | `playerIsInCombat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerIsInCombat = PlayerIsInCombat()
@@ -2797,7 +2797,7 @@ playerIsTimerunning = PlayerIsTimerunning()
 |------|------|---------|-------------|
 | `playerIsTimerunning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerIsTimerunning = PlayerIsTimerunning()
@@ -2809,7 +2809,7 @@ local playerIsTimerunning = PlayerIsTimerunning()
 PortGraveyard()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PortGraveyard()
@@ -2828,7 +2828,7 @@ RandomRoll(min, max)
 | `min` | number | no |  |
 | `max` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RandomRoll(0, 0)
@@ -2846,7 +2846,7 @@ allowed = ReagentsFromBankAllowed()
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = ReagentsFromBankAllowed()
@@ -2858,7 +2858,7 @@ local allowed = ReagentsFromBankAllowed()
 RepopMe()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RepopMe()
@@ -2870,7 +2870,7 @@ RepopMe()
 RequestTimePlayed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RequestTimePlayed()
@@ -2888,7 +2888,7 @@ RespondInstanceLock(acceptLock)
 |------|------|---------|-------------|
 | `acceptLock` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RespondInstanceLock(false)
@@ -2906,7 +2906,7 @@ name = ResurrectGetOfferer()
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = ResurrectGetOfferer()
@@ -2924,7 +2924,7 @@ result = ResurrectHasSickness()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ResurrectHasSickness()
@@ -2942,7 +2942,7 @@ result = ResurrectHasTimer()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ResurrectHasTimer()
@@ -2954,7 +2954,7 @@ local result = ResurrectHasTimer()
 RetrieveCorpse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RetrieveCorpse()
@@ -2972,7 +2972,7 @@ SetAllowLowLevelRaid(allow)
 |------|------|---------|-------------|
 | `allow` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowLowLevelRaid(false)
@@ -2990,7 +2990,7 @@ SetAllowRecentAlliesSeeLocation(allowRecentAlliesSeeLocation)
 |------|------|---------|-------------|
 | `allowRecentAlliesSeeLocation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowRecentAlliesSeeLocation(false)
@@ -3008,7 +3008,7 @@ SetAutoDeclineGuildInvites(allow)
 |------|------|---------|-------------|
 | `allow` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAutoDeclineGuildInvites(false)
@@ -3026,7 +3026,7 @@ SetAutoDeclineNeighborhoodInvites(allow)
 |------|------|---------|-------------|
 | `allow` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAutoDeclineNeighborhoodInvites(false)
@@ -3044,7 +3044,7 @@ SetCemeteryPreference(cemetaryID)
 |------|------|---------|-------------|
 | `cemetaryID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCemeteryPreference(0)
@@ -3062,7 +3062,7 @@ SetLootSpecialization(specializationID)
 |------|------|---------|-------------|
 | `specializationID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLootSpecialization(0)
@@ -3080,7 +3080,7 @@ SetTaxiBenchmarkMode(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaxiBenchmarkMode(false)
@@ -3098,7 +3098,7 @@ result = ShouldDisplayRaidRolesInSocialFrame()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShouldDisplayRaidRolesInSocialFrame()
@@ -3116,7 +3116,7 @@ result = ShouldDisplayStoryModeTooltipInSocialFrame()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShouldDisplayStoryModeTooltipInSocialFrame()
@@ -3134,7 +3134,7 @@ result = ShouldShowIslandsWeeklyPOI()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShouldShowIslandsWeeklyPOI()
@@ -3152,7 +3152,7 @@ result = ShouldShowSpecialSplashScreen()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShouldShowSpecialSplashScreen()
@@ -3170,7 +3170,7 @@ ShowCloak(show)
 |------|------|---------|-------------|
 | `show` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ShowCloak(false)
@@ -3188,7 +3188,7 @@ ShowHelm(show)
 |------|------|---------|-------------|
 | `show` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ShowHelm(false)
@@ -3206,7 +3206,7 @@ result = ShowingCloak()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShowingCloak()
@@ -3224,7 +3224,7 @@ result = ShowingHelm()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ShowingHelm()
@@ -3236,7 +3236,7 @@ local result = ShowingHelm()
 SitStandOrDescendStart()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SitStandOrDescendStart()
@@ -3254,7 +3254,7 @@ result = SplashFrameCanBeShown()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = SplashFrameCanBeShown()
@@ -3273,7 +3273,7 @@ StartAttack(name, exactMatch)
 | `name` | cstring | no | (default: 0) |
 | `exactMatch` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StartAttack("", false)
@@ -3285,7 +3285,7 @@ StartAttack("", false)
 StopAttack()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopAttack()
@@ -3297,7 +3297,7 @@ StopAttack()
 Stuck()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Stuck()
@@ -3309,7 +3309,7 @@ Stuck()
 TimeoutResurrect()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TimeoutResurrect()
@@ -3327,7 +3327,7 @@ enabled = ToggleSelfHighlight()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = ToggleSelfHighlight()
@@ -3339,7 +3339,7 @@ local enabled = ToggleSelfHighlight()
 ToggleSheath()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleSheath()
@@ -3351,7 +3351,7 @@ ToggleSheath()
 ToggleSit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleSit()

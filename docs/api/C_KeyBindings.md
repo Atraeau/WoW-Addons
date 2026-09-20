@@ -18,10 +18,10 @@ C_KeyBindings.ActivateBindingContext(newContext)
 |------|------|---------|-------------|
 | `newContext` | BindingContext | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_KeyBindings.ActivateBindingContext(newContext)
+C_KeyBindings.ActivateBindingContext(Enum.BindingContext.None)
 ```
 
 ### C_KeyBindings.DeactivateBindingContext
@@ -36,10 +36,10 @@ C_KeyBindings.DeactivateBindingContext(context)
 |------|------|---------|-------------|
 | `context` | BindingContext | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_KeyBindings.DeactivateBindingContext(context)
+C_KeyBindings.DeactivateBindingContext(Enum.BindingContext.None)
 ```
 
 ### C_KeyBindings.GetBindingByKey
@@ -61,7 +61,7 @@ binding = C_KeyBindings.GetBindingByKey(action, [context])
 |------|------|---------|-------------|
 | `binding` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local binding = C_KeyBindings.GetBindingByKey("")
@@ -85,7 +85,7 @@ context = C_KeyBindings.GetBindingContextForAction(action)
 |------|------|---------|-------------|
 | `context` | BindingContext | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local context = C_KeyBindings.GetBindingContextForAction("")
@@ -109,7 +109,7 @@ bindingIndex = C_KeyBindings.GetBindingIndex(action)
 |------|------|---------|-------------|
 | `bindingIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bindingIndex = C_KeyBindings.GetBindingIndex("")
@@ -133,7 +133,7 @@ customBindingType = C_KeyBindings.GetCustomBindingType(bindingIndex)
 |------|------|---------|-------------|
 | `customBindingType` | CustomBindingType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local customBindingType = C_KeyBindings.GetCustomBindingType(1)
@@ -157,7 +157,7 @@ searchTags = C_KeyBindings.GetSearchTagsForAction(action)
 |------|------|---------|-------------|
 | `searchTags` | string[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local searchTags = C_KeyBindings.GetSearchTagsForAction("")
@@ -175,7 +175,7 @@ style = C_KeyBindings.GetTurnStrafeStyle()
 |------|------|---------|-------------|
 | `style` | TurnStrafeStyle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local style = C_KeyBindings.GetTurnStrafeStyle()
@@ -199,10 +199,10 @@ isActive = C_KeyBindings.IsBindingContextActive(context)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isActive = C_KeyBindings.IsBindingContextActive(context)
+local isActive = C_KeyBindings.IsBindingContextActive(Enum.BindingContext.None)
 ```
 
 ### C_KeyBindings.SetTurnStrafeStyle
@@ -219,10 +219,10 @@ C_KeyBindings.SetTurnStrafeStyle(style)
 |------|------|---------|-------------|
 | `style` | TurnStrafeStyle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_KeyBindings.SetTurnStrafeStyle(style)
+C_KeyBindings.SetTurnStrafeStyle(Enum.TurnStrafeStyle.Modern)
 ```
 
 ### C_KeyBindings.UpdateTurnStrafeBindingsForCharacter
@@ -231,7 +231,7 @@ C_KeyBindings.SetTurnStrafeStyle(style)
 C_KeyBindings.UpdateTurnStrafeBindingsForCharacter()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_KeyBindings.UpdateTurnStrafeBindingsForCharacter()

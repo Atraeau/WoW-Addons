@@ -25,7 +25,7 @@ squishedLevel = C_LevelSquish.ConvertFollowerLevel(level, maxFollowerLevel)
 |------|------|---------|-------------|
 | `squishedLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local squishedLevel = C_LevelSquish.ConvertFollowerLevel(0, 0)
@@ -49,7 +49,7 @@ squishedLevel = C_LevelSquish.ConvertPlayerLevel(level)
 |------|------|---------|-------------|
 | `squishedLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local squishedLevel = C_LevelSquish.ConvertPlayerLevel(0)

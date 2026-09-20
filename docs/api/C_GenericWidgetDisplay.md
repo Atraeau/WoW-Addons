@@ -12,7 +12,7 @@
 C_GenericWidgetDisplay.Acknowledge()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GenericWidgetDisplay.Acknowledge()
@@ -24,7 +24,7 @@ C_GenericWidgetDisplay.Acknowledge()
 C_GenericWidgetDisplay.Close()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GenericWidgetDisplay.Close()

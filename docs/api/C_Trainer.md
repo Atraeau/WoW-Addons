@@ -18,7 +18,7 @@ trainerType = C_Trainer.GetTrainerType()
 |------|------|---------|-------------|
 | `trainerType` | TrainerType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trainerType = C_Trainer.GetTrainerType()

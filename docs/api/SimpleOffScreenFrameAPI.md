@@ -25,7 +25,7 @@ success = ApplySnapshot(texture, snapshotID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = ApplySnapshot(texture, 0)
@@ -37,7 +37,7 @@ local success = ApplySnapshot(texture, 0)
 Flush()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Flush()
@@ -55,7 +55,7 @@ maxSnapshots = GetMaxSnapshots()
 |------|------|---------|-------------|
 | `maxSnapshots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxSnapshots = GetMaxSnapshots()
@@ -79,7 +79,7 @@ isValid = IsSnapshotValid(snapshotID)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = IsSnapshotValid(0)
@@ -97,7 +97,7 @@ SetMaxSnapshots(maxSnapshots)
 |------|------|---------|-------------|
 | `maxSnapshots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxSnapshots(0)
@@ -115,7 +115,7 @@ snapshotID = TakeSnapshot()
 |------|------|---------|-------------|
 | `snapshotID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local snapshotID = TakeSnapshot()
@@ -142,7 +142,7 @@ success = TestPrintToFile(snapshotID, filename)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = TestPrintToFile(0, "")
@@ -160,7 +160,7 @@ usesNPOT = UsesNPOT()
 |------|------|---------|-------------|
 | `usesNPOT` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local usesNPOT = UsesNPOT()

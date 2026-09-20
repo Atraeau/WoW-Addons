@@ -24,7 +24,7 @@ enabled = C_TTSSettings.GetChannelEnabled(channelInfo)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TTSSettings.GetChannelEnabled(channelInfo)
@@ -42,7 +42,7 @@ settingsBeenSaved = C_TTSSettings.GetCharacterSettingsSaved()
 |------|------|---------|-------------|
 | `settingsBeenSaved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local settingsBeenSaved = C_TTSSettings.GetCharacterSettingsSaved()
@@ -66,7 +66,7 @@ enabled = C_TTSSettings.GetChatTypeEnabled(chatName)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TTSSettings.GetChatTypeEnabled("")
@@ -90,7 +90,7 @@ enabled = C_TTSSettings.GetSetting(setting)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TTSSettings.GetSetting(setting)
@@ -108,7 +108,7 @@ rate = C_TTSSettings.GetSpeechRate()
 |------|------|---------|-------------|
 | `rate` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rate = C_TTSSettings.GetSpeechRate()
@@ -126,7 +126,7 @@ volume = C_TTSSettings.GetSpeechVolume()
 |------|------|---------|-------------|
 | `volume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local volume = C_TTSSettings.GetSpeechVolume()
@@ -150,7 +150,7 @@ voiceID = C_TTSSettings.GetVoiceOptionID(voiceType)
 |------|------|---------|-------------|
 | `voiceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local voiceID = C_TTSSettings.GetVoiceOptionID(voiceType)
@@ -174,7 +174,7 @@ voiceName = C_TTSSettings.GetVoiceOptionName(voiceType)
 |------|------|---------|-------------|
 | `voiceName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local voiceName = C_TTSSettings.GetVoiceOptionName(voiceType)
@@ -186,7 +186,7 @@ local voiceName = C_TTSSettings.GetVoiceOptionName(voiceType)
 C_TTSSettings.MarkCharacterSettingsSaved()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.MarkCharacterSettingsSaved()
@@ -205,7 +205,7 @@ C_TTSSettings.SetChannelEnabled(channelInfo, newVal)
 | `channelInfo` | ChatChannelInfo | no |  |
 | `newVal` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetChannelEnabled(channelInfo, false)
@@ -224,7 +224,7 @@ C_TTSSettings.SetChannelKeyEnabled(channelKey, newVal)
 | `channelKey` | string | no |  |
 | `newVal` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetChannelKeyEnabled("", false)
@@ -243,7 +243,7 @@ C_TTSSettings.SetChatTypeEnabled(chatName, newVal)
 | `chatName` | cstring | no |  |
 | `newVal` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetChatTypeEnabled("", false)
@@ -255,7 +255,7 @@ C_TTSSettings.SetChatTypeEnabled("", false)
 C_TTSSettings.SetDefaultSettings()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetDefaultSettings()
@@ -274,7 +274,7 @@ C_TTSSettings.SetSetting(setting, newVal)
 | `setting` | TtsBoolSetting | no |  |
 | `newVal` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetSetting(setting, false)
@@ -292,7 +292,7 @@ C_TTSSettings.SetSpeechRate(newVal)
 |------|------|---------|-------------|
 | `newVal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetSpeechRate(0)
@@ -310,7 +310,7 @@ C_TTSSettings.SetSpeechVolume(newVal)
 |------|------|---------|-------------|
 | `newVal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetSpeechVolume(0)
@@ -329,7 +329,7 @@ C_TTSSettings.SetVoiceOption(voiceType, voiceID)
 | `voiceType` | TtsVoiceType | no |  |
 | `voiceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetVoiceOption(voiceType, 0)
@@ -348,7 +348,7 @@ C_TTSSettings.SetVoiceOptionName(voiceType, voiceName)
 | `voiceType` | TtsVoiceType | no |  |
 | `voiceName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TTSSettings.SetVoiceOptionName(voiceType, "")
@@ -373,7 +373,7 @@ overrideMessage = C_TTSSettings.ShouldOverrideMessage(language, messageText)
 |------|------|---------|-------------|
 | `overrideMessage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overrideMessage = C_TTSSettings.ShouldOverrideMessage(0, "")

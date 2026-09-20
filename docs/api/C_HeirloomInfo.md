@@ -18,7 +18,7 @@ areAllCollectionFiltersChecked = C_HeirloomInfo.AreAllCollectionFiltersChecked()
 |------|------|---------|-------------|
 | `areAllCollectionFiltersChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAllCollectionFiltersChecked = C_HeirloomInfo.AreAllCollectionFiltersChecked()
@@ -36,7 +36,7 @@ areAllSourceFiltersChecked = C_HeirloomInfo.AreAllSourceFiltersChecked()
 |------|------|---------|-------------|
 | `areAllSourceFiltersChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAllSourceFiltersChecked = C_HeirloomInfo.AreAllSourceFiltersChecked()
@@ -54,7 +54,7 @@ areHeirloomsAvailable = C_HeirloomInfo.HeirloomsAvailable()
 |------|------|---------|-------------|
 | `areHeirloomsAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areHeirloomsAvailable = C_HeirloomInfo.HeirloomsAvailable()
@@ -78,10 +78,10 @@ isHeirloomSourceValid = C_HeirloomInfo.IsHeirloomSourceValid(source)
 |------|------|---------|-------------|
 | `isHeirloomSourceValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHeirloomSourceValid = C_HeirloomInfo.IsHeirloomSourceValid(source)
+local isHeirloomSourceValid = C_HeirloomInfo.IsHeirloomSourceValid(1)
 ```
 
 ### C_HeirloomInfo.IsUsingDefaultFilters
@@ -96,7 +96,7 @@ isUsingDefaultFilters = C_HeirloomInfo.IsUsingDefaultFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultFilters = C_HeirloomInfo.IsUsingDefaultFilters()
@@ -114,7 +114,7 @@ C_HeirloomInfo.SetAllCollectionFilters(checked)
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HeirloomInfo.SetAllCollectionFilters(false)
@@ -132,7 +132,7 @@ C_HeirloomInfo.SetAllSourceFilters(checked)
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HeirloomInfo.SetAllSourceFilters(false)
@@ -144,7 +144,7 @@ C_HeirloomInfo.SetAllSourceFilters(false)
 C_HeirloomInfo.SetDefaultFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HeirloomInfo.SetDefaultFilters()

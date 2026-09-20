@@ -18,7 +18,7 @@ campaignIDs = C_CampaignInfo.GetAvailableCampaigns()
 |------|------|---------|-------------|
 | `campaignIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local campaignIDs = C_CampaignInfo.GetAvailableCampaigns()
@@ -42,7 +42,7 @@ campaignChapterInfo = C_CampaignInfo.GetCampaignChapterInfo(campaignChapterID)
 |------|------|---------|-------------|
 | `campaignChapterInfo` | CampaignChapterInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local campaignChapterInfo = C_CampaignInfo.GetCampaignChapterInfo(0)
@@ -66,7 +66,7 @@ campaignID = C_CampaignInfo.GetCampaignID(questID)
 |------|------|---------|-------------|
 | `campaignID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local campaignID = C_CampaignInfo.GetCampaignID(0)
@@ -90,7 +90,7 @@ campaignInfo = C_CampaignInfo.GetCampaignInfo(campaignID)
 |------|------|---------|-------------|
 | `campaignInfo` | CampaignInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local campaignInfo = C_CampaignInfo.GetCampaignInfo(0)
@@ -114,7 +114,7 @@ chapterIDs = C_CampaignInfo.GetChapterIDs(campaignID)
 |------|------|---------|-------------|
 | `chapterIDs` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local chapterIDs = C_CampaignInfo.GetChapterIDs(0)
@@ -138,7 +138,7 @@ currentChapterID = C_CampaignInfo.GetCurrentChapterID(campaignID)
 |------|------|---------|-------------|
 | `currentChapterID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentChapterID = C_CampaignInfo.GetCurrentChapterID(0)
@@ -162,7 +162,7 @@ failureReason = C_CampaignInfo.GetFailureReason(campaignID)
 |------|------|---------|-------------|
 | `failureReason` | CampaignFailureReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local failureReason = C_CampaignInfo.GetFailureReason(0)
@@ -186,7 +186,7 @@ state = C_CampaignInfo.GetState(campaignID)
 |------|------|---------|-------------|
 | `state` | CampaignState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_CampaignInfo.GetState(0)
@@ -210,7 +210,7 @@ isCampaignQuest = C_CampaignInfo.IsCampaignQuest(questID)
 |------|------|---------|-------------|
 | `isCampaignQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCampaignQuest = C_CampaignInfo.IsCampaignQuest(0)
@@ -234,7 +234,7 @@ sortAsNormalQuest = C_CampaignInfo.SortAsNormalQuest(campaignID)
 |------|------|---------|-------------|
 | `sortAsNormalQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sortAsNormalQuest = C_CampaignInfo.SortAsNormalQuest(0)

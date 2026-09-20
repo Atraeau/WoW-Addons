@@ -18,7 +18,7 @@ CopyFontObject(sourceFont)
 |------|------|---------|-------------|
 | `sourceFont` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CopyFontObject(sourceFont)
@@ -36,7 +36,7 @@ alpha = GetAlpha()
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetAlpha()
@@ -56,7 +56,7 @@ fontFile, height, flags = GetFont()
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontFile, height, flags = GetFont()
@@ -76,7 +76,7 @@ height = GetFontHeight()
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetFontHeight()
@@ -94,7 +94,7 @@ font = GetFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObject()
@@ -118,7 +118,7 @@ font = GetFontObjectForAlphabet(alphabet)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObjectForAlphabet(alphabet)
@@ -136,7 +136,7 @@ wordWrap = GetIndentedWordWrap()
 |------|------|---------|-------------|
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wordWrap = GetIndentedWordWrap()
@@ -154,7 +154,7 @@ justifyH = GetJustifyH()
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyH = GetJustifyH()
@@ -172,7 +172,7 @@ justifyV = GetJustifyV()
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyV = GetJustifyV()
@@ -193,7 +193,7 @@ colorR, colorG, colorB, colorA = GetShadowColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetShadowColor()
@@ -212,7 +212,7 @@ offsetX, offsetY = GetShadowOffset()
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetShadowOffset()
@@ -230,7 +230,7 @@ spacing = GetSpacing()
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spacing = GetSpacing()
@@ -251,7 +251,7 @@ colorR, colorG, colorB, colorA = GetTextColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetTextColor()
@@ -269,7 +269,7 @@ SetAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlpha(alpha)
@@ -289,7 +289,7 @@ SetFont(fontFile, height, flags)
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFont("", height, flags)
@@ -309,7 +309,7 @@ SetFontHeight(height)
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontHeight(0)
@@ -327,7 +327,7 @@ SetFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontObject(font)
@@ -345,7 +345,7 @@ SetIndentedWordWrap(wordWrap)
 |------|------|---------|-------------|
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIndentedWordWrap(false)
@@ -363,7 +363,7 @@ SetJustifyH(justifyH)
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyH(justifyH)
@@ -381,7 +381,7 @@ SetJustifyV(justifyV)
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyV(justifyV)
@@ -402,7 +402,7 @@ SetShadowColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowColor(0, 0, 0)
@@ -421,10 +421,10 @@ SetShadowOffset(offsetX, offsetY)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetShadowOffset(0, 0)
+SetShadowOffset(1, 1)
 ```
 
 ### SimpleFontAPI.SetSpacing
@@ -439,7 +439,7 @@ SetSpacing(spacing)
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpacing(spacing)
@@ -460,7 +460,7 @@ SetTextColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColor(0, 0, 0)

@@ -18,7 +18,7 @@ zoneAbilities = C_ZoneAbility.GetActiveAbilities()
 |------|------|---------|-------------|
 | `zoneAbilities` | ZoneAbilityInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local zoneAbilities = C_ZoneAbility.GetActiveAbilities()
@@ -42,10 +42,10 @@ zoneAbilityIconID = C_ZoneAbility.GetZoneAbilityIcon(zoneAbilitySpellID)
 |------|------|---------|-------------|
 | `zoneAbilityIconID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local zoneAbilityIconID = C_ZoneAbility.GetZoneAbilityIcon(12345)
+local zoneAbilityIconID = C_ZoneAbility.GetZoneAbilityIcon(2050)
 ```
 
 ## Types

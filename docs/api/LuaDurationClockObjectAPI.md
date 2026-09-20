@@ -23,6 +23,9 @@ time = GetTime()
 **Example**
 
 ```lua
-local time = GetTime()
+-- High-precision seconds since client start; use for timers/throttling, not wall-clock.
+local start = GetTime()
+-- ... later ...
+print(("elapsed: %.3fs"):format(GetTime() - start))
 ```
 

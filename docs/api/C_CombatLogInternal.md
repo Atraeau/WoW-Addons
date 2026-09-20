@@ -12,7 +12,7 @@
 C_CombatLogInternal.GetCurrentEventInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogInternal.GetCurrentEventInfo()

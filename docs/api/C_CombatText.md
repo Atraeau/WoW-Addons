@@ -18,7 +18,7 @@ unitTarget = C_CombatText.GetActiveUnit()
 |------|------|---------|-------------|
 | `unitTarget` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitTarget = C_CombatText.GetActiveUnit()
@@ -30,7 +30,7 @@ local unitTarget = C_CombatText.GetActiveUnit()
 C_CombatText.GetCurrentEventInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatText.GetCurrentEventInfo()
@@ -48,7 +48,7 @@ C_CombatText.SetActiveUnit(unitToken)
 |------|------|---------|-------------|
 | `unitToken` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatText.SetActiveUnit("player")

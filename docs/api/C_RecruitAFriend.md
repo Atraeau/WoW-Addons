@@ -25,10 +25,10 @@ canSummon, reason = C_RecruitAFriend.CanSummonFriend(guid)
 | `canSummon` | bool | no |  |
 | `reason` | RecruitAFriendFailure | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canSummon, reason = C_RecruitAFriend.CanSummonFriend("Creature-0-0000-0-0-0-0")
+local canSummon, reason = C_RecruitAFriend.CanSummonFriend(UnitGUID("player"))
 ```
 
 ### C_RecruitAFriend.ClaimActivityReward
@@ -50,7 +50,7 @@ success = C_RecruitAFriend.ClaimActivityReward(activityID, acceptanceID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_RecruitAFriend.ClaimActivityReward(0, acceptanceID)
@@ -74,7 +74,7 @@ success = C_RecruitAFriend.ClaimNextReward([rafVersion])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_RecruitAFriend.ClaimNextReward()
@@ -92,7 +92,7 @@ success = C_RecruitAFriend.GenerateRecruitmentLink()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_RecruitAFriend.GenerateRecruitmentLink()
@@ -110,7 +110,7 @@ info = C_RecruitAFriend.GetRAFInfo()
 |------|------|---------|-------------|
 | `info` | RafInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_RecruitAFriend.GetRAFInfo()
@@ -128,7 +128,7 @@ systemInfo = C_RecruitAFriend.GetRAFSystemInfo()
 |------|------|---------|-------------|
 | `systemInfo` | RafSystemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local systemInfo = C_RecruitAFriend.GetRAFSystemInfo()
@@ -153,7 +153,7 @@ requirementsText = C_RecruitAFriend.GetRecruitActivityRequirementsText(activityI
 |------|------|---------|-------------|
 | `requirementsText` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requirementsText = C_RecruitAFriend.GetRecruitActivityRequirementsText(0, acceptanceID)
@@ -172,7 +172,7 @@ active, faction = C_RecruitAFriend.GetRecruitInfo()
 | `active` | bool | no |  |
 | `faction` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active, faction = C_RecruitAFriend.GetRecruitInfo()
@@ -192,7 +192,7 @@ startTimeSeconds, durationSeconds, enableCooldownTimer = C_RecruitAFriend.GetSum
 | `durationSeconds` | number | no |  |
 | `enableCooldownTimer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTimeSeconds, durationSeconds, enableCooldownTimer = C_RecruitAFriend.GetSummonFriendCooldown()
@@ -216,10 +216,10 @@ result = C_RecruitAFriend.IsRecruitAFriendLinked(guid)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_RecruitAFriend.IsRecruitAFriendLinked("Creature-0-0000-0-0-0-0")
+local result = C_RecruitAFriend.IsRecruitAFriendLinked(UnitGUID("player"))
 ```
 
 ### C_RecruitAFriend.IsRecruitingEnabled
@@ -234,7 +234,7 @@ enabled = C_RecruitAFriend.IsRecruitingEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_RecruitAFriend.IsRecruitingEnabled()
@@ -252,7 +252,7 @@ isSystemEnabled = C_RecruitAFriend.IsSystemEnabled()
 |------|------|---------|-------------|
 | `isSystemEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSystemEnabled = C_RecruitAFriend.IsSystemEnabled()
@@ -270,7 +270,7 @@ isSystemSupported = C_RecruitAFriend.IsSystemSupported()
 |------|------|---------|-------------|
 | `isSystemSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSystemSupported = C_RecruitAFriend.IsSystemSupported()
@@ -294,10 +294,10 @@ success = C_RecruitAFriend.RemoveRAFRecruit(wowAccountGUID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local success = C_RecruitAFriend.RemoveRAFRecruit("Creature-0-0000-0-0-0-0")
+local success = C_RecruitAFriend.RemoveRAFRecruit(UnitGUID("player"))
 ```
 
 ### C_RecruitAFriend.RequestUpdatedRecruitmentInfo
@@ -312,7 +312,7 @@ success = C_RecruitAFriend.RequestUpdatedRecruitmentInfo()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_RecruitAFriend.RequestUpdatedRecruitmentInfo()
@@ -331,10 +331,10 @@ C_RecruitAFriend.SummonFriend(target, name)
 | `target` | WOWGUID | no |  |
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_RecruitAFriend.SummonFriend(target, "")
+C_RecruitAFriend.SummonFriend(UnitGUID("player"), "")
 ```
 
 ## Events

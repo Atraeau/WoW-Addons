@@ -18,7 +18,7 @@ EquipItem(itemID)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EquipItem(6948)
@@ -36,7 +36,7 @@ InitializeCamera(scaleFactor)
 |------|------|---------|-------------|
 | `scaleFactor` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 InitializeCamera(0)
@@ -54,7 +54,7 @@ InitializePanCamera(scaleFactor)
 |------|------|---------|-------------|
 | `scaleFactor` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 InitializePanCamera(0)
@@ -66,7 +66,7 @@ InitializePanCamera(0)
 RefreshCamera()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RefreshCamera()
@@ -84,10 +84,10 @@ SetAnimOffset(offset)
 |------|------|---------|-------------|
 | `offset` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetAnimOffset(0)
+SetAnimOffset(1)
 ```
 
 ### FrameAPICinematicModel.SetCameraPosition
@@ -104,7 +104,7 @@ SetCameraPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraPosition(0, 0, 0)
@@ -124,7 +124,7 @@ SetCameraTarget(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraTarget(0, 0, 0)
@@ -142,7 +142,7 @@ SetCreatureData(creatureID)
 |------|------|---------|-------------|
 | `creatureID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCreatureData(0)
@@ -160,7 +160,7 @@ SetFacingLeft(isFacingLeft)
 |------|------|---------|-------------|
 | `isFacingLeft` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFacingLeft(false)
@@ -179,7 +179,7 @@ SetFadeTimes(fadeInSeconds, fadeOutSeconds)
 | `fadeInSeconds` | number | no |  |
 | `fadeOutSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFadeTimes(0, 0)
@@ -197,7 +197,7 @@ SetHeightFactor(factor)
 |------|------|---------|-------------|
 | `factor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHeightFactor(0)
@@ -216,7 +216,7 @@ SetJumpInfo(jumpLength, jumpHeight)
 | `jumpLength` | number | no |  |
 | `jumpHeight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJumpInfo(0, 0)
@@ -234,7 +234,7 @@ SetPanDistance(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPanDistance(0)
@@ -252,7 +252,7 @@ SetSpellVisualKit(visualKitID)
 |------|------|---------|-------------|
 | `visualKitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpellVisualKit(0)
@@ -270,7 +270,7 @@ SetTargetDistance(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTargetDistance(0)
@@ -293,10 +293,10 @@ StartPan(panType, durationSeconds, doFade, visKitID, startPositionScale, speedMu
 | `startPositionScale` | number | no | (default: 0) |
 | `speedMultiplier` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-StartPan(panType, 0, false, 0, 0, 0)
+StartPan(1, 0, false, 0, 0, 0)
 ```
 
 ### FrameAPICinematicModel.StopPan
@@ -305,7 +305,7 @@ StartPan(panType, 0, false, 0, 0, 0)
 StopPan()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopPan()
@@ -317,7 +317,7 @@ StopPan()
 UnequipItems()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnequipItems()

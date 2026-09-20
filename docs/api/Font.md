@@ -25,7 +25,7 @@ fontFamily = CreateFontFamily(name, members)
 |------|------|---------|-------------|
 | `fontFamily` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontFamily = CreateFontFamily("", members)
@@ -49,7 +49,7 @@ info = GetFontInfo(fontObject)
 |------|------|---------|-------------|
 | `info` | FontScriptInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = GetFontInfo(fontObject)
@@ -67,7 +67,7 @@ fontNames = GetFonts()
 |------|------|---------|-------------|
 | `fontNames` | cstring[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontNames = GetFonts()

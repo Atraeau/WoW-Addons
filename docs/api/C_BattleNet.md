@@ -18,7 +18,7 @@ areFriendTagsEnabled = C_BattleNet.AreFriendTagsEnabled()
 |------|------|---------|-------------|
 | `areFriendTagsEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areFriendTagsEnabled = C_BattleNet.AreFriendTagsEnabled()
@@ -36,7 +36,7 @@ installed = C_BattleNet.AreHighResTexturesInstalled()
 |------|------|---------|-------------|
 | `installed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local installed = C_BattleNet.AreHighResTexturesInstalled()
@@ -54,7 +54,7 @@ areTitleFriendCustomNamesEnabled = C_BattleNet.AreTitleFriendCustomNamesEnabled(
 |------|------|---------|-------------|
 | `areTitleFriendCustomNamesEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areTitleFriendCustomNamesEnabled = C_BattleNet.AreTitleFriendCustomNamesEnabled()
@@ -72,7 +72,7 @@ areTitleFriendsEnabled = C_BattleNet.AreTitleFriendsEnabled()
 |------|------|---------|-------------|
 | `areTitleFriendsEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areTitleFriendsEnabled = C_BattleNet.AreTitleFriendsEnabled()
@@ -90,10 +90,10 @@ C_BattleNet.BNCheckBattleTagInviteToRecentAlly(recentAllyGUID)
 |------|------|---------|-------------|
 | `recentAllyGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_BattleNet.BNCheckBattleTagInviteToRecentAlly("Creature-0-0000-0-0-0-0")
+C_BattleNet.BNCheckBattleTagInviteToRecentAlly(UnitGUID("player"))
 ```
 
 ### C_BattleNet.BNCheckTitleFriendInviteToUnit
@@ -108,7 +108,7 @@ C_BattleNet.BNCheckTitleFriendInviteToUnit(unit)
 |------|------|---------|-------------|
 | `unit` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.BNCheckTitleFriendInviteToUnit("player")
@@ -126,7 +126,7 @@ canToggle = C_BattleNet.CanToggleHighResTexturesWithoutClientReload()
 |------|------|---------|-------------|
 | `canToggle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canToggle = C_BattleNet.CanToggleHighResTexturesWithoutClientReload()
@@ -150,10 +150,10 @@ accountInfo = C_BattleNet.GetAccountInfoByGUID(guid)
 |------|------|---------|-------------|
 | `accountInfo` | BNetAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local accountInfo = C_BattleNet.GetAccountInfoByGUID("Creature-0-0000-0-0-0-0")
+local accountInfo = C_BattleNet.GetAccountInfoByGUID(UnitGUID("player"))
 ```
 
 ### C_BattleNet.GetAccountInfoByID
@@ -175,7 +175,7 @@ accountInfo = C_BattleNet.GetAccountInfoByID(id, [wowAccountGUID])
 |------|------|---------|-------------|
 | `accountInfo` | BNetAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accountInfo = C_BattleNet.GetAccountInfoByID(0)
@@ -199,7 +199,7 @@ customName = C_BattleNet.GetCustomTitleFriendName(id)
 |------|------|---------|-------------|
 | `customName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local customName = C_BattleNet.GetCustomTitleFriendName(0)
@@ -224,7 +224,7 @@ accountInfo = C_BattleNet.GetFriendAccountInfo(friendIndex, [wowAccountGUID])
 |------|------|---------|-------------|
 | `accountInfo` | BNetAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accountInfo = C_BattleNet.GetFriendAccountInfo(1)
@@ -249,7 +249,7 @@ gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(friendIndex, accountIndex
 |------|------|---------|-------------|
 | `gameAccountInfo` | BNetGameAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(1, 1)
@@ -273,7 +273,7 @@ inviteInfo = C_BattleNet.GetFriendInviteInfo(inviteIndex)
 |------|------|---------|-------------|
 | `inviteInfo` | BNetFriendInviteInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inviteInfo = C_BattleNet.GetFriendInviteInfo(1)
@@ -297,7 +297,7 @@ numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(friendIndex)
 |------|------|---------|-------------|
 | `numGameAccounts` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(1)
@@ -321,10 +321,10 @@ gameAccountInfo = C_BattleNet.GetGameAccountInfoByGUID(guid)
 |------|------|---------|-------------|
 | `gameAccountInfo` | BNetGameAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local gameAccountInfo = C_BattleNet.GetGameAccountInfoByGUID("Creature-0-0000-0-0-0-0")
+local gameAccountInfo = C_BattleNet.GetGameAccountInfoByGUID(UnitGUID("player"))
 ```
 
 ### C_BattleNet.GetGameAccountInfoByID
@@ -345,7 +345,7 @@ gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(id)
 |------|------|---------|-------------|
 | `gameAccountInfo` | BNetGameAccountInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(0)
@@ -357,7 +357,7 @@ local gameAccountInfo = C_BattleNet.GetGameAccountInfoByID(0)
 C_BattleNet.InstallHighResTextures()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.InstallHighResTextures()
@@ -375,7 +375,7 @@ C_BattleNet.InviteFriend(gameAccountID)
 |------|------|---------|-------------|
 | `gameAccountID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.InviteFriend(0)
@@ -393,7 +393,7 @@ isBattleNetFriendsListEnabled = C_BattleNet.IsBattleNetFriendsListEnabled()
 |------|------|---------|-------------|
 | `isBattleNetFriendsListEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBattleNetFriendsListEnabled = C_BattleNet.IsBattleNetFriendsListEnabled()
@@ -411,7 +411,7 @@ isBattleNetFriendsListSupported = C_BattleNet.IsBattleNetFriendsListSupported()
 |------|------|---------|-------------|
 | `isBattleNetFriendsListSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBattleNetFriendsListSupported = C_BattleNet.IsBattleNetFriendsListSupported()
@@ -435,7 +435,7 @@ isFriendTagSupportedForCurrentGameType = C_BattleNet.IsFriendTagSupportedForCurr
 |------|------|---------|-------------|
 | `isFriendTagSupportedForCurrentGameType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFriendTagSupportedForCurrentGameType = C_BattleNet.IsFriendTagSupportedForCurrentGameType(friendTag)
@@ -459,7 +459,7 @@ friendsData = C_BattleNet.SearchFriends(searchInfo)
 |------|------|---------|-------------|
 | `friendsData` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local friendsData = C_BattleNet.SearchFriends(searchInfo)
@@ -485,7 +485,7 @@ result = C_BattleNet.SendGameData(gameAccountID, prefix, data)
 |------|------|---------|-------------|
 | `result` | SendAddonMessageResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_BattleNet.SendGameData(0, prefix, data)
@@ -503,7 +503,7 @@ C_BattleNet.SendTitleFriendInviteByName(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SendTitleFriendInviteByName("")
@@ -515,7 +515,7 @@ C_BattleNet.SendTitleFriendInviteByName("")
 C_BattleNet.SendVerifiedBattleNetFriendInvite()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SendVerifiedBattleNetFriendInvite()
@@ -540,7 +540,7 @@ success = C_BattleNet.SendWhisper(bnetAccountID, text)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_BattleNet.SendWhisper(0, text)
@@ -558,7 +558,7 @@ C_BattleNet.SetAFK(isAFK)
 |------|------|---------|-------------|
 | `isAFK` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SetAFK(false)
@@ -576,7 +576,7 @@ C_BattleNet.SetAppearOffline(isAppearOffline)
 |------|------|---------|-------------|
 | `isAppearOffline` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SetAppearOffline(false)
@@ -600,7 +600,7 @@ success = C_BattleNet.SetCustomMessage(text)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_BattleNet.SetCustomMessage("")
@@ -619,7 +619,7 @@ C_BattleNet.SetCustomTitleFriendName(id, customName)
 | `id` | number | no |  |
 | `customName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SetCustomTitleFriendName(0, "")
@@ -637,7 +637,7 @@ C_BattleNet.SetDND(isDND)
 |------|------|---------|-------------|
 | `isDND` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SetDND(false)
@@ -656,7 +656,7 @@ C_BattleNet.SetFriendTags(id, friendTags)
 | `id` | number | no |  |
 | `friendTags` | BattleNetFriendTag[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BattleNet.SetFriendTags(0, friendTags)

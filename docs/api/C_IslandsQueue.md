@@ -12,7 +12,7 @@
 C_IslandsQueue.CloseIslandsQueueScreen()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_IslandsQueue.CloseIslandsQueueScreen()
@@ -30,7 +30,7 @@ islandDifficultyInfo = C_IslandsQueue.GetIslandDifficultyInfo()
 |------|------|---------|-------------|
 | `islandDifficultyInfo` | IslandsQueueDifficultyInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local islandDifficultyInfo = C_IslandsQueue.GetIslandDifficultyInfo()
@@ -48,7 +48,7 @@ maxGroupSize = C_IslandsQueue.GetIslandsMaxGroupSize()
 |------|------|---------|-------------|
 | `maxGroupSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxGroupSize = C_IslandsQueue.GetIslandsMaxGroupSize()
@@ -66,7 +66,7 @@ questID = C_IslandsQueue.GetIslandsWeeklyQuestID()
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_IslandsQueue.GetIslandsWeeklyQuestID()
@@ -84,7 +84,7 @@ C_IslandsQueue.QueueForIsland(difficultyID)
 |------|------|---------|-------------|
 | `difficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_IslandsQueue.QueueForIsland(0)
@@ -102,7 +102,7 @@ C_IslandsQueue.RequestPreloadRewardData(questId)
 |------|------|---------|-------------|
 | `questId` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_IslandsQueue.RequestPreloadRewardData(0)

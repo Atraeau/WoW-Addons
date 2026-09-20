@@ -12,7 +12,7 @@
 ClearOutage()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearOutage()
@@ -24,7 +24,7 @@ ClearOutage()
 OutageDetected()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OutageDetected()

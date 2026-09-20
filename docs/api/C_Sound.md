@@ -24,7 +24,7 @@ scaledVolume = C_Sound.GetSoundScaledVolume(soundHandle)
 |------|------|---------|-------------|
 | `scaledVolume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaledVolume = C_Sound.GetSoundScaledVolume(0)
@@ -48,7 +48,7 @@ isPlaying = C_Sound.IsPlaying(soundHandle)
 |------|------|---------|-------------|
 | `isPlaying` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlaying = C_Sound.IsPlaying(0)
@@ -67,7 +67,7 @@ C_Sound.PlayItemSound(soundType, itemLocation)
 | `soundType` | ItemSoundType | no |  |
 | `itemLocation` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Sound.PlayItemSound(soundType, 6948)
@@ -97,7 +97,7 @@ success, soundHandle = C_Sound.PlaySound(soundKitID, uiSoundSubType, forceNoDupl
 | `success` | bool | no |  |
 | `soundHandle` | SoundHandle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, soundHandle = C_Sound.PlaySound(0, uiSoundSubType, false, false)
@@ -122,7 +122,7 @@ success, soundHandle = C_Sound.PlaySoundWithOptions(params)
 | `success` | bool | no |  |
 | `soundHandle` | SoundHandle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, soundHandle = C_Sound.PlaySoundWithOptions(params)
@@ -140,7 +140,7 @@ C_Sound.PlayVocalErrorSound(vocalErrorSoundID)
 |------|------|---------|-------------|
 | `vocalErrorSoundID` | Vocalerrorsounds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Sound.PlayVocalErrorSound(vocalErrorSoundID)

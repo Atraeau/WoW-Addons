@@ -12,7 +12,7 @@
 AbortDrag()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AbortDrag()
@@ -32,7 +32,7 @@ AddRoleset(roleset)
 |------|------|---------|-------------|
 | `roleset` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddRoleset("")
@@ -50,7 +50,7 @@ canChangeAttributes = CanChangeAttribute()
 |------|------|---------|-------------|
 | `canChangeAttributes` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChangeAttributes = CanChangeAttribute()
@@ -62,7 +62,7 @@ local canChangeAttributes = CanChangeAttribute()
 ClearAlphaGradient()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAlphaGradient()
@@ -86,7 +86,7 @@ cleared = ClearAttribute(attributeName)
 |------|------|---------|-------------|
 | `cleared` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cleared = ClearAttribute("")
@@ -98,7 +98,7 @@ local cleared = ClearAttribute("")
 ClearAttributes()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAttributes()
@@ -124,7 +124,7 @@ line = CreateFontString([name], [drawLayer], [templateName])
 |------|------|---------|-------------|
 | `line` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local line = CreateFontString()
@@ -151,7 +151,7 @@ line = CreateLine([name], [drawLayer], [templateName], [subLevel])
 |------|------|---------|-------------|
 | `line` | SimpleLine | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local line = CreateLine()
@@ -178,7 +178,7 @@ maskTexture = CreateMaskTexture([name], [drawLayer], [templateName], [subLevel])
 |------|------|---------|-------------|
 | `maskTexture` | SimpleMaskTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maskTexture = CreateMaskTexture()
@@ -205,7 +205,7 @@ texture = CreateTexture([name], [drawLayer], [templateName], [subLevel])
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = CreateTexture()
@@ -232,7 +232,7 @@ vectorGraphics = CreateVectorGraphics([name], [drawLayer], [templateName], [subL
 |------|------|---------|-------------|
 | `vectorGraphics` | SimpleVectorGraphics | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vectorGraphics = CreateVectorGraphics()
@@ -251,7 +251,7 @@ DesaturateHierarchy(desaturation, excludeRoot)
 | `desaturation` | number | no |  |
 | `excludeRoot` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DesaturateHierarchy(0, false)
@@ -269,7 +269,7 @@ DisableDrawLayer(layer)
 |------|------|---------|-------------|
 | `layer` | DrawLayer | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DisableDrawLayer(layer)
@@ -287,7 +287,7 @@ clipsChildren = DoesClipChildren()
 |------|------|---------|-------------|
 | `clipsChildren` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clipsChildren = DoesClipChildren()
@@ -307,7 +307,7 @@ canPropagate = DoesHyperlinkPropagateToParent()
 |------|------|---------|-------------|
 | `canPropagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPropagate = DoesHyperlinkPropagateToParent()
@@ -325,7 +325,7 @@ EnableDrawLayer(layer)
 |------|------|---------|-------------|
 | `layer` | DrawLayer | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableDrawLayer(layer)
@@ -343,7 +343,7 @@ EnableGamePadButton(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableGamePadButton(false)
@@ -361,7 +361,7 @@ EnableGamePadStick(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableGamePadStick(false)
@@ -379,7 +379,7 @@ EnableKeyboard(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableKeyboard(false)
@@ -405,7 +405,7 @@ success, returns = ExecuteAttribute(attributeName, [arguments])
 | `success` | bool | no |  |
 | `returns` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, returns = ExecuteAttribute("")
@@ -423,7 +423,7 @@ alpha = GetAlpha()
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetAlpha()
@@ -447,7 +447,7 @@ value = GetAttribute(attributeName)
 |------|------|---------|-------------|
 | `value` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = GetAttribute("")
@@ -468,7 +468,7 @@ left, bottom, width, height = GetBoundsRect()
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, bottom, width, height = GetBoundsRect()
@@ -486,7 +486,7 @@ children = GetChildren()
 |------|------|---------|-------------|
 | `children` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local children = GetChildren()
@@ -507,7 +507,7 @@ left, right, top, bottom = GetClampRectInsets()
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = GetClampRectInsets()
@@ -525,7 +525,7 @@ dontSave = GetDontSavePosition()
 |------|------|---------|-------------|
 | `dontSave` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dontSave = GetDontSavePosition()
@@ -543,7 +543,7 @@ effectiveAlpha = GetEffectiveAlpha()
 |------|------|---------|-------------|
 | `effectiveAlpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveAlpha = GetEffectiveAlpha()
@@ -561,7 +561,7 @@ flatten = GetEffectivelyFlattensRenderLayers()
 |------|------|---------|-------------|
 | `flatten` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flatten = GetEffectivelyFlattensRenderLayers()
@@ -579,7 +579,7 @@ effectiveScale = GetEffectiveScale()
 |------|------|---------|-------------|
 | `effectiveScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveScale = GetEffectiveScale()
@@ -597,7 +597,7 @@ flatten = GetFlattensRenderLayers()
 |------|------|---------|-------------|
 | `flatten` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flatten = GetFlattensRenderLayers()
@@ -615,7 +615,7 @@ frameLevel = GetFrameLevel()
 |------|------|---------|-------------|
 | `frameLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frameLevel = GetFrameLevel()
@@ -633,7 +633,7 @@ strata = GetFrameStrata()
 |------|------|---------|-------------|
 | `strata` | FrameStrata | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local strata = GetFrameStrata()
@@ -659,7 +659,7 @@ frameLevel = GetHighestFrameLevel(iterateAllChildren)
 |------|------|---------|-------------|
 | `frameLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frameLevel = GetHighestFrameLevel(false)
@@ -680,7 +680,7 @@ left, right, top, bottom = GetHitRectInsets()
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = GetHitRectInsets()
@@ -698,7 +698,7 @@ enabled = GetHyperlinksEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetHyperlinksEnabled()
@@ -716,7 +716,7 @@ id = GetID()
 |------|------|---------|-------------|
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local id = GetID()
@@ -734,7 +734,7 @@ numChildren = GetNumChildren()
 |------|------|---------|-------------|
 | `numChildren` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numChildren = GetNumChildren()
@@ -752,7 +752,7 @@ numRegions = GetNumRegions()
 |------|------|---------|-------------|
 | `numRegions` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numRegions = GetNumRegions()
@@ -772,7 +772,7 @@ onUpdateMode = GetOnUpdateMode()
 |------|------|---------|-------------|
 | `onUpdateMode` | OnUpdateMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local onUpdateMode = GetOnUpdateMode()
@@ -790,7 +790,7 @@ propagate = GetPropagateKeyboardInput()
 |------|------|---------|-------------|
 | `propagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local propagate = GetPropagateKeyboardInput()
@@ -808,7 +808,7 @@ frameLevel = GetRaisedFrameLevel()
 |------|------|---------|-------------|
 | `frameLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frameLevel = GetRaisedFrameLevel()
@@ -826,7 +826,7 @@ regions = GetRegions()
 |------|------|---------|-------------|
 | `regions` | SimpleRegion | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local regions = GetRegions()
@@ -847,7 +847,7 @@ minWidth, minHeight, maxWidth, maxHeight = GetResizeBounds()
 | `maxWidth` | uiUnit | no |  |
 | `maxHeight` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minWidth, minHeight, maxWidth, maxHeight = GetResizeBounds()
@@ -867,7 +867,7 @@ rolesets = GetRolesetNames()
 |------|------|---------|-------------|
 | `rolesets` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rolesets = GetRolesetNames()
@@ -885,7 +885,7 @@ frameScale = GetScale()
 |------|------|---------|-------------|
 | `frameScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frameScale = GetScale()
@@ -903,7 +903,7 @@ window = GetWindow()
 |------|------|---------|-------------|
 | `window` | SimpleWindow | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local window = GetWindow()
@@ -921,7 +921,7 @@ hasAlphaGradient = HasAlphaGradient()
 |------|------|---------|-------------|
 | `hasAlphaGradient` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAlphaGradient = HasAlphaGradient()
@@ -939,7 +939,7 @@ isFixed = HasFixedFrameLevel()
 |------|------|---------|-------------|
 | `isFixed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFixed = HasFixedFrameLevel()
@@ -957,7 +957,7 @@ isFixed = HasFixedFrameStrata()
 |------|------|---------|-------------|
 | `isFixed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFixed = HasFixedFrameStrata()
@@ -969,7 +969,7 @@ local isFixed = HasFixedFrameStrata()
 Hide()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Hide()
@@ -993,7 +993,7 @@ success = InterceptStartDrag(delegate)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = InterceptStartDrag(delegate)
@@ -1011,7 +1011,7 @@ clampedToScreen = IsClampedToScreen()
 |------|------|---------|-------------|
 | `clampedToScreen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clampedToScreen = IsClampedToScreen()
@@ -1035,7 +1035,7 @@ isEnabled = IsDrawLayerEnabled(layer)
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = IsDrawLayerEnabled(layer)
@@ -1060,7 +1060,7 @@ isRegistered, units = IsEventRegistered(eventName)
 | `isRegistered` | bool | no |  |
 | `units` | UnitTokenType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRegistered, units = IsEventRegistered("")
@@ -1078,7 +1078,7 @@ isFrameBuffer = IsFrameBuffer()
 |------|------|---------|-------------|
 | `isFrameBuffer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFrameBuffer = IsFrameBuffer()
@@ -1096,7 +1096,7 @@ enabled = IsGamePadButtonEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsGamePadButtonEnabled()
@@ -1114,7 +1114,7 @@ enabled = IsGamePadStickEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsGamePadStickEnabled()
@@ -1132,7 +1132,7 @@ locked = IsHighlightLocked()
 |------|------|---------|-------------|
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locked = IsHighlightLocked()
@@ -1150,7 +1150,7 @@ ignore = IsIgnoringChildrenForBounds()
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ignore = IsIgnoringChildrenForBounds()
@@ -1168,7 +1168,7 @@ ignore = IsIgnoringParentAlpha()
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ignore = IsIgnoringParentAlpha()
@@ -1186,7 +1186,7 @@ ignore = IsIgnoringParentScale()
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ignore = IsIgnoringParentScale()
@@ -1204,7 +1204,7 @@ enabled = IsKeyboardEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsKeyboardEnabled()
@@ -1222,7 +1222,7 @@ isMovable = IsMovable()
 |------|------|---------|-------------|
 | `isMovable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMovable = IsMovable()
@@ -1240,7 +1240,7 @@ isLoaded = IsObjectLoaded()
 |------|------|---------|-------------|
 | `isLoaded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLoaded = IsObjectLoaded()
@@ -1258,7 +1258,7 @@ resizable = IsResizable()
 |------|------|---------|-------------|
 | `resizable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local resizable = IsResizable()
@@ -1278,7 +1278,7 @@ isRolesetFiltered = IsRolesetFiltered()
 |------|------|---------|-------------|
 | `isRolesetFiltered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRolesetFiltered = IsRolesetFiltered()
@@ -1296,7 +1296,7 @@ isShown = IsShown()
 |------|------|---------|-------------|
 | `isShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isShown = IsShown()
@@ -1314,7 +1314,7 @@ isTopLevel = IsToplevel()
 |------|------|---------|-------------|
 | `isTopLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTopLevel = IsToplevel()
@@ -1332,7 +1332,7 @@ isUserPlaced = IsUserPlaced()
 |------|------|---------|-------------|
 | `isUserPlaced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUserPlaced = IsUserPlaced()
@@ -1350,7 +1350,7 @@ usingParentLevel = IsUsingParentLevel()
 |------|------|---------|-------------|
 | `usingParentLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local usingParentLevel = IsUsingParentLevel()
@@ -1368,7 +1368,7 @@ isVisible = IsVisible()
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = IsVisible()
@@ -1380,7 +1380,7 @@ local isVisible = IsVisible()
 LockHighlight()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 LockHighlight()
@@ -1392,7 +1392,7 @@ LockHighlight()
 Lower()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Lower()
@@ -1404,7 +1404,7 @@ Lower()
 Raise()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Raise()
@@ -1416,7 +1416,7 @@ Raise()
 RegisterAllEvents()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterAllEvents()
@@ -1440,7 +1440,7 @@ registered = RegisterEvent(eventName)
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = RegisterEvent("")
@@ -1465,7 +1465,7 @@ registered = RegisterEventCallback(eventName, cb)
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = RegisterEventCallback("", cb)
@@ -1483,7 +1483,7 @@ RegisterForDrag(buttons)
 |------|------|---------|-------------|
 | `buttons` | MouseButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterForDrag(buttons)
@@ -1508,7 +1508,7 @@ registered = RegisterUnitEvent(eventName, units)
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = RegisterUnitEvent("", "player")
@@ -1534,7 +1534,7 @@ registered = RegisterUnitEventCallback(eventName, cb, units)
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = RegisterUnitEventCallback("", cb, "player")
@@ -1554,7 +1554,7 @@ RemoveRoleset(roleset)
 |------|------|---------|-------------|
 | `roleset` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RemoveRoleset("")
@@ -1566,7 +1566,7 @@ RemoveRoleset("")
 ResizeToBoundsRect()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResizeToBoundsRect()
@@ -1586,7 +1586,7 @@ RotateTextures(radians, x, y)
 | `x` | number | no | (default: 0.5) |
 | `y` | number | no | (default: 0.5) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RotateTextures(0, 0, 0)
@@ -1604,7 +1604,7 @@ SetAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlpha(alpha)
@@ -1624,7 +1624,7 @@ SetAlphaFromBoolean(value, alphaIfTrue, alphaIfFalse)
 | `alphaIfTrue` | SingleColorValue | no | (default: 255) |
 | `alphaIfFalse` | SingleColorValue | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlphaFromBoolean(false, alphaIfTrue, alphaIfFalse)
@@ -1643,7 +1643,7 @@ SetAlphaGradient(index, gradient)
 | `index` | number | no |  |
 | `gradient` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlphaGradient(1, gradient)
@@ -1662,7 +1662,7 @@ SetAttribute(attributeName, value)
 | `attributeName` | cstring | no |  |
 | `value` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAttribute("", "")
@@ -1681,7 +1681,7 @@ SetAttributeNoHandler(attributeName, value)
 | `attributeName` | cstring | no |  |
 | `value` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAttributeNoHandler("", "")
@@ -1699,7 +1699,7 @@ SetClampedToScreen(clampedToScreen)
 |------|------|---------|-------------|
 | `clampedToScreen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetClampedToScreen(false)
@@ -1720,7 +1720,7 @@ SetClampRectInsets(left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetClampRectInsets(left, right, top, bottom)
@@ -1738,7 +1738,7 @@ SetClipsChildren(clipsChildren)
 |------|------|---------|-------------|
 | `clipsChildren` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetClipsChildren(false)
@@ -1756,7 +1756,7 @@ SetDontSavePosition(dontSave)
 |------|------|---------|-------------|
 | `dontSave` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDontSavePosition(false)
@@ -1775,7 +1775,7 @@ SetDrawLayerEnabled(layer, isEnabled)
 | `layer` | DrawLayer | no |  |
 | `isEnabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawLayerEnabled(layer, false)
@@ -1793,7 +1793,7 @@ SetFixedFrameLevel(isFixed)
 |------|------|---------|-------------|
 | `isFixed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFixedFrameLevel(false)
@@ -1811,7 +1811,7 @@ SetFixedFrameStrata(isFixed)
 |------|------|---------|-------------|
 | `isFixed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFixedFrameStrata(false)
@@ -1829,7 +1829,7 @@ SetFlattensRenderLayers(flatten)
 |------|------|---------|-------------|
 | `flatten` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlattensRenderLayers(false)
@@ -1847,7 +1847,7 @@ SetFrameLevel(frameLevel)
 |------|------|---------|-------------|
 | `frameLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFrameLevel(0)
@@ -1865,7 +1865,7 @@ SetFrameStrata(strata)
 |------|------|---------|-------------|
 | `strata` | FrameStrata | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFrameStrata(strata)
@@ -1883,7 +1883,7 @@ SetHighlightLocked(locked)
 |------|------|---------|-------------|
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHighlightLocked(false)
@@ -1904,7 +1904,7 @@ SetHitRectInsets(left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHitRectInsets(left, right, top, bottom)
@@ -1924,7 +1924,7 @@ SetHyperlinkPropagateToParent(canPropagate)
 |------|------|---------|-------------|
 | `canPropagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHyperlinkPropagateToParent(false)
@@ -1942,7 +1942,7 @@ SetHyperlinksEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHyperlinksEnabled(false)
@@ -1960,7 +1960,7 @@ SetID(id)
 |------|------|---------|-------------|
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetID(0)
@@ -1978,7 +1978,7 @@ SetIgnoreParentAlpha(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIgnoreParentAlpha(false)
@@ -1996,7 +1996,7 @@ SetIgnoreParentScale(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIgnoreParentScale(false)
@@ -2014,7 +2014,7 @@ SetIgnoringChildrenForBounds(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIgnoringChildrenForBounds(false)
@@ -2032,7 +2032,7 @@ SetIsFrameBuffer(isFrameBuffer)
 |------|------|---------|-------------|
 | `isFrameBuffer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIsFrameBuffer(false)
@@ -2050,7 +2050,7 @@ SetMovable(movable)
 |------|------|---------|-------------|
 | `movable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMovable(false)
@@ -2070,7 +2070,7 @@ SetOnUpdateMode(onUpdateMode)
 |------|------|---------|-------------|
 | `onUpdateMode` | OnUpdateMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOnUpdateMode(onUpdateMode)
@@ -2088,7 +2088,7 @@ SetPropagateKeyboardInput(propagate)
 |------|------|---------|-------------|
 | `propagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPropagateKeyboardInput(false)
@@ -2106,7 +2106,7 @@ SetResizable(resizable)
 |------|------|---------|-------------|
 | `resizable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetResizable(false)
@@ -2127,7 +2127,7 @@ SetResizeBounds(minWidth, minHeight, [maxWidth], [maxHeight])
 | `maxWidth` | uiUnit | yes |  |
 | `maxHeight` | uiUnit | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetResizeBounds(minWidth, minHeight)
@@ -2147,7 +2147,7 @@ SetRolesets([rolesetsString])
 |------|------|---------|-------------|
 | `rolesetsString` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRolesets()
@@ -2165,7 +2165,7 @@ SetScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScale(0)
@@ -2183,7 +2183,7 @@ SetShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShown(false)
@@ -2201,7 +2201,7 @@ SetToplevel(topLevel)
 |------|------|---------|-------------|
 | `topLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToplevel(false)
@@ -2219,7 +2219,7 @@ SetUserPlaced(userPlaced)
 |------|------|---------|-------------|
 | `userPlaced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUserPlaced(false)
@@ -2237,7 +2237,7 @@ SetUsingParentLevel(usingParentLevel)
 |------|------|---------|-------------|
 | `usingParentLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUsingParentLevel(false)
@@ -2255,7 +2255,7 @@ SetWindow([window])
 |------|------|---------|-------------|
 | `window` | SimpleWindow | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetWindow()
@@ -2267,7 +2267,7 @@ SetWindow()
 Show()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Show()
@@ -2285,7 +2285,7 @@ StartMoving(alwaysStartFromMouse)
 |------|------|---------|-------------|
 | `alwaysStartFromMouse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StartMoving(false)
@@ -2304,7 +2304,7 @@ StartSizing([resizePoint], alwaysStartFromMouse)
 | `resizePoint` | FramePoint | yes |  |
 | `alwaysStartFromMouse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StartSizing(false)
@@ -2316,7 +2316,7 @@ StartSizing(false)
 StopMovingOrSizing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopMovingOrSizing()
@@ -2328,7 +2328,7 @@ StopMovingOrSizing()
 UnlockHighlight()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnlockHighlight()
@@ -2340,7 +2340,7 @@ UnlockHighlight()
 UnregisterAllEvents()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnregisterAllEvents()
@@ -2364,7 +2364,7 @@ registered = UnregisterEvent(eventName)
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = UnregisterEvent("")

@@ -25,7 +25,7 @@ classification = C_QuestInfoSystem.GetQuestClassification([questID], [questInfoI
 |------|------|---------|-------------|
 | `classification` | QuestClassification | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classification = C_QuestInfoSystem.GetQuestClassification()
@@ -49,7 +49,7 @@ hasShortExpirationWarning = C_QuestInfoSystem.GetQuestHasShortExpirationWarning(
 |------|------|---------|-------------|
 | `hasShortExpirationWarning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasShortExpirationWarning = C_QuestInfoSystem.GetQuestHasShortExpirationWarning()
@@ -74,7 +74,7 @@ amount = C_QuestInfoSystem.GetQuestLogRewardFavor([questID], [clampFavorToCycleC
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_QuestInfoSystem.GetQuestLogRewardFavor()
@@ -98,7 +98,7 @@ questRewardCurrencyInfo = C_QuestInfoSystem.GetQuestRewardCurrencies([questID])
 |------|------|---------|-------------|
 | `questRewardCurrencyInfo` | QuestRewardCurrencyInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questRewardCurrencyInfo = C_QuestInfoSystem.GetQuestRewardCurrencies()
@@ -123,10 +123,10 @@ info = C_QuestInfoSystem.GetQuestRewardSpellInfo([questID], spellID)
 |------|------|---------|-------------|
 | `info` | QuestRewardSpellInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_QuestInfoSystem.GetQuestRewardSpellInfo(12345)
+local info = C_QuestInfoSystem.GetQuestRewardSpellInfo(2050)
 ```
 
 ### C_QuestInfoSystem.GetQuestRewardSpells
@@ -147,7 +147,7 @@ spellIDs = C_QuestInfoSystem.GetQuestRewardSpells([questID])
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_QuestInfoSystem.GetQuestRewardSpells()
@@ -171,7 +171,7 @@ shouldToast = C_QuestInfoSystem.GetQuestShouldToastCompletion([questID])
 |------|------|---------|-------------|
 | `shouldToast` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldToast = C_QuestInfoSystem.GetQuestShouldToastCompletion()
@@ -195,7 +195,7 @@ hasQuestRewardCurrencies = C_QuestInfoSystem.HasQuestRewardCurrencies([questID])
 |------|------|---------|-------------|
 | `hasQuestRewardCurrencies` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasQuestRewardCurrencies = C_QuestInfoSystem.HasQuestRewardCurrencies()
@@ -219,7 +219,7 @@ hasRewardSpells = C_QuestInfoSystem.HasQuestRewardSpells([questID])
 |------|------|---------|-------------|
 | `hasRewardSpells` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasRewardSpells = C_QuestInfoSystem.HasQuestRewardSpells()

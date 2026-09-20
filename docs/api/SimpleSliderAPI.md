@@ -12,7 +12,7 @@
 Disable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Disable()
@@ -24,7 +24,7 @@ Disable()
 Enable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Enable()
@@ -43,7 +43,7 @@ minValue, maxValue = GetMinMaxValues()
 | `minValue` | number | no |  |
 | `maxValue` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minValue, maxValue = GetMinMaxValues()
@@ -61,7 +61,7 @@ isObeyStepOnDrag = GetObeyStepOnDrag()
 |------|------|---------|-------------|
 | `isObeyStepOnDrag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isObeyStepOnDrag = GetObeyStepOnDrag()
@@ -79,7 +79,7 @@ orientation = GetOrientation()
 |------|------|---------|-------------|
 | `orientation` | Orientation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local orientation = GetOrientation()
@@ -97,7 +97,7 @@ stepsPerPage = GetStepsPerPage()
 |------|------|---------|-------------|
 | `stepsPerPage` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stepsPerPage = GetStepsPerPage()
@@ -115,7 +115,7 @@ texture = GetThumbTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetThumbTexture()
@@ -133,7 +133,7 @@ value = GetValue()
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = GetValue()
@@ -151,7 +151,7 @@ valueStep = GetValueStep()
 |------|------|---------|-------------|
 | `valueStep` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valueStep = GetValueStep()
@@ -169,7 +169,7 @@ isDraggingThumb = IsDraggingThumb()
 |------|------|---------|-------------|
 | `isDraggingThumb` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDraggingThumb = IsDraggingThumb()
@@ -187,7 +187,7 @@ enabled = IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsEnabled()
@@ -205,7 +205,7 @@ SetEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEnabled(false)
@@ -224,7 +224,7 @@ SetMinMaxValues(minValue, maxValue)
 | `minValue` | number | no |  |
 | `maxValue` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinMaxValues(0, 0)
@@ -242,7 +242,7 @@ SetObeyStepOnDrag(obeyStepOnDrag)
 |------|------|---------|-------------|
 | `obeyStepOnDrag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetObeyStepOnDrag(false)
@@ -260,7 +260,7 @@ SetOrientation(orientation)
 |------|------|---------|-------------|
 | `orientation` | Orientation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrientation(orientation)
@@ -278,7 +278,7 @@ SetStepsPerPage(stepsPerPage)
 |------|------|---------|-------------|
 | `stepsPerPage` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStepsPerPage(0)
@@ -296,7 +296,7 @@ SetThumbTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetThumbTexture(asset)
@@ -315,7 +315,7 @@ SetValue(value, treatAsMouseEvent)
 | `value` | number | no |  |
 | `treatAsMouseEvent` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetValue(0, false)
@@ -333,7 +333,7 @@ SetValueStep(valueStep)
 |------|------|---------|-------------|
 | `valueStep` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetValueStep(0)

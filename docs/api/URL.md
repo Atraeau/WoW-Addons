@@ -18,7 +18,7 @@ LaunchURL(url)
 |------|------|---------|-------------|
 | `url` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 LaunchURL("")
@@ -37,7 +37,7 @@ LoadURLIndex(index, [param])
 | `index` | number | no |  |
 | `param` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 LoadURLIndex(1)

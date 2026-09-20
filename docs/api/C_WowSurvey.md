@@ -12,7 +12,7 @@
 C_WowSurvey.OpenSurvey()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WowSurvey.OpenSurvey()
@@ -30,7 +30,7 @@ C_WowSurvey.TriggerSurveyServe(deliveryMoment)
 |------|------|---------|-------------|
 | `deliveryMoment` | SurveyDeliveryMoment | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WowSurvey.TriggerSurveyServe(deliveryMoment)

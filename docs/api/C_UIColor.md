@@ -18,7 +18,7 @@ colors = C_UIColor.GetColors()
 |------|------|---------|-------------|
 | `colors` | DBColorExport[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colors = C_UIColor.GetColors()

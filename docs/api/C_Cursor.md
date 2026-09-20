@@ -18,7 +18,7 @@ item = C_Cursor.GetCursorItem()
 |------|------|---------|-------------|
 | `item` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local item = C_Cursor.GetCursorItem()

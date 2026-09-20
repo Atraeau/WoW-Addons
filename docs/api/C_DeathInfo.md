@@ -24,7 +24,7 @@ position = C_DeathInfo.GetCorpseMapPosition(uiMapID)
 |------|------|---------|-------------|
 | `position` | vector2 | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local position = C_DeathInfo.GetCorpseMapPosition(0)
@@ -48,7 +48,7 @@ position = C_DeathInfo.GetDeathReleasePosition(uiMapID)
 |------|------|---------|-------------|
 | `position` | vector2 | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local position = C_DeathInfo.GetDeathReleasePosition(0)
@@ -72,7 +72,7 @@ graveyards = C_DeathInfo.GetGraveyardsForMap(uiMapID)
 |------|------|---------|-------------|
 | `graveyards` | GraveyardMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local graveyards = C_DeathInfo.GetGraveyardsForMap(0)
@@ -90,7 +90,7 @@ options = C_DeathInfo.GetSelfResurrectOptions()
 |------|------|---------|-------------|
 | `options` | SelfResurrectOption[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options = C_DeathInfo.GetSelfResurrectOptions()
@@ -109,10 +109,10 @@ C_DeathInfo.UseSelfResurrectOption(optionType, id)
 | `optionType` | SelfResurrectOptionType | no |  |
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_DeathInfo.UseSelfResurrectOption(optionType, 0)
+C_DeathInfo.UseSelfResurrectOption(Enum.SelfResurrectOptionType.Spell, 0)
 ```
 
 ## Events

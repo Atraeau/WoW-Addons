@@ -18,7 +18,7 @@ areLegacyReputationsShown = C_Reputation.AreLegacyReputationsShown()
 |------|------|---------|-------------|
 | `areLegacyReputationsShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areLegacyReputationsShown = C_Reputation.AreLegacyReputationsShown()
@@ -30,7 +30,7 @@ local areLegacyReputationsShown = C_Reputation.AreLegacyReputationsShown()
 C_Reputation.CollapseAllFactionHeaders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.CollapseAllFactionHeaders()
@@ -48,7 +48,7 @@ C_Reputation.CollapseFactionHeader(factionSortIndex)
 |------|------|---------|-------------|
 | `factionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.CollapseFactionHeader(1)
@@ -60,7 +60,7 @@ C_Reputation.CollapseFactionHeader(1)
 C_Reputation.ExpandAllFactionHeaders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.ExpandAllFactionHeaders()
@@ -78,7 +78,7 @@ C_Reputation.ExpandFactionHeader(factionSortIndex)
 |------|------|---------|-------------|
 | `factionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.ExpandFactionHeader(1)
@@ -102,7 +102,7 @@ factionData = C_Reputation.GetFactionDataByID(factionID)
 |------|------|---------|-------------|
 | `factionData` | FactionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionData = C_Reputation.GetFactionDataByID(0)
@@ -126,7 +126,7 @@ factionData = C_Reputation.GetFactionDataByIndex(factionSortIndex)
 |------|------|---------|-------------|
 | `factionData` | FactionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionData = C_Reputation.GetFactionDataByIndex(1)
@@ -155,7 +155,7 @@ currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon,
 | `tooLowLevelForParagon` | bool | no |  |
 | `paragonStorageLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentValue, threshold, rewardQuestID, hasRewardPending, tooLowLevelForParagon, paragonStorageLevel = C_Reputation.GetFactionParagonInfo(0)
@@ -173,7 +173,7 @@ guildFactionData = C_Reputation.GetGuildFactionData()
 |------|------|---------|-------------|
 | `guildFactionData` | FactionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local guildFactionData = C_Reputation.GetGuildFactionData()
@@ -191,7 +191,7 @@ expirationTime = C_Reputation.GetGuildRepExpirationTime()
 |------|------|---------|-------------|
 | `expirationTime` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expirationTime = C_Reputation.GetGuildRepExpirationTime()
@@ -209,7 +209,7 @@ numFactions = C_Reputation.GetNumFactions()
 |------|------|---------|-------------|
 | `numFactions` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numFactions = C_Reputation.GetNumFactions()
@@ -227,7 +227,7 @@ sortType = C_Reputation.GetReputationSortType()
 |------|------|---------|-------------|
 | `sortType` | ReputationSortType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sortType = C_Reputation.GetReputationSortType()
@@ -245,7 +245,7 @@ selectedFactionSortIndex = C_Reputation.GetSelectedFaction()
 |------|------|---------|-------------|
 | `selectedFactionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local selectedFactionSortIndex = C_Reputation.GetSelectedFaction()
@@ -263,7 +263,7 @@ watchedFactionData = C_Reputation.GetWatchedFactionData()
 |------|------|---------|-------------|
 | `watchedFactionData` | FactionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local watchedFactionData = C_Reputation.GetWatchedFactionData()
@@ -287,7 +287,7 @@ isAccountWide = C_Reputation.IsAccountWideReputation(factionID)
 |------|------|---------|-------------|
 | `isAccountWide` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAccountWide = C_Reputation.IsAccountWideReputation(0)
@@ -311,7 +311,7 @@ isActive = C_Reputation.IsFactionActive(factionSortIndex)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_Reputation.IsFactionActive(1)
@@ -335,7 +335,7 @@ factionIsParagon = C_Reputation.IsFactionParagon(factionID)
 |------|------|---------|-------------|
 | `factionIsParagon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionIsParagon = C_Reputation.IsFactionParagon(0)
@@ -359,7 +359,7 @@ currentPlayerHasParagon = C_Reputation.IsFactionParagonForCurrentPlayer(factionI
 |------|------|---------|-------------|
 | `currentPlayerHasParagon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentPlayerHasParagon = C_Reputation.IsFactionParagonForCurrentPlayer(0)
@@ -383,7 +383,7 @@ isMajorFaction = C_Reputation.IsMajorFaction(factionID)
 |------|------|---------|-------------|
 | `isMajorFaction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMajorFaction = C_Reputation.IsMajorFaction(0)
@@ -401,7 +401,7 @@ C_Reputation.RequestFactionParagonPreloadRewardData(factionID)
 |------|------|---------|-------------|
 | `factionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.RequestFactionParagonPreloadRewardData(0)
@@ -420,7 +420,7 @@ C_Reputation.SetFactionActive(factionSortIndex, setActive)
 | `factionSortIndex` | luaIndex | no |  |
 | `setActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.SetFactionActive(1, false)
@@ -438,7 +438,7 @@ C_Reputation.SetLegacyReputationsShown(showLegacyReputations)
 |------|------|---------|-------------|
 | `showLegacyReputations` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.SetLegacyReputationsShown(false)
@@ -456,10 +456,10 @@ C_Reputation.SetReputationSortType(sortType)
 |------|------|---------|-------------|
 | `sortType` | ReputationSortType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Reputation.SetReputationSortType(sortType)
+C_Reputation.SetReputationSortType(Enum.ReputationSortType.None)
 ```
 
 ### C_Reputation.SetSelectedFaction
@@ -474,7 +474,7 @@ C_Reputation.SetSelectedFaction(factionSortIndex)
 |------|------|---------|-------------|
 | `factionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.SetSelectedFaction(1)
@@ -492,7 +492,7 @@ C_Reputation.SetWatchedFactionByID(factionID)
 |------|------|---------|-------------|
 | `factionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.SetWatchedFactionByID(0)
@@ -510,7 +510,7 @@ C_Reputation.SetWatchedFactionByIndex(factionSortIndex)
 |------|------|---------|-------------|
 | `factionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.SetWatchedFactionByIndex(1)
@@ -528,7 +528,7 @@ C_Reputation.ToggleFactionAtWar(factionSortIndex)
 |------|------|---------|-------------|
 | `factionSortIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Reputation.ToggleFactionAtWar(1)

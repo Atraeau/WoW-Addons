@@ -12,7 +12,7 @@
 C_ExpansionTrial.OnTrialLevelUpDialogClicked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ExpansionTrial.OnTrialLevelUpDialogClicked()
@@ -24,7 +24,7 @@ C_ExpansionTrial.OnTrialLevelUpDialogClicked()
 C_ExpansionTrial.OnTrialLevelUpDialogShown()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ExpansionTrial.OnTrialLevelUpDialogShown()

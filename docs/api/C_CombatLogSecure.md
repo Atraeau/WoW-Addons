@@ -12,7 +12,7 @@
 C_CombatLogSecure.AddEventFilter()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogSecure.AddEventFilter()
@@ -24,7 +24,7 @@ C_CombatLogSecure.AddEventFilter()
 C_CombatLogSecure.ClearEventFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogSecure.ClearEventFilters()
@@ -46,7 +46,7 @@ C_CombatLogSecure.CreateCombatLogMessage(message, colorR, colorG, colorB, order)
 | `colorB` | number | no |  |
 | `order` | CombatLogMessageOrder | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogSecure.CreateCombatLogMessage("", 0, 0, 0, order)
@@ -58,7 +58,7 @@ C_CombatLogSecure.CreateCombatLogMessage("", 0, 0, 0, order)
 C_CombatLogSecure.GetCurrentEntryInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogSecure.GetCurrentEntryInfo()
@@ -70,7 +70,7 @@ C_CombatLogSecure.GetCurrentEntryInfo()
 C_CombatLogSecure.GetCurrentEventInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLogSecure.GetCurrentEventInfo()
@@ -94,7 +94,7 @@ count = C_CombatLogSecure.GetEntryCount(ignoreFilter)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_CombatLogSecure.GetEntryCount("HELPFUL")
@@ -118,7 +118,7 @@ isValidEntry = C_CombatLogSecure.SeekToNewestEntry(ignoreFilter)
 |------|------|---------|-------------|
 | `isValidEntry` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidEntry = C_CombatLogSecure.SeekToNewestEntry("HELPFUL")
@@ -142,7 +142,7 @@ isValidEntry = C_CombatLogSecure.SeekToPreviousEntry(ignoreFilter)
 |------|------|---------|-------------|
 | `isValidEntry` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidEntry = C_CombatLogSecure.SeekToPreviousEntry("HELPFUL")
@@ -160,7 +160,7 @@ shouldShow = C_CombatLogSecure.ShouldShowCurrentEntry()
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_CombatLogSecure.ShouldShowCurrentEntry()

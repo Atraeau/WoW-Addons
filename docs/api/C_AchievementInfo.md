@@ -18,7 +18,7 @@ enabled = C_AchievementInfo.AreGuildAchievementsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_AchievementInfo.AreGuildAchievementsEnabled()
@@ -42,7 +42,7 @@ rewardItemID = C_AchievementInfo.GetRewardItemID(achievementID)
 |------|------|---------|-------------|
 | `rewardItemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewardItemID = C_AchievementInfo.GetRewardItemID(0)
@@ -66,7 +66,7 @@ supercedingAchievements = C_AchievementInfo.GetSupercedingAchievements(achieveme
 |------|------|---------|-------------|
 | `supercedingAchievements` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local supercedingAchievements = C_AchievementInfo.GetSupercedingAchievements(0)
@@ -90,7 +90,7 @@ isGuild = C_AchievementInfo.IsGuildAchievement(achievementId)
 |------|------|---------|-------------|
 | `isGuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isGuild = C_AchievementInfo.IsGuildAchievement(0)
@@ -114,7 +114,7 @@ isValidAchievement = C_AchievementInfo.IsValidAchievement(achievementId)
 |------|------|---------|-------------|
 | `isValidAchievement` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidAchievement = C_AchievementInfo.IsValidAchievement(0)
@@ -132,7 +132,7 @@ C_AchievementInfo.SetPortraitTexture(textureObject)
 |------|------|---------|-------------|
 | `textureObject` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AchievementInfo.SetPortraitTexture(textureObject)

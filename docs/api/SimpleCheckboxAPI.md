@@ -18,7 +18,7 @@ checked = GetChecked()
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local checked = GetChecked()
@@ -36,7 +36,7 @@ texture = GetCheckedTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetCheckedTexture()
@@ -54,7 +54,7 @@ texture = GetDisabledCheckedTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetDisabledCheckedTexture()
@@ -72,7 +72,7 @@ SetChecked(checked)
 |------|------|---------|-------------|
 | `checked` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetChecked(false)
@@ -90,7 +90,7 @@ SetCheckedTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCheckedTexture(asset)
@@ -108,7 +108,7 @@ SetDisabledCheckedTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDisabledCheckedTexture(asset)

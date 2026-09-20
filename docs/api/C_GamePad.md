@@ -25,10 +25,10 @@ success = C_GamePad.AddSDLMapping(platform, mapping)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local success = C_GamePad.AddSDLMapping(platform, "")
+local success = C_GamePad.AddSDLMapping(Enum.ClientPlatformType.Windows, "")
 ```
 
 ### C_GamePad.ApplyConfigs
@@ -37,7 +37,7 @@ local success = C_GamePad.AddSDLMapping(platform, "")
 C_GamePad.ApplyConfigs()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.ApplyConfigs()
@@ -61,7 +61,7 @@ configName = C_GamePad.AxisIndexToConfigName(axisIndex)
 |------|------|---------|-------------|
 | `configName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configName = C_GamePad.AxisIndexToConfigName(1)
@@ -85,7 +85,7 @@ buttonIndex = C_GamePad.ButtonBindingToIndex(bindingName)
 |------|------|---------|-------------|
 | `buttonIndex` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buttonIndex = C_GamePad.ButtonBindingToIndex("")
@@ -109,7 +109,7 @@ bindingName = C_GamePad.ButtonIndexToBinding(buttonIndex)
 |------|------|---------|-------------|
 | `bindingName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bindingName = C_GamePad.ButtonIndexToBinding(1)
@@ -133,7 +133,7 @@ configName = C_GamePad.ButtonIndexToConfigName(buttonIndex)
 |------|------|---------|-------------|
 | `configName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configName = C_GamePad.ButtonIndexToConfigName(1)
@@ -145,7 +145,7 @@ local configName = C_GamePad.ButtonIndexToConfigName(1)
 C_GamePad.ClearLedColor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.ClearLedColor()
@@ -163,7 +163,7 @@ C_GamePad.DeleteConfig(configID)
 |------|------|---------|-------------|
 | `configID` | GamePadConfigID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.DeleteConfig(configID)
@@ -181,7 +181,7 @@ deviceID = C_GamePad.GetActiveDeviceID()
 |------|------|---------|-------------|
 | `deviceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deviceID = C_GamePad.GetActiveDeviceID()
@@ -199,7 +199,7 @@ configIDs = C_GamePad.GetAllConfigIDs()
 |------|------|---------|-------------|
 | `configIDs` | GamePadConfigID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configIDs = C_GamePad.GetAllConfigIDs()
@@ -217,7 +217,7 @@ deviceIDs = C_GamePad.GetAllDeviceIDs()
 |------|------|---------|-------------|
 | `deviceIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deviceIDs = C_GamePad.GetAllDeviceIDs()
@@ -235,7 +235,7 @@ enabled = C_GamePad.GetAllowHoverEventsWithFreeLook()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GamePad.GetAllowHoverEventsWithFreeLook()
@@ -253,7 +253,7 @@ deviceID = C_GamePad.GetCombinedDeviceID()
 |------|------|---------|-------------|
 | `deviceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deviceID = C_GamePad.GetCombinedDeviceID()
@@ -277,7 +277,7 @@ config = C_GamePad.GetConfig(configID)
 |------|------|---------|-------------|
 | `config` | GamePadConfig | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local config = C_GamePad.GetConfig(configID)
@@ -301,7 +301,7 @@ state = C_GamePad.GetDeviceMappedState([deviceID])
 |------|------|---------|-------------|
 | `state` | GamePadMappedState | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_GamePad.GetDeviceMappedState()
@@ -325,7 +325,7 @@ rawState = C_GamePad.GetDeviceRawState(deviceID)
 |------|------|---------|-------------|
 | `rawState` | GamePadRawState | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rawState = C_GamePad.GetDeviceRawState(0)
@@ -343,7 +343,7 @@ color = C_GamePad.GetLedColor()
 |------|------|---------|-------------|
 | `color` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_GamePad.GetLedColor()
@@ -367,7 +367,7 @@ powerLevel = C_GamePad.GetPowerLevel([deviceID])
 |------|------|---------|-------------|
 | `powerLevel` | GamePadPowerLevel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerLevel = C_GamePad.GetPowerLevel()
@@ -385,7 +385,7 @@ enabled = C_GamePad.IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GamePad.IsEnabled()
@@ -403,7 +403,7 @@ C_GamePad.SetAllowHoverEventsWithFreeLook(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.SetAllowHoverEventsWithFreeLook(false)
@@ -421,7 +421,7 @@ C_GamePad.SetConfig(config)
 |------|------|---------|-------------|
 | `config` | GamePadConfig | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.SetConfig(config)
@@ -439,7 +439,7 @@ C_GamePad.SetLedColor(color)
 |------|------|---------|-------------|
 | `color` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.SetLedColor(color)
@@ -458,7 +458,7 @@ C_GamePad.SetVibration(vibrationType, intensity)
 | `vibrationType` | cstring | no |  |
 | `intensity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.SetVibration("", 0)
@@ -482,7 +482,7 @@ configName = C_GamePad.StickIndexToConfigName(stickIndex)
 |------|------|---------|-------------|
 | `configName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configName = C_GamePad.StickIndexToConfigName(1)
@@ -494,7 +494,7 @@ local configName = C_GamePad.StickIndexToConfigName(1)
 C_GamePad.StopVibration()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamePad.StopVibration()

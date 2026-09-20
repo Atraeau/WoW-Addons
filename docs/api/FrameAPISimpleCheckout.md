@@ -12,7 +12,7 @@
 CancelOpenCheckout()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelOpenCheckout()
@@ -24,7 +24,7 @@ CancelOpenCheckout()
 ClearFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFocus()
@@ -36,7 +36,7 @@ ClearFocus()
 CloseCheckout()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CloseCheckout()
@@ -48,7 +48,7 @@ CloseCheckout()
 CopyExternalLink()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CopyExternalLink()
@@ -72,7 +72,7 @@ wasOpened = OpenCheckout(checkoutID)
 |------|------|---------|-------------|
 | `wasOpened` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasOpened = OpenCheckout(0)
@@ -84,7 +84,7 @@ local wasOpened = OpenCheckout(0)
 OpenExternalLink()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OpenExternalLink()
@@ -96,7 +96,7 @@ OpenExternalLink()
 SetFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFocus()
@@ -114,7 +114,7 @@ SetZoom(zoomLevel)
 |------|------|---------|-------------|
 | `zoomLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetZoom(0)

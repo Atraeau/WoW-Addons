@@ -18,7 +18,7 @@ durationSec = GetDuration()
 |------|------|---------|-------------|
 | `durationSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSec = GetDuration()
@@ -36,7 +36,7 @@ elapsedSec = GetElapsed()
 |------|------|---------|-------------|
 | `elapsedSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elapsedSec = GetElapsed()
@@ -54,7 +54,7 @@ delaySec = GetEndDelay()
 |------|------|---------|-------------|
 | `delaySec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local delaySec = GetEndDelay()
@@ -72,7 +72,7 @@ order = GetOrder()
 |------|------|---------|-------------|
 | `order` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local order = GetOrder()
@@ -90,7 +90,7 @@ progress = GetProgress()
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = GetProgress()
@@ -108,7 +108,7 @@ region = GetRegionParent()
 |------|------|---------|-------------|
 | `region` | CScriptObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local region = GetRegionParent()
@@ -133,7 +133,7 @@ script = GetScript(scriptTypeName, bindingType)
 |------|------|---------|-------------|
 | `script` | LuaFunctionReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local script = GetScript(scriptTypeName, bindingType)
@@ -151,7 +151,7 @@ weights = GetSmoothing()
 |------|------|---------|-------------|
 | `weights` | SmoothingType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weights = GetSmoothing()
@@ -169,7 +169,7 @@ progress = GetSmoothProgress()
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = GetSmoothProgress()
@@ -187,7 +187,7 @@ delaySec = GetStartDelay()
 |------|------|---------|-------------|
 | `delaySec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local delaySec = GetStartDelay()
@@ -205,7 +205,7 @@ target = GetTarget()
 |------|------|---------|-------------|
 | `target` | CScriptObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local target = GetTarget()
@@ -229,7 +229,7 @@ hasScript = HasScript(scriptName)
 |------|------|---------|-------------|
 | `hasScript` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasScript = HasScript("")
@@ -255,7 +255,7 @@ success = HookScript(scriptTypeName, script, bindingType)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = HookScript(scriptTypeName, script, bindingType)
@@ -273,7 +273,7 @@ isDelaying = IsDelaying()
 |------|------|---------|-------------|
 | `isDelaying` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDelaying = IsDelaying()
@@ -291,7 +291,7 @@ isDone = IsDone()
 |------|------|---------|-------------|
 | `isDone` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDone = IsDone()
@@ -309,7 +309,7 @@ isPaused = IsPaused()
 |------|------|---------|-------------|
 | `isPaused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPaused = IsPaused()
@@ -327,7 +327,7 @@ isPlaying = IsPlaying()
 |------|------|---------|-------------|
 | `isPlaying` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlaying = IsPlaying()
@@ -345,7 +345,7 @@ isStopped = IsStopped()
 |------|------|---------|-------------|
 | `isStopped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isStopped = IsStopped()
@@ -357,7 +357,7 @@ local isStopped = IsStopped()
 Pause()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Pause()
@@ -369,7 +369,7 @@ Pause()
 Play()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Play()
@@ -381,7 +381,7 @@ Play()
 Restart()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Restart()
@@ -405,7 +405,7 @@ success = SetChildKey(childKey)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetChildKey("")
@@ -424,7 +424,7 @@ SetDuration(durationSec, recomputeGroupDuration)
 | `durationSec` | number | no |  |
 | `recomputeGroupDuration` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDuration(0, false)
@@ -443,7 +443,7 @@ SetEndDelay(delaySec, recomputeGroupDuration)
 | `delaySec` | number | no |  |
 | `recomputeGroupDuration` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEndDelay(0, false)
@@ -461,7 +461,7 @@ SetOrder(newOrder)
 |------|------|---------|-------------|
 | `newOrder` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrder(0)
@@ -480,7 +480,7 @@ SetParent(parent, [order])
 | `parent` | SimpleAnimGroup | no |  |
 | `order` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParent(parent)
@@ -498,7 +498,7 @@ SetPlaying(play)
 |------|------|---------|-------------|
 | `play` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPlaying(false)
@@ -517,7 +517,7 @@ SetScript(scriptTypeName, [script])
 | `scriptTypeName` | ScriptTypeName | no |  |
 | `script` | LuaFunctionReference | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScript(scriptTypeName)
@@ -535,7 +535,7 @@ SetSmoothing(weights)
 |------|------|---------|-------------|
 | `weights` | SmoothingType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSmoothing(weights)
@@ -553,7 +553,7 @@ SetSmoothProgress(durationSec)
 |------|------|---------|-------------|
 | `durationSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSmoothProgress(0)
@@ -572,7 +572,7 @@ SetStartDelay(delaySec, recomputeGroupDuration)
 | `delaySec` | number | no |  |
 | `recomputeGroupDuration` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStartDelay(0, false)
@@ -596,7 +596,7 @@ success = SetTarget(target)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetTarget(target)
@@ -620,7 +620,7 @@ success = SetTargetKey(key)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetTargetKey("")
@@ -644,7 +644,7 @@ success = SetTargetName(name)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetTargetName("")
@@ -662,7 +662,7 @@ success = SetTargetParent()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetTargetParent()
@@ -674,7 +674,7 @@ local success = SetTargetParent()
 Stop()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Stop()

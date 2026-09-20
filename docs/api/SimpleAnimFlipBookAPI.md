@@ -18,7 +18,7 @@ columns = GetFlipBookColumns()
 |------|------|---------|-------------|
 | `columns` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local columns = GetFlipBookColumns()
@@ -36,7 +36,7 @@ height = GetFlipBookFrameHeight()
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetFlipBookFrameHeight()
@@ -54,7 +54,7 @@ frames = GetFlipBookFrames()
 |------|------|---------|-------------|
 | `frames` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frames = GetFlipBookFrames()
@@ -72,7 +72,7 @@ width = GetFlipBookFrameWidth()
 |------|------|---------|-------------|
 | `width` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetFlipBookFrameWidth()
@@ -90,7 +90,7 @@ rows = GetFlipBookRows()
 |------|------|---------|-------------|
 | `rows` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rows = GetFlipBookRows()
@@ -108,7 +108,7 @@ SetFlipBookColumns(columns)
 |------|------|---------|-------------|
 | `columns` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlipBookColumns(0)
@@ -126,7 +126,7 @@ SetFlipBookFrameHeight(height)
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlipBookFrameHeight(0)
@@ -144,7 +144,7 @@ SetFlipBookFrames(frames)
 |------|------|---------|-------------|
 | `frames` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlipBookFrames(0)
@@ -162,7 +162,7 @@ SetFlipBookFrameWidth(width)
 |------|------|---------|-------------|
 | `width` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlipBookFrameWidth(0)
@@ -180,7 +180,7 @@ SetFlipBookRows(rows)
 |------|------|---------|-------------|
 | `rows` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFlipBookRows(0)

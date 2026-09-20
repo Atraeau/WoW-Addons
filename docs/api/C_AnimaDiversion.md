@@ -12,7 +12,7 @@
 C_AnimaDiversion.CloseUI()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AnimaDiversion.CloseUI()
@@ -30,7 +30,7 @@ animaNodes = C_AnimaDiversion.GetAnimaDiversionNodes()
 |------|------|---------|-------------|
 | `animaNodes` | AnimaDiversionNodeInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local animaNodes = C_AnimaDiversion.GetAnimaDiversionNodes()
@@ -48,7 +48,7 @@ normalizedPosition = C_AnimaDiversion.GetOriginPosition()
 |------|------|---------|-------------|
 | `normalizedPosition` | vector2 | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local normalizedPosition = C_AnimaDiversion.GetOriginPosition()
@@ -66,7 +66,7 @@ progress = C_AnimaDiversion.GetReinforceProgress()
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = C_AnimaDiversion.GetReinforceProgress()
@@ -84,7 +84,7 @@ textureKit = C_AnimaDiversion.GetTextureKit()
 |------|------|---------|-------------|
 | `textureKit` | textureKit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureKit = C_AnimaDiversion.GetTextureKit()
@@ -96,7 +96,7 @@ local textureKit = C_AnimaDiversion.GetTextureKit()
 C_AnimaDiversion.OpenAnimaDiversionUI()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AnimaDiversion.OpenAnimaDiversionUI()
@@ -115,7 +115,7 @@ C_AnimaDiversion.SelectAnimaNode(talentID, temporary)
 | `talentID` | number | no |  |
 | `temporary` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AnimaDiversion.SelectAnimaNode(0, false)

@@ -27,7 +27,7 @@ color = C_EncounterEvents.GetEventColor(encounterEventID, trigger)
 |------|------|---------|-------------|
 | `color` | colorRGBA | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_EncounterEvents.GetEventColor(0, trigger)
@@ -53,7 +53,7 @@ encounterEventInfo = C_EncounterEvents.GetEventInfo(encounterEventID)
 |------|------|---------|-------------|
 | `encounterEventInfo` | EncounterEventInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounterEventInfo = C_EncounterEvents.GetEventInfo(0)
@@ -73,7 +73,7 @@ encounterEventIDs = C_EncounterEvents.GetEventList()
 |------|------|---------|-------------|
 | `encounterEventIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounterEventIDs = C_EncounterEvents.GetEventList()
@@ -100,7 +100,7 @@ sound = C_EncounterEvents.GetEventSound(encounterEventID, trigger)
 |------|------|---------|-------------|
 | `sound` | EncounterEventSoundInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sound = C_EncounterEvents.GetEventSound(0, trigger)
@@ -126,7 +126,7 @@ exists = C_EncounterEvents.HasEventInfo(encounterEventID)
 |------|------|---------|-------------|
 | `exists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exists = C_EncounterEvents.HasEventInfo(0)
@@ -153,7 +153,7 @@ handle = C_EncounterEvents.PlayEventSound(encounterEventID, trigger)
 |------|------|---------|-------------|
 | `handle` | SoundHandle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local handle = C_EncounterEvents.PlayEventSound(0, trigger)
@@ -175,7 +175,7 @@ C_EncounterEvents.SetEventColor(encounterEventID, trigger, [color])
 | `trigger` | EncounterEventColorTrigger | no |  |
 | `color` | colorRGBA | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterEvents.SetEventColor(0, trigger)
@@ -197,7 +197,7 @@ C_EncounterEvents.SetEventSound(encounterEventID, trigger, [sound])
 | `trigger` | EncounterEventSoundTrigger | no |  |
 | `sound` | EncounterEventSoundInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterEvents.SetEventSound(0, trigger)

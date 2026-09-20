@@ -12,7 +12,7 @@
 C_SummonInfo.CancelSummon()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SummonInfo.CancelSummon()
@@ -24,7 +24,7 @@ C_SummonInfo.CancelSummon()
 C_SummonInfo.ConfirmSummon()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SummonInfo.ConfirmSummon()
@@ -42,7 +42,7 @@ areaName = C_SummonInfo.GetSummonConfirmAreaName()
 |------|------|---------|-------------|
 | `areaName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaName = C_SummonInfo.GetSummonConfirmAreaName()
@@ -60,7 +60,7 @@ summoner = C_SummonInfo.GetSummonConfirmSummoner()
 |------|------|---------|-------------|
 | `summoner` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local summoner = C_SummonInfo.GetSummonConfirmSummoner()
@@ -78,7 +78,7 @@ timeLeft = C_SummonInfo.GetSummonConfirmTimeLeft()
 |------|------|---------|-------------|
 | `timeLeft` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeft = C_SummonInfo.GetSummonConfirmTimeLeft()
@@ -96,7 +96,7 @@ summonReason = C_SummonInfo.GetSummonReason()
 |------|------|---------|-------------|
 | `summonReason` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local summonReason = C_SummonInfo.GetSummonReason()
@@ -114,7 +114,7 @@ isSummonSkippingStartExperience = C_SummonInfo.IsSummonSkippingStartExperience()
 |------|------|---------|-------------|
 | `isSummonSkippingStartExperience` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSummonSkippingStartExperience = C_SummonInfo.IsSummonSkippingStartExperience()

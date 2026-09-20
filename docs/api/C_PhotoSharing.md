@@ -12,7 +12,7 @@
 C_PhotoSharing.BeginAuthorizationFlow()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.BeginAuthorizationFlow()
@@ -24,7 +24,7 @@ C_PhotoSharing.BeginAuthorizationFlow()
 C_PhotoSharing.ClearAuthorization()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.ClearAuthorization()
@@ -42,7 +42,7 @@ C_PhotoSharing.CompleteAuthorizationFlow(callbackURL)
 |------|------|---------|-------------|
 | `callbackURL` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.CompleteAuthorizationFlow("")
@@ -60,7 +60,7 @@ cropRatio = C_PhotoSharing.GetCropRatio()
 |------|------|---------|-------------|
 | `cropRatio` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cropRatio = C_PhotoSharing.GetCropRatio()
@@ -78,7 +78,7 @@ authUrl = C_PhotoSharing.GetPhotoSharingAuthURL()
 |------|------|---------|-------------|
 | `authUrl` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local authUrl = C_PhotoSharing.GetPhotoSharingAuthURL()
@@ -96,7 +96,7 @@ status = C_PhotoSharing.GetStatus()
 |------|------|---------|-------------|
 | `status` | PhotoSharingStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_PhotoSharing.GetStatus()
@@ -114,7 +114,7 @@ authorized = C_PhotoSharing.IsAuthorized()
 |------|------|---------|-------------|
 | `authorized` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local authorized = C_PhotoSharing.IsAuthorized()
@@ -132,7 +132,7 @@ enabled = C_PhotoSharing.IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_PhotoSharing.IsEnabled()
@@ -150,7 +150,7 @@ C_PhotoSharing.SetScreenshotPreviewTexture(textureObject)
 |------|------|---------|-------------|
 | `textureObject` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.SetScreenshotPreviewTexture(textureObject)
@@ -162,7 +162,7 @@ C_PhotoSharing.SetScreenshotPreviewTexture(textureObject)
 C_PhotoSharing.TakePhoto()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.TakePhoto()
@@ -181,7 +181,7 @@ C_PhotoSharing.UploadPhotoToService(optionalTitle, optionalDescription)
 | `optionalTitle` | cstring | no |  |
 | `optionalDescription` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PhotoSharing.UploadPhotoToService("", "")

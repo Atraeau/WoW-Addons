@@ -18,7 +18,7 @@ canChange = CanChangeProtectedState()
 |------|------|---------|-------------|
 | `canChange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChange = CanChangeProtectedState()
@@ -36,7 +36,7 @@ canPropagate = CanPropagateMouseClicks()
 |------|------|---------|-------------|
 | `canPropagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPropagate = CanPropagateMouseClicks()
@@ -54,7 +54,7 @@ canPropagate = CanPropagateMouseMotion()
 |------|------|---------|-------------|
 | `canPropagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPropagate = CanPropagateMouseMotion()
@@ -68,7 +68,7 @@ Remove all script handlers set through Scripts in XML or SetScript in Lua
 ClearScripts()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearScripts()
@@ -86,7 +86,7 @@ collapsesLayout = CollapsesLayout()
 |------|------|---------|-------------|
 | `collapsesLayout` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collapsesLayout = CollapsesLayout()
@@ -104,7 +104,7 @@ EnableMouse(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableMouse(false)
@@ -122,7 +122,7 @@ EnableMouseMotion(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableMouseMotion(false)
@@ -140,7 +140,7 @@ EnableMouseWheel(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableMouseWheel(false)
@@ -158,7 +158,7 @@ FocusEnter(fromMouseMotion)
 |------|------|---------|-------------|
 | `fromMouseMotion` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FocusEnter(false)
@@ -176,7 +176,7 @@ FocusExit(fromMouseMotion)
 |------|------|---------|-------------|
 | `fromMouseMotion` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FocusExit(false)
@@ -194,7 +194,7 @@ bottom = GetBottom()
 |------|------|---------|-------------|
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bottom = GetBottom()
@@ -213,7 +213,7 @@ x, y = GetCenter()
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local x, y = GetCenter()
@@ -237,7 +237,7 @@ height = GetHeight(ignoreRect)
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetHeight(false)
@@ -255,7 +255,7 @@ left = GetLeft()
 |------|------|---------|-------------|
 | `left` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left = GetLeft()
@@ -276,7 +276,7 @@ left, bottom, width, height = GetRect()
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, bottom, width, height = GetRect()
@@ -294,7 +294,7 @@ right = GetRight()
 |------|------|---------|-------------|
 | `right` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local right = GetRight()
@@ -312,7 +312,7 @@ enabled = GetRoundLayoutToNearestPixel()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetRoundLayoutToNearestPixel()
@@ -333,7 +333,7 @@ left, bottom, width, height = GetScaledRect()
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, bottom, width, height = GetScaledRect()
@@ -358,7 +358,7 @@ script = GetScript(scriptTypeName, bindingType)
 |------|------|---------|-------------|
 | `script` | LuaFunctionReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local script = GetScript(scriptTypeName, bindingType)
@@ -383,7 +383,7 @@ width, height = GetSize(ignoreRect)
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width, height = GetSize(false)
@@ -401,7 +401,7 @@ location = GetSourceLocation()
 |------|------|---------|-------------|
 | `location` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local location = GetSourceLocation()
@@ -419,7 +419,7 @@ top = GetTop()
 |------|------|---------|-------------|
 | `top` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local top = GetTop()
@@ -443,7 +443,7 @@ width = GetWidth(ignoreRect)
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetWidth(false)
@@ -467,7 +467,7 @@ hasScript = HasScript(scriptName)
 |------|------|---------|-------------|
 | `hasScript` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasScript = HasScript("")
@@ -479,7 +479,7 @@ local hasScript = HasScript("")
 Hide()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Hide()
@@ -505,7 +505,7 @@ success = HookScript(scriptTypeName, script, bindingType)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = HookScript(scriptTypeName, script, bindingType)
@@ -529,7 +529,7 @@ intersects = Intersects(region)
 |------|------|---------|-------------|
 | `intersects` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local intersects = Intersects(region)
@@ -547,7 +547,7 @@ isRestricted = IsAnchoringRestricted()
 |------|------|---------|-------------|
 | `isRestricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRestricted = IsAnchoringRestricted()
@@ -565,7 +565,7 @@ isSecret = IsAnchoringSecret()
 |------|------|---------|-------------|
 | `isSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSecret = IsAnchoringSecret()
@@ -583,7 +583,7 @@ isCollapsed = IsCollapsed()
 |------|------|---------|-------------|
 | `isCollapsed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCollapsed = IsCollapsed()
@@ -601,7 +601,7 @@ isDragging = IsDragging()
 |------|------|---------|-------------|
 | `isDragging` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDragging = IsDragging()
@@ -619,7 +619,7 @@ enabled = IsMouseClickEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsMouseClickEnabled()
@@ -637,7 +637,7 @@ enabled = IsMouseEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsMouseEnabled()
@@ -655,7 +655,7 @@ enabled = IsMouseMotionEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsMouseMotionEnabled()
@@ -673,7 +673,7 @@ isMouseMotionFocus = IsMouseMotionFocus()
 |------|------|---------|-------------|
 | `isMouseMotionFocus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMouseMotionFocus = IsMouseMotionFocus()
@@ -700,10 +700,10 @@ isMouseOver = IsMouseOver(offsetTop, offsetBottom, offsetLeft, offsetRight)
 |------|------|---------|-------------|
 | `isMouseOver` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isMouseOver = IsMouseOver(offsetTop, offsetBottom, offsetLeft, offsetRight)
+local isMouseOver = IsMouseOver(1, 1, 1, 1)
 ```
 
 ### SimpleScriptRegionAPI.IsMouseWheelEnabled
@@ -718,7 +718,7 @@ enabled = IsMouseWheelEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsMouseWheelEnabled()
@@ -737,7 +737,7 @@ isProtected, isProtectedExplicitly = IsProtected()
 | `isProtected` | bool | no |  |
 | `isProtectedExplicitly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isProtected, isProtectedExplicitly = IsProtected()
@@ -755,7 +755,7 @@ isValid = IsRectValid()
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = IsRectValid()
@@ -773,7 +773,7 @@ isShown = IsShown()
 |------|------|---------|-------------|
 | `isShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isShown = IsShown()
@@ -791,7 +791,7 @@ isVisible = IsVisible()
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = IsVisible()
@@ -809,7 +809,7 @@ MouseDown(button)
 |------|------|---------|-------------|
 | `button` | cstring | no | (default: LeftButton) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 MouseDown("")
@@ -827,7 +827,7 @@ MouseUp(button)
 |------|------|---------|-------------|
 | `button` | cstring | no | (default: LeftButton) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 MouseUp("")
@@ -845,7 +845,7 @@ SetCollapsesLayout(collapsesLayout)
 |------|------|---------|-------------|
 | `collapsesLayout` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCollapsesLayout(false)
@@ -863,7 +863,7 @@ SetMouseClickEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMouseClickEnabled(false)
@@ -881,7 +881,7 @@ SetMouseMotionEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMouseMotionEnabled(false)
@@ -899,7 +899,7 @@ SetParent([parent])
 |------|------|---------|-------------|
 | `parent` | SimpleFrame | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParent()
@@ -917,7 +917,7 @@ SetPassThroughButtons(buttons)
 |------|------|---------|-------------|
 | `buttons` | MouseButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPassThroughButtons(buttons)
@@ -935,7 +935,7 @@ SetPropagateMouseClicks(propagate)
 |------|------|---------|-------------|
 | `propagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPropagateMouseClicks(false)
@@ -953,7 +953,7 @@ SetPropagateMouseMotion(propagate)
 |------|------|---------|-------------|
 | `propagate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPropagateMouseMotion(false)
@@ -971,7 +971,7 @@ SetRoundLayoutToNearestPixel(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRoundLayoutToNearestPixel(false)
@@ -990,7 +990,7 @@ SetScript(scriptTypeName, [script])
 | `scriptTypeName` | ScriptTypeName | no |  |
 | `script` | LuaFunctionReference | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScript(scriptTypeName)
@@ -1008,7 +1008,7 @@ SetShown(show)
 |------|------|---------|-------------|
 | `show` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShown(false)
@@ -1032,7 +1032,7 @@ shouldPassThrough = ShouldButtonPassThrough(button)
 |------|------|---------|-------------|
 | `shouldPassThrough` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldPassThrough = ShouldButtonPassThrough(button)
@@ -1044,7 +1044,7 @@ local shouldPassThrough = ShouldButtonPassThrough(button)
 Show()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Show()

@@ -18,7 +18,7 @@ numObjectives = GetNumTooltips()
 |------|------|---------|-------------|
 | `numObjectives` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numObjectives = GetNumTooltips()
@@ -42,7 +42,7 @@ objectiveIndex = GetTooltipIndex(index)
 |------|------|---------|-------------|
 | `objectiveIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objectiveIndex = GetTooltipIndex(1)
@@ -68,7 +68,7 @@ questID, numObjectives = UpdateMouseOverTooltip(x, y)
 | `questID` | number | yes |  |
 | `numObjectives` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID, numObjectives = UpdateMouseOverTooltip(0, 0)

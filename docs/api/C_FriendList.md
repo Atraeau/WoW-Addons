@@ -19,7 +19,7 @@ C_FriendList.AddFriend(name, [notes])
 | `name` | cstring | no |  |
 | `notes` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.AddFriend("")
@@ -43,7 +43,7 @@ added = C_FriendList.AddIgnore(name)
 |------|------|---------|-------------|
 | `added` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local added = C_FriendList.AddIgnore("")
@@ -61,7 +61,7 @@ C_FriendList.AddOrDelIgnore(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.AddOrDelIgnore("")
@@ -80,7 +80,7 @@ C_FriendList.AddOrRemoveFriend(name, notes)
 | `name` | cstring | no |  |
 | `notes` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.AddOrRemoveFriend("", "")
@@ -104,7 +104,7 @@ removed = C_FriendList.DelIgnore(name)
 |------|------|---------|-------------|
 | `removed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removed = C_FriendList.DelIgnore("")
@@ -122,7 +122,7 @@ C_FriendList.DelIgnoreByIndex(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.DelIgnoreByIndex(1)
@@ -146,7 +146,7 @@ info = C_FriendList.GetFriendInfo(name)
 |------|------|---------|-------------|
 | `info` | FriendInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_FriendList.GetFriendInfo("")
@@ -170,7 +170,7 @@ info = C_FriendList.GetFriendInfoByIndex(index)
 |------|------|---------|-------------|
 | `info` | FriendInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_FriendList.GetFriendInfoByIndex(1)
@@ -194,7 +194,7 @@ name = C_FriendList.GetIgnoreName(index)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_FriendList.GetIgnoreName(1)
@@ -212,7 +212,7 @@ numFriends = C_FriendList.GetNumFriends()
 |------|------|---------|-------------|
 | `numFriends` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numFriends = C_FriendList.GetNumFriends()
@@ -230,7 +230,7 @@ numIgnores = C_FriendList.GetNumIgnores()
 |------|------|---------|-------------|
 | `numIgnores` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numIgnores = C_FriendList.GetNumIgnores()
@@ -248,7 +248,7 @@ numOnline = C_FriendList.GetNumOnlineFriends()
 |------|------|---------|-------------|
 | `numOnline` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numOnline = C_FriendList.GetNumOnlineFriends()
@@ -267,7 +267,7 @@ numWhos, totalNumWhos = C_FriendList.GetNumWhoResults()
 | `numWhos` | number | no |  |
 | `totalNumWhos` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numWhos, totalNumWhos = C_FriendList.GetNumWhoResults()
@@ -285,7 +285,7 @@ index = C_FriendList.GetSelectedFriend()
 |------|------|---------|-------------|
 | `index` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = C_FriendList.GetSelectedFriend()
@@ -303,7 +303,7 @@ index = C_FriendList.GetSelectedIgnore()
 |------|------|---------|-------------|
 | `index` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = C_FriendList.GetSelectedIgnore()
@@ -327,7 +327,7 @@ info = C_FriendList.GetWhoInfo(index)
 |------|------|---------|-------------|
 | `info` | WhoInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_FriendList.GetWhoInfo(1)
@@ -351,10 +351,10 @@ isFriend = C_FriendList.IsFriend(guid)
 |------|------|---------|-------------|
 | `isFriend` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isFriend = C_FriendList.IsFriend("Creature-0-0000-0-0-0-0")
+local isFriend = C_FriendList.IsFriend(UnitGUID("player"))
 ```
 
 ### C_FriendList.IsIgnored
@@ -375,7 +375,7 @@ isIgnored = C_FriendList.IsIgnored(token)
 |------|------|---------|-------------|
 | `isIgnored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIgnored = C_FriendList.IsIgnored("")
@@ -399,10 +399,10 @@ isIgnored = C_FriendList.IsIgnoredByGuid(guid)
 |------|------|---------|-------------|
 | `isIgnored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isIgnored = C_FriendList.IsIgnoredByGuid("Creature-0-0000-0-0-0-0")
+local isIgnored = C_FriendList.IsIgnoredByGuid(UnitGUID("player"))
 ```
 
 ### C_FriendList.IsLegacyFriendSystemEnabled
@@ -417,7 +417,7 @@ isLegacyFriendSystemEnabled = C_FriendList.IsLegacyFriendSystemEnabled()
 |------|------|---------|-------------|
 | `isLegacyFriendSystemEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLegacyFriendSystemEnabled = C_FriendList.IsLegacyFriendSystemEnabled()
@@ -441,7 +441,7 @@ isIgnored = C_FriendList.IsOnIgnoredList(token)
 |------|------|---------|-------------|
 | `isIgnored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIgnored = C_FriendList.IsOnIgnoredList("")
@@ -465,7 +465,7 @@ removed = C_FriendList.RemoveFriend(name)
 |------|------|---------|-------------|
 | `removed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removed = C_FriendList.RemoveFriend("")
@@ -483,7 +483,7 @@ C_FriendList.RemoveFriendByIndex(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.RemoveFriendByIndex(1)
@@ -502,7 +502,7 @@ C_FriendList.SendWho(filter, [origin])
 | `filter` | cstring | no |  |
 | `origin` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SendWho("HELPFUL")
@@ -527,7 +527,7 @@ found = C_FriendList.SetFriendNotes(name, notes)
 |------|------|---------|-------------|
 | `found` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local found = C_FriendList.SetFriendNotes("", "")
@@ -546,7 +546,7 @@ C_FriendList.SetFriendNotesByIndex(index, notes)
 | `index` | luaIndex | no |  |
 | `notes` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SetFriendNotesByIndex(1, "")
@@ -564,7 +564,7 @@ C_FriendList.SetSelectedFriend(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SetSelectedFriend(1)
@@ -582,7 +582,7 @@ C_FriendList.SetSelectedIgnore(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SetSelectedIgnore(1)
@@ -600,7 +600,7 @@ C_FriendList.SetWhoToUi(whoToUi)
 |------|------|---------|-------------|
 | `whoToUi` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SetWhoToUi(false)
@@ -612,7 +612,7 @@ C_FriendList.SetWhoToUi(false)
 C_FriendList.ShowFriends()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.ShowFriends()
@@ -630,7 +630,7 @@ C_FriendList.SortWho(sorting)
 |------|------|---------|-------------|
 | `sorting` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_FriendList.SortWho("")

@@ -12,7 +12,7 @@
 C_SecureTransfer.AcceptTrade()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SecureTransfer.AcceptTrade()
@@ -24,7 +24,7 @@ C_SecureTransfer.AcceptTrade()
 C_SecureTransfer.Cancel()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SecureTransfer.Cancel()
@@ -36,7 +36,7 @@ C_SecureTransfer.Cancel()
 C_SecureTransfer.CompleteHousingPurchase()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SecureTransfer.CompleteHousingPurchase()
@@ -48,7 +48,7 @@ C_SecureTransfer.CompleteHousingPurchase()
 C_SecureTransfer.CompleteHousingVCPurchase()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SecureTransfer.CompleteHousingVCPurchase()
@@ -66,7 +66,7 @@ totalCost = C_SecureTransfer.GetHousingPurchaseCost()
 |------|------|---------|-------------|
 | `totalCost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalCost = C_SecureTransfer.GetHousingPurchaseCost()
@@ -84,7 +84,7 @@ quantity = C_SecureTransfer.GetHousingPurchaseQuantity()
 |------|------|---------|-------------|
 | `quantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quantity = C_SecureTransfer.GetHousingPurchaseQuantity()
@@ -102,7 +102,7 @@ productID = C_SecureTransfer.GetHousingVCPurchaseProductID()
 |------|------|---------|-------------|
 | `productID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local productID = C_SecureTransfer.GetHousingVCPurchaseProductID()
@@ -120,7 +120,7 @@ mailInfo = C_SecureTransfer.GetMailInfo()
 |------|------|---------|-------------|
 | `mailInfo` | MailInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mailInfo = C_SecureTransfer.GetMailInfo()
@@ -138,7 +138,7 @@ name = C_SecureTransfer.GetTradePartner()
 |------|------|---------|-------------|
 | `name` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_SecureTransfer.GetTradePartner()
@@ -150,7 +150,7 @@ local name = C_SecureTransfer.GetTradePartner()
 C_SecureTransfer.SendMail()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SecureTransfer.SendMail()
@@ -168,7 +168,7 @@ shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()

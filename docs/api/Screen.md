@@ -18,7 +18,7 @@ scale = GetDefaultScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetDefaultScale()
@@ -37,7 +37,7 @@ sizeX, sizeY = GetPhysicalScreenSize()
 | `sizeX` | number | no |  |
 | `sizeY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sizeX, sizeY = GetPhysicalScreenSize()
@@ -55,7 +55,7 @@ scale = GetScreenDPIScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetScreenDPIScale()
@@ -73,7 +73,7 @@ height = GetScreenHeight()
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetScreenHeight()
@@ -91,7 +91,7 @@ width = GetScreenWidth()
 |------|------|---------|-------------|
 | `width` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetScreenWidth()

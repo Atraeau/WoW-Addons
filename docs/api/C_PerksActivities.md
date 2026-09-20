@@ -18,7 +18,7 @@ C_PerksActivities.AddTrackedPerksActivity(perksActivityID)
 |------|------|---------|-------------|
 | `perksActivityID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksActivities.AddTrackedPerksActivity(0)
@@ -30,7 +30,7 @@ C_PerksActivities.AddTrackedPerksActivity(0)
 C_PerksActivities.ClearPerksActivitiesPendingCompletion()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksActivities.ClearPerksActivitiesPendingCompletion()
@@ -48,7 +48,7 @@ tags = C_PerksActivities.GetAllPerksActivityTags()
 |------|------|---------|-------------|
 | `tags` | PerksActivityTags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tags = C_PerksActivities.GetAllPerksActivityTags()
@@ -66,7 +66,7 @@ info = C_PerksActivities.GetPerksActivitiesInfo()
 |------|------|---------|-------------|
 | `info` | PerksActivitiesInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PerksActivities.GetPerksActivitiesInfo()
@@ -84,7 +84,7 @@ pending = C_PerksActivities.GetPerksActivitiesPendingCompletion()
 |------|------|---------|-------------|
 | `pending` | PerksActivitiesPending | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pending = C_PerksActivities.GetPerksActivitiesPendingCompletion()
@@ -108,7 +108,7 @@ link = C_PerksActivities.GetPerksActivityChatLink(perksActivityID)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_PerksActivities.GetPerksActivityChatLink(0)
@@ -132,7 +132,7 @@ info = C_PerksActivities.GetPerksActivityInfo(perksActivityID)
 |------|------|---------|-------------|
 | `info` | PerksActivityInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PerksActivities.GetPerksActivityInfo(0)
@@ -150,7 +150,7 @@ kitPrefix = C_PerksActivities.GetPerksUIThemePrefix()
 |------|------|---------|-------------|
 | `kitPrefix` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local kitPrefix = C_PerksActivities.GetPerksUIThemePrefix()
@@ -168,7 +168,7 @@ trackedPerksActivities = C_PerksActivities.GetTrackedPerksActivities()
 |------|------|---------|-------------|
 | `trackedPerksActivities` | PerksActivitiesTracked | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackedPerksActivities = C_PerksActivities.GetTrackedPerksActivities()
@@ -186,7 +186,7 @@ C_PerksActivities.RemoveTrackedPerksActivity(perksActivityID)
 |------|------|---------|-------------|
 | `perksActivityID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksActivities.RemoveTrackedPerksActivity(0)

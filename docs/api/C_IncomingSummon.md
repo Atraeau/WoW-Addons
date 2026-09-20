@@ -24,7 +24,7 @@ summon = C_IncomingSummon.HasIncomingSummon(unit)
 |------|------|---------|-------------|
 | `summon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local summon = C_IncomingSummon.HasIncomingSummon("player")
@@ -48,7 +48,7 @@ status = C_IncomingSummon.IncomingSummonStatus(unit)
 |------|------|---------|-------------|
 | `status` | SummonStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_IncomingSummon.IncomingSummonStatus("player")

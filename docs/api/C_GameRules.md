@@ -18,7 +18,7 @@ isSDEnabled = C_GameRules.AccountHasSDEnabled()
 |------|------|---------|-------------|
 | `isSDEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSDEnabled = C_GameRules.AccountHasSDEnabled()
@@ -36,7 +36,7 @@ C_GameRules.AutoConnectToGameModeRealm(gameModeRecordID)
 |------|------|---------|-------------|
 | `gameModeRecordID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GameRules.AutoConnectToGameModeRealm(0)
@@ -60,7 +60,7 @@ hasPromo = C_GameRules.DoesGameModeHavePromo(gameModeRecordID)
 |------|------|---------|-------------|
 | `hasPromo` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPromo = C_GameRules.DoesGameModeHavePromo(0)
@@ -78,7 +78,7 @@ gameMode = C_GameRules.GetActiveGameMode()
 |------|------|---------|-------------|
 | `gameMode` | GameMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gameMode = C_GameRules.GetActiveGameMode()
@@ -96,7 +96,7 @@ eventRealmQueues = C_GameRules.GetCurrentEventRealmQueues()
 |------|------|---------|-------------|
 | `eventRealmQueues` | EventRealmQueues | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local eventRealmQueues = C_GameRules.GetCurrentEventRealmQueues()
@@ -114,7 +114,7 @@ info = C_GameRules.GetCurrentGameModeDisplayInfo()
 |------|------|---------|-------------|
 | `info` | GameModeDisplayInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_GameRules.GetCurrentGameModeDisplayInfo()
@@ -132,7 +132,7 @@ gameModeRecordID = C_GameRules.GetCurrentGameModeRecordID()
 |------|------|---------|-------------|
 | `gameModeRecordID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gameModeRecordID = C_GameRules.GetCurrentGameModeRecordID()
@@ -156,7 +156,7 @@ gameModeRecordID = C_GameRules.GetDisplayedGameModeRecordIDAtIndex(displayIndex)
 |------|------|---------|-------------|
 | `gameModeRecordID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gameModeRecordID = C_GameRules.GetDisplayedGameModeRecordIDAtIndex(1)
@@ -180,7 +180,7 @@ info = C_GameRules.GetGameModeDisplayInfoByRecordID(gameModeRecordID)
 |------|------|---------|-------------|
 | `info` | GameModeDisplayInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_GameRules.GetGameModeDisplayInfoByRecordID(0)
@@ -198,7 +198,7 @@ screenName = C_GameRules.GetGameModeGlueScreenName()
 |------|------|---------|-------------|
 | `screenName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local screenName = C_GameRules.GetGameModeGlueScreenName()
@@ -222,7 +222,7 @@ promoGlobalString = C_GameRules.GetGameModePromoGlobalString(gameModeRecordID)
 |------|------|---------|-------------|
 | `promoGlobalString` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local promoGlobalString = C_GameRules.GetGameModePromoGlobalString(0)
@@ -249,7 +249,7 @@ value = C_GameRules.GetGameRuleAsFloat(gameRule, decimalPlaces)
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_GameRules.GetGameRuleAsFloat(gameRule, 0)
@@ -275,7 +275,7 @@ frameStrata = C_GameRules.GetGameRuleAsFrameStrata(gameRule)
 |------|------|---------|-------------|
 | `frameStrata` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frameStrata = C_GameRules.GetGameRuleAsFrameStrata(gameRule)
@@ -293,7 +293,7 @@ numDisplayedGameModes = C_GameRules.GetNumDisplayedGameModes()
 |------|------|---------|-------------|
 | `numDisplayedGameModes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDisplayedGameModes = C_GameRules.GetNumDisplayedGameModes()
@@ -311,7 +311,7 @@ active = C_GameRules.IsCharacterlessLoginActive()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsCharacterlessLoginActive()
@@ -335,7 +335,7 @@ valid = C_GameRules.IsClassAllowedForGameMode(classID)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_GameRules.IsClassAllowedForGameMode(0)
@@ -359,7 +359,7 @@ enabled = C_GameRules.IsGameModeEnabled(gameModeRecordID)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GameRules.IsGameModeEnabled(0)
@@ -383,7 +383,7 @@ isActive = C_GameRules.IsGameRuleActive(gameRule)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_GameRules.IsGameRuleActive(gameRule)
@@ -401,7 +401,7 @@ active = C_GameRules.IsHardcoreActive()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsHardcoreActive()
@@ -419,7 +419,7 @@ valid = C_GameRules.IsMultiActionBarVisibilityForced()
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_GameRules.IsMultiActionBarVisibilityForced()
@@ -439,7 +439,7 @@ isPersonalResourceDisplayEnabled = C_GameRules.IsPersonalResourceDisplayEnabled(
 |------|------|---------|-------------|
 | `isPersonalResourceDisplayEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPersonalResourceDisplayEnabled = C_GameRules.IsPersonalResourceDisplayEnabled()
@@ -457,7 +457,7 @@ active = C_GameRules.IsPlunderstorm()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsPlunderstorm()
@@ -475,7 +475,7 @@ isEnabled = C_GameRules.IsSDHDToggleEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_GameRules.IsSDHDToggleEnabled()
@@ -493,7 +493,7 @@ active = C_GameRules.IsSelfFoundAllowed()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsSelfFoundAllowed()
@@ -511,7 +511,7 @@ active = C_GameRules.IsStandard()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsStandard()
@@ -529,7 +529,7 @@ active = C_GameRules.IsWoWHack()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_GameRules.IsWoWHack()
@@ -541,7 +541,7 @@ local active = C_GameRules.IsWoWHack()
 C_GameRules.SelectClassicExperiencePreset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GameRules.SelectClassicExperiencePreset()
@@ -553,7 +553,7 @@ C_GameRules.SelectClassicExperiencePreset()
 C_GameRules.SelectModernExperiencePreset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GameRules.SelectModernExperiencePreset()
@@ -571,7 +571,7 @@ C_GameRules.SetSDHDToggleValue(setToSD)
 |------|------|---------|-------------|
 | `setToSD` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GameRules.SetSDHDToggleValue(false)

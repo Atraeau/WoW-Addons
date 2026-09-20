@@ -24,10 +24,10 @@ isSpellOverlayed = C_SpellActivationOverlay.IsSpellOverlayed(spellID)
 |------|------|---------|-------------|
 | `isSpellOverlayed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isSpellOverlayed = C_SpellActivationOverlay.IsSpellOverlayed(12345)
+local isSpellOverlayed = C_SpellActivationOverlay.IsSpellOverlayed(2050)
 ```
 
 ## Events

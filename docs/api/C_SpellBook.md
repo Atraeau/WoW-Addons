@@ -18,10 +18,10 @@ C_SpellBook.AbortSpellIntro(spellID)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.AbortSpellIntro(12345)
+C_SpellBook.AbortSpellIntro(2050)
 ```
 
 ### C_SpellBook.CastSpellBookItem
@@ -38,10 +38,10 @@ C_SpellBook.CastSpellBookItem(spellBookItemSlotIndex, spellBookItemSpellBank, ta
 | `spellBookItemSpellBank` | SpellBookSpellBank | no |  |
 | `targetSelf` | bool | no | If true, spell will target the current player; Otherwise, targets the player's current target (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.CastSpellBookItem(1, 12345, false)
+C_SpellBook.CastSpellBookItem(1, 2050, false)
 ```
 
 ### C_SpellBook.ContainsAnyDisenchantSpell
@@ -58,7 +58,7 @@ contains = C_SpellBook.ContainsAnyDisenchantSpell()
 |------|------|---------|-------------|
 | `contains` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contains = C_SpellBook.ContainsAnyDisenchantSpell()
@@ -82,10 +82,10 @@ baseSpellID = C_SpellBook.FindBaseSpellByID(spellID)
 |------|------|---------|-------------|
 | `baseSpellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local baseSpellID = C_SpellBook.FindBaseSpellByID(12345)
+local baseSpellID = C_SpellBook.FindBaseSpellByID(2050)
 ```
 
 ### C_SpellBook.FindFlyoutSlotBySpellID
@@ -106,10 +106,10 @@ flyoutSlot = C_SpellBook.FindFlyoutSlotBySpellID(spellID)
 |------|------|---------|-------------|
 | `flyoutSlot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local flyoutSlot = C_SpellBook.FindFlyoutSlotBySpellID(12345)
+local flyoutSlot = C_SpellBook.FindFlyoutSlotBySpellID(2050)
 ```
 
 ### C_SpellBook.FindSpellBookSlotForSpell
@@ -137,10 +137,10 @@ spellBookItemSlotIndex, spellBookItemSpellBank = C_SpellBook.FindSpellBookSlotFo
 | `spellBookItemSlotIndex` | luaIndex | no |  |
 | `spellBookItemSpellBank` | SpellBookSpellBank | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellBookItemSlotIndex, spellBookItemSpellBank = C_SpellBook.FindSpellBookSlotForSpell(12345, false, false, 12345, false)
+local spellBookItemSlotIndex, spellBookItemSpellBank = C_SpellBook.FindSpellBookSlotForSpell(2050, false, false, 2050, false)
 ```
 
 ### C_SpellBook.FindSpellOverrideByID
@@ -161,10 +161,10 @@ overrideSpellID = C_SpellBook.FindSpellOverrideByID(spellID)
 |------|------|---------|-------------|
 | `overrideSpellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local overrideSpellID = C_SpellBook.FindSpellOverrideByID(12345)
+local overrideSpellID = C_SpellBook.FindSpellOverrideByID(2050)
 ```
 
 ### C_SpellBook.GetClassSkillLineInfo
@@ -179,7 +179,7 @@ skillLineInfo = C_SpellBook.GetClassSkillLineInfo()
 |------|------|---------|-------------|
 | `skillLineInfo` | SpellBookSkillLineInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineInfo = C_SpellBook.GetClassSkillLineInfo()
@@ -205,7 +205,7 @@ spellIDs = C_SpellBook.GetCurrentLevelSpells(level)
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_SpellBook.GetCurrentLevelSpells(0)
@@ -223,7 +223,7 @@ numSpellBookSkillLines = C_SpellBook.GetNumSpellBookSkillLines()
 |------|------|---------|-------------|
 | `numSpellBookSkillLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSpellBookSkillLines = C_SpellBook.GetNumSpellBookSkillLines()
@@ -247,7 +247,7 @@ skillIndex = C_SpellBook.GetSkillLineIndexByID(skillLineID)
 |------|------|---------|-------------|
 | `skillIndex` | luaIndex | yes | Will be nil if the specified SkillLine could not be found, or if it is not one of the player's tracked skill lines |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillIndex = C_SpellBook.GetSkillLineIndexByID(0)
@@ -275,10 +275,10 @@ autoCastAllowed, autoCastEnabled = C_SpellBook.GetSpellBookItemAutoCast(spellBoo
 | `autoCastAllowed` | bool | no | True if this spell is allowed to be auto-cast |
 | `autoCastEnabled` | bool | no | True if auto-casting this spell is currently enabled (usually by the player) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local autoCastAllowed, autoCastEnabled = C_SpellBook.GetSpellBookItemAutoCast(1, 12345)
+local autoCastAllowed, autoCastEnabled = C_SpellBook.GetSpellBookItemAutoCast(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemCastCount
@@ -302,10 +302,10 @@ castCount = C_SpellBook.GetSpellBookItemCastCount(spellBookItemSlotIndex, spellB
 |------|------|---------|-------------|
 | `castCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local castCount = C_SpellBook.GetSpellBookItemCastCount(1, 12345)
+local castCount = C_SpellBook.GetSpellBookItemCastCount(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemChargeDuration
@@ -329,10 +329,10 @@ duration = C_SpellBook.GetSpellBookItemChargeDuration(spellBookItemSlotIndex, sp
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_SpellBook.GetSpellBookItemChargeDuration(1, 12345)
+local duration = C_SpellBook.GetSpellBookItemChargeDuration(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemCharges
@@ -356,10 +356,10 @@ chargeInfo = C_SpellBook.GetSpellBookItemCharges(spellBookItemSlotIndex, spellBo
 |------|------|---------|-------------|
 | `chargeInfo` | SpellChargeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local chargeInfo = C_SpellBook.GetSpellBookItemCharges(1, 12345)
+local chargeInfo = C_SpellBook.GetSpellBookItemCharges(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemCooldown
@@ -383,10 +383,10 @@ spellCooldownInfo = C_SpellBook.GetSpellBookItemCooldown(spellBookItemSlotIndex,
 |------|------|---------|-------------|
 | `spellCooldownInfo` | SpellCooldownInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellCooldownInfo = C_SpellBook.GetSpellBookItemCooldown(1, 12345)
+local spellCooldownInfo = C_SpellBook.GetSpellBookItemCooldown(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemCooldownDuration
@@ -411,10 +411,10 @@ duration = C_SpellBook.GetSpellBookItemCooldownDuration(spellBookItemSlotIndex, 
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_SpellBook.GetSpellBookItemCooldownDuration(1, 12345, false)
+local duration = C_SpellBook.GetSpellBookItemCooldownDuration(1, 2050, false)
 ```
 
 ### C_SpellBook.GetSpellBookItemDescription
@@ -436,10 +436,10 @@ description = C_SpellBook.GetSpellBookItemDescription(spellBookItemSlotIndex, sp
 |------|------|---------|-------------|
 | `description` | string | no | May be empty if spell's data isn't loaded yet; Listen for SPELL_TEXT_UPDATE event, or use SpellMixin to load asynchronously |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local description = C_SpellBook.GetSpellBookItemDescription(1, 12345)
+local description = C_SpellBook.GetSpellBookItemDescription(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemInfo
@@ -461,10 +461,10 @@ spellBookItemInfo = C_SpellBook.GetSpellBookItemInfo(spellBookItemSlotIndex, spe
 |------|------|---------|-------------|
 | `spellBookItemInfo` | SpellBookItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellBookItemInfo = C_SpellBook.GetSpellBookItemInfo(1, 12345)
+local spellBookItemInfo = C_SpellBook.GetSpellBookItemInfo(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemLevelLearned
@@ -488,10 +488,10 @@ levelLearned = C_SpellBook.GetSpellBookItemLevelLearned(spellBookItemSlotIndex, 
 |------|------|---------|-------------|
 | `levelLearned` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local levelLearned = C_SpellBook.GetSpellBookItemLevelLearned(1, 12345)
+local levelLearned = C_SpellBook.GetSpellBookItemLevelLearned(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemLink
@@ -514,10 +514,10 @@ spellLink = C_SpellBook.GetSpellBookItemLink(spellBookItemSlotIndex, spellBookIt
 |------|------|---------|-------------|
 | `spellLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellLink = C_SpellBook.GetSpellBookItemLink(1, 12345)
+local spellLink = C_SpellBook.GetSpellBookItemLink(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemLossOfControlCooldownDuration
@@ -541,10 +541,10 @@ duration = C_SpellBook.GetSpellBookItemLossOfControlCooldownDuration(spellBookIt
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_SpellBook.GetSpellBookItemLossOfControlCooldownDuration(1, 12345)
+local duration = C_SpellBook.GetSpellBookItemLossOfControlCooldownDuration(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemLossOfControlCooldownInfo
@@ -568,10 +568,10 @@ lossOfControlInfo = C_SpellBook.GetSpellBookItemLossOfControlCooldownInfo(spellB
 |------|------|---------|-------------|
 | `lossOfControlInfo` | SpellLossOfControlInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local lossOfControlInfo = C_SpellBook.GetSpellBookItemLossOfControlCooldownInfo(1, 12345)
+local lossOfControlInfo = C_SpellBook.GetSpellBookItemLossOfControlCooldownInfo(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemName
@@ -594,10 +594,10 @@ name, subName = C_SpellBook.GetSpellBookItemName(spellBookItemSlotIndex, spellBo
 | `name` | string | no |  |
 | `subName` | string | no | May be empty if spell's data isn't loaded yet; Listen for SPELL_TEXT_UPDATE event, or use SpellMixin to load asynchronously |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local name, subName = C_SpellBook.GetSpellBookItemName(1, 12345)
+local name, subName = C_SpellBook.GetSpellBookItemName(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemPowerCost
@@ -621,10 +621,10 @@ powerCosts = C_SpellBook.GetSpellBookItemPowerCost(spellBookItemSlotIndex, spell
 |------|------|---------|-------------|
 | `powerCosts` | SpellPowerCostInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local powerCosts = C_SpellBook.GetSpellBookItemPowerCost(1, 12345)
+local powerCosts = C_SpellBook.GetSpellBookItemPowerCost(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemSkillLineIndex
@@ -648,10 +648,10 @@ skillLineIndex = C_SpellBook.GetSpellBookItemSkillLineIndex(spellBookItemSlotInd
 |------|------|---------|-------------|
 | `skillLineIndex` | luaIndex | yes | Will be nil if the specified SpellBookItem doesn't exist or isn't part of a SkillLine |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local skillLineIndex = C_SpellBook.GetSpellBookItemSkillLineIndex(1, 12345)
+local skillLineIndex = C_SpellBook.GetSpellBookItemSkillLineIndex(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemTexture
@@ -673,10 +673,10 @@ iconID = C_SpellBook.GetSpellBookItemTexture(spellBookItemSlotIndex, spellBookIt
 |------|------|---------|-------------|
 | `iconID` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local iconID = C_SpellBook.GetSpellBookItemTexture(1, 12345)
+local iconID = C_SpellBook.GetSpellBookItemTexture(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemTradeSkillLink
@@ -700,10 +700,10 @@ spellLink = C_SpellBook.GetSpellBookItemTradeSkillLink(spellBookItemSlotIndex, s
 |------|------|---------|-------------|
 | `spellLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellLink = C_SpellBook.GetSpellBookItemTradeSkillLink(1, 12345)
+local spellLink = C_SpellBook.GetSpellBookItemTradeSkillLink(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookItemType
@@ -727,10 +727,10 @@ itemType, actionID, spellID = C_SpellBook.GetSpellBookItemType(spellBookItemSlot
 | `actionID` | number | no | Represents a base spellID for spells, flyoutID for flyouts, or petActionID for pet actions |
 | `spellID` | number | yes | May be nil if item is not a spell; Will be the overriding spellID if spell is overriden, otherwise will match actionID |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemType, actionID, spellID = C_SpellBook.GetSpellBookItemType(1, 12345)
+local itemType, actionID, spellID = C_SpellBook.GetSpellBookItemType(1, 2050)
 ```
 
 ### C_SpellBook.GetSpellBookSkillLineInfo
@@ -751,7 +751,7 @@ skillLineInfo = C_SpellBook.GetSpellBookSkillLineInfo(skillLineIndex)
 |------|------|---------|-------------|
 | `skillLineInfo` | SpellBookSkillLineInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineInfo = C_SpellBook.GetSpellBookSkillLineInfo(1)
@@ -772,7 +772,7 @@ numPetSpells, petNameToken = C_SpellBook.HasPetSpells()
 | `numPetSpells` | number | no |  |
 | `petNameToken` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPetSpells, petNameToken = C_SpellBook.HasPetSpells()
@@ -799,10 +799,10 @@ isAutoAttack = C_SpellBook.IsAutoAttackSpellBookItem(spellBookItemSlotIndex, spe
 |------|------|---------|-------------|
 | `isAutoAttack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoAttack = C_SpellBook.IsAutoAttackSpellBookItem(1, 12345)
+local isAutoAttack = C_SpellBook.IsAutoAttackSpellBookItem(1, 2050)
 ```
 
 ### C_SpellBook.IsClassTalentSpellBookItem
@@ -826,10 +826,10 @@ isClassTalent = C_SpellBook.IsClassTalentSpellBookItem(spellBookItemSlotIndex, s
 |------|------|---------|-------------|
 | `isClassTalent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isClassTalent = C_SpellBook.IsClassTalentSpellBookItem(1, 12345)
+local isClassTalent = C_SpellBook.IsClassTalentSpellBookItem(1, 2050)
 ```
 
 ### C_SpellBook.IsPvPTalentSpellBookItem
@@ -853,10 +853,10 @@ isPvPTalent = C_SpellBook.IsPvPTalentSpellBookItem(spellBookItemSlotIndex, spell
 |------|------|---------|-------------|
 | `isPvPTalent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPvPTalent = C_SpellBook.IsPvPTalentSpellBookItem(1, 12345)
+local isPvPTalent = C_SpellBook.IsPvPTalentSpellBookItem(1, 2050)
 ```
 
 ### C_SpellBook.IsRangedAutoAttackSpellBookItem
@@ -880,10 +880,10 @@ isRangedAutoAttack = C_SpellBook.IsRangedAutoAttackSpellBookItem(spellBookItemSl
 |------|------|---------|-------------|
 | `isRangedAutoAttack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isRangedAutoAttack = C_SpellBook.IsRangedAutoAttackSpellBookItem(1, 12345)
+local isRangedAutoAttack = C_SpellBook.IsRangedAutoAttackSpellBookItem(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemHarmful
@@ -907,10 +907,10 @@ isHarmful = C_SpellBook.IsSpellBookItemHarmful(spellBookItemSlotIndex, spellBook
 |------|------|---------|-------------|
 | `isHarmful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHarmful = C_SpellBook.IsSpellBookItemHarmful(1, 12345)
+local isHarmful = C_SpellBook.IsSpellBookItemHarmful(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemHelpful
@@ -934,10 +934,10 @@ isHelpful = C_SpellBook.IsSpellBookItemHelpful(spellBookItemSlotIndex, spellBook
 |------|------|---------|-------------|
 | `isHelpful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHelpful = C_SpellBook.IsSpellBookItemHelpful(1, 12345)
+local isHelpful = C_SpellBook.IsSpellBookItemHelpful(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemInRange
@@ -962,10 +962,10 @@ inRange = C_SpellBook.IsSpellBookItemInRange(spellBookItemSlotIndex, spellBookIt
 |------|------|---------|-------------|
 | `inRange` | bool | yes | May be nil if the range check was invalid, ie due to unknown/invalid spell, missing/invalid target, etc |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local inRange = C_SpellBook.IsSpellBookItemInRange(1, 12345)
+local inRange = C_SpellBook.IsSpellBookItemInRange(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemLooseFlyoutMember
@@ -989,10 +989,10 @@ isFlyoutMember = C_SpellBook.IsSpellBookItemLooseFlyoutMember(spellBookItemSlotI
 |------|------|---------|-------------|
 | `isFlyoutMember` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isFlyoutMember = C_SpellBook.IsSpellBookItemLooseFlyoutMember(1, 12345)
+local isFlyoutMember = C_SpellBook.IsSpellBookItemLooseFlyoutMember(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemLowRank
@@ -1016,10 +1016,10 @@ isLowRank = C_SpellBook.IsSpellBookItemLowRank(spellBookItemSlotIndex, spellBook
 |------|------|---------|-------------|
 | `isLowRank` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isLowRank = C_SpellBook.IsSpellBookItemLowRank(1, 12345)
+local isLowRank = C_SpellBook.IsSpellBookItemLowRank(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemOffSpec
@@ -1043,10 +1043,10 @@ isOffSpec = C_SpellBook.IsSpellBookItemOffSpec(spellBookItemSlotIndex, spellBook
 |------|------|---------|-------------|
 | `isOffSpec` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isOffSpec = C_SpellBook.IsSpellBookItemOffSpec(1, 12345)
+local isOffSpec = C_SpellBook.IsSpellBookItemOffSpec(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemPassive
@@ -1070,10 +1070,10 @@ isPassive = C_SpellBook.IsSpellBookItemPassive(spellBookItemSlotIndex, spellBook
 |------|------|---------|-------------|
 | `isPassive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPassive = C_SpellBook.IsSpellBookItemPassive(1, 12345)
+local isPassive = C_SpellBook.IsSpellBookItemPassive(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellBookItemUsable
@@ -1098,10 +1098,10 @@ isUsable, insufficientPower = C_SpellBook.IsSpellBookItemUsable(spellBookItemSlo
 | `isUsable` | bool | no |  |
 | `insufficientPower` | bool | no | True if SpellBookIem is specifically unusable due to insufficient power (ie MANA, RAGE, etc) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isUsable, insufficientPower = C_SpellBook.IsSpellBookItemUsable(1, 12345)
+local isUsable, insufficientPower = C_SpellBook.IsSpellBookItemUsable(1, 2050)
 ```
 
 ### C_SpellBook.IsSpellInSpellBook
@@ -1126,10 +1126,10 @@ isInSpellBook = C_SpellBook.IsSpellInSpellBook(spellID, spellBank, includeOverri
 |------|------|---------|-------------|
 | `isInSpellBook` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isInSpellBook = C_SpellBook.IsSpellInSpellBook(12345, 12345, false)
+local isInSpellBook = C_SpellBook.IsSpellInSpellBook(2050, 2050, false)
 ```
 
 ### C_SpellBook.IsSpellKnown
@@ -1153,10 +1153,10 @@ isKnown = C_SpellBook.IsSpellKnown(spellID, spellBank)
 |------|------|---------|-------------|
 | `isKnown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isKnown = C_SpellBook.IsSpellKnown(12345, 12345)
+local isKnown = C_SpellBook.IsSpellKnown(2050, 2050)
 ```
 
 ### C_SpellBook.IsSpellKnownOrInSpellBook
@@ -1181,10 +1181,10 @@ isKnownOrInSpellBook = C_SpellBook.IsSpellKnownOrInSpellBook(spellID, spellBank,
 |------|------|---------|-------------|
 | `isKnownOrInSpellBook` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isKnownOrInSpellBook = C_SpellBook.IsSpellKnownOrInSpellBook(12345, 12345, false)
+local isKnownOrInSpellBook = C_SpellBook.IsSpellKnownOrInSpellBook(2050, 2050, false)
 ```
 
 ### C_SpellBook.PickupSpellBookItem
@@ -1200,10 +1200,10 @@ C_SpellBook.PickupSpellBookItem(spellBookItemSlotIndex, spellBookItemSpellBank)
 | `spellBookItemSlotIndex` | luaIndex | no |  |
 | `spellBookItemSpellBank` | SpellBookSpellBank | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.PickupSpellBookItem(1, 12345)
+C_SpellBook.PickupSpellBookItem(1, 2050)
 ```
 
 ### C_SpellBook.SetBarSlotFromIntro
@@ -1219,10 +1219,10 @@ C_SpellBook.SetBarSlotFromIntro(spellID, slotIndex)
 | `spellID` | number | no |  |
 | `slotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.SetBarSlotFromIntro(12345, 1)
+C_SpellBook.SetBarSlotFromIntro(2050, 1)
 ```
 
 ### C_SpellBook.SetSpellBookItemAutoCastEnabled
@@ -1239,10 +1239,10 @@ C_SpellBook.SetSpellBookItemAutoCastEnabled(spellBookItemSlotIndex, spellBookIte
 | `spellBookItemSpellBank` | SpellBookSpellBank | no |  |
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.SetSpellBookItemAutoCastEnabled(1, 12345, false)
+C_SpellBook.SetSpellBookItemAutoCastEnabled(1, 2050, false)
 ```
 
 ### C_SpellBook.SpellBookItemHasRange
@@ -1266,10 +1266,10 @@ hasRange = C_SpellBook.SpellBookItemHasRange(spellBookItemSlotIndex, spellBookIt
 |------|------|---------|-------------|
 | `hasRange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasRange = C_SpellBook.SpellBookItemHasRange(1, 12345)
+local hasRange = C_SpellBook.SpellBookItemHasRange(1, 2050)
 ```
 
 ### C_SpellBook.ToggleSpellBookItemAutoCast
@@ -1285,10 +1285,10 @@ C_SpellBook.ToggleSpellBookItemAutoCast(spellBookItemSlotIndex, spellBookItemSpe
 | `spellBookItemSlotIndex` | luaIndex | no |  |
 | `spellBookItemSpellBank` | SpellBookSpellBank | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SpellBook.ToggleSpellBookItemAutoCast(1, 12345)
+C_SpellBook.ToggleSpellBookItemAutoCast(1, 2050)
 ```
 
 ## Events

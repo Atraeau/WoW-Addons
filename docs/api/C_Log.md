@@ -18,7 +18,7 @@ C_Log.LogErrorMessage(message)
 |------|------|---------|-------------|
 | `message` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Log.LogErrorMessage("")
@@ -36,7 +36,7 @@ C_Log.LogMessage(message)
 |------|------|---------|-------------|
 | `message` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Log.LogMessage("")
@@ -55,7 +55,7 @@ C_Log.LogMessageWithPriority(priority, message)
 | `priority` | LogPriority | no |  |
 | `message` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Log.LogMessageWithPriority(priority, "")
@@ -73,7 +73,7 @@ C_Log.LogWarningMessage(message)
 |------|------|---------|-------------|
 | `message` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Log.LogWarningMessage("")

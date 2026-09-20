@@ -18,7 +18,7 @@ choiceInfo = C_PlayerChoice.GetCurrentPlayerChoiceInfo()
 |------|------|---------|-------------|
 | `choiceInfo` | PlayerChoiceInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local choiceInfo = C_PlayerChoice.GetCurrentPlayerChoiceInfo()
@@ -36,7 +36,7 @@ numRerolls = C_PlayerChoice.GetNumRerolls()
 |------|------|---------|-------------|
 | `numRerolls` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numRerolls = C_PlayerChoice.GetNumRerolls()
@@ -54,7 +54,7 @@ remainingTime = C_PlayerChoice.GetRemainingTime()
 |------|------|---------|-------------|
 | `remainingTime` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remainingTime = C_PlayerChoice.GetRemainingTime()
@@ -72,7 +72,7 @@ isWaitingForResponse = C_PlayerChoice.IsWaitingForPlayerChoiceResponse()
 |------|------|---------|-------------|
 | `isWaitingForResponse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWaitingForResponse = C_PlayerChoice.IsWaitingForPlayerChoiceResponse()
@@ -84,7 +84,7 @@ local isWaitingForResponse = C_PlayerChoice.IsWaitingForPlayerChoiceResponse()
 C_PlayerChoice.OnUIClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerChoice.OnUIClosed()
@@ -96,7 +96,7 @@ C_PlayerChoice.OnUIClosed()
 C_PlayerChoice.RequestRerollPlayerChoice()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerChoice.RequestRerollPlayerChoice()
@@ -114,7 +114,7 @@ C_PlayerChoice.SendPlayerChoiceResponse(responseID)
 |------|------|---------|-------------|
 | `responseID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerChoice.SendPlayerChoiceResponse(0)

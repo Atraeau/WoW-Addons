@@ -25,7 +25,7 @@ groupGUIDs = C_SocialQueue.GetAllGroups(allowNonJoinable, allowNonQueuedGroups)
 |------|------|---------|-------------|
 | `groupGUIDs` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local groupGUIDs = C_SocialQueue.GetAllGroups(false, false)
@@ -43,7 +43,7 @@ config = C_SocialQueue.GetConfig()
 |------|------|---------|-------------|
 | `config` | SocialQueueConfig | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local config = C_SocialQueue.GetConfig()
@@ -68,10 +68,10 @@ groupGUID, isSoloQueueParty = C_SocialQueue.GetGroupForPlayer(playerGUID)
 | `groupGUID` | WOWGUID | no |  |
 | `isSoloQueueParty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local groupGUID, isSoloQueueParty = C_SocialQueue.GetGroupForPlayer("Creature-0-0000-0-0-0-0")
+local groupGUID, isSoloQueueParty = C_SocialQueue.GetGroupForPlayer(UnitGUID("player"))
 ```
 
 ### C_SocialQueue.GetGroupInfo
@@ -99,10 +99,10 @@ canJoin, numQueues, needTank, needHealer, needDamage, isSoloQueueParty, questSes
 | `questSessionActive` | bool | no |  |
 | `leaderGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canJoin, numQueues, needTank, needHealer, needDamage, isSoloQueueParty, questSessionActive, leaderGUID = C_SocialQueue.GetGroupInfo("Creature-0-0000-0-0-0-0")
+local canJoin, numQueues, needTank, needHealer, needDamage, isSoloQueueParty, questSessionActive, leaderGUID = C_SocialQueue.GetGroupInfo(UnitGUID("player"))
 ```
 
 ### C_SocialQueue.GetGroupMembers
@@ -123,10 +123,10 @@ groupMembers = C_SocialQueue.GetGroupMembers(groupGUID)
 |------|------|---------|-------------|
 | `groupMembers` | SocialQueuePlayerInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local groupMembers = C_SocialQueue.GetGroupMembers("Creature-0-0000-0-0-0-0")
+local groupMembers = C_SocialQueue.GetGroupMembers(UnitGUID("player"))
 ```
 
 ### C_SocialQueue.GetGroupQueues
@@ -147,10 +147,10 @@ queues = C_SocialQueue.GetGroupQueues(groupGUID)
 |------|------|---------|-------------|
 | `queues` | SocialQueueGroupQueueInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local queues = C_SocialQueue.GetGroupQueues("Creature-0-0000-0-0-0-0")
+local queues = C_SocialQueue.GetGroupQueues(UnitGUID("player"))
 ```
 
 ### C_SocialQueue.IsSystemEnabled
@@ -165,7 +165,7 @@ isSystemEnabled = C_SocialQueue.IsSystemEnabled()
 |------|------|---------|-------------|
 | `isSystemEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSystemEnabled = C_SocialQueue.IsSystemEnabled()
@@ -183,7 +183,7 @@ isSystemSupported = C_SocialQueue.IsSystemSupported()
 |------|------|---------|-------------|
 | `isSystemSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSystemSupported = C_SocialQueue.IsSystemSupported()
@@ -210,10 +210,10 @@ requestSuccessful = C_SocialQueue.RequestToJoin(groupGUID, applyAsTank, applyAsH
 |------|------|---------|-------------|
 | `requestSuccessful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local requestSuccessful = C_SocialQueue.RequestToJoin("Creature-0-0000-0-0-0-0", false, false, false)
+local requestSuccessful = C_SocialQueue.RequestToJoin(UnitGUID("player"), false, false, false)
 ```
 
 ### C_SocialQueue.SignalToastDisplayed
@@ -229,10 +229,10 @@ C_SocialQueue.SignalToastDisplayed(groupGUID, priority)
 | `groupGUID` | WOWGUID | no |  |
 | `priority` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SocialQueue.SignalToastDisplayed("Creature-0-0000-0-0-0-0", 0)
+C_SocialQueue.SignalToastDisplayed(UnitGUID("player"), 0)
 ```
 
 ## Events

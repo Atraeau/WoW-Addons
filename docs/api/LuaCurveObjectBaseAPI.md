@@ -20,7 +20,7 @@ curveType = GetType()
 |------|------|---------|-------------|
 | `curveType` | LuaCurveType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curveType = GetType()
@@ -40,7 +40,7 @@ hasSecretValues = HasSecretValues()
 |------|------|---------|-------------|
 | `hasSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretValues = HasSecretValues()
@@ -60,7 +60,7 @@ SetType(type)
 |------|------|---------|-------------|
 | `type` | LuaCurveType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetType(type)

@@ -25,7 +25,7 @@ areaID = C_MapExplorationInfo.GetExploredAreaIDsAtPosition(uiMapID, normalizedPo
 |------|------|---------|-------------|
 | `areaID` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaID = C_MapExplorationInfo.GetExploredAreaIDsAtPosition(0, normalizedPosition)
@@ -49,7 +49,7 @@ overlayInfo = C_MapExplorationInfo.GetExploredMapTextures(uiMapID)
 |------|------|---------|-------------|
 | `overlayInfo` | UiMapExplorationInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overlayInfo = C_MapExplorationInfo.GetExploredMapTextures(0)

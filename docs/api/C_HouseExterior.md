@@ -14,7 +14,7 @@ Cancels all in-progress editing of house exterior fixtures, which will deselect 
 C_HouseExterior.CancelActiveExteriorEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.CancelActiveExteriorEditing()
@@ -38,7 +38,7 @@ coreFixtureOptionsInfo = C_HouseExterior.GetCoreFixtureOptionsInfo(coreFixtureTy
 |------|------|---------|-------------|
 | `coreFixtureOptionsInfo` | HousingCoreFixtureInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local coreFixtureOptionsInfo = C_HouseExterior.GetCoreFixtureOptionsInfo(coreFixtureType)
@@ -56,7 +56,7 @@ houseExteriorSize = C_HouseExterior.GetCurrentHouseExteriorSize()
 |------|------|---------|-------------|
 | `houseExteriorSize` | HousingFixtureSize | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local houseExteriorSize = C_HouseExterior.GetCurrentHouseExteriorSize()
@@ -75,7 +75,7 @@ houseExteriorTypeID, houseExteriorTypeName = C_HouseExterior.GetCurrentHouseExte
 | `houseExteriorTypeID` | number | yes |  |
 | `houseExteriorTypeName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local houseExteriorTypeID, houseExteriorTypeName = C_HouseExterior.GetCurrentHouseExteriorType()
@@ -93,7 +93,7 @@ options = C_HouseExterior.GetHouseExteriorSizeOptions()
 |------|------|---------|-------------|
 | `options` | HouseExteriorSizeOptionsInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options = C_HouseExterior.GetHouseExteriorSizeOptions()
@@ -111,7 +111,7 @@ options = C_HouseExterior.GetHouseExteriorTypeOptions()
 |------|------|---------|-------------|
 | `options` | HouseExteriorTypeOptionsInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options = C_HouseExterior.GetHouseExteriorTypeOptions()
@@ -129,7 +129,7 @@ fixturePointInfo = C_HouseExterior.GetSelectedFixturePointInfo()
 |------|------|---------|-------------|
 | `fixturePointInfo` | HousingFixturePointInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fixturePointInfo = C_HouseExterior.GetSelectedFixturePointInfo()
@@ -147,7 +147,7 @@ anyHoveredFixture = C_HouseExterior.HasHoveredFixture()
 |------|------|---------|-------------|
 | `anyHoveredFixture` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyHoveredFixture = C_HouseExterior.HasHoveredFixture()
@@ -165,7 +165,7 @@ anySelectedFixturePoint = C_HouseExterior.HasSelectedFixturePoint()
 |------|------|---------|-------------|
 | `anySelectedFixturePoint` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anySelectedFixturePoint = C_HouseExterior.HasSelectedFixturePoint()
@@ -191,7 +191,7 @@ anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToCoreFixture(coreFixtureTy
 |------|------|---------|-------------|
 | `anyAttachedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToCoreFixture(coreFixtureType)
@@ -211,7 +211,7 @@ anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToDoor()
 |------|------|---------|-------------|
 | `anyAttachedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToDoor()
@@ -231,7 +231,7 @@ anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToHouseExterior()
 |------|------|---------|-------------|
 | `anyAttachedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToHouseExterior()
@@ -251,7 +251,7 @@ anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToSelectedFixturePoint()
 |------|------|---------|-------------|
 | `anyAttachedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyAttachedDecor = C_HouseExterior.IsAnyDecorAttachedToSelectedFixturePoint()
@@ -269,7 +269,7 @@ decorHidden = C_HouseExterior.IsExteriorDecorHidden()
 |------|------|---------|-------------|
 | `decorHidden` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local decorHidden = C_HouseExterior.IsExteriorDecorHidden()
@@ -287,7 +287,7 @@ C_HouseExterior.RemoveFixtureFromSelectedPoint(attachedDecorAction)
 |------|------|---------|-------------|
 | `attachedDecorAction` | HousingFixtureDecorAction | no | What to do with any decor currently attached to the fixture (default: Store) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.RemoveFixtureFromSelectedPoint(attachedDecorAction)
@@ -306,7 +306,7 @@ C_HouseExterior.SelectCoreFixtureOption(fixtureID, attachedDecorAction)
 | `fixtureID` | number | no |  |
 | `attachedDecorAction` | HousingFixtureDecorAction | no | What to do with any decor attached to the old core fixture; If the fixture being swapped is a variant (ie recolor) of the existing one, attached decor will always be reparented directly to the new one (default: Store) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.SelectCoreFixtureOption(0, attachedDecorAction)
@@ -325,7 +325,7 @@ C_HouseExterior.SelectFixtureOption(fixtureID, attachedDecorAction)
 | `fixtureID` | number | no |  |
 | `attachedDecorAction` | HousingFixtureDecorAction | no | If this fixture choice is replacing an existing one that has decor attached, what to do with any decor attached to the old one (default: Store) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.SelectFixtureOption(0, attachedDecorAction)
@@ -343,7 +343,7 @@ C_HouseExterior.SetExteriorDecorHidden(decorHidden)
 |------|------|---------|-------------|
 | `decorHidden` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.SetExteriorDecorHidden(false)
@@ -362,7 +362,7 @@ C_HouseExterior.SetHouseExteriorSize(size, attachedDecorAction)
 | `size` | HousingFixtureSize | no |  |
 | `attachedDecorAction` | HousingFixtureDecorAction | no | What to do with decor attached to any of the house's existing exterior components (default: Store) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.SetHouseExteriorSize(size, attachedDecorAction)
@@ -381,7 +381,7 @@ C_HouseExterior.SetHouseExteriorType(houseExteriorTypeID, attachedDecorAction)
 | `houseExteriorTypeID` | number | no |  |
 | `attachedDecorAction` | HousingFixtureDecorAction | no | What to do with decor attached to any of the house's existing exterior components (default: Store) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseExterior.SetHouseExteriorType(0, attachedDecorAction)

@@ -19,7 +19,7 @@ AddCharacterLight([index], light)
 | `index` | number | yes |  |
 | `light` | ModelLight | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddCharacterLight(light)
@@ -38,7 +38,7 @@ AddLight([index], light)
 | `index` | number | yes |  |
 | `light` | ModelLight | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddLight(light)
@@ -57,7 +57,7 @@ AddPetLight([index], light)
 | `index` | number | yes |  |
 | `light` | ModelLight | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddPetLight(light)
@@ -69,7 +69,7 @@ AddPetLight(light)
 ResetLights()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetLights()

@@ -12,7 +12,7 @@
 ClearFog()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFog()
@@ -31,7 +31,7 @@ CreateActor(name, template)
 | `name` | cstring | no |  |
 | `template` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CreateActor("", "")
@@ -49,7 +49,7 @@ GetActorAtIndex(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 GetActorAtIndex(1)
@@ -67,7 +67,7 @@ allowOverlappedModels = GetAllowOverlappedModels()
 |------|------|---------|-------------|
 | `allowOverlappedModels` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowOverlappedModels = GetAllowOverlappedModels()
@@ -85,7 +85,7 @@ farClip = GetCameraFarClip()
 |------|------|---------|-------------|
 | `farClip` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local farClip = GetCameraFarClip()
@@ -105,7 +105,7 @@ fov = GetCameraFieldOfView()
 |------|------|---------|-------------|
 | `fov` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fov = GetCameraFieldOfView()
@@ -125,7 +125,7 @@ forwardX, forwardY, forwardZ = GetCameraForward()
 | `forwardY` | number | no |  |
 | `forwardZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local forwardX, forwardY, forwardZ = GetCameraForward()
@@ -143,7 +143,7 @@ nearClip = GetCameraNearClip()
 |------|------|---------|-------------|
 | `nearClip` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nearClip = GetCameraNearClip()
@@ -163,7 +163,7 @@ positionX, positionY, positionZ = GetCameraPosition()
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ = GetCameraPosition()
@@ -183,7 +183,7 @@ rightX, rightY, rightZ = GetCameraRight()
 | `rightY` | number | no |  |
 | `rightZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rightX, rightY, rightZ = GetCameraRight()
@@ -203,7 +203,7 @@ upX, upY, upZ = GetCameraUp()
 | `upY` | number | no |  |
 | `upZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local upX, upY, upZ = GetCameraUp()
@@ -222,7 +222,7 @@ layer, sublevel = GetDrawLayer()
 | `layer` | DrawLayer | no |  |
 | `sublevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layer, sublevel = GetDrawLayer()
@@ -242,7 +242,7 @@ colorR, colorG, colorB = GetFogColor()
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB = GetFogColor()
@@ -260,7 +260,7 @@ far = GetFogFar()
 |------|------|---------|-------------|
 | `far` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local far = GetFogFar()
@@ -278,7 +278,7 @@ near = GetFogNear()
 |------|------|---------|-------------|
 | `near` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local near = GetFogNear()
@@ -298,7 +298,7 @@ colorR, colorG, colorB = GetLightAmbientColor()
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB = GetLightAmbientColor()
@@ -318,7 +318,7 @@ colorR, colorG, colorB = GetLightDiffuseColor()
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB = GetLightDiffuseColor()
@@ -338,7 +338,7 @@ directionX, directionY, directionZ = GetLightDirection()
 | `directionY` | number | no |  |
 | `directionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local directionX, directionY, directionZ = GetLightDirection()
@@ -358,7 +358,7 @@ positionX, positionY, positionZ = GetLightPosition()
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ = GetLightPosition()
@@ -376,7 +376,7 @@ lightType = GetLightType()
 |------|------|---------|-------------|
 | `lightType` | ModelLightType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lightType = GetLightType()
@@ -394,7 +394,7 @@ numActors = GetNumActors()
 |------|------|---------|-------------|
 | `numActors` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numActors = GetNumActors()
@@ -412,7 +412,7 @@ insets = GetViewInsets()
 |------|------|---------|-------------|
 | `insets` | uiRect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local insets = GetViewInsets()
@@ -431,7 +431,7 @@ translationX, translationY = GetViewTranslation()
 | `translationX` | number | no |  |
 | `translationY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local translationX, translationY = GetViewTranslation()
@@ -449,7 +449,7 @@ isVisible = IsLightVisible()
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = IsLightVisible()
@@ -477,7 +477,7 @@ point2DX, point2DY, depth = Project3DPointTo2D(pointX, pointY, pointZ)
 | `point2DY` | number | no |  |
 | `depth` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point2DX, point2DY, depth = Project3DPointTo2D(0, 0, 0)
@@ -495,7 +495,7 @@ SetAllowOverlappedModels(allowOverlappedModels)
 |------|------|---------|-------------|
 | `allowOverlappedModels` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowOverlappedModels(false)
@@ -513,7 +513,7 @@ SetCameraFarClip(farClip)
 |------|------|---------|-------------|
 | `farClip` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraFarClip(0)
@@ -533,7 +533,7 @@ SetCameraFieldOfView(fov)
 |------|------|---------|-------------|
 | `fov` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraFieldOfView(0)
@@ -551,7 +551,7 @@ SetCameraNearClip(nearClip)
 |------|------|---------|-------------|
 | `nearClip` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraNearClip(0)
@@ -577,7 +577,7 @@ SetCameraOrientationByAxisVectors(forwardX, forwardY, forwardZ, rightX, rightY, 
 | `upY` | number | no |  |
 | `upZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraOrientationByAxisVectors(0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -597,7 +597,7 @@ SetCameraOrientationByYawPitchRoll(yaw, pitch, roll)
 | `pitch` | number | no |  |
 | `roll` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraOrientationByYawPitchRoll(0, 0, 0)
@@ -617,7 +617,7 @@ SetCameraPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraPosition(0, 0, 0)
@@ -635,7 +635,7 @@ SetDesaturation(strength)
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturation(0)
@@ -653,7 +653,7 @@ SetDrawLayer(layer)
 |------|------|---------|-------------|
 | `layer` | DrawLayer | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawLayer(layer)
@@ -673,7 +673,7 @@ SetFogColor(colorR, colorG, colorB)
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogColor(0, 0, 0)
@@ -691,7 +691,7 @@ SetFogFar(far)
 |------|------|---------|-------------|
 | `far` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogFar(0)
@@ -709,7 +709,7 @@ SetFogNear(near)
 |------|------|---------|-------------|
 | `near` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogNear(0)
@@ -729,7 +729,7 @@ SetLightAmbientColor(colorR, colorG, colorB)
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightAmbientColor(0, 0, 0)
@@ -749,7 +749,7 @@ SetLightDiffuseColor(colorR, colorG, colorB)
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightDiffuseColor(0, 0, 0)
@@ -769,7 +769,7 @@ SetLightDirection(directionX, directionY, directionZ)
 | `directionY` | number | no |  |
 | `directionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightDirection(0, 0, 0)
@@ -789,7 +789,7 @@ SetLightPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightPosition(0, 0, 0)
@@ -807,7 +807,7 @@ SetLightType(lightType)
 |------|------|---------|-------------|
 | `lightType` | ModelLightType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightType(lightType)
@@ -825,7 +825,7 @@ SetLightVisible(visible)
 |------|------|---------|-------------|
 | `visible` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLightVisible(false)
@@ -844,7 +844,7 @@ SetPaused(paused, affectsGlobalPause)
 | `paused` | bool | no |  |
 | `affectsGlobalPause` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPaused(false, false)
@@ -862,7 +862,7 @@ SetViewInsets(insets)
 |------|------|---------|-------------|
 | `insets` | uiRect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetViewInsets(insets)
@@ -881,7 +881,7 @@ SetViewTranslation(translationX, translationY)
 | `translationX` | number | no |  |
 | `translationY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetViewTranslation(0, 0)
@@ -893,7 +893,7 @@ SetViewTranslation(0, 0)
 TakeActor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TakeActor()

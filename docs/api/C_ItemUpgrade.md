@@ -24,7 +24,7 @@ isValid = C_ItemUpgrade.CanUpgradeItem(baseItem)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_ItemUpgrade.CanUpgradeItem(6948)
@@ -36,7 +36,7 @@ local isValid = C_ItemUpgrade.CanUpgradeItem(6948)
 C_ItemUpgrade.ClearItemUpgrade()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemUpgrade.ClearItemUpgrade()
@@ -48,7 +48,7 @@ C_ItemUpgrade.ClearItemUpgrade()
 C_ItemUpgrade.CloseItemUpgrade()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemUpgrade.CloseItemUpgrade()
@@ -73,7 +73,7 @@ characterHighWatermark, accountHighWatermark = C_ItemUpgrade.GetHighWatermarkFor
 | `characterHighWatermark` | number | no |  |
 | `accountHighWatermark` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local characterHighWatermark, accountHighWatermark = C_ItemUpgrade.GetHighWatermarkForItem(6948)
@@ -98,7 +98,7 @@ characterHighWatermark, accountHighWatermark = C_ItemUpgrade.GetHighWatermarkFor
 | `characterHighWatermark` | number | no |  |
 | `accountHighWatermark` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local characterHighWatermark, accountHighWatermark = C_ItemUpgrade.GetHighWatermarkForSlot(1)
@@ -122,7 +122,7 @@ itemRedundancySlot = C_ItemUpgrade.GetHighWatermarkSlotForItem(itemInfo)
 |------|------|---------|-------------|
 | `itemRedundancySlot` | number | no | Enum.ItemRedundancySlot value |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemRedundancySlot = C_ItemUpgrade.GetHighWatermarkSlotForItem(6948)
@@ -140,7 +140,7 @@ link = C_ItemUpgrade.GetItemHyperlink()
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_ItemUpgrade.GetItemHyperlink()
@@ -159,7 +159,7 @@ itemLevel, isPvpItemLevel = C_ItemUpgrade.GetItemUpgradeCurrentLevel()
 | `itemLevel` | number | no |  |
 | `isPvpItemLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLevel, isPvpItemLevel = C_ItemUpgrade.GetItemUpgradeCurrentLevel()
@@ -185,7 +185,7 @@ outBaseEffect, outUpgradedEffect = C_ItemUpgrade.GetItemUpgradeEffect(effectInde
 | `outBaseEffect` | string | no |  |
 | `outUpgradedEffect` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outBaseEffect, outUpgradedEffect = C_ItemUpgrade.GetItemUpgradeEffect(1)
@@ -203,7 +203,7 @@ itemInfo = C_ItemUpgrade.GetItemUpgradeItemInfo()
 |------|------|---------|-------------|
 | `itemInfo` | ItemUpgradeItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemInfo = C_ItemUpgrade.GetItemUpgradeItemInfo()
@@ -228,7 +228,7 @@ currentPvPItemLevel, upgradedPvPItemLevel = C_ItemUpgrade.GetItemUpgradePvpItemL
 | `currentPvPItemLevel` | number | no |  |
 | `upgradedPvPItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentPvPItemLevel, upgradedPvPItemLevel = C_ItemUpgrade.GetItemUpgradePvpItemLevelDeltaValues(0)
@@ -246,7 +246,7 @@ numItemUpgradeEffects = C_ItemUpgrade.GetNumItemUpgradeEffects()
 |------|------|---------|-------------|
 | `numItemUpgradeEffects` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numItemUpgradeEffects = C_ItemUpgrade.GetNumItemUpgradeEffects()
@@ -264,7 +264,7 @@ isBound = C_ItemUpgrade.IsItemBound()
 |------|------|---------|-------------|
 | `isBound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBound = C_ItemUpgrade.IsItemBound()
@@ -276,7 +276,7 @@ local isBound = C_ItemUpgrade.IsItemBound()
 C_ItemUpgrade.SetItemUpgradeFromCursorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemUpgrade.SetItemUpgradeFromCursorItem()
@@ -294,7 +294,7 @@ C_ItemUpgrade.SetItemUpgradeFromLocation(itemToSet)
 |------|------|---------|-------------|
 | `itemToSet` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemUpgrade.SetItemUpgradeFromLocation(6948)
@@ -312,7 +312,7 @@ C_ItemUpgrade.UpgradeItem(numUpgrades)
 |------|------|---------|-------------|
 | `numUpgrades` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemUpgrade.UpgradeItem(0)

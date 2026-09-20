@@ -18,7 +18,7 @@ C_PartyPose.ExtraAction(partyPoseID)
 |------|------|---------|-------------|
 | `partyPoseID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyPose.ExtraAction(0)
@@ -42,7 +42,7 @@ info = C_PartyPose.GetPartyPoseInfoByID(mapID)
 |------|------|---------|-------------|
 | `info` | PartyPoseInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PartyPose.GetPartyPoseInfoByID(0)
@@ -66,7 +66,7 @@ info = C_PartyPose.GetPartyPoseInfoByMapID(mapID)
 |------|------|---------|-------------|
 | `info` | PartyPoseInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PartyPose.GetPartyPoseInfoByMapID(0)
@@ -90,7 +90,7 @@ hasExtraAction = C_PartyPose.HasExtraAction(partyPoseID)
 |------|------|---------|-------------|
 | `hasExtraAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasExtraAction = C_PartyPose.HasExtraAction(0)

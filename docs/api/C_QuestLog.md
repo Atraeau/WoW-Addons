@@ -12,7 +12,7 @@
 C_QuestLog.AbandonQuest()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.AbandonQuest()
@@ -36,7 +36,7 @@ wasWatched = C_QuestLog.AddQuestWatch(questID)
 |------|------|---------|-------------|
 | `wasWatched` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasWatched = C_QuestLog.AddQuestWatch(0)
@@ -61,7 +61,7 @@ wasWatched = C_QuestLog.AddWorldQuestWatch(questID, [watchType])
 |------|------|---------|-------------|
 | `wasWatched` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasWatched = C_QuestLog.AddWorldQuestWatch(0)
@@ -85,7 +85,7 @@ canAbandon = C_QuestLog.CanAbandonQuest(questID)
 |------|------|---------|-------------|
 | `canAbandon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAbandon = C_QuestLog.CanAbandonQuest(0)
@@ -110,7 +110,7 @@ awardsReputation = C_QuestLog.DoesQuestAwardReputationWithFaction(questID, targe
 |------|------|---------|-------------|
 | `awardsReputation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local awardsReputation = C_QuestLog.DoesQuestAwardReputationWithFaction(0, 0)
@@ -128,7 +128,7 @@ questID = C_QuestLog.GetAbandonQuest()
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetAbandonQuest()
@@ -146,7 +146,7 @@ itemIDs = C_QuestLog.GetAbandonQuestItems()
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemIDs = C_QuestLog.GetAbandonQuestItems()
@@ -164,7 +164,7 @@ questID = C_QuestLog.GetActivePreyQuest()
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetActivePreyQuest()
@@ -182,7 +182,7 @@ uiMapIDs = C_QuestLog.GetActiveThreatMaps()
 |------|------|---------|-------------|
 | `uiMapIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapIDs = C_QuestLog.GetActiveThreatMaps()
@@ -200,7 +200,7 @@ quests = C_QuestLog.GetAllCompletedQuestIDs()
 |------|------|---------|-------------|
 | `quests` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quests = C_QuestLog.GetAllCompletedQuestIDs()
@@ -224,7 +224,7 @@ bounties = C_QuestLog.GetBountiesForMapID(uiMapID)
 |------|------|---------|-------------|
 | `bounties` | BountyInfo[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bounties = C_QuestLog.GetBountiesForMapID(0)
@@ -251,7 +251,7 @@ displayLocation, lockQuestID, bountySetID, isActivitySet = C_QuestLog.GetBountyS
 | `bountySetID` | number | no |  |
 | `isActivitySet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayLocation, lockQuestID, bountySetID, isActivitySet = C_QuestLog.GetBountySetInfoForMapID(0)
@@ -276,7 +276,7 @@ distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(questID)
 | `distanceSq` | number | no |  |
 | `onContinent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distanceSq, onContinent = C_QuestLog.GetDistanceSqToQuest(0)
@@ -300,7 +300,7 @@ index = C_QuestLog.GetHeaderIndexForQuest(questID)
 |------|------|---------|-------------|
 | `index` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = C_QuestLog.GetHeaderIndexForQuest(0)
@@ -324,7 +324,7 @@ info = C_QuestLog.GetInfo(questLogIndex)
 |------|------|---------|-------------|
 | `info` | QuestInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_QuestLog.GetInfo(1)
@@ -350,7 +350,7 @@ questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
 |------|------|---------|-------------|
 | `questLogIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questLogIndex = C_QuestLog.GetLogIndexForQuestID(0)
@@ -368,7 +368,7 @@ uiMapID = C_QuestLog.GetMapForQuestPOIs()
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = C_QuestLog.GetMapForQuestPOIs()
@@ -388,7 +388,7 @@ maxNumQuests = C_QuestLog.GetMaxNumQuests()
 |------|------|---------|-------------|
 | `maxNumQuests` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxNumQuests = C_QuestLog.GetMaxNumQuests()
@@ -408,7 +408,7 @@ maxNumQuestsCanAccept = C_QuestLog.GetMaxNumQuestsCanAccept()
 |------|------|---------|-------------|
 | `maxNumQuestsCanAccept` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxNumQuestsCanAccept = C_QuestLog.GetMaxNumQuestsCanAccept()
@@ -434,7 +434,7 @@ mapID, x, y = C_QuestLog.GetNextWaypoint(questID)
 | `x` | number | no |  |
 | `y` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID, x, y = C_QuestLog.GetNextWaypoint(0)
@@ -460,7 +460,7 @@ x, y = C_QuestLog.GetNextWaypointForMap(questID, uiMapID)
 | `x` | number | no |  |
 | `y` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local x, y = C_QuestLog.GetNextWaypointForMap(0, 0)
@@ -484,7 +484,7 @@ waypointText = C_QuestLog.GetNextWaypointText(questID)
 |------|------|---------|-------------|
 | `waypointText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local waypointText = C_QuestLog.GetNextWaypointText(0)
@@ -503,7 +503,7 @@ numShownEntries, numQuests = C_QuestLog.GetNumQuestLogEntries()
 | `numShownEntries` | number | no |  |
 | `numQuests` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numShownEntries, numQuests = C_QuestLog.GetNumQuestLogEntries()
@@ -527,7 +527,7 @@ leaderboardCount = C_QuestLog.GetNumQuestObjectives(questID)
 |------|------|---------|-------------|
 | `leaderboardCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local leaderboardCount = C_QuestLog.GetNumQuestObjectives(0)
@@ -545,7 +545,7 @@ numQuestWatches = C_QuestLog.GetNumQuestWatches()
 |------|------|---------|-------------|
 | `numQuestWatches` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numQuestWatches = C_QuestLog.GetNumQuestWatches()
@@ -563,7 +563,7 @@ numQuestWatches = C_QuestLog.GetNumWorldQuestWatches()
 |------|------|---------|-------------|
 | `numQuestWatches` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numQuestWatches = C_QuestLog.GetNumWorldQuestWatches()
@@ -591,7 +591,7 @@ uiMapID, worldQuests, worldQuestsElite, dungeons, treasures = C_QuestLog.GetQues
 | `dungeons` | bool | no |  |
 | `treasures` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID, worldQuests, worldQuestsElite, dungeons, treasures = C_QuestLog.GetQuestAdditionalHighlights(0)
@@ -615,7 +615,7 @@ theme = C_QuestLog.GetQuestDetailsTheme(questID)
 |------|------|---------|-------------|
 | `theme` | QuestTheme | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local theme = C_QuestLog.GetQuestDetailsTheme(0)
@@ -639,7 +639,7 @@ level = C_QuestLog.GetQuestDifficultyLevel(questID)
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_QuestLog.GetQuestDifficultyLevel(0)
@@ -665,7 +665,7 @@ questID = C_QuestLog.GetQuestIDForLogIndex(questLogIndex)
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetQuestIDForLogIndex(1)
@@ -689,7 +689,7 @@ questID = C_QuestLog.GetQuestIDForQuestWatchIndex(questWatchIndex)
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetQuestIDForQuestWatchIndex(1)
@@ -713,7 +713,7 @@ questID = C_QuestLog.GetQuestIDForWorldQuestWatchIndex(questWatchIndex)
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetQuestIDForWorldQuestWatchIndex(1)
@@ -737,7 +737,7 @@ reputationRewards = C_QuestLog.GetQuestLogMajorFactionReputationRewards(questID)
 |------|------|---------|-------------|
 | `reputationRewards` | QuestRewardReputationInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reputationRewards = C_QuestLog.GetQuestLogMajorFactionReputationRewards(0)
@@ -765,7 +765,7 @@ portraitGiver, portraitGiverText, portraitGiverName, portraitGiverMount, portrai
 | `portraitGiverMount` | number | no |  |
 | `portraitGiverModelSceneID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local portraitGiver, portraitGiverText, portraitGiverName, portraitGiverMount, portraitGiverModelSceneID = C_QuestLog.GetQuestLogPortraitGiver()
@@ -789,7 +789,7 @@ objectives = C_QuestLog.GetQuestObjectives(questID)
 |------|------|---------|-------------|
 | `objectives` | QuestObjectiveInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objectives = C_QuestLog.GetQuestObjectives(0)
@@ -813,7 +813,7 @@ questRewardCurrencies = C_QuestLog.GetQuestRewardCurrencies(questID)
 |------|------|---------|-------------|
 | `questRewardCurrencies` | QuestRewardCurrencyInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questRewardCurrencies = C_QuestLog.GetQuestRewardCurrencies(0)
@@ -839,7 +839,7 @@ questRewardCurrencyInfo = C_QuestLog.GetQuestRewardCurrencyInfo(questID, currenc
 |------|------|---------|-------------|
 | `questRewardCurrencyInfo` | QuestRewardCurrencyInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questRewardCurrencyInfo = C_QuestLog.GetQuestRewardCurrencyInfo(0, 1, false)
@@ -863,7 +863,7 @@ quests = C_QuestLog.GetQuestsOnMap(uiMapID)
 |------|------|---------|-------------|
 | `quests` | QuestPOIMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quests = C_QuestLog.GetQuestsOnMap(0)
@@ -887,7 +887,7 @@ info = C_QuestLog.GetQuestTagInfo(questID)
 |------|------|---------|-------------|
 | `info` | QuestTagInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_QuestLog.GetQuestTagInfo(0)
@@ -905,7 +905,7 @@ questTimers = C_QuestLog.GetQuestTimers()
 |------|------|---------|-------------|
 | `questTimers` | QuestTimerInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questTimers = C_QuestLog.GetQuestTimers()
@@ -929,7 +929,7 @@ questType = C_QuestLog.GetQuestType(questID)
 |------|------|---------|-------------|
 | `questType` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questType = C_QuestLog.GetQuestType(0)
@@ -953,7 +953,7 @@ watchType = C_QuestLog.GetQuestWatchType(questID)
 |------|------|---------|-------------|
 | `watchType` | QuestWatchType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local watchType = C_QuestLog.GetQuestWatchType(0)
@@ -979,7 +979,7 @@ requiredMoney = C_QuestLog.GetRequiredMoney([questID])
 |------|------|---------|-------------|
 | `requiredMoney` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requiredMoney = C_QuestLog.GetRequiredMoney()
@@ -997,7 +997,7 @@ questID = C_QuestLog.GetSelectedQuest()
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestLog.GetSelectedQuest()
@@ -1021,7 +1021,7 @@ suggestedGroupSize = C_QuestLog.GetSuggestedGroupSize(questID)
 |------|------|---------|-------------|
 | `suggestedGroupSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local suggestedGroupSize = C_QuestLog.GetSuggestedGroupSize(0)
@@ -1046,7 +1046,7 @@ totalTime, elapsedTime = C_QuestLog.GetTimeAllowed(questID)
 | `totalTime` | number | no |  |
 | `elapsedTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalTime, elapsedTime = C_QuestLog.GetTimeAllowed(0)
@@ -1072,7 +1072,7 @@ title = C_QuestLog.GetTitleForLogIndex(questLogIndex)
 |------|------|---------|-------------|
 | `title` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local title = C_QuestLog.GetTitleForLogIndex(1)
@@ -1098,7 +1098,7 @@ title = C_QuestLog.GetTitleForQuestID(questID)
 |------|------|---------|-------------|
 | `title` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local title = C_QuestLog.GetTitleForQuestID(0)
@@ -1116,7 +1116,7 @@ range = C_QuestLog.GetTrivialRange()
 |------|------|---------|-------------|
 | `range` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local range = C_QuestLog.GetTrivialRange()
@@ -1141,7 +1141,7 @@ achievementID, storyMapID = C_QuestLog.GetZoneStoryInfo(uiMapID)
 | `achievementID` | number | no |  |
 | `storyMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local achievementID, storyMapID = C_QuestLog.GetZoneStoryInfo(0)
@@ -1159,7 +1159,7 @@ hasActiveThreats = C_QuestLog.HasActiveThreats()
 |------|------|---------|-------------|
 | `hasActiveThreats` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasActiveThreats = C_QuestLog.HasActiveThreats()
@@ -1183,7 +1183,7 @@ isAccountQuest = C_QuestLog.IsAccountQuest(questID)
 |------|------|---------|-------------|
 | `isAccountQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAccountQuest = C_QuestLog.IsAccountQuest(0)
@@ -1207,7 +1207,7 @@ isComplete = C_QuestLog.IsComplete(questID)
 |------|------|---------|-------------|
 | `isComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isComplete = C_QuestLog.IsComplete(0)
@@ -1231,7 +1231,7 @@ isEliteQuest = C_QuestLog.IsEliteQuest(questID)
 |------|------|---------|-------------|
 | `isEliteQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEliteQuest = C_QuestLog.IsEliteQuest(0)
@@ -1255,7 +1255,7 @@ isFailed = C_QuestLog.IsFailed(questID)
 |------|------|---------|-------------|
 | `isFailed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFailed = C_QuestLog.IsFailed(0)
@@ -1279,7 +1279,7 @@ isImportant = C_QuestLog.IsImportantQuest(questID)
 |------|------|---------|-------------|
 | `isImportant` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isImportant = C_QuestLog.IsImportantQuest(0)
@@ -1303,7 +1303,7 @@ isMeta = C_QuestLog.IsMetaQuest(questID)
 |------|------|---------|-------------|
 | `isMeta` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMeta = C_QuestLog.IsMetaQuest(0)
@@ -1328,7 +1328,7 @@ onMap, hasLocalPOI = C_QuestLog.IsOnMap(questID)
 | `onMap` | bool | no |  |
 | `hasLocalPOI` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local onMap, hasLocalPOI = C_QuestLog.IsOnMap(0)
@@ -1352,7 +1352,7 @@ isOnQuest = C_QuestLog.IsOnQuest(questID)
 |------|------|---------|-------------|
 | `isOnQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOnQuest = C_QuestLog.IsOnQuest(0)
@@ -1376,7 +1376,7 @@ isPushable = C_QuestLog.IsPushableQuest(questID)
 |------|------|---------|-------------|
 | `isPushable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPushable = C_QuestLog.IsPushableQuest(0)
@@ -1400,7 +1400,7 @@ isBounty = C_QuestLog.IsQuestBounty(questID)
 |------|------|---------|-------------|
 | `isBounty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBounty = C_QuestLog.IsQuestBounty(0)
@@ -1424,7 +1424,7 @@ isCalling = C_QuestLog.IsQuestCalling(questID)
 |------|------|---------|-------------|
 | `isCalling` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCalling = C_QuestLog.IsQuestCalling(0)
@@ -1449,7 +1449,7 @@ isCriteriaForBounty = C_QuestLog.IsQuestCriteriaForBounty(questID, bountyQuestID
 |------|------|---------|-------------|
 | `isCriteriaForBounty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCriteriaForBounty = C_QuestLog.IsQuestCriteriaForBounty(0, 0)
@@ -1473,7 +1473,7 @@ isDisabled = C_QuestLog.IsQuestDisabledForSession(questID)
 |------|------|---------|-------------|
 | `isDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisabled = C_QuestLog.IsQuestDisabledForSession(0)
@@ -1497,7 +1497,7 @@ isCompleted = C_QuestLog.IsQuestFlaggedCompleted(questID)
 |------|------|---------|-------------|
 | `isCompleted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(0)
@@ -1521,7 +1521,7 @@ isCompletedOnAccount = C_QuestLog.IsQuestFlaggedCompletedOnAccount(questID)
 |------|------|---------|-------------|
 | `isCompletedOnAccount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCompletedOnAccount = C_QuestLog.IsQuestFlaggedCompletedOnAccount(0)
@@ -1545,7 +1545,7 @@ isFromContentPush = C_QuestLog.IsQuestFromContentPush(questID)
 |------|------|---------|-------------|
 | `isFromContentPush` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFromContentPush = C_QuestLog.IsQuestFromContentPush(0)
@@ -1569,7 +1569,7 @@ isInvasion = C_QuestLog.IsQuestInvasion(questID)
 |------|------|---------|-------------|
 | `isInvasion` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInvasion = C_QuestLog.IsQuestInvasion(0)
@@ -1593,7 +1593,7 @@ isReplayable = C_QuestLog.IsQuestReplayable(questID)
 |------|------|---------|-------------|
 | `isReplayable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReplayable = C_QuestLog.IsQuestReplayable(0)
@@ -1617,7 +1617,7 @@ recentlyReplayed = C_QuestLog.IsQuestReplayedRecently(questID)
 |------|------|---------|-------------|
 | `recentlyReplayed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentlyReplayed = C_QuestLog.IsQuestReplayedRecently(0)
@@ -1641,7 +1641,7 @@ isTask = C_QuestLog.IsQuestTask(questID)
 |------|------|---------|-------------|
 | `isTask` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTask = C_QuestLog.IsQuestTask(0)
@@ -1665,7 +1665,7 @@ isTrivial = C_QuestLog.IsQuestTrivial(questID)
 |------|------|---------|-------------|
 | `isTrivial` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrivial = C_QuestLog.IsQuestTrivial(0)
@@ -1689,7 +1689,7 @@ isRepeatable = C_QuestLog.IsRepeatableQuest(questID)
 |------|------|---------|-------------|
 | `isRepeatable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRepeatable = C_QuestLog.IsRepeatableQuest(0)
@@ -1713,7 +1713,7 @@ isThreat = C_QuestLog.IsThreatQuest(questID)
 |------|------|---------|-------------|
 | `isThreat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isThreat = C_QuestLog.IsThreatQuest(0)
@@ -1738,7 +1738,7 @@ isOnQuest = C_QuestLog.IsUnitOnQuest(unit, questID)
 |------|------|---------|-------------|
 | `isOnQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOnQuest = C_QuestLog.IsUnitOnQuest("player", 0)
@@ -1762,7 +1762,7 @@ isWorldQuest = C_QuestLog.IsWorldQuest(questID)
 |------|------|---------|-------------|
 | `isWorldQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWorldQuest = C_QuestLog.IsWorldQuest(0)
@@ -1788,7 +1788,7 @@ hasBonus = C_QuestLog.QuestCanHaveWarModeBonus(questID)
 |------|------|---------|-------------|
 | `hasBonus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBonus = C_QuestLog.QuestCanHaveWarModeBonus(0)
@@ -1812,7 +1812,7 @@ questContainsFirstTimeRepBonusForPlayer = C_QuestLog.QuestContainsFirstTimeRepBo
 |------|------|---------|-------------|
 | `questContainsFirstTimeRepBonusForPlayer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questContainsFirstTimeRepBonusForPlayer = C_QuestLog.QuestContainsFirstTimeRepBonusForPlayer(0)
@@ -1836,7 +1836,7 @@ hasBonus = C_QuestLog.QuestHasQuestSessionBonus(questID)
 |------|------|---------|-------------|
 | `hasBonus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBonus = C_QuestLog.QuestHasQuestSessionBonus(0)
@@ -1862,7 +1862,7 @@ hasBonus = C_QuestLog.QuestHasWarModeBonus(questID)
 |------|------|---------|-------------|
 | `hasBonus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBonus = C_QuestLog.QuestHasWarModeBonus(0)
@@ -1886,7 +1886,7 @@ questIgnoresAccountCompletedFiltering = C_QuestLog.QuestIgnoresAccountCompletedF
 |------|------|---------|-------------|
 | `questIgnoresAccountCompletedFiltering` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questIgnoresAccountCompletedFiltering = C_QuestLog.QuestIgnoresAccountCompletedFiltering(0)
@@ -1910,7 +1910,7 @@ readyForTurnIn = C_QuestLog.ReadyForTurnIn(questID)
 |------|------|---------|-------------|
 | `readyForTurnIn` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local readyForTurnIn = C_QuestLog.ReadyForTurnIn(0)
@@ -1934,7 +1934,7 @@ wasRemoved = C_QuestLog.RemoveQuestWatch(questID)
 |------|------|---------|-------------|
 | `wasRemoved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasRemoved = C_QuestLog.RemoveQuestWatch(0)
@@ -1958,7 +1958,7 @@ wasRemoved = C_QuestLog.RemoveWorldQuestWatch(questID)
 |------|------|---------|-------------|
 | `wasRemoved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasRemoved = C_QuestLog.RemoveWorldQuestWatch(0)
@@ -1976,7 +1976,7 @@ C_QuestLog.RequestLoadQuestByID(questID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.RequestLoadQuestByID(0)
@@ -1988,7 +1988,7 @@ C_QuestLog.RequestLoadQuestByID(0)
 C_QuestLog.SetAbandonQuest()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.SetAbandonQuest()
@@ -2006,7 +2006,7 @@ C_QuestLog.SetMapForQuestPOIs(uiMapID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.SetMapForQuestPOIs(0)
@@ -2024,7 +2024,7 @@ C_QuestLog.SetSelectedQuest(questID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.SetSelectedQuest(0)
@@ -2048,7 +2048,7 @@ displayTimeRemaining = C_QuestLog.ShouldDisplayTimeRemaining(questID)
 |------|------|---------|-------------|
 | `displayTimeRemaining` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayTimeRemaining = C_QuestLog.ShouldDisplayTimeRemaining(0)
@@ -2072,7 +2072,7 @@ shouldShow = C_QuestLog.ShouldShowQuestRewards(questID)
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_QuestLog.ShouldShowQuestRewards(0)
@@ -2084,7 +2084,7 @@ local shouldShow = C_QuestLog.ShouldShowQuestRewards(0)
 C_QuestLog.SortQuestWatches()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.SortQuestWatches()
@@ -2108,7 +2108,7 @@ isRelatedToActiveQuest = C_QuestLog.UnitIsRelatedToActiveQuest(unit)
 |------|------|---------|-------------|
 | `isRelatedToActiveQuest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRelatedToActiveQuest = C_QuestLog.UnitIsRelatedToActiveQuest("player")
@@ -2120,7 +2120,7 @@ local isRelatedToActiveQuest = C_QuestLog.UnitIsRelatedToActiveQuest("player")
 C_QuestLog.UpdateCampaignHeaders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLog.UpdateCampaignHeaders()

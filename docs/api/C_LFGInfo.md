@@ -24,7 +24,7 @@ areCrossFactionGroupQueuesAllowed = C_LFGInfo.AreCrossFactionGroupQueuesAllowed(
 |------|------|---------|-------------|
 | `areCrossFactionGroupQueuesAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areCrossFactionGroupQueuesAllowed = C_LFGInfo.AreCrossFactionGroupQueuesAllowed(0)
@@ -43,7 +43,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUseGroupFinder()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUseGroupFinder()
@@ -62,7 +62,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUseLFD()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUseLFD()
@@ -81,7 +81,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUseLFR()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUseLFR()
@@ -100,7 +100,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUsePremadeGroup()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUsePremadeGroup()
@@ -119,7 +119,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUsePVP()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUsePVP()
@@ -138,7 +138,7 @@ canUse, failureReason = C_LFGInfo.CanPlayerUseScenarioFinder()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_LFGInfo.CanPlayerUseScenarioFinder()
@@ -150,7 +150,7 @@ local canUse, failureReason = C_LFGInfo.CanPlayerUseScenarioFinder()
 C_LFGInfo.ConfirmLfgExpandSearch()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGInfo.ConfirmLfgExpandSearch()
@@ -174,7 +174,7 @@ doesActivePartyMeetPremadeLaunchCount = C_LFGInfo.DoesActivePartyMeetPremadeLaun
 |------|------|---------|-------------|
 | `doesActivePartyMeetPremadeLaunchCount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesActivePartyMeetPremadeLaunchCount = C_LFGInfo.DoesActivePartyMeetPremadeLaunchCount(0)
@@ -198,7 +198,7 @@ doesCrossFactionQueueRequireFullPremade = C_LFGInfo.DoesCrossFactionQueueRequire
 |------|------|---------|-------------|
 | `doesCrossFactionQueueRequireFullPremade` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesCrossFactionQueueRequireFullPremade = C_LFGInfo.DoesCrossFactionQueueRequireFullPremade(0)
@@ -216,7 +216,7 @@ name = C_LFGInfo.GetActiveLFGDungeonName()
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_LFGInfo.GetActiveLFGDungeonName()
@@ -240,10 +240,10 @@ lfgDungeonIDs = C_LFGInfo.GetAllEntriesForCategory(category)
 |------|------|---------|-------------|
 | `lfgDungeonIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local lfgDungeonIDs = C_LFGInfo.GetAllEntriesForCategory(category)
+local lfgDungeonIDs = C_LFGInfo.GetAllEntriesForCategory(1)
 ```
 
 ### C_LFGInfo.GetDungeonInfo
@@ -264,7 +264,7 @@ dungeonInfo = C_LFGInfo.GetDungeonInfo(lfgDungeonID)
 |------|------|---------|-------------|
 | `dungeonInfo` | LFGDungeonInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dungeonInfo = C_LFGInfo.GetDungeonInfo(0)
@@ -289,7 +289,7 @@ instances = C_LFGInfo.GetLevelUpInstances(currPlayerLevel, isRaid)
 |------|------|---------|-------------|
 | `instances` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local instances = C_LFGInfo.GetLevelUpInstances(0, false)
@@ -307,7 +307,7 @@ lockInfo = C_LFGInfo.GetLFDLockStates()
 |------|------|---------|-------------|
 | `lockInfo` | LFGLockInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lockInfo = C_LFGInfo.GetLFDLockStates()
@@ -326,7 +326,7 @@ maxLevel, isLevelReduced = C_LFGInfo.GetRoleCheckDifficultyDetails()
 | `maxLevel` | number | yes |  |
 | `isLevelReduced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLevel, isLevelReduced = C_LFGInfo.GetRoleCheckDifficultyDetails()
@@ -350,7 +350,7 @@ shouldHide = C_LFGInfo.HideNameFromUI(dungeonID)
 |------|------|---------|-------------|
 | `shouldHide` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldHide = C_LFGInfo.HideNameFromUI(0)
@@ -368,7 +368,7 @@ enabled = C_LFGInfo.IsGroupFinderEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_LFGInfo.IsGroupFinderEnabled()
@@ -386,7 +386,7 @@ result = C_LFGInfo.IsInLFGFollowerDungeon()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LFGInfo.IsInLFGFollowerDungeon()
@@ -404,7 +404,7 @@ result = C_LFGInfo.IsInMatchmadeRaidWithoutRoleRequirements()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LFGInfo.IsInMatchmadeRaidWithoutRoleRequirements()
@@ -422,7 +422,7 @@ enabled = C_LFGInfo.IsLFDEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_LFGInfo.IsLFDEnabled()
@@ -446,7 +446,7 @@ result = C_LFGInfo.IsLFGFollowerDungeon(dungeonID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LFGInfo.IsLFGFollowerDungeon(0)
@@ -464,7 +464,7 @@ enabled = C_LFGInfo.IsLFREnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_LFGInfo.IsLFREnabled()

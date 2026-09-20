@@ -24,7 +24,7 @@ added = C_CombatAudioAlert.AddToKnownTargetingList(unit)
 |------|------|---------|-------------|
 | `added` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local added = C_CombatAudioAlert.AddToKnownTargetingList("player")
@@ -48,7 +48,7 @@ voice = C_CombatAudioAlert.GetCategoryVoice(category)
 |------|------|---------|-------------|
 | `voice` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local voice = C_CombatAudioAlert.GetCategoryVoice(category)
@@ -72,7 +72,7 @@ volume = C_CombatAudioAlert.GetCategoryVolume(category)
 |------|------|---------|-------------|
 | `volume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local volume = C_CombatAudioAlert.GetCategoryVolume(category)
@@ -97,7 +97,7 @@ formatVal = C_CombatAudioAlert.GetFormatSetting(unit, alertType)
 |------|------|---------|-------------|
 | `formatVal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatVal = C_CombatAudioAlert.GetFormatSetting("player", alertType)
@@ -115,7 +115,7 @@ speed = C_CombatAudioAlert.GetSpeakerSpeed()
 |------|------|---------|-------------|
 | `speed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local speed = C_CombatAudioAlert.GetSpeakerSpeed()
@@ -139,7 +139,7 @@ value = C_CombatAudioAlert.GetSpecSetting(setting)
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CombatAudioAlert.GetSpecSetting(setting)
@@ -163,7 +163,7 @@ throttle = C_CombatAudioAlert.GetThrottle(throttleType)
 |------|------|---------|-------------|
 | `throttle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local throttle = C_CombatAudioAlert.GetThrottle(throttleType)
@@ -181,7 +181,7 @@ isEnabled = C_CombatAudioAlert.IsEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_CombatAudioAlert.IsEnabled()
@@ -205,7 +205,7 @@ removed = C_CombatAudioAlert.RemoveFromKnownTargetingList(unit)
 |------|------|---------|-------------|
 | `removed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removed = C_CombatAudioAlert.RemoveFromKnownTargetingList("player")
@@ -230,7 +230,7 @@ success = C_CombatAudioAlert.SetCategoryVoice(category, newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetCategoryVoice(category, 0)
@@ -255,7 +255,7 @@ success = C_CombatAudioAlert.SetCategoryVolume(category, newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetCategoryVolume(category, 0)
@@ -281,7 +281,7 @@ success = C_CombatAudioAlert.SetFormatSetting(unit, alertType, newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetFormatSetting("player", alertType, 0)
@@ -305,7 +305,7 @@ success = C_CombatAudioAlert.SetSpeakerSpeed(newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetSpeakerSpeed(0)
@@ -330,7 +330,7 @@ success = C_CombatAudioAlert.SetSpecSetting(setting, newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetSpecSetting(setting, 0)
@@ -355,7 +355,7 @@ success = C_CombatAudioAlert.SetThrottle(throttleType, newVal)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CombatAudioAlert.SetThrottle(throttleType, 0)
@@ -381,7 +381,7 @@ utteranceID = C_CombatAudioAlert.SpeakText(text, category, allowOverlap)
 |------|------|---------|-------------|
 | `utteranceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local utteranceID = C_CombatAudioAlert.SpeakText("", category, false)

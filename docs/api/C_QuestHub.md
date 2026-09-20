@@ -25,7 +25,7 @@ isRelated = C_QuestHub.IsAreaPOICurrentlyRelatedToHub(areaPoiID, hubAreaPoiID)
 |------|------|---------|-------------|
 | `isRelated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRelated = C_QuestHub.IsAreaPOICurrentlyRelatedToHub(0, 0)
@@ -50,7 +50,7 @@ isRelated = C_QuestHub.IsQuestCurrentlyRelatedToHub(questID, hubAreaPoiID)
 |------|------|---------|-------------|
 | `isRelated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRelated = C_QuestHub.IsQuestCurrentlyRelatedToHub(0, 0)

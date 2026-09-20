@@ -24,10 +24,10 @@ battleNetAccountID = C_AccountInfo.GetIDFromBattleNetAccountGUID(battleNetAccoun
 |------|------|---------|-------------|
 | `battleNetAccountID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local battleNetAccountID = C_AccountInfo.GetIDFromBattleNetAccountGUID("Creature-0-0000-0-0-0-0")
+local battleNetAccountID = C_AccountInfo.GetIDFromBattleNetAccountGUID(UnitGUID("player"))
 ```
 
 ### C_AccountInfo.IsGUIDBattleNetAccountType
@@ -48,10 +48,10 @@ isBNet = C_AccountInfo.IsGUIDBattleNetAccountType(guid)
 |------|------|---------|-------------|
 | `isBNet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isBNet = C_AccountInfo.IsGUIDBattleNetAccountType("Creature-0-0000-0-0-0-0")
+local isBNet = C_AccountInfo.IsGUIDBattleNetAccountType(UnitGUID("player"))
 ```
 
 ### C_AccountInfo.IsGUIDRelatedToLocalAccount
@@ -72,9 +72,9 @@ isLocalUser = C_AccountInfo.IsGUIDRelatedToLocalAccount(guid)
 |------|------|---------|-------------|
 | `isLocalUser` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isLocalUser = C_AccountInfo.IsGUIDRelatedToLocalAccount("Creature-0-0000-0-0-0-0")
+local isLocalUser = C_AccountInfo.IsGUIDRelatedToLocalAccount(UnitGUID("player"))
 ```
 

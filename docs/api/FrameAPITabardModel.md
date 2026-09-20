@@ -18,7 +18,7 @@ file = GetLowerBackgroundFileName()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetLowerBackgroundFileName()
@@ -36,7 +36,7 @@ file = GetLowerBorderFile()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetLowerBorderFile()
@@ -54,7 +54,7 @@ file = GetLowerEmblemFile()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetLowerEmblemFile()
@@ -72,7 +72,7 @@ file = GetUpperBackgroundFileName()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetUpperBackgroundFileName()
@@ -90,7 +90,7 @@ file = GetUpperBorderFile()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetUpperBorderFile()
@@ -108,7 +108,7 @@ file = GetUpperEmblemFile()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetUpperEmblemFile()

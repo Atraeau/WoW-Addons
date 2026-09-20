@@ -20,7 +20,7 @@ result = AreClassRolesSoftSuggestions()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = AreClassRolesSoftSuggestions()
@@ -38,7 +38,7 @@ result = CanShowSetRoleButton()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanShowSetRoleButton()
@@ -56,7 +56,7 @@ result = InitiateRolePoll()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = InitiateRolePoll()
@@ -82,7 +82,7 @@ tank, healer, dps = UnitGetAvailableRoles(unit)
 | `healer` | bool | no |  |
 | `dps` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tank, healer, dps = UnitGetAvailableRoles("player")
@@ -107,7 +107,7 @@ result = UnitSetRole(unit, [roleStr])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitSetRole("player")
@@ -132,7 +132,7 @@ result = UnitSetRoleEnum(unit, [role])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitSetRoleEnum("player")

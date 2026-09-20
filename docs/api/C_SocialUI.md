@@ -18,7 +18,7 @@ isSocialUISystemEnabled = C_SocialUI.IsSystemEnabled()
 |------|------|---------|-------------|
 | `isSocialUISystemEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSocialUISystemEnabled = C_SocialUI.IsSystemEnabled()

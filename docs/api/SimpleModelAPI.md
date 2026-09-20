@@ -12,7 +12,7 @@
 AdvanceTime()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AdvanceTime()
@@ -24,7 +24,7 @@ AdvanceTime()
 ClearFog()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFog()
@@ -36,7 +36,7 @@ ClearFog()
 ClearModel()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearModel()
@@ -48,7 +48,7 @@ ClearModel()
 ClearTransform()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearTransform()
@@ -66,7 +66,7 @@ distance = GetCameraDistance()
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distance = GetCameraDistance()
@@ -84,7 +84,7 @@ radians = GetCameraFacing()
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local radians = GetCameraFacing()
@@ -104,7 +104,7 @@ positionX, positionY, positionZ = GetCameraPosition()
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ = GetCameraPosition()
@@ -122,7 +122,7 @@ radians = GetCameraRoll()
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local radians = GetCameraRoll()
@@ -142,7 +142,7 @@ targetX, targetY, targetZ = GetCameraTarget()
 | `targetY` | number | no |  |
 | `targetZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetX, targetY, targetZ = GetCameraTarget()
@@ -160,7 +160,7 @@ strength = GetDesaturation()
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local strength = GetDesaturation()
@@ -178,7 +178,7 @@ facing = GetFacing()
 |------|------|---------|-------------|
 | `facing` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local facing = GetFacing()
@@ -199,7 +199,7 @@ colorR, colorG, colorB, colorA = GetFogColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetFogColor()
@@ -217,7 +217,7 @@ fogFar = GetFogFar()
 |------|------|---------|-------------|
 | `fogFar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fogFar = GetFogFar()
@@ -235,7 +235,7 @@ fogNear = GetFogNear()
 |------|------|---------|-------------|
 | `fogNear` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fogNear = GetFogNear()
@@ -254,7 +254,7 @@ enabled, light = GetLight()
 | `enabled` | bool | no |  |
 | `light` | ModelLight | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled, light = GetLight()
@@ -272,7 +272,7 @@ alpha = GetModelAlpha()
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetModelAlpha()
@@ -291,7 +291,7 @@ layer, sublayer = GetModelDrawLayer()
 | `layer` | DrawLayer | no |  |
 | `sublayer` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layer, sublayer = GetModelDrawLayer()
@@ -309,7 +309,7 @@ modelFileID = GetModelFileID()
 |------|------|---------|-------------|
 | `modelFileID` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelFileID = GetModelFileID()
@@ -327,7 +327,7 @@ scale = GetModelScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetModelScale()
@@ -345,7 +345,7 @@ paused = GetPaused()
 |------|------|---------|-------------|
 | `paused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local paused = GetPaused()
@@ -363,7 +363,7 @@ pitch = GetPitch()
 |------|------|---------|-------------|
 | `pitch` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pitch = GetPitch()
@@ -383,7 +383,7 @@ positionX, positionY, positionZ = GetPosition()
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ = GetPosition()
@@ -401,7 +401,7 @@ roll = GetRoll()
 |------|------|---------|-------------|
 | `roll` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roll = GetRoll()
@@ -419,7 +419,7 @@ strength = GetShadowEffect()
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local strength = GetShadowEffect()
@@ -440,7 +440,7 @@ left, right, top, bottom = GetViewInsets()
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = GetViewInsets()
@@ -459,7 +459,7 @@ x, y = GetViewTranslation()
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local x, y = GetViewTranslation()
@@ -477,7 +477,7 @@ worldScale = GetWorldScale()
 |------|------|---------|-------------|
 | `worldScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local worldScale = GetWorldScale()
@@ -495,7 +495,7 @@ hasAttachmentPoints = HasAttachmentPoints()
 |------|------|---------|-------------|
 | `hasAttachmentPoints` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAttachmentPoints = HasAttachmentPoints()
@@ -513,7 +513,7 @@ hasCustomCamera = HasCustomCamera()
 |------|------|---------|-------------|
 | `hasCustomCamera` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasCustomCamera = HasCustomCamera()
@@ -531,7 +531,7 @@ useCenter = IsUsingModelCenterToTransform()
 |------|------|---------|-------------|
 | `useCenter` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local useCenter = IsUsingModelCenterToTransform()
@@ -543,7 +543,7 @@ local useCenter = IsUsingModelCenterToTransform()
 MakeCurrentCameraCustom()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 MakeCurrentCameraCustom()
@@ -561,7 +561,7 @@ ReplaceIconTexture(asset)
 |------|------|---------|-------------|
 | `asset` | FileAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ReplaceIconTexture(asset)
@@ -579,7 +579,7 @@ SetCamera(cameraIndex)
 |------|------|---------|-------------|
 | `cameraIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCamera(1)
@@ -597,7 +597,7 @@ SetCameraDistance(distance)
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraDistance(0)
@@ -615,7 +615,7 @@ SetCameraFacing(radians)
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraFacing(0)
@@ -635,7 +635,7 @@ SetCameraPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraPosition(0, 0, 0)
@@ -653,7 +653,7 @@ SetCameraRoll(radians)
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraRoll(0)
@@ -673,7 +673,7 @@ SetCameraTarget(targetX, targetY, targetZ)
 | `targetY` | number | no |  |
 | `targetZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCameraTarget(0, 0, 0)
@@ -691,7 +691,7 @@ SetCustomCamera(cameraIndex)
 |------|------|---------|-------------|
 | `cameraIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCustomCamera(1)
@@ -709,7 +709,7 @@ SetDesaturation(strength)
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturation(0)
@@ -727,7 +727,7 @@ SetFacing(facing)
 |------|------|---------|-------------|
 | `facing` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFacing(0)
@@ -748,7 +748,7 @@ SetFogColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogColor(0, 0, 0)
@@ -766,7 +766,7 @@ SetFogFar(fogFar)
 |------|------|---------|-------------|
 | `fogFar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogFar(0)
@@ -784,7 +784,7 @@ SetFogNear(fogNear)
 |------|------|---------|-------------|
 | `fogNear` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogNear(0)
@@ -802,7 +802,7 @@ SetGlow(glow)
 |------|------|---------|-------------|
 | `glow` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetGlow(0)
@@ -823,7 +823,7 @@ SetGradientMask(grad0, grad1, grad2, grad3)
 | `grad2` | number | no |  |
 | `grad3` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetGradientMask(0, 0, 0, 0)
@@ -842,7 +842,7 @@ SetLight(enabled, light)
 | `enabled` | bool | no |  |
 | `light` | ModelLight | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLight(false, light)
@@ -861,7 +861,7 @@ SetModel(asset, noMip)
 | `asset` | ModelAsset | no |  |
 | `noMip` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetModel(asset, false)
@@ -879,7 +879,7 @@ SetModelAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetModelAlpha(0)
@@ -897,7 +897,7 @@ SetModelDrawLayer(layer)
 |------|------|---------|-------------|
 | `layer` | DrawLayer | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetModelDrawLayer(layer)
@@ -915,7 +915,7 @@ SetModelScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetModelScale(0)
@@ -933,7 +933,7 @@ SetParticlesEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParticlesEnabled(false)
@@ -951,7 +951,7 @@ SetPaused(paused)
 |------|------|---------|-------------|
 | `paused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPaused(false)
@@ -969,7 +969,7 @@ SetPitch(pitch)
 |------|------|---------|-------------|
 | `pitch` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPitch(0)
@@ -989,7 +989,7 @@ SetPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPosition(0, 0, 0)
@@ -1007,7 +1007,7 @@ SetRoll(roll)
 |------|------|---------|-------------|
 | `roll` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRoll(0)
@@ -1025,7 +1025,7 @@ SetSequence(sequence)
 |------|------|---------|-------------|
 | `sequence` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSequence(0)
@@ -1044,10 +1044,10 @@ SetSequenceTime(sequence, timeOffset)
 | `sequence` | number | no |  |
 | `timeOffset` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetSequenceTime(0, 0)
+SetSequenceTime(0, 1)
 ```
 
 ### SimpleModelAPI.SetShadowEffect
@@ -1062,7 +1062,7 @@ SetShadowEffect(strength)
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowEffect(0)
@@ -1082,7 +1082,7 @@ SetTransform([translation], [rotation], [scale])
 | `rotation` | vector3 | yes |  |
 | `scale` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTransform()
@@ -1100,7 +1100,7 @@ SetUseGBuffer(useGBuffer)
 |------|------|---------|-------------|
 | `useGBuffer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseGBuffer(false)
@@ -1121,7 +1121,7 @@ SetViewInsets(left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetViewInsets(left, right, top, bottom)
@@ -1140,7 +1140,7 @@ SetViewTranslation(x, y)
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetViewTranslation(x, y)
@@ -1164,7 +1164,7 @@ modelPosition = TransformCameraSpaceToModelSpace(cameraPosition)
 |------|------|---------|-------------|
 | `modelPosition` | vector3 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelPosition = TransformCameraSpaceToModelSpace(cameraPosition)
@@ -1182,7 +1182,7 @@ UseModelCenterToTransform(useCenter)
 |------|------|---------|-------------|
 | `useCenter` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UseModelCenterToTransform(false)

@@ -12,7 +12,7 @@
 C_Browser.CloseFullscreenBrowser()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Browser.CloseFullscreenBrowser()

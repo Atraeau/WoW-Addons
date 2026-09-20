@@ -19,7 +19,7 @@ C_AddOns.DisableAddOn(name, character)
 | `name` | uiAddon | no |  |
 | `character` | cstring | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.DisableAddOn(name, "")
@@ -37,7 +37,7 @@ C_AddOns.DisableAllAddOns([character])
 |------|------|---------|-------------|
 | `character` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.DisableAllAddOns()
@@ -61,7 +61,7 @@ exists = C_AddOns.DoesAddOnExist(name)
 |------|------|---------|-------------|
 | `exists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exists = C_AddOns.DoesAddOnExist(name)
@@ -85,7 +85,7 @@ hadError = C_AddOns.DoesAddOnHaveLoadError(name)
 |------|------|---------|-------------|
 | `hadError` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hadError = C_AddOns.DoesAddOnHaveLoadError(name)
@@ -104,7 +104,7 @@ C_AddOns.EnableAddOn(name, character)
 | `name` | uiAddon | no |  |
 | `character` | cstring | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.EnableAddOn(name, "")
@@ -122,7 +122,7 @@ C_AddOns.EnableAllAddOns([character])
 |------|------|---------|-------------|
 | `character` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.EnableAllAddOns()
@@ -146,7 +146,7 @@ deps = C_AddOns.GetAddOnDependencies(name)
 |------|------|---------|-------------|
 | `deps` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deps = C_AddOns.GetAddOnDependencies(name)
@@ -171,7 +171,7 @@ state = C_AddOns.GetAddOnEnableState(name, character)
 |------|------|---------|-------------|
 | `state` | AddOnEnableState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_AddOns.GetAddOnEnableState(name, "")
@@ -200,7 +200,7 @@ name, title, notes, loadable, reason, security = C_AddOns.GetAddOnInfo(name)
 | `reason` | cstring | no |  |
 | `security` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, title, notes, loadable, reason, security = C_AddOns.GetAddOnInfo(name)
@@ -224,7 +224,7 @@ interfaceVersion = C_AddOns.GetAddOnInterfaceVersion(name)
 |------|------|---------|-------------|
 | `interfaceVersion` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interfaceVersion = C_AddOns.GetAddOnInterfaceVersion(name)
@@ -250,7 +250,7 @@ table = C_AddOns.GetAddOnLocalTable(name)
 |------|------|---------|-------------|
 | `table` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local table = C_AddOns.GetAddOnLocalTable(name)
@@ -278,7 +278,9 @@ value = C_AddOns.GetAddOnMetadata(name, variable)
 **Example**
 
 ```lua
-local value = C_AddOns.GetAddOnMetadata(name, "")
+-- Read a field from an addon's .toc (## Version:, ## Title:, ## X-*:)
+local version = C_AddOns.GetAddOnMetadata("BlizzThreatPlates", "Version")
+print(version)
 ```
 
 ### C_AddOns.GetAddOnName
@@ -299,7 +301,7 @@ name = C_AddOns.GetAddOnName(index)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_AddOns.GetAddOnName(1)
@@ -323,7 +325,7 @@ notes = C_AddOns.GetAddOnNotes(name)
 |------|------|---------|-------------|
 | `notes` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local notes = C_AddOns.GetAddOnNotes(name)
@@ -347,7 +349,7 @@ deps = C_AddOns.GetAddOnOptionalDependencies(name)
 |------|------|---------|-------------|
 | `deps` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deps = C_AddOns.GetAddOnOptionalDependencies(name)
@@ -371,7 +373,7 @@ security = C_AddOns.GetAddOnSecurity(name)
 |------|------|---------|-------------|
 | `security` | AddOnSecurityStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local security = C_AddOns.GetAddOnSecurity(name)
@@ -395,7 +397,7 @@ title = C_AddOns.GetAddOnTitle(name)
 |------|------|---------|-------------|
 | `title` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local title = C_AddOns.GetAddOnTitle(name)
@@ -413,7 +415,7 @@ numAddOns = C_AddOns.GetNumAddOns()
 |------|------|---------|-------------|
 | `numAddOns` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numAddOns = C_AddOns.GetNumAddOns()
@@ -431,7 +433,7 @@ disallowed = C_AddOns.GetScriptsDisallowedForBeta()
 |------|------|---------|-------------|
 | `disallowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local disallowed = C_AddOns.GetScriptsDisallowedForBeta()
@@ -455,7 +457,7 @@ defaultEnabled = C_AddOns.IsAddOnDefaultEnabled(name)
 |------|------|---------|-------------|
 | `defaultEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultEnabled = C_AddOns.IsAddOnDefaultEnabled(name)
@@ -482,7 +484,7 @@ loadable, reason = C_AddOns.IsAddOnLoadable(name, character, demandLoaded)
 | `loadable` | bool | no |  |
 | `reason` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loadable, reason = C_AddOns.IsAddOnLoadable(name, "", false)
@@ -510,7 +512,9 @@ loadedOrLoading, loaded = C_AddOns.IsAddOnLoaded(name)
 **Example**
 
 ```lua
-local loadedOrLoading, loaded = C_AddOns.IsAddOnLoaded(name)
+if not C_AddOns.IsAddOnLoaded("Blizzard_APIDocumentation") then
+    C_AddOns.LoadAddOn("Blizzard_APIDocumentation")
+end
 ```
 
 ### C_AddOns.IsAddOnLoadOnDemand
@@ -531,7 +535,7 @@ loadOnDemand = C_AddOns.IsAddOnLoadOnDemand(name)
 |------|------|---------|-------------|
 | `loadOnDemand` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loadOnDemand = C_AddOns.IsAddOnLoadOnDemand(name)
@@ -549,7 +553,7 @@ isEnabled = C_AddOns.IsAddonVersionCheckEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_AddOns.IsAddonVersionCheckEnabled()
@@ -574,7 +578,7 @@ loaded, value = C_AddOns.LoadAddOn(name)
 | `loaded` | bool | yes |  |
 | `value` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loaded, value = C_AddOns.LoadAddOn(name)
@@ -586,7 +590,7 @@ local loaded, value = C_AddOns.LoadAddOn(name)
 C_AddOns.ResetAddOns()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.ResetAddOns()
@@ -598,7 +602,7 @@ C_AddOns.ResetAddOns()
 C_AddOns.ResetDisabledAddOns()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.ResetDisabledAddOns()
@@ -610,7 +614,7 @@ C_AddOns.ResetDisabledAddOns()
 C_AddOns.SaveAddOns()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.SaveAddOns()
@@ -628,7 +632,7 @@ C_AddOns.SetAddonVersionCheck(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOns.SetAddonVersionCheck(false)

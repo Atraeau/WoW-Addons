@@ -24,7 +24,7 @@ canReport = C_ReportSystem.CanReportPlayer(playerLocation)
 |------|------|---------|-------------|
 | `canReport` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canReport = C_ReportSystem.CanReportPlayer(playerLocation)
@@ -48,7 +48,7 @@ canReport = C_ReportSystem.CanReportPlayerForLanguage(playerLocation)
 |------|------|---------|-------------|
 | `canReport` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canReport = C_ReportSystem.CanReportPlayerForLanguage(playerLocation)
@@ -72,7 +72,7 @@ majorCategories = C_ReportSystem.GetMajorCategoriesForReportType(reportType)
 |------|------|---------|-------------|
 | `majorCategories` | ReportMajorCategory[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local majorCategories = C_ReportSystem.GetMajorCategoriesForReportType(reportType)
@@ -96,7 +96,7 @@ majorCategoryString = C_ReportSystem.GetMajorCategoryString(majorCategory)
 |------|------|---------|-------------|
 | `majorCategoryString` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local majorCategoryString = C_ReportSystem.GetMajorCategoryString(majorCategory)
@@ -121,7 +121,7 @@ minorCategories = C_ReportSystem.GetMinorCategoriesForReportTypeAndMajorCategory
 |------|------|---------|-------------|
 | `minorCategories` | ReportMinorCategory[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minorCategories = C_ReportSystem.GetMinorCategoriesForReportTypeAndMajorCategory(reportType, majorCategory)
@@ -145,7 +145,7 @@ minorCategoryString = C_ReportSystem.GetMinorCategoryString(minorCategory)
 |------|------|---------|-------------|
 | `minorCategoryString` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minorCategoryString = C_ReportSystem.GetMinorCategoryString(minorCategory)
@@ -157,7 +157,7 @@ local minorCategoryString = C_ReportSystem.GetMinorCategoryString(minorCategory)
 C_ReportSystem.ReportServerLag()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ReportSystem.ReportServerLag()
@@ -169,7 +169,7 @@ C_ReportSystem.ReportServerLag()
 C_ReportSystem.ReportStuckInCombat()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ReportSystem.ReportStuckInCombat()
@@ -194,7 +194,7 @@ requiresScreenshot = C_ReportSystem.RequiresScreenshotForReportType(reportType, 
 |------|------|---------|-------------|
 | `requiresScreenshot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requiresScreenshot = C_ReportSystem.RequiresScreenshotForReportType(reportType, majorCategory)
@@ -215,7 +215,7 @@ C_ReportSystem.SendReport(reportInfo, [playerLocation])
 | `reportInfo` | ReportInfo | no |  |
 | `playerLocation` | PlayerLocation | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ReportSystem.SendReport(reportInfo)
@@ -233,7 +233,7 @@ C_ReportSystem.SetScreenshotPreviewTexture(textureObject)
 |------|------|---------|-------------|
 | `textureObject` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ReportSystem.SetScreenshotPreviewTexture(textureObject)
@@ -245,7 +245,7 @@ C_ReportSystem.SetScreenshotPreviewTexture(textureObject)
 C_ReportSystem.TakeReportScreenshot()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ReportSystem.TakeReportScreenshot()

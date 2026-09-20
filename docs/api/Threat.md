@@ -26,7 +26,7 @@ colorR, colorG, colorB = GetThreatStatusColor(gameErrorIndex)
 | `colorG` | number | no |  |
 | `colorB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB = GetThreatStatusColor(1)
@@ -44,7 +44,7 @@ result = IsThreatWarningEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsThreatWarningEnabled()

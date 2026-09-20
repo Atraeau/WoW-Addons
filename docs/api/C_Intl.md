@@ -28,7 +28,7 @@ result = C_Intl.CompareStrings(left, right, strength)
 |------|------|---------|-------------|
 | `result` | number | no | The comparison result: less than, equal to, or greater than zero. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.CompareStrings("", "", strength)
@@ -54,7 +54,7 @@ context = C_Intl.CreateLocaleContext(locale)
 |------|------|---------|-------------|
 | `context` | LuaLocaleContext | no | A locale context userdata object for calling locale-scoped APIs. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local context = C_Intl.CreateLocaleContext("")
@@ -81,7 +81,7 @@ byteOffsets = C_Intl.FindBreaks(text, breakType)
 |------|------|---------|-------------|
 | `byteOffsets` | number[] | no | The native UTF-8 string indices for the text boundaries. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local byteOffsets = C_Intl.FindBreaks("", breakType)
@@ -109,7 +109,7 @@ byteOffsets = C_Intl.FindStringMatches(text, pattern, strength)
 |------|------|---------|-------------|
 | `byteOffsets` | number[] | no | The UTF-8 byte offsets of matches in the text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local byteOffsets = C_Intl.FindStringMatches("", "", strength)
@@ -135,7 +135,7 @@ result = C_Intl.FoldCase(text)
 |------|------|---------|-------------|
 | `result` | string | no | The case-folded string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FoldCase("")
@@ -162,7 +162,7 @@ result = C_Intl.FormatCurrency(number, currencyCode)
 |------|------|---------|-------------|
 | `result` | string | no | The localized currency text produced by the formatter. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FormatCurrency(0, "")
@@ -190,7 +190,7 @@ result = C_Intl.FormatDate(unixTimeSeconds, style, timeZone)
 |------|------|---------|-------------|
 | `result` | string | no | The formatted date string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FormatDate(0, style, "")
@@ -219,7 +219,7 @@ result = C_Intl.FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, timeZone)
 |------|------|---------|-------------|
 | `result` | string | no | The formatted date and time string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FormatDateTime(0, dateStyle, timeStyle, "")
@@ -246,7 +246,7 @@ result = C_Intl.FormatNumber(number, style)
 |------|------|---------|-------------|
 | `result` | string | no | The localized number text produced by the formatter. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FormatNumber(0, style)
@@ -274,7 +274,7 @@ result = C_Intl.FormatTime(unixTimeSeconds, style, timeZone)
 |------|------|---------|-------------|
 | `result` | string | no | The formatted time string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.FormatTime(0, style, "")
@@ -300,7 +300,7 @@ result = C_Intl.GetCharacterProperties(text)
 |------|------|---------|-------------|
 | `result` | CharacterProperties | no | Unicode property values for the first code point. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.GetCharacterProperties("")
@@ -326,7 +326,7 @@ result = C_Intl.GetCurrencyFractionDigits(currencyCode)
 |------|------|---------|-------------|
 | `result` | number | no | The non-negative number of fraction digits to be displayed, or 0 if the lookup fails. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.GetCurrencyFractionDigits("")
@@ -353,7 +353,7 @@ result = C_Intl.GetCurrencyName(currencyCode, nameStyle)
 |------|------|---------|-------------|
 | `result` | string | no | The display string for the currency, or the currency code itself if no localized name is available. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.GetCurrencyName("", nameStyle)
@@ -373,7 +373,7 @@ result = C_Intl.GetCurrentLocale()
 |------|------|---------|-------------|
 | `result` | cstring | no | The current locale ID. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.GetCurrentLocale()
@@ -399,7 +399,7 @@ result = C_Intl.GetDisplayName(displayLocale)
 |------|------|---------|-------------|
 | `result` | string | no | The displayable name for the locale. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.GetDisplayName("")
@@ -426,7 +426,7 @@ sortKey = C_Intl.GetSortKey(text, strength)
 |------|------|---------|-------------|
 | `sortKey` | string | no | The sort key bytes excluding the terminating zero byte. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sortKey = C_Intl.GetSortKey("", strength)
@@ -453,7 +453,7 @@ isNormalized = C_Intl.IsNormalized(text, form)
 |------|------|---------|-------------|
 | `isNormalized` | bool | no | True if the string is normalized according to the specified form. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNormalized = C_Intl.IsNormalized("", form)
@@ -479,7 +479,7 @@ result = C_Intl.Length(text)
 |------|------|---------|-------------|
 | `result` | number | no | The number of character boundaries minus the initial boundary. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.Length("")
@@ -506,7 +506,7 @@ result = C_Intl.Normalize(text, form)
 |------|------|---------|-------------|
 | `result` | string | no | The normalized form of the source string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.Normalize("", form)
@@ -532,7 +532,7 @@ result = C_Intl.ParseCurrency(text)
 |------|------|---------|-------------|
 | `result` | CurrencyParseResult | no | The numeric amount and ISO 4217 currency code parsed from the localized currency text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.ParseCurrency("")
@@ -559,7 +559,7 @@ result = C_Intl.ParseNumber(text, style)
 |------|------|---------|-------------|
 | `result` | number | no | The numeric value parsed from the localized number text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.ParseNumber("", style)
@@ -586,7 +586,7 @@ result = C_Intl.SelectPlural(number, pluralType)
 |------|------|---------|-------------|
 | `result` | string | no | The plural keyword for the rule that applies to the number. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.SelectPlural(0, pluralType)
@@ -612,7 +612,7 @@ result = C_Intl.ToLower(text)
 |------|------|---------|-------------|
 | `result` | string | no | The lowercased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.ToLower("")
@@ -638,7 +638,7 @@ result = C_Intl.ToTitle(text)
 |------|------|---------|-------------|
 | `result` | string | no | The titlecased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.ToTitle("")
@@ -664,7 +664,7 @@ result = C_Intl.ToUpper(text)
 |------|------|---------|-------------|
 | `result` | string | no | The uppercased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.ToUpper("")
@@ -690,7 +690,7 @@ result = C_Intl.TransformLocale(transform)
 |------|------|---------|-------------|
 | `result` | string | no | The transformed locale string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.TransformLocale(transform)
@@ -717,7 +717,7 @@ result = C_Intl.Transliterate(text, transliteratorID)
 |------|------|---------|-------------|
 | `result` | string | no | The UTF-8 text after transliterator rules are applied. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Intl.Transliterate("", "")

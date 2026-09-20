@@ -26,7 +26,7 @@ canUse = C_QuestItemUse.CanUseQuestItemOnObject(item, unit, [checkRange])
 |------|------|---------|-------------|
 | `canUse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse = C_QuestItemUse.CanUseQuestItemOnObject(6948, "player")

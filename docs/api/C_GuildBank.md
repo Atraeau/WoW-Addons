@@ -18,7 +18,7 @@ enabled = C_GuildBank.IsGuildBankEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GuildBank.IsGuildBankEnabled()

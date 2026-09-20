@@ -24,7 +24,7 @@ data = C_TooltipInfo.GetAchievementByID(achievementID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetAchievementByID(0)
@@ -48,10 +48,10 @@ data = C_TooltipInfo.GetAction(actionID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetAction(actionID)
+local data = C_TooltipInfo.GetAction(1)
 ```
 
 ### C_TooltipInfo.GetArtifactItem
@@ -66,7 +66,7 @@ data = C_TooltipInfo.GetArtifactItem()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetArtifactItem()
@@ -90,7 +90,7 @@ data = C_TooltipInfo.GetArtifactPowerByID(powerID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetArtifactPowerByID(0)
@@ -115,7 +115,7 @@ data = C_TooltipInfo.GetAzeriteEssence(essenceID, [rank])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetAzeriteEssence(0)
@@ -139,7 +139,7 @@ data = C_TooltipInfo.GetAzeriteEssenceSlot(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetAzeriteEssenceSlot(1)
@@ -166,7 +166,7 @@ data = C_TooltipInfo.GetAzeritePower(itemID, itemLevel, powerID, [owningItemLink
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetAzeritePower(6948, 6948, 0)
@@ -190,7 +190,7 @@ data = C_TooltipInfo.GetBackpackToken(index)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetBackpackToken(1)
@@ -215,7 +215,7 @@ data = C_TooltipInfo.GetBagItem(bagIndex, slotIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetBagItem(1, 1)
@@ -241,7 +241,7 @@ data = C_TooltipInfo.GetBagItemChild(bagIndex, slotIndex, equipSlotIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetBagItemChild(1, 1, 1)
@@ -265,7 +265,7 @@ data = C_TooltipInfo.GetBuybackItem(index)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetBuybackItem(1)
@@ -289,10 +289,10 @@ data = C_TooltipInfo.GetCompanionPet(petGUID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetCompanionPet("Creature-0-0000-0-0-0-0")
+local data = C_TooltipInfo.GetCompanionPet(UnitGUID("player"))
 ```
 
 ### C_TooltipInfo.GetConduit
@@ -314,7 +314,7 @@ data = C_TooltipInfo.GetConduit(conduitID, conduitRank)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetConduit(0, 1)
@@ -339,7 +339,7 @@ data = C_TooltipInfo.GetCurrencyByID(currencyID, [amount])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetCurrencyByID(0)
@@ -363,7 +363,7 @@ data = C_TooltipInfo.GetCurrencyToken(tokenIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetCurrencyToken(1)
@@ -388,7 +388,7 @@ data = C_TooltipInfo.GetEnhancedConduit(conduitID, rank)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetEnhancedConduit(0, 1)
@@ -412,7 +412,7 @@ data = C_TooltipInfo.GetEquipmentSet(setID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetEquipmentSet(0)
@@ -437,7 +437,7 @@ data = C_TooltipInfo.GetExistingSocketGem(index, [toDestroy])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetExistingSocketGem(1)
@@ -462,10 +462,10 @@ data = C_TooltipInfo.GetGuildBankItem(tab, slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetGuildBankItem(tab, 1)
+local data = C_TooltipInfo.GetGuildBankItem(1, 1)
 ```
 
 ### C_TooltipInfo.GetHeirloomByItemID
@@ -486,7 +486,7 @@ data = C_TooltipInfo.GetHeirloomByItemID(itemID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetHeirloomByItemID(6948)
@@ -513,7 +513,7 @@ data = C_TooltipInfo.GetHyperlink(hyperlink, [optionalArg1], [optionalArg2], [hi
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetHyperlink("")
@@ -538,7 +538,7 @@ data = C_TooltipInfo.GetInboxItem(messageIndex, [attachmentIndex])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetInboxItem(1)
@@ -562,7 +562,7 @@ data = C_TooltipInfo.GetInstanceLockEncountersComplete(index)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetInstanceLockEncountersComplete(1)
@@ -588,7 +588,7 @@ data = C_TooltipInfo.GetInventoryItem(unit, slot, [hideUselessStats])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetInventoryItem("player", 1)
@@ -612,7 +612,7 @@ data = C_TooltipInfo.GetInventoryItemByID(itemID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetInventoryItemByID(6948)
@@ -636,10 +636,10 @@ data = C_TooltipInfo.GetItemByGUID(guid)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetItemByGUID("Creature-0-0000-0-0-0-0")
+local data = C_TooltipInfo.GetItemByGUID(UnitGUID("player"))
 ```
 
 ### C_TooltipInfo.GetItemByID
@@ -663,7 +663,7 @@ data = C_TooltipInfo.GetItemByID(itemID, [quality], [itemContext], [treasureCont
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetItemByID(6948)
@@ -687,7 +687,7 @@ data = C_TooltipInfo.GetItemByItemModifiedAppearanceID(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetItemByItemModifiedAppearanceID(6948)
@@ -705,7 +705,7 @@ data = C_TooltipInfo.GetItemInteractionItem()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetItemInteractionItem()
@@ -732,7 +732,7 @@ data = C_TooltipInfo.GetItemKey(itemID, itemLevel, itemSuffix, [requiredLevel])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetItemKey(6948, 6948, 6948)
@@ -757,7 +757,7 @@ data = C_TooltipInfo.GetLFGDungeonReward(dungeonID, lootIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetLFGDungeonReward(0, 1)
@@ -783,10 +783,10 @@ data = C_TooltipInfo.GetLFGDungeonShortageReward(dungeonID, shortageSeverity, lo
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetLFGDungeonShortageReward(0, shortageSeverity, 1)
+local data = C_TooltipInfo.GetLFGDungeonShortageReward(0, 1, 1)
 ```
 
 ### C_TooltipInfo.GetLootCurrency
@@ -807,7 +807,7 @@ data = C_TooltipInfo.GetLootCurrency(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetLootCurrency(1)
@@ -831,7 +831,7 @@ data = C_TooltipInfo.GetLootItem(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetLootItem(1)
@@ -855,7 +855,7 @@ data = C_TooltipInfo.GetLootRollItem(id)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetLootRollItem(0)
@@ -880,7 +880,7 @@ data = C_TooltipInfo.GetMerchantCostItem(slot, costIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetMerchantCostItem(1, 1)
@@ -904,7 +904,7 @@ data = C_TooltipInfo.GetMerchantItem(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetMerchantItem(1)
@@ -922,7 +922,7 @@ data = C_TooltipInfo.GetMinimapMouseover()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetMinimapMouseover()
@@ -947,10 +947,10 @@ data = C_TooltipInfo.GetMountBySpellID(spellID, [checkIndoors])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetMountBySpellID(12345)
+local data = C_TooltipInfo.GetMountBySpellID(2050)
 ```
 
 ### C_TooltipInfo.GetOutfit
@@ -971,7 +971,7 @@ data = C_TooltipInfo.GetOutfit(outfitID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetOutfit(0)
@@ -995,7 +995,7 @@ data = C_TooltipInfo.GetOwnedItemByID(itemID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetOwnedItemByID(6948)
@@ -1019,7 +1019,7 @@ data = C_TooltipInfo.GetPetAction(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetPetAction(1)
@@ -1043,7 +1043,7 @@ data = C_TooltipInfo.GetPossession(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetPossession(1)
@@ -1067,7 +1067,7 @@ data = C_TooltipInfo.GetPvpBrawl([isSpecial])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetPvpBrawl()
@@ -1094,7 +1094,7 @@ data = C_TooltipInfo.GetPvpTalent(talentID, [isInspect], [groupIndex], [talentIn
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetPvpTalent(0)
@@ -1119,7 +1119,7 @@ data = C_TooltipInfo.GetQuestCurrency(type, currencyIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestCurrency("", 1)
@@ -1145,7 +1145,7 @@ data = C_TooltipInfo.GetQuestItem(type, itemIndex, [allowCollectionText])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestItem("", 1)
@@ -1171,7 +1171,7 @@ data = C_TooltipInfo.GetQuestLogCurrency(type, currencyIndex, [questID])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestLogCurrency("", 1)
@@ -1198,7 +1198,7 @@ data = C_TooltipInfo.GetQuestLogItem(type, itemIndex, [questID], [allowCollectio
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestLogItem("", 1)
@@ -1222,7 +1222,7 @@ data = C_TooltipInfo.GetQuestLogSpecialItem(questIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestLogSpecialItem(1)
@@ -1248,7 +1248,7 @@ data = C_TooltipInfo.GetQuestPartyProgress(questID, [omitTitle], [ignoreActivePl
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetQuestPartyProgress(0)
@@ -1273,7 +1273,7 @@ data = C_TooltipInfo.GetRecipeRankInfo(recipeID, rank)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetRecipeRankInfo(0, 1)
@@ -1298,10 +1298,10 @@ data = C_TooltipInfo.GetRecipeReagentItem(recipeSpellID, dataSlotIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetRecipeReagentItem(12345, 1)
+local data = C_TooltipInfo.GetRecipeReagentItem(2050, 1)
 ```
 
 ### C_TooltipInfo.GetRecipeResultItem
@@ -1326,7 +1326,7 @@ data = C_TooltipInfo.GetRecipeResultItem(recipeID, [reagentInfos], [recraftItemG
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetRecipeResultItem(0)
@@ -1354,7 +1354,7 @@ data = C_TooltipInfo.GetRecipeResultItemForOrder(recipeID, [reagentInfos], [orde
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetRecipeResultItemForOrder(0)
@@ -1381,10 +1381,10 @@ data = C_TooltipInfo.GetRuneforgeResultItem(itemGUID, itemLevel, [powerID], [mod
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetRuneforgeResultItem("Creature-0-0000-0-0-0-0", 6948)
+local data = C_TooltipInfo.GetRuneforgeResultItem(UnitGUID("player"), 6948)
 ```
 
 ### C_TooltipInfo.GetSendMailItem
@@ -1405,7 +1405,7 @@ data = C_TooltipInfo.GetSendMailItem([attachmentIndex])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetSendMailItem()
@@ -1429,7 +1429,7 @@ data = C_TooltipInfo.GetShapeshift(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetShapeshift(1)
@@ -1447,7 +1447,7 @@ data = C_TooltipInfo.GetSlottedKeystone()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetSlottedKeystone()
@@ -1465,7 +1465,7 @@ data = C_TooltipInfo.GetSocketedItem()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetSocketedItem()
@@ -1489,7 +1489,7 @@ data = C_TooltipInfo.GetSocketedRelic(slotIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetSocketedRelic(1)
@@ -1513,7 +1513,7 @@ data = C_TooltipInfo.GetSocketGem(index)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetSocketGem(1)
@@ -1538,10 +1538,10 @@ data = C_TooltipInfo.GetSpellBookItem(spellBookItemSlotIndex, spellBookItemSpell
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetSpellBookItem(1, 12345)
+local data = C_TooltipInfo.GetSpellBookItem(1, 2050)
 ```
 
 ### C_TooltipInfo.GetSpellByID
@@ -1567,10 +1567,10 @@ data = C_TooltipInfo.GetSpellByID(spellID, [isPet], [showSubtext], [dontOverride
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local data = C_TooltipInfo.GetSpellByID(12345)
+local data = C_TooltipInfo.GetSpellByID(2050)
 ```
 
 ### C_TooltipInfo.GetTalent
@@ -1593,7 +1593,7 @@ data = C_TooltipInfo.GetTalent(talentID, [isInspect], [groupIndex])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTalent(0)
@@ -1617,7 +1617,7 @@ data = C_TooltipInfo.GetTotem(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTotem(1)
@@ -1641,7 +1641,7 @@ data = C_TooltipInfo.GetToyByItemID(itemID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetToyByItemID(6948)
@@ -1665,7 +1665,7 @@ data = C_TooltipInfo.GetTradePlayerItem(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTradePlayerItem(1)
@@ -1689,7 +1689,7 @@ data = C_TooltipInfo.GetTradeTargetItem(slot)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTradeTargetItem(1)
@@ -1713,7 +1713,7 @@ data = C_TooltipInfo.GetTrainerService(serviceIndex)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTrainerService(1)
@@ -1738,7 +1738,7 @@ data = C_TooltipInfo.GetTraitEntry(entryID, [rank])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetTraitEntry(0)
@@ -1763,7 +1763,7 @@ data = C_TooltipInfo.GetUnit(unit, [hideStatus])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnit("player")
@@ -1789,7 +1789,7 @@ data = C_TooltipInfo.GetUnitAura(unitToken, index, [filter])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitAura("player", 1)
@@ -1817,7 +1817,7 @@ data = C_TooltipInfo.GetUnitAuraByAuraInstanceID(unitToken, auraInstanceID, [fil
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitAuraByAuraInstanceID("player", 0)
@@ -1843,7 +1843,7 @@ data = C_TooltipInfo.GetUnitBuff(unitToken, index, [filter])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitBuff("player", 1)
@@ -1869,7 +1869,7 @@ data = C_TooltipInfo.GetUnitBuffByAuraInstanceID(unitToken, auraInstanceID, [fil
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitBuffByAuraInstanceID("player", 0)
@@ -1895,7 +1895,7 @@ data = C_TooltipInfo.GetUnitDebuff(unitToken, index, [filter])
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitDebuff("player", 1)
@@ -1921,7 +1921,7 @@ data = C_TooltipInfo.GetUnitDebuffByAuraInstanceID(unitToken, auraInstanceID, [f
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUnitDebuffByAuraInstanceID("player", 0)
@@ -1939,7 +1939,7 @@ data = C_TooltipInfo.GetUpgradeItem()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetUpgradeItem()
@@ -1963,7 +1963,7 @@ data = C_TooltipInfo.GetWeeklyReward(itemDBID)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetWeeklyReward(6948)
@@ -1981,7 +1981,7 @@ data = C_TooltipInfo.GetWorldCursor()
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetWorldCursor()
@@ -2005,7 +2005,7 @@ data = C_TooltipInfo.GetWorldLootObject(unitTokenString)
 |------|------|---------|-------------|
 | `data` | TooltipData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_TooltipInfo.GetWorldLootObject("player")

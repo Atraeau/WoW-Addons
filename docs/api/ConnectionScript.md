@@ -12,7 +12,7 @@
 CancelLogout()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelLogout()
@@ -24,7 +24,7 @@ CancelLogout()
 ForceLogout()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ForceLogout()
@@ -36,7 +36,7 @@ ForceLogout()
 ForceQuit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ForceQuit()
@@ -54,7 +54,7 @@ nativeRealmID = GetNativeRealmID()
 |------|------|---------|-------------|
 | `nativeRealmID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nativeRealmID = GetNativeRealmID()
@@ -72,7 +72,7 @@ ipTypes = GetNetIpTypes()
 |------|------|---------|-------------|
 | `ipTypes` | ConnectionIptype | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ipTypes = GetNetIpTypes()
@@ -92,7 +92,7 @@ in, out, latencyList = GetNetStats()
 | `out` | number | no |  |
 | `latencyList` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local in, out, latencyList = GetNetStats()
@@ -110,7 +110,7 @@ protocolTypes = GetProtocolTypes()
 |------|------|---------|-------------|
 | `protocolTypes` | ConnectionProtocol | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local protocolTypes = GetProtocolTypes()
@@ -128,7 +128,7 @@ realmID = GetRealmID()
 |------|------|---------|-------------|
 | `realmID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local realmID = GetRealmID()
@@ -146,7 +146,7 @@ realmName = GetRealmName()
 |------|------|---------|-------------|
 | `realmName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local realmName = GetRealmName()
@@ -164,7 +164,7 @@ result = IsOnTournamentRealm()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsOnTournamentRealm()
@@ -176,7 +176,7 @@ local result = IsOnTournamentRealm()
 Logout()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Logout()
@@ -188,7 +188,7 @@ Logout()
 Quit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Quit()
@@ -206,7 +206,7 @@ selectedRealmName = SelectedRealmName()
 |------|------|---------|-------------|
 | `selectedRealmName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local selectedRealmName = SelectedRealmName()

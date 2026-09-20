@@ -18,7 +18,7 @@ loaded = C_CVar.AreCVarsLoaded()
 |------|------|---------|-------------|
 | `loaded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loaded = C_CVar.AreCVarsLoaded()
@@ -42,7 +42,7 @@ value = C_CVar.GetCVar(name)
 |------|------|---------|-------------|
 | `value` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CVar.GetCVar("")
@@ -67,7 +67,7 @@ value = C_CVar.GetCVarBitfield(name, index)
 |------|------|---------|-------------|
 | `value` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CVar.GetCVarBitfield("", 1)
@@ -91,7 +91,7 @@ value = C_CVar.GetCVarBool(name)
 |------|------|---------|-------------|
 | `value` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CVar.GetCVarBool("")
@@ -115,7 +115,7 @@ defaultValue = C_CVar.GetCVarDefault(name)
 |------|------|---------|-------------|
 | `defaultValue` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultValue = C_CVar.GetCVarDefault("")
@@ -145,7 +145,7 @@ value, defaultValue, isStoredServerAccount, isStoredServerCharacter, isLockedFro
 | `isSecure` | bool | no |  |
 | `isReadOnly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value, defaultValue, isStoredServerAccount, isStoredServerCharacter, isLockedFromUser, isSecure, isReadOnly = C_CVar.GetCVarInfo("")
@@ -164,7 +164,7 @@ C_CVar.RegisterCVar(name, [value])
 | `name` | cstring | no |  |
 | `value` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CVar.RegisterCVar("")
@@ -182,7 +182,7 @@ C_CVar.RemoveTempCVar(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CVar.RemoveTempCVar("")
@@ -194,7 +194,7 @@ C_CVar.RemoveTempCVar("")
 C_CVar.ResetTestCVars()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CVar.ResetTestCVars()
@@ -219,7 +219,7 @@ success = C_CVar.SetCVar(name, [value])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CVar.SetCVar("")
@@ -245,7 +245,7 @@ success = C_CVar.SetCVarBitfield(name, index, value)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_CVar.SetCVarBitfield("", 1, false)
@@ -264,7 +264,7 @@ C_CVar.SetTempCVar(name, [value])
 | `name` | cstring | no |  |
 | `value` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CVar.SetTempCVar("")

@@ -18,7 +18,7 @@ activeStanceFirstGamepadStorageSlotIndex = C_GamepadUI.GetFirstGamepadActionBarS
 |------|------|---------|-------------|
 | `activeStanceFirstGamepadStorageSlotIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeStanceFirstGamepadStorageSlotIndex = C_GamepadUI.GetFirstGamepadActionBarStorageSlotIndexForActiveStance()
@@ -36,7 +36,7 @@ firstGamepadActionStorageSlotIndex = C_GamepadUI.GetFirstGamepadActionStorageSlo
 |------|------|---------|-------------|
 | `firstGamepadActionStorageSlotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local firstGamepadActionStorageSlotIndex = C_GamepadUI.GetFirstGamepadActionStorageSlotIndex()
@@ -54,7 +54,7 @@ firstGamepadPetActionStorageSlotID = C_GamepadUI.GetFirstGamepadPetActionStorage
 |------|------|---------|-------------|
 | `firstGamepadPetActionStorageSlotID` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local firstGamepadPetActionStorageSlotID = C_GamepadUI.GetFirstGamepadPetActionStorageSlotIndex()
@@ -78,7 +78,7 @@ isValid = C_GamepadUI.IsValidGamepadActionStorageSlotIndex(gamepadActionStorageS
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_GamepadUI.IsValidGamepadActionStorageSlotIndex(1)
@@ -102,7 +102,7 @@ isValid = C_GamepadUI.IsValidGamepadPossessBarStorageSlotIndex(gamepadPossessBar
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_GamepadUI.IsValidGamepadPossessBarStorageSlotIndex(1)

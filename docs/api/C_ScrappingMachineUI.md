@@ -12,7 +12,7 @@
 C_ScrappingMachineUI.CloseScrappingMachine()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.CloseScrappingMachine()
@@ -30,7 +30,7 @@ C_ScrappingMachineUI.DropPendingScrapItemFromCursor(index)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.DropPendingScrapItemFromCursor(1)
@@ -54,7 +54,7 @@ itemLoc = C_ScrappingMachineUI.GetCurrentPendingScrapItemLocationByIndex(index)
 |------|------|---------|-------------|
 | `itemLoc` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLoc = C_ScrappingMachineUI.GetCurrentPendingScrapItemLocationByIndex(1)
@@ -72,7 +72,7 @@ name = C_ScrappingMachineUI.GetScrappingMachineName()
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_ScrappingMachineUI.GetScrappingMachineName()
@@ -90,7 +90,7 @@ spellID = C_ScrappingMachineUI.GetScrapSpellID()
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_ScrappingMachineUI.GetScrapSpellID()
@@ -108,7 +108,7 @@ hasScrappableItems = C_ScrappingMachineUI.HasScrappableItems()
 |------|------|---------|-------------|
 | `hasScrappableItems` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasScrappableItems = C_ScrappingMachineUI.HasScrappableItems()
@@ -120,7 +120,7 @@ local hasScrappableItems = C_ScrappingMachineUI.HasScrappableItems()
 C_ScrappingMachineUI.RemoveAllScrapItems()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.RemoveAllScrapItems()
@@ -132,7 +132,7 @@ C_ScrappingMachineUI.RemoveAllScrapItems()
 C_ScrappingMachineUI.RemoveCurrentScrappingItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.RemoveCurrentScrappingItem()
@@ -150,7 +150,7 @@ C_ScrappingMachineUI.RemoveItemToScrap(index)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.RemoveItemToScrap(1)
@@ -162,7 +162,7 @@ C_ScrappingMachineUI.RemoveItemToScrap(1)
 C_ScrappingMachineUI.ScrapItems()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.ScrapItems()
@@ -174,7 +174,7 @@ C_ScrappingMachineUI.ScrapItems()
 C_ScrappingMachineUI.ValidateScrappingList()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ScrappingMachineUI.ValidateScrappingList()

@@ -27,7 +27,7 @@ result, mapID = C_ContentTracking.GetBestMapForTrackable(trackableType, trackabl
 | `result` | ContentTrackingResult | no |  |
 | `mapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, mapID = C_ContentTracking.GetBestMapForTrackable(trackableType, 0, false)
@@ -45,7 +45,7 @@ isEnabled = C_ContentTracking.GetCollectableSourceTrackingEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_ContentTracking.GetCollectableSourceTrackingEnabled()
@@ -63,7 +63,7 @@ collectableSourceTypes = C_ContentTracking.GetCollectableSourceTypes()
 |------|------|---------|-------------|
 | `collectableSourceTypes` | ContentTrackingType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectableSourceTypes = C_ContentTracking.GetCollectableSourceTypes()
@@ -89,7 +89,7 @@ targetType, targetID = C_ContentTracking.GetCurrentTrackingTarget(type, id)
 | `targetType` | ContentTrackingTargetType | no |  |
 | `targetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetType, targetID = C_ContentTracking.GetCurrentTrackingTarget(type, 0)
@@ -113,7 +113,7 @@ trackingInfo = C_ContentTracking.GetEncounterTrackingInfo(journalEncounterID)
 |------|------|---------|-------------|
 | `trackingInfo` | EncounterTrackingInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackingInfo = C_ContentTracking.GetEncounterTrackingInfo(0)
@@ -140,7 +140,7 @@ result, mapInfo = C_ContentTracking.GetNextWaypointForTrackable(trackableType, t
 | `result` | ContentTrackingResult | no |  |
 | `mapInfo` | ContentTrackingMapInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, mapInfo = C_ContentTracking.GetNextWaypointForTrackable(trackableType, 0, 0)
@@ -166,7 +166,7 @@ objectiveText = C_ContentTracking.GetObjectiveText(targetType, targetID, include
 |------|------|---------|-------------|
 | `objectiveText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objectiveText = C_ContentTracking.GetObjectiveText(targetType, 0, false)
@@ -191,7 +191,7 @@ title = C_ContentTracking.GetTitle(trackableType, trackableID)
 |------|------|---------|-------------|
 | `title` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local title = C_ContentTracking.GetTitle(trackableType, 0)
@@ -217,7 +217,7 @@ result, trackableMapInfos = C_ContentTracking.GetTrackablesOnMap(trackableType, 
 | `result` | ContentTrackingResult | no |  |
 | `trackableMapInfos` | ContentTrackingMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, trackableMapInfos = C_ContentTracking.GetTrackablesOnMap(trackableType, 0)
@@ -241,7 +241,7 @@ entryIDs = C_ContentTracking.GetTrackedIDs(trackableType)
 |------|------|---------|-------------|
 | `entryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryIDs = C_ContentTracking.GetTrackedIDs(trackableType)
@@ -265,7 +265,7 @@ vendorTrackingInfo = C_ContentTracking.GetVendorTrackingInfo(collectableEntryID)
 |------|------|---------|-------------|
 | `vendorTrackingInfo` | VendorTrackingInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vendorTrackingInfo = C_ContentTracking.GetVendorTrackingInfo(0)
@@ -290,7 +290,7 @@ waypointText = C_ContentTracking.GetWaypointText(trackableType, trackableID)
 |------|------|---------|-------------|
 | `waypointText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local waypointText = C_ContentTracking.GetWaypointText(trackableType, 0)
@@ -318,7 +318,7 @@ result, isNavigable = C_ContentTracking.IsNavigable(trackableType, trackableID)
 | `result` | ContentTrackingResult | no |  |
 | `isNavigable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, isNavigable = C_ContentTracking.IsNavigable(trackableType, 0)
@@ -343,7 +343,7 @@ isTrackable = C_ContentTracking.IsTrackable(type, id)
 |------|------|---------|-------------|
 | `isTrackable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrackable = C_ContentTracking.IsTrackable(type, 0)
@@ -368,7 +368,7 @@ isTracking = C_ContentTracking.IsTracking(type, id)
 |------|------|---------|-------------|
 | `isTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTracking = C_ContentTracking.IsTracking(type, 0)
@@ -393,7 +393,7 @@ error = C_ContentTracking.StartTracking(type, id)
 |------|------|---------|-------------|
 | `error` | ContentTrackingError | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local error = C_ContentTracking.StartTracking(type, 0)
@@ -413,7 +413,7 @@ C_ContentTracking.StopTracking(type, id, stopType)
 | `id` | number | no |  |
 | `stopType` | ContentTrackingStopType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ContentTracking.StopTracking(type, 0, stopType)
@@ -439,7 +439,7 @@ error = C_ContentTracking.ToggleTracking(type, id, stopType)
 |------|------|---------|-------------|
 | `error` | ContentTrackingError | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local error = C_ContentTracking.ToggleTracking(type, 0, stopType)

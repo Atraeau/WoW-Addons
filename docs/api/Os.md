@@ -25,7 +25,7 @@ length = CopyToClipboard(text, removeMarkup)
 |------|------|---------|-------------|
 | `length` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local length = CopyToClipboard("", false)
@@ -43,7 +43,7 @@ time = GetTimePreciseSec()
 |------|------|---------|-------------|
 | `time` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = GetTimePreciseSec()

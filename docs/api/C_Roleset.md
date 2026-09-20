@@ -21,7 +21,7 @@ C_Roleset.ApplyRolesetFilters(blockedRolesets, allowedRolesets)
 | `blockedRolesets` | string[] | no |  |
 | `allowedRolesets` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Roleset.ApplyRolesetFilters(blockedRolesets, allowedRolesets)
@@ -41,7 +41,7 @@ allowedRolesets = C_Roleset.GetActiveAllowedRolesets()
 |------|------|---------|-------------|
 | `allowedRolesets` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowedRolesets = C_Roleset.GetActiveAllowedRolesets()
@@ -61,7 +61,7 @@ blockedRolesets = C_Roleset.GetActiveBlockedRolesets()
 |------|------|---------|-------------|
 | `blockedRolesets` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blockedRolesets = C_Roleset.GetActiveBlockedRolesets()

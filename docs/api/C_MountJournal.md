@@ -24,7 +24,7 @@ canContinue = C_MountJournal.ApplyMountEquipment(itemLocation)
 |------|------|---------|-------------|
 | `canContinue` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canContinue = C_MountJournal.ApplyMountEquipment(6948)
@@ -42,7 +42,7 @@ areEffectsSuppressed = C_MountJournal.AreMountEquipmentEffectsSuppressed()
 |------|------|---------|-------------|
 | `areEffectsSuppressed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areEffectsSuppressed = C_MountJournal.AreMountEquipmentEffectsSuppressed()
@@ -60,7 +60,7 @@ C_MountJournal.ClearFanfare(mountID)
 |------|------|---------|-------------|
 | `mountID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.ClearFanfare(0)
@@ -72,7 +72,7 @@ C_MountJournal.ClearFanfare(0)
 C_MountJournal.ClearRecentFanfares()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.ClearRecentFanfares()
@@ -84,7 +84,7 @@ C_MountJournal.ClearRecentFanfares()
 C_MountJournal.Dismiss()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.Dismiss()
@@ -108,7 +108,7 @@ creatureDisplayIDs = C_MountJournal.GetAllCreatureDisplayIDsForMountID(mountID)
 |------|------|---------|-------------|
 | `creatureDisplayIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureDisplayIDs = C_MountJournal.GetAllCreatureDisplayIDsForMountID(0)
@@ -126,7 +126,7 @@ itemID = C_MountJournal.GetAppliedMountEquipmentID()
 |------|------|---------|-------------|
 | `itemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_MountJournal.GetAppliedMountEquipmentID()
@@ -144,7 +144,7 @@ mountIDs = C_MountJournal.GetCollectedDragonridingMounts()
 |------|------|---------|-------------|
 | `mountIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mountIDs = C_MountJournal.GetCollectedDragonridingMounts()
@@ -168,7 +168,7 @@ isChecked = C_MountJournal.GetCollectedFilterSetting(filterIndex)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isChecked = C_MountJournal.GetCollectedFilterSetting(1)
@@ -192,7 +192,7 @@ allDisplayInfo = C_MountJournal.GetDisplayedMountAllCreatureDisplayInfo(mountInd
 |------|------|---------|-------------|
 | `allDisplayInfo` | MountCreatureDisplayInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allDisplayInfo = C_MountJournal.GetDisplayedMountAllCreatureDisplayInfo(1)
@@ -216,7 +216,7 @@ mountID = C_MountJournal.GetDisplayedMountID(displayIndex)
 |------|------|---------|-------------|
 | `mountID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mountID = C_MountJournal.GetDisplayedMountID(1)
@@ -252,7 +252,7 @@ name, spellID, icon, isActive, isUsable, sourceType, isFavorite, isFactionSpecif
 | `mountID` | number | no |  |
 | `isSteadyFlight` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, spellID, icon, isActive, isUsable, sourceType, isFavorite, isFactionSpecific, faction, shouldHideOnChar, isCollected, mountID, isSteadyFlight = C_MountJournal.GetDisplayedMountInfo(1)
@@ -284,7 +284,7 @@ creatureDisplayInfoID, description, source, isSelfMount, mountTypeID, uiModelSce
 | `spellVisualKitID` | number | no |  |
 | `disablePlayerMountPreview` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureDisplayInfoID, description, source, isSelfMount, mountTypeID, uiModelSceneID, animID, spellVisualKitID, disablePlayerMountPreview = C_MountJournal.GetDisplayedMountInfoExtra(1)
@@ -302,7 +302,7 @@ spellID = C_MountJournal.GetDynamicFlightModeSpellID()
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_MountJournal.GetDynamicFlightModeSpellID()
@@ -327,7 +327,7 @@ isFavorite, canSetFavorite = C_MountJournal.GetIsFavorite(mountIndex)
 | `isFavorite` | bool | no |  |
 | `canSetFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFavorite, canSetFavorite = C_MountJournal.GetIsFavorite(1)
@@ -351,7 +351,7 @@ allDisplayInfo = C_MountJournal.GetMountAllCreatureDisplayInfoByID(mountID)
 |------|------|---------|-------------|
 | `allDisplayInfo` | MountCreatureDisplayInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allDisplayInfo = C_MountJournal.GetMountAllCreatureDisplayInfoByID(0)
@@ -369,7 +369,7 @@ level = C_MountJournal.GetMountEquipmentUnlockLevel()
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_MountJournal.GetMountEquipmentUnlockLevel()
@@ -393,7 +393,7 @@ mountID = C_MountJournal.GetMountFromItem(itemID)
 |------|------|---------|-------------|
 | `mountID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mountID = C_MountJournal.GetMountFromItem(6948)
@@ -417,10 +417,10 @@ mountID = C_MountJournal.GetMountFromSpell(spellID)
 |------|------|---------|-------------|
 | `mountID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local mountID = C_MountJournal.GetMountFromSpell(12345)
+local mountID = C_MountJournal.GetMountFromSpell(2050)
 ```
 
 ### C_MountJournal.GetMountIDs
@@ -435,7 +435,7 @@ mountIDs = C_MountJournal.GetMountIDs()
 |------|------|---------|-------------|
 | `mountIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mountIDs = C_MountJournal.GetMountIDs()
@@ -471,7 +471,7 @@ name, spellID, icon, isActive, isUsable, sourceType, isFavorite, isFactionSpecif
 | `mountID` | number | no |  |
 | `isSteadyFlight` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, spellID, icon, isActive, isUsable, sourceType, isFavorite, isFactionSpecific, faction, shouldHideOnChar, isCollected, mountID, isSteadyFlight = C_MountJournal.GetMountInfoByID(0)
@@ -503,7 +503,7 @@ creatureDisplayInfoID, description, source, isSelfMount, mountTypeID, uiModelSce
 | `spellVisualKitID` | number | no |  |
 | `disablePlayerMountPreview` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureDisplayInfoID, description, source, isSelfMount, mountTypeID, uiModelSceneID, animID, spellVisualKitID, disablePlayerMountPreview = C_MountJournal.GetMountInfoExtraByID(0)
@@ -527,10 +527,10 @@ mountCreatureDisplayInfoLink = C_MountJournal.GetMountLink(spellID)
 |------|------|---------|-------------|
 | `mountCreatureDisplayInfoLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local mountCreatureDisplayInfoLink = C_MountJournal.GetMountLink(12345)
+local mountCreatureDisplayInfoLink = C_MountJournal.GetMountLink(2050)
 ```
 
 ### C_MountJournal.GetMountUsabilityByID
@@ -553,7 +553,7 @@ isUsable, useError = C_MountJournal.GetMountUsabilityByID(mountID, checkIndoors)
 | `isUsable` | bool | no |  |
 | `useError` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsable, useError = C_MountJournal.GetMountUsabilityByID(0, false)
@@ -571,7 +571,7 @@ numMounts = C_MountJournal.GetNumDisplayedMounts()
 |------|------|---------|-------------|
 | `numMounts` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numMounts = C_MountJournal.GetNumDisplayedMounts()
@@ -589,7 +589,7 @@ numMounts = C_MountJournal.GetNumMounts()
 |------|------|---------|-------------|
 | `numMounts` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numMounts = C_MountJournal.GetNumMounts()
@@ -607,7 +607,7 @@ numMountsNeedingFanfare = C_MountJournal.GetNumMountsNeedingFanfare()
 |------|------|---------|-------------|
 | `numMountsNeedingFanfare` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numMountsNeedingFanfare = C_MountJournal.GetNumMountsNeedingFanfare()
@@ -625,7 +625,7 @@ hasMount = C_MountJournal.HasDisplayableMount()
 |------|------|---------|-------------|
 | `hasMount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMount = C_MountJournal.HasDisplayableMount()
@@ -645,7 +645,7 @@ isUnlocked = C_MountJournal.IsDragonridingUnlocked()
 |------|------|---------|-------------|
 | `isUnlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnlocked = C_MountJournal.IsDragonridingUnlocked()
@@ -671,7 +671,7 @@ isMountEquipment = C_MountJournal.IsItemMountEquipment(itemLocation)
 |------|------|---------|-------------|
 | `isMountEquipment` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMountEquipment = C_MountJournal.IsItemMountEquipment(6948)
@@ -689,7 +689,7 @@ isApplied = C_MountJournal.IsMountEquipmentApplied()
 |------|------|---------|-------------|
 | `isApplied` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApplied = C_MountJournal.IsMountEquipmentApplied()
@@ -713,7 +713,7 @@ isChecked = C_MountJournal.IsSourceChecked(filterIndex)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isChecked = C_MountJournal.IsSourceChecked(1)
@@ -737,7 +737,7 @@ isChecked = C_MountJournal.IsTypeChecked(filterIndex)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isChecked = C_MountJournal.IsTypeChecked(1)
@@ -755,7 +755,7 @@ isUsingDefaultFilters = C_MountJournal.IsUsingDefaultFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultFilters = C_MountJournal.IsUsingDefaultFilters()
@@ -779,7 +779,7 @@ isValid = C_MountJournal.IsValidSourceFilter(filterIndex)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_MountJournal.IsValidSourceFilter(1)
@@ -803,7 +803,7 @@ isValid = C_MountJournal.IsValidTypeFilter(filterIndex)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_MountJournal.IsValidTypeFilter(1)
@@ -821,7 +821,7 @@ isMountEquipmentAvailable = C_MountJournal.MountEquipmentAvailable()
 |------|------|---------|-------------|
 | `isMountEquipmentAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMountEquipmentAvailable = C_MountJournal.MountEquipmentAvailable()
@@ -845,7 +845,7 @@ needsFanfare = C_MountJournal.NeedsFanfare(mountID)
 |------|------|---------|-------------|
 | `needsFanfare` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local needsFanfare = C_MountJournal.NeedsFanfare(0)
@@ -863,7 +863,7 @@ C_MountJournal.Pickup(displayIndex)
 |------|------|---------|-------------|
 | `displayIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.Pickup(1)
@@ -875,7 +875,7 @@ C_MountJournal.Pickup(1)
 C_MountJournal.PickupDynamicFlightMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.PickupDynamicFlightMode()
@@ -893,7 +893,7 @@ C_MountJournal.SetAllSourceFilters(isChecked)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetAllSourceFilters(false)
@@ -911,7 +911,7 @@ C_MountJournal.SetAllTypeFilters(isChecked)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetAllTypeFilters(false)
@@ -930,7 +930,7 @@ C_MountJournal.SetCollectedFilterSetting(filterIndex, isChecked)
 | `filterIndex` | luaIndex | no |  |
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetCollectedFilterSetting(1, false)
@@ -942,7 +942,7 @@ C_MountJournal.SetCollectedFilterSetting(1, false)
 C_MountJournal.SetDefaultFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetDefaultFilters()
@@ -961,7 +961,7 @@ C_MountJournal.SetIsFavorite(mountIndex, isFavorite)
 | `mountIndex` | luaIndex | no |  |
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetIsFavorite(1, false)
@@ -979,7 +979,7 @@ C_MountJournal.SetSearch(searchValue)
 |------|------|---------|-------------|
 | `searchValue` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetSearch("")
@@ -998,7 +998,7 @@ C_MountJournal.SetSourceFilter(filterIndex, isChecked)
 | `filterIndex` | luaIndex | no |  |
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetSourceFilter(1, false)
@@ -1017,7 +1017,7 @@ C_MountJournal.SetTypeFilter(filterIndex, isChecked)
 | `filterIndex` | luaIndex | no |  |
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SetTypeFilter(1, false)
@@ -1035,7 +1035,7 @@ C_MountJournal.SummonByID(mountID)
 |------|------|---------|-------------|
 | `mountID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SummonByID(0)
@@ -1047,7 +1047,7 @@ C_MountJournal.SummonByID(0)
 C_MountJournal.SwapDynamicFlightMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MountJournal.SwapDynamicFlightMode()

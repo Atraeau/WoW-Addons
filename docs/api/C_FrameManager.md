@@ -24,10 +24,10 @@ shouldShow = C_FrameManager.GetFrameVisibilityState(frameType)
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local shouldShow = C_FrameManager.GetFrameVisibilityState(frameType)
+local shouldShow = C_FrameManager.GetFrameVisibilityState(Enum.UIFrameType.JailersTowerBuffs)
 ```
 
 ## Events

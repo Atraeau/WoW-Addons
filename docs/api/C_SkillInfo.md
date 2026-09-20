@@ -18,7 +18,7 @@ C_SkillInfo.AbandonSkill(skillLineID)
 |------|------|---------|-------------|
 | `skillLineID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SkillInfo.AbandonSkill(0)
@@ -36,7 +36,7 @@ C_SkillInfo.CollapseSkillHeader(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SkillInfo.CollapseSkillHeader(1)
@@ -54,7 +54,7 @@ C_SkillInfo.ExpandSkillHeader(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SkillInfo.ExpandSkillHeader(1)
@@ -72,7 +72,7 @@ numSkillLines = C_SkillInfo.GetNumSkillLines()
 |------|------|---------|-------------|
 | `numSkillLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSkillLines = C_SkillInfo.GetNumSkillLines()
@@ -90,7 +90,7 @@ index = C_SkillInfo.GetSelectedSkill()
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = C_SkillInfo.GetSelectedSkill()
@@ -114,7 +114,7 @@ skillLineAttributes = C_SkillInfo.GetSkillLineInfo(index)
 |------|------|---------|-------------|
 | `skillLineAttributes` | SkillLineAttributes | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineAttributes = C_SkillInfo.GetSkillLineInfo(1)
@@ -138,7 +138,7 @@ skillLineAttributes = C_SkillInfo.GetSkillLineInfoByID(ID)
 |------|------|---------|-------------|
 | `skillLineAttributes` | SkillLineAttributes | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineAttributes = C_SkillInfo.GetSkillLineInfoByID(0)
@@ -156,7 +156,7 @@ C_SkillInfo.SetSelectedSkill(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SkillInfo.SetSelectedSkill(1)

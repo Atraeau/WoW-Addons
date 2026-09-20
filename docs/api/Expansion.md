@@ -18,7 +18,7 @@ canUpgradeExpansion = CanUpgradeToCurrentExpansion()
 |------|------|---------|-------------|
 | `canUpgradeExpansion` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUpgradeExpansion = CanUpgradeToCurrentExpansion()
@@ -36,7 +36,7 @@ regionSellsExpansions = DoesCurrentLocaleSellExpansionLevels()
 |------|------|---------|-------------|
 | `regionSellsExpansions` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local regionSellsExpansions = DoesCurrentLocaleSellExpansionLevels()
@@ -54,7 +54,7 @@ expansionLevel = GetAccountExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetAccountExpansionLevel()
@@ -72,7 +72,7 @@ expansionLevel = GetClientDisplayExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetClientDisplayExpansionLevel()
@@ -90,7 +90,7 @@ regionName = GetCurrentRegionName()
 |------|------|---------|-------------|
 | `regionName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local regionName = GetCurrentRegionName()
@@ -115,7 +115,7 @@ info = GetExpansionDisplayInfo(expansionLevel, [desiredReleaseType])
 |------|------|---------|-------------|
 | `info` | ExpansionDisplayInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = GetExpansionDisplayInfo(0)
@@ -139,7 +139,7 @@ expansionLevel = GetExpansionForLevel(playerLevel)
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetExpansionForLevel(0)
@@ -157,7 +157,7 @@ expansionLevel = GetExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetExpansionLevel()
@@ -176,7 +176,7 @@ isExpansionTrialAccount, expansionTrialRemainingSeconds = GetExpansionTrialInfo(
 | `isExpansionTrialAccount` | bool | no |  |
 | `expansionTrialRemainingSeconds` | time_t | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isExpansionTrialAccount, expansionTrialRemainingSeconds = GetExpansionTrialInfo()
@@ -194,7 +194,7 @@ expansionLevel = GetMaximumExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetMaximumExpansionLevel()
@@ -220,7 +220,7 @@ maxLevel = GetMaxLevelForExpansionLevel(expansionLevel)
 |------|------|---------|-------------|
 | `maxLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLevel = GetMaxLevelForExpansionLevel(0)
@@ -238,7 +238,7 @@ maxLevel = GetMaxLevelForLatestExpansion()
 |------|------|---------|-------------|
 | `maxLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLevel = GetMaxLevelForLatestExpansion()
@@ -256,7 +256,7 @@ maxLevel = GetMaxLevelForPlayerExpansion()
 |------|------|---------|-------------|
 | `maxLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLevel = GetMaxLevelForPlayerExpansion()
@@ -274,7 +274,7 @@ expansionLevel = GetMinimumExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetMinimumExpansionLevel()
@@ -292,7 +292,7 @@ numExpansions = GetNumExpansions()
 |------|------|---------|-------------|
 | `numExpansions` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numExpansions = GetNumExpansions()
@@ -310,7 +310,7 @@ serverExpansionLevel = GetServerExpansionLevel()
 |------|------|---------|-------------|
 | `serverExpansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local serverExpansionLevel = GetServerExpansionLevel()
@@ -328,7 +328,7 @@ upgradeExpansionLevel = GetUpgradeExpansionLevel()
 |------|------|---------|-------------|
 | `upgradeExpansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local upgradeExpansionLevel = GetUpgradeExpansionLevel()
@@ -346,7 +346,7 @@ available = IsDemonHunterAvailable()
 |------|------|---------|-------------|
 | `available` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local available = IsDemonHunterAvailable()
@@ -364,7 +364,7 @@ isExpansionTrialAccount = IsExpansionTrial()
 |------|------|---------|-------------|
 | `isExpansionTrialAccount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isExpansionTrialAccount = IsExpansionTrial()
@@ -382,7 +382,7 @@ isTrialAccount = IsTrialAccount()
 |------|------|---------|-------------|
 | `isTrialAccount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrialAccount = IsTrialAccount()
@@ -400,7 +400,7 @@ isVeteranTrialAccount = IsVeteranTrialAccount()
 |------|------|---------|-------------|
 | `isVeteranTrialAccount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVeteranTrialAccount = IsVeteranTrialAccount()
@@ -418,10 +418,10 @@ SendSubscriptionInterstitialResponse(response)
 |------|------|---------|-------------|
 | `response` | SubscriptionInterstitialResponseType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SendSubscriptionInterstitialResponse(response)
+SendSubscriptionInterstitialResponse(Enum.SubscriptionInterstitialResponseType.Clicked)
 ```
 
 ### Expansion.ShouldShowExpansionUpgradeBanner
@@ -436,7 +436,7 @@ showUpgradeBanner = ShouldShowExpansionUpgradeBanner()
 |------|------|---------|-------------|
 | `showUpgradeBanner` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showUpgradeBanner = ShouldShowExpansionUpgradeBanner()

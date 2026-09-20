@@ -18,7 +18,7 @@ C_CombatLog.ApplyFilterSettings(filterSettings)
 |------|------|---------|-------------|
 | `filterSettings` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.ApplyFilterSettings("HELPFUL")
@@ -36,7 +36,7 @@ enabled = C_CombatLog.AreFilteredEventsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_CombatLog.AreFilteredEventsEnabled()
@@ -48,7 +48,7 @@ local enabled = C_CombatLog.AreFilteredEventsEnabled()
 C_CombatLog.ClearEntries()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.ClearEntries()
@@ -73,7 +73,7 @@ matches = C_CombatLog.DoesObjectMatchFilter(mask, flags)
 |------|------|---------|-------------|
 | `matches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matches = C_CombatLog.DoesObjectMatchFilter(mask, flags)
@@ -91,7 +91,7 @@ retentionTime = C_CombatLog.GetEntryRetentionTime()
 |------|------|---------|-------------|
 | `retentionTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local retentionTime = C_CombatLog.GetEntryRetentionTime()
@@ -109,7 +109,7 @@ messageLimit = C_CombatLog.GetMessageLimit()
 |------|------|---------|-------------|
 | `messageLimit` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local messageLimit = C_CombatLog.GetMessageLimit()
@@ -127,7 +127,7 @@ restricted = C_CombatLog.IsCombatLogRestricted()
 |------|------|---------|-------------|
 | `restricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local restricted = C_CombatLog.IsCombatLogRestricted()
@@ -139,7 +139,7 @@ local restricted = C_CombatLog.IsCombatLogRestricted()
 C_CombatLog.RefilterEntries()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.RefilterEntries()
@@ -157,7 +157,7 @@ C_CombatLog.SetEntryRetentionTime(retentionTime)
 |------|------|---------|-------------|
 | `retentionTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.SetEntryRetentionTime(0)
@@ -175,7 +175,7 @@ C_CombatLog.SetFilteredEventsEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.SetFilteredEventsEnabled(false)
@@ -193,7 +193,7 @@ C_CombatLog.SetMessageLimit(messageLimit)
 |------|------|---------|-------------|
 | `messageLimit` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CombatLog.SetMessageLimit(0)

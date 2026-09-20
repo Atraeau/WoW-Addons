@@ -12,7 +12,7 @@
 ClearParentKey()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearParentKey()
@@ -36,7 +36,7 @@ debugName = GetDebugName(preferParentKey)
 |------|------|---------|-------------|
 | `debugName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local debugName = GetDebugName(false)
@@ -54,7 +54,7 @@ parent = GetParent()
 |------|------|---------|-------------|
 | `parent` | CScriptObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local parent = GetParent()
@@ -72,7 +72,7 @@ parentKey = GetParentKey()
 |------|------|---------|-------------|
 | `parentKey` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local parentKey = GetParentKey()
@@ -91,7 +91,7 @@ SetParentKey(parentKey, clearOtherKeys)
 | `parentKey` | cstring | no |  |
 | `clearOtherKeys` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParentKey("", false)

@@ -20,7 +20,7 @@ point, originX, originY = GetOrigin()
 | `originX` | number | no |  |
 | `originY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point, originX, originY = GetOrigin()
@@ -39,7 +39,7 @@ scaleX, scaleY = GetScale()
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaleX, scaleY = GetScale()
@@ -58,7 +58,7 @@ scaleX, scaleY = GetScaleFrom()
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaleX, scaleY = GetScaleFrom()
@@ -77,7 +77,7 @@ scaleX, scaleY = GetScaleTo()
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaleX, scaleY = GetScaleTo()
@@ -97,7 +97,7 @@ SetOrigin(point, originX, originY)
 | `originX` | number | no |  |
 | `originY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrigin(point, 0, 0)
@@ -116,7 +116,7 @@ SetScale(scaleX, scaleY)
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScale(0, 0)
@@ -135,7 +135,7 @@ SetScaleFrom(scaleX, scaleY)
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScaleFrom(0, 0)
@@ -154,7 +154,7 @@ SetScaleTo(scaleX, scaleY)
 | `scaleX` | number | no |  |
 | `scaleY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScaleTo(0, 0)

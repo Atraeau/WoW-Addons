@@ -30,7 +30,7 @@ name, startValue, maxValue, scale, paused, label, spellID = GetMirrorTimerInfo(t
 | `label` | cstring | no |  |
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, startValue, maxValue, scale, paused, label, spellID = GetMirrorTimerInfo(1)
@@ -54,7 +54,7 @@ progress = GetMirrorTimerProgress(timerName)
 |------|------|---------|-------------|
 | `progress` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = GetMirrorTimerProgress("")

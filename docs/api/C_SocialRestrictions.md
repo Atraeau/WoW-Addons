@@ -12,7 +12,7 @@
 C_SocialRestrictions.AcknowledgeRegionalChatDisabled()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SocialRestrictions.AcknowledgeRegionalChatDisabled()
@@ -32,7 +32,7 @@ canReceiveChat = C_SocialRestrictions.CanReceiveChat()
 |------|------|---------|-------------|
 | `canReceiveChat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canReceiveChat = C_SocialRestrictions.CanReceiveChat()
@@ -52,7 +52,7 @@ canSendChat = C_SocialRestrictions.CanSendChat()
 |------|------|---------|-------------|
 | `canSendChat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSendChat = C_SocialRestrictions.CanSendChat()
@@ -70,7 +70,7 @@ disabled = C_SocialRestrictions.IsChatDisabled()
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local disabled = C_SocialRestrictions.IsChatDisabled()
@@ -88,7 +88,7 @@ disabled = C_SocialRestrictions.IsFriendsDisabled()
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local disabled = C_SocialRestrictions.IsFriendsDisabled()
@@ -106,7 +106,7 @@ isMuted = C_SocialRestrictions.IsMuted()
 |------|------|---------|-------------|
 | `isMuted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMuted = C_SocialRestrictions.IsMuted()
@@ -124,7 +124,7 @@ isSilenced = C_SocialRestrictions.IsSilenced()
 |------|------|---------|-------------|
 | `isSilenced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSilenced = C_SocialRestrictions.IsSilenced()
@@ -142,7 +142,7 @@ isSquelched = C_SocialRestrictions.IsSquelched()
 |------|------|---------|-------------|
 | `isSquelched` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSquelched = C_SocialRestrictions.IsSquelched()
@@ -160,7 +160,7 @@ C_SocialRestrictions.SetChatDisabled(disabled)
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SocialRestrictions.SetChatDisabled(false)

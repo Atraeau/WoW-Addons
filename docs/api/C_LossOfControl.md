@@ -24,7 +24,7 @@ event = C_LossOfControl.GetActiveLossOfControlData(index)
 |------|------|---------|-------------|
 | `event` | LossOfControlData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local event = C_LossOfControl.GetActiveLossOfControlData(1)
@@ -49,7 +49,7 @@ event = C_LossOfControl.GetActiveLossOfControlDataByUnit(unitToken, index)
 |------|------|---------|-------------|
 | `event` | LossOfControlData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local event = C_LossOfControl.GetActiveLossOfControlDataByUnit("player", 1)
@@ -67,7 +67,7 @@ count = C_LossOfControl.GetActiveLossOfControlDataCount()
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_LossOfControl.GetActiveLossOfControlDataCount()
@@ -91,7 +91,7 @@ count = C_LossOfControl.GetActiveLossOfControlDataCountByUnit(unitToken)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_LossOfControl.GetActiveLossOfControlDataCountByUnit("player")
@@ -116,7 +116,7 @@ duration = C_LossOfControl.GetActiveLossOfControlDuration(unitToken, index)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_LossOfControl.GetActiveLossOfControlDuration("player", 1)

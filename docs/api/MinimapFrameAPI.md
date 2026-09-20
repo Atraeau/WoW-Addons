@@ -19,7 +19,7 @@ positionX, positionY = GetPingPosition()
 | `positionX` | number | no |  |
 | `positionY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY = GetPingPosition()
@@ -37,7 +37,7 @@ zoomFactor = GetZoom()
 |------|------|---------|-------------|
 | `zoomFactor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local zoomFactor = GetZoom()
@@ -55,7 +55,7 @@ zoomLevels = GetZoomLevels()
 |------|------|---------|-------------|
 | `zoomLevels` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local zoomLevels = GetZoomLevels()
@@ -74,7 +74,7 @@ PingLocation(locationX, locationY)
 | `locationX` | number | no |  |
 | `locationY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PingLocation(0, 0)
@@ -92,7 +92,7 @@ SetArchBlobInsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobInsideAlpha(0)
@@ -110,7 +110,7 @@ SetArchBlobInsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobInsideTexture(asset)
@@ -128,7 +128,7 @@ SetArchBlobOutsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobOutsideAlpha(0)
@@ -146,7 +146,7 @@ SetArchBlobOutsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobOutsideTexture(asset)
@@ -164,7 +164,7 @@ SetArchBlobRingAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobRingAlpha(0)
@@ -182,7 +182,7 @@ SetArchBlobRingScalar(scalar)
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobRingScalar(0)
@@ -200,7 +200,7 @@ SetArchBlobRingTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetArchBlobRingTexture(asset)
@@ -218,7 +218,7 @@ SetIconScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIconScale(0)
@@ -236,7 +236,7 @@ SetMaskTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaskTexture(asset)
@@ -254,7 +254,7 @@ SetQuestBlobInsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobInsideAlpha(0)
@@ -272,7 +272,7 @@ SetQuestBlobInsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobInsideTexture(asset)
@@ -290,7 +290,7 @@ SetQuestBlobOutsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobOutsideAlpha(0)
@@ -308,7 +308,7 @@ SetQuestBlobOutsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobOutsideTexture(asset)
@@ -326,7 +326,7 @@ SetQuestBlobRingAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobRingAlpha(0)
@@ -344,7 +344,7 @@ SetQuestBlobRingScalar(scalar)
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobRingScalar(0)
@@ -362,7 +362,7 @@ SetQuestBlobRingTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetQuestBlobRingTexture(asset)
@@ -380,7 +380,7 @@ SetTaskBlobInsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobInsideAlpha(0)
@@ -398,7 +398,7 @@ SetTaskBlobInsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobInsideTexture(asset)
@@ -416,7 +416,7 @@ SetTaskBlobOutsideAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobOutsideAlpha(0)
@@ -434,7 +434,7 @@ SetTaskBlobOutsideTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobOutsideTexture(asset)
@@ -452,7 +452,7 @@ SetTaskBlobRingAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobRingAlpha(0)
@@ -470,7 +470,7 @@ SetTaskBlobRingScalar(scalar)
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobRingScalar(0)
@@ -488,7 +488,7 @@ SetTaskBlobRingTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTaskBlobRingTexture(asset)
@@ -506,7 +506,7 @@ SetUsingSoftCursor(usingSoftCursor)
 |------|------|---------|-------------|
 | `usingSoftCursor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUsingSoftCursor(false)
@@ -524,7 +524,7 @@ SetZoom(zoomFactor)
 |------|------|---------|-------------|
 | `zoomFactor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetZoom(0)
@@ -536,7 +536,7 @@ SetZoom(0)
 UpdateBlips()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateBlips()
@@ -555,7 +555,7 @@ UpdateMouseoverAtPoint(pointX, pointY)
 | `pointX` | number | no |  |
 | `pointY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateMouseoverAtPoint(0, 0)

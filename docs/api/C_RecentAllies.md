@@ -24,10 +24,10 @@ canSetNote = C_RecentAllies.CanSetRecentAllyNote(characterGUID)
 |------|------|---------|-------------|
 | `canSetNote` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canSetNote = C_RecentAllies.CanSetRecentAllyNote("Creature-0-0000-0-0-0-0")
+local canSetNote = C_RecentAllies.CanSetRecentAllyNote(UnitGUID("player"))
 ```
 
 ### C_RecentAllies.GetRecentAllies
@@ -42,7 +42,7 @@ recentAlliesData = C_RecentAllies.GetRecentAllies()
 |------|------|---------|-------------|
 | `recentAlliesData` | RecentAllyData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentAlliesData = C_RecentAllies.GetRecentAllies()
@@ -66,7 +66,7 @@ recentAllyData = C_RecentAllies.GetRecentAllyByFullName(fullCharacterName)
 |------|------|---------|-------------|
 | `recentAllyData` | RecentAllyData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentAllyData = C_RecentAllies.GetRecentAllyByFullName("")
@@ -90,10 +90,10 @@ recentAllyData = C_RecentAllies.GetRecentAllyByGUID(characterGUID)
 |------|------|---------|-------------|
 | `recentAllyData` | RecentAllyData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local recentAllyData = C_RecentAllies.GetRecentAllyByGUID("Creature-0-0000-0-0-0-0")
+local recentAllyData = C_RecentAllies.GetRecentAllyByGUID(UnitGUID("player"))
 ```
 
 ### C_RecentAllies.IsInteractionCategoryFilterSupportedForCurrentGameType
@@ -114,7 +114,7 @@ isInteractionCategoryFilterSupportedForCurrentGameType = C_RecentAllies.IsIntera
 |------|------|---------|-------------|
 | `isInteractionCategoryFilterSupportedForCurrentGameType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInteractionCategoryFilterSupportedForCurrentGameType = C_RecentAllies.IsInteractionCategoryFilterSupportedForCurrentGameType("HELPFUL")
@@ -138,7 +138,7 @@ isRecentAlly = C_RecentAllies.IsRecentAllyByFullName(fullCharacterName)
 |------|------|---------|-------------|
 | `isRecentAlly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRecentAlly = C_RecentAllies.IsRecentAllyByFullName("")
@@ -162,10 +162,10 @@ isRecentAlly = C_RecentAllies.IsRecentAllyByGUID(characterGUID)
 |------|------|---------|-------------|
 | `isRecentAlly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isRecentAlly = C_RecentAllies.IsRecentAllyByGUID("Creature-0-0000-0-0-0-0")
+local isRecentAlly = C_RecentAllies.IsRecentAllyByGUID(UnitGUID("player"))
 ```
 
 ### C_RecentAllies.IsRecentAllyDataReady
@@ -180,7 +180,7 @@ isReady = C_RecentAllies.IsRecentAllyDataReady()
 |------|------|---------|-------------|
 | `isReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReady = C_RecentAllies.IsRecentAllyDataReady()
@@ -204,10 +204,10 @@ isPinned = C_RecentAllies.IsRecentAllyPinned(characterGUID)
 |------|------|---------|-------------|
 | `isPinned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPinned = C_RecentAllies.IsRecentAllyPinned("Creature-0-0000-0-0-0-0")
+local isPinned = C_RecentAllies.IsRecentAllyPinned(UnitGUID("player"))
 ```
 
 ### C_RecentAllies.IsSystemEnabled
@@ -222,7 +222,7 @@ isRecentAllySystemEnabled = C_RecentAllies.IsSystemEnabled()
 |------|------|---------|-------------|
 | `isRecentAllySystemEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRecentAllySystemEnabled = C_RecentAllies.IsSystemEnabled()
@@ -240,7 +240,7 @@ isRecentAllySystemSupported = C_RecentAllies.IsSystemSupported()
 |------|------|---------|-------------|
 | `isRecentAllySystemSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRecentAllySystemSupported = C_RecentAllies.IsSystemSupported()
@@ -264,7 +264,7 @@ recentAlliesData = C_RecentAllies.SearchRecentAllies(searchInfo)
 |------|------|---------|-------------|
 | `recentAlliesData` | RecentAllyData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentAlliesData = C_RecentAllies.SearchRecentAllies(searchInfo)
@@ -283,10 +283,10 @@ C_RecentAllies.SetRecentAllyNote(characterGUID, note)
 | `characterGUID` | WOWGUID | no |  |
 | `note` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_RecentAllies.SetRecentAllyNote("Creature-0-0000-0-0-0-0", "")
+C_RecentAllies.SetRecentAllyNote(UnitGUID("player"), "")
 ```
 
 ### C_RecentAllies.SetRecentAllyPinned
@@ -302,10 +302,10 @@ C_RecentAllies.SetRecentAllyPinned(characterGUID, isPinned)
 | `characterGUID` | WOWGUID | no |  |
 | `isPinned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_RecentAllies.SetRecentAllyPinned("Creature-0-0000-0-0-0-0", false)
+C_RecentAllies.SetRecentAllyPinned(UnitGUID("player"), false)
 ```
 
 ### C_RecentAllies.TryRequestRecentAlliesData
@@ -314,7 +314,7 @@ C_RecentAllies.SetRecentAllyPinned("Creature-0-0000-0-0-0-0", false)
 C_RecentAllies.TryRequestRecentAlliesData()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_RecentAllies.TryRequestRecentAlliesData()

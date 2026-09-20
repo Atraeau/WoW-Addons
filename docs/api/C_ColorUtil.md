@@ -30,7 +30,7 @@ hsvH, hsvS, hsvV = C_ColorUtil.ConvertHSLToHSV(hslH, hslS, hslL)
 | `hsvS` | number | no |  |
 | `hsvV` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hsvH, hsvS, hsvV = C_ColorUtil.ConvertHSLToHSV(0, 0, 0)
@@ -60,7 +60,7 @@ hslH, hslS, hslL = C_ColorUtil.ConvertHSVToHSL(hsvH, hsvS, hsvV)
 | `hslS` | number | no |  |
 | `hslL` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hslH, hslS, hslL = C_ColorUtil.ConvertHSVToHSL(0, 0, 0)
@@ -90,7 +90,7 @@ rgbR, rgbG, rgbB = C_ColorUtil.ConvertHSVToRGB(hsvH, hsvS, hsvV)
 | `rgbG` | number | no |  |
 | `rgbB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rgbR, rgbG, rgbB = C_ColorUtil.ConvertHSVToRGB(0, 0, 0)
@@ -120,7 +120,7 @@ hsvH, hsvS, hsvV = C_ColorUtil.ConvertRGBToHSV(rgbR, rgbG, rgbB)
 | `hsvS` | number | no |  |
 | `hsvV` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hsvH, hsvS, hsvV = C_ColorUtil.ConvertRGBToHSV(0, 0, 0)
@@ -146,7 +146,7 @@ textColorCode = C_ColorUtil.GenerateTextColorCode(color)
 |------|------|---------|-------------|
 | `textColorCode` | string | no | Hex representation of the color formatted as an 8-byte ARGB string, with alpha forced to 255. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textColorCode = C_ColorUtil.GenerateTextColorCode(color)
@@ -173,7 +173,7 @@ coloredText = C_ColorUtil.WrapTextInColor(text, color)
 |------|------|---------|-------------|
 | `coloredText` | string | no | The input text wrapped in '\|c' and '\|r' quoted code sequences for the supplied color. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local coloredText = C_ColorUtil.WrapTextInColor("", color)
@@ -200,7 +200,7 @@ coloredText = C_ColorUtil.WrapTextInColorCode(text, textColorCode)
 |------|------|---------|-------------|
 | `coloredText` | string | no | The input text wrapped in '\|c' and '\|r' quoted code sequences for the supplied color. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local coloredText = C_ColorUtil.WrapTextInColorCode("", "")

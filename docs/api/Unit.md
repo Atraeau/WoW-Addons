@@ -24,7 +24,7 @@ result = CanEjectPassengerFromSeat(virtualSeatIndex)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanEjectPassengerFromSeat(1)
@@ -42,7 +42,7 @@ result = CanSwitchVehicleSeat()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanSwitchVehicleSeat()
@@ -68,7 +68,7 @@ xPos, yPos, distance = ClosestGameObjectPosition(gameObjectID)
 | `yPos` | number | no |  |
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local xPos, yPos, distance = ClosestGameObjectPosition(0)
@@ -94,7 +94,7 @@ xPos, yPos, distance = ClosestUnitPosition(creatureID)
 | `yPos` | number | no |  |
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local xPos, yPos, distance = ClosestUnitPosition(0)
@@ -112,7 +112,7 @@ healPredictionCalculator = CreateUnitHealPredictionCalculator()
 |------|------|---------|-------------|
 | `healPredictionCalculator` | UnitHealPredictionCalculator | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local healPredictionCalculator = CreateUnitHealPredictionCalculator()
@@ -130,7 +130,7 @@ EjectPassengerFromSeat(virtualSeatIndex)
 |------|------|---------|-------------|
 | `virtualSeatIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EjectPassengerFromSeat(1)
@@ -155,7 +155,7 @@ result = GetComboPoints(unit, target)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetComboPoints("player", target)
@@ -173,7 +173,7 @@ corruptionEffects = GetNegativeCorruptionEffectInfo()
 |------|------|---------|-------------|
 | `corruptionEffects` | CorruptionEffectInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local corruptionEffects = GetNegativeCorruptionEffectInfo()
@@ -197,7 +197,7 @@ pointIndices = GetUnitChargedPowerPoints(unit)
 |------|------|---------|-------------|
 | `pointIndices` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pointIndices = GetUnitChargedPowerPoints("player")
@@ -221,7 +221,7 @@ holdAtMaxTime = GetUnitEmpowerHoldAtMaxTime(unit)
 |------|------|---------|-------------|
 | `holdAtMaxTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local holdAtMaxTime = GetUnitEmpowerHoldAtMaxTime("player")
@@ -245,7 +245,7 @@ minHoldTime = GetUnitEmpowerMinHoldTime(unit)
 |------|------|---------|-------------|
 | `minHoldTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minHoldTime = GetUnitEmpowerMinHoldTime("player")
@@ -270,7 +270,7 @@ duration = GetUnitEmpowerStageDuration(unit, index)
 |------|------|---------|-------------|
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetUnitEmpowerStageDuration("player", 1)
@@ -294,7 +294,7 @@ result = GetUnitHealthModifier(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetUnitHealthModifier("player")
@@ -318,7 +318,7 @@ result = GetUnitMaxHealthModifier(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetUnitMaxHealthModifier("player")
@@ -342,7 +342,7 @@ info = GetUnitPowerBarInfo(unitToken)
 |------|------|---------|-------------|
 | `info` | UnitPowerBarInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = GetUnitPowerBarInfo("player")
@@ -366,7 +366,7 @@ info = GetUnitPowerBarInfoByID(barID)
 |------|------|---------|-------------|
 | `info` | UnitPowerBarInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = GetUnitPowerBarInfoByID(0)
@@ -392,7 +392,7 @@ name, tooltip, cost = GetUnitPowerBarStrings(unitToken)
 | `tooltip` | cstring | yes |  |
 | `cost` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, tooltip, cost = GetUnitPowerBarStrings("player")
@@ -418,7 +418,7 @@ name, tooltip, cost = GetUnitPowerBarStringsByID(barID)
 | `tooltip` | cstring | yes |  |
 | `cost` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, tooltip, cost = GetUnitPowerBarStringsByID(0)
@@ -448,7 +448,7 @@ texture, colorR, colorG, colorB, colorA = GetUnitPowerBarTextureInfo(unitToken, 
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture, colorR, colorG, colorB, colorA = GetUnitPowerBarTextureInfo("player", 1)
@@ -477,7 +477,7 @@ texture, colorR, colorG, colorB, colorA = GetUnitPowerBarTextureInfoByID(barID, 
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture, colorR, colorG, colorB, colorA = GetUnitPowerBarTextureInfoByID(0, 1)
@@ -501,7 +501,7 @@ result = GetUnitPowerModifier(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetUnitPowerModifier("player")
@@ -528,7 +528,7 @@ currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed(unit)
 | `flightSpeed` | number | no |  |
 | `swimSpeed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentSpeed, runSpeed, flightSpeed, swimSpeed = GetUnitSpeed("player")
@@ -552,7 +552,7 @@ result = GetUnitTotalModifiedMaxHealthPercent(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetUnitTotalModifiedMaxHealthPercent("player")
@@ -577,7 +577,7 @@ backgroundTextureID, numSeatIndicators = GetVehicleUIIndicator(vehicleIndicatorI
 | `backgroundTextureID` | fileID | no |  |
 | `numSeatIndicators` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local backgroundTextureID, numSeatIndicators = GetVehicleUIIndicator(0)
@@ -604,7 +604,7 @@ virtualSeatIndex, xPos, yPos = GetVehicleUIIndicatorSeat(vehicleIndicatorID, ind
 | `xPos` | number | no |  |
 | `yPos` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local virtualSeatIndex, xPos, yPos = GetVehicleUIIndicatorSeat(0, 1)
@@ -628,7 +628,7 @@ result = IsFalling([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsFalling()
@@ -652,7 +652,7 @@ result = IsFlying([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsFlying()
@@ -676,10 +676,10 @@ IsInGuild = IsPlayerInGuildFromGUID(playerGUID)
 |------|------|---------|-------------|
 | `IsInGuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local IsInGuild = IsPlayerInGuildFromGUID("Creature-0-0000-0-0-0-0")
+local IsInGuild = IsPlayerInGuildFromGUID(UnitGUID("player"))
 ```
 
 ### Unit.IsSubmerged
@@ -700,7 +700,7 @@ result = IsSubmerged([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsSubmerged()
@@ -724,7 +724,7 @@ result = IsSwimming([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsSwimming()
@@ -748,7 +748,7 @@ isReady = IsUnitModelReadyForUI(unitToken)
 |------|------|---------|-------------|
 | `isReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReady = IsUnitModelReadyForUI("player")
@@ -772,7 +772,7 @@ result = PlayerIsPVPInactive(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = PlayerIsPVPInactive("player")
@@ -798,7 +798,7 @@ result = PlayerIsSpellTarget(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = PlayerIsSpellTarget("player")
@@ -816,7 +816,7 @@ vehicleHasComboPoints = PlayerVehicleHasComboPoints()
 |------|------|---------|-------------|
 | `vehicleHasComboPoints` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vehicleHasComboPoints = PlayerVehicleHasComboPoints()
@@ -834,7 +834,7 @@ result = RegionalUniqueNamesEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = RegionalUniqueNamesEnabled()
@@ -852,7 +852,7 @@ ReportPlayerIsPVPAFK(unit)
 |------|------|---------|-------------|
 | `unit` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ReportPlayerIsPVPAFK("player")
@@ -877,7 +877,7 @@ result = ResistancePercent(resistance, casterLevel)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ResistancePercent(0, 0)
@@ -897,7 +897,7 @@ SetPortraitTexture(textureObject, unitToken, disableMasking)
 | `unitToken` | UnitToken | no |  |
 | `disableMasking` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPortraitTexture(textureObject, "player", false)
@@ -916,7 +916,7 @@ SetPortraitTextureFromCreatureDisplayID(textureObject, creatureDisplayID)
 | `textureObject` | SimpleTexture | no |  |
 | `creatureDisplayID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPortraitTextureFromCreatureDisplayID(textureObject, 0)
@@ -944,7 +944,7 @@ hasCursor = SetUnitCursorTexture(textureObject, unit, [style], [includeLowPriori
 |------|------|---------|-------------|
 | `hasCursor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasCursor = SetUnitCursorTexture(textureObject, "player")
@@ -968,7 +968,7 @@ result = UnitAffectingCombat(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitAffectingCombat("player")
@@ -993,7 +993,7 @@ isAlliedRace, hasHeritageArmorUnlocked = UnitAlliedRaceInfo(unit)
 | `isAlliedRace` | bool | no |  |
 | `hasHeritageArmorUnlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAlliedRace, hasHeritageArmorUnlocked = UnitAlliedRaceInfo("player")
@@ -1020,7 +1020,7 @@ base, effective, real, bonus = UnitArmor(unit)
 | `real` | number | no |  |
 | `bonus` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local base, effective, real, bonus = UnitArmor("player")
@@ -1046,7 +1046,7 @@ attackPower, posBuff, negBuff = UnitAttackPower(unit)
 | `posBuff` | number | no |  |
 | `negBuff` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local attackPower, posBuff, negBuff = UnitAttackPower("player")
@@ -1072,7 +1072,7 @@ attackSpeed, offhandAttackSpeed, rangedAttackSpeed = UnitAttackSpeed(unit)
 | `offhandAttackSpeed` | number | yes |  |
 | `rangedAttackSpeed` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local attackSpeed, offhandAttackSpeed, rangedAttackSpeed = UnitAttackSpeed("player")
@@ -1096,7 +1096,7 @@ result = UnitBattlePetLevel(unit)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitBattlePetLevel("player")
@@ -1120,7 +1120,7 @@ result = UnitBattlePetSpeciesID(unit)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitBattlePetSpeciesID("player")
@@ -1144,7 +1144,7 @@ result = UnitBattlePetType(unit)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitBattlePetType("player")
@@ -1171,7 +1171,7 @@ result = UnitCanAssist(unit, target, canAssistImmunePC, canAssistUninteractable)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitCanAssist("player", target, false, false)
@@ -1196,7 +1196,7 @@ result = UnitCanAttack(unit, target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitCanAttack("player", target)
@@ -1221,7 +1221,7 @@ result = UnitCanCooperate(unit, target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitCanCooperate("player", target)
@@ -1246,7 +1246,7 @@ result = UnitCanPetBattle(unit, target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitCanPetBattle("player", target)
@@ -1270,7 +1270,7 @@ duration = UnitCastingDuration(unit)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = UnitCastingDuration("player")
@@ -1304,7 +1304,7 @@ name, displayName, textureID, startTimeMs, endTimeMs, isTradeskill, castID, notI
 | `castBarID` | UnitCastBarID | yes |  |
 | `delayTimeMs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, displayName, textureID, startTimeMs, endTimeMs, isTradeskill, castID, notInterruptible, castingSpellID, castBarID, delayTimeMs = UnitCastingInfo("player")
@@ -1328,7 +1328,7 @@ duration = UnitChannelDuration(unit)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = UnitChannelDuration("player")
@@ -1362,7 +1362,7 @@ name, displayName, textureID, startTimeMs, endTimeMs, isTradeskill, notInterrupt
 | `numEmpowerStages` | number | no |  |
 | `castBarID` | UnitCastBarID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, displayName, textureID, startTimeMs, endTimeMs, isTradeskill, notInterruptible, spellID, isEmpowered, numEmpowerStages, castBarID = UnitChannelInfo("player")
@@ -1386,7 +1386,7 @@ ID = UnitChromieTimeID(unit)
 |------|------|---------|-------------|
 | `ID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ID = UnitChromieTimeID("player")
@@ -1415,7 +1415,8 @@ className, classFilename, classID = UnitClass(unit)
 **Example**
 
 ```lua
-local className, classFilename, classID = UnitClass("player")
+local className, classFile, classID = UnitClass("player")
+print(className, classFile, classID)  -- e.g. "Warrior", "WARRIOR", 1
 ```
 
 ### Unit.UnitClassBase
@@ -1437,7 +1438,7 @@ classFilename, classID = UnitClassBase(unit)
 | `classFilename` | cstring | no |  |
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classFilename, classID = UnitClassBase("player")
@@ -1463,7 +1464,7 @@ className, classFilename, classID = UnitClassFromGUID(unitGUID)
 | `classFilename` | cstring | no |  |
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local className, classFilename, classID = UnitClassFromGUID("player")
@@ -1487,7 +1488,7 @@ result = UnitClassification(unit)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitClassification("player")
@@ -1511,7 +1512,7 @@ result = UnitControllingVehicle(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitControllingVehicle("player")
@@ -1536,7 +1537,7 @@ name, id = UnitCreatureFamily(unit)
 | `name` | cstring | no |  |
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, id = UnitCreatureFamily("player")
@@ -1560,7 +1561,7 @@ creatureID = UnitCreatureID(unit)
 |------|------|---------|-------------|
 | `creatureID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureID = UnitCreatureID("player")
@@ -1585,7 +1586,7 @@ name, id = UnitCreatureType(unit)
 | `name` | cstring | no |  |
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, id = UnitCreatureType("player")
@@ -1615,7 +1616,7 @@ minDamage, maxDamage, offhandMinDamage, offhandMaxDamage, posBuff, negBuff, perc
 | `negBuff` | number | no |  |
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minDamage, maxDamage, offhandMinDamage, offhandMaxDamage, posBuff, negBuff, percent = UnitDamage("player")
@@ -1640,7 +1641,7 @@ base, modifier = UnitDefenseSkill(unit)
 | `base` | number | no |  |
 | `modifier` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local base, modifier = UnitDefenseSkill("player")
@@ -1672,7 +1673,13 @@ isTanking, status, scaledPercentage, rawPercentage, rawThreat = UnitDetailedThre
 **Example**
 
 ```lua
-local isTanking, status, scaledPercentage, rawPercentage, rawThreat = UnitDetailedThreatSituation("player", "Creature-0-0000-0-0-0-0")
+-- WoW 12.0: returns are SECRET for enemy units -- addon code cannot read/compare them.
+local isTanking, status, threatPct, rawThreatPct, threatValue =
+    UnitDetailedThreatSituation("player", "target")
+if issecretvalue(status) then
+    return  -- only the Blizzard UI may act on secret threat values
+end
+print(status, threatPct)
 ```
 
 ### Unit.UnitDistanceSquared
@@ -1694,7 +1701,7 @@ distance, checkedDistance = UnitDistanceSquared(unit)
 | `distance` | number | no |  |
 | `checkedDistance` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distance, checkedDistance = UnitDistanceSquared("player")
@@ -1718,7 +1725,7 @@ result = UnitEffectiveLevel(name)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitEffectiveLevel("")
@@ -1745,7 +1752,7 @@ duration = UnitEmpoweredChannelDuration(unit, includeHoldAtMaxTime)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = UnitEmpoweredChannelDuration("player", false)
@@ -1771,7 +1778,7 @@ duration = UnitEmpoweredStageDurations(unit)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = UnitEmpoweredStageDurations("player")
@@ -1798,7 +1805,7 @@ percentages = UnitEmpoweredStagePercentages(unit, includeHoldAtMaxTime)
 |------|------|---------|-------------|
 | `percentages` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percentages = UnitEmpoweredStagePercentages("player", false)
@@ -1822,7 +1829,7 @@ result = UnitExists([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitExists()
@@ -1848,7 +1855,7 @@ factionGroupTag, localized = UnitFactionGroup(unitName, checkDisplayRace)
 | `factionGroupTag` | cstring | no |  |
 | `localized` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionGroupTag, localized = UnitFactionGroup("player", false)
@@ -1873,7 +1880,7 @@ unitName, unitServer = UnitFullName(unit)
 | `unitName` | cstring | no |  |
 | `unitServer` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitName, unitServer = UnitFullName("player")
@@ -1893,7 +1900,7 @@ UnitGetDetailedHealPrediction(unit, [healerUnit], healPredictionCalculator)
 | `healerUnit` | UnitTokenPvPRestrictedForAddOns | yes | If specified, a unit to evaluate as the 'healer' for incoming heal values. If nil, healer values will be zero. |
 | `healPredictionCalculator` | UnitHealPredictionCalculator | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnitGetDetailedHealPrediction("player", healPredictionCalculator)
@@ -1918,7 +1925,7 @@ result = UnitGetIncomingHeals(unit, [healerGUID])
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitGetIncomingHeals("player")
@@ -1942,7 +1949,7 @@ result = UnitGetTotalAbsorbs(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitGetTotalAbsorbs("player")
@@ -1966,7 +1973,7 @@ result = UnitGetTotalHealAbsorbs(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitGetTotalHealAbsorbs("player")
@@ -1990,7 +1997,7 @@ result = UnitGroupRolesAssigned([unit])
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitGroupRolesAssigned()
@@ -2014,7 +2021,7 @@ result = UnitGroupRolesAssignedEnum([unit])
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitGroupRolesAssignedEnum()
@@ -2041,7 +2048,11 @@ result = UnitGUID(unit)
 **Example**
 
 ```lua
-local result = UnitGUID("player")
+local guid = UnitGUID("target")
+if guid then
+    local kind, _, _, _, _, npcID = strsplit("-", guid)
+    print(kind, npcID)  -- e.g. "Creature", "12345"
+end
 ```
 
 ### Unit.UnitHasEffectivelyTankAura
@@ -2062,7 +2073,7 @@ result = UnitHasEffectivelyTankAura([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasEffectivelyTankAura()
@@ -2086,7 +2097,7 @@ result = UnitHasLootInteraction(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasLootInteraction("player")
@@ -2110,7 +2121,7 @@ result = UnitHasMouseoverHighlight(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasMouseoverHighlight("player")
@@ -2135,7 +2146,7 @@ hasPower = UnitHasPowerType(unitToken, powerType)
 |------|------|---------|-------------|
 | `hasPower` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPower = UnitHasPowerType("player", powerType)
@@ -2159,7 +2170,7 @@ result = UnitHasRelicSlot(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasRelicSlot("player")
@@ -2183,7 +2194,7 @@ result = UnitHasVehiclePlayerFrameUI([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasVehiclePlayerFrameUI()
@@ -2207,7 +2218,7 @@ result = UnitHasVehicleUI([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHasVehicleUI()
@@ -2235,7 +2246,8 @@ result = UnitHealth(unit, usePredicted)
 **Example**
 
 ```lua
-local result = UnitHealth("player", false)
+local hp, hpMax = UnitHealth("player"), UnitHealthMax("player")
+print(("%d / %d"):format(hp, hpMax))
 ```
 
 ### Unit.UnitHealthMax
@@ -2256,7 +2268,7 @@ result = UnitHealthMax(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHealthMax("player")
@@ -2283,7 +2295,7 @@ result = UnitHealthMissing(unit, usePredicted)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHealthMissing("player", false)
@@ -2311,7 +2323,7 @@ result = UnitHealthPercent(unit, usePredicted, [curve])
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no | If no curve is specified, a floating point percentage value. Else, the result of evaluating the curve with the percentage as the input. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHealthPercent("player", false)
@@ -2335,7 +2347,7 @@ result = UnitHonor(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHonor("player")
@@ -2359,7 +2371,7 @@ result = UnitHonorLevel(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHonorLevel("player")
@@ -2383,7 +2395,7 @@ result = UnitHonorMax(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHonorMax("player")
@@ -2407,7 +2419,7 @@ result = UnitHPPerStamina(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitHPPerStamina("player")
@@ -2432,7 +2444,7 @@ result = UnitInAnyGroup([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInAnyGroup()
@@ -2457,7 +2469,7 @@ result = UnitInBattleground([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInBattleground()
@@ -2483,7 +2495,7 @@ inOtherParty = UnitInOtherParty(unit)
 |------|------|---------|-------------|
 | `inOtherParty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inOtherParty = UnitInOtherParty("player")
@@ -2508,7 +2520,7 @@ result = UnitInParty([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInParty()
@@ -2532,7 +2544,7 @@ result = UnitInPartyIsAI([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInPartyIsAI()
@@ -2556,7 +2568,7 @@ inPartyShard = UnitInPartyShard(unit)
 |------|------|---------|-------------|
 | `inPartyShard` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inPartyShard = UnitInPartyShard("player")
@@ -2581,7 +2593,7 @@ result = UnitInRaid([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInRaid()
@@ -2606,7 +2618,7 @@ inRange, checkedRange = UnitInRange(unit)
 | `inRange` | bool | no |  |
 | `checkedRange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inRange, checkedRange = UnitInRange("player")
@@ -2631,7 +2643,7 @@ result = UnitInSubgroup([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInSubgroup()
@@ -2655,7 +2667,7 @@ result = UnitInVehicle(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInVehicle("player")
@@ -2679,7 +2691,7 @@ result = UnitInVehicleControlSeat([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInVehicleControlSeat()
@@ -2703,7 +2715,7 @@ result = UnitInVehicleHidesPetFrame([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitInVehicleHidesPetFrame()
@@ -2727,7 +2739,7 @@ result = UnitIsAFK(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsAFK("player")
@@ -2751,7 +2763,7 @@ result = UnitIsBattlePet(unit)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsBattlePet("player")
@@ -2775,7 +2787,7 @@ result = UnitIsBattlePetCompanion(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsBattlePetCompanion("player")
@@ -2799,7 +2811,7 @@ result = UnitIsBossMob(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsBossMob("player")
@@ -2823,7 +2835,7 @@ result = UnitIsCharmed([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsCharmed()
@@ -2847,7 +2859,7 @@ isConnected = UnitIsConnected(unit)
 |------|------|---------|-------------|
 | `isConnected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isConnected = UnitIsConnected("player")
@@ -2871,7 +2883,7 @@ result = UnitIsControlling(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsControlling("player")
@@ -2895,7 +2907,7 @@ result = UnitIsCorpse([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsCorpse()
@@ -2919,7 +2931,7 @@ result = UnitIsDead(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsDead("player")
@@ -2943,7 +2955,7 @@ result = UnitIsDeadOrGhost(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsDeadOrGhost("player")
@@ -2967,7 +2979,7 @@ result = UnitIsDND(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsDND("player")
@@ -2992,7 +3004,7 @@ result = UnitIsEnemy(unit, target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsEnemy("player", target)
@@ -3016,7 +3028,7 @@ result = UnitIsFeignDeath(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsFeignDeath("player")
@@ -3041,7 +3053,7 @@ result = UnitIsFriend(unit, target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsFriend("player", target)
@@ -3065,7 +3077,7 @@ result = UnitIsGameObject([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsGameObject()
@@ -3089,7 +3101,7 @@ result = UnitIsGhost(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsGhost("player")
@@ -3113,7 +3125,7 @@ isAssistant = UnitIsGroupAssistant(unit)
 |------|------|---------|-------------|
 | `isAssistant` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAssistant = UnitIsGroupAssistant("player")
@@ -3138,7 +3150,7 @@ isLeader = UnitIsGroupLeader(unit, [partyCategory])
 |------|------|---------|-------------|
 | `isLeader` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLeader = UnitIsGroupLeader("player")
@@ -3163,7 +3175,7 @@ result = UnitIsHumanPlayer([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsHumanPlayer()
@@ -3187,7 +3199,7 @@ result = UnitIsInInteractRange(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsInInteractRange("player")
@@ -3211,7 +3223,7 @@ result = UnitIsInMyGuild(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsInMyGuild("player")
@@ -3235,7 +3247,7 @@ result = UnitIsInteractable([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsInteractable()
@@ -3259,7 +3271,7 @@ result = UnitIsLieutenant(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsLieutenant("player")
@@ -3283,7 +3295,7 @@ result = UnitIsMercenary(name)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsMercenary("")
@@ -3309,7 +3321,7 @@ result = UnitIsMinion(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsMinion("player")
@@ -3333,7 +3345,7 @@ result = UnitIsNPCAsPlayer([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsNPCAsPlayer()
@@ -3357,7 +3369,7 @@ result = UnitIsOtherPlayersBattlePet([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsOtherPlayersBattlePet()
@@ -3381,7 +3393,7 @@ result = UnitIsOtherPlayersPet([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsOtherPlayersPet()
@@ -3406,7 +3418,7 @@ unitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit(controllingUnit, c
 |------|------|---------|-------------|
 | `unitIsOwnerOrControllerOfUnit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitIsOwnerOrControllerOfUnit = UnitIsOwnerOrControllerOfUnit("player", "player")
@@ -3431,7 +3443,7 @@ result = UnitIsPlayer([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPlayer()
@@ -3457,7 +3469,7 @@ result = UnitIsPlayerControlledOrGroupMember(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPlayerControlledOrGroupMember("player")
@@ -3481,7 +3493,7 @@ result = UnitIsPossessed([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPossessed()
@@ -3505,7 +3517,7 @@ result = UnitIsPVP(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPVP("player")
@@ -3529,7 +3541,7 @@ result = UnitIsPVPFreeForAll(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPVPFreeForAll("player")
@@ -3553,7 +3565,7 @@ result = UnitIsPVPSanctuary([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsPVPSanctuary()
@@ -3577,7 +3589,7 @@ result = UnitIsQuestBoss(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsQuestBoss("player")
@@ -3601,7 +3613,7 @@ result = UnitIsRaidOfficer([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsRaidOfficer()
@@ -3625,7 +3637,7 @@ result = UnitIsSameServer(unitName)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsSameServer("player")
@@ -3649,7 +3661,7 @@ result = UnitIsTapDenied(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsTapDenied("player")
@@ -3673,7 +3685,7 @@ result = UnitIsTrivial(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsTrivial("player")
@@ -3697,7 +3709,7 @@ result = UnitIsUnconscious(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsUnconscious("player")
@@ -3722,7 +3734,7 @@ result = UnitIsUnit(unit1, unit2)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsUnit("player", "player")
@@ -3746,7 +3758,7 @@ result = UnitIsVisible([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsVisible()
@@ -3770,7 +3782,7 @@ result = UnitIsWildBattlePet(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitIsWildBattlePet("player")
@@ -3794,7 +3806,7 @@ isLeader = UnitLeadsAnyGroup(unit)
 |------|------|---------|-------------|
 | `isLeader` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLeader = UnitLeadsAnyGroup("player")
@@ -3818,7 +3830,7 @@ result = UnitLevel(name)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitLevel("")
@@ -3846,7 +3858,8 @@ unitName, unitServer = UnitName(unit)
 **Example**
 
 ```lua
-local unitName, unitServer = UnitName("player")
+local name, realm = UnitName("target")
+print(name, realm)  -- realm is nil when the unit is on your realm
 ```
 
 ### Unit.UnitNameFromGUID
@@ -3868,7 +3881,7 @@ unitName, unitServer = UnitNameFromGUID(unitGUID)
 | `unitName` | cstring | no |  |
 | `unitServer` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitName, unitServer = UnitNameFromGUID("player")
@@ -3892,7 +3905,7 @@ nameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 |------|------|---------|-------------|
 | `nameplateShowsWidgetsOnly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly("player")
@@ -3917,7 +3930,7 @@ unitName, unitServer = UnitNameUnmodified(unit)
 | `unitName` | cstring | no |  |
 | `unitServer` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitName, unitServer = UnitNameUnmodified("player")
@@ -3941,7 +3954,7 @@ result = UnitNumPowerBarTimers(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitNumPowerBarTimers("player")
@@ -3965,7 +3978,7 @@ result = UnitOnTaxi(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitOnTaxi("player")
@@ -3989,7 +4002,7 @@ ownerGUID = UnitOwnerGUID(unit)
 |------|------|---------|-------------|
 | `ownerGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ownerGUID = UnitOwnerGUID("player")
@@ -4015,7 +4028,7 @@ partialPower = UnitPartialPower(unitToken, [powerType], unmodified)
 |------|------|---------|-------------|
 | `partialPower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local partialPower = UnitPartialPower("player", false)
@@ -4039,7 +4052,7 @@ percentHealth = UnitPercentHealthFromGUID(unitGUID)
 |------|------|---------|-------------|
 | `percentHealth` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percentHealth = UnitPercentHealthFromGUID("player")
@@ -4063,7 +4076,7 @@ reason = UnitPhaseReason(unit)
 |------|------|---------|-------------|
 | `reason` | PhaseReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reason = UnitPhaseReason("player")
@@ -4087,7 +4100,7 @@ result = UnitPlayerControlled([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPlayerControlled()
@@ -4112,7 +4125,7 @@ result = UnitPlayerOrPetInParty([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPlayerOrPetInParty()
@@ -4137,7 +4150,7 @@ result = UnitPlayerOrPetInRaid([unit], [partyIndex])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPlayerOrPetInRaid()
@@ -4164,7 +4177,7 @@ positionX, positionY, positionZ, mapID = UnitPosition(unit)
 | `positionZ` | number | no |  |
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ, mapID = UnitPosition("player")
@@ -4190,7 +4203,7 @@ power = UnitPower(unitToken, [powerType], unmodified)
 |------|------|---------|-------------|
 | `power` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local power = UnitPower("player", false)
@@ -4214,7 +4227,7 @@ barID = UnitPowerBarID(unitToken)
 |------|------|---------|-------------|
 | `barID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local barID = UnitPowerBarID("player")
@@ -4242,7 +4255,7 @@ duration, expiration, barID, auraID = UnitPowerBarTimerInfo(unit, index)
 | `barID` | number | no |  |
 | `auraID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration, expiration, barID, auraID = UnitPowerBarTimerInfo("player", 1)
@@ -4266,7 +4279,7 @@ displayMod = UnitPowerDisplayMod(powerType)
 |------|------|---------|-------------|
 | `displayMod` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayMod = UnitPowerDisplayMod(powerType)
@@ -4292,7 +4305,7 @@ maxPower = UnitPowerMax(unitToken, [powerType], unmodified)
 |------|------|---------|-------------|
 | `maxPower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxPower = UnitPowerMax("player", false)
@@ -4320,7 +4333,7 @@ result = UnitPowerMissing(unitToken, [powerType], unmodified)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPowerMissing("player", false)
@@ -4349,7 +4362,7 @@ result = UnitPowerPercent(unitToken, [powerType], unmodified, [curve])
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no | If no curve is specified, a floating point percentage value. Else, the result of evaluating the curve with the percentage as the input. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPowerPercent("player", false)
@@ -4378,7 +4391,7 @@ powerType, powerTypeToken, rgbX, rgbY, rgbZ = UnitPowerType(unit, index)
 | `rgbY` | number | no |  |
 | `rgbZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerType, powerTypeToken, rgbX, rgbY, rgbZ = UnitPowerType("player", 1)
@@ -4402,7 +4415,7 @@ classification = UnitPvpClassification(unit)
 |------|------|---------|-------------|
 | `classification` | PvPUnitClassification | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classification = UnitPvpClassification("player")
@@ -4426,7 +4439,7 @@ result = UnitPVPName(unit)
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitPVPName("player")
@@ -4450,7 +4463,7 @@ levelRange = UnitQuestTrivialLevelRange(unit)
 |------|------|---------|-------------|
 | `levelRange` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levelRange = UnitQuestTrivialLevelRange("player")
@@ -4474,7 +4487,7 @@ levelRange = UnitQuestTrivialLevelRangeScaling(unit)
 |------|------|---------|-------------|
 | `levelRange` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levelRange = UnitQuestTrivialLevelRangeScaling("player")
@@ -4500,7 +4513,7 @@ localizedRaceName, englishRaceName, raceID = UnitRace(unit)
 | `englishRaceName` | cstring | no |  |
 | `raceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localizedRaceName, englishRaceName, raceID = UnitRace("player")
@@ -4526,7 +4539,7 @@ attackPower, posBuff, negBuff = UnitRangedAttackPower(unit)
 | `posBuff` | number | no |  |
 | `negBuff` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local attackPower, posBuff, negBuff = UnitRangedAttackPower("player")
@@ -4555,7 +4568,7 @@ speed, minDamage, maxDamage, posBuff, negBuff, percent = UnitRangedDamage(unit)
 | `negBuff` | number | no |  |
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local speed, minDamage, maxDamage, posBuff, negBuff, percent = UnitRangedDamage("player")
@@ -4580,7 +4593,7 @@ result = UnitReaction(unit, target)
 |------|------|---------|-------------|
 | `result` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitReaction("player", target)
@@ -4604,7 +4617,7 @@ realmRelationship = UnitRealmRelationship(unit)
 |------|------|---------|-------------|
 | `realmRelationship` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local realmRelationship = UnitRealmRelationship("player")
@@ -4632,7 +4645,7 @@ baseResistance, realResistance, effectiveResistance, bonusResistance = UnitResis
 | `effectiveResistance` | number | no |  |
 | `bonusResistance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local baseResistance, realResistance, effectiveResistance, bonusResistance = UnitResistance("player", damageClass)
@@ -4660,7 +4673,7 @@ resultR, resultG, resultB, resultA = UnitSelectionColor(unit, useExtendedColors)
 | `resultB` | number | no |  |
 | `resultA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local resultR, resultG, resultB, resultA = UnitSelectionColor("player", false)
@@ -4685,7 +4698,7 @@ result = UnitSelectionType(unit, useExtendedColors)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitSelectionType("player", false)
@@ -4709,7 +4722,7 @@ sex = UnitSex(unit)
 |------|------|---------|-------------|
 | `sex` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sex = UnitSex("player")
@@ -4733,7 +4746,7 @@ sex = UnitSexBase(unit)
 |------|------|---------|-------------|
 | `sex` | UnitSex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sex = UnitSexBase("player")
@@ -4757,7 +4770,7 @@ result = UnitShouldDisplayName(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitShouldDisplayName("player")
@@ -4783,7 +4796,7 @@ result = UnitShouldDisplaySpellTargetName(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitShouldDisplaySpellTargetName("player")
@@ -4807,7 +4820,7 @@ result = UnitSpellHaste(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitSpellHaste("player")
@@ -4833,7 +4846,7 @@ classFilename = UnitSpellTargetClass(unit)
 |------|------|---------|-------------|
 | `classFilename` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classFilename = UnitSpellTargetClass("player")
@@ -4859,7 +4872,7 @@ targetName = UnitSpellTargetName(unit)
 |------|------|---------|-------------|
 | `targetName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetName = UnitSpellTargetName("player")
@@ -4883,7 +4896,7 @@ result = UnitStagger(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitStagger("player")
@@ -4911,7 +4924,7 @@ currentStat, effectiveStat, statPositiveBuff, statNegativeBuff = UnitStat(unit, 
 | `statPositiveBuff` | number | no |  |
 | `statNegativeBuff` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentStat, effectiveStat, statPositiveBuff, statNegativeBuff = UnitStat("player", 1)
@@ -4930,7 +4943,7 @@ UnitSwitchToVehicleSeat(unit, virtualSeatIndex)
 | `unit` | UnitToken | no |  |
 | `virtualSeatIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnitSwitchToVehicleSeat("player", 1)
@@ -4954,7 +4967,7 @@ result = UnitTargetsVehicleInRaidUI([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitTargetsVehicleInRaidUI()
@@ -4981,10 +4994,10 @@ result = UnitThreatLeadSituation(unit, mobGUID)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = UnitThreatLeadSituation("player", "Creature-0-0000-0-0-0-0")
+local result = UnitThreatLeadSituation("player", UnitGUID("player"))
 ```
 
 ### Unit.UnitThreatPercentageOfLead
@@ -5006,10 +5019,10 @@ result = UnitThreatPercentageOfLead(unit, mobGUID)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = UnitThreatPercentageOfLead("player", "Creature-0-0000-0-0-0-0")
+local result = UnitThreatPercentageOfLead("player", UnitGUID("player"))
 ```
 
 ### Unit.UnitThreatSituation
@@ -5031,7 +5044,7 @@ result = UnitThreatSituation(unit, [mobGUID])
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitThreatSituation("player")
@@ -5055,7 +5068,7 @@ unitToken = UnitTokenFromGUID(unitGUID)
 |------|------|---------|-------------|
 | `unitToken` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitToken = UnitTokenFromGUID("player")
@@ -5079,7 +5092,7 @@ treatAsPlayer = UnitTreatAsPlayerForDisplay(unit)
 |------|------|---------|-------------|
 | `treatAsPlayer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treatAsPlayer = UnitTreatAsPlayerForDisplay("player")
@@ -5105,7 +5118,7 @@ bankedLevels, xpIntoCurrentLevel, xpForNextLevel = UnitTrialBankedLevels(unit)
 | `xpIntoCurrentLevel` | number | no |  |
 | `xpForNextLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bankedLevels, xpIntoCurrentLevel, xpForNextLevel = UnitTrialBankedLevels("player")
@@ -5129,7 +5142,7 @@ result = UnitTrialXP(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitTrialXP("player")
@@ -5153,7 +5166,7 @@ result = UnitUsingVehicle(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitUsingVehicle("player")
@@ -5177,7 +5190,7 @@ result = UnitVehicleSeatCount(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitVehicleSeatCount("player")
@@ -5206,7 +5219,7 @@ controlType, occupantName, serverName, ejectable, canSwitchSeats = UnitVehicleSe
 | `ejectable` | bool | no |  |
 | `canSwitchSeats` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local controlType, occupantName, serverName, ejectable, canSwitchSeats = UnitVehicleSeatInfo("player", 1)
@@ -5230,7 +5243,7 @@ result = UnitVehicleSkin([unit])
 |------|------|---------|-------------|
 | `result` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitVehicleSkin()
@@ -5256,7 +5269,7 @@ mainHandWeaponAttackPower, offHandWeaponAttackPower, rangedWeaponAttackPower = U
 | `offHandWeaponAttackPower` | number | no |  |
 | `rangedWeaponAttackPower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mainHandWeaponAttackPower, offHandWeaponAttackPower, rangedWeaponAttackPower = UnitWeaponAttackPower("player")
@@ -5280,7 +5293,7 @@ uiWidgetSet = UnitWidgetSet(unit)
 |------|------|---------|-------------|
 | `uiWidgetSet` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiWidgetSet = UnitWidgetSet("player")
@@ -5304,7 +5317,7 @@ result = UnitXP(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitXP("player")
@@ -5328,7 +5341,7 @@ result = UnitXPMax(unit)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = UnitXPMax("player")
@@ -5352,7 +5365,7 @@ result = WorldLootObjectExists([unit])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = WorldLootObjectExists()

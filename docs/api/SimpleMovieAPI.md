@@ -18,7 +18,7 @@ EnableSubtitles(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EnableSubtitles(false)
@@ -44,7 +44,7 @@ success, returnCode = StartMovie(movieID, looping)
 | `success` | bool | no |  |
 | `returnCode` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, returnCode = StartMovie(0, false)
@@ -71,7 +71,7 @@ success, returnCode = StartMovieByName(movieName, looping, resolution)
 | `success` | bool | no |  |
 | `returnCode` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, returnCode = StartMovieByName("", false, 0)
@@ -83,7 +83,7 @@ local success, returnCode = StartMovieByName("", false, 0)
 StopMovie()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopMovie()

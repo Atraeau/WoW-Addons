@@ -25,7 +25,7 @@ areas = CalculateScreenAreaFromCharacterSpan(leftIndex, rightIndex)
 |------|------|---------|-------------|
 | `areas` | uiBoundsRect[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areas = CalculateScreenAreaFromCharacterSpan(1, 1)
@@ -43,7 +43,7 @@ wrap = CanNonSpaceWrap()
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wrap = CanNonSpaceWrap()
@@ -61,7 +61,7 @@ wrap = CanWordWrap()
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wrap = CanWordWrap()
@@ -73,7 +73,7 @@ local wrap = CanWordWrap()
 ClearAlphaGradient()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAlphaGradient()
@@ -87,7 +87,7 @@ Sets text to an empty string and removes the Text secret aspect.
 ClearText()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearText()
@@ -113,7 +113,7 @@ characterIndex, inside = FindCharacterIndexAtCoordinate(x, y)
 | `characterIndex` | luaIndex | no |  |
 | `inside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local characterIndex, inside = FindCharacterIndexAtCoordinate(x, y)
@@ -132,7 +132,7 @@ start, length = GetAlphaGradient()
 | `start` | number | no |  |
 | `length` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local start, length = GetAlphaGradient()
@@ -150,7 +150,7 @@ fieldSize = GetFieldSize()
 |------|------|---------|-------------|
 | `fieldSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fieldSize = GetFieldSize()
@@ -170,7 +170,7 @@ fontFile, fontHeight, flags = GetFont()
 | `fontHeight` | uiUnit | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontFile, fontHeight, flags = GetFont()
@@ -194,7 +194,7 @@ height = GetFontHeight(calculated)
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetFontHeight(false)
@@ -212,7 +212,7 @@ font = GetFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObject()
@@ -230,7 +230,7 @@ wrap = GetIndentedWordWrap()
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wrap = GetIndentedWordWrap()
@@ -248,7 +248,7 @@ justifyH = GetJustifyH()
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyH = GetJustifyH()
@@ -266,7 +266,7 @@ justifyV = GetJustifyV()
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyV = GetJustifyV()
@@ -284,7 +284,7 @@ lineHeight = GetLineHeight()
 |------|------|---------|-------------|
 | `lineHeight` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lineHeight = GetLineHeight()
@@ -302,7 +302,7 @@ maxLines = GetMaxLines()
 |------|------|---------|-------------|
 | `maxLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLines = GetMaxLines()
@@ -320,7 +320,7 @@ numLines = GetNumLines()
 |------|------|---------|-------------|
 | `numLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numLines = GetNumLines()
@@ -338,7 +338,7 @@ radians = GetRotation()
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local radians = GetRotation()
@@ -356,7 +356,7 @@ scaleAnimationMode = GetScaleAnimationMode()
 |------|------|---------|-------------|
 | `scaleAnimationMode` | FontStringScaleAnimationMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaleAnimationMode = GetScaleAnimationMode()
@@ -377,7 +377,7 @@ colorR, colorG, colorB, colorA = GetShadowColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetShadowColor()
@@ -396,7 +396,7 @@ offsetX, offsetY = GetShadowOffset()
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetShadowOffset()
@@ -414,7 +414,7 @@ smoothScaling = GetSmoothScaling()
 |------|------|---------|-------------|
 | `smoothScaling` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local smoothScaling = GetSmoothScaling()
@@ -432,7 +432,7 @@ spacing = GetSpacing()
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spacing = GetSpacing()
@@ -450,7 +450,7 @@ height = GetStringHeight()
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetStringHeight()
@@ -468,7 +468,7 @@ width = GetStringWidth()
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetStringWidth()
@@ -486,7 +486,7 @@ text = GetText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetText()
@@ -507,7 +507,7 @@ colorR, colorG, colorB, colorA = GetTextColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetTextColor()
@@ -525,7 +525,7 @@ textScale = GetTextScale()
 |------|------|---------|-------------|
 | `textScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textScale = GetTextScale()
@@ -543,7 +543,7 @@ width = GetUnboundedStringWidth()
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetUnboundedStringWidth()
@@ -567,7 +567,7 @@ width = GetUnboundedStringWidthForText(text)
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetUnboundedStringWidthForText("")
@@ -585,7 +585,7 @@ width = GetWrappedWidth()
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetWrappedWidth()
@@ -603,7 +603,7 @@ isTruncated = IsTruncated()
 |------|------|---------|-------------|
 | `isTruncated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTruncated = IsTruncated()
@@ -615,7 +615,7 @@ local isTruncated = IsTruncated()
 OnColorsUpdated()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OnColorsUpdated()
@@ -640,7 +640,7 @@ isWithinText = SetAlphaGradient(start, length)
 |------|------|---------|-------------|
 | `isWithinText` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWithinText = SetAlphaGradient(0, 0)
@@ -658,7 +658,7 @@ SetDesaturateEmbeddedTextures(desaturate)
 |------|------|---------|-------------|
 | `desaturate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturateEmbeddedTextures(false)
@@ -676,7 +676,7 @@ SetFixedColor(fixedColor)
 |------|------|---------|-------------|
 | `fixedColor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFixedColor(false)
@@ -702,7 +702,7 @@ success = SetFont(fontFile, fontHeight, [flags])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetFont(fontFile, fontHeight)
@@ -720,7 +720,7 @@ SetFontHeight(height)
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontHeight(height)
@@ -738,7 +738,7 @@ SetFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontObject(font)
@@ -756,7 +756,7 @@ SetFormattedText(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFormattedText("")
@@ -774,7 +774,7 @@ SetIndentedWordWrap(wrap)
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIndentedWordWrap(false)
@@ -792,7 +792,7 @@ SetJustifyH(justifyH)
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyH(justifyH)
@@ -810,7 +810,7 @@ SetJustifyV(justifyV)
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyV(justifyV)
@@ -828,7 +828,7 @@ SetMaxLines(maxLines)
 |------|------|---------|-------------|
 | `maxLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxLines(0)
@@ -846,7 +846,7 @@ SetNonSpaceWrap(wrap)
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNonSpaceWrap(false)
@@ -864,7 +864,7 @@ SetRotation(radians)
 |------|------|---------|-------------|
 | `radians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRotation(0)
@@ -882,7 +882,7 @@ SetScaleAnimationMode(scaleAnimationMode)
 |------|------|---------|-------------|
 | `scaleAnimationMode` | FontStringScaleAnimationMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScaleAnimationMode(scaleAnimationMode)
@@ -903,7 +903,7 @@ SetShadowColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowColor(0, 0, 0)
@@ -922,10 +922,10 @@ SetShadowOffset(offsetX, offsetY)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetShadowOffset(0, 0)
+SetShadowOffset(1, 1)
 ```
 
 ### SimpleFontStringAPI.SetSmoothScaling
@@ -940,7 +940,7 @@ SetSmoothScaling(smoothScaling)
 |------|------|---------|-------------|
 | `smoothScaling` | bool | no | If true, text height will not snap to nearest whole numbers for scaled font strings. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSmoothScaling(false)
@@ -958,7 +958,7 @@ SetSpacing(spacing)
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpacing(spacing)
@@ -976,7 +976,7 @@ SetText(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetText("")
@@ -997,7 +997,7 @@ SetTextColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColor(0, 0, 0)
@@ -1015,7 +1015,7 @@ SetTextHeight(height)
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextHeight(height)
@@ -1033,7 +1033,7 @@ SetTextScale(textScale)
 |------|------|---------|-------------|
 | `textScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextScale(0)
@@ -1051,7 +1051,7 @@ SetTextToFit(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextToFit("")
@@ -1069,7 +1069,7 @@ SetWordWrap(wrap)
 |------|------|---------|-------------|
 | `wrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetWordWrap(false)

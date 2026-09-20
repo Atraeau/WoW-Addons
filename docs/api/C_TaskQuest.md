@@ -24,7 +24,7 @@ showsTaskQuestObjectives = C_TaskQuest.DoesMapShowTaskQuestObjectives(uiMapID)
 |------|------|---------|-------------|
 | `showsTaskQuestObjectives` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showsTaskQuestObjectives = C_TaskQuest.DoesMapShowTaskQuestObjectives(0)
@@ -51,7 +51,7 @@ questTitle, factionID, capped, displayAsObjective = C_TaskQuest.GetQuestInfoByQu
 | `capped` | bool | yes |  |
 | `displayAsObjective` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questTitle, factionID, capped, displayAsObjective = C_TaskQuest.GetQuestInfoByQuestID(0)
@@ -77,7 +77,7 @@ locationX, locationY = C_TaskQuest.GetQuestLocation(questID, uiMapID)
 | `locationX` | number | no |  |
 | `locationY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locationX, locationY = C_TaskQuest.GetQuestLocation(0, 0)
@@ -101,7 +101,7 @@ progress = C_TaskQuest.GetQuestProgressBarInfo(questID)
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = C_TaskQuest.GetQuestProgressBarInfo(0)
@@ -125,7 +125,7 @@ taskPOIs = C_TaskQuest.GetQuestsOnMap(uiMapID)
 |------|------|---------|-------------|
 | `taskPOIs` | QuestPOIMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local taskPOIs = C_TaskQuest.GetQuestsOnMap(0)
@@ -149,7 +149,7 @@ minutesLeft = C_TaskQuest.GetQuestTimeLeftMinutes(questID)
 |------|------|---------|-------------|
 | `minutesLeft` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minutesLeft = C_TaskQuest.GetQuestTimeLeftMinutes(0)
@@ -173,7 +173,7 @@ secondsLeft = C_TaskQuest.GetQuestTimeLeftSeconds(questID)
 |------|------|---------|-------------|
 | `secondsLeft` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local secondsLeft = C_TaskQuest.GetQuestTimeLeftSeconds(0)
@@ -198,7 +198,7 @@ widgetSet = C_TaskQuest.GetQuestUIWidgetSetByType(questID, type)
 |------|------|---------|-------------|
 | `widgetSet` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetSet = C_TaskQuest.GetQuestUIWidgetSetByType(0, type)
@@ -222,7 +222,7 @@ uiMapID = C_TaskQuest.GetQuestZoneID(questID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = C_TaskQuest.GetQuestZoneID(0)
@@ -240,7 +240,7 @@ quests = C_TaskQuest.GetThreatQuests()
 |------|------|---------|-------------|
 | `quests` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quests = C_TaskQuest.GetThreatQuests()
@@ -264,7 +264,7 @@ active = C_TaskQuest.IsActive(questID)
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_TaskQuest.IsActive(0)
@@ -282,7 +282,7 @@ C_TaskQuest.RequestPreloadRewardData(questID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TaskQuest.RequestPreloadRewardData(0)

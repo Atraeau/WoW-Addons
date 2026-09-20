@@ -19,10 +19,10 @@ C_TransmogOutfitInfo.AddNewOutfit(name, icon)
 | `name` | cstring | no |  |
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TransmogOutfitInfo.AddNewOutfit("", icon)
+C_TransmogOutfitInfo.AddNewOutfit("", 0)
 ```
 
 ### C_TransmogOutfitInfo.CanPlayerTransmogSlot
@@ -43,7 +43,7 @@ valid = C_TransmogOutfitInfo.CanPlayerTransmogSlot(slot)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_TransmogOutfitInfo.CanPlayerTransmogSlot(1)
@@ -64,7 +64,7 @@ C_TransmogOutfitInfo.ChangeDisplayedOutfit(outfitID, trigger, toggleLock, allowR
 | `toggleLock` | bool | no |  |
 | `allowRemoveOutfit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ChangeDisplayedOutfit(0, trigger, false, false)
@@ -83,7 +83,7 @@ C_TransmogOutfitInfo.ChangeToOutfit(playerFacingOutfitIndex, allowRemoveOutfit)
 | `playerFacingOutfitIndex` | number | no |  |
 | `allowRemoveOutfit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ChangeToOutfit(1, false)
@@ -101,7 +101,7 @@ C_TransmogOutfitInfo.ChangeViewedOutfit(outfitID)
 |------|------|---------|-------------|
 | `outfitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ChangeViewedOutfit(0)
@@ -113,7 +113,7 @@ C_TransmogOutfitInfo.ChangeViewedOutfit(0)
 C_TransmogOutfitInfo.ClearAllPendingSituations()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ClearAllPendingSituations()
@@ -125,7 +125,7 @@ C_TransmogOutfitInfo.ClearAllPendingSituations()
 C_TransmogOutfitInfo.ClearAllPendingTransmogs()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ClearAllPendingTransmogs()
@@ -144,7 +144,7 @@ C_TransmogOutfitInfo.ClearDisplayedOutfit(trigger, toggleLock)
 | `trigger` | TransmogSituationTrigger | no |  |
 | `toggleLock` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ClearDisplayedOutfit(trigger, false)
@@ -156,7 +156,7 @@ C_TransmogOutfitInfo.ClearDisplayedOutfit(trigger, false)
 C_TransmogOutfitInfo.ClearOutfit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ClearOutfit()
@@ -174,7 +174,7 @@ C_TransmogOutfitInfo.CommitAndApplyAllPending(useAvailableDiscount)
 |------|------|---------|-------------|
 | `useAvailableDiscount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.CommitAndApplyAllPending(false)
@@ -194,10 +194,10 @@ C_TransmogOutfitInfo.CommitOutfitInfo(outfitID, name, icon)
 | `name` | cstring | no |  |
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TransmogOutfitInfo.CommitOutfitInfo(0, "", icon)
+C_TransmogOutfitInfo.CommitOutfitInfo(0, "", 0)
 ```
 
 ### C_TransmogOutfitInfo.CommitPendingSituations
@@ -206,7 +206,7 @@ C_TransmogOutfitInfo.CommitOutfitInfo(0, "", icon)
 C_TransmogOutfitInfo.CommitPendingSituations()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.CommitPendingSituations()
@@ -224,7 +224,7 @@ outfitID = C_TransmogOutfitInfo.GetActiveOutfitID()
 |------|------|---------|-------------|
 | `outfitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitID = C_TransmogOutfitInfo.GetActiveOutfitID()
@@ -243,7 +243,7 @@ appearanceSlotInfo, illusionSlotInfo = C_TransmogOutfitInfo.GetAllSlotLocationIn
 | `appearanceSlotInfo` | TransmogOutfitSlotInfo[] | no |  |
 | `illusionSlotInfo` | TransmogOutfitSlotInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local appearanceSlotInfo, illusionSlotInfo = C_TransmogOutfitInfo.GetAllSlotLocationInfo()
@@ -267,7 +267,7 @@ categoryInfo = C_TransmogOutfitInfo.GetAllTransmogOutfitOptionSheatheCategoryInf
 |------|------|---------|-------------|
 | `categoryInfo` | TransmogOutfitOptionSheatheCategoryInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryInfo = C_TransmogOutfitInfo.GetAllTransmogOutfitOptionSheatheCategoryInfo(0)
@@ -293,7 +293,7 @@ collectionInfo = C_TransmogOutfitInfo.GetCollectionInfoForSlotAndOption(slot, op
 |------|------|---------|-------------|
 | `collectionInfo` | TransmogOutfitCollectionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionInfo = C_TransmogOutfitInfo.GetCollectionInfoForSlotAndOption(1, option, collectionType)
@@ -311,7 +311,7 @@ outfitID = C_TransmogOutfitInfo.GetCurrentlyViewedOutfitID()
 |------|------|---------|-------------|
 | `outfitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitID = C_TransmogOutfitInfo.GetCurrentlyViewedOutfitID()
@@ -335,7 +335,7 @@ option = C_TransmogOutfitInfo.GetEquippedSlotOptionFromTransmogSlot(slot)
 |------|------|---------|-------------|
 | `option` | TransmogOutfitSlotOption | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local option = C_TransmogOutfitInfo.GetEquippedSlotOptionFromTransmogSlot(1)
@@ -359,7 +359,7 @@ imaID = C_TransmogOutfitInfo.GetIllusionDefaultIMAIDForCollectionType(collection
 |------|------|---------|-------------|
 | `imaID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local imaID = C_TransmogOutfitInfo.GetIllusionDefaultIMAIDForCollectionType(collectionType)
@@ -383,7 +383,7 @@ categoryID = C_TransmogOutfitInfo.GetItemModifiedAppearanceEffectiveCategory(ima
 |------|------|---------|-------------|
 | `categoryID` | TransmogCollectionType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryID = C_TransmogOutfitInfo.GetItemModifiedAppearanceEffectiveCategory(0)
@@ -407,7 +407,7 @@ linkedSlotInfo = C_TransmogOutfitInfo.GetLinkedSlotInfo(slot)
 |------|------|---------|-------------|
 | `linkedSlotInfo` | TransmogOutfitLinkedSlotInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local linkedSlotInfo = C_TransmogOutfitInfo.GetLinkedSlotInfo(1)
@@ -431,7 +431,7 @@ maxOutfitCount = C_TransmogOutfitInfo.GetMaxNumberOfTotalOutfitsForSource(source
 |------|------|---------|-------------|
 | `maxOutfitCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxOutfitCount = C_TransmogOutfitInfo.GetMaxNumberOfTotalOutfitsForSource(source)
@@ -449,7 +449,7 @@ maxOutfitCount = C_TransmogOutfitInfo.GetMaxNumberOfUsableOutfits()
 |------|------|---------|-------------|
 | `maxOutfitCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxOutfitCount = C_TransmogOutfitInfo.GetMaxNumberOfUsableOutfits()
@@ -467,7 +467,7 @@ outfitCost = C_TransmogOutfitInfo.GetNextOutfitCost()
 |------|------|---------|-------------|
 | `outfitCost` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitCost = C_TransmogOutfitInfo.GetNextOutfitCost()
@@ -491,7 +491,7 @@ unlockedOutfitCount = C_TransmogOutfitInfo.GetNumberOfOutfitsUnlockedForSource(s
 |------|------|---------|-------------|
 | `unlockedOutfitCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unlockedOutfitCount = C_TransmogOutfitInfo.GetNumberOfOutfitsUnlockedForSource(source)
@@ -516,7 +516,7 @@ options, artifactOptions = C_TransmogOutfitInfo.GetOptionsForSlot(slot)
 | `options` | TransmogOutfitOptionInfo[] | no |  |
 | `artifactOptions` | TransmogOutfitOptionInfo[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options, artifactOptions = C_TransmogOutfitInfo.GetOptionsForSlot(1)
@@ -540,7 +540,7 @@ outfitInfo = C_TransmogOutfitInfo.GetOutfitInfo(outfitID)
 |------|------|---------|-------------|
 | `outfitInfo` | TransmogOutfitEntryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitInfo = C_TransmogOutfitInfo.GetOutfitInfo(0)
@@ -564,7 +564,7 @@ outfitInfo = C_TransmogOutfitInfo.GetOutfitInfoByName(name)
 |------|------|---------|-------------|
 | `outfitInfo` | TransmogOutfitEntryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitInfo = C_TransmogOutfitInfo.GetOutfitInfoByName("")
@@ -588,7 +588,7 @@ outfitInfo = C_TransmogOutfitInfo.GetOutfitInfoByPlayerFacingIndex(playerFacingO
 |------|------|---------|-------------|
 | `outfitInfo` | TransmogOutfitEntryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitInfo = C_TransmogOutfitInfo.GetOutfitInfoByPlayerFacingIndex(1)
@@ -606,7 +606,7 @@ outfitsInfo = C_TransmogOutfitInfo.GetOutfitsInfo()
 |------|------|---------|-------------|
 | `outfitsInfo` | TransmogOutfitEntryInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outfitsInfo = C_TransmogOutfitInfo.GetOutfitsInfo()
@@ -630,7 +630,7 @@ value = C_TransmogOutfitInfo.GetOutfitSituation(option)
 |------|------|---------|-------------|
 | `value` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_TransmogOutfitInfo.GetOutfitSituation(option)
@@ -648,7 +648,7 @@ enabled = C_TransmogOutfitInfo.GetOutfitSituationsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TransmogOutfitInfo.GetOutfitSituationsEnabled()
@@ -667,7 +667,7 @@ cost, modifierFlags = C_TransmogOutfitInfo.GetPendingTransmogCost()
 | `cost` | BigUInteger | no |  |
 | `modifierFlags` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost, modifierFlags = C_TransmogOutfitInfo.GetPendingTransmogCost()
@@ -691,7 +691,7 @@ state = C_TransmogOutfitInfo.GetSecondarySlotState(slot)
 |------|------|---------|-------------|
 | `state` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_TransmogOutfitInfo.GetSecondarySlotState(1)
@@ -716,7 +716,7 @@ sources = C_TransmogOutfitInfo.GetSetSourcesForSlot(transmogSetID, slot)
 |------|------|---------|-------------|
 | `sources` | AppearanceSourceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogOutfitInfo.GetSetSourcesForSlot(0, 1)
@@ -734,7 +734,7 @@ slotGroups = C_TransmogOutfitInfo.GetSlotGroupInfo()
 |------|------|---------|-------------|
 | `slotGroups` | TransmogOutfitSlotGroup[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotGroups = C_TransmogOutfitInfo.GetSlotGroupInfo()
@@ -759,7 +759,7 @@ sources = C_TransmogOutfitInfo.GetSourceIDsForSlot(transmogSetID, slot)
 |------|------|---------|-------------|
 | `sources` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogOutfitInfo.GetSourceIDsForSlot(0, 1)
@@ -783,10 +783,10 @@ slot = C_TransmogOutfitInfo.GetTransmogOutfitSlotForInventoryType(inventoryType)
 |------|------|---------|-------------|
 | `slot` | TransmogOutfitSlot | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slot = C_TransmogOutfitInfo.GetTransmogOutfitSlotForInventoryType(inventoryType)
+local slot = C_TransmogOutfitInfo.GetTransmogOutfitSlotForInventoryType(1)
 ```
 
 ### C_TransmogOutfitInfo.GetTransmogOutfitSlotFromInventorySlot
@@ -807,7 +807,7 @@ slot = C_TransmogOutfitInfo.GetTransmogOutfitSlotFromInventorySlot(inventorySlot
 |------|------|---------|-------------|
 | `slot` | TransmogOutfitSlot | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slot = C_TransmogOutfitInfo.GetTransmogOutfitSlotFromInventorySlot(1)
@@ -825,7 +825,7 @@ categoryData = C_TransmogOutfitInfo.GetUISituationCategoriesAndOptions()
 |------|------|---------|-------------|
 | `categoryData` | TransmogSituationCategory[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryData = C_TransmogOutfitInfo.GetUISituationCategoriesAndOptions()
@@ -849,7 +849,7 @@ atlas = C_TransmogOutfitInfo.GetUnassignedAtlasForSlot(slot)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlas = C_TransmogOutfitInfo.GetUnassignedAtlasForSlot(1)
@@ -873,7 +873,7 @@ atlas = C_TransmogOutfitInfo.GetUnassignedDisplayAtlasForSlot(slot)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlas = C_TransmogOutfitInfo.GetUnassignedDisplayAtlasForSlot(1)
@@ -899,7 +899,7 @@ slotInfo = C_TransmogOutfitInfo.GetViewedOutfitSlotInfo(slot, type, option)
 |------|------|---------|-------------|
 | `slotInfo` | ViewedTransmogOutfitSlotInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotInfo = C_TransmogOutfitInfo.GetViewedOutfitSlotInfo(1, type, option)
@@ -917,7 +917,7 @@ hasPending = C_TransmogOutfitInfo.HasPendingOutfitSituations()
 |------|------|---------|-------------|
 | `hasPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPending = C_TransmogOutfitInfo.HasPendingOutfitSituations()
@@ -935,7 +935,7 @@ hasPending = C_TransmogOutfitInfo.HasPendingOutfitTransmogs()
 |------|------|---------|-------------|
 | `hasPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPending = C_TransmogOutfitInfo.HasPendingOutfitTransmogs()
@@ -953,7 +953,7 @@ inTransmogEvent = C_TransmogOutfitInfo.InTransmogEvent()
 |------|------|---------|-------------|
 | `inTransmogEvent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inTransmogEvent = C_TransmogOutfitInfo.InTransmogEvent()
@@ -971,7 +971,7 @@ isDisplayed = C_TransmogOutfitInfo.IsEquippedGearOutfitDisplayed()
 |------|------|---------|-------------|
 | `isDisplayed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisplayed = C_TransmogOutfitInfo.IsEquippedGearOutfitDisplayed()
@@ -989,7 +989,7 @@ isLocked = C_TransmogOutfitInfo.IsEquippedGearOutfitLocked()
 |------|------|---------|-------------|
 | `isLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLocked = C_TransmogOutfitInfo.IsEquippedGearOutfitLocked()
@@ -1013,7 +1013,7 @@ isLocked = C_TransmogOutfitInfo.IsLockedOutfit(outfitID)
 |------|------|---------|-------------|
 | `isLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLocked = C_TransmogOutfitInfo.IsLockedOutfit(0)
@@ -1037,7 +1037,7 @@ isWeaponSlot = C_TransmogOutfitInfo.IsSlotWeaponSlot(slot)
 |------|------|---------|-------------|
 | `isWeaponSlot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWeaponSlot = C_TransmogOutfitInfo.IsSlotWeaponSlot(1)
@@ -1055,7 +1055,7 @@ enabled = C_TransmogOutfitInfo.IsTransmogEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TransmogOutfitInfo.IsTransmogEnabled()
@@ -1073,7 +1073,7 @@ isAvailable = C_TransmogOutfitInfo.IsUsableDiscountAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_TransmogOutfitInfo.IsUsableDiscountAvailable()
@@ -1097,7 +1097,7 @@ isApproved = C_TransmogOutfitInfo.IsValidTransmogOutfitName(name)
 |------|------|---------|-------------|
 | `isApproved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApproved = C_TransmogOutfitInfo.IsValidTransmogOutfitName("")
@@ -1115,7 +1115,7 @@ C_TransmogOutfitInfo.PickupOutfit(outfitID)
 |------|------|---------|-------------|
 | `outfitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.PickupOutfit(0)
@@ -1127,7 +1127,7 @@ C_TransmogOutfitInfo.PickupOutfit(0)
 C_TransmogOutfitInfo.ResetOutfitSituations()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.ResetOutfitSituations()
@@ -1147,7 +1147,7 @@ C_TransmogOutfitInfo.RevertPendingTransmog(slot, type, option)
 | `type` | TransmogType | no |  |
 | `option` | TransmogOutfitSlotOption | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.RevertPendingTransmog(1, type, option)
@@ -1165,7 +1165,7 @@ C_TransmogOutfitInfo.SetOutfitSituationsEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetOutfitSituationsEnabled(false)
@@ -1183,7 +1183,7 @@ C_TransmogOutfitInfo.SetOutfitToCustomSet(transmogCustomSetID)
 |------|------|---------|-------------|
 | `transmogCustomSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetOutfitToCustomSet(0)
@@ -1201,7 +1201,7 @@ C_TransmogOutfitInfo.SetOutfitToOutfit(outfitID)
 |------|------|---------|-------------|
 | `outfitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetOutfitToOutfit(0)
@@ -1219,7 +1219,7 @@ C_TransmogOutfitInfo.SetOutfitToSet(transmogSetID)
 |------|------|---------|-------------|
 | `transmogSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetOutfitToSet(0)
@@ -1241,7 +1241,7 @@ C_TransmogOutfitInfo.SetPendingTransmog(slot, type, option, transmogID, displayT
 | `transmogID` | number | no |  |
 | `displayType` | TransmogOutfitDisplayType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetPendingTransmog(1, type, option, 0, displayType)
@@ -1261,7 +1261,7 @@ C_TransmogOutfitInfo.SetPendingTransmogSheatheCategory(slot, option, category)
 | `option` | TransmogOutfitSlotOption | no |  |
 | `category` | TransmogOutfitSlotOptionSheatheCategory | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetPendingTransmogSheatheCategory(1, option, category)
@@ -1280,7 +1280,7 @@ C_TransmogOutfitInfo.SetSecondarySlotState(slot, state)
 | `slot` | TransmogOutfitSlot | no |  |
 | `state` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetSecondarySlotState(1, false)
@@ -1299,7 +1299,7 @@ C_TransmogOutfitInfo.SetViewedOptionForSlot(slot, option)
 | `slot` | TransmogOutfitSlot | no |  |
 | `option` | TransmogOutfitSlotOption | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.SetViewedOptionForSlot(1, option)
@@ -1323,7 +1323,7 @@ hasSecondary = C_TransmogOutfitInfo.SlotHasSecondary(slot)
 |------|------|---------|-------------|
 | `hasSecondary` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecondary = C_TransmogOutfitInfo.SlotHasSecondary(1)
@@ -1341,7 +1341,7 @@ transmogEventActive = C_TransmogOutfitInfo.TransmogEventActive()
 |------|------|---------|-------------|
 | `transmogEventActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local transmogEventActive = C_TransmogOutfitInfo.TransmogEventActive()
@@ -1360,7 +1360,7 @@ C_TransmogOutfitInfo.UpdatePendingSituation(option, value)
 | `option` | TransmogSituationOption | no |  |
 | `value` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogOutfitInfo.UpdatePendingSituation(option, false)

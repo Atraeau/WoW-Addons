@@ -12,7 +12,7 @@
 C_Discord.Authorize()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.Authorize()
@@ -37,7 +37,7 @@ name = C_Discord.GetDiscordChannelName(serverIndex, channelIndex)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_Discord.GetDiscordChannelName(1, 1)
@@ -55,7 +55,7 @@ userID = C_Discord.GetDiscordUserID()
 |------|------|---------|-------------|
 | `userID` | DiscordID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local userID = C_Discord.GetDiscordUserID()
@@ -79,7 +79,7 @@ userName = C_Discord.GetDiscordUserName(userID)
 |------|------|---------|-------------|
 | `userName` | KStringDiscordUserName | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local userName = C_Discord.GetDiscordUserName(userID)
@@ -97,7 +97,7 @@ type = C_Discord.GetDisplayNameType()
 |------|------|---------|-------------|
 | `type` | DiscordDisplayNameType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type = C_Discord.GetDisplayNameType()
@@ -117,7 +117,7 @@ isFullyLinked, linkedChannelName, linkedServerName = C_Discord.GetGuildLinkStatu
 | `linkedChannelName` | string | no |  |
 | `linkedServerName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFullyLinked, linkedChannelName, linkedServerName = C_Discord.GetGuildLinkStatus()
@@ -142,7 +142,7 @@ count, valid = C_Discord.GetNumDiscordChannels(serverIndex)
 | `count` | number | no |  |
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count, valid = C_Discord.GetNumDiscordChannels(1)
@@ -160,7 +160,7 @@ count = C_Discord.GetNumDiscordServers()
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_Discord.GetNumDiscordServers()
@@ -178,7 +178,7 @@ C_Discord.GetServerLinkableChannels(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.GetServerLinkableChannels(1)
@@ -202,7 +202,7 @@ name = C_Discord.GetServerName(index)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_Discord.GetServerName(1)
@@ -221,7 +221,7 @@ C_Discord.GuildLink(serverIndex, channelIndex)
 | `serverIndex` | luaIndex | no |  |
 | `channelIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.GuildLink(1, 1)
@@ -233,7 +233,7 @@ C_Discord.GuildLink(1, 1)
 C_Discord.GuildUnlink()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.GuildUnlink()
@@ -251,7 +251,7 @@ enabled = C_Discord.IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_Discord.IsEnabled()
@@ -269,7 +269,7 @@ isLinked = C_Discord.IsGuildChannelLinked()
 |------|------|---------|-------------|
 | `isLinked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLinked = C_Discord.IsGuildChannelLinked()
@@ -293,7 +293,7 @@ isSet = C_Discord.IsGuildSettingSet(setting)
 |------|------|---------|-------------|
 | `isSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSet = C_Discord.IsGuildSettingSet(setting)
@@ -311,7 +311,7 @@ hasOAuth = C_Discord.IsUserOAuthed()
 |------|------|---------|-------------|
 | `hasOAuth` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasOAuth = C_Discord.IsUserOAuthed()
@@ -323,7 +323,7 @@ local hasOAuth = C_Discord.IsUserOAuthed()
 C_Discord.RefreshAuth()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.RefreshAuth()
@@ -342,7 +342,7 @@ C_Discord.SetGuildSetting(setting, set)
 | `setting` | DiscordGuildSettings | no |  |
 | `set` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.SetGuildSetting(setting, false)
@@ -354,7 +354,7 @@ C_Discord.SetGuildSetting(setting, false)
 C_Discord.UpdateDiscordServers()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.UpdateDiscordServers()
@@ -366,7 +366,7 @@ C_Discord.UpdateDiscordServers()
 C_Discord.UpdateGuildLobby()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Discord.UpdateGuildLobby()

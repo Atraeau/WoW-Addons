@@ -20,7 +20,7 @@ isRestricted = C_ChatInfo.AreOutgoingAddonChatMessagesRestricted()
 |------|------|---------|-------------|
 | `isRestricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRestricted = C_ChatInfo.AreOutgoingAddonChatMessagesRestricted()
@@ -32,7 +32,7 @@ local isRestricted = C_ChatInfo.AreOutgoingAddonChatMessagesRestricted()
 C_ChatInfo.CancelEmote()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.CancelEmote()
@@ -56,7 +56,7 @@ canSpeakLanguage = C_ChatInfo.CanPlayerSpeakLanguage(languageId)
 |------|------|---------|-------------|
 | `canSpeakLanguage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSpeakLanguage = C_ChatInfo.CanPlayerSpeakLanguage(0)
@@ -74,7 +74,7 @@ C_ChatInfo.DropCautionaryChatMessage(confirmNumber)
 |------|------|---------|-------------|
 | `confirmNumber` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.DropCautionaryChatMessage(0)
@@ -98,7 +98,7 @@ info = C_ChatInfo.GetChannelInfoFromIdentifier(channelIdentifier)
 |------|------|---------|-------------|
 | `info` | ChatChannelInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ChatInfo.GetChannelInfoFromIdentifier("")
@@ -126,7 +126,7 @@ name, owner, moderator, guid = C_ChatInfo.GetChannelRosterInfo(channelIndex, ros
 | `moderator` | bool | no |  |
 | `guid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, owner, moderator, guid = C_ChatInfo.GetChannelRosterInfo(1, 1)
@@ -150,7 +150,7 @@ ruleset = C_ChatInfo.GetChannelRuleset(channelIndex)
 |------|------|---------|-------------|
 | `ruleset` | ChatChannelRuleset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ruleset = C_ChatInfo.GetChannelRuleset(1)
@@ -174,7 +174,7 @@ ruleset = C_ChatInfo.GetChannelRulesetForChannelID(channelID)
 |------|------|---------|-------------|
 | `ruleset` | ChatChannelRuleset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ruleset = C_ChatInfo.GetChannelRulesetForChannelID(0)
@@ -198,7 +198,7 @@ shortcut = C_ChatInfo.GetChannelShortcut(channelIndex)
 |------|------|---------|-------------|
 | `shortcut` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shortcut = C_ChatInfo.GetChannelShortcut(1)
@@ -222,7 +222,7 @@ shortcut = C_ChatInfo.GetChannelShortcutForChannelID(channelID)
 |------|------|---------|-------------|
 | `shortcut` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shortcut = C_ChatInfo.GetChannelShortcutForChannelID(0)
@@ -246,7 +246,7 @@ guid = C_ChatInfo.GetChatLineSenderGUID(chatLine)
 |------|------|---------|-------------|
 | `guid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local guid = C_ChatInfo.GetChatLineSenderGUID(0)
@@ -270,7 +270,7 @@ name = C_ChatInfo.GetChatLineSenderName(chatLine)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_ChatInfo.GetChatLineSenderName(0)
@@ -294,7 +294,7 @@ text = C_ChatInfo.GetChatLineText(chatLine)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_ChatInfo.GetChatLineText(0)
@@ -318,7 +318,7 @@ name = C_ChatInfo.GetChatTypeName(typeID)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_ChatInfo.GetChatTypeName(0)
@@ -342,7 +342,7 @@ ids = C_ChatInfo.GetClubStreamIDs(clubID)
 |------|------|---------|-------------|
 | `ids` | ClubStreamId[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ids = C_ChatInfo.GetClubStreamIDs(clubID)
@@ -366,7 +366,7 @@ color = C_ChatInfo.GetColorForChatType(chatType)
 |------|------|---------|-------------|
 | `color` | colorRGB | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_ChatInfo.GetColorForChatType("")
@@ -384,7 +384,7 @@ channelID = C_ChatInfo.GetGeneralChannelID()
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channelID = C_ChatInfo.GetGeneralChannelID()
@@ -402,7 +402,7 @@ localID = C_ChatInfo.GetGeneralChannelLocalID()
 |------|------|---------|-------------|
 | `localID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localID = C_ChatInfo.GetGeneralChannelLocalID()
@@ -420,7 +420,7 @@ channelID = C_ChatInfo.GetMentorChannelID()
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channelID = C_ChatInfo.GetMentorChannelID()
@@ -438,7 +438,7 @@ numChannels = C_ChatInfo.GetNumActiveChannels()
 |------|------|---------|-------------|
 | `numChannels` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numChannels = C_ChatInfo.GetNumActiveChannels()
@@ -456,7 +456,7 @@ numReserved = C_ChatInfo.GetNumReservedChatWindows()
 |------|------|---------|-------------|
 | `numReserved` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numReserved = C_ChatInfo.GetNumReservedChatWindows()
@@ -474,7 +474,7 @@ registeredPrefixes = C_ChatInfo.GetRegisteredAddonMessagePrefixes()
 |------|------|---------|-------------|
 | `registeredPrefixes` | cstring[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registeredPrefixes = C_ChatInfo.GetRegisteredAddonMessagePrefixes()
@@ -494,7 +494,7 @@ isRestricted = C_ChatInfo.InChatMessagingLockdown()
 |------|------|---------|-------------|
 | `isRestricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRestricted = C_ChatInfo.InChatMessagingLockdown()
@@ -518,7 +518,7 @@ isRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered(prefix)
 |------|------|---------|-------------|
 | `isRegistered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRegistered = C_ChatInfo.IsAddonMessagePrefixRegistered("")
@@ -542,7 +542,7 @@ isRegional = C_ChatInfo.IsChannelRegional(channelIndex)
 |------|------|---------|-------------|
 | `isRegional` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRegional = C_ChatInfo.IsChannelRegional(1)
@@ -566,7 +566,7 @@ isRegional = C_ChatInfo.IsChannelRegionalForChannelID(channelID)
 |------|------|---------|-------------|
 | `isRegional` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRegional = C_ChatInfo.IsChannelRegionalForChannelID(0)
@@ -590,7 +590,7 @@ isCensored = C_ChatInfo.IsChatLineCensored(chatLine)
 |------|------|---------|-------------|
 | `isCensored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCensored = C_ChatInfo.IsChatLineCensored(0)
@@ -608,7 +608,7 @@ enabled = C_ChatInfo.IsLoggingChat()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_ChatInfo.IsLoggingChat()
@@ -627,7 +627,7 @@ enabled, advanced = C_ChatInfo.IsLoggingCombat()
 | `enabled` | bool | no |  |
 | `advanced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled, advanced = C_ChatInfo.IsLoggingCombat()
@@ -651,7 +651,7 @@ isPartyChannelType = C_ChatInfo.IsPartyChannelType(channelType)
 |------|------|---------|-------------|
 | `isPartyChannelType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPartyChannelType = C_ChatInfo.IsPartyChannelType(channelType)
@@ -669,7 +669,7 @@ available = C_ChatInfo.IsRegionalServiceAvailable()
 |------|------|---------|-------------|
 | `available` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local available = C_ChatInfo.IsRegionalServiceAvailable()
@@ -693,10 +693,10 @@ isTimerunning = C_ChatInfo.IsTimerunningPlayer(playerGUID)
 |------|------|---------|-------------|
 | `isTimerunning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isTimerunning = C_ChatInfo.IsTimerunningPlayer("Creature-0-0000-0-0-0-0")
+local isTimerunning = C_ChatInfo.IsTimerunningPlayer(UnitGUID("player"))
 ```
 
 ### C_ChatInfo.IsValidChatLine
@@ -717,7 +717,7 @@ isValid = C_ChatInfo.IsValidChatLine([chatLine])
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_ChatInfo.IsValidChatLine()
@@ -741,7 +741,7 @@ isApproved = C_ChatInfo.IsValidCombatFilterName(name)
 |------|------|---------|-------------|
 | `isApproved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApproved = C_ChatInfo.IsValidCombatFilterName("")
@@ -767,7 +767,7 @@ success = C_ChatInfo.PerformEmote(emoteName, [targetName], suppressMoveError)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ChatInfo.PerformEmote("", false)
@@ -796,7 +796,8 @@ result = C_ChatInfo.RegisterAddonMessagePrefix(prefix)
 **Example**
 
 ```lua
-local result = C_ChatInfo.RegisterAddonMessagePrefix("")
+-- Register your prefix (<= 16 chars) before sending/receiving addon comms
+C_ChatInfo.RegisterAddonMessagePrefix("MyAddon")
 ```
 
 ### C_ChatInfo.ReplaceIconAndGroupExpressions
@@ -819,7 +820,7 @@ output = C_ChatInfo.ReplaceIconAndGroupExpressions(input, [noIconReplacement], [
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local output = C_ChatInfo.ReplaceIconAndGroupExpressions("")
@@ -837,10 +838,10 @@ C_ChatInfo.RequestCanLocalWhisperTarget(whisperTarget)
 |------|------|---------|-------------|
 | `whisperTarget` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ChatInfo.RequestCanLocalWhisperTarget(whisperTarget)
+C_ChatInfo.RequestCanLocalWhisperTarget(UnitGUID("player"))
 ```
 
 ### C_ChatInfo.ResetDefaultZoneChannels
@@ -849,7 +850,7 @@ C_ChatInfo.RequestCanLocalWhisperTarget(whisperTarget)
 C_ChatInfo.ResetDefaultZoneChannels()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.ResetDefaultZoneChannels()
@@ -881,7 +882,8 @@ result = C_ChatInfo.SendAddonMessage(prefix, message, [chatType], [target])
 **Example**
 
 ```lua
-local result = C_ChatInfo.SendAddonMessage("", "")
+-- channelType: "PARTY", "RAID", "GUILD", "WHISPER" (needs target), "INSTANCE_CHAT"
+C_ChatInfo.SendAddonMessage("MyAddon", "hello", "PARTY")
 ```
 
 ### C_ChatInfo.SendAddonMessageLogged
@@ -907,7 +909,7 @@ result = C_ChatInfo.SendAddonMessageLogged(prefix, message, [chatType], [target]
 |------|------|---------|-------------|
 | `result` | SendAddonMessageResult | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_ChatInfo.SendAddonMessageLogged("", "")
@@ -925,7 +927,7 @@ C_ChatInfo.SendCautionaryChatMessage(confirmNumber)
 |------|------|---------|-------------|
 | `confirmNumber` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.SendCautionaryChatMessage(0)
@@ -946,7 +948,7 @@ C_ChatInfo.SendChatMessage(message, [chatType], [languageID], [target])
 | `languageID` | number | yes | Language to send the message in. |
 | `target` | cstring | yes | Name of the player to send a message to. Only applies to chat types that support targeted messages. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.SendChatMessage("")
@@ -965,7 +967,7 @@ C_ChatInfo.SwapChatChannelsByChannelIndex(firstChannelIndex, secondChannelIndex)
 | `firstChannelIndex` | luaIndex | no |  |
 | `secondChannelIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.SwapChatChannelsByChannelIndex(1, 1)
@@ -983,7 +985,7 @@ C_ChatInfo.UncensorChatLine(chatLine)
 |------|------|---------|-------------|
 | `chatLine` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChatInfo.UncensorChatLine(0)

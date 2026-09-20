@@ -12,7 +12,7 @@
 ClearSVG()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearSVG()
@@ -30,7 +30,7 @@ svgFile = GetSVGFileID()
 |------|------|---------|-------------|
 | `svgFile` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local svgFile = GetSVGFileID()
@@ -48,7 +48,7 @@ hasSVG = HasSVG()
 |------|------|---------|-------------|
 | `hasSVG` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSVG = HasSVG()
@@ -72,7 +72,7 @@ success = SetSVG(svgAsset)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetSVG(svgAsset)

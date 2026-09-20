@@ -18,7 +18,7 @@ canUseAutoAccept = C_LFGList.CanActiveEntryUseAutoAccept()
 |------|------|---------|-------------|
 | `canUseAutoAccept` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseAutoAccept = C_LFGList.CanActiveEntryUseAutoAccept()
@@ -42,7 +42,7 @@ canCreate = C_LFGList.CanCreateQuestGroup(questID)
 |------|------|---------|-------------|
 | `canCreate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCreate = C_LFGList.CanCreateQuestGroup(0)
@@ -66,7 +66,7 @@ canCreate = C_LFGList.CanCreateScenarioGroup(scenarioID)
 |------|------|---------|-------------|
 | `canCreate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCreate = C_LFGList.CanCreateScenarioGroup(0)
@@ -78,7 +78,7 @@ local canCreate = C_LFGList.CanCreateScenarioGroup(0)
 C_LFGList.ClearApplicationTextFields()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.ClearApplicationTextFields()
@@ -90,7 +90,7 @@ C_LFGList.ClearApplicationTextFields()
 C_LFGList.ClearCreationTextFields()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.ClearCreationTextFields()
@@ -102,7 +102,7 @@ C_LFGList.ClearCreationTextFields()
 C_LFGList.ClearSearchTextFields()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.ClearSearchTextFields()
@@ -114,7 +114,7 @@ C_LFGList.ClearSearchTextFields()
 C_LFGList.ConfirmCensoredActiveEntry()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.ConfirmCensoredActiveEntry()
@@ -126,7 +126,7 @@ C_LFGList.ConfirmCensoredActiveEntry()
 C_LFGList.CopyActiveEntryInfoToCreationFields()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.CopyActiveEntryInfoToCreationFields()
@@ -150,7 +150,7 @@ success = C_LFGList.CreateListing(createData)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_LFGList.CreateListing(createData)
@@ -178,7 +178,7 @@ canCreate = C_LFGList.CreateScenarioListing(activityID, itemLevel, autoAccept, p
 |------|------|---------|-------------|
 | `canCreate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCreate = C_LFGList.CreateScenarioListing(0, 6948, false, false, 0)
@@ -203,7 +203,7 @@ isMatch = C_LFGList.DoesCensoredTextMatch(name, comment)
 |------|------|---------|-------------|
 | `isMatch` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMatch = C_LFGList.DoesCensoredTextMatch("", "")
@@ -230,7 +230,7 @@ matches = C_LFGList.DoesEntryTitleMatchPrebuiltTitle(activityID, groupID, [plays
 |------|------|---------|-------------|
 | `matches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matches = C_LFGList.DoesEntryTitleMatchPrebuiltTitle(0, 0)
@@ -248,7 +248,7 @@ entryData = C_LFGList.GetActiveEntryInfo()
 |------|------|---------|-------------|
 | `entryData` | LfgEntryData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryData = C_LFGList.GetActiveEntryInfo()
@@ -274,7 +274,7 @@ fullName = C_LFGList.GetActivityFullName(activityID, [questID], [showWarmode])
 |------|------|---------|-------------|
 | `fullName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fullName = C_LFGList.GetActivityFullName(0)
@@ -299,7 +299,7 @@ name, orderIndex = C_LFGList.GetActivityGroupInfo(groupID)
 | `name` | string | no |  |
 | `orderIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, orderIndex = C_LFGList.GetActivityGroupInfo(0)
@@ -325,7 +325,7 @@ activityInfo = C_LFGList.GetActivityInfoTable(activityID, [questID], [showWarmod
 |------|------|---------|-------------|
 | `activityInfo` | GroupFinderActivityInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activityInfo = C_LFGList.GetActivityInfoTable(0)
@@ -343,7 +343,7 @@ options = C_LFGList.GetAdvancedFilter()
 |------|------|---------|-------------|
 | `options` | AdvancedFilterOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options = C_LFGList.GetAdvancedFilter()
@@ -368,7 +368,7 @@ bestDungeonScoreForListing = C_LFGList.GetApplicantBestDungeonScore(localID, app
 |------|------|---------|-------------|
 | `bestDungeonScoreForListing` | BestDungeonScoreMapInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bestDungeonScoreForListing = C_LFGList.GetApplicantBestDungeonScore(0, 1)
@@ -394,7 +394,7 @@ bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(localI
 |------|------|---------|-------------|
 | `bestDungeonScoreForListing` | BestDungeonScoreMapInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bestDungeonScoreForListing = C_LFGList.GetApplicantDungeonScoreForListing(0, 1, 0)
@@ -418,7 +418,7 @@ applicantData = C_LFGList.GetApplicantInfo(applicantID)
 |------|------|---------|-------------|
 | `applicantData` | LfgApplicantData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local applicantData = C_LFGList.GetApplicantInfo(0)
@@ -444,7 +444,7 @@ pvpRatingInfo = C_LFGList.GetApplicantPvpRatingInfoForListing(localID, applicant
 |------|------|---------|-------------|
 | `pvpRatingInfo` | PvpRatingInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pvpRatingInfo = C_LFGList.GetApplicantPvpRatingInfoForListing(0, 1, 0)
@@ -469,7 +469,7 @@ activityIDs = C_LFGList.GetAvailableActivityGroups(categoryID, filter)
 |------|------|---------|-------------|
 | `activityIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activityIDs = C_LFGList.GetAvailableActivityGroups(0, "HELPFUL")
@@ -488,7 +488,7 @@ totalResultsFound, filteredResults = C_LFGList.GetFilteredSearchResults()
 | `totalResultsFound` | number | no | (default: 0) |
 | `filteredResults` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalResultsFound, filteredResults = C_LFGList.GetFilteredSearchResults()
@@ -508,7 +508,7 @@ tankLeavers, healerLeavers, damageLeavers = C_LFGList.GetGroupLeaverCountsByRole
 | `healerLeavers` | number | no |  |
 | `damageLeavers` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tankLeavers, healerLeavers, damageLeavers = C_LFGList.GetGroupLeaverCountsByRole()
@@ -532,7 +532,7 @@ level = C_LFGList.GetKeystoneForActivity(activityID)
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_LFGList.GetKeystoneForActivity(0)
@@ -556,7 +556,7 @@ categoryData = C_LFGList.GetLfgCategoryInfo(categoryID)
 |------|------|---------|-------------|
 | `categoryData` | LfgCategoryData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryData = C_LFGList.GetLfgCategoryInfo(0)
@@ -582,7 +582,7 @@ activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupA
 | `groupID` | number | no |  |
 | `keystoneLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activityID, groupID, keystoneLevel = C_LFGList.GetOwnedKeystoneActivityAndGroupAndLevel(false)
@@ -608,7 +608,7 @@ playstyleString = C_LFGList.GetPlaystyleString(playstyle, generalPlaystyle, acti
 |------|------|---------|-------------|
 | `playstyleString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playstyleString = C_LFGList.GetPlaystyleString(playstyle, generalPlaystyle, activityInfo)
@@ -626,7 +626,7 @@ style = C_LFGList.GetPremadeGroupFinderStyle()
 |------|------|---------|-------------|
 | `style` | PremadeGroupFinderStyle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local style = C_LFGList.GetPremadeGroupFinderStyle()
@@ -650,7 +650,7 @@ searchResultData = C_LFGList.GetSearchResultInfo(searchResultID)
 |------|------|---------|-------------|
 | `searchResultData` | LfgSearchResultData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local searchResultData = C_LFGList.GetSearchResultInfo(0)
@@ -674,7 +674,7 @@ leaderInfo = C_LFGList.GetSearchResultLeaderInfo(searchResultID)
 |------|------|---------|-------------|
 | `leaderInfo` | LfgSearchResultPlayerInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local leaderInfo = C_LFGList.GetSearchResultLeaderInfo(0)
@@ -699,7 +699,7 @@ playerInfo = C_LFGList.GetSearchResultPlayerInfo(searchResultID, memberIndex)
 |------|------|---------|-------------|
 | `playerInfo` | LfgSearchResultPlayerInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerInfo = C_LFGList.GetSearchResultPlayerInfo(0, 1)
@@ -718,7 +718,7 @@ totalResultsFound, results = C_LFGList.GetSearchResults()
 | `totalResultsFound` | number | no | (default: 0) |
 | `results` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalResultsFound, results = C_LFGList.GetSearchResults()
@@ -736,7 +736,7 @@ hasActiveEntryInfo = C_LFGList.HasActiveEntryInfo()
 |------|------|---------|-------------|
 | `hasActiveEntryInfo` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasActiveEntryInfo = C_LFGList.HasActiveEntryInfo()
@@ -760,7 +760,7 @@ hasSearchResultInfo = C_LFGList.HasSearchResultInfo(searchResultID)
 |------|------|---------|-------------|
 | `hasSearchResultInfo` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSearchResultInfo = C_LFGList.HasSearchResultInfo(0)
@@ -778,7 +778,7 @@ isUnresolved = C_LFGList.IsCensoredActiveEntryUnresolved()
 |------|------|---------|-------------|
 | `isUnresolved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnresolved = C_LFGList.IsCensoredActiveEntryUnresolved()
@@ -802,7 +802,7 @@ isAuthenticated = C_LFGList.IsPlayerAuthenticatedForLFG([activityCategoryID])
 |------|------|---------|-------------|
 | `isAuthenticated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAuthenticated = C_LFGList.IsPlayerAuthenticatedForLFG()
@@ -820,7 +820,7 @@ isValid = C_LFGList.IsPlayerValidForEndgameFieldEdits()
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_LFGList.IsPlayerValidForEndgameFieldEdits()
@@ -838,7 +838,7 @@ enabled = C_LFGList.IsPremadeGroupFinderEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_LFGList.IsPremadeGroupFinderEnabled()
@@ -862,7 +862,7 @@ isEndgameListing = C_LFGList.ListingUsesEndgameEditRestrictions(activityID)
 |------|------|---------|-------------|
 | `isEndgameListing` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEndgameListing = C_LFGList.ListingUsesEndgameEditRestrictions(0)
@@ -880,7 +880,7 @@ C_LFGList.ReportGroupAsAdvertisement(searchResultID)
 |------|------|---------|-------------|
 | `searchResultID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.ReportGroupAsAdvertisement(0)
@@ -892,7 +892,7 @@ C_LFGList.ReportGroupAsAdvertisement(0)
 C_LFGList.RevealCensoredActiveEntry()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.RevealCensoredActiveEntry()
@@ -910,7 +910,7 @@ C_LFGList.RevealCensoredSearchResult(searchResultID)
 |------|------|---------|-------------|
 | `searchResultID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.RevealCensoredSearchResult(0)
@@ -928,7 +928,7 @@ C_LFGList.SaveAdvancedFilter(options)
 |------|------|---------|-------------|
 | `options` | AdvancedFilterOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.SaveAdvancedFilter(options)
@@ -952,7 +952,7 @@ C_LFGList.Search(categoryID, filter, preferredFilters, [languageFilter], [search
 | `advancedFilter` | AdvancedFilterOptions | yes |  |
 | `activityIDsFilter` | number[] | yes | Activity IDs to filter by. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.Search(0, "HELPFUL", "HELPFUL")
@@ -973,7 +973,7 @@ C_LFGList.SetEntryTitle(activityID, groupID, [playstyle], [generalPlaystyle])
 | `playstyle` | LFGEntryPlaystyle | yes |  |
 | `generalPlaystyle` | LFGEntryGeneralPlaystyle | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.SetEntryTitle(0, 0)
@@ -991,7 +991,7 @@ C_LFGList.SetSearchToActivity(activityID)
 |------|------|---------|-------------|
 | `activityID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.SetSearchToActivity(0)
@@ -1009,7 +1009,7 @@ C_LFGList.SetSearchToQuestID(questID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.SetSearchToQuestID(0)
@@ -1027,7 +1027,7 @@ C_LFGList.SetSearchToScenarioID(scenarioID)
 |------|------|---------|-------------|
 | `scenarioID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LFGList.SetSearchToScenarioID(0)
@@ -1051,7 +1051,7 @@ success = C_LFGList.UpdateListing(createData)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_LFGList.UpdateListing(createData)
@@ -1075,7 +1075,7 @@ passes = C_LFGList.ValidateRequiredDungeonScore(dungeonScore)
 |------|------|---------|-------------|
 | `passes` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local passes = C_LFGList.ValidateRequiredDungeonScore(0)
@@ -1100,7 +1100,7 @@ passes = C_LFGList.ValidateRequiredPvpRatingForActivity(activityID, rating)
 |------|------|---------|-------------|
 | `passes` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)

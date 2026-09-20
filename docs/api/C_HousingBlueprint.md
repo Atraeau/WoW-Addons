@@ -26,10 +26,10 @@ canExport = C_HousingBlueprint.CanExportRoom(roomGUID)
 |------|------|---------|-------------|
 | `canExport` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canExport = C_HousingBlueprint.CanExportRoom("Creature-0-0000-0-0-0-0")
+local canExport = C_HousingBlueprint.CanExportRoom(UnitGUID("player"))
 ```
 
 ### C_HousingBlueprint.CanExportTypeFromCurrentLocation
@@ -52,7 +52,7 @@ locationValid = C_HousingBlueprint.CanExportTypeFromCurrentLocation(type)
 |------|------|---------|-------------|
 | `locationValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locationValid = C_HousingBlueprint.CanExportTypeFromCurrentLocation(type)
@@ -78,7 +78,7 @@ locationValid = C_HousingBlueprint.CanImportTypeFromCurrentLocation(type)
 |------|------|---------|-------------|
 | `locationValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locationValid = C_HousingBlueprint.CanImportTypeFromCurrentLocation(type)
@@ -98,7 +98,7 @@ C_HousingBlueprint.DeleteBlueprint(blueprintID)
 |------|------|---------|-------------|
 | `blueprintID` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.DeleteBlueprint(blueprintID)
@@ -119,7 +119,7 @@ C_HousingBlueprint.ExportBlueprint(type, name)
 | `type` | HousingBlueprintType | no |  |
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.ExportBlueprint(type, "")
@@ -140,10 +140,10 @@ C_HousingBlueprint.ExportRoomBlueprint(name, roomGUID)
 | `name` | cstring | no |  |
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingBlueprint.ExportRoomBlueprint("", "Creature-0-0000-0-0-0-0")
+C_HousingBlueprint.ExportRoomBlueprint("", UnitGUID("player"))
 ```
 
 ### C_HousingBlueprint.GetBlueprintHyperlink
@@ -164,7 +164,7 @@ hyperLink = C_HousingBlueprint.GetBlueprintHyperlink(blueprintShareCode)
 |------|------|---------|-------------|
 | `hyperLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperLink = C_HousingBlueprint.GetBlueprintHyperlink("")
@@ -190,7 +190,7 @@ type = C_HousingBlueprint.GetBlueprintTypeForCode(shareCode)
 |------|------|---------|-------------|
 | `type` | HousingBlueprintType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type = C_HousingBlueprint.GetBlueprintTypeForCode("")
@@ -210,7 +210,7 @@ availability = C_HousingBlueprint.GetExportAvailability()
 |------|------|---------|-------------|
 | `availability` | HousingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local availability = C_HousingBlueprint.GetExportAvailability()
@@ -230,7 +230,7 @@ blueprintsAvailability = C_HousingBlueprint.GetFeatureAvailability()
 |------|------|---------|-------------|
 | `blueprintsAvailability` | HousingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blueprintsAvailability = C_HousingBlueprint.GetFeatureAvailability()
@@ -250,7 +250,7 @@ availability = C_HousingBlueprint.GetImportAvailability()
 |------|------|---------|-------------|
 | `availability` | HousingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local availability = C_HousingBlueprint.GetImportAvailability()
@@ -270,7 +270,7 @@ C_HousingBlueprint.ImportBlueprint(shareCode)
 |------|------|---------|-------------|
 | `shareCode` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.ImportBlueprint("")
@@ -296,7 +296,7 @@ isValid = C_HousingBlueprint.IsShareCodeValid(shareCode)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_HousingBlueprint.IsShareCodeValid("")
@@ -317,7 +317,7 @@ C_HousingBlueprint.RenameBlueprint(blueprintID, newName)
 | `blueprintID` | BigUInteger | no |  |
 | `newName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.RenameBlueprint(blueprintID, "")
@@ -331,7 +331,7 @@ Request the full list of all of the player's Blueprints; This is async, either t
 C_HousingBlueprint.RequestBlueprintCollection()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.RequestBlueprintCollection()
@@ -351,7 +351,7 @@ C_HousingBlueprint.RequestBlueprintContents(shareCode)
 |------|------|---------|-------------|
 | `shareCode` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.RequestBlueprintContents("")
@@ -372,7 +372,7 @@ C_HousingBlueprint.RequestBlueprintContentsForContext(shareCode, [optionalHouseG
 | `shareCode` | cstring | no |  |
 | `optionalHouseGUID` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.RequestBlueprintContentsForContext("")
@@ -392,7 +392,7 @@ C_HousingBlueprint.StartImportRoomBlueprint(shareCode)
 |------|------|---------|-------------|
 | `shareCode` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBlueprint.StartImportRoomBlueprint("")
@@ -416,7 +416,7 @@ updatedShareCode = C_HousingBlueprint.UpdateBlueprintStringFromInput(inputShareC
 |------|------|---------|-------------|
 | `updatedShareCode` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local updatedShareCode = C_HousingBlueprint.UpdateBlueprintStringFromInput("")

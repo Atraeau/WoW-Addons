@@ -14,7 +14,7 @@ Cancels all in-progress editing of the selected target, which will reset any uns
 C_HousingExpertMode.CancelActiveEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.CancelActiveEditing()
@@ -28,7 +28,7 @@ Attempt to save the changes made to the currently selected decor instance
 C_HousingExpertMode.CommitDecorMovement()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.CommitDecorMovement()
@@ -42,7 +42,7 @@ Attempt to save the changes made to the House Exterior's position within the plo
 C_HousingExpertMode.CommitHouseExteriorPosition()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.CommitHouseExteriorPosition()
@@ -62,7 +62,7 @@ info = C_HousingExpertMode.GetHoveredDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingExpertMode.GetHoveredDecorInfo()
@@ -82,7 +82,7 @@ activeSubMode = C_HousingExpertMode.GetPrecisionSubmode()
 |------|------|---------|-------------|
 | `activeSubMode` | HousingPrecisionSubmode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeSubMode = C_HousingExpertMode.GetPrecisionSubmode()
@@ -108,10 +108,10 @@ restriction = C_HousingExpertMode.GetPrecisionSubmodeRestriction(subMode)
 |------|------|---------|-------------|
 | `restriction` | HousingExpertSubmodeRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local restriction = C_HousingExpertMode.GetPrecisionSubmodeRestriction(subMode)
+local restriction = C_HousingExpertMode.GetPrecisionSubmodeRestriction(Enum.HousingPrecisionSubmode.Translate)
 ```
 
 ### C_HousingExpertMode.GetSelectedDecorInfo
@@ -128,7 +128,7 @@ info = C_HousingExpertMode.GetSelectedDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingExpertMode.GetSelectedDecorInfo()
@@ -148,7 +148,7 @@ hasSelectedDecor = C_HousingExpertMode.IsDecorSelected()
 |------|------|---------|-------------|
 | `hasSelectedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedDecor = C_HousingExpertMode.IsDecorSelected()
@@ -166,7 +166,7 @@ gridVisible = C_HousingExpertMode.IsGridVisible()
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gridVisible = C_HousingExpertMode.IsGridVisible()
@@ -186,7 +186,7 @@ isHouseExteriorHovered = C_HousingExpertMode.IsHouseExteriorHovered()
 |------|------|---------|-------------|
 | `isHouseExteriorHovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorHovered = C_HousingExpertMode.IsHouseExteriorHovered()
@@ -206,7 +206,7 @@ isHouseExteriorSelected = C_HousingExpertMode.IsHouseExteriorSelected()
 |------|------|---------|-------------|
 | `isHouseExteriorSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorSelected = C_HousingExpertMode.IsHouseExteriorSelected()
@@ -226,7 +226,7 @@ isHoveringDecor = C_HousingExpertMode.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingExpertMode.IsHoveringDecor()
@@ -240,7 +240,7 @@ Attempt to return the currently selected decor instance back to the house chest
 C_HousingExpertMode.RemoveSelectedDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.RemoveSelectedDecor()
@@ -260,7 +260,7 @@ C_HousingExpertMode.ResetPrecisionChanges(activeSubmodeOnly)
 |------|------|---------|-------------|
 | `activeSubmodeOnly` | bool | no | If true, only transform values associated with the currently active submode with be reset (ex: in Scale submode, only target's scale will be reset); If false, all transform values will be reset |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.ResetPrecisionChanges(false)
@@ -274,7 +274,7 @@ In the rotation submode, swaps the selected axis to the next available one, in o
 C_HousingExpertMode.SelectNextRotationAxis()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.SelectNextRotationAxis()
@@ -292,7 +292,7 @@ C_HousingExpertMode.SetGridVisible(gridVisible)
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingExpertMode.SetGridVisible(false)
@@ -313,10 +313,10 @@ C_HousingExpertMode.SetPrecisionIncrementingActive(incrementType, active)
 | `incrementType` | HousingIncrementType | no |  |
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingExpertMode.SetPrecisionIncrementingActive(incrementType, false)
+C_HousingExpertMode.SetPrecisionIncrementingActive(Enum.HousingIncrementType.Left, false)
 ```
 
 ### C_HousingExpertMode.SetPrecisionSubmode
@@ -333,10 +333,10 @@ C_HousingExpertMode.SetPrecisionSubmode(subMode)
 |------|------|---------|-------------|
 | `subMode` | HousingPrecisionSubmode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingExpertMode.SetPrecisionSubmode(subMode)
+C_HousingExpertMode.SetPrecisionSubmode(Enum.HousingPrecisionSubmode.Translate)
 ```
 
 ## Events

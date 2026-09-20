@@ -25,7 +25,7 @@ canRefund = C_ProfSpecs.CanRefundPath(pathID, configID)
 |------|------|---------|-------------|
 | `canRefund` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canRefund = C_ProfSpecs.CanRefundPath(0, 0)
@@ -50,7 +50,7 @@ canUnlock = C_ProfSpecs.CanUnlockTab(tabTreeID, configID)
 |------|------|---------|-------------|
 | `canUnlock` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUnlock = C_ProfSpecs.CanUnlockTab(0, 0)
@@ -74,7 +74,7 @@ childIDs = C_ProfSpecs.GetChildrenForPath(pathID)
 |------|------|---------|-------------|
 | `childIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local childIDs = C_ProfSpecs.GetChildrenForPath(0)
@@ -98,7 +98,7 @@ configID = C_ProfSpecs.GetConfigIDForSkillLine(skillLineID)
 |------|------|---------|-------------|
 | `configID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configID = C_ProfSpecs.GetConfigIDForSkillLine(0)
@@ -122,7 +122,7 @@ info = C_ProfSpecs.GetCurrencyInfoForSkillLine(skillLineID)
 |------|------|---------|-------------|
 | `info` | SpecializationCurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ProfSpecs.GetCurrencyInfoForSkillLine(0)
@@ -140,7 +140,7 @@ defaultSpecSkillLine = C_ProfSpecs.GetDefaultSpecSkillLine()
 |------|------|---------|-------------|
 | `defaultSpecSkillLine` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultSpecSkillLine = C_ProfSpecs.GetDefaultSpecSkillLine()
@@ -164,7 +164,7 @@ description = C_ProfSpecs.GetDescriptionForPath(pathID)
 |------|------|---------|-------------|
 | `description` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_ProfSpecs.GetDescriptionForPath(0)
@@ -188,7 +188,7 @@ description = C_ProfSpecs.GetDescriptionForPerk(perkID)
 |------|------|---------|-------------|
 | `description` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_ProfSpecs.GetDescriptionForPerk(0)
@@ -212,7 +212,7 @@ entryID = C_ProfSpecs.GetEntryIDForPerk(perkID)
 |------|------|---------|-------------|
 | `entryID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryID = C_ProfSpecs.GetEntryIDForPerk(0)
@@ -230,7 +230,7 @@ profName = C_ProfSpecs.GetNewSpecReminderProfName()
 |------|------|---------|-------------|
 | `profName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local profName = C_ProfSpecs.GetNewSpecReminderProfName()
@@ -254,7 +254,7 @@ perkInfos = C_ProfSpecs.GetPerksForPath(pathID)
 |------|------|---------|-------------|
 | `perkInfos` | SpecPerkInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local perkInfos = C_ProfSpecs.GetPerksForPath(0)
@@ -278,7 +278,7 @@ rootPathID = C_ProfSpecs.GetRootPathForTab(tabTreeID)
 |------|------|---------|-------------|
 | `rootPathID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rootPathID = C_ProfSpecs.GetRootPathForTab(0)
@@ -303,7 +303,7 @@ sourceText = C_ProfSpecs.GetSourceTextForPath(pathID, configID)
 |------|------|---------|-------------|
 | `sourceText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sourceText = C_ProfSpecs.GetSourceTextForPath(0, 0)
@@ -327,7 +327,7 @@ specTabIDs = C_ProfSpecs.GetSpecTabIDsForSkillLine(skillLineID)
 |------|------|---------|-------------|
 | `specTabIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specTabIDs = C_ProfSpecs.GetSpecTabIDsForSkillLine(0)
@@ -345,7 +345,7 @@ specTabInfo = C_ProfSpecs.GetSpecTabInfo()
 |------|------|---------|-------------|
 | `specTabInfo` | SpecializationTabInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specTabInfo = C_ProfSpecs.GetSpecTabInfo()
@@ -369,7 +369,7 @@ currencyID = C_ProfSpecs.GetSpendCurrencyForPath(pathID)
 |------|------|---------|-------------|
 | `currencyID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyID = C_ProfSpecs.GetSpendCurrencyForPath(0)
@@ -393,7 +393,7 @@ entryID = C_ProfSpecs.GetSpendEntryForPath(pathID)
 |------|------|---------|-------------|
 | `entryID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryID = C_ProfSpecs.GetSpendEntryForPath(0)
@@ -418,7 +418,7 @@ state = C_ProfSpecs.GetStateForPath(pathID, configID)
 |------|------|---------|-------------|
 | `state` | ProfessionsSpecPathState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_ProfSpecs.GetStateForPath(0, 0)
@@ -443,7 +443,7 @@ state = C_ProfSpecs.GetStateForPerk(perkID, configID)
 |------|------|---------|-------------|
 | `state` | ProfessionsSpecPerkState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_ProfSpecs.GetStateForPerk(0, 0)
@@ -468,7 +468,7 @@ tabInfo = C_ProfSpecs.GetStateForTab(tabTreeID, configID)
 |------|------|---------|-------------|
 | `tabInfo` | ProfessionsSpecTabState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tabInfo = C_ProfSpecs.GetStateForTab(0, 0)
@@ -492,7 +492,7 @@ tabInfo = C_ProfSpecs.GetTabInfo(tabTreeID)
 |------|------|---------|-------------|
 | `tabInfo` | ProfTabInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tabInfo = C_ProfSpecs.GetTabInfo(0)
@@ -516,7 +516,7 @@ entryID = C_ProfSpecs.GetUnlockEntryForPath(pathID)
 |------|------|---------|-------------|
 | `entryID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryID = C_ProfSpecs.GetUnlockEntryForPath(0)
@@ -540,7 +540,7 @@ unlockRank = C_ProfSpecs.GetUnlockRankForPerk(perkID)
 |------|------|---------|-------------|
 | `unlockRank` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unlockRank = C_ProfSpecs.GetUnlockRankForPerk(0)
@@ -558,7 +558,7 @@ showReminder = C_ProfSpecs.ShouldShowPointsReminder()
 |------|------|---------|-------------|
 | `showReminder` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showReminder = C_ProfSpecs.ShouldShowPointsReminder()
@@ -582,7 +582,7 @@ showReminder = C_ProfSpecs.ShouldShowPointsReminderForSkillLine(skillLineID)
 |------|------|---------|-------------|
 | `showReminder` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showReminder = C_ProfSpecs.ShouldShowPointsReminderForSkillLine(0)
@@ -600,7 +600,7 @@ showSpecTab = C_ProfSpecs.ShouldShowSpecTab()
 |------|------|---------|-------------|
 | `showSpecTab` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showSpecTab = C_ProfSpecs.ShouldShowSpecTab()
@@ -624,7 +624,7 @@ hasSpecialization = C_ProfSpecs.SkillLineHasSpecialization(skillLineID)
 |------|------|---------|-------------|
 | `hasSpecialization` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSpecialization = C_ProfSpecs.SkillLineHasSpecialization(0)

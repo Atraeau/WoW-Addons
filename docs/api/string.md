@@ -27,7 +27,7 @@ contains = string.contains(str, substring)
 |------|------|---------|-------------|
 | `contains` | bool | no | True if the string contains the specified substring; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contains = string.contains(str, substring)
@@ -54,7 +54,7 @@ endsWith = string.endswith(str, suffix)
 |------|------|---------|-------------|
 | `endsWith` | bool | no | True if the string ends with the specified suffix; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local endsWith = string.endswith(str, suffix)
@@ -81,7 +81,7 @@ trimmed = string.ltrim(str, characters)
 |------|------|---------|-------------|
 | `trimmed` | stringView | no | The left-trimmed string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trimmed = string.ltrim(str, characters)
@@ -108,7 +108,7 @@ trimmed = string.rtrim(str, characters)
 |------|------|---------|-------------|
 | `trimmed` | stringView | no | The right-trimmed string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trimmed = string.rtrim(str, characters)
@@ -135,7 +135,7 @@ startsWith = string.startswith(str, prefix)
 |------|------|---------|-------------|
 | `startsWith` | bool | no | True if the string starts with the specified prefix; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startsWith = string.startswith(str, prefix)
@@ -162,7 +162,7 @@ trimmed = string.trim(str, characters)
 |------|------|---------|-------------|
 | `trimmed` | stringView | no | The trimmed string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trimmed = string.trim(str, characters)

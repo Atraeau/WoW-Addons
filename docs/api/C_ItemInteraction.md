@@ -12,7 +12,7 @@
 C_ItemInteraction.ClearPendingItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemInteraction.ClearPendingItem()
@@ -24,7 +24,7 @@ C_ItemInteraction.ClearPendingItem()
 C_ItemInteraction.CloseUI()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemInteraction.CloseUI()
@@ -42,7 +42,7 @@ chargeInfo = C_ItemInteraction.GetChargeInfo()
 |------|------|---------|-------------|
 | `chargeInfo` | ItemInteractionChargeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local chargeInfo = C_ItemInteraction.GetChargeInfo()
@@ -66,7 +66,7 @@ conversionCost = C_ItemInteraction.GetItemConversionCurrencyCost(item)
 |------|------|---------|-------------|
 | `conversionCost` | ConversionCurrencyCost | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local conversionCost = C_ItemInteraction.GetItemConversionCurrencyCost(6948)
@@ -84,7 +84,7 @@ info = C_ItemInteraction.GetItemInteractionInfo()
 |------|------|---------|-------------|
 | `info` | ItemInteractionFrameInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ItemInteraction.GetItemInteractionInfo()
@@ -102,7 +102,7 @@ spellId = C_ItemInteraction.GetItemInteractionSpellId()
 |------|------|---------|-------------|
 | `spellId` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellId = C_ItemInteraction.GetItemInteractionSpellId()
@@ -114,7 +114,7 @@ local spellId = C_ItemInteraction.GetItemInteractionSpellId()
 C_ItemInteraction.InitializeFrame()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemInteraction.InitializeFrame()
@@ -126,7 +126,7 @@ C_ItemInteraction.InitializeFrame()
 C_ItemInteraction.PerformItemInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemInteraction.PerformItemInteraction()
@@ -138,7 +138,7 @@ C_ItemInteraction.PerformItemInteraction()
 C_ItemInteraction.Reset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemInteraction.Reset()
@@ -162,7 +162,7 @@ success = C_ItemInteraction.SetPendingItem([item])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ItemInteraction.SetPendingItem()

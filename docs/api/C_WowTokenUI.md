@@ -18,7 +18,7 @@ displayInAH = C_WowTokenUI.ShouldDisplayInAuctionHouse()
 |------|------|---------|-------------|
 | `displayInAH` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayInAH = C_WowTokenUI.ShouldDisplayInAuctionHouse()
@@ -36,10 +36,10 @@ C_WowTokenUI.StartTokenSell(tokenGUID)
 |------|------|---------|-------------|
 | `tokenGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_WowTokenUI.StartTokenSell("Creature-0-0000-0-0-0-0")
+C_WowTokenUI.StartTokenSell(UnitGUID("player"))
 ```
 
 ## Events

@@ -18,7 +18,7 @@ alpha = GetAlpha()
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetAlpha()
@@ -37,7 +37,7 @@ layer, sublayer = GetDrawLayer()
 | `layer` | DrawLayer | no |  |
 | `sublayer` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layer, sublayer = GetDrawLayer()
@@ -55,7 +55,7 @@ effectiveScale = GetEffectiveScale()
 |------|------|---------|-------------|
 | `effectiveScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveScale = GetEffectiveScale()
@@ -73,7 +73,7 @@ scale = GetScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetScale()
@@ -94,7 +94,7 @@ colorR, colorG, colorB, colorA = GetVertexColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetVertexColor()
@@ -112,7 +112,7 @@ isIgnoring = IsIgnoringParentAlpha()
 |------|------|---------|-------------|
 | `isIgnoring` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIgnoring = IsIgnoringParentAlpha()
@@ -130,7 +130,7 @@ isIgnoring = IsIgnoringParentScale()
 |------|------|---------|-------------|
 | `isIgnoring` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIgnoring = IsIgnoringParentScale()
@@ -148,7 +148,7 @@ isLoaded = IsObjectLoaded()
 |------|------|---------|-------------|
 | `isLoaded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLoaded = IsObjectLoaded()
@@ -166,7 +166,7 @@ SetAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlpha(alpha)
@@ -186,7 +186,7 @@ SetAlphaFromBoolean(value, alphaIfTrue, alphaIfFalse)
 | `alphaIfTrue` | SingleColorValue | no | (default: 255) |
 | `alphaIfFalse` | SingleColorValue | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlphaFromBoolean(false, alphaIfTrue, alphaIfFalse)
@@ -205,7 +205,7 @@ SetDrawLayer(layer, sublevel)
 | `layer` | DrawLayer | no |  |
 | `sublevel` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawLayer(layer, 0)
@@ -223,7 +223,7 @@ SetIgnoreParentAlpha(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIgnoreParentAlpha(false)
@@ -241,7 +241,7 @@ SetIgnoreParentScale(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIgnoreParentScale(false)
@@ -259,7 +259,7 @@ SetScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScale(0)
@@ -280,7 +280,7 @@ SetVertexColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetVertexColor(0, 0, 0)
@@ -300,7 +300,7 @@ SetVertexColorFromBoolean(value, colorIfTrue, colorIfFalse)
 | `colorIfTrue` | colorRGBA | no |  |
 | `colorIfFalse` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetVertexColorFromBoolean(false, colorIfTrue, colorIfFalse)

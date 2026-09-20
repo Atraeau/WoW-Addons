@@ -22,7 +22,7 @@ canChange, canAdd, changeError = C_ClassTalents.CanChangeTalents()
 | `canAdd` | bool | no |  |
 | `changeError` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChange, canAdd, changeError = C_ClassTalents.CanChangeTalents()
@@ -40,7 +40,7 @@ canCreate = C_ClassTalents.CanCreateNewConfig()
 |------|------|---------|-------------|
 | `canCreate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCreate = C_ClassTalents.CanCreateNewConfig()
@@ -61,7 +61,7 @@ canEdit, changeError = C_ClassTalents.CanEditTalents()
 | `canEdit` | bool | no |  |
 | `changeError` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEdit, changeError = C_ClassTalents.CanEditTalents()
@@ -85,7 +85,7 @@ success = C_ClassTalents.CommitConfig([savedConfigID])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.CommitConfig()
@@ -109,7 +109,7 @@ success = C_ClassTalents.DeleteConfig(configID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.DeleteConfig(0)
@@ -127,7 +127,7 @@ activeConfigID = C_ClassTalents.GetActiveConfigID()
 |------|------|---------|-------------|
 | `activeConfigID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeConfigID = C_ClassTalents.GetActiveConfigID()
@@ -147,7 +147,7 @@ heroSpecID = C_ClassTalents.GetActiveHeroTalentSpec()
 |------|------|---------|-------------|
 | `heroSpecID` | number | yes | SubTreeID of the player's active Hero Talent Specialization or nil if no Specialization is active. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local heroSpecID = C_ClassTalents.GetActiveHeroTalentSpec()
@@ -171,7 +171,7 @@ configIDs = C_ClassTalents.GetConfigIDsBySpecID([specID])
 |------|------|---------|-------------|
 | `configIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configIDs = C_ClassTalents.GetConfigIDsBySpecID()
@@ -189,7 +189,7 @@ hasStarterBuild = C_ClassTalents.GetHasStarterBuild()
 |------|------|---------|-------------|
 | `hasStarterBuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasStarterBuild = C_ClassTalents.GetHasStarterBuild()
@@ -217,7 +217,7 @@ subTreeIDs, requiredPlayerLevel = C_ClassTalents.GetHeroTalentSpecsForClassSpec(
 | `subTreeIDs` | number[] | yes | SubTreeIDs of each Hero Talent Specialization |
 | `requiredPlayerLevel` | number | yes | The player level at which one of the Hero Talent Specializations can be activated |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subTreeIDs, requiredPlayerLevel = C_ClassTalents.GetHeroTalentSpecsForClassSpec()
@@ -241,7 +241,7 @@ configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
 |------|------|---------|-------------|
 | `configID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configID = C_ClassTalents.GetLastSelectedSavedConfigID(0)
@@ -260,7 +260,7 @@ nodeID, entryID = C_ClassTalents.GetNextStarterBuildPurchase()
 | `nodeID` | number | yes |  |
 | `entryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID, entryID = C_ClassTalents.GetNextStarterBuildPurchase()
@@ -278,7 +278,7 @@ isActive = C_ClassTalents.GetStarterBuildActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_ClassTalents.GetStarterBuildActive()
@@ -302,7 +302,7 @@ treeID = C_ClassTalents.GetTraitTreeForSpec(specID)
 |------|------|---------|-------------|
 | `treeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeID = C_ClassTalents.GetTraitTreeForSpec(0)
@@ -323,7 +323,7 @@ hasUnspentPoints, numHeroPoints = C_ClassTalents.HasUnspentHeroTalentPoints()
 | `hasUnspentPoints` | bool | no |  |
 | `numHeroPoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUnspentPoints, numHeroPoints = C_ClassTalents.HasUnspentHeroTalentPoints()
@@ -345,7 +345,7 @@ hasUnspentPoints, numClassPoints, numSpecPoints = C_ClassTalents.HasUnspentTalen
 | `numClassPoints` | number | no |  |
 | `numSpecPoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUnspentPoints, numClassPoints, numSpecPoints = C_ClassTalents.HasUnspentTalentPoints()
@@ -373,7 +373,7 @@ success, importError = C_ClassTalents.ImportLoadout(configID, entries, name, [im
 | `success` | bool | no |  |
 | `importError` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success, importError = C_ClassTalents.ImportLoadout(0, entries, "")
@@ -392,7 +392,7 @@ C_ClassTalents.InitializeViewLoadout(specID, level)
 | `specID` | number | no |  |
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.InitializeViewLoadout(0, 0)
@@ -418,7 +418,7 @@ isPopulated = C_ClassTalents.IsConfigPopulated(configID)
 |------|------|---------|-------------|
 | `isPopulated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPopulated = C_ClassTalents.IsConfigPopulated(0)
@@ -445,7 +445,7 @@ result, changeError, newLearnedNodeIDs = C_ClassTalents.LoadConfig(configID, aut
 | `changeError` | string | yes |  |
 | `newLearnedNodeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, changeError, newLearnedNodeIDs = C_ClassTalents.LoadConfig(0, false)
@@ -470,7 +470,7 @@ success = C_ClassTalents.RenameConfig(configID, name)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.RenameConfig(0, "")
@@ -494,7 +494,7 @@ success = C_ClassTalents.RequestNewConfig(name)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.RequestNewConfig("")
@@ -518,7 +518,7 @@ success = C_ClassTalents.SaveConfig(configID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.SaveConfig(0)
@@ -542,7 +542,7 @@ result = C_ClassTalents.SetStarterBuildActive(active)
 |------|------|---------|-------------|
 | `result` | LoadConfigResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_ClassTalents.SetStarterBuildActive(false)
@@ -561,7 +561,7 @@ C_ClassTalents.SetUsesSharedActionBars(configID, usesShared)
 | `configID` | number | no |  |
 | `usesShared` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.SetUsesSharedActionBars(0, false)
@@ -581,7 +581,7 @@ C_ClassTalents.SwitchToLoadoutByIndex(loadoutIndex)
 |------|------|---------|-------------|
 | `loadoutIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.SwitchToLoadoutByIndex(1)
@@ -601,7 +601,7 @@ C_ClassTalents.SwitchToLoadoutByName(loadoutName)
 |------|------|---------|-------------|
 | `loadoutName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.SwitchToLoadoutByName("")
@@ -621,7 +621,7 @@ C_ClassTalents.SwitchToSpecializationByIndex(specIndex)
 |------|------|---------|-------------|
 | `specIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.SwitchToSpecializationByIndex(1)
@@ -641,7 +641,7 @@ C_ClassTalents.SwitchToSpecializationByName(specName)
 |------|------|---------|-------------|
 | `specName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.SwitchToSpecializationByName("")
@@ -660,7 +660,7 @@ C_ClassTalents.UpdateLastSelectedSavedConfigID(specID, [configID])
 | `specID` | number | no |  |
 | `configID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClassTalents.UpdateLastSelectedSavedConfigID(0)
@@ -685,7 +685,7 @@ success = C_ClassTalents.ViewLoadout(entries, [importString])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ClassTalents.ViewLoadout(entries)

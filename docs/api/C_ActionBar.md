@@ -21,10 +21,10 @@ C_ActionBar.EnableActionRangeCheck(actionID, enable)
 | `actionID` | luaIndex | no |  |
 | `enable` | bool | no | True if changes in range for the action should dispatch ActionRangeCheckUpdate. False if the action no longer needs the event. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ActionBar.EnableActionRangeCheck(actionID, false)
+C_ActionBar.EnableActionRangeCheck(1, false)
 ```
 
 ### C_ActionBar.FindAssistedCombatActionButtons
@@ -47,10 +47,10 @@ slots = C_ActionBar.FindAssistedCombatActionButtons(setToSearch)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slots = C_ActionBar.FindAssistedCombatActionButtons(setToSearch)
+local slots = C_ActionBar.FindAssistedCombatActionButtons(Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.FindFlyoutActionButtons
@@ -72,10 +72,10 @@ slots = C_ActionBar.FindFlyoutActionButtons(flyoutID, setToSearch)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slots = C_ActionBar.FindFlyoutActionButtons(0, setToSearch)
+local slots = C_ActionBar.FindFlyoutActionButtons(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.FindPetActionButtons
@@ -97,10 +97,10 @@ slots = C_ActionBar.FindPetActionButtons(petActionID, setToSearch)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slots = C_ActionBar.FindPetActionButtons(0, setToSearch)
+local slots = C_ActionBar.FindPetActionButtons(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.FindSpellActionButtons
@@ -124,10 +124,10 @@ slots = C_ActionBar.FindSpellActionButtons(spellID, setToSearch)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slots = C_ActionBar.FindSpellActionButtons(12345, setToSearch)
+local slots = C_ActionBar.FindSpellActionButtons(2050, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.ForceUpdateAction
@@ -145,7 +145,7 @@ C_ActionBar.ForceUpdateAction(slotID, suppressEvents)
 | `slotID` | luaIndex | no |  |
 | `suppressEvents` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ActionBar.ForceUpdateAction(1, false)
@@ -170,10 +170,10 @@ autocastAllowed, autocastEnabled = C_ActionBar.GetActionAutocast(actionID)
 | `autocastAllowed` | bool | no |  |
 | `autocastEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local autocastAllowed, autocastEnabled = C_ActionBar.GetActionAutocast(actionID)
+local autocastAllowed, autocastEnabled = C_ActionBar.GetActionAutocast(1)
 ```
 
 ### C_ActionBar.GetActionBarPage
@@ -188,7 +188,7 @@ currentPage = C_ActionBar.GetActionBarPage()
 |------|------|---------|-------------|
 | `currentPage` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentPage = C_ActionBar.GetActionBarPage()
@@ -214,10 +214,10 @@ duration = C_ActionBar.GetActionChargeDuration(actionID)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_ActionBar.GetActionChargeDuration(actionID)
+local duration = C_ActionBar.GetActionChargeDuration(1)
 ```
 
 ### C_ActionBar.GetActionCharges
@@ -238,10 +238,10 @@ chargeInfo = C_ActionBar.GetActionCharges(actionID)
 |------|------|---------|-------------|
 | `chargeInfo` | SpellChargeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local chargeInfo = C_ActionBar.GetActionCharges(actionID)
+local chargeInfo = C_ActionBar.GetActionCharges(1)
 ```
 
 ### C_ActionBar.GetActionCooldown
@@ -262,10 +262,10 @@ cooldownInfo = C_ActionBar.GetActionCooldown(actionID)
 |------|------|---------|-------------|
 | `cooldownInfo` | SpellCooldownInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local cooldownInfo = C_ActionBar.GetActionCooldown(actionID)
+local cooldownInfo = C_ActionBar.GetActionCooldown(1)
 ```
 
 ### C_ActionBar.GetActionCooldownDuration
@@ -289,10 +289,10 @@ duration = C_ActionBar.GetActionCooldownDuration(actionID, ignoreGCD)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_ActionBar.GetActionCooldownDuration(actionID, false)
+local duration = C_ActionBar.GetActionCooldownDuration(1, false)
 ```
 
 ### C_ActionBar.GetActionDisplayCount
@@ -317,10 +317,10 @@ displayCount = C_ActionBar.GetActionDisplayCount(actionID, maxDisplayCount, repl
 |------|------|---------|-------------|
 | `displayCount` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local displayCount = C_ActionBar.GetActionDisplayCount(actionID, 0, "")
+local displayCount = C_ActionBar.GetActionDisplayCount(1, 0, "")
 ```
 
 ### C_ActionBar.GetActionLossOfControlCooldownDuration
@@ -343,10 +343,10 @@ duration = C_ActionBar.GetActionLossOfControlCooldownDuration(actionID)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_ActionBar.GetActionLossOfControlCooldownDuration(actionID)
+local duration = C_ActionBar.GetActionLossOfControlCooldownDuration(1)
 ```
 
 ### C_ActionBar.GetActionLossOfControlCooldownInfo
@@ -367,10 +367,10 @@ lossOfControlInfo = C_ActionBar.GetActionLossOfControlCooldownInfo(actionID)
 |------|------|---------|-------------|
 | `lossOfControlInfo` | SpellLossOfControlInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local lossOfControlInfo = C_ActionBar.GetActionLossOfControlCooldownInfo(actionID)
+local lossOfControlInfo = C_ActionBar.GetActionLossOfControlCooldownInfo(1)
 ```
 
 ### C_ActionBar.GetActionText
@@ -391,10 +391,10 @@ text = C_ActionBar.GetActionText(actionID)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local text = C_ActionBar.GetActionText(actionID)
+local text = C_ActionBar.GetActionText(1)
 ```
 
 ### C_ActionBar.GetActionTexture
@@ -415,10 +415,10 @@ textureFileID = C_ActionBar.GetActionTexture(actionID)
 |------|------|---------|-------------|
 | `textureFileID` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local textureFileID = C_ActionBar.GetActionTexture(actionID)
+local textureFileID = C_ActionBar.GetActionTexture(1)
 ```
 
 ### C_ActionBar.GetActionUseCount
@@ -439,10 +439,10 @@ count = C_ActionBar.GetActionUseCount(actionID)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local count = C_ActionBar.GetActionUseCount(actionID)
+local count = C_ActionBar.GetActionUseCount(1)
 ```
 
 ### C_ActionBar.GetBonusBarIndex
@@ -457,7 +457,7 @@ bonusBarIndex = C_ActionBar.GetBonusBarIndex()
 |------|------|---------|-------------|
 | `bonusBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bonusBarIndex = C_ActionBar.GetBonusBarIndex()
@@ -481,7 +481,7 @@ bonusBarIndex = C_ActionBar.GetBonusBarIndexForSlot(slotID)
 |------|------|---------|-------------|
 | `bonusBarIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bonusBarIndex = C_ActionBar.GetBonusBarIndexForSlot(1)
@@ -499,7 +499,7 @@ bonusBarOffset = C_ActionBar.GetBonusBarOffset()
 |------|------|---------|-------------|
 | `bonusBarOffset` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bonusBarOffset = C_ActionBar.GetBonusBarOffset()
@@ -517,7 +517,7 @@ extraBarIndex = C_ActionBar.GetExtraBarIndex()
 |------|------|---------|-------------|
 | `extraBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local extraBarIndex = C_ActionBar.GetExtraBarIndex()
@@ -541,10 +541,10 @@ onEquipSpellID = C_ActionBar.GetItemActionOnEquipSpellID(actionID)
 |------|------|---------|-------------|
 | `onEquipSpellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local onEquipSpellID = C_ActionBar.GetItemActionOnEquipSpellID(actionID)
+local onEquipSpellID = C_ActionBar.GetItemActionOnEquipSpellID(1)
 ```
 
 ### C_ActionBar.GetMultiCastBarIndex
@@ -559,7 +559,7 @@ multiCastBarIndex = C_ActionBar.GetMultiCastBarIndex()
 |------|------|---------|-------------|
 | `multiCastBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local multiCastBarIndex = C_ActionBar.GetMultiCastBarIndex()
@@ -577,7 +577,7 @@ overrideBarIndex = C_ActionBar.GetOverrideBarIndex()
 |------|------|---------|-------------|
 | `overrideBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overrideBarIndex = C_ActionBar.GetOverrideBarIndex()
@@ -595,7 +595,7 @@ textureFileID = C_ActionBar.GetOverrideBarSkin()
 |------|------|---------|-------------|
 | `textureFileID` | fileID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureFileID = C_ActionBar.GetOverrideBarSkin()
@@ -620,10 +620,10 @@ slots = C_ActionBar.GetPetActionPetBarIndices(petActionID, setToSearch)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slots = C_ActionBar.GetPetActionPetBarIndices(0, setToSearch)
+local slots = C_ActionBar.GetPetActionPetBarIndices(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.GetProfessionQuality
@@ -644,10 +644,10 @@ quality = C_ActionBar.GetProfessionQuality(actionID)
 |------|------|---------|-------------|
 | `quality` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local quality = C_ActionBar.GetProfessionQuality(actionID)
+local quality = C_ActionBar.GetProfessionQuality(1)
 ```
 
 ### C_ActionBar.GetProfessionQualityInfo
@@ -668,10 +668,10 @@ info = C_ActionBar.GetProfessionQualityInfo(actionID)
 |------|------|---------|-------------|
 | `info` | CraftingQualityInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_ActionBar.GetProfessionQualityInfo(actionID)
+local info = C_ActionBar.GetProfessionQualityInfo(1)
 ```
 
 ### C_ActionBar.GetSpell
@@ -692,10 +692,10 @@ spellID = C_ActionBar.GetSpell(actionID)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellID = C_ActionBar.GetSpell(actionID)
+local spellID = C_ActionBar.GetSpell(1)
 ```
 
 ### C_ActionBar.GetTempShapeshiftBarIndex
@@ -710,7 +710,7 @@ tempShapeshiftBarIndex = C_ActionBar.GetTempShapeshiftBarIndex()
 |------|------|---------|-------------|
 | `tempShapeshiftBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tempShapeshiftBarIndex = C_ActionBar.GetTempShapeshiftBarIndex()
@@ -728,7 +728,7 @@ vehicleBarIndex = C_ActionBar.GetVehicleBarIndex()
 |------|------|---------|-------------|
 | `vehicleBarIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vehicleBarIndex = C_ActionBar.GetVehicleBarIndex()
@@ -754,10 +754,10 @@ hasAction = C_ActionBar.HasAction(actionID)
 |------|------|---------|-------------|
 | `hasAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasAction = C_ActionBar.HasAction(actionID)
+local hasAction = C_ActionBar.HasAction(1)
 ```
 
 ### C_ActionBar.HasAssistedCombatActionButtons
@@ -778,10 +778,10 @@ hasButtons = C_ActionBar.HasAssistedCombatActionButtons(setToSearch)
 |------|------|---------|-------------|
 | `hasButtons` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasButtons = C_ActionBar.HasAssistedCombatActionButtons(setToSearch)
+local hasButtons = C_ActionBar.HasAssistedCombatActionButtons(Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.HasBonusActionBar
@@ -796,7 +796,7 @@ hasBonusActionBar = C_ActionBar.HasBonusActionBar()
 |------|------|---------|-------------|
 | `hasBonusActionBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBonusActionBar = C_ActionBar.HasBonusActionBar()
@@ -814,7 +814,7 @@ hasExtraActionBar = C_ActionBar.HasExtraActionBar()
 |------|------|---------|-------------|
 | `hasExtraActionBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasExtraActionBar = C_ActionBar.HasExtraActionBar()
@@ -839,10 +839,10 @@ hasFlyoutActionButtons = C_ActionBar.HasFlyoutActionButtons(flyoutID, setToSearc
 |------|------|---------|-------------|
 | `hasFlyoutActionButtons` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasFlyoutActionButtons = C_ActionBar.HasFlyoutActionButtons(0, setToSearch)
+local hasFlyoutActionButtons = C_ActionBar.HasFlyoutActionButtons(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.HasOverrideActionBar
@@ -857,7 +857,7 @@ hasOverrideActionBar = C_ActionBar.HasOverrideActionBar()
 |------|------|---------|-------------|
 | `hasOverrideActionBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasOverrideActionBar = C_ActionBar.HasOverrideActionBar()
@@ -882,10 +882,10 @@ hasPetActionButtons = C_ActionBar.HasPetActionButtons(petActionID, setToSearch)
 |------|------|---------|-------------|
 | `hasPetActionButtons` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasPetActionButtons = C_ActionBar.HasPetActionButtons(0, setToSearch)
+local hasPetActionButtons = C_ActionBar.HasPetActionButtons(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.HasPetActionPetBarIndices
@@ -907,10 +907,10 @@ hasPetActionPetBarIndices = C_ActionBar.HasPetActionPetBarIndices(petActionID, s
 |------|------|---------|-------------|
 | `hasPetActionPetBarIndices` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasPetActionPetBarIndices = C_ActionBar.HasPetActionPetBarIndices(0, setToSearch)
+local hasPetActionPetBarIndices = C_ActionBar.HasPetActionPetBarIndices(0, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.HasRangeRequirements
@@ -931,10 +931,10 @@ hasRangeRequirements = C_ActionBar.HasRangeRequirements(actionID)
 |------|------|---------|-------------|
 | `hasRangeRequirements` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasRangeRequirements = C_ActionBar.HasRangeRequirements(actionID)
+local hasRangeRequirements = C_ActionBar.HasRangeRequirements(1)
 ```
 
 ### C_ActionBar.HasSpellActionButtons
@@ -956,10 +956,10 @@ hasSpellActionButtons = C_ActionBar.HasSpellActionButtons(spellID, setToSearch)
 |------|------|---------|-------------|
 | `hasSpellActionButtons` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasSpellActionButtons = C_ActionBar.HasSpellActionButtons(12345, setToSearch)
+local hasSpellActionButtons = C_ActionBar.HasSpellActionButtons(2050, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.HasTempShapeshiftActionBar
@@ -974,7 +974,7 @@ hasTempShapeshiftActionBar = C_ActionBar.HasTempShapeshiftActionBar()
 |------|------|---------|-------------|
 | `hasTempShapeshiftActionBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasTempShapeshiftActionBar = C_ActionBar.HasTempShapeshiftActionBar()
@@ -992,7 +992,7 @@ hasVehicleActionBar = C_ActionBar.HasVehicleActionBar()
 |------|------|---------|-------------|
 | `hasVehicleActionBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasVehicleActionBar = C_ActionBar.HasVehicleActionBar()
@@ -1017,10 +1017,10 @@ isInRange = C_ActionBar.IsActionInRange(actionID, [target])
 |------|------|---------|-------------|
 | `isInRange` | bool | yes | If nil, range cannot be determined (eg. no target is available). |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isInRange = C_ActionBar.IsActionInRange(actionID)
+local isInRange = C_ActionBar.IsActionInRange(1)
 ```
 
 ### C_ActionBar.IsAssistedCombatAction
@@ -1043,7 +1043,7 @@ isAssistedCombatAction = C_ActionBar.IsAssistedCombatAction(slotID)
 |------|------|---------|-------------|
 | `isAssistedCombatAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAssistedCombatAction = C_ActionBar.IsAssistedCombatAction(1)
@@ -1067,10 +1067,10 @@ isAttackAction = C_ActionBar.IsAttackAction(actionID)
 |------|------|---------|-------------|
 | `isAttackAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAttackAction = C_ActionBar.IsAttackAction(actionID)
+local isAttackAction = C_ActionBar.IsAttackAction(1)
 ```
 
 ### C_ActionBar.IsAutoCastPetAction
@@ -1091,7 +1091,7 @@ isAutoCastPetAction = C_ActionBar.IsAutoCastPetAction(slotID)
 |------|------|---------|-------------|
 | `isAutoCastPetAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAutoCastPetAction = C_ActionBar.IsAutoCastPetAction(1)
@@ -1115,10 +1115,10 @@ isAutoRepeatAction = C_ActionBar.IsAutoRepeatAction(actionID)
 |------|------|---------|-------------|
 | `isAutoRepeatAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoRepeatAction = C_ActionBar.IsAutoRepeatAction(actionID)
+local isAutoRepeatAction = C_ActionBar.IsAutoRepeatAction(1)
 ```
 
 ### C_ActionBar.IsConsumableAction
@@ -1139,10 +1139,10 @@ isConsumableAction = C_ActionBar.IsConsumableAction(actionID)
 |------|------|---------|-------------|
 | `isConsumableAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isConsumableAction = C_ActionBar.IsConsumableAction(actionID)
+local isConsumableAction = C_ActionBar.IsConsumableAction(1)
 ```
 
 ### C_ActionBar.IsCurrentAction
@@ -1163,10 +1163,10 @@ isCurrentAction = C_ActionBar.IsCurrentAction(actionID)
 |------|------|---------|-------------|
 | `isCurrentAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCurrentAction = C_ActionBar.IsCurrentAction(actionID)
+local isCurrentAction = C_ActionBar.IsCurrentAction(1)
 ```
 
 ### C_ActionBar.IsEnabledAutoCastPetAction
@@ -1187,7 +1187,7 @@ isEnabledAutoCastPetAction = C_ActionBar.IsEnabledAutoCastPetAction(slotID)
 |------|------|---------|-------------|
 | `isEnabledAutoCastPetAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabledAutoCastPetAction = C_ActionBar.IsEnabledAutoCastPetAction(1)
@@ -1211,10 +1211,10 @@ isEquippedAction = C_ActionBar.IsEquippedAction(actionID)
 |------|------|---------|-------------|
 | `isEquippedAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isEquippedAction = C_ActionBar.IsEquippedAction(actionID)
+local isEquippedAction = C_ActionBar.IsEquippedAction(1)
 ```
 
 ### C_ActionBar.IsEquippedGearOutfitAction
@@ -1235,7 +1235,7 @@ isEquippedGearOutfitAction = C_ActionBar.IsEquippedGearOutfitAction(slotID)
 |------|------|---------|-------------|
 | `isEquippedGearOutfitAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEquippedGearOutfitAction = C_ActionBar.IsEquippedGearOutfitAction(1)
@@ -1260,10 +1260,10 @@ isHarmful = C_ActionBar.IsHarmfulAction(actionID, useNeutral)
 |------|------|---------|-------------|
 | `isHarmful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHarmful = C_ActionBar.IsHarmfulAction(actionID, false)
+local isHarmful = C_ActionBar.IsHarmfulAction(1, false)
 ```
 
 ### C_ActionBar.IsHelpfulAction
@@ -1285,10 +1285,10 @@ isHelpful = C_ActionBar.IsHelpfulAction(actionID, useNeutral)
 |------|------|---------|-------------|
 | `isHelpful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHelpful = C_ActionBar.IsHelpfulAction(actionID, false)
+local isHelpful = C_ActionBar.IsHelpfulAction(1, false)
 ```
 
 ### C_ActionBar.IsInterruptAction
@@ -1311,7 +1311,7 @@ isInterruptAction = C_ActionBar.IsInterruptAction(slotID)
 |------|------|---------|-------------|
 | `isInterruptAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInterruptAction = C_ActionBar.IsInterruptAction(1)
@@ -1335,10 +1335,10 @@ isItemAction = C_ActionBar.IsItemAction(actionID)
 |------|------|---------|-------------|
 | `isItemAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isItemAction = C_ActionBar.IsItemAction(actionID)
+local isItemAction = C_ActionBar.IsItemAction(1)
 ```
 
 ### C_ActionBar.IsMacroActionWithShowTooltip
@@ -1361,10 +1361,10 @@ isMacroActionWithShowTooltip = C_ActionBar.IsMacroActionWithShowTooltip(actionID
 |------|------|---------|-------------|
 | `isMacroActionWithShowTooltip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isMacroActionWithShowTooltip = C_ActionBar.IsMacroActionWithShowTooltip(actionID)
+local isMacroActionWithShowTooltip = C_ActionBar.IsMacroActionWithShowTooltip(1)
 ```
 
 ### C_ActionBar.IsOnBarOrSpecialBar
@@ -1386,10 +1386,10 @@ isOnBarOrSpecialBar = C_ActionBar.IsOnBarOrSpecialBar(spellID, setToSearch)
 |------|------|---------|-------------|
 | `isOnBarOrSpecialBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isOnBarOrSpecialBar = C_ActionBar.IsOnBarOrSpecialBar(12345, setToSearch)
+local isOnBarOrSpecialBar = C_ActionBar.IsOnBarOrSpecialBar(2050, Enum.ActionBarSet.None)
 ```
 
 ### C_ActionBar.IsPossessBarVisible
@@ -1404,7 +1404,7 @@ isPossessBarVisible = C_ActionBar.IsPossessBarVisible()
 |------|------|---------|-------------|
 | `isPossessBarVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPossessBarVisible = C_ActionBar.IsPossessBarVisible()
@@ -1428,10 +1428,10 @@ isStackableAction = C_ActionBar.IsStackableAction(actionID)
 |------|------|---------|-------------|
 | `isStackableAction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isStackableAction = C_ActionBar.IsStackableAction(actionID)
+local isStackableAction = C_ActionBar.IsStackableAction(1)
 ```
 
 ### C_ActionBar.IsUsableAction
@@ -1453,10 +1453,10 @@ isUsable, isLackingResources = C_ActionBar.IsUsableAction(actionID)
 | `isUsable` | bool | no |  |
 | `isLackingResources` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isUsable, isLackingResources = C_ActionBar.IsUsableAction(actionID)
+local isUsable, isLackingResources = C_ActionBar.IsUsableAction(1)
 ```
 
 ### C_ActionBar.PutActionInSlot
@@ -1471,7 +1471,7 @@ C_ActionBar.PutActionInSlot(slotID)
 |------|------|---------|-------------|
 | `slotID` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ActionBar.PutActionInSlot(1)
@@ -1491,10 +1491,10 @@ C_ActionBar.RegisterActionUIButton(checkboxFrame, actionID, cooldownFrame)
 | `actionID` | luaIndex | no |  |
 | `cooldownFrame` | CooldownFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_ActionBar.RegisterActionUIButton(checkboxFrame, actionID, cooldownFrame)
+C_ActionBar.RegisterActionUIButton(checkboxFrame, 1, cooldownFrame)
 ```
 
 ### C_ActionBar.SetActionBarPage
@@ -1509,7 +1509,7 @@ C_ActionBar.SetActionBarPage(pageIndex)
 |------|------|---------|-------------|
 | `pageIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ActionBar.SetActionBarPage(1)
@@ -1527,7 +1527,7 @@ showHealthBar = C_ActionBar.ShouldOverrideBarShowHealthBar()
 |------|------|---------|-------------|
 | `showHealthBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showHealthBar = C_ActionBar.ShouldOverrideBarShowHealthBar()
@@ -1545,7 +1545,7 @@ showManaBar = C_ActionBar.ShouldOverrideBarShowManaBar()
 |------|------|---------|-------------|
 | `showManaBar` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showManaBar = C_ActionBar.ShouldOverrideBarShowManaBar()
@@ -1563,7 +1563,7 @@ isKeyringEnabled = C_ActionBar.ShouldShowKeyring()
 |------|------|---------|-------------|
 | `isKeyringEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isKeyringEnabled = C_ActionBar.ShouldShowKeyring()
@@ -1581,7 +1581,7 @@ C_ActionBar.ToggleAutoCastPetAction(slotID)
 |------|------|---------|-------------|
 | `slotID` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ActionBar.ToggleAutoCastPetAction(1)
@@ -1599,7 +1599,7 @@ C_ActionBar.UnregisterActionUIButton(checkboxFrame)
 |------|------|---------|-------------|
 | `checkboxFrame` | SimpleCheckbox | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ActionBar.UnregisterActionUIButton(checkboxFrame)
@@ -1623,10 +1623,10 @@ usesActionText = C_ActionBar.UsesActionText(actionID)
 |------|------|---------|-------------|
 | `usesActionText` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local usesActionText = C_ActionBar.UsesActionText(actionID)
+local usesActionText = C_ActionBar.UsesActionText(1)
 ```
 
 ## Events

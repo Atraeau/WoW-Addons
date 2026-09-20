@@ -18,7 +18,7 @@ isCurrentPeriod = C_WeeklyRewards.AreRewardsForCurrentRewardPeriod()
 |------|------|---------|-------------|
 | `isCurrentPeriod` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCurrentPeriod = C_WeeklyRewards.AreRewardsForCurrentRewardPeriod()
@@ -36,7 +36,7 @@ canClaimRewards = C_WeeklyRewards.CanClaimRewards()
 |------|------|---------|-------------|
 | `canClaimRewards` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canClaimRewards = C_WeeklyRewards.CanClaimRewards()
@@ -54,7 +54,7 @@ C_WeeklyRewards.ClaimReward(id)
 |------|------|---------|-------------|
 | `id` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WeeklyRewards.ClaimReward(0)
@@ -66,7 +66,7 @@ C_WeeklyRewards.ClaimReward(0)
 C_WeeklyRewards.CloseInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WeeklyRewards.CloseInteraction()
@@ -90,7 +90,7 @@ activities = C_WeeklyRewards.GetActivities([type])
 |------|------|---------|-------------|
 | `activities` | WeeklyRewardActivityInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activities = C_WeeklyRewards.GetActivities()
@@ -115,7 +115,7 @@ info = C_WeeklyRewards.GetActivityEncounterInfo(type, index)
 |------|------|---------|-------------|
 | `info` | WeeklyRewardActivityEncounterInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_WeeklyRewards.GetActivityEncounterInfo(type, 1)
@@ -133,7 +133,7 @@ weeklyProgress = C_WeeklyRewards.GetConquestWeeklyProgress()
 |------|------|---------|-------------|
 | `weeklyProgress` | ConquestWeeklyProgress | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weeklyProgress = C_WeeklyRewards.GetConquestWeeklyProgress()
@@ -157,7 +157,7 @@ difficultyID = C_WeeklyRewards.GetDifficultyIDForActivityTier(activityTierID)
 |------|------|---------|-------------|
 | `difficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local difficultyID = C_WeeklyRewards.GetDifficultyIDForActivityTier(0)
@@ -182,7 +182,7 @@ hyperlink, upgradeHyperlink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(id)
 | `hyperlink` | string | no |  |
 | `upgradeHyperlink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperlink, upgradeHyperlink = C_WeeklyRewards.GetExampleRewardItemHyperlinks(0)
@@ -206,7 +206,7 @@ hyperlink = C_WeeklyRewards.GetItemHyperlink(itemDBID)
 |------|------|---------|-------------|
 | `hyperlink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperlink = C_WeeklyRewards.GetItemHyperlink(6948)
@@ -234,7 +234,7 @@ hasSeasonData, nextActivityTierID, nextLevel, itemLevel = C_WeeklyRewards.GetNex
 | `nextLevel` | number | yes |  |
 | `itemLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSeasonData, nextActivityTierID, nextLevel, itemLevel = C_WeeklyRewards.GetNextActivitiesIncrease(0, 0)
@@ -260,7 +260,7 @@ hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlu
 | `nextMythicPlusLevel` | number | yes |  |
 | `itemLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSeasonData, nextMythicPlusLevel, itemLevel = C_WeeklyRewards.GetNextMythicPlusIncrease(0)
@@ -280,7 +280,7 @@ numHeroic, numMythic, numMythicPlus = C_WeeklyRewards.GetNumCompletedDungeonRuns
 | `numMythic` | number | no |  |
 | `numMythicPlus` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numHeroic, numMythic, numMythicPlus = C_WeeklyRewards.GetNumCompletedDungeonRuns()
@@ -305,7 +305,7 @@ progress = C_WeeklyRewards.GetSortedProgressForActivity(type, combineSharedDiffi
 |------|------|---------|-------------|
 | `progress` | WeeklyRewardActivityTierProgress[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = C_WeeklyRewards.GetSortedProgressForActivity(type, false)
@@ -323,7 +323,7 @@ hasAvailableRewards = C_WeeklyRewards.HasAvailableRewards()
 |------|------|---------|-------------|
 | `hasAvailableRewards` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAvailableRewards = C_WeeklyRewards.HasAvailableRewards()
@@ -341,7 +341,7 @@ hasGeneratedRewards = C_WeeklyRewards.HasGeneratedRewards()
 |------|------|---------|-------------|
 | `hasGeneratedRewards` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasGeneratedRewards = C_WeeklyRewards.HasGeneratedRewards()
@@ -359,7 +359,7 @@ isInteracting = C_WeeklyRewards.HasInteraction()
 |------|------|---------|-------------|
 | `isInteracting` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInteracting = C_WeeklyRewards.HasInteraction()
@@ -377,7 +377,7 @@ isRetired = C_WeeklyRewards.IsWeeklyChestRetired()
 |------|------|---------|-------------|
 | `isRetired` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRetired = C_WeeklyRewards.IsWeeklyChestRetired()
@@ -389,7 +389,7 @@ local isRetired = C_WeeklyRewards.IsWeeklyChestRetired()
 C_WeeklyRewards.OnUIInteract()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WeeklyRewards.OnUIInteract()
@@ -407,7 +407,7 @@ showRetirementMessage = C_WeeklyRewards.ShouldShowFinalRetirementMessage()
 |------|------|---------|-------------|
 | `showRetirementMessage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showRetirementMessage = C_WeeklyRewards.ShouldShowFinalRetirementMessage()
@@ -425,7 +425,7 @@ showRetirementMessage = C_WeeklyRewards.ShouldShowRetirementMessage()
 |------|------|---------|-------------|
 | `showRetirementMessage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showRetirementMessage = C_WeeklyRewards.ShouldShowRetirementMessage()

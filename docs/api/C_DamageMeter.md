@@ -20,7 +20,7 @@ availableSessions = C_DamageMeter.GetAvailableCombatSessions()
 |------|------|---------|-------------|
 | `availableSessions` | DamageMeterAvailableCombatSession[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local availableSessions = C_DamageMeter.GetAvailableCombatSessions()
@@ -47,7 +47,7 @@ session = C_DamageMeter.GetCombatSessionFromID(sessionID, type)
 |------|------|---------|-------------|
 | `session` | DamageMeterCombatSession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local session = C_DamageMeter.GetCombatSessionFromID(0, type)
@@ -74,7 +74,7 @@ session = C_DamageMeter.GetCombatSessionFromType(sessionType, type)
 |------|------|---------|-------------|
 | `session` | DamageMeterCombatSession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local session = C_DamageMeter.GetCombatSessionFromType(sessionType, type)
@@ -103,7 +103,7 @@ sessionSource = C_DamageMeter.GetCombatSessionSourceFromID(sessionID, type, [sou
 |------|------|---------|-------------|
 | `sessionSource` | DamageMeterCombatSessionSource | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sessionSource = C_DamageMeter.GetCombatSessionSourceFromID(0, type)
@@ -132,7 +132,7 @@ sessionSource = C_DamageMeter.GetCombatSessionSourceFromType(sessionType, type, 
 |------|------|---------|-------------|
 | `sessionSource` | DamageMeterCombatSessionSource | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sessionSource = C_DamageMeter.GetCombatSessionSourceFromType(sessionType, type)
@@ -158,7 +158,7 @@ durationSeconds = C_DamageMeter.GetSessionDurationSeconds(sessionType)
 |------|------|---------|-------------|
 | `durationSeconds` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSeconds = C_DamageMeter.GetSessionDurationSeconds(sessionType)
@@ -179,7 +179,7 @@ isAvailable, failureReason = C_DamageMeter.IsDamageMeterAvailable()
 | `isAvailable` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable, failureReason = C_DamageMeter.IsDamageMeterAvailable()
@@ -193,7 +193,7 @@ Clears the data for all the player's combat sessions.
 C_DamageMeter.ResetAllCombatSessions()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_DamageMeter.ResetAllCombatSessions()

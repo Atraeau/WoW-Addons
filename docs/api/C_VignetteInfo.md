@@ -24,10 +24,10 @@ bestUniqueVignetteIndex = C_VignetteInfo.FindBestUniqueVignette(vignetteGUIDs)
 |------|------|---------|-------------|
 | `bestUniqueVignetteIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local bestUniqueVignetteIndex = C_VignetteInfo.FindBestUniqueVignette("Creature-0-0000-0-0-0-0")
+local bestUniqueVignetteIndex = C_VignetteInfo.FindBestUniqueVignette(UnitGUID("player"))
 ```
 
 ### C_VignetteInfo.GetHealthPercent
@@ -48,10 +48,10 @@ healthPct = C_VignetteInfo.GetHealthPercent(vignetteGUID)
 |------|------|---------|-------------|
 | `healthPct` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local healthPct = C_VignetteInfo.GetHealthPercent("Creature-0-0000-0-0-0-0")
+local healthPct = C_VignetteInfo.GetHealthPercent(UnitGUID("player"))
 ```
 
 ### C_VignetteInfo.GetRecommendedGroupSize
@@ -73,10 +73,10 @@ minGroupSize, maxGroupSize = C_VignetteInfo.GetRecommendedGroupSize(vignetteGUID
 | `minGroupSize` | number | no |  |
 | `maxGroupSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local minGroupSize, maxGroupSize = C_VignetteInfo.GetRecommendedGroupSize("Creature-0-0000-0-0-0-0")
+local minGroupSize, maxGroupSize = C_VignetteInfo.GetRecommendedGroupSize(UnitGUID("player"))
 ```
 
 ### C_VignetteInfo.GetVignetteInfo
@@ -97,10 +97,10 @@ vignetteInfo = C_VignetteInfo.GetVignetteInfo(vignetteGUID)
 |------|------|---------|-------------|
 | `vignetteInfo` | VignetteInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local vignetteInfo = C_VignetteInfo.GetVignetteInfo("Creature-0-0000-0-0-0-0")
+local vignetteInfo = C_VignetteInfo.GetVignetteInfo(UnitGUID("player"))
 ```
 
 ### C_VignetteInfo.GetVignettePosition
@@ -123,10 +123,10 @@ vignettePosition, vignetteFacing = C_VignetteInfo.GetVignettePosition(vignetteGU
 | `vignettePosition` | vector2 | no |  |
 | `vignetteFacing` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local vignettePosition, vignetteFacing = C_VignetteInfo.GetVignettePosition("Creature-0-0000-0-0-0-0", 0)
+local vignettePosition, vignetteFacing = C_VignetteInfo.GetVignettePosition(UnitGUID("player"), 0)
 ```
 
 ### C_VignetteInfo.GetVignettes
@@ -141,7 +141,7 @@ vignetteGUIDs = C_VignetteInfo.GetVignettes()
 |------|------|---------|-------------|
 | `vignetteGUIDs` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vignetteGUIDs = C_VignetteInfo.GetVignettes()

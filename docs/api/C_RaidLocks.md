@@ -25,7 +25,7 @@ redirectedDifficultyID = C_RaidLocks.GetRedirectedDifficultyID(mapID, difficulty
 |------|------|---------|-------------|
 | `redirectedDifficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local redirectedDifficultyID = C_RaidLocks.GetRedirectedDifficultyID(0, 0)
@@ -51,7 +51,7 @@ encounterIsComplete = C_RaidLocks.IsEncounterComplete(mapID, encounterID, [diffi
 |------|------|---------|-------------|
 | `encounterIsComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounterIsComplete = C_RaidLocks.IsEncounterComplete(0, 0)
@@ -69,7 +69,7 @@ raidLockExtendFeatureEnabled = C_RaidLocks.IsRaidLockExtendFeatureEnabled()
 |------|------|---------|-------------|
 | `raidLockExtendFeatureEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local raidLockExtendFeatureEnabled = C_RaidLocks.IsRaidLockExtendFeatureEnabled()
@@ -87,7 +87,7 @@ raidLockExtendFeatureSupported = C_RaidLocks.IsRaidLockExtendFeatureSupported()
 |------|------|---------|-------------|
 | `raidLockExtendFeatureSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local raidLockExtendFeatureSupported = C_RaidLocks.IsRaidLockExtendFeatureSupported()

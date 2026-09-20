@@ -20,7 +20,7 @@ AddBreakpoint(breakpoint)
 |------|------|---------|-------------|
 | `breakpoint` | NumberAbbreviationBreakpoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddBreakpoint(breakpoint)
@@ -34,7 +34,7 @@ Removes all configured breakpoints from the formatter.
 ClearBreakpoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearBreakpoints()
@@ -54,7 +54,7 @@ copy = Copy()
 |------|------|---------|-------------|
 | `copy` | AbbreviatedNumberFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local copy = Copy()
@@ -74,7 +74,7 @@ breakpoints = GetBreakpoints()
 |------|------|---------|-------------|
 | `breakpoints` | NumberAbbreviationBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local breakpoints = GetBreakpoints()
@@ -88,7 +88,7 @@ Removes all configured breakpoints from the formatter and replaces them with app
 ResetBreakpoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetBreakpoints()
@@ -108,7 +108,7 @@ SetBreakpoints(breakpoints)
 |------|------|---------|-------------|
 | `breakpoints` | NumberAbbreviationBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBreakpoints(breakpoints)

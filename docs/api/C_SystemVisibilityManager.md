@@ -24,10 +24,10 @@ visible = C_SystemVisibilityManager.IsSystemVisible(system)
 |------|------|---------|-------------|
 | `visible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local visible = C_SystemVisibilityManager.IsSystemVisible(system)
+local visible = C_SystemVisibilityManager.IsSystemVisible(Enum.UISystemType.InGameNavigation)
 ```
 
 ## Events

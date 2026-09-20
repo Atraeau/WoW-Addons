@@ -27,7 +27,7 @@ AddUnit(unitTokenString, asset, [width], [height], [r], [g], [b], [a], [sublayer
 | `sublayer` | number | yes |  |
 | `showFacing` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddUnit("player", asset)
@@ -39,7 +39,7 @@ AddUnit("player", asset)
 ClearUnits()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearUnits()
@@ -51,7 +51,7 @@ ClearUnits()
 FinalizeUnits()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FinalizeUnits()
@@ -69,7 +69,7 @@ units = GetMouseOverUnits()
 |------|------|---------|-------------|
 | `units` | UnitTokenType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local units = GetMouseOverUnits()
@@ -87,7 +87,7 @@ scale = GetPlayerPingScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetPlayerPingScale()
@@ -105,7 +105,7 @@ mapID = GetUiMapID()
 |------|------|---------|-------------|
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID = GetUiMapID()
@@ -123,7 +123,7 @@ SetPlayerPingScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPlayerPingScale(0)
@@ -144,7 +144,7 @@ SetPlayerPingTexture(textureType, asset, width, height)
 | `width` | uiUnit | no | (default: 0) |
 | `height` | uiUnit | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPlayerPingTexture(textureType, asset, width, height)
@@ -162,7 +162,7 @@ SetUiMapID(mapID)
 |------|------|---------|-------------|
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUiMapID(0)
@@ -184,7 +184,7 @@ SetUnitColor(unit, colorR, colorG, colorB, colorA)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUnitColor("player", 0, 0, 0, 0)
@@ -203,7 +203,7 @@ StartPlayerPing(duration, fadeDuration)
 | `duration` | number | no | (default: 0) |
 | `fadeDuration` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StartPlayerPing(0, 0)
@@ -215,7 +215,7 @@ StartPlayerPing(0, 0)
 StopPlayerPing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopPlayerPing()

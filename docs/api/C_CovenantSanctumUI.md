@@ -18,7 +18,7 @@ canAccess = C_CovenantSanctumUI.CanAccessReservoir()
 |------|------|---------|-------------|
 | `canAccess` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccess = C_CovenantSanctumUI.CanAccessReservoir()
@@ -36,7 +36,7 @@ canDeposit = C_CovenantSanctumUI.CanDepositAnima()
 |------|------|---------|-------------|
 | `canDeposit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canDeposit = C_CovenantSanctumUI.CanDepositAnima()
@@ -48,7 +48,7 @@ local canDeposit = C_CovenantSanctumUI.CanDepositAnima()
 C_CovenantSanctumUI.DepositAnima()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CovenantSanctumUI.DepositAnima()
@@ -60,7 +60,7 @@ C_CovenantSanctumUI.DepositAnima()
 C_CovenantSanctumUI.EndInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CovenantSanctumUI.EndInteraction()
@@ -79,7 +79,7 @@ currencyID, maxDisplayableValue = C_CovenantSanctumUI.GetAnimaInfo()
 | `currencyID` | number | no |  |
 | `maxDisplayableValue` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyID, maxDisplayableValue = C_CovenantSanctumUI.GetAnimaInfo()
@@ -97,7 +97,7 @@ currentTalentTreeID = C_CovenantSanctumUI.GetCurrentTalentTreeID()
 |------|------|---------|-------------|
 | `currentTalentTreeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentTalentTreeID = C_CovenantSanctumUI.GetCurrentTalentTreeID()
@@ -115,7 +115,7 @@ features = C_CovenantSanctumUI.GetFeatures()
 |------|------|---------|-------------|
 | `features` | CovenantSanctumFeatureInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local features = C_CovenantSanctumUI.GetFeatures()
@@ -133,7 +133,7 @@ level = C_CovenantSanctumUI.GetRenownLevel()
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_CovenantSanctumUI.GetRenownLevel()
@@ -157,7 +157,7 @@ levels = C_CovenantSanctumUI.GetRenownLevels(covenantID)
 |------|------|---------|-------------|
 | `levels` | CovenantSanctumRenownLevelInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levels = C_CovenantSanctumUI.GetRenownLevels(0)
@@ -182,7 +182,7 @@ rewards = C_CovenantSanctumUI.GetRenownRewardsForLevel(covenantID, renownLevel)
 |------|------|---------|-------------|
 | `rewards` | CovenantSanctumRenownRewardInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewards = C_CovenantSanctumUI.GetRenownRewardsForLevel(0, 0)
@@ -200,7 +200,7 @@ sanctumType = C_CovenantSanctumUI.GetSanctumType()
 |------|------|---------|-------------|
 | `sanctumType` | GarrTalentFeatureSubtype | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sanctumType = C_CovenantSanctumUI.GetSanctumType()
@@ -218,7 +218,7 @@ currencyIDs = C_CovenantSanctumUI.GetSoulCurrencies()
 |------|------|---------|-------------|
 | `currencyIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyIDs = C_CovenantSanctumUI.GetSoulCurrencies()
@@ -236,7 +236,7 @@ hasMaxRenown = C_CovenantSanctumUI.HasMaximumRenown()
 |------|------|---------|-------------|
 | `hasMaxRenown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxRenown = C_CovenantSanctumUI.HasMaximumRenown()
@@ -254,7 +254,7 @@ isInCatchUpMode = C_CovenantSanctumUI.IsPlayerInRenownCatchUpMode()
 |------|------|---------|-------------|
 | `isInCatchUpMode` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInCatchUpMode = C_CovenantSanctumUI.IsPlayerInRenownCatchUpMode()
@@ -272,7 +272,7 @@ isWeeklyCapped = C_CovenantSanctumUI.IsWeeklyRenownCapped()
 |------|------|---------|-------------|
 | `isWeeklyCapped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWeeklyCapped = C_CovenantSanctumUI.IsWeeklyRenownCapped()
@@ -284,7 +284,7 @@ local isWeeklyCapped = C_CovenantSanctumUI.IsWeeklyRenownCapped()
 C_CovenantSanctumUI.RequestCatchUpState()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CovenantSanctumUI.RequestCatchUpState()

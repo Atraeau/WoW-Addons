@@ -27,7 +27,7 @@ protectedFunctionsAllowed = C_RestrictedActions.CheckAllowProtectedFunctions(obj
 |------|------|---------|-------------|
 | `protectedFunctionsAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local protectedFunctionsAllowed = C_RestrictedActions.CheckAllowProtectedFunctions(object, false)
@@ -53,7 +53,7 @@ state = C_RestrictedActions.GetAddOnRestrictionState(type)
 |------|------|---------|-------------|
 | `state` | AddOnRestrictionState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_RestrictedActions.GetAddOnRestrictionState(type)
@@ -71,7 +71,7 @@ inCombatLockdown = C_RestrictedActions.InCombatLockdown()
 |------|------|---------|-------------|
 | `inCombatLockdown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inCombatLockdown = C_RestrictedActions.InCombatLockdown()
@@ -97,7 +97,7 @@ active = C_RestrictedActions.IsAddOnRestrictionActive(type)
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_RestrictedActions.IsAddOnRestrictionActive(type)

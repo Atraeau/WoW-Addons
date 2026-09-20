@@ -18,7 +18,7 @@ adventureMapTextureKit = C_AdventureMap.GetAdventureMapTextureKit()
 |------|------|---------|-------------|
 | `adventureMapTextureKit` | textureKit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local adventureMapTextureKit = C_AdventureMap.GetAdventureMapTextureKit()
@@ -42,7 +42,7 @@ info = C_AdventureMap.GetQuestPortraitInfo(questID)
 |------|------|---------|-------------|
 | `info` | AdventureMapQuestPortraitInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AdventureMap.GetQuestPortraitInfo(0)

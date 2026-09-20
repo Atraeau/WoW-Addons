@@ -18,7 +18,7 @@ C_AchievementTelemetry.LinkAchievementInClub(achievementID)
 |------|------|---------|-------------|
 | `achievementID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AchievementTelemetry.LinkAchievementInClub(0)
@@ -36,7 +36,7 @@ C_AchievementTelemetry.LinkAchievementInWhisper(achievementID)
 |------|------|---------|-------------|
 | `achievementID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AchievementTelemetry.LinkAchievementInWhisper(0)
@@ -48,7 +48,7 @@ C_AchievementTelemetry.LinkAchievementInWhisper(0)
 C_AchievementTelemetry.ShowAchievements()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AchievementTelemetry.ShowAchievements()

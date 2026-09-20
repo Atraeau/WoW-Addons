@@ -18,7 +18,7 @@ affixIDs = C_MythicPlus.GetCurrentAffixes()
 |------|------|---------|-------------|
 | `affixIDs` | MythicPlusKeystoneAffix[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local affixIDs = C_MythicPlus.GetCurrentAffixes()
@@ -36,7 +36,7 @@ seasonID = C_MythicPlus.GetCurrentSeason()
 |------|------|---------|-------------|
 | `seasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seasonID = C_MythicPlus.GetCurrentSeason()
@@ -56,7 +56,7 @@ displaySeasonID, milestoneSeasonID, rewardSeasonID = C_MythicPlus.GetCurrentSeas
 | `milestoneSeasonID` | number | no |  |
 | `rewardSeasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displaySeasonID, milestoneSeasonID, rewardSeasonID = C_MythicPlus.GetCurrentSeasonValues()
@@ -74,7 +74,7 @@ seasonID = C_MythicPlus.GetCurrentUIDisplaySeason()
 |------|------|---------|-------------|
 | `seasonID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seasonID = C_MythicPlus.GetCurrentUIDisplaySeason()
@@ -98,7 +98,7 @@ sequenceLevel = C_MythicPlus.GetEndOfRunGearSequenceLevel(keystoneLevel)
 |------|------|---------|-------------|
 | `sequenceLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sequenceLevel = C_MythicPlus.GetEndOfRunGearSequenceLevel(0)
@@ -117,7 +117,7 @@ challengeMapId, level = C_MythicPlus.GetLastWeeklyBestInformation()
 | `challengeMapId` | number | no |  |
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local challengeMapId, level = C_MythicPlus.GetLastWeeklyBestInformation()
@@ -135,7 +135,7 @@ challengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
 |------|------|---------|-------------|
 | `challengeMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local challengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
@@ -153,7 +153,7 @@ keyStoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
 |------|------|---------|-------------|
 | `keyStoneLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local keyStoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
@@ -171,7 +171,7 @@ mapID = C_MythicPlus.GetOwnedKeystoneMapID()
 |------|------|---------|-------------|
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID = C_MythicPlus.GetOwnedKeystoneMapID()
@@ -196,7 +196,7 @@ weeklyRewardLevel, endOfRunRewardLevel = C_MythicPlus.GetRewardLevelForDifficult
 | `weeklyRewardLevel` | number | no |  |
 | `endOfRunRewardLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weeklyRewardLevel, endOfRunRewardLevel = C_MythicPlus.GetRewardLevelForDifficultyLevel(0)
@@ -220,7 +220,7 @@ rewardLevel = C_MythicPlus.GetRewardLevelFromKeystoneLevel(keystoneLevel)
 |------|------|---------|-------------|
 | `rewardLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewardLevel = C_MythicPlus.GetRewardLevelFromKeystoneLevel(0)
@@ -246,7 +246,7 @@ runs = C_MythicPlus.GetRunHistory(includePreviousWeeks, includeIncompleteRuns, c
 |------|------|---------|-------------|
 | `runs` | MythicPlusRunInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local runs = C_MythicPlus.GetRunHistory(false, false, false)
@@ -273,7 +273,7 @@ affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(m
 | `affixScores` | MythicPlusAffixScoreInfo[] | no |  |
 | `bestOverAllScore` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local affixScores, bestOverAllScore = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap(0)
@@ -298,7 +298,7 @@ intimeInfo, overtimeInfo = C_MythicPlus.GetSeasonBestForMap(mapChallengeModeID)
 | `intimeInfo` | MapSeasonBestInfo | yes |  |
 | `overtimeInfo` | MapSeasonBestInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local intimeInfo, overtimeInfo = C_MythicPlus.GetSeasonBestForMap(0)
@@ -317,7 +317,7 @@ bestSeasonScore, bestSeason = C_MythicPlus.GetSeasonBestMythicRatingFromThisExpa
 | `bestSeasonScore` | number | no |  |
 | `bestSeason` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bestSeasonScore, bestSeason = C_MythicPlus.GetSeasonBestMythicRatingFromThisExpansion()
@@ -346,7 +346,7 @@ durationSec, level, completionDate, affixIDs, members, dungeonScore = C_MythicPl
 | `members` | MythicPlusMember[] | no |  |
 | `dungeonScore` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSec, level, completionDate, affixIDs, members, dungeonScore = C_MythicPlus.GetWeeklyBestForMap(0)
@@ -367,7 +367,7 @@ currentWeekBestLevel, weeklyRewardLevel, nextDifficultyWeeklyRewardLevel, nextBe
 | `nextDifficultyWeeklyRewardLevel` | number | no |  |
 | `nextBestLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentWeekBestLevel, weeklyRewardLevel, nextDifficultyWeeklyRewardLevel, nextBestLevel = C_MythicPlus.GetWeeklyChestRewardLevel()
@@ -385,7 +385,7 @@ isMythicPlusActive = C_MythicPlus.IsMythicPlusActive()
 |------|------|---------|-------------|
 | `isMythicPlusActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMythicPlusActive = C_MythicPlus.IsMythicPlusActive()
@@ -397,7 +397,7 @@ local isMythicPlusActive = C_MythicPlus.IsMythicPlusActive()
 C_MythicPlus.RequestCurrentAffixes()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MythicPlus.RequestCurrentAffixes()
@@ -409,7 +409,7 @@ C_MythicPlus.RequestCurrentAffixes()
 C_MythicPlus.RequestMapInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MythicPlus.RequestMapInfo()
@@ -421,7 +421,7 @@ C_MythicPlus.RequestMapInfo()
 C_MythicPlus.RequestRewards()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MythicPlus.RequestRewards()

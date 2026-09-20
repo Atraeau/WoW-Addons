@@ -12,7 +12,7 @@
 Clear()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Clear()
@@ -32,7 +32,7 @@ duration = GetCooldownDisplayDuration()
 |------|------|---------|-------------|
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetCooldownDisplayDuration()
@@ -52,7 +52,7 @@ duration = GetCooldownDuration()
 |------|------|---------|-------------|
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetCooldownDuration()
@@ -71,7 +71,7 @@ start, duration = GetCooldownTimes()
 | `start` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local start, duration = GetCooldownTimes()
@@ -91,7 +91,7 @@ seconds = GetCountdownAbbrevThreshold()
 |------|------|---------|-------------|
 | `seconds` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = GetCountdownAbbrevThreshold()
@@ -109,7 +109,7 @@ countdownString = GetCountdownFontString()
 |------|------|---------|-------------|
 | `countdownString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local countdownString = GetCountdownFontString()
@@ -127,7 +127,7 @@ formatter = GetCountdownFormatter()
 |------|------|---------|-------------|
 | `formatter` | NumericFormatter | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatter = GetCountdownFormatter()
@@ -147,7 +147,7 @@ seconds = GetCountdownMillisecondsThreshold()
 |------|------|---------|-------------|
 | `seconds` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = GetCountdownMillisecondsThreshold()
@@ -165,7 +165,7 @@ drawBling = GetDrawBling()
 |------|------|---------|-------------|
 | `drawBling` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local drawBling = GetDrawBling()
@@ -183,7 +183,7 @@ drawEdge = GetDrawEdge()
 |------|------|---------|-------------|
 | `drawEdge` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local drawEdge = GetDrawEdge()
@@ -201,7 +201,7 @@ drawSwipe = GetDrawSwipe()
 |------|------|---------|-------------|
 | `drawSwipe` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local drawSwipe = GetDrawSwipe()
@@ -219,7 +219,7 @@ edgeScale = GetEdgeScale()
 |------|------|---------|-------------|
 | `edgeScale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local edgeScale = GetEdgeScale()
@@ -237,7 +237,7 @@ hideNumbers = GetHideCountdownNumbers()
 |------|------|---------|-------------|
 | `hideNumbers` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hideNumbers = GetHideCountdownNumbers()
@@ -255,7 +255,7 @@ milliseconds = GetMinimumCountdownDuration()
 |------|------|---------|-------------|
 | `milliseconds` | Milliseconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local milliseconds = GetMinimumCountdownDuration()
@@ -273,7 +273,7 @@ reverse = GetReverse()
 |------|------|---------|-------------|
 | `reverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reverse = GetReverse()
@@ -291,7 +291,7 @@ rotationRadians = GetRotation()
 |------|------|---------|-------------|
 | `rotationRadians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rotationRadians = GetRotation()
@@ -309,7 +309,7 @@ useAuraDisplayTime = GetUseAuraDisplayTime()
 |------|------|---------|-------------|
 | `useAuraDisplayTime` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local useAuraDisplayTime = GetUseAuraDisplayTime()
@@ -327,7 +327,7 @@ isPaused = IsPaused()
 |------|------|---------|-------------|
 | `isPaused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPaused = IsPaused()
@@ -339,7 +339,7 @@ local isPaused = IsPaused()
 Pause()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Pause()
@@ -351,7 +351,7 @@ Pause()
 Resume()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Resume()
@@ -373,7 +373,7 @@ SetBlingTexture(texture, colorR, colorG, colorB, colorA)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBlingTexture(texture, 0, 0, 0, 0)
@@ -393,7 +393,7 @@ SetCooldown(start, duration, modRate)
 | `duration` | Seconds | no |  |
 | `modRate` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCooldown(start, duration, 0)
@@ -412,7 +412,7 @@ SetCooldownDuration(duration, modRate)
 | `duration` | Seconds | no |  |
 | `modRate` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCooldownDuration(duration, 0)
@@ -431,7 +431,7 @@ SetCooldownFromDurationObject(duration, clearIfZero)
 | `duration` | LuaDurationObject | no |  |
 | `clearIfZero` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCooldownFromDurationObject(duration, false)
@@ -451,7 +451,7 @@ SetCooldownFromExpirationTime(expirationTime, duration, modRate)
 | `duration` | Seconds | no |  |
 | `modRate` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCooldownFromExpirationTime(expirationTime, duration, 0)
@@ -471,7 +471,7 @@ SetCooldownUNIX(start, duration, modRate)
 | `duration` | number | no |  |
 | `modRate` | number | no | (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCooldownUNIX(0, 0, 0)
@@ -491,7 +491,7 @@ SetCountdownAbbrevThreshold(seconds)
 |------|------|---------|-------------|
 | `seconds` | Seconds | no | Number of seconds below which numbers will be abbreviated. If above one hour or below one minute, no abbreviation will be performed. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCountdownAbbrevThreshold(seconds)
@@ -509,7 +509,7 @@ SetCountdownFont(fontName)
 |------|------|---------|-------------|
 | `fontName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCountdownFont("")
@@ -527,7 +527,7 @@ SetCountdownFormatter([formatter])
 |------|------|---------|-------------|
 | `formatter` | NumericFormatter | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCountdownFormatter()
@@ -547,7 +547,7 @@ SetCountdownMillisecondsThreshold(seconds)
 |------|------|---------|-------------|
 | `seconds` | Seconds | no | Number of seconds below which numbers are displayed with milliseconds. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCountdownMillisecondsThreshold(seconds)
@@ -565,7 +565,7 @@ SetDrawBling(drawBling)
 |------|------|---------|-------------|
 | `drawBling` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawBling(false)
@@ -583,7 +583,7 @@ SetDrawEdge(drawEdge)
 |------|------|---------|-------------|
 | `drawEdge` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawEdge(false)
@@ -601,7 +601,7 @@ SetDrawSwipe(drawSwipe)
 |------|------|---------|-------------|
 | `drawSwipe` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDrawSwipe(false)
@@ -622,7 +622,7 @@ SetEdgeColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEdgeColor(0, 0, 0)
@@ -640,7 +640,7 @@ SetEdgeScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEdgeScale(0)
@@ -662,7 +662,7 @@ SetEdgeTexture(texture, colorR, colorG, colorB, colorA)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEdgeTexture(texture, 0, 0, 0, 0)
@@ -680,7 +680,7 @@ SetHideCountdownNumbers(hideNumbers)
 |------|------|---------|-------------|
 | `hideNumbers` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHideCountdownNumbers(false)
@@ -700,7 +700,7 @@ SetMinimumCountdownDuration(milliseconds)
 |------|------|---------|-------------|
 | `milliseconds` | Milliseconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinimumCountdownDuration(milliseconds)
@@ -718,7 +718,7 @@ SetPaused(paused)
 |------|------|---------|-------------|
 | `paused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPaused(false)
@@ -736,7 +736,7 @@ SetReverse(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetReverse(false)
@@ -754,7 +754,7 @@ SetRotation(rotationRadians)
 |------|------|---------|-------------|
 | `rotationRadians` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRotation(0)
@@ -775,7 +775,7 @@ SetSwipeColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSwipeColor(0, 0, 0)
@@ -797,7 +797,7 @@ SetSwipeTexture([texture], colorR, colorG, colorB, colorA)
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSwipeTexture(0, 0, 0, 0)
@@ -816,7 +816,7 @@ SetTexCoordRange(low, high)
 | `low` | vector2 | no |  |
 | `high` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTexCoordRange(low, high)
@@ -836,7 +836,7 @@ SetUseAuraDisplayTime(useAuraDisplayTime)
 |------|------|---------|-------------|
 | `useAuraDisplayTime` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseAuraDisplayTime(false)
@@ -854,7 +854,7 @@ SetUseCircularEdge(useCircularEdge)
 |------|------|---------|-------------|
 | `useCircularEdge` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseCircularEdge(false)

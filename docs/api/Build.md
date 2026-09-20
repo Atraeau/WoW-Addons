@@ -23,7 +23,7 @@ buildVersion, buildNumber, buildDate, interfaceVersion, localizedVersion, buildI
 | `localizedVersion` | cstring | no |  |
 | `buildInfo` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buildVersion, buildNumber, buildDate, interfaceVersion, localizedVersion, buildInfo = GetBuildInfo()
@@ -47,7 +47,7 @@ isSet = GetBuildOption(name)
 |------|------|---------|-------------|
 | `isSet` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSet = GetBuildOption("")
@@ -65,7 +65,7 @@ is64Bit = Is64BitClient()
 |------|------|---------|-------------|
 | `is64Bit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local is64Bit = Is64BitClient()
@@ -83,7 +83,7 @@ isBetaBuild = IsBetaBuild()
 |------|------|---------|-------------|
 | `isBetaBuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBetaBuild = IsBetaBuild()
@@ -101,7 +101,7 @@ isDebugBuild = IsDebugBuild()
 |------|------|---------|-------------|
 | `isDebugBuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDebugBuild = IsDebugBuild()
@@ -119,7 +119,7 @@ isLinux = IsLinuxClient()
 |------|------|---------|-------------|
 | `isLinux` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLinux = IsLinuxClient()
@@ -137,7 +137,7 @@ isMac = IsMacClient()
 |------|------|---------|-------------|
 | `isMac` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMac = IsMacClient()
@@ -155,7 +155,7 @@ isPublicBuild = IsPublicBuild()
 |------|------|---------|-------------|
 | `isPublicBuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPublicBuild = IsPublicBuild()
@@ -175,7 +175,7 @@ isPublicTestClient = IsPublicTestClient()
 |------|------|---------|-------------|
 | `isPublicTestClient` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPublicTestClient = IsPublicTestClient()
@@ -193,7 +193,7 @@ isTestBuild = IsTestBuild()
 |------|------|---------|-------------|
 | `isTestBuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTestBuild = IsTestBuild()
@@ -211,7 +211,7 @@ isWindows = IsWindowsClient()
 |------|------|---------|-------------|
 | `isWindows` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWindows = IsWindowsClient()
@@ -229,7 +229,7 @@ supportsClipCursor = SupportsClipCursor()
 |------|------|---------|-------------|
 | `supportsClipCursor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local supportsClipCursor = SupportsClipCursor()

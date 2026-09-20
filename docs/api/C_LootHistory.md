@@ -18,7 +18,7 @@ infos = C_LootHistory.GetAllEncounterInfos()
 |------|------|---------|-------------|
 | `infos` | EncounterLootInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infos = C_LootHistory.GetAllEncounterInfos()
@@ -42,7 +42,7 @@ info = C_LootHistory.GetInfoForEncounter(encounterID)
 |------|------|---------|-------------|
 | `info` | EncounterLootInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_LootHistory.GetInfoForEncounter(0)
@@ -60,7 +60,7 @@ time = C_LootHistory.GetLootHistoryTime()
 |------|------|---------|-------------|
 | `time` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = C_LootHistory.GetLootHistoryTime()
@@ -84,7 +84,7 @@ drops = C_LootHistory.GetSortedDropsForEncounter(encounterID)
 |------|------|---------|-------------|
 | `drops` | EncounterLootDropInfo[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local drops = C_LootHistory.GetSortedDropsForEncounter(0)
@@ -109,7 +109,7 @@ info = C_LootHistory.GetSortedInfoForDrop(encounterID, lootListKey)
 |------|------|---------|-------------|
 | `info` | EncounterLootDropInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_LootHistory.GetSortedInfoForDrop(0, 0)

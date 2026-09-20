@@ -12,7 +12,7 @@
 C_ContributionCollector.Close()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ContributionCollector.Close()
@@ -30,7 +30,7 @@ C_ContributionCollector.Contribute(contributionID)
 |------|------|---------|-------------|
 | `contributionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ContributionCollector.Contribute(0)
@@ -48,7 +48,7 @@ contributionID = C_ContributionCollector.GetActive()
 |------|------|---------|-------------|
 | `contributionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contributionID = C_ContributionCollector.GetActive()
@@ -72,7 +72,7 @@ atlasName = C_ContributionCollector.GetAtlases(contributionID)
 |------|------|---------|-------------|
 | `atlasName` | textureAtlas[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlasName = C_ContributionCollector.GetAtlases(0)
@@ -96,7 +96,7 @@ spellID = C_ContributionCollector.GetBuffs(contributionID)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_ContributionCollector.GetBuffs(0)
@@ -121,7 +121,7 @@ appearance = C_ContributionCollector.GetContributionAppearance(contributionID, c
 |------|------|---------|-------------|
 | `appearance` | ContributionAppearance | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local appearance = C_ContributionCollector.GetContributionAppearance(0, contributionState)
@@ -145,7 +145,7 @@ contributionCollectors = C_ContributionCollector.GetContributionCollectorsForMap
 |------|------|---------|-------------|
 | `contributionCollectors` | ContributionMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contributionCollectors = C_ContributionCollector.GetContributionCollectorsForMap(0)
@@ -169,7 +169,7 @@ result = C_ContributionCollector.GetContributionResult(contributionID)
 |------|------|---------|-------------|
 | `result` | ContributionResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_ContributionCollector.GetContributionResult(0)
@@ -193,7 +193,7 @@ description = C_ContributionCollector.GetDescription(contributionID)
 |------|------|---------|-------------|
 | `description` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_ContributionCollector.GetDescription(0)
@@ -217,7 +217,7 @@ contributionID = C_ContributionCollector.GetManagedContributionsForCreatureID(cr
 |------|------|---------|-------------|
 | `contributionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contributionID = C_ContributionCollector.GetManagedContributionsForCreatureID(0)
@@ -241,7 +241,7 @@ name = C_ContributionCollector.GetName(contributionID)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_ContributionCollector.GetName(0)
@@ -265,7 +265,7 @@ orderIndex = C_ContributionCollector.GetOrderIndex(contributionID)
 |------|------|---------|-------------|
 | `orderIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local orderIndex = C_ContributionCollector.GetOrderIndex(0)
@@ -290,7 +290,7 @@ currencyID, currencyAmount = C_ContributionCollector.GetRequiredContributionCurr
 | `currencyID` | number | no | (default: 0) |
 | `currencyAmount` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyID, currencyAmount = C_ContributionCollector.GetRequiredContributionCurrency(0)
@@ -315,7 +315,7 @@ itemID, itemCount = C_ContributionCollector.GetRequiredContributionItem(contribu
 | `itemID` | number | no | (default: 0) |
 | `itemCount` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, itemCount = C_ContributionCollector.GetRequiredContributionItem(0)
@@ -339,7 +339,7 @@ questID = C_ContributionCollector.GetRewardQuestID(contributionID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_ContributionCollector.GetRewardQuestID(0)
@@ -366,7 +366,7 @@ contributionState, contributionPercentageComplete, timeOfNextStateChange, startT
 | `timeOfNextStateChange` | time_t | yes |  |
 | `startTime` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local contributionState, contributionPercentageComplete, timeOfNextStateChange, startTime = C_ContributionCollector.GetState(0)
@@ -390,7 +390,7 @@ hasPending = C_ContributionCollector.HasPendingContribution(contributionID)
 |------|------|---------|-------------|
 | `hasPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPending = C_ContributionCollector.HasPendingContribution(0)
@@ -414,7 +414,7 @@ awaitingData = C_ContributionCollector.IsAwaitingRewardQuestData(contributionID)
 |------|------|---------|-------------|
 | `awaitingData` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local awaitingData = C_ContributionCollector.IsAwaitingRewardQuestData(0)

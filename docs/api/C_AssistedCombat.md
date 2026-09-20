@@ -18,7 +18,7 @@ spellID = C_AssistedCombat.GetActionSpell()
 |------|------|---------|-------------|
 | `spellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_AssistedCombat.GetActionSpell()
@@ -42,7 +42,7 @@ spellID = C_AssistedCombat.GetNextCastSpell(checkForVisibleButton)
 |------|------|---------|-------------|
 | `spellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_AssistedCombat.GetNextCastSpell(false)
@@ -60,7 +60,7 @@ spellIDs = C_AssistedCombat.GetRotationSpells()
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_AssistedCombat.GetRotationSpells()
@@ -79,7 +79,7 @@ isAvailable, failureReason = C_AssistedCombat.IsAvailable()
 | `isAvailable` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable, failureReason = C_AssistedCombat.IsAvailable()

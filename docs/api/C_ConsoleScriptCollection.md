@@ -24,7 +24,7 @@ data = C_ConsoleScriptCollection.GetCollectionDataByID(collectionID)
 |------|------|---------|-------------|
 | `data` | ConsoleScriptCollectionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_ConsoleScriptCollection.GetCollectionDataByID(0)
@@ -48,7 +48,7 @@ data = C_ConsoleScriptCollection.GetCollectionDataByTag(collectionTag)
 |------|------|---------|-------------|
 | `data` | ConsoleScriptCollectionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_ConsoleScriptCollection.GetCollectionDataByTag("")
@@ -72,7 +72,7 @@ elementIDs = C_ConsoleScriptCollection.GetElements(collectionID)
 |------|------|---------|-------------|
 | `elementIDs` | ConsoleScriptCollectionElementData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elementIDs = C_ConsoleScriptCollection.GetElements(0)
@@ -96,7 +96,7 @@ data = C_ConsoleScriptCollection.GetScriptData(consoleScriptID)
 |------|------|---------|-------------|
 | `data` | ConsoleScriptData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_ConsoleScriptCollection.GetScriptData(0)

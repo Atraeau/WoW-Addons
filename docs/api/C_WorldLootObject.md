@@ -25,7 +25,7 @@ matches = C_WorldLootObject.DoesSlotMatchInventoryType(slot, inventoryType)
 |------|------|---------|-------------|
 | `matches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matches = C_WorldLootObject.DoesSlotMatchInventoryType(1, inventoryType)
@@ -49,7 +49,7 @@ distanceSquared = C_WorldLootObject.GetWorldLootObjectDistanceSquared(unitToken)
 |------|------|---------|-------------|
 | `distanceSquared` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distanceSquared = C_WorldLootObject.GetWorldLootObjectDistanceSquared("player")
@@ -73,7 +73,7 @@ info = C_WorldLootObject.GetWorldLootObjectInfo(unitToken)
 |------|------|---------|-------------|
 | `info` | WorldLootObjectInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_WorldLootObject.GetWorldLootObjectInfo("player")
@@ -97,10 +97,10 @@ info = C_WorldLootObject.GetWorldLootObjectInfoByGUID(objectGUID)
 |------|------|---------|-------------|
 | `info` | WorldLootObjectInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_WorldLootObject.GetWorldLootObjectInfoByGUID("Creature-0-0000-0-0-0-0")
+local info = C_WorldLootObject.GetWorldLootObjectInfoByGUID(UnitGUID("player"))
 ```
 
 ### C_WorldLootObject.IsWorldLootObject
@@ -121,7 +121,7 @@ isWorldLootObject = C_WorldLootObject.IsWorldLootObject(unitToken)
 |------|------|---------|-------------|
 | `isWorldLootObject` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWorldLootObject = C_WorldLootObject.IsWorldLootObject("player")
@@ -145,10 +145,10 @@ isWorldLootObject = C_WorldLootObject.IsWorldLootObjectByGUID(guid)
 |------|------|---------|-------------|
 | `isWorldLootObject` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isWorldLootObject = C_WorldLootObject.IsWorldLootObjectByGUID("Creature-0-0000-0-0-0-0")
+local isWorldLootObject = C_WorldLootObject.IsWorldLootObjectByGUID(UnitGUID("player"))
 ```
 
 ### C_WorldLootObject.IsWorldLootObjectInRange
@@ -169,7 +169,7 @@ isWorldLootObjectInRange = C_WorldLootObject.IsWorldLootObjectInRange(unitToken)
 |------|------|---------|-------------|
 | `isWorldLootObjectInRange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWorldLootObjectInRange = C_WorldLootObject.IsWorldLootObjectInRange("player")
@@ -188,7 +188,7 @@ C_WorldLootObject.OnWorldLootObjectClick(unitToken, isLeftClick)
 | `unitToken` | UnitToken | no |  |
 | `isLeftClick` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WorldLootObject.OnWorldLootObjectClick("player", false)

@@ -27,7 +27,7 @@ containsValue = table.contains(table, [value])
 |------|------|---------|-------------|
 | `containsValue` | bool | no | True if any entry in the table has the specified value. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local containsValue = table.contains(table)
@@ -53,7 +53,7 @@ count = table.count(table)
 |------|------|---------|-------------|
 | `count` | number | no | The number of entries in the table. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = table.count(table)
@@ -80,7 +80,7 @@ table = table.create(arraySizeHint, nodeSizeHint)
 |------|------|---------|-------------|
 | `table` | table | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local table = table.create(0, 0)
@@ -106,7 +106,7 @@ frozen = table.freeze(table)
 |------|------|---------|-------------|
 | `frozen` | table | no | The supplied table, passed through. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frozen = table.freeze(table)
@@ -134,7 +134,7 @@ numEntries, numPositiveIntegerKeys, maxPositiveIntegerKey = table.getcountinfo(t
 | `numPositiveIntegerKeys` | number | no | The number of entries with positive integral keys. |
 | `maxPositiveIntegerKey` | number | no | The largest positive integral key in the table, or zero if no such keys were found. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numEntries, numPositiveIntegerKeys, maxPositiveIntegerKey = table.getcountinfo(table)
@@ -161,7 +161,7 @@ index = table.indexof(table, [value])
 |------|------|---------|-------------|
 | `index` | number | yes | The first matching index, or nil if no match is found. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local index = table.indexof(table)
@@ -187,7 +187,7 @@ empty = table.isempty(table)
 |------|------|---------|-------------|
 | `empty` | bool | no | True if the table contains no entries; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local empty = table.isempty(table)
@@ -213,7 +213,7 @@ frozen = table.isfrozen(table)
 |------|------|---------|-------------|
 | `frozen` | bool | no | True if the table has been made read-only; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frozen = table.isfrozen(table)
@@ -239,7 +239,7 @@ keys = table.keys(table)
 |------|------|---------|-------------|
 | `keys` | any | no | An array containing the table's keys. The order of the returned keys is unspecified. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local keys = table.keys(table)
@@ -266,7 +266,7 @@ value = table.removeunordered(table, [index])
 |------|------|---------|-------------|
 | `value` | any | yes | The removed value, or nil if the index is outside the array bounds. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = table.removeunordered(table)
@@ -293,7 +293,7 @@ removedCount = table.removevalue(table, [value])
 |------|------|---------|-------------|
 | `removedCount` | number | no | The number of values removed. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removedCount = table.removevalue(table)
@@ -319,7 +319,7 @@ values = table.values(table)
 |------|------|---------|-------------|
 | `values` | any | no | An array containing the table's values. The order of the returned values is unspecified. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local values = table.values(table)

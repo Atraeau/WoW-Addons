@@ -20,7 +20,7 @@ matchingEntryVariantIDs = GetAllSearchItems()
 |------|------|---------|-------------|
 | `matchingEntryVariantIDs` | HousingCatalogEntryVariantID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchingEntryVariantIDs = GetAllSearchItems()
@@ -40,7 +40,7 @@ matchingEntryVariantIDs = GetCatalogSearchResults()
 |------|------|---------|-------------|
 | `matchingEntryVariantIDs` | HousingCatalogEntryVariantID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchingEntryVariantIDs = GetCatalogSearchResults()
@@ -58,7 +58,7 @@ editorModeContext = GetEditorModeContext()
 |------|------|---------|-------------|
 | `editorModeContext` | HouseEditorMode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local editorModeContext = GetEditorModeContext()
@@ -76,7 +76,7 @@ categoryID = GetFilteredCategoryID()
 |------|------|---------|-------------|
 | `categoryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryID = GetFilteredCategoryID()
@@ -94,7 +94,7 @@ subcategoryID = GetFilteredSubcategoryID()
 |------|------|---------|-------------|
 | `subcategoryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subcategoryID = GetFilteredSubcategoryID()
@@ -119,7 +119,7 @@ active = GetFilterTagStatus(groupID, tagID)
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = GetFilterTagStatus(0, 0)
@@ -139,7 +139,7 @@ numSearchItems = GetNumSearchItems()
 |------|------|---------|-------------|
 | `numSearchItems` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSearchItems = GetNumSearchItems()
@@ -159,7 +159,7 @@ searchCount = GetSearchCount()
 |------|------|---------|-------------|
 | `searchCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local searchCount = GetSearchCount()
@@ -177,7 +177,7 @@ searchText = GetSearchText()
 |------|------|---------|-------------|
 | `searchText` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local searchText = GetSearchText()
@@ -195,7 +195,7 @@ sortType = GetSortType()
 |------|------|---------|-------------|
 | `sortType` | HousingCatalogSortType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sortType = GetSortType()
@@ -213,7 +213,7 @@ isActive = IsAllowedIndoorsActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsAllowedIndoorsActive()
@@ -231,7 +231,7 @@ isActive = IsAllowedOutdoorsActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsAllowedOutdoorsActive()
@@ -249,7 +249,7 @@ isActive = IsBaseVariantOnlyActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsBaseVariantOnlyActive()
@@ -267,7 +267,7 @@ isActive = IsCollectedActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsCollectedActive()
@@ -285,7 +285,7 @@ isActive = IsCustomizableOnlyActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsCustomizableOnlyActive()
@@ -303,7 +303,7 @@ isActive = IsFirstAcquisitionBonusOnlyActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsFirstAcquisitionBonusOnlyActive()
@@ -321,7 +321,7 @@ isSearchInProgress = IsSearchInProgress()
 |------|------|---------|-------------|
 | `isSearchInProgress` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSearchInProgress = IsSearchInProgress()
@@ -339,7 +339,7 @@ isActive = IsStoredOnlyActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsStoredOnlyActive()
@@ -357,7 +357,7 @@ isActive = IsUncollectedActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsUncollectedActive()
@@ -371,7 +371,7 @@ Run search with all current param values
 RunSearch()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RunSearch()
@@ -392,7 +392,7 @@ SetAllInFilterTagGroup(groupID, active)
 | `groupID` | number | no |  |
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllInFilterTagGroup(0, false)
@@ -412,7 +412,7 @@ SetAllowedIndoors(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowedIndoors(false)
@@ -432,7 +432,7 @@ SetAllowedOutdoors(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllowedOutdoors(false)
@@ -452,7 +452,7 @@ SetAutoUpdateOnParamChanges(autoUpdateActive)
 |------|------|---------|-------------|
 | `autoUpdateActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAutoUpdateOnParamChanges(false)
@@ -472,7 +472,7 @@ SetBaseVariantOnly(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBaseVariantOnly(false)
@@ -492,7 +492,7 @@ SetCollected(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCollected(false)
@@ -512,7 +512,7 @@ SetCustomizableOnly(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCustomizableOnly(false)
@@ -532,7 +532,7 @@ SetEditorModeContext([editorModeContext])
 |------|------|---------|-------------|
 | `editorModeContext` | HouseEditorMode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEditorModeContext()
@@ -552,7 +552,7 @@ SetFilteredCategoryID([categoryID])
 |------|------|---------|-------------|
 | `categoryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFilteredCategoryID()
@@ -572,7 +572,7 @@ SetFilteredSubcategoryID([subcategoryID])
 |------|------|---------|-------------|
 | `subcategoryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFilteredSubcategoryID()
@@ -594,7 +594,7 @@ SetFilterTagStatus(groupID, tagID, active)
 | `tagID` | number | no |  |
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFilterTagStatus(0, 0, false)
@@ -614,7 +614,7 @@ SetFirstAcquisitionBonusOnly(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFirstAcquisitionBonusOnly(false)
@@ -632,7 +632,7 @@ SetResultsUpdatedCallback(callback)
 |------|------|---------|-------------|
 | `callback` | HousingCatalogSearchResultsUpdatedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetResultsUpdatedCallback(callback)
@@ -652,7 +652,7 @@ SetSearchText([searchText])
 |------|------|---------|-------------|
 | `searchText` | string | yes | Supports advanced search tokens ('"' '-' and '\|'), case and accent insensitive; Set nil to clear out the search text |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSearchText()
@@ -670,7 +670,7 @@ SetSortType(sortType)
 |------|------|---------|-------------|
 | `sortType` | HousingCatalogSortType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSortType(sortType)
@@ -690,7 +690,7 @@ SetStoredOnly(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStoredOnly(false)
@@ -710,7 +710,7 @@ SetUncollected(isActive)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUncollected(false)
@@ -722,7 +722,7 @@ SetUncollected(false)
 ToggleAllowedIndoors()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleAllowedIndoors()
@@ -734,7 +734,7 @@ ToggleAllowedIndoors()
 ToggleAllowedOutdoors()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleAllowedOutdoors()
@@ -746,7 +746,7 @@ ToggleAllowedOutdoors()
 ToggleBaseVariantOnly()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleBaseVariantOnly()
@@ -758,7 +758,7 @@ ToggleBaseVariantOnly()
 ToggleCollected()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleCollected()
@@ -770,7 +770,7 @@ ToggleCollected()
 ToggleCustomizableOnly()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleCustomizableOnly()
@@ -789,7 +789,7 @@ ToggleFilterTag(groupID, tagID)
 | `groupID` | number | no |  |
 | `tagID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleFilterTag(0, 0)
@@ -801,7 +801,7 @@ ToggleFilterTag(0, 0)
 ToggleFirstAcquisitionBonusOnly()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleFirstAcquisitionBonusOnly()
@@ -813,7 +813,7 @@ ToggleFirstAcquisitionBonusOnly()
 ToggleStoredOnly()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleStoredOnly()
@@ -825,7 +825,7 @@ ToggleStoredOnly()
 ToggleUncollected()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleUncollected()

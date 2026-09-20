@@ -16,7 +16,7 @@ Cancels all scheduled signals.
 CancelAllSignals()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelAllSignals()
@@ -36,7 +36,7 @@ CancelSignal(key)
 |------|------|---------|-------------|
 | `key` | number | no | Key to cancel. No effect if the key is not scheduled. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelSignal(0)
@@ -57,7 +57,7 @@ key, time = GetNextSignal()
 | `key` | number | no | The key that has been scheduled. |
 | `time` | FrameTime | no | Absolute time, on the same clock as GetTime(), at which the key is scheduled to signal. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local key, time = GetNextSignal()
@@ -77,7 +77,7 @@ count = GetSignalCount()
 |------|------|---------|-------------|
 | `count` | size | no | Count of scheduled keys. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = GetSignalCount()
@@ -103,7 +103,7 @@ time = GetSignalTime(key)
 |------|------|---------|-------------|
 | `time` | FrameTime | yes | Absolute time the key will signal; nil if not scheduled. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = GetSignalTime(0)
@@ -129,7 +129,7 @@ hasSignal = HasSignal(key)
 |------|------|---------|-------------|
 | `hasSignal` | bool | no | True if the key is scheduled to signal. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSignal = HasSignal(0)
@@ -150,7 +150,7 @@ SignalAfter(key, secondsFromNow)
 | `key` | number | no | Key to signal. Re-scheduling an existing key replaces its time. |
 | `secondsFromNow` | Seconds | no | Delay in seconds from now, converted to an absolute time when scheduled. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SignalAfter(0, secondsFromNow)
@@ -171,7 +171,7 @@ SignalAt(key, time)
 | `key` | number | no | Key to signal. Re-scheduling an existing key replaces its time. |
 | `time` | FrameTime | no | Absolute time at which to signal, on the same clock as GetTime(). |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SignalAt(0, time)

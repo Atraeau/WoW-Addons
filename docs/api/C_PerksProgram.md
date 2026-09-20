@@ -12,7 +12,7 @@
 C_PerksProgram.ClearFrozenPerksVendorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.ClearFrozenPerksVendorItem()
@@ -24,7 +24,7 @@ C_PerksProgram.ClearFrozenPerksVendorItem()
 C_PerksProgram.CloseInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.CloseInteraction()
@@ -42,7 +42,7 @@ categoryIDs = C_PerksProgram.GetAvailableCategoryIDs()
 |------|------|---------|-------------|
 | `categoryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryIDs = C_PerksProgram.GetAvailableCategoryIDs()
@@ -60,7 +60,7 @@ vendorItemIDs = C_PerksProgram.GetAvailableVendorItemIDs()
 |------|------|---------|-------------|
 | `vendorItemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vendorItemIDs = C_PerksProgram.GetAvailableVendorItemIDs()
@@ -84,7 +84,7 @@ categoryInfo = C_PerksProgram.GetCategoryInfo(categoryID)
 |------|------|---------|-------------|
 | `categoryInfo` | PerksVendorCategoryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryInfo = C_PerksProgram.GetCategoryInfo(0)
@@ -102,7 +102,7 @@ currencyAmount = C_PerksProgram.GetCurrencyAmount()
 |------|------|---------|-------------|
 | `currencyAmount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyAmount = C_PerksProgram.GetCurrencyAmount()
@@ -120,7 +120,7 @@ perksVendorItemID = C_PerksProgram.GetDraggedPerksVendorItem()
 |------|------|---------|-------------|
 | `perksVendorItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local perksVendorItemID = C_PerksProgram.GetDraggedPerksVendorItem()
@@ -138,7 +138,7 @@ vendorItemInfo = C_PerksProgram.GetFrozenPerksVendorItemInfo()
 |------|------|---------|-------------|
 | `vendorItemInfo` | PerksVendorItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vendorItemInfo = C_PerksProgram.GetFrozenPerksVendorItemInfo()
@@ -156,7 +156,7 @@ pendingRewards = C_PerksProgram.GetPendingChestRewards()
 |------|------|---------|-------------|
 | `pendingRewards` | PerksProgramPendingChestRewards[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pendingRewards = C_PerksProgram.GetPendingChestRewards()
@@ -180,7 +180,7 @@ item = C_PerksProgram.GetPerksProgramItemDisplayInfo(id)
 |------|------|---------|-------------|
 | `item` | PerksProgramItemDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local item = C_PerksProgram.GetPerksProgramItemDisplayInfo(0)
@@ -204,7 +204,7 @@ timeRemaining = C_PerksProgram.GetTimeRemaining(vendorItemID)
 |------|------|---------|-------------|
 | `timeRemaining` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeRemaining = C_PerksProgram.GetTimeRemaining(6948)
@@ -228,7 +228,7 @@ vendorItemInfo = C_PerksProgram.GetVendorItemInfo(vendorItemID)
 |------|------|---------|-------------|
 | `vendorItemInfo` | PerksVendorItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vendorItemInfo = C_PerksProgram.GetVendorItemInfo(6948)
@@ -252,7 +252,7 @@ refundTimeRemaining = C_PerksProgram.GetVendorItemInfoRefundTimeLeft(vendorItemI
 |------|------|---------|-------------|
 | `refundTimeRemaining` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundTimeRemaining = C_PerksProgram.GetVendorItemInfoRefundTimeLeft(6948)
@@ -270,7 +270,7 @@ isAttackAnimToggleEnabled = C_PerksProgram.IsAttackAnimToggleEnabled()
 |------|------|---------|-------------|
 | `isAttackAnimToggleEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAttackAnimToggleEnabled = C_PerksProgram.IsAttackAnimToggleEnabled()
@@ -294,7 +294,7 @@ isFrozen = C_PerksProgram.IsFrozenPerksVendorItem(perksVendorItemID)
 |------|------|---------|-------------|
 | `isFrozen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFrozen = C_PerksProgram.IsFrozenPerksVendorItem(6948)
@@ -312,7 +312,7 @@ isMountSpecialAnimToggleEnabled = C_PerksProgram.IsMountSpecialAnimToggleEnabled
 |------|------|---------|-------------|
 | `isMountSpecialAnimToggleEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMountSpecialAnimToggleEnabled = C_PerksProgram.IsMountSpecialAnimToggleEnabled()
@@ -330,7 +330,7 @@ C_PerksProgram.ItemSelectedTelemetry(perksVendorItemID)
 |------|------|---------|-------------|
 | `perksVendorItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.ItemSelectedTelemetry(6948)
@@ -348,7 +348,7 @@ C_PerksProgram.PickupPerksVendorItem(perksVendorItemID)
 |------|------|---------|-------------|
 | `perksVendorItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.PickupPerksVendorItem(6948)
@@ -366,7 +366,7 @@ C_PerksProgram.RequestCartCheckout(perksVendorItemIDs)
 |------|------|---------|-------------|
 | `perksVendorItemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.RequestCartCheckout(6948)
@@ -378,7 +378,7 @@ C_PerksProgram.RequestCartCheckout(6948)
 C_PerksProgram.RequestPendingChestRewards()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.RequestPendingChestRewards()
@@ -396,7 +396,7 @@ C_PerksProgram.RequestPurchase(perksVendorItemID)
 |------|------|---------|-------------|
 | `perksVendorItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.RequestPurchase(6948)
@@ -414,7 +414,7 @@ C_PerksProgram.RequestRefund(perksVendorItemID)
 |------|------|---------|-------------|
 | `perksVendorItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.RequestRefund(6948)
@@ -426,7 +426,7 @@ C_PerksProgram.RequestRefund(6948)
 C_PerksProgram.ResetHeldItemDragAndDrop()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.ResetHeldItemDragAndDrop()
@@ -438,7 +438,7 @@ C_PerksProgram.ResetHeldItemDragAndDrop()
 C_PerksProgram.SetFrozenPerksVendorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PerksProgram.SetFrozenPerksVendorItem()

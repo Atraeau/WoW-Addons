@@ -18,7 +18,7 @@ offset = GetHorizontalScroll()
 |------|------|---------|-------------|
 | `offset` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offset = GetHorizontalScroll()
@@ -36,7 +36,7 @@ range = GetHorizontalScrollRange()
 |------|------|---------|-------------|
 | `range` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local range = GetHorizontalScrollRange()
@@ -54,7 +54,7 @@ scrollChild = GetScrollChild()
 |------|------|---------|-------------|
 | `scrollChild` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scrollChild = GetScrollChild()
@@ -72,7 +72,7 @@ offset = GetVerticalScroll()
 |------|------|---------|-------------|
 | `offset` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offset = GetVerticalScroll()
@@ -90,7 +90,7 @@ range = GetVerticalScrollRange()
 |------|------|---------|-------------|
 | `range` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local range = GetVerticalScrollRange()
@@ -108,10 +108,10 @@ SetHorizontalScroll(offset)
 |------|------|---------|-------------|
 | `offset` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetHorizontalScroll(offset)
+SetHorizontalScroll(1)
 ```
 
 ### SimpleScrollFrameAPI.SetScrollChild
@@ -126,7 +126,7 @@ SetScrollChild(scrollChild)
 |------|------|---------|-------------|
 | `scrollChild` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScrollChild(scrollChild)
@@ -144,10 +144,10 @@ SetVerticalScroll(offset)
 |------|------|---------|-------------|
 | `offset` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetVerticalScroll(offset)
+SetVerticalScroll(1)
 ```
 
 ### SimpleScrollFrameAPI.UpdateScrollChildRect
@@ -156,7 +156,7 @@ SetVerticalScroll(offset)
 UpdateScrollChildRect()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateScrollChildRect()

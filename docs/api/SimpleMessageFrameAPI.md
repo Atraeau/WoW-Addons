@@ -23,7 +23,7 @@ AddMessage(text, colorR, colorG, colorB, [a], [messageID])
 | `a` | SingleColorValue | yes |  |
 | `messageID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddMessage("", 0, 0, 0)
@@ -35,7 +35,7 @@ AddMessage("", 0, 0, 0)
 Clear()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Clear()
@@ -53,7 +53,7 @@ fadeDurationSeconds = GetFadeDuration()
 |------|------|---------|-------------|
 | `fadeDurationSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fadeDurationSeconds = GetFadeDuration()
@@ -71,7 +71,7 @@ fadePower = GetFadePower()
 |------|------|---------|-------------|
 | `fadePower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fadePower = GetFadePower()
@@ -89,7 +89,7 @@ isFading = GetFading()
 |------|------|---------|-------------|
 | `isFading` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFading = GetFading()
@@ -109,7 +109,7 @@ fontFile, height, flags = GetFont()
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontFile, height, flags = GetFont()
@@ -127,7 +127,7 @@ font = GetFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObject()
@@ -151,7 +151,7 @@ fontString = GetFontStringByID(messageID)
 |------|------|---------|-------------|
 | `fontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontString = GetFontStringByID(0)
@@ -169,7 +169,7 @@ wordWrap = GetIndentedWordWrap()
 |------|------|---------|-------------|
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wordWrap = GetIndentedWordWrap()
@@ -187,7 +187,7 @@ mode = GetInsertMode()
 |------|------|---------|-------------|
 | `mode` | InsertMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mode = GetInsertMode()
@@ -205,7 +205,7 @@ justifyH = GetJustifyH()
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyH = GetJustifyH()
@@ -223,7 +223,7 @@ justifyV = GetJustifyV()
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyV = GetJustifyV()
@@ -244,7 +244,7 @@ colorR, colorG, colorB, colorA = GetShadowColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetShadowColor()
@@ -263,7 +263,7 @@ offsetX, offsetY = GetShadowOffset()
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetShadowOffset()
@@ -281,7 +281,7 @@ spacing = GetSpacing()
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spacing = GetSpacing()
@@ -302,7 +302,7 @@ colorR, colorG, colorB, colorA = GetTextColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetTextColor()
@@ -320,7 +320,7 @@ timeVisibleSeconds = GetTimeVisible()
 |------|------|---------|-------------|
 | `timeVisibleSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeVisibleSeconds = GetTimeVisible()
@@ -344,7 +344,7 @@ hasMessage = HasMessageByID(messageID)
 |------|------|---------|-------------|
 | `hasMessage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMessage = HasMessageByID(0)
@@ -362,7 +362,7 @@ ResetMessageFadeByID(messageID)
 |------|------|---------|-------------|
 | `messageID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetMessageFadeByID(0)
@@ -380,7 +380,7 @@ SetFadeDuration(fadeDurationSeconds)
 |------|------|---------|-------------|
 | `fadeDurationSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFadeDuration(0)
@@ -398,7 +398,7 @@ SetFadePower(fadePower)
 |------|------|---------|-------------|
 | `fadePower` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFadePower(0)
@@ -416,7 +416,7 @@ SetFading(fading)
 |------|------|---------|-------------|
 | `fading` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFading(false)
@@ -436,7 +436,7 @@ SetFont(fontFile, height, flags)
 | `height` | uiFontHeight | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFont("", height, flags)
@@ -454,7 +454,7 @@ SetFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontObject(font)
@@ -472,7 +472,7 @@ SetIndentedWordWrap(wordWrap)
 |------|------|---------|-------------|
 | `wordWrap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIndentedWordWrap(false)
@@ -490,7 +490,7 @@ SetInsertMode(mode)
 |------|------|---------|-------------|
 | `mode` | InsertMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetInsertMode(mode)
@@ -508,7 +508,7 @@ SetJustifyH(justifyH)
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyH(justifyH)
@@ -526,7 +526,7 @@ SetJustifyV(justifyV)
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyV(justifyV)
@@ -547,7 +547,7 @@ SetShadowColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowColor(0, 0, 0)
@@ -566,10 +566,10 @@ SetShadowOffset(offsetX, offsetY)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetShadowOffset(0, 0)
+SetShadowOffset(1, 1)
 ```
 
 ### SimpleMessageFrameAPI.SetSpacing
@@ -584,7 +584,7 @@ SetSpacing(spacing)
 |------|------|---------|-------------|
 | `spacing` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpacing(spacing)
@@ -605,7 +605,7 @@ SetTextColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColor(0, 0, 0)
@@ -623,7 +623,7 @@ SetTimeVisible(timeVisibleSeconds)
 |------|------|---------|-------------|
 | `timeVisibleSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimeVisible(0)

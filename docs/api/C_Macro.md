@@ -24,10 +24,10 @@ name = C_Macro.GetMacroName(macroId)
 |------|------|---------|-------------|
 | `name` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local name = C_Macro.GetMacroName(macroId)
+local name = C_Macro.GetMacroName(1)
 ```
 
 ### C_Macro.GetSelectedMacroIcon
@@ -48,10 +48,10 @@ textureNum = C_Macro.GetSelectedMacroIcon(macroId)
 |------|------|---------|-------------|
 | `textureNum` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local textureNum = C_Macro.GetSelectedMacroIcon(macroId)
+local textureNum = C_Macro.GetSelectedMacroIcon(1)
 ```
 
 ### C_Macro.RunMacroText
@@ -67,7 +67,7 @@ C_Macro.RunMacroText(text, button)
 | `text` | cstring | no |  |
 | `button` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Macro.RunMacroText("", "")
@@ -85,7 +85,7 @@ C_Macro.SetMacroExecuteLineCallback(cb)
 |------|------|---------|-------------|
 | `cb` | MacroExecuteLineCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Macro.SetMacroExecuteLineCallback(cb)

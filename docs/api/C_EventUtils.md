@@ -24,7 +24,7 @@ isCallbackEvent = C_EventUtils.IsCallbackEvent(eventName)
 |------|------|---------|-------------|
 | `isCallbackEvent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCallbackEvent = C_EventUtils.IsCallbackEvent(eventName)
@@ -48,7 +48,7 @@ valid = C_EventUtils.IsEventValid(eventName)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_EventUtils.IsEventValid(eventName)

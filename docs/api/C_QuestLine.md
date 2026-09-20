@@ -24,7 +24,7 @@ questLines = C_QuestLine.GetAvailableQuestLines(uiMapID)
 |------|------|---------|-------------|
 | `questLines` | QuestLineInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questLines = C_QuestLine.GetAvailableQuestLines(0)
@@ -48,7 +48,7 @@ questIDs = C_QuestLine.GetForceVisibleQuests(uiMapID)
 |------|------|---------|-------------|
 | `questIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questIDs = C_QuestLine.GetForceVisibleQuests(0)
@@ -74,7 +74,7 @@ questLineInfo = C_QuestLine.GetQuestLineInfo(questID, [uiMapID], displayableOnly
 |------|------|---------|-------------|
 | `questLineInfo` | QuestLineInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questLineInfo = C_QuestLine.GetQuestLineInfo(0, false)
@@ -98,7 +98,7 @@ questIDs = C_QuestLine.GetQuestLineQuests(questLineID)
 |------|------|---------|-------------|
 | `questIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questIDs = C_QuestLine.GetQuestLineQuests(0)
@@ -122,7 +122,7 @@ isComplete = C_QuestLine.IsComplete(questLineID)
 |------|------|---------|-------------|
 | `isComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isComplete = C_QuestLine.IsComplete(0)
@@ -147,7 +147,7 @@ questLineIgnoresAccountCompletedFiltering = C_QuestLine.QuestLineIgnoresAccountC
 |------|------|---------|-------------|
 | `questLineIgnoresAccountCompletedFiltering` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questLineIgnoresAccountCompletedFiltering = C_QuestLine.QuestLineIgnoresAccountCompletedFiltering(0, 0)
@@ -165,7 +165,7 @@ C_QuestLine.RequestQuestLinesForMap(uiMapID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestLine.RequestQuestLinesForMap(0)

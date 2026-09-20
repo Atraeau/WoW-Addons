@@ -21,7 +21,7 @@ AddPoint(x, y)
 | `x` | number | no |  |
 | `y` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddPoint(0, y)
@@ -35,7 +35,7 @@ Removes all points from the curve. Evaluating an empty curve always yields a zer
 ClearPoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPoints()
@@ -55,7 +55,7 @@ curve = Copy()
 |------|------|---------|-------------|
 | `curve` | LuaColorCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = Copy()
@@ -81,7 +81,7 @@ y = Evaluate(x)
 |------|------|---------|-------------|
 | `y` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local y = Evaluate(0)
@@ -110,7 +110,7 @@ yR, yG, yB, yA = EvaluateUnpacked(x)
 | `yB` | number | no |  |
 | `yA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local yR, yG, yB, yA = EvaluateUnpacked(0)
@@ -136,7 +136,7 @@ point = GetPoint(index)
 |------|------|---------|-------------|
 | `point` | LuaColorCurvePoint | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point = GetPoint(1)
@@ -156,7 +156,7 @@ count = GetPointCount()
 |------|------|---------|-------------|
 | `count` | size | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = GetPointCount()
@@ -176,7 +176,7 @@ point = GetPoints()
 |------|------|---------|-------------|
 | `point` | LuaColorCurvePoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point = GetPoints()
@@ -196,7 +196,7 @@ RemovePoint(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RemovePoint(1)
@@ -216,7 +216,7 @@ SetPoints(point)
 |------|------|---------|-------------|
 | `point` | LuaColorCurvePoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPoints(point)
@@ -230,7 +230,7 @@ Resets all state on the curve, and clears the secret values flag.
 SetToDefaults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToDefaults()

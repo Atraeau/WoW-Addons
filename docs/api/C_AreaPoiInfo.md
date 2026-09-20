@@ -24,7 +24,7 @@ areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(uiMapID)
 |------|------|---------|-------------|
 | `areaPoiIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(0)
@@ -49,7 +49,7 @@ poiInfo = C_AreaPoiInfo.GetAreaPOIInfo([uiMapID], areaPoiID)
 |------|------|---------|-------------|
 | `poiInfo` | AreaPOIInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(0)
@@ -75,7 +75,7 @@ secondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
 |------|------|---------|-------------|
 | `secondsLeft` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local secondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft(0)
@@ -101,7 +101,7 @@ areaPoiIDs = C_AreaPoiInfo.GetDelvesForMap(uiMapID)
 |------|------|---------|-------------|
 | `areaPoiIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaPoiIDs = C_AreaPoiInfo.GetDelvesForMap(0)
@@ -127,7 +127,7 @@ areaPoiIDs = C_AreaPoiInfo.GetDragonridingRacesForMap(uiMapID)
 |------|------|---------|-------------|
 | `areaPoiIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaPoiIDs = C_AreaPoiInfo.GetDragonridingRacesForMap(0)
@@ -153,7 +153,7 @@ areaPoiIDs = C_AreaPoiInfo.GetEventsForMap(uiMapID)
 |------|------|---------|-------------|
 | `areaPoiIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaPoiIDs = C_AreaPoiInfo.GetEventsForMap(0)
@@ -179,7 +179,7 @@ areaPoiIDs = C_AreaPoiInfo.GetQuestHubsForMap(uiMapID)
 |------|------|---------|-------------|
 | `areaPoiIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areaPoiIDs = C_AreaPoiInfo.GetQuestHubsForMap(0)
@@ -206,7 +206,7 @@ isTimed, hideTimerInTooltip = C_AreaPoiInfo.IsAreaPOITimed(areaPoiID)
 | `isTimed` | bool | no |  |
 | `hideTimerInTooltip` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTimed, hideTimerInTooltip = C_AreaPoiInfo.IsAreaPOITimed(0)

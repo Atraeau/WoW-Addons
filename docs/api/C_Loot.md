@@ -24,7 +24,7 @@ duration = C_Loot.GetLootRollDuration(rollID)
 |------|------|---------|-------------|
 | `duration` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_Loot.GetLootRollDuration(0)
@@ -42,7 +42,7 @@ isLegacyLootModeEnabled = C_Loot.IsLegacyLootModeEnabled()
 |------|------|---------|-------------|
 | `isLegacyLootModeEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLegacyLootModeEnabled = C_Loot.IsLegacyLootModeEnabled()

@@ -18,7 +18,7 @@ result = IsCollisionEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsCollisionEnabled()
@@ -30,7 +30,7 @@ local result = IsCollisionEnabled()
 ToggleAnimKitDisplay()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleAnimKitDisplay()
@@ -42,7 +42,7 @@ ToggleAnimKitDisplay()
 ToggleCollision()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleCollision()
@@ -54,7 +54,7 @@ ToggleCollision()
 ToggleCollisionDisplay()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleCollisionDisplay()
@@ -66,7 +66,7 @@ ToggleCollisionDisplay()
 ToggleDebugAIDisplay()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleDebugAIDisplay()
@@ -78,7 +78,7 @@ ToggleDebugAIDisplay()
 ToggleGravity()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleGravity()
@@ -90,7 +90,7 @@ ToggleGravity()
 TogglePlayerBounds()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TogglePlayerBounds()
@@ -102,7 +102,7 @@ TogglePlayerBounds()
 TogglePortals()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TogglePortals()
@@ -114,7 +114,7 @@ TogglePortals()
 ToggleTris()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleTris()

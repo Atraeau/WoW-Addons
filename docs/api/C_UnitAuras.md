@@ -25,7 +25,7 @@ auraSoundID = C_UnitAuras.AddAuraSound(trigger, sound)
 |------|------|---------|-------------|
 | `auraSoundID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local auraSoundID = C_UnitAuras.AddAuraSound(trigger, sound)
@@ -44,7 +44,7 @@ C_UnitAuras.AddBlockedAura(unit, auraInstanceID)
 | `unit` | UnitTokenRestrictedForAddOns | no |  |
 | `auraInstanceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.AddBlockedAura("player", 0)
@@ -68,7 +68,7 @@ anchorID = C_UnitAuras.AddPrivateAuraAnchor(args)
 |------|------|---------|-------------|
 | `anchorID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anchorID = C_UnitAuras.AddPrivateAuraAnchor(args)
@@ -92,10 +92,10 @@ isBigDefensive = C_UnitAuras.AuraIsBigDefensive(spellID)
 |------|------|---------|-------------|
 | `isBigDefensive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isBigDefensive = C_UnitAuras.AuraIsBigDefensive(12345)
+local isBigDefensive = C_UnitAuras.AuraIsBigDefensive(2050)
 ```
 
 ### C_UnitAuras.AuraIsPrivate
@@ -116,10 +116,10 @@ isPrivate = C_UnitAuras.AuraIsPrivate(spellID)
 |------|------|---------|-------------|
 | `isPrivate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPrivate = C_UnitAuras.AuraIsPrivate(12345)
+local isPrivate = C_UnitAuras.AuraIsPrivate(2050)
 ```
 
 ### C_UnitAuras.CancelAuraByInstanceID
@@ -135,7 +135,7 @@ C_UnitAuras.CancelAuraByInstanceID(unit, auraInstanceID)
 | `unit` | UnitTokenRestrictedForAddOns | no |  |
 | `auraInstanceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.CancelAuraByInstanceID("player", 0)
@@ -153,7 +153,7 @@ C_UnitAuras.ClearBlockedAuras(unit)
 |------|------|---------|-------------|
 | `unit` | UnitTokenRestrictedForAddOns | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.ClearBlockedAuras("player")
@@ -180,7 +180,7 @@ hasExpirationTime = C_UnitAuras.DoesAuraHaveExpirationTime(auraInstanceUnit, aur
 |------|------|---------|-------------|
 | `hasExpirationTime` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasExpirationTime = C_UnitAuras.DoesAuraHaveExpirationTime("player", 0)
@@ -209,7 +209,7 @@ count = C_UnitAuras.GetAuraApplicationDisplayCount(auraInstanceUnit, auraInstanc
 |------|------|---------|-------------|
 | `count` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_UnitAuras.GetAuraApplicationDisplayCount("player", 0, 0)
@@ -237,7 +237,7 @@ newDuration = C_UnitAuras.GetAuraBaseDuration(auraInstanceUnit, auraInstanceID, 
 |------|------|---------|-------------|
 | `newDuration` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newDuration = C_UnitAuras.GetAuraBaseDuration("player", 0)
@@ -262,7 +262,7 @@ casterGUID = C_UnitAuras.GetAuraCasterGUID(auraInstanceUnit, auraInstanceID)
 |------|------|---------|-------------|
 | `casterGUID` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local casterGUID = C_UnitAuras.GetAuraCasterGUID("player", 0)
@@ -287,7 +287,7 @@ aura = C_UnitAuras.GetAuraDataByAuraInstanceID(unit, auraInstanceID)
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local aura = C_UnitAuras.GetAuraDataByAuraInstanceID("player", 0)
@@ -316,7 +316,12 @@ aura = C_UnitAuras.GetAuraDataByIndex(unit, index, [filter])
 **Example**
 
 ```lua
-local aura = C_UnitAuras.GetAuraDataByIndex("player", 1)
+-- Iterate a unit's buffs (filter "HELPFUL"/"HARMFUL") until nil
+for i = 1, 40 do
+    local aura = C_UnitAuras.GetAuraDataByIndex("player", i, "HELPFUL")
+    if not aura then break end
+    print(aura.name, aura.spellId, aura.applications)
+end
 ```
 
 ### C_UnitAuras.GetAuraDataBySlot
@@ -338,7 +343,7 @@ aura = C_UnitAuras.GetAuraDataBySlot(unit, slot)
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local aura = C_UnitAuras.GetAuraDataBySlot("player", 1)
@@ -364,10 +369,10 @@ aura = C_UnitAuras.GetAuraDataBySpellName(unit, spellName, [filter])
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local aura = C_UnitAuras.GetAuraDataBySpellName("player", 12345)
+local aura = C_UnitAuras.GetAuraDataBySpellName("player", 2050)
 ```
 
 ### C_UnitAuras.GetAuraDispelTypeColor
@@ -392,7 +397,7 @@ dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor(auraInstanceUnit, auraInsta
 |------|------|---------|-------------|
 | `dispelTypeColor` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dispelTypeColor = C_UnitAuras.GetAuraDispelTypeColor("player", 0, curve)
@@ -417,7 +422,7 @@ duration = C_UnitAuras.GetAuraDuration(auraInstanceUnit, auraInstanceID)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_UnitAuras.GetAuraDuration("player", 0)
@@ -445,7 +450,7 @@ outContinuationToken, slots = C_UnitAuras.GetAuraSlots(unit, [filter], [maxSlots
 | `outContinuationToken` | number | yes |  |
 | `slots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outContinuationToken, slots = C_UnitAuras.GetAuraSlots("player")
@@ -475,6 +480,9 @@ aura = C_UnitAuras.GetBuffDataByIndex(unit, index, [filter])
 
 ```lua
 local aura = C_UnitAuras.GetBuffDataByIndex("player", 1)
+if aura then
+    print(aura.name, aura.spellId, aura.expirationTime)
+end
 ```
 
 ### C_UnitAuras.GetCooldownAuraBySpellID
@@ -495,10 +503,10 @@ cooldownSpellID = C_UnitAuras.GetCooldownAuraBySpellID(spellID)
 |------|------|---------|-------------|
 | `cooldownSpellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local cooldownSpellID = C_UnitAuras.GetCooldownAuraBySpellID(12345)
+local cooldownSpellID = C_UnitAuras.GetCooldownAuraBySpellID(2050)
 ```
 
 ### C_UnitAuras.GetDebuffDataByIndex
@@ -521,7 +529,7 @@ aura = C_UnitAuras.GetDebuffDataByIndex(unit, index, [filter])
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local aura = C_UnitAuras.GetDebuffDataByIndex("player", 1)
@@ -539,7 +547,7 @@ visualAlerts = C_UnitAuras.GetGroupBuffVisualAlerts()
 |------|------|---------|-------------|
 | `visualAlerts` | GroupBuffVisualAlertInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local visualAlerts = C_UnitAuras.GetGroupBuffVisualAlerts()
@@ -557,7 +565,7 @@ spellIDs = C_UnitAuras.GetHiddenGroupBuffs()
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_UnitAuras.GetHiddenGroupBuffs()
@@ -581,10 +589,10 @@ aura = C_UnitAuras.GetPlayerAuraBySpellID(spellID)
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local aura = C_UnitAuras.GetPlayerAuraBySpellID(12345)
+local aura = C_UnitAuras.GetPlayerAuraBySpellID(2050)
 ```
 
 ### C_UnitAuras.GetRefreshExtendedDuration
@@ -609,7 +617,7 @@ newDuration = C_UnitAuras.GetRefreshExtendedDuration(auraInstanceUnit, auraInsta
 |------|------|---------|-------------|
 | `newDuration` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newDuration = C_UnitAuras.GetRefreshExtendedDuration("player", 0)
@@ -636,10 +644,10 @@ aura = C_UnitAuras.GetUnitAuraBySpellID(unit, spellID)
 |------|------|---------|-------------|
 | `aura` | AuraData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local aura = C_UnitAuras.GetUnitAuraBySpellID("player", 12345)
+local aura = C_UnitAuras.GetUnitAuraBySpellID("player", 2050)
 ```
 
 ### C_UnitAuras.GetUnitAuraInstanceIDs
@@ -664,7 +672,7 @@ auraInstanceIDs = C_UnitAuras.GetUnitAuraInstanceIDs(unit, filter, [maxCount], s
 |------|------|---------|-------------|
 | `auraInstanceIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local auraInstanceIDs = C_UnitAuras.GetUnitAuraInstanceIDs("player", "HELPFUL", sortRule, sortDirection)
@@ -692,7 +700,7 @@ auras = C_UnitAuras.GetUnitAuras(unit, filter, [maxCount], sortRule, sortDirecti
 |------|------|---------|-------------|
 | `auras` | AuraData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local auras = C_UnitAuras.GetUnitAuras("player", "HELPFUL", sortRule, sortDirection)
@@ -718,7 +726,7 @@ isFiltered = C_UnitAuras.IsAuraFilteredOutByInstanceID(unit, auraInstanceID, fil
 |------|------|---------|-------------|
 | `isFiltered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFiltered = C_UnitAuras.IsAuraFilteredOutByInstanceID("player", 0, "HELPFUL")
@@ -736,7 +744,7 @@ C_UnitAuras.RemoveAuraSound(auraSoundID)
 |------|------|---------|-------------|
 | `auraSoundID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.RemoveAuraSound(0)
@@ -754,7 +762,7 @@ C_UnitAuras.RemovePrivateAuraAnchor(anchorID)
 |------|------|---------|-------------|
 | `anchorID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.RemovePrivateAuraAnchor(0)
@@ -766,7 +774,7 @@ C_UnitAuras.RemovePrivateAuraAnchor(0)
 C_UnitAuras.ResetAuraDataProvider()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.ResetAuraDataProvider()
@@ -784,7 +792,7 @@ C_UnitAuras.SetGroupBuffVisualAlerts(visualAlerts)
 |------|------|---------|-------------|
 | `visualAlerts` | GroupBuffVisualAlertInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.SetGroupBuffVisualAlerts(visualAlerts)
@@ -802,10 +810,10 @@ C_UnitAuras.SetHiddenGroupBuffs(spellIDs)
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_UnitAuras.SetHiddenGroupBuffs(12345)
+C_UnitAuras.SetHiddenGroupBuffs(2050)
 ```
 
 ### C_UnitAuras.SetPrivateWarningTextAnchor
@@ -821,7 +829,7 @@ C_UnitAuras.SetPrivateWarningTextAnchor(parent, [anchor])
 | `parent` | SimpleFrame | no |  |
 | `anchor` | AnchorBinding | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.SetPrivateWarningTextAnchor(parent)
@@ -833,7 +841,7 @@ C_UnitAuras.SetPrivateWarningTextAnchor(parent)
 C_UnitAuras.SwitchAuraDataProvider()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UnitAuras.SwitchAuraDataProvider()
@@ -857,7 +865,7 @@ wantsAlteredForm = C_UnitAuras.WantsAlteredForm(unit)
 |------|------|---------|-------------|
 | `wantsAlteredForm` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wantsAlteredForm = C_UnitAuras.WantsAlteredForm("player")

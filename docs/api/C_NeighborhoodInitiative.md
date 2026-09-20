@@ -18,7 +18,7 @@ C_NeighborhoodInitiative.AddTrackedInitiativeTask(initiativeTaskID)
 |------|------|---------|-------------|
 | `initiativeTaskID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NeighborhoodInitiative.AddTrackedInitiativeTask(0)
@@ -36,7 +36,7 @@ neighborhoodGUID = C_NeighborhoodInitiative.GetActiveNeighborhood()
 |------|------|---------|-------------|
 | `neighborhoodGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodGUID = C_NeighborhoodInitiative.GetActiveNeighborhood()
@@ -54,7 +54,7 @@ availabeXP = C_NeighborhoodInitiative.GetAvailableHouseXP()
 |------|------|---------|-------------|
 | `availabeXP` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local availabeXP = C_NeighborhoodInitiative.GetAvailableHouseXP()
@@ -72,7 +72,7 @@ info = C_NeighborhoodInitiative.GetInitiativeActivityLogInfo()
 |------|------|---------|-------------|
 | `info` | InitiativeActivityLogInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_NeighborhoodInitiative.GetInitiativeActivityLogInfo()
@@ -96,7 +96,7 @@ link = C_NeighborhoodInitiative.GetInitiativeTaskChatLink(initiativeTaskID)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_NeighborhoodInitiative.GetInitiativeTaskChatLink(0)
@@ -120,7 +120,7 @@ info = C_NeighborhoodInitiative.GetInitiativeTaskInfo(initiativeTaskID)
 |------|------|---------|-------------|
 | `info` | InitiativeTaskInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_NeighborhoodInitiative.GetInitiativeTaskInfo(0)
@@ -145,7 +145,7 @@ scaledAmount = C_NeighborhoodInitiative.GetInitiativeTaskRewardScaling(taskID, n
 |------|------|---------|-------------|
 | `scaledAmount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scaledAmount = C_NeighborhoodInitiative.GetInitiativeTaskRewardScaling(0, 6948)
@@ -163,7 +163,7 @@ info = C_NeighborhoodInitiative.GetNeighborhoodInitiativeInfo()
 |------|------|---------|-------------|
 | `info` | NeighborhoodInitiativeInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_NeighborhoodInitiative.GetNeighborhoodInitiativeInfo()
@@ -181,7 +181,7 @@ reqLevel = C_NeighborhoodInitiative.GetRequiredLevel()
 |------|------|---------|-------------|
 | `reqLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reqLevel = C_NeighborhoodInitiative.GetRequiredLevel()
@@ -199,7 +199,7 @@ trackedInitiativeTasks = C_NeighborhoodInitiative.GetTrackedInitiativeTasks()
 |------|------|---------|-------------|
 | `trackedInitiativeTasks` | InitiativeTasksTracked | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackedInitiativeTasks = C_NeighborhoodInitiative.GetTrackedInitiativeTasks()
@@ -217,7 +217,7 @@ enabled = C_NeighborhoodInitiative.IsInitiativeEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_NeighborhoodInitiative.IsInitiativeEnabled()
@@ -235,7 +235,7 @@ inValidGroup = C_NeighborhoodInitiative.IsPlayerInNeighborhoodGroup()
 |------|------|---------|-------------|
 | `inValidGroup` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inValidGroup = C_NeighborhoodInitiative.IsPlayerInNeighborhoodGroup()
@@ -253,7 +253,7 @@ isViewingActiveNeighborhood = C_NeighborhoodInitiative.IsViewingActiveNeighborho
 |------|------|---------|-------------|
 | `isViewingActiveNeighborhood` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isViewingActiveNeighborhood = C_NeighborhoodInitiative.IsViewingActiveNeighborhood()
@@ -271,7 +271,7 @@ success = C_NeighborhoodInitiative.PlayerHasInitiativeAccess()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_NeighborhoodInitiative.PlayerHasInitiativeAccess()
@@ -289,7 +289,7 @@ success = C_NeighborhoodInitiative.PlayerMeetsRequiredLevel()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_NeighborhoodInitiative.PlayerMeetsRequiredLevel()
@@ -307,7 +307,7 @@ C_NeighborhoodInitiative.RemoveTrackedInitiativeTask(initiativeTaskID)
 |------|------|---------|-------------|
 | `initiativeTaskID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NeighborhoodInitiative.RemoveTrackedInitiativeTask(0)
@@ -319,7 +319,7 @@ C_NeighborhoodInitiative.RemoveTrackedInitiativeTask(0)
 C_NeighborhoodInitiative.RequestInitiativeActivityLog()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NeighborhoodInitiative.RequestInitiativeActivityLog()
@@ -331,7 +331,7 @@ C_NeighborhoodInitiative.RequestInitiativeActivityLog()
 C_NeighborhoodInitiative.RequestNeighborhoodInitiativeInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NeighborhoodInitiative.RequestNeighborhoodInitiativeInfo()
@@ -349,10 +349,10 @@ C_NeighborhoodInitiative.SetActiveNeighborhood(neighborhoodGUID)
 |------|------|---------|-------------|
 | `neighborhoodGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_NeighborhoodInitiative.SetActiveNeighborhood("Creature-0-0000-0-0-0-0")
+C_NeighborhoodInitiative.SetActiveNeighborhood(UnitGUID("player"))
 ```
 
 ### C_NeighborhoodInitiative.SetViewingNeighborhood
@@ -367,10 +367,10 @@ C_NeighborhoodInitiative.SetViewingNeighborhood(neighborhoodGUID)
 |------|------|---------|-------------|
 | `neighborhoodGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_NeighborhoodInitiative.SetViewingNeighborhood("Creature-0-0000-0-0-0-0")
+C_NeighborhoodInitiative.SetViewingNeighborhood(UnitGUID("player"))
 ```
 
 ## Events

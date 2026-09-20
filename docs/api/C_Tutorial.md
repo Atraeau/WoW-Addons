@@ -12,7 +12,7 @@
 C_Tutorial.AbandonTutorialArea()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Tutorial.AbandonTutorialArea()
@@ -24,7 +24,7 @@ C_Tutorial.AbandonTutorialArea()
 C_Tutorial.GetCombatEventInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Tutorial.GetCombatEventInfo()
@@ -36,7 +36,7 @@ C_Tutorial.GetCombatEventInfo()
 C_Tutorial.ReturnToTutorialArea()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Tutorial.ReturnToTutorialArea()

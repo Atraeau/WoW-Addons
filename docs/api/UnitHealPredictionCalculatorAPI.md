@@ -26,7 +26,7 @@ result = EvaluateCurrentHealthPercent(curve)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateCurrentHealthPercent(curve)
@@ -52,7 +52,7 @@ result = EvaluateMissingHealthPercent(curve)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateMissingHealthPercent(curve)
@@ -72,7 +72,7 @@ currentHealth = GetCurrentHealth()
 |------|------|---------|-------------|
 | `currentHealth` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentHealth = GetCurrentHealth()
@@ -92,7 +92,7 @@ currentHealthPercent = GetCurrentHealthPercent()
 |------|------|---------|-------------|
 | `currentHealthPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentHealthPercent = GetCurrentHealthPercent()
@@ -112,7 +112,7 @@ damageAbsorbClampMode = GetDamageAbsorbClampMode()
 |------|------|---------|-------------|
 | `damageAbsorbClampMode` | UnitDamageAbsorbClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local damageAbsorbClampMode = GetDamageAbsorbClampMode()
@@ -133,7 +133,7 @@ amount, clamped = GetDamageAbsorbs()
 | `amount` | number | no | Amount of applied damage absorb affects with potential reductions from clamping included. |
 | `clamped` | bool | no | If true, the value is in excess of the clamp boundary. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount, clamped = GetDamageAbsorbs()
@@ -153,7 +153,7 @@ healAbsorbClampMode = GetHealAbsorbClampMode()
 |------|------|---------|-------------|
 | `healAbsorbClampMode` | UnitHealAbsorbClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local healAbsorbClampMode = GetHealAbsorbClampMode()
@@ -173,7 +173,7 @@ healAbsorbMode = GetHealAbsorbMode()
 |------|------|---------|-------------|
 | `healAbsorbMode` | UnitHealAbsorbMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local healAbsorbMode = GetHealAbsorbMode()
@@ -194,7 +194,7 @@ amount, clamped = GetHealAbsorbs()
 | `amount` | number | no | Amount of applied heal absorb affects with potential reductions from incoming heals and clamping included. |
 | `clamped` | bool | no | If true, the value is in excess of the clamp boundary. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount, clamped = GetHealAbsorbs()
@@ -214,7 +214,7 @@ incomingHealClampMode = GetIncomingHealClampMode()
 |------|------|---------|-------------|
 | `incomingHealClampMode` | UnitIncomingHealClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local incomingHealClampMode = GetIncomingHealClampMode()
@@ -234,7 +234,7 @@ incomingHealOverflowPercent = GetIncomingHealOverflowPercent()
 |------|------|---------|-------------|
 | `incomingHealOverflowPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local incomingHealOverflowPercent = GetIncomingHealOverflowPercent()
@@ -257,7 +257,7 @@ amount, amountFromHealer, amountFromOthers, clamped = GetIncomingHeals()
 | `amountFromOthers` | number | no | Amount of incoming heals from units other than theh healer. Calculated as the difference between amount and amount-from-healer. |
 | `clamped` | bool | no | If true, the value is in excess of the clamp boundary. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount, amountFromHealer, amountFromOthers, clamped = GetIncomingHeals()
@@ -277,7 +277,7 @@ maximumDamageAbsorbs = GetMaximumDamageAbsorbs()
 |------|------|---------|-------------|
 | `maximumDamageAbsorbs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maximumDamageAbsorbs = GetMaximumDamageAbsorbs()
@@ -297,7 +297,7 @@ maximumHealAbsorbs = GetMaximumHealAbsorbs()
 |------|------|---------|-------------|
 | `maximumHealAbsorbs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maximumHealAbsorbs = GetMaximumHealAbsorbs()
@@ -317,7 +317,7 @@ maximumHealth = GetMaximumHealth()
 |------|------|---------|-------------|
 | `maximumHealth` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maximumHealth = GetMaximumHealth()
@@ -337,7 +337,7 @@ maximumHealthMode = GetMaximumHealthMode()
 |------|------|---------|-------------|
 | `maximumHealthMode` | UnitMaximumHealthMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maximumHealthMode = GetMaximumHealthMode()
@@ -357,7 +357,7 @@ maximumIncomingHeals = GetMaximumIncomingHeals()
 |------|------|---------|-------------|
 | `maximumIncomingHeals` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maximumIncomingHeals = GetMaximumIncomingHeals()
@@ -377,7 +377,7 @@ missingHealth = GetMissingHealth()
 |------|------|---------|-------------|
 | `missingHealth` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local missingHealth = GetMissingHealth()
@@ -397,7 +397,7 @@ missingHealthPercent = GetMissingHealthPercent()
 |------|------|---------|-------------|
 | `missingHealthPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local missingHealthPercent = GetMissingHealthPercent()
@@ -417,7 +417,7 @@ predictedValues = GetPredictedValues()
 |------|------|---------|-------------|
 | `predictedValues` | UnitHealPredictionValues | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local predictedValues = GetPredictedValues()
@@ -437,7 +437,7 @@ totalDamageAbsorbs = GetTotalDamageAbsorbs()
 |------|------|---------|-------------|
 | `totalDamageAbsorbs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalDamageAbsorbs = GetTotalDamageAbsorbs()
@@ -457,7 +457,7 @@ totalHealAbsorbs = GetTotalHealAbsorbs()
 |------|------|---------|-------------|
 | `totalHealAbsorbs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalHealAbsorbs = GetTotalHealAbsorbs()
@@ -477,7 +477,7 @@ totalIncomingHeals = GetTotalIncomingHeals()
 |------|------|---------|-------------|
 | `totalIncomingHeals` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalIncomingHeals = GetTotalIncomingHeals()
@@ -497,7 +497,7 @@ totalIncomingHealsFromHealer = GetTotalIncomingHealsFromHealer()
 |------|------|---------|-------------|
 | `totalIncomingHealsFromHealer` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalIncomingHealsFromHealer = GetTotalIncomingHealsFromHealer()
@@ -517,7 +517,7 @@ hasSecretValues = HasSecretValues()
 |------|------|---------|-------------|
 | `hasSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretValues = HasSecretValues()
@@ -531,7 +531,7 @@ Resets all stored state on the object.
 Reset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Reset()
@@ -545,7 +545,7 @@ Resets all stored healing values used for calculations.
 ResetPredictedValues()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetPredictedValues()
@@ -565,7 +565,7 @@ SetDamageAbsorbClampMode(damageAbsorbClampMode)
 |------|------|---------|-------------|
 | `damageAbsorbClampMode` | UnitDamageAbsorbClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDamageAbsorbClampMode(damageAbsorbClampMode)
@@ -585,7 +585,7 @@ SetHealAbsorbClampMode(healAbsorbClampMode)
 |------|------|---------|-------------|
 | `healAbsorbClampMode` | UnitHealAbsorbClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHealAbsorbClampMode(healAbsorbClampMode)
@@ -605,7 +605,7 @@ SetHealAbsorbMode(healAbsorbMode)
 |------|------|---------|-------------|
 | `healAbsorbMode` | UnitHealAbsorbMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHealAbsorbMode(healAbsorbMode)
@@ -625,7 +625,7 @@ SetIncomingHealClampMode(incomingHealClampMode)
 |------|------|---------|-------------|
 | `incomingHealClampMode` | UnitIncomingHealClampMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIncomingHealClampMode(incomingHealClampMode)
@@ -645,7 +645,7 @@ SetIncomingHealOverflowPercent(incomingHealOverflowPercent)
 |------|------|---------|-------------|
 | `incomingHealOverflowPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIncomingHealOverflowPercent(0)
@@ -665,7 +665,7 @@ SetMaximumHealthMode(maximumHealthMode)
 |------|------|---------|-------------|
 | `maximumHealthMode` | UnitMaximumHealthMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaximumHealthMode(maximumHealthMode)
@@ -685,7 +685,7 @@ SetPredictedValues(predictedValues)
 |------|------|---------|-------------|
 | `predictedValues` | UnitHealPredictionValues | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPredictedValues(predictedValues)
@@ -699,7 +699,7 @@ Resets all state on the object, and clears the secret values flag.
 SetToDefaults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToDefaults()

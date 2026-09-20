@@ -18,7 +18,7 @@ tooltipText = GetScenarioTooltipText()
 |------|------|---------|-------------|
 | `tooltipText` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tooltipText = GetScenarioTooltipText()
@@ -43,7 +43,7 @@ hasTooltip = UpdateMouseOverTooltip(x, y)
 |------|------|---------|-------------|
 | `hasTooltip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasTooltip = UpdateMouseOverTooltip(0, 0)

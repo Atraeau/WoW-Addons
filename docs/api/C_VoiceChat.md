@@ -18,7 +18,7 @@ C_VoiceChat.ActivateChannel(channelID)
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.ActivateChannel(0)
@@ -36,7 +36,7 @@ C_VoiceChat.ActivateChannelTranscription(channelID)
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.ActivateChannelTranscription(0)
@@ -54,7 +54,7 @@ C_VoiceChat.BeginLocalCapture(listenToLocalUser)
 |------|------|---------|-------------|
 | `listenToLocalUser` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.BeginLocalCapture(false)
@@ -72,7 +72,7 @@ canAccess = C_VoiceChat.CanAccessSettings()
 |------|------|---------|-------------|
 | `canAccess` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccess = C_VoiceChat.CanAccessSettings()
@@ -90,7 +90,7 @@ canUseVoiceChat = C_VoiceChat.CanPlayerUseVoiceChat()
 |------|------|---------|-------------|
 | `canUseVoiceChat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseVoiceChat = C_VoiceChat.CanPlayerUseVoiceChat()
@@ -114,7 +114,7 @@ status = C_VoiceChat.CreateChannel(channelDisplayName)
 |------|------|---------|-------------|
 | `status` | VoiceChatStatusCode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_VoiceChat.CreateChannel("")
@@ -132,7 +132,7 @@ C_VoiceChat.DeactivateChannel(channelID)
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.DeactivateChannel(0)
@@ -150,7 +150,7 @@ C_VoiceChat.DeactivateChannelTranscription(channelID)
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.DeactivateChannelTranscription(0)
@@ -162,7 +162,7 @@ C_VoiceChat.DeactivateChannelTranscription(0)
 C_VoiceChat.EndLocalCapture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.EndLocalCapture()
@@ -180,7 +180,7 @@ channelID = C_VoiceChat.GetActiveChannelID()
 |------|------|---------|-------------|
 | `channelID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channelID = C_VoiceChat.GetActiveChannelID()
@@ -198,7 +198,7 @@ channelType = C_VoiceChat.GetActiveChannelType()
 |------|------|---------|-------------|
 | `channelType` | ChatChannelType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channelType = C_VoiceChat.GetActiveChannelType()
@@ -216,7 +216,7 @@ inputDevices = C_VoiceChat.GetAvailableInputDevices()
 |------|------|---------|-------------|
 | `inputDevices` | VoiceAudioDevice[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inputDevices = C_VoiceChat.GetAvailableInputDevices()
@@ -234,7 +234,7 @@ outputDevices = C_VoiceChat.GetAvailableOutputDevices()
 |------|------|---------|-------------|
 | `outputDevices` | VoiceAudioDevice[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outputDevices = C_VoiceChat.GetAvailableOutputDevices()
@@ -258,7 +258,7 @@ channel = C_VoiceChat.GetChannel(channelID)
 |------|------|---------|-------------|
 | `channel` | VoiceChatChannel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channel = C_VoiceChat.GetChannel(0)
@@ -282,7 +282,7 @@ channel = C_VoiceChat.GetChannelForChannelType(channelType)
 |------|------|---------|-------------|
 | `channel` | VoiceChatChannel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channel = C_VoiceChat.GetChannelForChannelType(channelType)
@@ -307,7 +307,7 @@ channel = C_VoiceChat.GetChannelForCommunityStream(clubId, streamId)
 |------|------|---------|-------------|
 | `channel` | VoiceChatChannel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local channel = C_VoiceChat.GetChannelForCommunityStream(clubId, streamId)
@@ -325,7 +325,7 @@ communicationMode = C_VoiceChat.GetCommunicationMode()
 |------|------|---------|-------------|
 | `communicationMode` | CommunicationMode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local communicationMode = C_VoiceChat.GetCommunicationMode()
@@ -343,7 +343,7 @@ statusCode = C_VoiceChat.GetCurrentVoiceChatConnectionStatusCode()
 |------|------|---------|-------------|
 | `statusCode` | VoiceChatStatusCode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local statusCode = C_VoiceChat.GetCurrentVoiceChatConnectionStatusCode()
@@ -361,7 +361,7 @@ volume = C_VoiceChat.GetInputVolume()
 |------|------|---------|-------------|
 | `volume` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local volume = C_VoiceChat.GetInputVolume()
@@ -385,7 +385,7 @@ errorReason = C_VoiceChat.GetJoinClubVoiceChannelError(clubId)
 |------|------|---------|-------------|
 | `errorReason` | VoiceChannelErrorReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local errorReason = C_VoiceChat.GetJoinClubVoiceChannelError(clubId)
@@ -403,7 +403,7 @@ memberInfo = C_VoiceChat.GetLocalPlayerActiveChannelMemberInfo()
 |------|------|---------|-------------|
 | `memberInfo` | VoiceChatMember | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local memberInfo = C_VoiceChat.GetLocalPlayerActiveChannelMemberInfo()
@@ -427,7 +427,7 @@ memberID = C_VoiceChat.GetLocalPlayerMemberID(channelID)
 |------|------|---------|-------------|
 | `memberID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local memberID = C_VoiceChat.GetLocalPlayerMemberID(0)
@@ -445,7 +445,7 @@ scale = C_VoiceChat.GetMasterVolumeScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = C_VoiceChat.GetMasterVolumeScale()
@@ -470,7 +470,7 @@ memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)
 |------|------|---------|-------------|
 | `memberGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local memberGUID = C_VoiceChat.GetMemberGUID(0, 0)
@@ -495,10 +495,10 @@ memberID = C_VoiceChat.GetMemberID(channelID, memberGUID)
 |------|------|---------|-------------|
 | `memberID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberID = C_VoiceChat.GetMemberID(0, "Creature-0-0000-0-0-0-0")
+local memberID = C_VoiceChat.GetMemberID(0, UnitGUID("player"))
 ```
 
 ### C_VoiceChat.GetMemberInfo
@@ -520,7 +520,7 @@ memberInfo = C_VoiceChat.GetMemberInfo(memberID, channelID)
 |------|------|---------|-------------|
 | `memberInfo` | VoiceChatMember | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local memberInfo = C_VoiceChat.GetMemberInfo(0, 0)
@@ -545,7 +545,7 @@ memberName = C_VoiceChat.GetMemberName(memberID, channelID)
 |------|------|---------|-------------|
 | `memberName` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local memberName = C_VoiceChat.GetMemberName(0, 0)
@@ -569,7 +569,7 @@ volume = C_VoiceChat.GetMemberVolume(playerLocation)
 |------|------|---------|-------------|
 | `volume` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local volume = C_VoiceChat.GetMemberVolume(playerLocation)
@@ -587,7 +587,7 @@ volume = C_VoiceChat.GetOutputVolume()
 |------|------|---------|-------------|
 | `volume` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local volume = C_VoiceChat.GetOutputVolume()
@@ -605,7 +605,7 @@ processes = C_VoiceChat.GetProcesses()
 |------|------|---------|-------------|
 | `processes` | VoiceChatProcess[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local processes = C_VoiceChat.GetProcesses()
@@ -623,7 +623,7 @@ isPressed = C_VoiceChat.GetPTTButtonPressedState()
 |------|------|---------|-------------|
 | `isPressed` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPressed = C_VoiceChat.GetPTTButtonPressedState()
@@ -641,7 +641,7 @@ keys = C_VoiceChat.GetPushToTalkBinding()
 |------|------|---------|-------------|
 | `keys` | string[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local keys = C_VoiceChat.GetPushToTalkBinding()
@@ -659,7 +659,7 @@ ttsVoices = C_VoiceChat.GetRemoteTtsVoices()
 |------|------|---------|-------------|
 | `ttsVoices` | VoiceTtsVoiceType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ttsVoices = C_VoiceChat.GetRemoteTtsVoices()
@@ -677,7 +677,7 @@ ttsVoices = C_VoiceChat.GetTtsVoices()
 |------|------|---------|-------------|
 | `ttsVoices` | VoiceTtsVoiceType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ttsVoices = C_VoiceChat.GetTtsVoices()
@@ -695,7 +695,7 @@ sensitivity = C_VoiceChat.GetVADSensitivity()
 |------|------|---------|-------------|
 | `sensitivity` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sensitivity = C_VoiceChat.GetVADSensitivity()
@@ -721,7 +721,7 @@ isPending = C_VoiceChat.IsChannelJoinPending(channelType, [clubId], [streamId])
 |------|------|---------|-------------|
 | `isPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPending = C_VoiceChat.IsChannelJoinPending(channelType)
@@ -739,7 +739,7 @@ isDeafened = C_VoiceChat.IsDeafened()
 |------|------|---------|-------------|
 | `isDeafened` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDeafened = C_VoiceChat.IsDeafened()
@@ -757,7 +757,7 @@ isEnabled = C_VoiceChat.IsEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_VoiceChat.IsEnabled()
@@ -775,7 +775,7 @@ isLoggedIn = C_VoiceChat.IsLoggedIn()
 |------|------|---------|-------------|
 | `isLoggedIn` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLoggedIn = C_VoiceChat.IsLoggedIn()
@@ -800,7 +800,7 @@ isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)
 |------|------|---------|-------------|
 | `isLocalPlayer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(0, 0)
@@ -824,7 +824,7 @@ mutedForMe = C_VoiceChat.IsMemberMuted(playerLocation)
 |------|------|---------|-------------|
 | `mutedForMe` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mutedForMe = C_VoiceChat.IsMemberMuted(playerLocation)
@@ -849,7 +849,7 @@ mutedForAll = C_VoiceChat.IsMemberMutedForAll(memberID, channelID)
 |------|------|---------|-------------|
 | `mutedForAll` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mutedForAll = C_VoiceChat.IsMemberMutedForAll(0, 0)
@@ -874,7 +874,7 @@ silenced = C_VoiceChat.IsMemberSilenced(memberID, channelID)
 |------|------|---------|-------------|
 | `silenced` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local silenced = C_VoiceChat.IsMemberSilenced(0, 0)
@@ -892,7 +892,7 @@ isMuted = C_VoiceChat.IsMuted()
 |------|------|---------|-------------|
 | `isMuted` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMuted = C_VoiceChat.IsMuted()
@@ -910,7 +910,7 @@ isParentalDisabled = C_VoiceChat.IsParentalDisabled()
 |------|------|---------|-------------|
 | `isParentalDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isParentalDisabled = C_VoiceChat.IsParentalDisabled()
@@ -928,7 +928,7 @@ isParentalMuted = C_VoiceChat.IsParentalMuted()
 |------|------|---------|-------------|
 | `isParentalMuted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isParentalMuted = C_VoiceChat.IsParentalMuted()
@@ -952,7 +952,7 @@ isUsingVoice = C_VoiceChat.IsPlayerUsingVoice(playerLocation)
 |------|------|---------|-------------|
 | `isUsingVoice` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingVoice = C_VoiceChat.IsPlayerUsingVoice(playerLocation)
@@ -970,7 +970,7 @@ isSilenced = C_VoiceChat.IsSilenced()
 |------|------|---------|-------------|
 | `isSilenced` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSilenced = C_VoiceChat.IsSilenced()
@@ -988,7 +988,7 @@ isActive = C_VoiceChat.IsSpeakForMeActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_VoiceChat.IsSpeakForMeActive()
@@ -1006,7 +1006,7 @@ isAllowed = C_VoiceChat.IsSpeakForMeAllowed()
 |------|------|---------|-------------|
 | `isAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAllowed = C_VoiceChat.IsSpeakForMeAllowed()
@@ -1024,7 +1024,7 @@ isTranscribing = C_VoiceChat.IsTranscribing()
 |------|------|---------|-------------|
 | `isTranscribing` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTranscribing = C_VoiceChat.IsTranscribing()
@@ -1042,7 +1042,7 @@ isAllowed = C_VoiceChat.IsTranscriptionAllowed()
 |------|------|---------|-------------|
 | `isAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAllowed = C_VoiceChat.IsTranscriptionAllowed()
@@ -1060,7 +1060,7 @@ connected = C_VoiceChat.IsVoiceChatConnected()
 |------|------|---------|-------------|
 | `connected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local connected = C_VoiceChat.IsVoiceChatConnected()
@@ -1078,7 +1078,7 @@ C_VoiceChat.LeaveChannel(channelID)
 |------|------|---------|-------------|
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.LeaveChannel(0)
@@ -1096,7 +1096,7 @@ status = C_VoiceChat.Login()
 |------|------|---------|-------------|
 | `status` | VoiceChatStatusCode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_VoiceChat.Login()
@@ -1114,7 +1114,7 @@ status = C_VoiceChat.Logout()
 |------|------|---------|-------------|
 | `status` | VoiceChatStatusCode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_VoiceChat.Logout()
@@ -1128,7 +1128,7 @@ Once the UI has enumerated all channels, use this to reset the channel discovery
 C_VoiceChat.MarkChannelsDiscovered()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.MarkChannelsDiscovered()
@@ -1147,7 +1147,7 @@ C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, streamId)
@@ -1166,7 +1166,7 @@ C_VoiceChat.RequestJoinChannelByChannelType(channelType, [autoActivate])
 | `channelType` | ChatChannelType | no |  |
 | `autoActivate` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.RequestJoinChannelByChannelType(channelType)
@@ -1184,10 +1184,10 @@ C_VoiceChat.SetCommunicationMode(communicationMode)
 |------|------|---------|-------------|
 | `communicationMode` | CommunicationMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.SetCommunicationMode(communicationMode)
+C_VoiceChat.SetCommunicationMode(Enum.CommunicationMode.PushToTalk)
 ```
 
 ### C_VoiceChat.SetDeafened
@@ -1202,7 +1202,7 @@ C_VoiceChat.SetDeafened(isDeafened)
 |------|------|---------|-------------|
 | `isDeafened` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetDeafened(false)
@@ -1220,7 +1220,7 @@ C_VoiceChat.SetInputDevice(deviceID)
 |------|------|---------|-------------|
 | `deviceID` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetInputDevice("")
@@ -1238,7 +1238,7 @@ C_VoiceChat.SetInputVolume(volume)
 |------|------|---------|-------------|
 | `volume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetInputVolume(0)
@@ -1256,7 +1256,7 @@ C_VoiceChat.SetMasterVolumeScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetMasterVolumeScale(0)
@@ -1275,7 +1275,7 @@ C_VoiceChat.SetMemberMuted(playerLocation, muted)
 | `playerLocation` | PlayerLocation | no |  |
 | `muted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetMemberMuted(playerLocation, false)
@@ -1296,7 +1296,7 @@ C_VoiceChat.SetMemberVolume(playerLocation, volume)
 | `playerLocation` | PlayerLocation | no |  |
 | `volume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetMemberVolume(playerLocation, 0)
@@ -1314,7 +1314,7 @@ C_VoiceChat.SetMuted(isMuted)
 |------|------|---------|-------------|
 | `isMuted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetMuted(false)
@@ -1332,7 +1332,7 @@ C_VoiceChat.SetOutputDevice(deviceID)
 |------|------|---------|-------------|
 | `deviceID` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetOutputDevice("")
@@ -1350,7 +1350,7 @@ C_VoiceChat.SetOutputVolume(volume)
 |------|------|---------|-------------|
 | `volume` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetOutputVolume(0)
@@ -1370,7 +1370,7 @@ C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)
 | `memberID` | number | no |  |
 | `channelID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetPortraitTexture(textureObject, 0, 0)
@@ -1388,7 +1388,7 @@ C_VoiceChat.SetPushToTalkBinding(keys)
 |------|------|---------|-------------|
 | `keys` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetPushToTalkBinding(keys)
@@ -1406,7 +1406,7 @@ C_VoiceChat.SetVADSensitivity(sensitivity)
 |------|------|---------|-------------|
 | `sensitivity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SetVADSensitivity(0)
@@ -1426,7 +1426,7 @@ shouldDiscoverChannels = C_VoiceChat.ShouldDiscoverChannels()
 |------|------|---------|-------------|
 | `shouldDiscoverChannels` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldDiscoverChannels = C_VoiceChat.ShouldDiscoverChannels()
@@ -1444,7 +1444,7 @@ C_VoiceChat.SpeakRemoteTextSample(text)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SpeakRemoteTextSample("")
@@ -1468,7 +1468,7 @@ C_VoiceChat.SpeakText(voiceID, text, rate, volume, overlap)
 | `volume` | number | no |  |
 | `overlap` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.SpeakText(0, "", 0, 0, false)
@@ -1480,7 +1480,7 @@ C_VoiceChat.SpeakText(0, "", 0, 0, false)
 C_VoiceChat.StopSpeakingText()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.StopSpeakingText()
@@ -1492,7 +1492,7 @@ C_VoiceChat.StopSpeakingText()
 C_VoiceChat.ToggleDeafened()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.ToggleDeafened()
@@ -1510,7 +1510,7 @@ C_VoiceChat.ToggleMemberMuted(playerLocation)
 |------|------|---------|-------------|
 | `playerLocation` | PlayerLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.ToggleMemberMuted(playerLocation)
@@ -1522,7 +1522,7 @@ C_VoiceChat.ToggleMemberMuted(playerLocation)
 C_VoiceChat.ToggleMuted()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VoiceChat.ToggleMuted()

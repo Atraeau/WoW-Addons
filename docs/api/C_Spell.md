@@ -20,7 +20,7 @@ wasCancelled = C_Spell.CancelAutoRepeatSpell()
 |------|------|---------|-------------|
 | `wasCancelled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasCancelled = C_Spell.CancelAutoRepeatSpell()
@@ -41,7 +41,7 @@ C_Spell.CancelItemTempEnchantment(weaponSlot, enchantmentType)
 | `weaponSlot` | WeaponSlot | no |  |
 | `enchantmentType` | ItemEnchantType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Spell.CancelItemTempEnchantment(1, enchantmentType)
@@ -59,10 +59,10 @@ C_Spell.CancelSpellByID(spellID)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.CancelSpellByID(12345)
+C_Spell.CancelSpellByID(2050)
 ```
 
 ### C_Spell.DoesSpellExist
@@ -85,10 +85,10 @@ spellExists = C_Spell.DoesSpellExist(spellIdentifier)
 |------|------|---------|-------------|
 | `spellExists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellExists = C_Spell.DoesSpellExist(12345)
+local spellExists = C_Spell.DoesSpellExist(2050)
 ```
 
 ### C_Spell.EnableSpellRangeCheck
@@ -106,10 +106,10 @@ C_Spell.EnableSpellRangeCheck(spellIdentifier, enable)
 | `spellIdentifier` | SpellIdentifier | no |  |
 | `enable` | bool | no | True if changes in range for the spell should dispatch SpellRangeCheckUpdate. False if the spell no longer needs the event. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.EnableSpellRangeCheck(12345, false)
+C_Spell.EnableSpellRangeCheck(2050, false)
 ```
 
 ### C_Spell.GetAuraStatChanges
@@ -131,10 +131,10 @@ healthChange, powerTypeChanges = C_Spell.GetAuraStatChanges(spellID)
 | `healthChange` | number | no |  |
 | `powerTypeChanges` | PowerTypeChange[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local healthChange, powerTypeChanges = C_Spell.GetAuraStatChanges(12345)
+local healthChange, powerTypeChanges = C_Spell.GetAuraStatChanges(2050)
 ```
 
 ### C_Spell.GetBaseSpell
@@ -156,10 +156,10 @@ baseSpellID = C_Spell.GetBaseSpell(spellIdentifier, spec)
 |------|------|---------|-------------|
 | `baseSpellID` | number | no | Returns the spellID passed in if there is no override |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local baseSpellID = C_Spell.GetBaseSpell(12345, 0)
+local baseSpellID = C_Spell.GetBaseSpell(2050, 0)
 ```
 
 ### C_Spell.GetDeadlyDebuffInfo
@@ -180,10 +180,10 @@ deadlyDebuffInfo = C_Spell.GetDeadlyDebuffInfo(spellIdentifier)
 |------|------|---------|-------------|
 | `deadlyDebuffInfo` | DeadlyDebuffInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local deadlyDebuffInfo = C_Spell.GetDeadlyDebuffInfo(12345)
+local deadlyDebuffInfo = C_Spell.GetDeadlyDebuffInfo(2050)
 ```
 
 ### C_Spell.GetItemModifiedAppearancesApplied
@@ -204,10 +204,10 @@ itemModifiedAppearanceIDs = C_Spell.GetItemModifiedAppearancesApplied(spellID)
 |------|------|---------|-------------|
 | `itemModifiedAppearanceIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemModifiedAppearanceIDs = C_Spell.GetItemModifiedAppearancesApplied(12345)
+local itemModifiedAppearanceIDs = C_Spell.GetItemModifiedAppearancesApplied(2050)
 ```
 
 ### C_Spell.GetLastCategoryCooldownSource
@@ -231,10 +231,10 @@ spellID, itemID = C_Spell.GetLastCategoryCooldownSource(spellCategory)
 | `spellID` | number | yes | The most recent spell associated with the category |
 | `itemID` | number | yes | The item used to trigger this spell |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellID, itemID = C_Spell.GetLastCategoryCooldownSource(12345)
+local spellID, itemID = C_Spell.GetLastCategoryCooldownSource(2050)
 ```
 
 ### C_Spell.GetMawPowerLinkBySpellID
@@ -255,10 +255,10 @@ link = C_Spell.GetMawPowerLinkBySpellID(spellID)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local link = C_Spell.GetMawPowerLinkBySpellID(12345)
+local link = C_Spell.GetMawPowerLinkBySpellID(2050)
 ```
 
 ### C_Spell.GetMawPowerRarityInfoBySpellID
@@ -280,10 +280,10 @@ rarityID, rarityBorderAtlas = C_Spell.GetMawPowerRarityInfoBySpellID(spellID)
 | `rarityID` | number | no |  |
 | `rarityBorderAtlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local rarityID, rarityBorderAtlas = C_Spell.GetMawPowerRarityInfoBySpellID(12345)
+local rarityID, rarityBorderAtlas = C_Spell.GetMawPowerRarityInfoBySpellID(2050)
 ```
 
 ### C_Spell.GetOverrideSpell
@@ -307,10 +307,10 @@ overrideSpellID = C_Spell.GetOverrideSpell(spellIdentifier, spec, onlyKnown, ign
 |------|------|---------|-------------|
 | `overrideSpellID` | number | no | Returns the spellID passed in if there is no override |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local overrideSpellID = C_Spell.GetOverrideSpell(12345, 0, false, 12345)
+local overrideSpellID = C_Spell.GetOverrideSpell(2050, 0, false, 2050)
 ```
 
 ### C_Spell.GetSchoolString
@@ -331,7 +331,7 @@ result = C_Spell.GetSchoolString(schoolMask)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Spell.GetSchoolString(0)
@@ -358,10 +358,10 @@ autoCastAllowed, autoCastEnabled = C_Spell.GetSpellAutoCast(spellIdentifier)
 | `autoCastAllowed` | bool | no |  |
 | `autoCastEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local autoCastAllowed, autoCastEnabled = C_Spell.GetSpellAutoCast(12345)
+local autoCastAllowed, autoCastEnabled = C_Spell.GetSpellAutoCast(2050)
 ```
 
 ### C_Spell.GetSpellCastCount
@@ -384,10 +384,10 @@ castCount = C_Spell.GetSpellCastCount(spellIdentifier)
 |------|------|---------|-------------|
 | `castCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local castCount = C_Spell.GetSpellCastCount(12345)
+local castCount = C_Spell.GetSpellCastCount(2050)
 ```
 
 ### C_Spell.GetSpellChargeDuration
@@ -410,10 +410,10 @@ duration = C_Spell.GetSpellChargeDuration(spellIdentifier)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_Spell.GetSpellChargeDuration(12345)
+local duration = C_Spell.GetSpellChargeDuration(2050)
 ```
 
 ### C_Spell.GetSpellCharges
@@ -436,10 +436,10 @@ chargeInfo = C_Spell.GetSpellCharges(spellIdentifier)
 |------|------|---------|-------------|
 | `chargeInfo` | SpellChargeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local chargeInfo = C_Spell.GetSpellCharges(12345)
+local chargeInfo = C_Spell.GetSpellCharges(2050)
 ```
 
 ### C_Spell.GetSpellCooldown
@@ -465,7 +465,12 @@ spellCooldownInfo = C_Spell.GetSpellCooldown(spellIdentifier)
 **Example**
 
 ```lua
-local spellCooldownInfo = C_Spell.GetSpellCooldown(12345)
+-- Returns a SpellCooldownInfo table
+local cd = C_Spell.GetSpellCooldown(2050)
+if cd and cd.duration > 0 then
+    local remaining = (cd.startTime + cd.duration) - GetTime()
+    print(("%.1fs remaining"):format(remaining))
+end
 ```
 
 ### C_Spell.GetSpellCooldownDuration
@@ -489,10 +494,10 @@ duration = C_Spell.GetSpellCooldownDuration(spellIdentifier, ignoreGCD)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_Spell.GetSpellCooldownDuration(12345, false)
+local duration = C_Spell.GetSpellCooldownDuration(2050, false)
 ```
 
 ### C_Spell.GetSpellDescription
@@ -515,10 +520,10 @@ description = C_Spell.GetSpellDescription(spellIdentifier)
 |------|------|---------|-------------|
 | `description` | string | no | May be empty if spell's data isn't loaded yet; Listen for SPELL_TEXT_UPDATE event, or use SpellMixin to load asynchronously |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local description = C_Spell.GetSpellDescription(12345)
+local description = C_Spell.GetSpellDescription(2050)
 ```
 
 ### C_Spell.GetSpellDescriptionForItemLocation
@@ -542,10 +547,10 @@ description = C_Spell.GetSpellDescriptionForItemLocation(spellIdentifier, itemLo
 |------|------|---------|-------------|
 | `description` | string | no | May be empty if spell's data isn't loaded yet; Listen for SPELL_TEXT_UPDATE event, or use SpellMixin to load asynchronously |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local description = C_Spell.GetSpellDescriptionForItemLocation(12345, 6948)
+local description = C_Spell.GetSpellDescriptionForItemLocation(2050, 6948)
 ```
 
 ### C_Spell.GetSpellDisplayCount
@@ -570,10 +575,10 @@ displayCount = C_Spell.GetSpellDisplayCount(spellIdentifier, maxDisplayCount, re
 |------|------|---------|-------------|
 | `displayCount` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local displayCount = C_Spell.GetSpellDisplayCount(12345, 0, "")
+local displayCount = C_Spell.GetSpellDisplayCount(2050, 0, "")
 ```
 
 ### C_Spell.GetSpellIDForSpellIdentifier
@@ -596,10 +601,10 @@ spellID = C_Spell.GetSpellIDForSpellIdentifier(spellIdentifier)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellID = C_Spell.GetSpellIDForSpellIdentifier(12345)
+local spellID = C_Spell.GetSpellIDForSpellIdentifier(2050)
 ```
 
 ### C_Spell.GetSpellInfo
@@ -625,7 +630,11 @@ spellInfo = C_Spell.GetSpellInfo(spellIdentifier)
 **Example**
 
 ```lua
-local spellInfo = C_Spell.GetSpellInfo(12345)
+-- Modern replacement for the old multi-return GetSpellInfo; returns a table.
+local info = C_Spell.GetSpellInfo(2050)  -- 2050 = Lesser Heal
+if info then
+    print(info.name, info.spellID, info.iconID, info.castTime)
+end
 ```
 
 ### C_Spell.GetSpellLevelLearned
@@ -648,10 +657,10 @@ levelLearned = C_Spell.GetSpellLevelLearned(spellIdentifier)
 |------|------|---------|-------------|
 | `levelLearned` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local levelLearned = C_Spell.GetSpellLevelLearned(12345)
+local levelLearned = C_Spell.GetSpellLevelLearned(2050)
 ```
 
 ### C_Spell.GetSpellLink
@@ -675,10 +684,10 @@ spellLink = C_Spell.GetSpellLink(spellIdentifier, [glyphID])
 |------|------|---------|-------------|
 | `spellLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellLink = C_Spell.GetSpellLink(12345)
+local spellLink = C_Spell.GetSpellLink(2050)
 ```
 
 ### C_Spell.GetSpellLossOfControlCooldownDuration
@@ -701,10 +710,10 @@ duration = C_Spell.GetSpellLossOfControlCooldownDuration(spellIdentifier)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local duration = C_Spell.GetSpellLossOfControlCooldownDuration(12345)
+local duration = C_Spell.GetSpellLossOfControlCooldownDuration(2050)
 ```
 
 ### C_Spell.GetSpellLossOfControlCooldownInfo
@@ -727,10 +736,10 @@ lossOfControlInfo = C_Spell.GetSpellLossOfControlCooldownInfo(spellIdentifier)
 |------|------|---------|-------------|
 | `lossOfControlInfo` | SpellLossOfControlInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local lossOfControlInfo = C_Spell.GetSpellLossOfControlCooldownInfo(12345)
+local lossOfControlInfo = C_Spell.GetSpellLossOfControlCooldownInfo(2050)
 ```
 
 ### C_Spell.GetSpellMaxCumulativeAuraApplications
@@ -751,10 +760,10 @@ cumulativeAura = C_Spell.GetSpellMaxCumulativeAuraApplications(spellID)
 |------|------|---------|-------------|
 | `cumulativeAura` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local cumulativeAura = C_Spell.GetSpellMaxCumulativeAuraApplications(12345)
+local cumulativeAura = C_Spell.GetSpellMaxCumulativeAuraApplications(2050)
 ```
 
 ### C_Spell.GetSpellName
@@ -777,10 +786,10 @@ name = C_Spell.GetSpellName(spellIdentifier)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local name = C_Spell.GetSpellName(12345)
+local name = C_Spell.GetSpellName(2050)
 ```
 
 ### C_Spell.GetSpellPowerCost
@@ -803,10 +812,10 @@ powerCosts = C_Spell.GetSpellPowerCost(spellIdentifier)
 |------|------|---------|-------------|
 | `powerCosts` | SpellPowerCostInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local powerCosts = C_Spell.GetSpellPowerCost(12345)
+local powerCosts = C_Spell.GetSpellPowerCost(2050)
 ```
 
 ### C_Spell.GetSpellQueueWindow
@@ -821,7 +830,7 @@ result = C_Spell.GetSpellQueueWindow()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Spell.GetSpellQueueWindow()
@@ -847,10 +856,10 @@ rank = C_Spell.GetSpellSkillLineAbilityRank(spellIdentifier)
 |------|------|---------|-------------|
 | `rank` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local rank = C_Spell.GetSpellSkillLineAbilityRank(12345)
+local rank = C_Spell.GetSpellSkillLineAbilityRank(2050)
 ```
 
 ### C_Spell.GetSpellSubtext
@@ -873,10 +882,10 @@ subtext = C_Spell.GetSpellSubtext(spellIdentifier)
 |------|------|---------|-------------|
 | `subtext` | string | no | May be empty if spell's data isn't loaded yet; Listen for SPELL_TEXT_UPDATE event, or use SpellMixin to load asynchronously |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local subtext = C_Spell.GetSpellSubtext(12345)
+local subtext = C_Spell.GetSpellSubtext(2050)
 ```
 
 ### C_Spell.GetSpellTexture
@@ -904,7 +913,8 @@ iconID, originalIconID, conditionalIconID = C_Spell.GetSpellTexture(spellIdentif
 **Example**
 
 ```lua
-local iconID, originalIconID, conditionalIconID = C_Spell.GetSpellTexture(12345)
+local icon = C_Spell.GetSpellTexture(2050)
+print(icon)  -- fileID of the spell's icon
 ```
 
 ### C_Spell.GetSpellTradeSkillLink
@@ -927,10 +937,10 @@ spellLink = C_Spell.GetSpellTradeSkillLink(spellIdentifier)
 |------|------|---------|-------------|
 | `spellLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellLink = C_Spell.GetSpellTradeSkillLink(12345)
+local spellLink = C_Spell.GetSpellTradeSkillLink(2050)
 ```
 
 ### C_Spell.GetTargetSpellID
@@ -945,7 +955,7 @@ spellID = C_Spell.GetTargetSpellID()
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_Spell.GetTargetSpellID()
@@ -972,10 +982,10 @@ hasCustom, alwaysShowMine, showForMySpec = C_Spell.GetVisibilityInfo(spellID, vi
 | `alwaysShowMine` | bool | no |  |
 | `showForMySpec` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasCustom, alwaysShowMine, showForMySpec = C_Spell.GetVisibilityInfo(12345, visibilityType)
+local hasCustom, alwaysShowMine, showForMySpec = C_Spell.GetVisibilityInfo(2050, visibilityType)
 ```
 
 ### C_Spell.IsActiveSpell
@@ -999,10 +1009,10 @@ isActiveSpell = C_Spell.IsActiveSpell(spellIdentifier, [targetUnit])
 |------|------|---------|-------------|
 | `isActiveSpell` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isActiveSpell = C_Spell.IsActiveSpell(12345)
+local isActiveSpell = C_Spell.IsActiveSpell(2050)
 ```
 
 ### C_Spell.IsAutoAttackSpell
@@ -1025,10 +1035,10 @@ isAutoAttack = C_Spell.IsAutoAttackSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isAutoAttack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoAttack = C_Spell.IsAutoAttackSpell(12345)
+local isAutoAttack = C_Spell.IsAutoAttackSpell(2050)
 ```
 
 ### C_Spell.IsAutoRepeatSpell
@@ -1051,10 +1061,10 @@ isAutoRepeat = C_Spell.IsAutoRepeatSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isAutoRepeat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoRepeat = C_Spell.IsAutoRepeatSpell(12345)
+local isAutoRepeat = C_Spell.IsAutoRepeatSpell(2050)
 ```
 
 ### C_Spell.IsClassTalentSpell
@@ -1077,10 +1087,10 @@ isAutoRepeat = C_Spell.IsClassTalentSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isAutoRepeat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoRepeat = C_Spell.IsClassTalentSpell(12345)
+local isAutoRepeat = C_Spell.IsClassTalentSpell(2050)
 ```
 
 ### C_Spell.IsConsumableSpell
@@ -1101,10 +1111,10 @@ consumable = C_Spell.IsConsumableSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `consumable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local consumable = C_Spell.IsConsumableSpell(12345)
+local consumable = C_Spell.IsConsumableSpell(2050)
 ```
 
 ### C_Spell.IsCurrentSpell
@@ -1127,10 +1137,10 @@ isCurrentSpell = C_Spell.IsCurrentSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isCurrentSpell` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCurrentSpell = C_Spell.IsCurrentSpell(12345)
+local isCurrentSpell = C_Spell.IsCurrentSpell(2050)
 ```
 
 ### C_Spell.IsExternalDefensive
@@ -1153,10 +1163,10 @@ isExternalDefensive = C_Spell.IsExternalDefensive(spellID)
 |------|------|---------|-------------|
 | `isExternalDefensive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isExternalDefensive = C_Spell.IsExternalDefensive(12345)
+local isExternalDefensive = C_Spell.IsExternalDefensive(2050)
 ```
 
 ### C_Spell.IsPressHoldReleaseSpell
@@ -1179,10 +1189,10 @@ isPressHoldRelease = C_Spell.IsPressHoldReleaseSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isPressHoldRelease` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPressHoldRelease = C_Spell.IsPressHoldReleaseSpell(12345)
+local isPressHoldRelease = C_Spell.IsPressHoldReleaseSpell(2050)
 ```
 
 ### C_Spell.IsPriorityAura
@@ -1205,10 +1215,10 @@ isHighPriority = C_Spell.IsPriorityAura(spellID)
 |------|------|---------|-------------|
 | `isHighPriority` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHighPriority = C_Spell.IsPriorityAura(12345)
+local isHighPriority = C_Spell.IsPriorityAura(2050)
 ```
 
 ### C_Spell.IsPvPTalentSpell
@@ -1231,10 +1241,10 @@ isAutoRepeat = C_Spell.IsPvPTalentSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isAutoRepeat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAutoRepeat = C_Spell.IsPvPTalentSpell(12345)
+local isAutoRepeat = C_Spell.IsPvPTalentSpell(2050)
 ```
 
 ### C_Spell.IsRangedAutoAttackSpell
@@ -1257,10 +1267,10 @@ isRangedAutoAttack = C_Spell.IsRangedAutoAttackSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `isRangedAutoAttack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isRangedAutoAttack = C_Spell.IsRangedAutoAttackSpell(12345)
+local isRangedAutoAttack = C_Spell.IsRangedAutoAttackSpell(2050)
 ```
 
 ### C_Spell.IsSelfBuff
@@ -1283,10 +1293,10 @@ hasSelfEffectsOnly = C_Spell.IsSelfBuff(spellID)
 |------|------|---------|-------------|
 | `hasSelfEffectsOnly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasSelfEffectsOnly = C_Spell.IsSelfBuff(12345)
+local hasSelfEffectsOnly = C_Spell.IsSelfBuff(2050)
 ```
 
 ### C_Spell.IsSpellCrowdControl
@@ -1309,10 +1319,10 @@ isCrowdControl = C_Spell.IsSpellCrowdControl(spellIdentifier)
 |------|------|---------|-------------|
 | `isCrowdControl` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCrowdControl = C_Spell.IsSpellCrowdControl(12345)
+local isCrowdControl = C_Spell.IsSpellCrowdControl(2050)
 ```
 
 ### C_Spell.IsSpellDataCached
@@ -1335,10 +1345,10 @@ isCached = C_Spell.IsSpellDataCached(spellIdentifier)
 |------|------|---------|-------------|
 | `isCached` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCached = C_Spell.IsSpellDataCached(12345)
+local isCached = C_Spell.IsSpellDataCached(2050)
 ```
 
 ### C_Spell.IsSpellDisabled
@@ -1359,10 +1369,10 @@ disabled = C_Spell.IsSpellDisabled(spellIdentifier)
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local disabled = C_Spell.IsSpellDisabled(12345)
+local disabled = C_Spell.IsSpellDisabled(2050)
 ```
 
 ### C_Spell.IsSpellHarmful
@@ -1385,10 +1395,10 @@ isHarmful = C_Spell.IsSpellHarmful(spellIdentifier)
 |------|------|---------|-------------|
 | `isHarmful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHarmful = C_Spell.IsSpellHarmful(12345)
+local isHarmful = C_Spell.IsSpellHarmful(2050)
 ```
 
 ### C_Spell.IsSpellHelpful
@@ -1411,10 +1421,10 @@ isHelpful = C_Spell.IsSpellHelpful(spellIdentifier)
 |------|------|---------|-------------|
 | `isHelpful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHelpful = C_Spell.IsSpellHelpful(12345)
+local isHelpful = C_Spell.IsSpellHelpful(2050)
 ```
 
 ### C_Spell.IsSpellImportant
@@ -1437,10 +1447,10 @@ isImportant = C_Spell.IsSpellImportant(spellIdentifier)
 |------|------|---------|-------------|
 | `isImportant` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isImportant = C_Spell.IsSpellImportant(12345)
+local isImportant = C_Spell.IsSpellImportant(2050)
 ```
 
 ### C_Spell.IsSpellInRange
@@ -1464,10 +1474,10 @@ inRange = C_Spell.IsSpellInRange(spellIdentifier, [targetUnit])
 |------|------|---------|-------------|
 | `inRange` | bool | yes | May be nil if the range check was invalid, ie due to unknown/invalid spell, missing/invalid target, etc |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local inRange = C_Spell.IsSpellInRange(12345)
+local inRange = C_Spell.IsSpellInRange(2050)
 ```
 
 ### C_Spell.IsSpellPassive
@@ -1488,10 +1498,10 @@ isPassive = C_Spell.IsSpellPassive(spellIdentifier)
 |------|------|---------|-------------|
 | `isPassive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPassive = C_Spell.IsSpellPassive(12345)
+local isPassive = C_Spell.IsSpellPassive(2050)
 ```
 
 ### C_Spell.IsSpellUsable
@@ -1518,7 +1528,8 @@ isUsable, insufficientPower = C_Spell.IsSpellUsable(spellIdentifier)
 **Example**
 
 ```lua
-local isUsable, insufficientPower = C_Spell.IsSpellUsable(12345)
+local usable, insufficientPower = C_Spell.IsSpellUsable(2050)
+print(usable, insufficientPower)
 ```
 
 ### C_Spell.PickupSpell
@@ -1533,10 +1544,10 @@ C_Spell.PickupSpell(spellIdentifier)
 |------|------|---------|-------------|
 | `spellIdentifier` | SpellIdentifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.PickupSpell(12345)
+C_Spell.PickupSpell(2050)
 ```
 
 ### C_Spell.PlaceTargetingSpellAtCursor
@@ -1545,7 +1556,7 @@ C_Spell.PickupSpell(12345)
 C_Spell.PlaceTargetingSpellAtCursor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Spell.PlaceTargetingSpellAtCursor()
@@ -1565,10 +1576,10 @@ C_Spell.RequestLoadSpellData(spellIdentifier)
 |------|------|---------|-------------|
 | `spellIdentifier` | SpellIdentifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.RequestLoadSpellData(12345)
+C_Spell.RequestLoadSpellData(2050)
 ```
 
 ### C_Spell.SetSpellAutoCastEnabled
@@ -1584,10 +1595,10 @@ C_Spell.SetSpellAutoCastEnabled(spellIdentifier, enabled)
 | `spellIdentifier` | SpellIdentifier | no |  |
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.SetSpellAutoCastEnabled(12345, false)
+C_Spell.SetSpellAutoCastEnabled(2050, false)
 ```
 
 ### C_Spell.SpellHasRange
@@ -1610,10 +1621,10 @@ hasRange = C_Spell.SpellHasRange(spellIdentifier)
 |------|------|---------|-------------|
 | `hasRange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasRange = C_Spell.SpellHasRange(12345)
+local hasRange = C_Spell.SpellHasRange(2050)
 ```
 
 ### C_Spell.TargetSpellChecksItemCondition
@@ -1628,7 +1639,7 @@ result = C_Spell.TargetSpellChecksItemCondition()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Spell.TargetSpellChecksItemCondition()
@@ -1646,7 +1657,7 @@ isEnchanting = C_Spell.TargetSpellIsEnchanting()
 |------|------|---------|-------------|
 | `isEnchanting` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnchanting = C_Spell.TargetSpellIsEnchanting()
@@ -1664,7 +1675,7 @@ jumpsUpgradeTrack = C_Spell.TargetSpellJumpsUpgradeTrack()
 |------|------|---------|-------------|
 | `jumpsUpgradeTrack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local jumpsUpgradeTrack = C_Spell.TargetSpellJumpsUpgradeTrack()
@@ -1682,7 +1693,7 @@ result = C_Spell.TargetSpellReplacesBonusTree()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Spell.TargetSpellReplacesBonusTree()
@@ -1702,10 +1713,10 @@ C_Spell.ToggleSpellAutoCast(spellIdentifier)
 |------|------|---------|-------------|
 | `spellIdentifier` | SpellIdentifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Spell.ToggleSpellAutoCast(12345)
+C_Spell.ToggleSpellAutoCast(2050)
 ```
 
 ## Events

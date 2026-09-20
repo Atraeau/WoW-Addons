@@ -20,7 +20,7 @@ curve = C_CurveUtil.CreateColorCurve()
 |------|------|---------|-------------|
 | `curve` | LuaColorCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = C_CurveUtil.CreateColorCurve()
@@ -40,7 +40,7 @@ curve = C_CurveUtil.CreateCurve()
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = C_CurveUtil.CreateCurve()
@@ -68,7 +68,7 @@ value = C_CurveUtil.EvaluateColorFromBoolean(boolean, valueIfTrue, valueIfFalse)
 |------|------|---------|-------------|
 | `value` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CurveUtil.EvaluateColorFromBoolean(false, valueIfTrue, valueIfFalse)
@@ -96,7 +96,7 @@ value = C_CurveUtil.EvaluateColorValueFromBoolean(boolean, valueIfTrue, valueIfF
 |------|------|---------|-------------|
 | `value` | SingleColorValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CurveUtil.EvaluateColorValueFromBoolean(false, valueIfTrue, valueIfFalse)
@@ -121,7 +121,7 @@ y = C_CurveUtil.EvaluateGameCurve(curveID, x)
 |------|------|---------|-------------|
 | `y` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local y = C_CurveUtil.EvaluateGameCurve(0, 0)

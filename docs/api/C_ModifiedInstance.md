@@ -24,7 +24,7 @@ info = C_ModifiedInstance.GetModifiedInstanceInfoFromMapID(mapID)
 |------|------|---------|-------------|
 | `info` | ModifiedInstanceInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ModifiedInstance.GetModifiedInstanceInfoFromMapID(0)

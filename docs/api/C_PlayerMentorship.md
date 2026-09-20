@@ -18,7 +18,7 @@ level = C_PlayerMentorship.GetMentorLevelRequirement()
 |------|------|---------|-------------|
 | `level` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_PlayerMentorship.GetMentorLevelRequirement()
@@ -38,7 +38,7 @@ achievementIDs, optionalAchievementIDs, optionalCompleteAtLeastCount = C_PlayerM
 | `optionalAchievementIDs` | number[] | no |  |
 | `optionalCompleteAtLeastCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local achievementIDs, optionalAchievementIDs, optionalCompleteAtLeastCount = C_PlayerMentorship.GetMentorRequirements()
@@ -62,7 +62,7 @@ status = C_PlayerMentorship.GetMentorshipStatus(playerLocation)
 |------|------|---------|-------------|
 | `status` | PlayerMentorshipStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local status = C_PlayerMentorship.GetMentorshipStatus(playerLocation)
@@ -80,7 +80,7 @@ isConsideredNewcomer = C_PlayerMentorship.IsActivePlayerConsideredNewcomer()
 |------|------|---------|-------------|
 | `isConsideredNewcomer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isConsideredNewcomer = C_PlayerMentorship.IsActivePlayerConsideredNewcomer()
@@ -98,7 +98,7 @@ isRestricted = C_PlayerMentorship.IsMentorRestricted()
 |------|------|---------|-------------|
 | `isRestricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRestricted = C_PlayerMentorship.IsMentorRestricted()

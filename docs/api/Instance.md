@@ -19,7 +19,7 @@ canChange, notOnCooldown = CanChangePlayerDifficulty()
 | `canChange` | bool | no |  |
 | `notOnCooldown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChange, notOnCooldown = CanChangePlayerDifficulty()
@@ -43,7 +43,7 @@ canChange = CanMapChangeDifficulty([mapID])
 |------|------|---------|-------------|
 | `canChange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChange = CanMapChangeDifficulty()
@@ -61,7 +61,7 @@ result = CanShowResetInstances()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanShowResetInstances()
@@ -85,7 +85,7 @@ baseDifficultyID = GetBaseDifficultyID(difficultyID)
 |------|------|---------|-------------|
 | `baseDifficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local baseDifficultyID = GetBaseDifficultyID(0)
@@ -119,7 +119,7 @@ name, instanceType, isHeroic, isChallengeMode, displayHeroic, displayMythic, tog
 | `maxPlayers` | number | yes |  |
 | `isUserSelectable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, instanceType, isHeroic, isChallengeMode, displayHeroic, displayMythic, toggleDifficultyID, isLFR, minPlayers, maxPlayers, isUserSelectable = GetDifficultyInfo(0)
@@ -137,7 +137,7 @@ result = GetDungeonDifficultyID()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetDungeonDifficultyID()
@@ -155,7 +155,7 @@ result = GetInstanceBootTimeRemaining()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetInstanceBootTimeRemaining()
@@ -183,7 +183,7 @@ name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty,
 | `lfgDungeonID` | number | yes |  |
 | `hasWorldTier` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, instanceType, difficultyID, difficultyName, maxPlayers, dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, lfgDungeonID, hasWorldTier = GetInstanceInfo()
@@ -204,7 +204,7 @@ timeLeft, extending, encountersTotal, encountersCompleted = GetInstanceLockTimeR
 | `encountersTotal` | number | no |  |
 | `encountersCompleted` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeft, extending, encountersTotal, encountersCompleted = GetInstanceLockTimeRemaining()
@@ -231,7 +231,7 @@ encounterName, texture, isKilled, ineligible = GetInstanceLockTimeRemainingEncou
 | `isKilled` | bool | no |  |
 | `ineligible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounterName, texture, isKilled, ineligible = GetInstanceLockTimeRemainingEncounter(1)
@@ -249,7 +249,7 @@ result = GetLegacyRaidDifficultyID()
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetLegacyRaidDifficultyID()
@@ -267,7 +267,7 @@ result = GetRaidDifficultyID()
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetRaidDifficultyID()
@@ -286,7 +286,7 @@ isInInstance, instanceType = IsInInstance()
 | `isInInstance` | bool | no |  |
 | `instanceType` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInInstance, instanceType = IsInInstance()
@@ -310,7 +310,7 @@ result = IsLegacyDifficulty(difficultyID)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsLegacyDifficulty(0)
@@ -322,7 +322,7 @@ local result = IsLegacyDifficulty(0)
 ResetInstances()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetInstances()
@@ -340,7 +340,7 @@ SetDungeonDifficultyID(difficultyID)
 |------|------|---------|-------------|
 | `difficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDungeonDifficultyID(0)
@@ -359,7 +359,7 @@ SetLegacyRaidDifficultyID(difficultyID, force)
 | `difficultyID` | number | no |  |
 | `force` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLegacyRaidDifficultyID(0, false)
@@ -378,7 +378,7 @@ SetRaidDifficultyID(difficultyID, force)
 | `difficultyID` | number | no |  |
 | `force` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRaidDifficultyID(0, false)

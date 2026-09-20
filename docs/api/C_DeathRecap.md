@@ -24,7 +24,7 @@ events = C_DeathRecap.GetRecapEvents([recapID])
 |------|------|---------|-------------|
 | `events` | DeathRecapEventInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_DeathRecap.GetRecapEvents()
@@ -48,7 +48,7 @@ link = C_DeathRecap.GetRecapLink([recapID])
 |------|------|---------|-------------|
 | `link` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_DeathRecap.GetRecapLink()
@@ -74,7 +74,7 @@ maxHealth = C_DeathRecap.GetRecapMaxHealth([recapID])
 |------|------|---------|-------------|
 | `maxHealth` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxHealth = C_DeathRecap.GetRecapMaxHealth()
@@ -98,7 +98,7 @@ hasEvents = C_DeathRecap.HasRecapEvents([recapID])
 |------|------|---------|-------------|
 | `hasEvents` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasEvents = C_DeathRecap.HasRecapEvents()

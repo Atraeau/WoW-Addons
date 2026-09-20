@@ -24,7 +24,7 @@ result = GetAddOnCPUUsage(name)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAddOnCPUUsage(name)
@@ -48,7 +48,7 @@ result = GetAddOnMemoryUsage(name)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAddOnMemoryUsage(name)
@@ -67,7 +67,7 @@ call_time, call_count = GetEventCPUUsage()
 | `call_time` | number | no |  |
 | `call_count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local call_time, call_count = GetEventCPUUsage()
@@ -93,7 +93,7 @@ call_time, call_count = GetFrameCPUUsage(frame, includeChildren)
 | `call_time` | number | no |  |
 | `call_count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local call_time, call_count = GetFrameCPUUsage(frame, false)
@@ -112,7 +112,7 @@ call_time, call_count = GetFunctionCPUUsage()
 | `call_time` | number | no |  |
 | `call_count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local call_time, call_count = GetFunctionCPUUsage()
@@ -130,7 +130,7 @@ result = GetScriptCPUUsage()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetScriptCPUUsage()
@@ -142,7 +142,7 @@ local result = GetScriptCPUUsage()
 ResetCPUUsage()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetCPUUsage()
@@ -154,7 +154,7 @@ ResetCPUUsage()
 UpdateAddOnCPUUsage()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateAddOnCPUUsage()
@@ -166,7 +166,7 @@ UpdateAddOnCPUUsage()
 UpdateAddOnMemoryUsage()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateAddOnMemoryUsage()

@@ -18,7 +18,7 @@ data = GetAbbreviateNumberData()
 |------|------|---------|-------------|
 | `data` | NumberAbbreviationBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = GetAbbreviateNumberData()
@@ -36,7 +36,7 @@ SetAbbreviateNumberData(data)
 |------|------|---------|-------------|
 | `data` | NumberAbbreviationBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAbbreviateNumberData(data)

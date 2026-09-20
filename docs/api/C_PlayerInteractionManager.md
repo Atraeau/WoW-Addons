@@ -18,7 +18,7 @@ C_PlayerInteractionManager.ClearInteraction([type])
 |------|------|---------|-------------|
 | `type` | PlayerInteractionType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerInteractionManager.ClearInteraction()
@@ -36,7 +36,7 @@ C_PlayerInteractionManager.ConfirmationInteraction([type])
 |------|------|---------|-------------|
 | `type` | PlayerInteractionType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerInteractionManager.ConfirmationInteraction()
@@ -62,7 +62,7 @@ success = C_PlayerInteractionManager.InteractUnit(unit, exactMatch, looseTargeti
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_PlayerInteractionManager.InteractUnit("player", false, false)
@@ -86,7 +86,7 @@ interacting = C_PlayerInteractionManager.IsInteractingWithNpcOfType(type)
 |------|------|---------|-------------|
 | `interacting` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interacting = C_PlayerInteractionManager.IsInteractingWithNpcOfType(type)
@@ -104,7 +104,7 @@ replacing = C_PlayerInteractionManager.IsReplacingUnit()
 |------|------|---------|-------------|
 | `replacing` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local replacing = C_PlayerInteractionManager.IsReplacingUnit()
@@ -128,7 +128,7 @@ isValidInteraction = C_PlayerInteractionManager.IsValidNPCInteraction(type)
 |------|------|---------|-------------|
 | `isValidInteraction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidInteraction = C_PlayerInteractionManager.IsValidNPCInteraction(type)
@@ -140,7 +140,7 @@ local isValidInteraction = C_PlayerInteractionManager.IsValidNPCInteraction(type
 C_PlayerInteractionManager.ReopenInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerInteractionManager.ReopenInteraction()
@@ -152,7 +152,7 @@ C_PlayerInteractionManager.ReopenInteraction()
 C_PlayerInteractionManager.ShardTransferConfirm()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PlayerInteractionManager.ShardTransferConfirm()

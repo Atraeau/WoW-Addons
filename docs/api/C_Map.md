@@ -24,7 +24,7 @@ canSet = C_Map.CanSetUserWaypointOnMap(uiMapID)
 |------|------|---------|-------------|
 | `canSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSet = C_Map.CanSetUserWaypointOnMap(0)
@@ -36,7 +36,7 @@ local canSet = C_Map.CanSetUserWaypointOnMap(0)
 C_Map.ClearUserWaypoint()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Map.ClearUserWaypoint()
@@ -48,7 +48,7 @@ C_Map.ClearUserWaypoint()
 C_Map.CloseWorldMapInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Map.CloseWorldMapInteraction()
@@ -72,7 +72,7 @@ name = C_Map.GetAreaInfo(areaID)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_Map.GetAreaInfo(0)
@@ -101,7 +101,8 @@ uiMapID = C_Map.GetBestMapForUnit(unitToken)
 **Example**
 
 ```lua
-local uiMapID = C_Map.GetBestMapForUnit("player")
+local mapID = C_Map.GetBestMapForUnit("player")
+print("Current mapID:", mapID)
 ```
 
 ### C_Map.GetBountySetMaps
@@ -122,7 +123,7 @@ mapIDs = C_Map.GetBountySetMaps(bountySetID)
 |------|------|---------|-------------|
 | `mapIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapIDs = C_Map.GetBountySetMaps(0)
@@ -140,7 +141,7 @@ uiMapID = C_Map.GetFallbackWorldMapID()
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = C_Map.GetFallbackWorldMapID()
@@ -164,7 +165,7 @@ atlasName = C_Map.GetMapArtBackgroundAtlas(uiMapID)
 |------|------|---------|-------------|
 | `atlasName` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlasName = C_Map.GetMapArtBackgroundAtlas(0)
@@ -188,7 +189,7 @@ position = C_Map.GetMapArtHelpTextPosition(uiMapID)
 |------|------|---------|-------------|
 | `position` | MapCanvasPosition | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local position = C_Map.GetMapArtHelpTextPosition(0)
@@ -212,7 +213,7 @@ uiMapArtID = C_Map.GetMapArtID(uiMapID)
 |------|------|---------|-------------|
 | `uiMapArtID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapArtID = C_Map.GetMapArtID(0)
@@ -236,7 +237,7 @@ layerInfo = C_Map.GetMapArtLayers(uiMapID)
 |------|------|---------|-------------|
 | `layerInfo` | UiMapLayerInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layerInfo = C_Map.GetMapArtLayers(0)
@@ -261,7 +262,7 @@ textures = C_Map.GetMapArtLayerTextures(uiMapID, layerIndex)
 |------|------|---------|-------------|
 | `textures` | fileID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textures = C_Map.GetMapArtLayerTextures(0, 1)
@@ -285,7 +286,7 @@ position = C_Map.GetMapArtZoneTextPosition(uiMapID)
 |------|------|---------|-------------|
 | `position` | MapCanvasPosition | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local position = C_Map.GetMapArtZoneTextPosition(0)
@@ -309,7 +310,7 @@ mapBanners = C_Map.GetMapBannersForMap(uiMapID)
 |------|------|---------|-------------|
 | `mapBanners` | MapBannerInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapBanners = C_Map.GetMapBannersForMap(0)
@@ -335,7 +336,7 @@ info = C_Map.GetMapChildrenInfo(uiMapID, [mapType], [allDescendants])
 |------|------|---------|-------------|
 | `info` | UiMapDetails[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Map.GetMapChildrenInfo(0)
@@ -359,7 +360,7 @@ hideIcons = C_Map.GetMapDisplayInfo(uiMapID)
 |------|------|---------|-------------|
 | `hideIcons` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hideIcons = C_Map.GetMapDisplayInfo(0)
@@ -383,7 +384,7 @@ uiMapGroupID = C_Map.GetMapGroupID(uiMapID)
 |------|------|---------|-------------|
 | `uiMapGroupID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapGroupID = C_Map.GetMapGroupID(0)
@@ -407,7 +408,7 @@ info = C_Map.GetMapGroupMembersInfo(uiMapGroupID)
 |------|------|---------|-------------|
 | `info` | UiMapGroupMemberInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Map.GetMapGroupMembersInfo(0)
@@ -440,7 +441,7 @@ fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY,
 | `scrollChildX` | number | no |  |
 | `scrollChildY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightInfoAtPosition(0, 0, 0)
@@ -471,7 +472,7 @@ fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY,
 | `scrollChildX` | number | no |  |
 | `scrollChildY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fileDataID, atlasID, texturePercentageX, texturePercentageY, textureX, textureY, scrollChildX, scrollChildY = C_Map.GetMapHighlightPulseInfo(0)
@@ -495,7 +496,7 @@ info = C_Map.GetMapInfo(uiMapID)
 |------|------|---------|-------------|
 | `info` | UiMapDetails | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Map.GetMapInfo(0)
@@ -522,7 +523,7 @@ info = C_Map.GetMapInfoAtPosition(uiMapID, x, y, [ignoreZoneMapPositionData])
 |------|------|---------|-------------|
 | `info` | UiMapDetails | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Map.GetMapInfoAtPosition(0, 0, 0)
@@ -549,7 +550,7 @@ playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.GetMapLevels(ui
 | `petMinLevel` | number | no | (default: 0) |
 | `petMaxLevel` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerMinLevel, playerMaxLevel, petMinLevel, petMaxLevel = C_Map.GetMapLevels(0)
@@ -573,7 +574,7 @@ mapLinks = C_Map.GetMapLinksForMap(uiMapID)
 |------|------|---------|-------------|
 | `mapLinks` | MapLinkInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapLinks = C_Map.GetMapLinksForMap(0)
@@ -600,7 +601,7 @@ uiMapID, mapPosition = C_Map.GetMapPosFromWorldPos(continentID, worldPosition, [
 | `uiMapID` | number | no |  |
 | `mapPosition` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID, mapPosition = C_Map.GetMapPosFromWorldPos(0, worldPosition)
@@ -628,7 +629,7 @@ minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(uiMapID, topUiMapID)
 | `minY` | number | no |  |
 | `maxY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(0, 0)
@@ -655,7 +656,7 @@ width, height = C_Map.GetMapWorldSize(uiMapID)
 | `width` | number | no |  |
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width, height = C_Map.GetMapWorldSize(0)
@@ -685,7 +686,12 @@ position = C_Map.GetPlayerMapPosition(uiMapID, unitToken)
 **Example**
 
 ```lua
-local position = C_Map.GetPlayerMapPosition(0, "player")
+local mapID = C_Map.GetBestMapForUnit("player")
+local pos = C_Map.GetPlayerMapPosition(mapID, "player")
+if pos then
+    local x, y = pos:GetXY()
+    print(("%.1f, %.1f"):format(x * 100, y * 100))
+end
 ```
 
 ### C_Map.GetUserWaypoint
@@ -700,7 +706,7 @@ point = C_Map.GetUserWaypoint()
 |------|------|---------|-------------|
 | `point` | UiMapPoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point = C_Map.GetUserWaypoint()
@@ -724,7 +730,7 @@ point = C_Map.GetUserWaypointFromHyperlink(hyperlink)
 |------|------|---------|-------------|
 | `point` | UiMapPoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point = C_Map.GetUserWaypointFromHyperlink("")
@@ -742,7 +748,7 @@ hyperlink = C_Map.GetUserWaypointHyperlink()
 |------|------|---------|-------------|
 | `hyperlink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperlink = C_Map.GetUserWaypointHyperlink()
@@ -766,7 +772,7 @@ mapPosition = C_Map.GetUserWaypointPositionForMap(uiMapID)
 |------|------|---------|-------------|
 | `mapPosition` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapPosition = C_Map.GetUserWaypointPositionForMap(0)
@@ -792,7 +798,7 @@ continentID, worldPosition = C_Map.GetWorldPosFromMapPos(uiMapID, mapPosition)
 | `continentID` | number | no |  |
 | `worldPosition` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local continentID, worldPosition = C_Map.GetWorldPosFromMapPos(0, mapPosition)
@@ -810,7 +816,7 @@ hasUserWaypoint = C_Map.HasUserWaypoint()
 |------|------|---------|-------------|
 | `hasUserWaypoint` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUserWaypoint = C_Map.HasUserWaypoint()
@@ -834,7 +840,7 @@ isCityMap = C_Map.IsCityMap(uiMapID)
 |------|------|---------|-------------|
 | `isCityMap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCityMap = C_Map.IsCityMap(0)
@@ -858,7 +864,7 @@ isValid = C_Map.IsMapValidForNavBarDropdown(uiMapID)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_Map.IsMapValidForNavBarDropdown(0)
@@ -882,7 +888,7 @@ hasArt = C_Map.MapHasArt(uiMapID)
 |------|------|---------|-------------|
 | `hasArt` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasArt = C_Map.MapHasArt(0)
@@ -900,7 +906,7 @@ C_Map.OpenWorldMap([uiMapID])
 |------|------|---------|-------------|
 | `uiMapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Map.OpenWorldMap()
@@ -918,7 +924,7 @@ C_Map.RequestPreloadMap(uiMapID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Map.RequestPreloadMap(0)
@@ -942,7 +948,7 @@ wasSet = C_Map.SetUserWaypoint(point)
 |------|------|---------|-------------|
 | `wasSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasSet = C_Map.SetUserWaypoint(point)

@@ -12,7 +12,7 @@
 C_ColorOverrides.ClearColorOverrides()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ColorOverrides.ClearColorOverrides()
@@ -36,7 +36,7 @@ color = C_ColorOverrides.GetColorForQuality(quality)
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_ColorOverrides.GetColorForQuality(quality)
@@ -60,7 +60,7 @@ overrideInfo = C_ColorOverrides.GetColorOverrideInfo(overrideType)
 |------|------|---------|-------------|
 | `overrideInfo` | ColorOverrideInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overrideInfo = C_ColorOverrides.GetColorOverrideInfo(overrideType)
@@ -84,7 +84,7 @@ color = C_ColorOverrides.GetDefaultColorForQuality(quality)
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_ColorOverrides.GetDefaultColorForQuality(quality)
@@ -102,7 +102,7 @@ C_ColorOverrides.RemoveColorOverride(overrideType)
 |------|------|---------|-------------|
 | `overrideType` | ColorOverride | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ColorOverrides.RemoveColorOverride(overrideType)
@@ -121,7 +121,7 @@ C_ColorOverrides.SetColorOverride(overrideType, color)
 | `overrideType` | ColorOverride | no |  |
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ColorOverrides.SetColorOverride(overrideType, color)

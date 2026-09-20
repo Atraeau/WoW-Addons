@@ -18,7 +18,7 @@ AddHistoryLine(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddHistoryLine("")
@@ -30,7 +30,7 @@ AddHistoryLine("")
 ClearFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFocus()
@@ -42,7 +42,7 @@ ClearFocus()
 ClearHighlightText()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearHighlightText()
@@ -54,7 +54,7 @@ ClearHighlightText()
 ClearHistory()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearHistory()
@@ -66,7 +66,7 @@ ClearHistory()
 Disable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Disable()
@@ -78,7 +78,7 @@ Disable()
 Enable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Enable()
@@ -96,7 +96,7 @@ altMode = GetAltArrowKeyMode()
 |------|------|---------|-------------|
 | `altMode` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local altMode = GetAltArrowKeyMode()
@@ -114,7 +114,7 @@ cursorBlinkSpeedSec = GetBlinkSpeed()
 |------|------|---------|-------------|
 | `cursorBlinkSpeedSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cursorBlinkSpeedSec = GetBlinkSpeed()
@@ -132,7 +132,7 @@ cursorPosition = GetCursorPosition()
 |------|------|---------|-------------|
 | `cursorPosition` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cursorPosition = GetCursorPosition()
@@ -150,7 +150,7 @@ displayText = GetDisplayText()
 |------|------|---------|-------------|
 | `displayText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayText = GetDisplayText()
@@ -170,7 +170,7 @@ name, fontHeight, flags = GetFont()
 | `fontHeight` | uiUnit | no |  |
 | `flags` | TBFFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, fontHeight, flags = GetFont()
@@ -188,7 +188,7 @@ font = GetFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetFontObject()
@@ -209,7 +209,7 @@ colorR, colorG, colorB, colorA = GetHighlightColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetHighlightColor()
@@ -227,7 +227,7 @@ numHistoryLines = GetHistoryLines()
 |------|------|---------|-------------|
 | `numHistoryLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numHistoryLines = GetHistoryLines()
@@ -245,7 +245,7 @@ isIndented = GetIndentedWordWrap()
 |------|------|---------|-------------|
 | `isIndented` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIndented = GetIndentedWordWrap()
@@ -263,7 +263,7 @@ language = GetInputLanguage()
 |------|------|---------|-------------|
 | `language` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local language = GetInputLanguage()
@@ -281,7 +281,7 @@ justifyH = GetJustifyH()
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyH = GetJustifyH()
@@ -299,7 +299,7 @@ justifyV = GetJustifyV()
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local justifyV = GetJustifyV()
@@ -317,7 +317,7 @@ maxBytes = GetMaxBytes()
 |------|------|---------|-------------|
 | `maxBytes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBytes = GetMaxBytes()
@@ -335,7 +335,7 @@ maxLetters = GetMaxLetters()
 |------|------|---------|-------------|
 | `maxLetters` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxLetters = GetMaxLetters()
@@ -353,7 +353,7 @@ number = GetNumber()
 |------|------|---------|-------------|
 | `number` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local number = GetNumber()
@@ -371,7 +371,7 @@ numLetters = GetNumLetters()
 |------|------|---------|-------------|
 | `numLetters` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numLetters = GetNumLetters()
@@ -389,7 +389,7 @@ lines = GetNumLines()
 |------|------|---------|-------------|
 | `lines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lines = GetNumLines()
@@ -410,7 +410,7 @@ colorR, colorG, colorB, colorA = GetShadowColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetShadowColor()
@@ -429,7 +429,7 @@ offsetX, offsetY = GetShadowOffset()
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetShadowOffset()
@@ -447,7 +447,7 @@ fontHeight = GetSpacing()
 |------|------|---------|-------------|
 | `fontHeight` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontHeight = GetSpacing()
@@ -465,7 +465,7 @@ text = GetText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetText()
@@ -486,7 +486,7 @@ colorR, colorG, colorB, colorA = GetTextColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetTextColor()
@@ -507,7 +507,7 @@ left, right, top, bottom = GetTextInsets()
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = GetTextInsets()
@@ -525,7 +525,7 @@ cursorPosition = GetUTF8CursorPosition()
 |------|------|---------|-------------|
 | `cursorPosition` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cursorPosition = GetUTF8CursorPosition()
@@ -543,7 +543,7 @@ maxVisibleBytes = GetVisibleTextByteLimit()
 |------|------|---------|-------------|
 | `maxVisibleBytes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxVisibleBytes = GetVisibleTextByteLimit()
@@ -561,7 +561,7 @@ hasFocus = HasFocus()
 |------|------|---------|-------------|
 | `hasFocus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFocus = HasFocus()
@@ -579,7 +579,7 @@ hasText = HasText()
 |------|------|---------|-------------|
 | `hasText` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasText = HasText()
@@ -598,7 +598,7 @@ HighlightText(start, stop)
 | `start` | number | no | (default: 0) |
 | `stop` | number | no | (default: -1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 HighlightText(0, 0)
@@ -616,7 +616,7 @@ Insert(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Insert("")
@@ -634,7 +634,7 @@ enabled = IsAlphabeticOnly()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsAlphabeticOnly()
@@ -652,7 +652,7 @@ autoFocus = IsAutoFocus()
 |------|------|---------|-------------|
 | `autoFocus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local autoFocus = IsAutoFocus()
@@ -670,7 +670,7 @@ countInvisibleLetters = IsCountInvisibleLetters()
 |------|------|---------|-------------|
 | `countInvisibleLetters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local countInvisibleLetters = IsCountInvisibleLetters()
@@ -688,7 +688,7 @@ isEnabled = IsEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = IsEnabled()
@@ -706,7 +706,7 @@ isInIMECompositionMode = IsInIMECompositionMode()
 |------|------|---------|-------------|
 | `isInIMECompositionMode` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInIMECompositionMode = IsInIMECompositionMode()
@@ -724,7 +724,7 @@ multiline = IsMultiLine()
 |------|------|---------|-------------|
 | `multiline` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local multiline = IsMultiLine()
@@ -742,7 +742,7 @@ isNumeric = IsNumeric()
 |------|------|---------|-------------|
 | `isNumeric` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNumeric = IsNumeric()
@@ -760,7 +760,7 @@ isNumeric = IsNumericFullRange()
 |------|------|---------|-------------|
 | `isNumeric` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNumeric = IsNumericFullRange()
@@ -778,7 +778,7 @@ isPassword = IsPassword()
 |------|------|---------|-------------|
 | `isPassword` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPassword = IsPassword()
@@ -796,7 +796,7 @@ isSecure = IsSecureText()
 |------|------|---------|-------------|
 | `isSecure` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSecure = IsSecureText()
@@ -808,7 +808,7 @@ local isSecure = IsSecureText()
 ResetInputMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetInputMode()
@@ -826,7 +826,7 @@ SetAlphabeticOnly(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlphabeticOnly(false)
@@ -844,7 +844,7 @@ SetAltArrowKeyMode(altMode)
 |------|------|---------|-------------|
 | `altMode` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAltArrowKeyMode(false)
@@ -862,7 +862,7 @@ SetAutoFocus(autoFocus)
 |------|------|---------|-------------|
 | `autoFocus` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAutoFocus(false)
@@ -880,7 +880,7 @@ SetBlinkSpeed(cursorBlinkSpeedSec)
 |------|------|---------|-------------|
 | `cursorBlinkSpeedSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBlinkSpeed(0)
@@ -898,7 +898,7 @@ SetCountInvisibleLetters(countInvisibleLetters)
 |------|------|---------|-------------|
 | `countInvisibleLetters` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCountInvisibleLetters(false)
@@ -916,7 +916,7 @@ SetCursorPosition(cursorPosition)
 |------|------|---------|-------------|
 | `cursorPosition` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCursorPosition(0)
@@ -934,7 +934,7 @@ SetEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEnabled(false)
@@ -946,7 +946,7 @@ SetEnabled(false)
 SetFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFocus()
@@ -972,7 +972,7 @@ success = SetFont(fontFile, height, flags)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetFont("", height, flags)
@@ -990,7 +990,7 @@ SetFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontObject(font)
@@ -1011,7 +1011,7 @@ SetHighlightColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHighlightColor(0, 0, 0)
@@ -1029,7 +1029,7 @@ SetHistoryLines(numHistoryLines)
 |------|------|---------|-------------|
 | `numHistoryLines` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHistoryLines(0)
@@ -1047,7 +1047,7 @@ SetIndentedWordWrap(isIndented)
 |------|------|---------|-------------|
 | `isIndented` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetIndentedWordWrap(false)
@@ -1065,7 +1065,7 @@ SetJustifyH(justifyH)
 |------|------|---------|-------------|
 | `justifyH` | JustifyHorizontal | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyH(justifyH)
@@ -1083,7 +1083,7 @@ SetJustifyV(justifyV)
 |------|------|---------|-------------|
 | `justifyV` | JustifyVertical | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetJustifyV(justifyV)
@@ -1101,7 +1101,7 @@ SetMaxBytes(maxBytes)
 |------|------|---------|-------------|
 | `maxBytes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxBytes(0)
@@ -1119,7 +1119,7 @@ SetMaxLetters(maxLetters)
 |------|------|---------|-------------|
 | `maxLetters` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxLetters(0)
@@ -1137,7 +1137,7 @@ SetMultiLine(multiline)
 |------|------|---------|-------------|
 | `multiline` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMultiLine(false)
@@ -1155,7 +1155,7 @@ SetNumber(number)
 |------|------|---------|-------------|
 | `number` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNumber(0)
@@ -1173,7 +1173,7 @@ SetNumeric(isNumeric)
 |------|------|---------|-------------|
 | `isNumeric` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNumeric(false)
@@ -1191,7 +1191,7 @@ SetNumericFullRange(isNumeric)
 |------|------|---------|-------------|
 | `isNumeric` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNumericFullRange(false)
@@ -1209,7 +1209,7 @@ SetPassword(isPassword)
 |------|------|---------|-------------|
 | `isPassword` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPassword(false)
@@ -1227,7 +1227,7 @@ SetSecureText(isSecure)
 |------|------|---------|-------------|
 | `isSecure` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSecureText(false)
@@ -1239,7 +1239,7 @@ SetSecureText(false)
 SetSecurityDisablePaste()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSecurityDisablePaste()
@@ -1251,7 +1251,7 @@ SetSecurityDisablePaste()
 SetSecurityDisableSetText()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSecurityDisableSetText()
@@ -1272,7 +1272,7 @@ SetShadowColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShadowColor(0, 0, 0)
@@ -1291,10 +1291,10 @@ SetShadowOffset(offsetX, offsetY)
 | `offsetX` | number | no |  |
 | `offsetY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetShadowOffset(0, 0)
+SetShadowOffset(1, 1)
 ```
 
 ### SimpleEditBoxAPI.SetSpacing
@@ -1309,7 +1309,7 @@ SetSpacing(fontHeight)
 |------|------|---------|-------------|
 | `fontHeight` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSpacing(fontHeight)
@@ -1327,7 +1327,7 @@ SetText(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetText("")
@@ -1348,7 +1348,7 @@ SetTextColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColor(0, 0, 0)
@@ -1369,7 +1369,7 @@ SetTextInsets(left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextInsets(left, right, top, bottom)
@@ -1387,7 +1387,7 @@ SetVisibleTextByteLimit(maxVisibleBytes)
 |------|------|---------|-------------|
 | `maxVisibleBytes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetVisibleTextByteLimit(0)
@@ -1399,7 +1399,7 @@ SetVisibleTextByteLimit(0)
 ToggleInputLanguage()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ToggleInputLanguage()

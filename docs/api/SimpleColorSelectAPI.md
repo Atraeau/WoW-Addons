@@ -12,7 +12,7 @@
 ClearColorWheelTexture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearColorWheelTexture()
@@ -30,7 +30,7 @@ alpha = GetColorAlpha()
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetColorAlpha()
@@ -48,7 +48,7 @@ texture = GetColorAlphaTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorAlphaTexture()
@@ -66,7 +66,7 @@ texture = GetColorAlphaThumbTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorAlphaThumbTexture()
@@ -86,7 +86,7 @@ hsvX, hsvY, hsvZ = GetColorHSV()
 | `hsvY` | number | no |  |
 | `hsvZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hsvX, hsvY, hsvZ = GetColorHSV()
@@ -106,7 +106,7 @@ rgbR, rgbG, rgbB = GetColorRGB()
 | `rgbG` | number | no |  |
 | `rgbB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rgbR, rgbG, rgbB = GetColorRGB()
@@ -124,7 +124,7 @@ texture = GetColorValueTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorValueTexture()
@@ -142,7 +142,7 @@ texture = GetColorValueThumbTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorValueThumbTexture()
@@ -160,7 +160,7 @@ texture = GetColorWheelTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorWheelTexture()
@@ -178,7 +178,7 @@ texture = GetColorWheelThumbTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetColorWheelThumbTexture()
@@ -196,7 +196,7 @@ SetColorAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorAlpha(0)
@@ -214,7 +214,7 @@ SetColorAlphaTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorAlphaTexture(texture)
@@ -232,7 +232,7 @@ SetColorAlphaThumbTexture(texture)
 |------|------|---------|-------------|
 | `texture` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorAlphaThumbTexture(texture)
@@ -252,7 +252,7 @@ SetColorHSV(hsvX, hsvY, hsvZ)
 | `hsvY` | number | no |  |
 | `hsvZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorHSV(0, 0, 0)
@@ -272,7 +272,7 @@ SetColorRGB(rgbR, rgbG, rgbB)
 | `rgbG` | number | no |  |
 | `rgbB` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorRGB(0, 0, 0)
@@ -290,7 +290,7 @@ SetColorValueTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorValueTexture(texture)
@@ -308,7 +308,7 @@ SetColorValueThumbTexture(texture)
 |------|------|---------|-------------|
 | `texture` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorValueThumbTexture(texture)
@@ -326,7 +326,7 @@ SetColorWheelTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorWheelTexture(texture)
@@ -344,7 +344,7 @@ SetColorWheelThumbTexture(texture)
 |------|------|---------|-------------|
 | `texture` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorWheelThumbTexture(texture)

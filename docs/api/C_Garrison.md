@@ -26,7 +26,7 @@ followerAdded = C_Garrison.AddFollowerToMission(missionID, followerID, [boardInd
 |------|------|---------|-------------|
 | `followerAdded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local followerAdded = C_Garrison.AddFollowerToMission(0, followerID)
@@ -44,7 +44,7 @@ damageClassStrings = C_Garrison.GetAutoCombatDamageClassValues()
 |------|------|---------|-------------|
 | `damageClassStrings` | AutoCombatDamageClassString[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local damageClassStrings = C_Garrison.GetAutoCombatDamageClassValues()
@@ -68,7 +68,7 @@ targetInfo = C_Garrison.GetAutoMissionBoardState(missionID)
 |------|------|---------|-------------|
 | `targetInfo` | AutoMissionTargetingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetInfo = C_Garrison.GetAutoMissionBoardState(0)
@@ -92,7 +92,7 @@ autoMissionEnvEffect = C_Garrison.GetAutoMissionEnvironmentEffect(missionID)
 |------|------|---------|-------------|
 | `autoMissionEnvEffect` | AutoMissionEnvironmentEffect | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local autoMissionEnvEffect = C_Garrison.GetAutoMissionEnvironmentEffect(0)
@@ -118,7 +118,7 @@ targetInfo = C_Garrison.GetAutoMissionTargetingInfo(missionID, followerID, caste
 |------|------|---------|-------------|
 | `targetInfo` | AutoMissionTargetingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetInfo = C_Garrison.GetAutoMissionTargetingInfo(0, followerID, 1)
@@ -144,10 +144,10 @@ targetInfo = C_Garrison.GetAutoMissionTargetingInfoForSpell(missionID, autoComba
 |------|------|---------|-------------|
 | `targetInfo` | AutoMissionTargetingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local targetInfo = C_Garrison.GetAutoMissionTargetingInfoForSpell(0, 12345, 1)
+local targetInfo = C_Garrison.GetAutoMissionTargetingInfoForSpell(0, 2050, 1)
 ```
 
 ### C_Garrison.GetAutoTroops
@@ -168,7 +168,7 @@ autoTroopInfo = C_Garrison.GetAutoTroops(followerType)
 |------|------|---------|-------------|
 | `autoTroopInfo` | AutoCombatTroopInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local autoTroopInfo = C_Garrison.GetAutoTroops(0)
@@ -192,10 +192,10 @@ spellInfo = C_Garrison.GetCombatLogSpellInfo(autoCombatSpellID)
 |------|------|---------|-------------|
 | `spellInfo` | AutoCombatSpellInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellInfo = C_Garrison.GetCombatLogSpellInfo(12345)
+local spellInfo = C_Garrison.GetCombatLogSpellInfo(2050)
 ```
 
 ### C_Garrison.GetCurrentCypherEquipmentLevel
@@ -210,7 +210,7 @@ equipmentLevel = C_Garrison.GetCurrentCypherEquipmentLevel()
 |------|------|---------|-------------|
 | `equipmentLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local equipmentLevel = C_Garrison.GetCurrentCypherEquipmentLevel()
@@ -228,7 +228,7 @@ currentGarrTalentTreeFriendshipFactionID = C_Garrison.GetCurrentGarrTalentTreeFr
 |------|------|---------|-------------|
 | `currentGarrTalentTreeFriendshipFactionID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentGarrTalentTreeFriendshipFactionID = C_Garrison.GetCurrentGarrTalentTreeFriendshipFactionID()
@@ -246,7 +246,7 @@ currentGarrTalentTreeID = C_Garrison.GetCurrentGarrTalentTreeID()
 |------|------|---------|-------------|
 | `currentGarrTalentTreeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentGarrTalentTreeID = C_Garrison.GetCurrentGarrTalentTreeID()
@@ -264,7 +264,7 @@ cyphersToNext = C_Garrison.GetCyphersToNextEquipmentLevel()
 |------|------|---------|-------------|
 | `cyphersToNext` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cyphersToNext = C_Garrison.GetCyphersToNextEquipmentLevel()
@@ -290,7 +290,7 @@ autoCombatSpells, autoCombatAutoAttack = C_Garrison.GetFollowerAutoCombatSpells(
 | `autoCombatSpells` | AutoCombatSpellInfo[] | no |  |
 | `autoCombatAutoAttack` | AutoCombatSpellInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local autoCombatSpells, autoCombatAutoAttack = C_Garrison.GetFollowerAutoCombatSpells(garrFollowerID, 0)
@@ -314,7 +314,7 @@ autoCombatInfo = C_Garrison.GetFollowerAutoCombatStats(garrFollowerID)
 |------|------|---------|-------------|
 | `autoCombatInfo` | FollowerAutoCombatStatsInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local autoCombatInfo = C_Garrison.GetFollowerAutoCombatStats(garrFollowerID)
@@ -338,7 +338,7 @@ followerMissionCompleteInfo = C_Garrison.GetFollowerMissionCompleteInfo(follower
 |------|------|---------|-------------|
 | `followerMissionCompleteInfo` | FollowerMissionCompleteInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local followerMissionCompleteInfo = C_Garrison.GetFollowerMissionCompleteInfo(followerID)
@@ -362,7 +362,7 @@ garrisonPlotInstances = C_Garrison.GetGarrisonPlotsInstancesForMap(uiMapID)
 |------|------|---------|-------------|
 | `garrisonPlotInstances` | GarrisonPlotInstanceMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local garrisonPlotInstances = C_Garrison.GetGarrisonPlotsInstancesForMap(0)
@@ -386,7 +386,7 @@ garrTalentTreeCurrencyType = C_Garrison.GetGarrisonTalentTreeCurrencyTypes(garrT
 |------|------|---------|-------------|
 | `garrTalentTreeCurrencyType` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local garrTalentTreeCurrencyType = C_Garrison.GetGarrisonTalentTreeCurrencyTypes(0)
@@ -410,7 +410,7 @@ garrTalentTreeType = C_Garrison.GetGarrisonTalentTreeType(garrTalentTreeID)
 |------|------|---------|-------------|
 | `garrTalentTreeType` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local garrTalentTreeType = C_Garrison.GetGarrisonTalentTreeType(0)
@@ -428,7 +428,7 @@ maxEquipmentLevel = C_Garrison.GetMaxCypherEquipmentLevel()
 |------|------|---------|-------------|
 | `maxEquipmentLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxEquipmentLevel = C_Garrison.GetMaxCypherEquipmentLevel()
@@ -452,7 +452,7 @@ encounters = C_Garrison.GetMissionCompleteEncounters(missionID)
 |------|------|---------|-------------|
 | `encounters` | GarrisonEnemyEncounterInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounters = C_Garrison.GetMissionCompleteEncounters(0)
@@ -476,7 +476,7 @@ missionDeploymentInfo = C_Garrison.GetMissionDeploymentInfo(missionID)
 |------|------|---------|-------------|
 | `missionDeploymentInfo` | MissionDeploymentInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local missionDeploymentInfo = C_Garrison.GetMissionDeploymentInfo(0)
@@ -500,7 +500,7 @@ missionEncounterIconInfo = C_Garrison.GetMissionEncounterIconInfo(missionID)
 |------|------|---------|-------------|
 | `missionEncounterIconInfo` | MissionEncounterIconInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local missionEncounterIconInfo = C_Garrison.GetMissionEncounterIconInfo(0)
@@ -524,7 +524,7 @@ info = C_Garrison.GetTalentInfo(talentID)
 |------|------|---------|-------------|
 | `info` | GarrisonTalentInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Garrison.GetTalentInfo(0)
@@ -548,7 +548,7 @@ talentPoints = C_Garrison.GetTalentPointsSpentInTalentTree(garrTalentTreeID)
 |------|------|---------|-------------|
 | `talentPoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local talentPoints = C_Garrison.GetTalentPointsSpentInTalentTree(0)
@@ -573,7 +573,7 @@ treeIDs = C_Garrison.GetTalentTreeIDsByClassID(garrType, classID)
 |------|------|---------|-------------|
 | `treeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeIDs = C_Garrison.GetTalentTreeIDsByClassID(0, 0)
@@ -597,7 +597,7 @@ info = C_Garrison.GetTalentTreeInfo(treeID)
 |------|------|---------|-------------|
 | `info` | GarrisonTalentTreeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Garrison.GetTalentTreeInfo(0)
@@ -622,7 +622,7 @@ goldCost, currencyCosts = C_Garrison.GetTalentTreeResetInfo(garrTalentTreeID)
 | `goldCost` | number | no |  |
 | `currencyCosts` | GarrisonTalentCurrencyCostInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local goldCost, currencyCosts = C_Garrison.GetTalentTreeResetInfo(0)
@@ -652,7 +652,7 @@ goldCost, currencyCosts, durationSecs = C_Garrison.GetTalentTreeTalentPointResea
 | `currencyCosts` | GarrisonTalentCurrencyCostInfo[] | no |  |
 | `durationSecs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local goldCost, currencyCosts, durationSecs = C_Garrison.GetTalentTreeTalentPointResearchInfo(0, 1, 0, 1, false)
@@ -676,7 +676,7 @@ worldQuestID = C_Garrison.GetTalentUnlockWorldQuest(talentID)
 |------|------|---------|-------------|
 | `worldQuestID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local worldQuestID = C_Garrison.GetTalentUnlockWorldQuest(0)
@@ -694,7 +694,7 @@ hasAdventures = C_Garrison.HasAdventures()
 |------|------|---------|-------------|
 | `hasAdventures` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAdventures = C_Garrison.HasAdventures()
@@ -712,7 +712,7 @@ atGarrisonMissionNPC = C_Garrison.IsAtGarrisonMissionNPC()
 |------|------|---------|-------------|
 | `atGarrisonMissionNPC` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atGarrisonMissionNPC = C_Garrison.IsAtGarrisonMissionNPC()
@@ -736,7 +736,7 @@ environmentCountered = C_Garrison.IsEnvironmentCountered(missionID)
 |------|------|---------|-------------|
 | `environmentCountered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local environmentCountered = C_Garrison.IsEnvironmentCountered(0)
@@ -760,7 +760,7 @@ followerOnCompletedMission = C_Garrison.IsFollowerOnCompletedMission(followerID)
 |------|------|---------|-------------|
 | `followerOnCompletedMission` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local followerOnCompletedMission = C_Garrison.IsFollowerOnCompletedMission(followerID)
@@ -784,7 +784,7 @@ isLandingPageMinimapButtonVisible = C_Garrison.IsLandingPageMinimapButtonVisible
 |------|------|---------|-------------|
 | `isLandingPageMinimapButtonVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLandingPageMinimapButtonVisible = C_Garrison.IsLandingPageMinimapButtonVisible(0)
@@ -809,7 +809,7 @@ isMet, failureString = C_Garrison.IsTalentConditionMet(talentID)
 | `isMet` | bool | no |  |
 | `failureString` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMet, failureString = C_Garrison.IsTalentConditionMet(0)
@@ -833,7 +833,7 @@ success = C_Garrison.RegenerateCombatLog(missionID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Garrison.RegenerateCombatLog(0)
@@ -853,7 +853,7 @@ C_Garrison.RemoveFollowerFromMission(missionID, followerID, [boardIndex])
 | `followerID` | GarrisonFollower | no |  |
 | `boardIndex` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Garrison.RemoveFollowerFromMission(0, followerID)
@@ -871,7 +871,7 @@ C_Garrison.RushHealAllFollowers(followerType)
 |------|------|---------|-------------|
 | `followerType` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Garrison.RushHealAllFollowers(0)
@@ -889,7 +889,7 @@ C_Garrison.RushHealFollower(garrFollowerID)
 |------|------|---------|-------------|
 | `garrFollowerID` | GarrisonFollower | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Garrison.RushHealFollower(garrFollowerID)
@@ -907,7 +907,7 @@ C_Garrison.SetAutoCombatSpellFastForward(state)
 |------|------|---------|-------------|
 | `state` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Garrison.SetAutoCombatSpellFastForward(false)

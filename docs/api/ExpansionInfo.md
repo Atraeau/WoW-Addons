@@ -24,7 +24,7 @@ isAtLeast = ClassicExpansionAtLeast(expansionLevel)
 |------|------|---------|-------------|
 | `isAtLeast` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtLeast = ClassicExpansionAtLeast(0)
@@ -48,7 +48,7 @@ isAtMost = ClassicExpansionAtMost(expansionLevel)
 |------|------|---------|-------------|
 | `isAtMost` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtMost = ClassicExpansionAtMost(0)
@@ -66,7 +66,7 @@ expansionLevel = GetClassicExpansionLevel()
 |------|------|---------|-------------|
 | `expansionLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionLevel = GetClassicExpansionLevel()

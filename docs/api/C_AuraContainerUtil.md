@@ -24,7 +24,7 @@ result = C_AuraContainerUtil.ProcessAuraTooltipBackdropOptions(options)
 |------|------|---------|-------------|
 | `result` | AuraContainerTooltipBackdropOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessAuraTooltipBackdropOptions(options)
@@ -48,7 +48,7 @@ result = C_AuraContainerUtil.ProcessAuraTooltipNineSliceOptions(options)
 |------|------|---------|-------------|
 | `result` | AuraContainerTooltipNineSliceOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessAuraTooltipNineSliceOptions(options)
@@ -72,7 +72,7 @@ result = C_AuraContainerUtil.ProcessAuraTooltipTextureSliceOptions(options)
 |------|------|---------|-------------|
 | `result` | AuraContainerTooltipTextureSliceOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessAuraTooltipTextureSliceOptions(options)
@@ -96,7 +96,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonApplicationBarOptions(option
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonApplicationBarOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonApplicationBarOptions(options)
@@ -120,7 +120,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonApplicationCountOptions([opt
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonApplicationCountOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonApplicationCountOptions()
@@ -144,7 +144,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonCasterNameOptions([options])
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonCasterNameOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonCasterNameOptions()
@@ -168,7 +168,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonDispelTypeTextOptions([optio
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonDispelTypeTextOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonDispelTypeTextOptions()
@@ -192,7 +192,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonDispelTypeTextureOptions([op
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonDispelTypeTextureOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonDispelTypeTextureOptions()
@@ -216,7 +216,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonDurationBarOptions([options]
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonDurationBarOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonDurationBarOptions()
@@ -240,7 +240,7 @@ result = C_AuraContainerUtil.ProcessCustomAuraButtonDurationTextOptions([options
 |------|------|---------|-------------|
 | `result` | CustomAuraButtonDurationTextOptions | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuraContainerUtil.ProcessCustomAuraButtonDurationTextOptions()

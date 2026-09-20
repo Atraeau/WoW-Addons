@@ -18,7 +18,7 @@ distance = C_Navigation.GetDistance()
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distance = C_Navigation.GetDistance()
@@ -36,7 +36,7 @@ frame = C_Navigation.GetFrame()
 |------|------|---------|-------------|
 | `frame` | ScriptRegion | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frame = C_Navigation.GetFrame()
@@ -54,7 +54,7 @@ unitToken = C_Navigation.GetNearestPartyMemberToken()
 |------|------|---------|-------------|
 | `unitToken` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitToken = C_Navigation.GetNearestPartyMemberToken()
@@ -80,7 +80,7 @@ x, y, waypointDescription = C_Navigation.GetNextWaypointForMap(uiMapID)
 | `y` | number | no |  |
 | `waypointDescription` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local x, y, waypointDescription = C_Navigation.GetNextWaypointForMap(0)
@@ -98,7 +98,7 @@ state = C_Navigation.GetTargetState()
 |------|------|---------|-------------|
 | `state` | NavigationState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_Navigation.GetTargetState()
@@ -116,7 +116,7 @@ hasValidScreenPosition = C_Navigation.HasValidScreenPosition()
 |------|------|---------|-------------|
 | `hasValidScreenPosition` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasValidScreenPosition = C_Navigation.HasValidScreenPosition()
@@ -134,7 +134,7 @@ wasClamped = C_Navigation.WasClampedToScreen()
 |------|------|---------|-------------|
 | `wasClamped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wasClamped = C_Navigation.WasClampedToScreen()

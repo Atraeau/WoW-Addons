@@ -18,7 +18,7 @@ AddMaskTexture(mask)
 |------|------|---------|-------------|
 | `mask` | SimpleMaskTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddMaskTexture(mask)
@@ -42,7 +42,7 @@ mask = GetMaskTexture(index)
 |------|------|---------|-------------|
 | `mask` | SimpleMaskTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mask = GetMaskTexture(1)
@@ -60,7 +60,7 @@ count = GetNumMaskTextures()
 |------|------|---------|-------------|
 | `count` | size | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = GetNumMaskTextures()
@@ -78,7 +78,7 @@ RemoveMaskTexture(mask)
 |------|------|---------|-------------|
 | `mask` | SimpleMaskTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RemoveMaskTexture(mask)

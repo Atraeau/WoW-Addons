@@ -18,7 +18,7 @@ data = C_ArdenwealdGardening.GetGardenData()
 |------|------|---------|-------------|
 | `data` | ArdenwealdGardenData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_ArdenwealdGardening.GetGardenData()
@@ -36,7 +36,7 @@ accessible = C_ArdenwealdGardening.IsGardenAccessible()
 |------|------|---------|-------------|
 | `accessible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accessible = C_ArdenwealdGardening.IsGardenAccessible()

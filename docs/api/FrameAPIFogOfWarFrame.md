@@ -18,7 +18,7 @@ atlas = GetFogOfWarBackgroundAtlas()
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlas = GetFogOfWarBackgroundAtlas()
@@ -36,7 +36,7 @@ asset = GetFogOfWarBackgroundTexture()
 |------|------|---------|-------------|
 | `asset` | FileAsset | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local asset = GetFogOfWarBackgroundTexture()
@@ -54,7 +54,7 @@ atlas = GetFogOfWarMaskAtlas()
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlas = GetFogOfWarMaskAtlas()
@@ -72,7 +72,7 @@ asset = GetFogOfWarMaskTexture()
 |------|------|---------|-------------|
 | `asset` | FileAsset | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local asset = GetFogOfWarMaskTexture()
@@ -90,7 +90,7 @@ scalar = GetMaskScalar()
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scalar = GetMaskScalar()
@@ -108,7 +108,7 @@ uiMapID = GetUiMapID()
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = GetUiMapID()
@@ -126,7 +126,7 @@ SetFogOfWarBackgroundAtlas(atlas)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogOfWarBackgroundAtlas(atlas)
@@ -146,7 +146,7 @@ SetFogOfWarBackgroundTexture(asset, horizontalTile, verticalTile)
 | `horizontalTile` | bool | no |  |
 | `verticalTile` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogOfWarBackgroundTexture(asset, false, false)
@@ -164,7 +164,7 @@ SetFogOfWarMaskAtlas(atlas)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogOfWarMaskAtlas(atlas)
@@ -182,7 +182,7 @@ SetFogOfWarMaskTexture(asset)
 |------|------|---------|-------------|
 | `asset` | FileAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFogOfWarMaskTexture(asset)
@@ -200,7 +200,7 @@ SetMaskScalar(scalar)
 |------|------|---------|-------------|
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaskScalar(0)
@@ -218,7 +218,7 @@ SetUiMapID(uiMapID)
 |------|------|---------|-------------|
 | `uiMapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUiMapID(0)

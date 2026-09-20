@@ -25,7 +25,7 @@ hasItemData, canCollect = C_TransmogCollection.AccountCanCollectSource(sourceID)
 | `hasItemData` | bool | no |  |
 | `canCollect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasItemData, canCollect = C_TransmogCollection.AccountCanCollectSource(0)
@@ -43,7 +43,7 @@ areAllCollectionTypeFiltersChecked = C_TransmogCollection.AreAllCollectionTypeFi
 |------|------|---------|-------------|
 | `areAllCollectionTypeFiltersChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAllCollectionTypeFiltersChecked = C_TransmogCollection.AreAllCollectionTypeFiltersChecked()
@@ -61,7 +61,7 @@ areAllSourceTypeFiltersChecked = C_TransmogCollection.AreAllSourceTypeFiltersChe
 |------|------|---------|-------------|
 | `areAllSourceTypeFiltersChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAllSourceTypeFiltersChecked = C_TransmogCollection.AreAllSourceTypeFiltersChecked()
@@ -85,7 +85,7 @@ canHaveIllusion = C_TransmogCollection.CanAppearanceHaveIllusion(appearanceID)
 |------|------|---------|-------------|
 | `canHaveIllusion` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canHaveIllusion = C_TransmogCollection.CanAppearanceHaveIllusion(0)
@@ -103,7 +103,7 @@ C_TransmogCollection.ClearNewAppearance(visualID)
 |------|------|---------|-------------|
 | `visualID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.ClearNewAppearance(0)
@@ -127,7 +127,7 @@ completed = C_TransmogCollection.ClearSearch(searchType)
 |------|------|---------|-------------|
 | `completed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local completed = C_TransmogCollection.ClearSearch(searchType)
@@ -145,7 +145,7 @@ C_TransmogCollection.DeleteCustomSet(customSetID)
 |------|------|---------|-------------|
 | `customSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.DeleteCustomSet(0)
@@ -157,7 +157,7 @@ C_TransmogCollection.DeleteCustomSet(0)
 C_TransmogCollection.EndSearch()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.EndSearch()
@@ -181,7 +181,7 @@ itemModifiedAppearanceIDs = C_TransmogCollection.GetAllAppearanceSources(itemApp
 |------|------|---------|-------------|
 | `itemModifiedAppearanceIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemModifiedAppearanceIDs = C_TransmogCollection.GetAllAppearanceSources(6948)
@@ -199,7 +199,7 @@ shown = C_TransmogCollection.GetAllFactionsShown()
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shown = C_TransmogCollection.GetAllFactionsShown()
@@ -217,7 +217,7 @@ shown = C_TransmogCollection.GetAllRacesShown()
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shown = C_TransmogCollection.GetAllRacesShown()
@@ -242,7 +242,7 @@ cameraID = C_TransmogCollection.GetAppearanceCameraID(itemAppearanceID, [variati
 |------|------|---------|-------------|
 | `cameraID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cameraID = C_TransmogCollection.GetAppearanceCameraID(6948)
@@ -267,7 +267,7 @@ cameraID = C_TransmogCollection.GetAppearanceCameraIDBySource(itemModifiedAppear
 |------|------|---------|-------------|
 | `cameraID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cameraID = C_TransmogCollection.GetAppearanceCameraIDBySource(6948)
@@ -291,7 +291,7 @@ info = C_TransmogCollection.GetAppearanceInfoBySource(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `info` | TransmogAppearanceInfoBySourceData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TransmogCollection.GetAppearanceInfoBySource(6948)
@@ -315,7 +315,7 @@ encounterInfo = C_TransmogCollection.GetAppearanceSourceDrops(itemModifiedAppear
 |------|------|---------|-------------|
 | `encounterInfo` | TransmogAppearanceJournalEncounterInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounterInfo = C_TransmogCollection.GetAppearanceSourceDrops(6948)
@@ -339,7 +339,7 @@ info = C_TransmogCollection.GetAppearanceSourceInfo(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `info` | TransmogAppearanceSourceInfoData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TransmogCollection.GetAppearanceSourceInfo(6948)
@@ -365,7 +365,7 @@ sources = C_TransmogCollection.GetAppearanceSources(appearanceID, [categoryType]
 |------|------|---------|-------------|
 | `sources` | AppearanceSourceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogCollection.GetAppearanceSources(0)
@@ -390,7 +390,7 @@ name, hyperlink = C_TransmogCollection.GetArtifactAppearanceStrings(appearanceID
 | `name` | cstring | no |  |
 | `hyperlink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, hyperlink = C_TransmogCollection.GetArtifactAppearanceStrings(0)
@@ -416,7 +416,7 @@ appearances = C_TransmogCollection.GetCategoryAppearances(category, [transmogLoc
 |------|------|---------|-------------|
 | `appearances` | TransmogCategoryAppearanceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local appearances = C_TransmogCollection.GetCategoryAppearances(category)
@@ -440,7 +440,7 @@ count = C_TransmogCollection.GetCategoryCollectedCount(category)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_TransmogCollection.GetCategoryCollectedCount(category)
@@ -464,7 +464,7 @@ collectionCategory = C_TransmogCollection.GetCategoryForItem(itemModifiedAppeara
 |------|------|---------|-------------|
 | `collectionCategory` | TransmogCollectionType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionCategory = C_TransmogCollection.GetCategoryForItem(6948)
@@ -493,7 +493,7 @@ name, isWeapon, canHaveIllusions, canMainHand, canOffHand, canRanged = C_Transmo
 | `canOffHand` | bool | no | (default: False) |
 | `canRanged` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, isWeapon, canHaveIllusions, canMainHand, canOffHand, canRanged = C_TransmogCollection.GetCategoryInfo(category)
@@ -517,7 +517,7 @@ total = C_TransmogCollection.GetCategoryTotal(category)
 |------|------|---------|-------------|
 | `total` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local total = C_TransmogCollection.GetCategoryTotal(category)
@@ -535,7 +535,7 @@ classID = C_TransmogCollection.GetClassFilter()
 |------|------|---------|-------------|
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classID = C_TransmogCollection.GetClassFilter()
@@ -553,7 +553,7 @@ shown = C_TransmogCollection.GetCollectedShown()
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shown = C_TransmogCollection.GetCollectedShown()
@@ -577,7 +577,7 @@ hyperlink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(i
 |------|------|---------|-------------|
 | `hyperlink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperlink = C_TransmogCollection.GetCustomSetHyperlinkFromItemTransmogInfoList(6948)
@@ -602,7 +602,7 @@ name, icon = C_TransmogCollection.GetCustomSetInfo(customSetID)
 | `name` | cstring | no |  |
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon = C_TransmogCollection.GetCustomSetInfo(0)
@@ -626,7 +626,7 @@ list = C_TransmogCollection.GetCustomSetItemTransmogInfoList(customSetID)
 |------|------|---------|-------------|
 | `list` | ItemTransmogInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local list = C_TransmogCollection.GetCustomSetItemTransmogInfoList(0)
@@ -644,7 +644,7 @@ customSetID = C_TransmogCollection.GetCustomSets()
 |------|------|---------|-------------|
 | `customSetID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local customSetID = C_TransmogCollection.GetCustomSets()
@@ -662,7 +662,7 @@ appearanceID = C_TransmogCollection.GetFallbackWeaponAppearance()
 |------|------|---------|-------------|
 | `appearanceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local appearanceID = C_TransmogCollection.GetFallbackWeaponAppearance()
@@ -686,7 +686,7 @@ count = C_TransmogCollection.GetFilteredCategoryCollectedCount(category)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_TransmogCollection.GetFilteredCategoryCollectedCount(category)
@@ -710,7 +710,7 @@ total = C_TransmogCollection.GetFilteredCategoryTotal(category)
 |------|------|---------|-------------|
 | `total` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local total = C_TransmogCollection.GetFilteredCategoryTotal(category)
@@ -734,7 +734,7 @@ info = C_TransmogCollection.GetIllusionInfo(illusionID)
 |------|------|---------|-------------|
 | `info` | TransmogIllusionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TransmogCollection.GetIllusionInfo(0)
@@ -758,7 +758,7 @@ illusions = C_TransmogCollection.GetIllusions([category])
 |------|------|---------|-------------|
 | `illusions` | TransmogIllusionInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local illusions = C_TransmogCollection.GetIllusions()
@@ -784,7 +784,7 @@ name, hyperlink, sourceText = C_TransmogCollection.GetIllusionStrings(illusionID
 | `hyperlink` | string | no |  |
 | `sourceText` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, hyperlink, sourceText = C_TransmogCollection.GetIllusionStrings(0)
@@ -802,7 +802,7 @@ list = C_TransmogCollection.GetInspectItemTransmogInfoList()
 |------|------|---------|-------------|
 | `list` | ItemTransmogInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local list = C_TransmogCollection.GetInspectItemTransmogInfoList()
@@ -826,7 +826,7 @@ isFavorite = C_TransmogCollection.GetIsAppearanceFavorite(itemAppearanceID)
 |------|------|---------|-------------|
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFavorite = C_TransmogCollection.GetIsAppearanceFavorite(6948)
@@ -851,7 +851,7 @@ itemAppearanceID, itemModifiedAppearanceID = C_TransmogCollection.GetItemInfo(it
 | `itemAppearanceID` | number | no |  |
 | `itemModifiedAppearanceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemAppearanceID, itemModifiedAppearanceID = C_TransmogCollection.GetItemInfo(6948)
@@ -875,7 +875,7 @@ list = C_TransmogCollection.GetItemTransmogInfoListFromCustomSetHyperlink(hyperl
 |------|------|---------|-------------|
 | `list` | ItemTransmogInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local list = C_TransmogCollection.GetItemTransmogInfoListFromCustomSetHyperlink("")
@@ -894,7 +894,7 @@ visualID, category = C_TransmogCollection.GetLatestAppearance()
 | `visualID` | number | no |  |
 | `category` | TransmogCollectionType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local visualID, category = C_TransmogCollection.GetLatestAppearance()
@@ -912,7 +912,7 @@ maxCustomSets = C_TransmogCollection.GetNumMaxCustomSets()
 |------|------|---------|-------------|
 | `maxCustomSets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxCustomSets = C_TransmogCollection.GetNumMaxCustomSets()
@@ -930,7 +930,7 @@ count = C_TransmogCollection.GetNumTransmogSources()
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_TransmogCollection.GetNumTransmogSources()
@@ -954,7 +954,7 @@ pairedItemModifiedAppearanceID = C_TransmogCollection.GetPairedArtifactAppearanc
 |------|------|---------|-------------|
 | `pairedItemModifiedAppearanceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pairedItemModifiedAppearanceID = C_TransmogCollection.GetPairedArtifactAppearance(6948)
@@ -978,7 +978,7 @@ icon = C_TransmogCollection.GetSourceIcon(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local icon = C_TransmogCollection.GetSourceIcon(6948)
@@ -1002,7 +1002,7 @@ sourceInfo = C_TransmogCollection.GetSourceInfo(sourceID)
 |------|------|---------|-------------|
 | `sourceInfo` | AppearanceSourceInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sourceInfo = C_TransmogCollection.GetSourceInfo(0)
@@ -1026,7 +1026,7 @@ itemID = C_TransmogCollection.GetSourceItemID(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_TransmogCollection.GetSourceItemID(6948)
@@ -1050,7 +1050,7 @@ holidayName = C_TransmogCollection.GetSourceRequiredHoliday(itemModifiedAppearan
 |------|------|---------|-------------|
 | `holidayName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local holidayName = C_TransmogCollection.GetSourceRequiredHoliday(6948)
@@ -1068,7 +1068,7 @@ shown = C_TransmogCollection.GetUncollectedShown()
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shown = C_TransmogCollection.GetUncollectedShown()
@@ -1095,7 +1095,7 @@ sources = C_TransmogCollection.GetValidAppearanceSourcesForClass(appearanceID, c
 |------|------|---------|-------------|
 | `sources` | AppearanceSourceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogCollection.GetValidAppearanceSourcesForClass(0, 0)
@@ -1113,7 +1113,7 @@ hasAnyAppearance = C_TransmogCollection.HasAnyAppearance()
 |------|------|---------|-------------|
 | `hasAnyAppearance` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyAppearance = C_TransmogCollection.HasAnyAppearance()
@@ -1131,7 +1131,7 @@ hasFavorites = C_TransmogCollection.HasFavorites()
 |------|------|---------|-------------|
 | `hasFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFavorites = C_TransmogCollection.HasFavorites()
@@ -1155,7 +1155,7 @@ isHiddenVisual = C_TransmogCollection.IsAppearanceHiddenVisual(appearanceID)
 |------|------|---------|-------------|
 | `isHiddenVisual` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHiddenVisual = C_TransmogCollection.IsAppearanceHiddenVisual(0)
@@ -1180,7 +1180,7 @@ isValid = C_TransmogCollection.IsCategoryValidForItem(category, itemInfo)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_TransmogCollection.IsCategoryValidForItem(category, 6948)
@@ -1204,7 +1204,7 @@ isNew = C_TransmogCollection.IsNewAppearance(visualID)
 |------|------|---------|-------------|
 | `isNew` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNew = C_TransmogCollection.IsNewAppearance(0)
@@ -1222,7 +1222,7 @@ isLoading = C_TransmogCollection.IsSearchDBLoading()
 |------|------|---------|-------------|
 | `isLoading` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLoading = C_TransmogCollection.IsSearchDBLoading()
@@ -1246,7 +1246,7 @@ inProgress = C_TransmogCollection.IsSearchInProgress(searchType)
 |------|------|---------|-------------|
 | `inProgress` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inProgress = C_TransmogCollection.IsSearchInProgress(searchType)
@@ -1270,7 +1270,7 @@ checked = C_TransmogCollection.IsSourceTypeFilterChecked(index)
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local checked = C_TransmogCollection.IsSourceTypeFilterChecked(1)
@@ -1294,10 +1294,10 @@ isHiddenVisual = C_TransmogCollection.IsSpellItemEnchantmentHiddenVisual(spellIt
 |------|------|---------|-------------|
 | `isHiddenVisual` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isHiddenVisual = C_TransmogCollection.IsSpellItemEnchantmentHiddenVisual(12345)
+local isHiddenVisual = C_TransmogCollection.IsSpellItemEnchantmentHiddenVisual(2050)
 ```
 
 ### C_TransmogCollection.IsUsingDefaultFilters
@@ -1312,7 +1312,7 @@ isUsingDefaultFilters = C_TransmogCollection.IsUsingDefaultFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultFilters = C_TransmogCollection.IsUsingDefaultFilters()
@@ -1336,7 +1336,7 @@ isApproved = C_TransmogCollection.IsValidCustomSetName(name)
 |------|------|---------|-------------|
 | `isApproved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApproved = C_TransmogCollection.IsValidCustomSetName("")
@@ -1360,7 +1360,7 @@ valid = C_TransmogCollection.IsValidTransmogSource(source)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_TransmogCollection.IsValidTransmogSource(source)
@@ -1379,7 +1379,7 @@ C_TransmogCollection.ModifyCustomSet(customSetID, itemTransmogInfoList)
 | `customSetID` | number | no |  |
 | `itemTransmogInfoList` | ItemTransmogInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.ModifyCustomSet(0, 6948)
@@ -1405,10 +1405,10 @@ customSetID = C_TransmogCollection.NewCustomSet(name, icon, itemTransmogInfoList
 |------|------|---------|-------------|
 | `customSetID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local customSetID = C_TransmogCollection.NewCustomSet("", icon, 6948)
+local customSetID = C_TransmogCollection.NewCustomSet("", 0, 6948)
 ```
 
 ### C_TransmogCollection.PlayerCanCollectSource
@@ -1430,7 +1430,7 @@ hasItemData, canCollect = C_TransmogCollection.PlayerCanCollectSource(sourceID)
 | `hasItemData` | bool | no |  |
 | `canCollect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasItemData, canCollect = C_TransmogCollection.PlayerCanCollectSource(0)
@@ -1455,7 +1455,7 @@ hasTransmog = C_TransmogCollection.PlayerHasTransmog(itemID, itemAppearanceModID
 |------|------|---------|-------------|
 | `hasTransmog` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasTransmog = C_TransmogCollection.PlayerHasTransmog(6948, 6948)
@@ -1479,7 +1479,7 @@ hasTransmog = C_TransmogCollection.PlayerHasTransmogByItemInfo(itemInfo)
 |------|------|---------|-------------|
 | `hasTransmog` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasTransmog = C_TransmogCollection.PlayerHasTransmogByItemInfo(6948)
@@ -1503,7 +1503,7 @@ hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(itemM
 |------|------|---------|-------------|
 | `hasTransmog` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasTransmog = C_TransmogCollection.PlayerHasTransmogItemModifiedAppearance(6948)
@@ -1527,7 +1527,7 @@ isKnown = C_TransmogCollection.PlayerKnowsSource(sourceID)
 |------|------|---------|-------------|
 | `isKnown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isKnown = C_TransmogCollection.PlayerKnowsSource(0)
@@ -1546,7 +1546,7 @@ C_TransmogCollection.RenameCustomSet(customSetID, name)
 | `customSetID` | number | no |  |
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.RenameCustomSet(0, "")
@@ -1570,7 +1570,7 @@ progress = C_TransmogCollection.SearchProgress(searchType)
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = C_TransmogCollection.SearchProgress(searchType)
@@ -1594,7 +1594,7 @@ size = C_TransmogCollection.SearchSize(searchType)
 |------|------|---------|-------------|
 | `size` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local size = C_TransmogCollection.SearchSize(searchType)
@@ -1612,7 +1612,7 @@ C_TransmogCollection.SetAllCollectionTypeFilters(checked)
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetAllCollectionTypeFilters(false)
@@ -1630,7 +1630,7 @@ C_TransmogCollection.SetAllFactionsShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetAllFactionsShown(false)
@@ -1648,7 +1648,7 @@ C_TransmogCollection.SetAllRacesShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetAllRacesShown(false)
@@ -1666,7 +1666,7 @@ C_TransmogCollection.SetAllSourceTypeFilters(checked)
 |------|------|---------|-------------|
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetAllSourceTypeFilters(false)
@@ -1684,7 +1684,7 @@ C_TransmogCollection.SetClassFilter(classID)
 |------|------|---------|-------------|
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetClassFilter(0)
@@ -1702,7 +1702,7 @@ C_TransmogCollection.SetCollectedShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetCollectedShown(false)
@@ -1714,7 +1714,7 @@ C_TransmogCollection.SetCollectedShown(false)
 C_TransmogCollection.SetDefaultFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetDefaultFilters()
@@ -1733,7 +1733,7 @@ C_TransmogCollection.SetIsAppearanceFavorite(itemAppearanceID, isFavorite)
 | `itemAppearanceID` | number | no |  |
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetIsAppearanceFavorite(6948, false)
@@ -1758,7 +1758,7 @@ completed = C_TransmogCollection.SetSearch(searchType, searchText)
 |------|------|---------|-------------|
 | `completed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local completed = C_TransmogCollection.SetSearch(searchType, "")
@@ -1776,7 +1776,7 @@ C_TransmogCollection.SetSearchAndFilterCategory(category)
 |------|------|---------|-------------|
 | `category` | TransmogCollectionType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetSearchAndFilterCategory(category)
@@ -1795,7 +1795,7 @@ C_TransmogCollection.SetSourceTypeFilter(index, checked)
 | `index` | luaIndex | no |  |
 | `checked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetSourceTypeFilter(1, false)
@@ -1813,7 +1813,7 @@ C_TransmogCollection.SetUncollectedShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.SetUncollectedShown(false)
@@ -1825,7 +1825,7 @@ C_TransmogCollection.SetUncollectedShown(false)
 C_TransmogCollection.UpdateUsableAppearances()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogCollection.UpdateUsableAppearances()

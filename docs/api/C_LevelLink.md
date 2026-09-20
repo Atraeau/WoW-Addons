@@ -24,10 +24,10 @@ isLocked = C_LevelLink.IsActionLocked(actionID)
 |------|------|---------|-------------|
 | `isLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isLocked = C_LevelLink.IsActionLocked(actionID)
+local isLocked = C_LevelLink.IsActionLocked(1)
 ```
 
 ### C_LevelLink.IsSpellLocked
@@ -48,9 +48,9 @@ isLocked = C_LevelLink.IsSpellLocked(spellID)
 |------|------|---------|-------------|
 | `isLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isLocked = C_LevelLink.IsSpellLocked(12345)
+local isLocked = C_LevelLink.IsSpellLocked(2050)
 ```
 

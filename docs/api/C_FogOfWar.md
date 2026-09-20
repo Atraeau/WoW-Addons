@@ -24,7 +24,7 @@ fogOfWarID = C_FogOfWar.GetFogOfWarForMap(uiMapID)
 |------|------|---------|-------------|
 | `fogOfWarID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fogOfWarID = C_FogOfWar.GetFogOfWarForMap(0)
@@ -48,7 +48,7 @@ fogOfWarInfo = C_FogOfWar.GetFogOfWarInfo(fogOfWarID)
 |------|------|---------|-------------|
 | `fogOfWarInfo` | FogOfWarInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fogOfWarInfo = C_FogOfWar.GetFogOfWarInfo(0)

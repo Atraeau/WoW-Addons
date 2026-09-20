@@ -24,7 +24,7 @@ baseDifficultyID = C_EncounterJournal.GetBaseDifficultyID(difficultyID)
 |------|------|---------|-------------|
 | `baseDifficultyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local baseDifficultyID = C_EncounterJournal.GetBaseDifficultyID(0)
@@ -48,7 +48,7 @@ dungeonEntrances = C_EncounterJournal.GetDungeonEntrancesForMap(uiMapID)
 |------|------|---------|-------------|
 | `dungeonEntrances` | DungeonEntranceMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dungeonEntrances = C_EncounterJournal.GetDungeonEntrancesForMap(0)
@@ -75,7 +75,7 @@ link = C_EncounterJournal.GetEncounterJournalLink(linkType, ID, displayText, dif
 |------|------|---------|-------------|
 | `link` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_EncounterJournal.GetEncounterJournalLink(linkType, 0, "", 0)
@@ -99,7 +99,7 @@ encounters = C_EncounterJournal.GetEncountersOnMap(uiMapID)
 |------|------|---------|-------------|
 | `encounters` | EncounterJournalMapEncounterInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local encounters = C_EncounterJournal.GetEncountersOnMap(0)
@@ -125,7 +125,7 @@ journalInstanceID = C_EncounterJournal.GetInstanceForGameMap(mapID)
 |------|------|---------|-------------|
 | `journalInstanceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local journalInstanceID = C_EncounterJournal.GetInstanceForGameMap(0)
@@ -149,7 +149,7 @@ itemInfo = C_EncounterJournal.GetLootInfo(id)
 |------|------|---------|-------------|
 | `itemInfo` | EncounterJournalItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemInfo = C_EncounterJournal.GetLootInfo(0)
@@ -174,7 +174,7 @@ itemInfo = C_EncounterJournal.GetLootInfoByIndex(index, [encounterIndex])
 |------|------|---------|-------------|
 | `itemInfo` | EncounterJournalItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemInfo = C_EncounterJournal.GetLootInfoByIndex(1)
@@ -200,7 +200,7 @@ iconFlags = C_EncounterJournal.GetSectionIconFlags(sectionID)
 |------|------|---------|-------------|
 | `iconFlags` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local iconFlags = C_EncounterJournal.GetSectionIconFlags(0)
@@ -224,7 +224,7 @@ info = C_EncounterJournal.GetSectionInfo(sectionID)
 |------|------|---------|-------------|
 | `info` | EncounterJournalSectionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_EncounterJournal.GetSectionInfo(0)
@@ -242,7 +242,7 @@ filter = C_EncounterJournal.GetSlotFilter()
 |------|------|---------|-------------|
 | `filter` | ItemSlotFilterType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filter = C_EncounterJournal.GetSlotFilter()
@@ -254,7 +254,7 @@ local filter = C_EncounterJournal.GetSlotFilter()
 C_EncounterJournal.InitalizeSelectedTier()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.InitalizeSelectedTier()
@@ -278,7 +278,7 @@ hasDifficultyID = C_EncounterJournal.InstanceHasDifficultyID(difficultyID)
 |------|------|---------|-------------|
 | `hasDifficultyID` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasDifficultyID = C_EncounterJournal.InstanceHasDifficultyID(0)
@@ -302,7 +302,7 @@ hasLoot = C_EncounterJournal.InstanceHasLoot([instanceID])
 |------|------|---------|-------------|
 | `hasLoot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasLoot = C_EncounterJournal.InstanceHasLoot()
@@ -326,7 +326,7 @@ isEncounterComplete = C_EncounterJournal.IsEncounterComplete(journalEncounterID)
 |------|------|---------|-------------|
 | `isEncounterComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEncounterComplete = C_EncounterJournal.IsEncounterComplete(0)
@@ -338,7 +338,7 @@ local isEncounterComplete = C_EncounterJournal.IsEncounterComplete(0)
 C_EncounterJournal.OnClose()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.OnClose()
@@ -350,7 +350,7 @@ C_EncounterJournal.OnClose()
 C_EncounterJournal.OnOpen()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.OnOpen()
@@ -362,7 +362,7 @@ C_EncounterJournal.OnOpen()
 C_EncounterJournal.ResetSlotFilter()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.ResetSlotFilter()
@@ -380,7 +380,7 @@ C_EncounterJournal.SetPreviewMythicPlusLevel(level)
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.SetPreviewMythicPlusLevel(0)
@@ -398,7 +398,7 @@ C_EncounterJournal.SetPreviewPvpTier(tier)
 |------|------|---------|-------------|
 | `tier` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.SetPreviewPvpTier(0)
@@ -416,7 +416,7 @@ C_EncounterJournal.SetSlotFilter(filterSlot)
 |------|------|---------|-------------|
 | `filterSlot` | ItemSlotFilterType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.SetSlotFilter(1)
@@ -434,7 +434,7 @@ C_EncounterJournal.SetTab(tabIdx)
 |------|------|---------|-------------|
 | `tabIdx` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.SetTab(0)
@@ -446,7 +446,7 @@ C_EncounterJournal.SetTab(0)
 C_EncounterJournal.StartArathiRPE()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterJournal.StartArathiRPE()

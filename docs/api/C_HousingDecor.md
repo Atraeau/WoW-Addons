@@ -26,10 +26,10 @@ isPlaced = C_HousingDecor.AnyDecorPlacedInRoom(roomGUID)
 |------|------|---------|-------------|
 | `isPlaced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPlaced = C_HousingDecor.AnyDecorPlacedInRoom("Creature-0-0000-0-0-0-0")
+local isPlaced = C_HousingDecor.AnyDecorPlacedInRoom(UnitGUID("player"))
 ```
 
 ### C_HousingDecor.CancelActiveEditing
@@ -40,7 +40,7 @@ Cancels all in-progress editing of the selected target, which will reset any uns
 C_HousingDecor.CancelActiveEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.CancelActiveEditing()
@@ -54,7 +54,7 @@ Attempt to save the changes made to the currently selected decor instance
 C_HousingDecor.CommitDecorMovement()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.CommitDecorMovement()
@@ -66,7 +66,7 @@ C_HousingDecor.CommitDecorMovement()
 C_HousingDecor.EnterPreviewState()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.EnterPreviewState()
@@ -78,7 +78,7 @@ C_HousingDecor.EnterPreviewState()
 C_HousingDecor.ExitPreviewState()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.ExitPreviewState()
@@ -99,7 +99,7 @@ interiorMaxBudgets, exteriorMaxBudgets = C_HousingDecor.GetAllMaxPlacementBudget
 | `interiorMaxBudgets` | number[] | yes | Map of budget type to max budget amount; Will be nil if not in an owned House or Plot |
 | `exteriorMaxBudgets` | number[] | yes | Map of budget type to max budget amount; Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interiorMaxBudgets, exteriorMaxBudgets = C_HousingDecor.GetAllMaxPlacementBudgets()
@@ -119,7 +119,7 @@ placedDecor = C_HousingDecor.GetAllPlacedDecor()
 |------|------|---------|-------------|
 | `placedDecor` | HousingDecorInstanceListEntry[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local placedDecor = C_HousingDecor.GetAllPlacedDecor()
@@ -140,7 +140,7 @@ interiorSpentBudgets, exteriorSpentBudgets = C_HousingDecor.GetAllSpentPlacement
 | `interiorSpentBudgets` | number[] | yes | Map of budget type to spent budget amount; Will be nil if not in an owned House or Plot |
 | `exteriorSpentBudgets` | number[] | yes | Map of budget type to spent budget amount; Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interiorSpentBudgets, exteriorSpentBudgets = C_HousingDecor.GetAllSpentPlacementBudgets()
@@ -166,10 +166,10 @@ name = C_HousingDecor.GetDecorAssignedPetName(decorGUID)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local name = C_HousingDecor.GetDecorAssignedPetName("Creature-0-0000-0-0-0-0")
+local name = C_HousingDecor.GetDecorAssignedPetName(UnitGUID("player"))
 ```
 
 ### C_HousingDecor.GetDecorCanAttachPet
@@ -190,7 +190,7 @@ canAttachPet = C_HousingDecor.GetDecorCanAttachPet(decorID)
 |------|------|---------|-------------|
 | `canAttachPet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAttachPet = C_HousingDecor.GetDecorCanAttachPet(0)
@@ -214,7 +214,7 @@ hyperLink = C_HousingDecor.GetDecorHyperlink(decorID)
 |------|------|---------|-------------|
 | `hyperLink` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hyperLink = C_HousingDecor.GetDecorHyperlink(0)
@@ -238,7 +238,7 @@ icon = C_HousingDecor.GetDecorIcon(decorID)
 |------|------|---------|-------------|
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local icon = C_HousingDecor.GetDecorIcon(0)
@@ -264,10 +264,10 @@ info = C_HousingDecor.GetDecorInstanceInfoForGUID(decorGUID)
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_HousingDecor.GetDecorInstanceInfoForGUID("Creature-0-0000-0-0-0-0")
+local info = C_HousingDecor.GetDecorInstanceInfoForGUID(UnitGUID("player"))
 ```
 
 ### C_HousingDecor.GetDecorName
@@ -288,7 +288,7 @@ name = C_HousingDecor.GetDecorName(decorID)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_HousingDecor.GetDecorName(0)
@@ -308,7 +308,7 @@ info = C_HousingDecor.GetHoveredDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingDecor.GetHoveredDecorInfo()
@@ -328,7 +328,7 @@ maxBudget = C_HousingDecor.GetMaxPetPlacementBudget()
 |------|------|---------|-------------|
 | `maxBudget` | number | yes | Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBudget = C_HousingDecor.GetMaxPetPlacementBudget()
@@ -348,7 +348,7 @@ maxBudget = C_HousingDecor.GetMaxPlacementBudget()
 |------|------|---------|-------------|
 | `maxBudget` | number | yes | Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBudget = C_HousingDecor.GetMaxPlacementBudget()
@@ -368,7 +368,7 @@ numPlaced = C_HousingDecor.GetNumDecorPlaced()
 |------|------|---------|-------------|
 | `numPlaced` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPlaced = C_HousingDecor.GetNumDecorPlaced()
@@ -386,7 +386,7 @@ numDecor = C_HousingDecor.GetNumPreviewDecor()
 |------|------|---------|-------------|
 | `numDecor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDecor = C_HousingDecor.GetNumPreviewDecor()
@@ -406,7 +406,7 @@ info = C_HousingDecor.GetSelectedDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingDecor.GetSelectedDecorInfo()
@@ -426,7 +426,7 @@ totalCost = C_HousingDecor.GetSpentPetPlacementBudget()
 |------|------|---------|-------------|
 | `totalCost` | number | yes | Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalCost = C_HousingDecor.GetSpentPetPlacementBudget()
@@ -446,7 +446,7 @@ totalCost = C_HousingDecor.GetSpentPlacementBudget()
 |------|------|---------|-------------|
 | `totalCost` | number | yes | Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalCost = C_HousingDecor.GetSpentPlacementBudget()
@@ -466,7 +466,7 @@ hasMaxBudget = C_HousingDecor.HasMaxPlacementBudget()
 |------|------|---------|-------------|
 | `hasMaxBudget` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxBudget = C_HousingDecor.HasMaxPlacementBudget()
@@ -486,7 +486,7 @@ hasSelectedDecor = C_HousingDecor.IsDecorSelected()
 |------|------|---------|-------------|
 | `hasSelectedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedDecor = C_HousingDecor.IsDecorSelected()
@@ -504,7 +504,7 @@ gridVisible = C_HousingDecor.IsGridVisible()
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gridVisible = C_HousingDecor.IsGridVisible()
@@ -524,7 +524,7 @@ isHouseExteriorDoorHovered = C_HousingDecor.IsHouseExteriorDoorHovered()
 |------|------|---------|-------------|
 | `isHouseExteriorDoorHovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorDoorHovered = C_HousingDecor.IsHouseExteriorDoorHovered()
@@ -544,7 +544,7 @@ isHouseExteriorHovered = C_HousingDecor.IsHouseExteriorHovered()
 |------|------|---------|-------------|
 | `isHouseExteriorHovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorHovered = C_HousingDecor.IsHouseExteriorHovered()
@@ -564,7 +564,7 @@ isHoveringDecor = C_HousingDecor.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingDecor.IsHoveringDecor()
@@ -588,7 +588,7 @@ isModeDisabled = C_HousingDecor.IsModeDisabledForPreviewState(mode)
 |------|------|---------|-------------|
 | `isModeDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isModeDisabled = C_HousingDecor.IsModeDisabledForPreviewState(mode)
@@ -606,7 +606,7 @@ isPreviewState = C_HousingDecor.IsPreviewState()
 |------|------|---------|-------------|
 | `isPreviewState` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPreviewState = C_HousingDecor.IsPreviewState()
@@ -626,10 +626,10 @@ C_HousingDecor.RemovePlacedDecorEntry(decorGUID)
 |------|------|---------|-------------|
 | `decorGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingDecor.RemovePlacedDecorEntry("Creature-0-0000-0-0-0-0")
+C_HousingDecor.RemovePlacedDecorEntry(UnitGUID("player"))
 ```
 
 ### C_HousingDecor.RemoveSelectedDecor
@@ -640,7 +640,7 @@ Attempt to return the currently selected decor instance back to the house chest
 C_HousingDecor.RemoveSelectedDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.RemoveSelectedDecor()
@@ -658,7 +658,7 @@ C_HousingDecor.SetGridVisible(gridVisible)
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingDecor.SetGridVisible(false)
@@ -679,10 +679,10 @@ C_HousingDecor.SetPlacedDecorEntryHovered(decorGUID, hovered)
 | `decorGUID` | WOWGUID | no |  |
 | `hovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingDecor.SetPlacedDecorEntryHovered("Creature-0-0000-0-0-0-0", false)
+C_HousingDecor.SetPlacedDecorEntryHovered(UnitGUID("player"), false)
 ```
 
 ### C_HousingDecor.SetPlacedDecorEntrySelected
@@ -700,10 +700,10 @@ C_HousingDecor.SetPlacedDecorEntrySelected(decorGUID, selected)
 | `decorGUID` | WOWGUID | no |  |
 | `selected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingDecor.SetPlacedDecorEntrySelected("Creature-0-0000-0-0-0-0", false)
+C_HousingDecor.SetPlacedDecorEntrySelected(UnitGUID("player"), false)
 ```
 
 ## Events

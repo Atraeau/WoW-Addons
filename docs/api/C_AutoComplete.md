@@ -24,7 +24,7 @@ presenceID = C_AutoComplete.GetAutoCompletePresenceID(name)
 |------|------|---------|-------------|
 | `presenceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local presenceID = C_AutoComplete.GetAutoCompletePresenceID("")
@@ -42,7 +42,7 @@ realms = C_AutoComplete.GetAutoCompleteRealms()
 |------|------|---------|-------------|
 | `realms` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local realms = C_AutoComplete.GetAutoCompleteRealms()
@@ -71,7 +71,7 @@ results = C_AutoComplete.GetAutoCompleteResults(name, numResults, cursorPosition
 |------|------|---------|-------------|
 | `results` | AutoCompleteResult[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local results = C_AutoComplete.GetAutoCompleteResults("", 0, 0, false, 0, 0)
@@ -97,7 +97,7 @@ isRecognizedName = C_AutoComplete.IsRecognizedName(name, includeFlags, excludeFl
 |------|------|---------|-------------|
 | `isRecognizedName` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRecognizedName = C_AutoComplete.IsRecognizedName("", 0, 0)

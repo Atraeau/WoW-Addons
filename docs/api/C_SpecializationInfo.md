@@ -19,7 +19,7 @@ canUse, failureReason = C_SpecializationInfo.CanPlayerUsePVPTalentUI()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_SpecializationInfo.CanPlayerUsePVPTalentUI()
@@ -38,7 +38,7 @@ canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentSpecUI()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentSpecUI()
@@ -57,7 +57,7 @@ canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentUI()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentUI()
@@ -82,7 +82,7 @@ groupIndex = C_SpecializationInfo.GetActiveSpecGroup([isInspect], [isPet])
 |------|------|---------|-------------|
 | `groupIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local groupIndex = C_SpecializationInfo.GetActiveSpecGroup()
@@ -100,7 +100,7 @@ allClassIDs = C_SpecializationInfo.GetAllClassIDs()
 |------|------|---------|-------------|
 | `allClassIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allClassIDs = C_SpecializationInfo.GetAllClassIDs()
@@ -118,7 +118,7 @@ selectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
 |------|------|---------|-------------|
 | `selectedPvpTalentIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local selectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
@@ -142,7 +142,7 @@ classID = C_SpecializationInfo.GetClassIDFromSpecID(specID)
 |------|------|---------|-------------|
 | `classID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classID = C_SpecializationInfo.GetClassIDFromSpecID(0)
@@ -166,7 +166,7 @@ configID = C_SpecializationInfo.GetCombatConfigIDForSpecGroup(groupIndex)
 |------|------|---------|-------------|
 | `configID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configID = C_SpecializationInfo.GetCombatConfigIDForSpecGroup(1)
@@ -191,7 +191,7 @@ selectedTalentID = C_SpecializationInfo.GetInspectSelectedPvpTalent(inspectedUni
 |------|------|---------|-------------|
 | `selectedTalentID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local selectedTalentID = C_SpecializationInfo.GetInspectSelectedPvpTalent("player", 1)
@@ -215,7 +215,7 @@ specializationID = C_SpecializationInfo.GetInspectSpecialization(unit)
 |------|------|---------|-------------|
 | `specializationID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specializationID = C_SpecializationInfo.GetInspectSpecialization("player")
@@ -239,7 +239,7 @@ specCount = C_SpecializationInfo.GetNumSpecializationsForClassID(classID)
 |------|------|---------|-------------|
 | `specCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specCount = C_SpecializationInfo.GetNumSpecializationsForClassID(0)
@@ -258,7 +258,7 @@ hasUnspentSlot, hasNewTalent = C_SpecializationInfo.GetPvpTalentAlertStatus()
 | `hasUnspentSlot` | bool | no |  |
 | `hasNewTalent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUnspentSlot, hasNewTalent = C_SpecializationInfo.GetPvpTalentAlertStatus()
@@ -282,7 +282,7 @@ talentInfo = C_SpecializationInfo.GetPvpTalentInfo(talentID)
 |------|------|---------|-------------|
 | `talentInfo` | PvpTalentInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local talentInfo = C_SpecializationInfo.GetPvpTalentInfo(0)
@@ -306,7 +306,7 @@ slotInfo = C_SpecializationInfo.GetPvpTalentSlotInfo(talentIndex)
 |------|------|---------|-------------|
 | `slotInfo` | PvpTalentSlotInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotInfo = C_SpecializationInfo.GetPvpTalentSlotInfo(1)
@@ -330,7 +330,7 @@ requiredLevel = C_SpecializationInfo.GetPvpTalentSlotUnlockLevel(talentIndex)
 |------|------|---------|-------------|
 | `requiredLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requiredLevel = C_SpecializationInfo.GetPvpTalentSlotUnlockLevel(1)
@@ -354,7 +354,7 @@ requiredLevel = C_SpecializationInfo.GetPvpTalentUnlockLevel(talentID)
 |------|------|---------|-------------|
 | `requiredLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requiredLevel = C_SpecializationInfo.GetPvpTalentUnlockLevel(0)
@@ -380,7 +380,7 @@ specializationIndex = C_SpecializationInfo.GetSpecialization([isInspect], [isPet
 |------|------|---------|-------------|
 | `specializationIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specializationIndex = C_SpecializationInfo.GetSpecialization()
@@ -419,7 +419,7 @@ specId, name, description, icon, role, primaryStat, pointsSpent, background, pre
 | `previewPointsSpent` | number | no | (default: 0) |
 | `isUnlocked` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specId, name, description, icon, role, primaryStat, pointsSpent, background, previewPointsSpent, isUnlocked = C_SpecializationInfo.GetSpecializationInfo(1, false, false)
@@ -445,7 +445,7 @@ spellIDs = C_SpecializationInfo.GetSpecializationMasterySpells(specializationInd
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_SpecializationInfo.GetSpecializationMasterySpells(1)
@@ -469,7 +469,7 @@ specIDs = C_SpecializationInfo.GetSpecIDs(specSetID)
 |------|------|---------|-------------|
 | `specIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specIDs = C_SpecializationInfo.GetSpecIDs(0)
@@ -493,7 +493,7 @@ spellID = C_SpecializationInfo.GetSpellsDisplay(specializationID)
 |------|------|---------|-------------|
 | `spellID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_SpecializationInfo.GetSpellsDisplay(0)
@@ -517,7 +517,7 @@ result = C_SpecializationInfo.GetTalentInfo(query)
 |------|------|---------|-------------|
 | `result` | TalentInfoResult | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_SpecializationInfo.GetTalentInfo(query)
@@ -535,7 +535,7 @@ hasEarned = C_SpecializationInfo.HasPlayerEarnedATalentPoint()
 |------|------|---------|-------------|
 | `hasEarned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasEarned = C_SpecializationInfo.HasPlayerEarnedATalentPoint()
@@ -553,7 +553,7 @@ isSpecializationDataInitialized = C_SpecializationInfo.IsInitialized()
 |------|------|---------|-------------|
 | `isSpecializationDataInitialized` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSpecializationDataInitialized = C_SpecializationInfo.IsInitialized()
@@ -577,7 +577,7 @@ locked = C_SpecializationInfo.IsPvpTalentLocked(talentID)
 |------|------|---------|-------------|
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locked = C_SpecializationInfo.IsPvpTalentLocked(0)
@@ -601,7 +601,7 @@ enabled = C_SpecializationInfo.IsSpecSelectionEnabled(classID)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_SpecializationInfo.IsSpecSelectionEnabled(0)
@@ -625,7 +625,7 @@ matches = C_SpecializationInfo.MatchesCurrentSpecSet(specSetID)
 |------|------|---------|-------------|
 | `matches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matches = C_SpecializationInfo.MatchesCurrentSpecSet(0)
@@ -643,7 +643,7 @@ C_SpecializationInfo.SetActiveSpecGroup(groupIndex)
 |------|------|---------|-------------|
 | `groupIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SpecializationInfo.SetActiveSpecGroup(1)
@@ -662,7 +662,7 @@ C_SpecializationInfo.SetPetSpecialization(specIndex, [petNumber])
 | `specIndex` | luaIndex | no |  |
 | `petNumber` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SpecializationInfo.SetPetSpecialization(1)
@@ -681,7 +681,7 @@ C_SpecializationInfo.SetPvpTalentLocked(talentID, locked)
 | `talentID` | number | no |  |
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SpecializationInfo.SetPvpTalentLocked(0, false)
@@ -705,7 +705,7 @@ success = C_SpecializationInfo.SetSpecialization(specIndex)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_SpecializationInfo.SetSpecialization(1)

@@ -18,7 +18,7 @@ ammoNeeded = C_PaperDollInfo.AmmoNeeded()
 |------|------|---------|-------------|
 | `ammoNeeded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ammoNeeded = C_PaperDollInfo.AmmoNeeded()
@@ -36,7 +36,7 @@ canAutoEquip = C_PaperDollInfo.CanAutoEquipCursorItem()
 |------|------|---------|-------------|
 | `canAutoEquip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAutoEquip = C_PaperDollInfo.CanAutoEquipCursorItem()
@@ -56,7 +56,7 @@ C_PaperDollInfo.CancelTemporaryEnchantment(slot)
 |------|------|---------|-------------|
 | `slot` | LuaInventorySlot | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PaperDollInfo.CancelTemporaryEnchantment(1)
@@ -80,7 +80,7 @@ canOccupySlot = C_PaperDollInfo.CursorCanGoInSlot(slotIndex)
 |------|------|---------|-------------|
 | `canOccupySlot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canOccupySlot = C_PaperDollInfo.CursorCanGoInSlot(1)
@@ -105,7 +105,7 @@ effectiveness = C_PaperDollInfo.GetArmorEffectiveness(armor, attackerLevel)
 |------|------|---------|-------------|
 | `effectiveness` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveness = C_PaperDollInfo.GetArmorEffectiveness(0, 0)
@@ -129,7 +129,7 @@ effectiveness = C_PaperDollInfo.GetArmorEffectivenessAgainstTarget(armor)
 |------|------|---------|-------------|
 | `effectiveness` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveness = C_PaperDollInfo.GetArmorEffectivenessAgainstTarget(0)
@@ -154,7 +154,7 @@ azeritePowerIDs = C_PaperDollInfo.GetInspectAzeriteItemEmpoweredChoices(unit, eq
 |------|------|---------|-------------|
 | `azeritePowerIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local azeritePowerIDs = C_PaperDollInfo.GetInspectAzeriteItemEmpoweredChoices("player", 1)
@@ -181,7 +181,7 @@ achievementPoints, numMembers, guildName, realmName = C_PaperDollInfo.GetInspect
 | `guildName` | string | no |  |
 | `realmName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local achievementPoints, numMembers, guildName, realmName = C_PaperDollInfo.GetInspectGuildInfo("player")
@@ -205,7 +205,7 @@ equippedItemLevel = C_PaperDollInfo.GetInspectItemLevel(unit)
 |------|------|---------|-------------|
 | `equippedItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local equippedItemLevel = C_PaperDollInfo.GetInspectItemLevel("player")
@@ -223,7 +223,7 @@ ratedBGBlitzData = C_PaperDollInfo.GetInspectRatedBGBlitzData()
 |------|------|---------|-------------|
 | `ratedBGBlitzData` | InspectPVPData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ratedBGBlitzData = C_PaperDollInfo.GetInspectRatedBGBlitzData()
@@ -241,7 +241,7 @@ ratedBGData = C_PaperDollInfo.GetInspectRatedBGData()
 |------|------|---------|-------------|
 | `ratedBGData` | InspectRatedBGData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ratedBGData = C_PaperDollInfo.GetInspectRatedBGData()
@@ -259,7 +259,7 @@ ratedSoloShuffleData = C_PaperDollInfo.GetInspectRatedSoloShuffleData()
 |------|------|---------|-------------|
 | `ratedSoloShuffleData` | InspectPVPData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ratedSoloShuffleData = C_PaperDollInfo.GetInspectRatedSoloShuffleData()
@@ -285,7 +285,7 @@ invSlot, slotTexture, checkRelic = C_PaperDollInfo.GetInventorySlotInfo(slotName
 | `slotTexture` | fileID | no |  |
 | `checkRelic` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invSlot, slotTexture, checkRelic = C_PaperDollInfo.GetInventorySlotInfo(1)
@@ -312,7 +312,7 @@ invSlot, slotTexture, checkRelic, slotName = C_PaperDollInfo.GetInventorySlotInf
 | `checkRelic` | bool | no |  |
 | `slotName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invSlot, slotTexture, checkRelic, slotName = C_PaperDollInfo.GetInventorySlotInfoForInvSlot(1)
@@ -330,7 +330,7 @@ minItemLevel = C_PaperDollInfo.GetMinItemLevel()
 |------|------|---------|-------------|
 | `minItemLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minItemLevel = C_PaperDollInfo.GetMinItemLevel()
@@ -355,7 +355,7 @@ stagger, staggerAgainstTarget = C_PaperDollInfo.GetStaggerPercentage(unit)
 | `stagger` | number | no |  |
 | `staggerAgainstTarget` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stagger, staggerAgainstTarget = C_PaperDollInfo.GetStaggerPercentage("player")
@@ -381,7 +381,7 @@ enchantInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo(slot)
 |------|------|---------|-------------|
 | `enchantInfo` | TemporaryItemEnchantInfo | no | Returns nothing if no temporary enchantment is active for this slot. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enchantInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo(1)
@@ -405,7 +405,7 @@ isEnabled = C_PaperDollInfo.IsInventorySlotEnabled(slotName)
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_PaperDollInfo.IsInventorySlotEnabled(1)
@@ -423,7 +423,7 @@ isShown = C_PaperDollInfo.IsRangedSlotShown()
 |------|------|---------|-------------|
 | `isShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isShown = C_PaperDollInfo.IsRangedSlotShown()
@@ -441,7 +441,7 @@ offhandHasShield = C_PaperDollInfo.OffhandHasShield()
 |------|------|---------|-------------|
 | `offhandHasShield` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offhandHasShield = C_PaperDollInfo.OffhandHasShield()
@@ -459,7 +459,7 @@ offhandHasWeapon = C_PaperDollInfo.OffhandHasWeapon()
 |------|------|---------|-------------|
 | `offhandHasWeapon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offhandHasWeapon = C_PaperDollInfo.OffhandHasWeapon()

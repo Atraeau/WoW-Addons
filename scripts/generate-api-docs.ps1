@@ -45,6 +45,16 @@ if (-not $Path) {
 if (-not (Test-Path $Path)) { throw "Dump not found: $Path" }
 if (-not $OutDir) { $OutDir = Join-Path $repoRoot 'docs/api' }
 
+# Curated, runnable examples (optional). Keys: "<Namespace>.<Func>" or "<Func>".
+$Examples = @{}
+$exPath = Join-Path $repoRoot 'scripts/api-examples.psd1'
+if (Test-Path $exPath) {
+    try { $Examples = Import-PowerShellDataFile -Path $exPath }
+    catch { Write-Warning "Could not load $exPath : $_" }
+}
+$script:UsedExamples = @{}
+$script:EnumFirst = @{}   # enum type name -> first field name, for realistic example values
+
 # --- Read the payload ------------------------------------------------------
 # Preferred: WowApiExportB64 = "<base64 of JSON>". Base64 has no quotes/backslashes,
 # so it survives the SavedVariables serializer untouched -- no escaping to undo.
@@ -84,20 +94,28 @@ function TypeStr($field) {
 # A literal example value for an argument, using name/type heuristics.
 function ExampleValue($arg) {
     $name = ("$($arg.name)").ToLower()
-    $t = ("$($arg.type)").ToLower()
+    $tRaw = "$($arg.type)"
+    $t = $tRaw.ToLower()
     if ($name -match 'unit') { return '"player"' }
-    if ($name -match 'guid') { return '"Creature-0-0000-0-0-0-0"' }
-    if ($name -match 'index|slot|rank') { return '1' }
-    if ($name -match 'spell') { return '12345' }
+    if ($name -match 'guid') { return 'UnitGUID("player")' }
+    if ($name -match 'index|slot|rank|offset') { return '1' }
+    if ($name -match 'spell') { return '2050' }
     if ($name -match 'item') { return '6948' }
     if ($name -match 'filter') { return '"HELPFUL"' }
+    # Enum-typed argument -> a real enum constant (e.g. Enum.ActionBarSet.None)
+    if ($script:EnumFirst.ContainsKey($tRaw)) { return "Enum.$tRaw.$($script:EnumFirst[$tRaw])" }
     switch ($t) {
-        'string'  { return '""' }
-        'cstring' { return '""' }
-        'number'  { return '0' }
-        'bool'    { return 'false' }
-        'boolean' { return 'false' }
-        default   { return $arg.name }   # complex type -> use the name as a placeholder
+        'string'   { return '""' }
+        'cstring'  { return '""' }
+        'number'   { return '0' }
+        'luaindex' { return '1' }
+        'bool'     { return 'false' }
+        'boolean'  { return 'false' }
+        'time_t'   { return 'GetServerTime()' }
+        'wowguid'  { return 'UnitGUID("player")' }
+        'fileid'   { return '0' }
+        'wowmoney' { return '0' }
+        default    { return $arg.name }   # complex/struct type -> name placeholder
     }
 }
 
@@ -231,6 +249,18 @@ foreach ($s in $systemsRaw) {
 }
 $systems = $agg.Values | Sort-Object { if ($_.namespace) { $_.namespace } else { $_.name } }
 
+# Enum registry: type name -> first field name, for realistic example values.
+foreach ($s in $systemsRaw) {
+    foreach ($t in @($s.tables)) {
+        if ($t.type -eq 'Enumeration') {
+            $ff = @($t.fields)
+            if ($ff.Count -gt 0 -and -not $script:EnumFirst.ContainsKey($t.name)) {
+                $script:EnumFirst[$t.name] = $ff[0].name
+            }
+        }
+    }
+}
+
 $indexRows = @()
 
 foreach ($sys in $systems) {
@@ -264,11 +294,21 @@ foreach ($sys in $systems) {
             if ($argTbl) { $md += '**Arguments**'; $md += ''; $md += $argTbl; $md += '' }
             $retTbl = ArgTable $fn.returns
             if ($retTbl) { $md += '**Returns**'; $md += ''; $md += $retTbl; $md += '' }
-            $md += '**Example**'
-            $md += ''
-            $md += '```lua'
-            $md += (BuildExample $fn $sys.namespace)
-            $md += '```'
+            $exKey = if ($sys.namespace) { "$($sys.namespace).$($fn.name)" } else { $fn.name }
+            if ($Examples.ContainsKey($exKey)) {
+                $script:UsedExamples[$exKey] = $true
+                $md += '**Example**'
+                $md += ''
+                $md += '```lua'
+                $md += ($Examples[$exKey].TrimEnd() -split "\r?\n")
+                $md += '```'
+            } else {
+                $md += '**Example** _(auto-generated from the signature — illustrative)_'
+                $md += ''
+                $md += '```lua'
+                $md += (BuildExample $fn $sys.namespace)
+                $md += '```'
+            }
             $md += ''
         }
     }
@@ -326,4 +366,10 @@ foreach ($row in ($indexRows | Sort-Object Namespace)) {
 ($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
 
 Write-Host "Generated $($indexRows.Count) namespace files into $OutDir" -ForegroundColor Green
+Write-Host "Curated examples applied: $($script:UsedExamples.Count) / $($Examples.Count)" -ForegroundColor Gray
+$unused = @($Examples.Keys | Where-Object { -not $script:UsedExamples.ContainsKey($_) })
+if ($unused.Count -gt 0) {
+    Write-Warning "Curated example keys with no matching documented function (check spelling):"
+    $unused | Sort-Object | ForEach-Object { Write-Warning "  $_" }
+}
 Write-Host "Index: $(Join-Path $OutDir 'README.md')" -ForegroundColor Gray

@@ -18,7 +18,7 @@ dyeColorCategoryIDs = C_DyeColor.GetAllDyeColorCategories()
 |------|------|---------|-------------|
 | `dyeColorCategoryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorCategoryIDs = C_DyeColor.GetAllDyeColorCategories()
@@ -42,7 +42,7 @@ dyeColorIDs = C_DyeColor.GetAllDyeColors(ownedColorsOnly)
 |------|------|---------|-------------|
 | `dyeColorIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorIDs = C_DyeColor.GetAllDyeColors(false)
@@ -66,7 +66,7 @@ dyeColorCategoryInfo = C_DyeColor.GetDyeColorCategoryInfo(dyeColorCategoryID)
 |------|------|---------|-------------|
 | `dyeColorCategoryInfo` | DyeColorCategoryDisplayInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorCategoryInfo = C_DyeColor.GetDyeColorCategoryInfo(0)
@@ -90,7 +90,7 @@ dyeColorInfo = C_DyeColor.GetDyeColorInfo(dyeColorID)
 |------|------|---------|-------------|
 | `dyeColorInfo` | DyeColorDisplayInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorInfo = C_DyeColor.GetDyeColorInfo(0)
@@ -114,7 +114,7 @@ dyeColorIDs = C_DyeColor.GetDyeColorsForItem(itemLinkOrID)
 |------|------|---------|-------------|
 | `dyeColorIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorIDs = C_DyeColor.GetDyeColorsForItem(6948)
@@ -138,7 +138,7 @@ dyeColorIDs = C_DyeColor.GetDyeColorsForItemLocation(itemLocation)
 |------|------|---------|-------------|
 | `dyeColorIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorIDs = C_DyeColor.GetDyeColorsForItemLocation(6948)
@@ -163,7 +163,7 @@ dyeColorIDs = C_DyeColor.GetDyeColorsInCategory(dyeColorCategory, ownedColorsOnl
 |------|------|---------|-------------|
 | `dyeColorIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dyeColorIDs = C_DyeColor.GetDyeColorsInCategory(0, false)
@@ -189,7 +189,7 @@ isOwned = C_DyeColor.IsDyeColorOwned(dyeColorID)
 |------|------|---------|-------------|
 | `isOwned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOwned = C_DyeColor.IsDyeColorOwned(0)

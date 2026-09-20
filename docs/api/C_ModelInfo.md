@@ -21,7 +21,7 @@ C_ModelInfo.AddActiveModelScene(modelSceneFrame, modelSceneID)
 | `modelSceneFrame` | ModelSceneFrame | no |  |
 | `modelSceneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ModelInfo.AddActiveModelScene(modelSceneFrame, 0)
@@ -42,7 +42,7 @@ C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, modelSceneActorID)
 | `modelSceneFrameActor` | ModelSceneFrameActor | no |  |
 | `modelSceneActorID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ModelInfo.AddActiveModelSceneActor(modelSceneFrameActor, 0)
@@ -62,7 +62,7 @@ C_ModelInfo.ClearActiveModelScene(modelSceneFrame)
 |------|------|---------|-------------|
 | `modelSceneFrame` | ModelSceneFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ModelInfo.ClearActiveModelScene(modelSceneFrame)
@@ -82,7 +82,7 @@ C_ModelInfo.ClearActiveModelSceneActor(modelSceneFrameActor)
 |------|------|---------|-------------|
 | `modelSceneFrameActor` | ModelSceneFrameActor | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ModelInfo.ClearActiveModelSceneActor(modelSceneFrameActor)
@@ -106,7 +106,7 @@ actorDisplayInfo = C_ModelInfo.GetModelSceneActorDisplayInfoByID(modelActorDispl
 |------|------|---------|-------------|
 | `actorDisplayInfo` | UIModelSceneActorDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local actorDisplayInfo = C_ModelInfo.GetModelSceneActorDisplayInfoByID(0)
@@ -130,7 +130,7 @@ actorInfo = C_ModelInfo.GetModelSceneActorInfoByID(modelActorID)
 |------|------|---------|-------------|
 | `actorInfo` | UIModelSceneActorInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local actorInfo = C_ModelInfo.GetModelSceneActorInfoByID(0)
@@ -154,7 +154,7 @@ modelSceneCameraInfo = C_ModelInfo.GetModelSceneCameraInfoByID(modelSceneCameraI
 |------|------|---------|-------------|
 | `modelSceneCameraInfo` | UIModelSceneCameraInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelSceneCameraInfo = C_ModelInfo.GetModelSceneCameraInfoByID(0)
@@ -181,7 +181,7 @@ modelSceneType, modelCameraIDs, modelActorsIDs, flags = C_ModelInfo.GetModelScen
 | `modelActorsIDs` | number[] | no |  |
 | `flags` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelSceneType, modelCameraIDs, modelActorsIDs, flags = C_ModelInfo.GetModelSceneInfoByID(0)

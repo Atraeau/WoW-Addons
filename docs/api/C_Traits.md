@@ -27,7 +27,7 @@ canEdit, errorMessage = C_Traits.CanEditConfig(configID)
 | `canEdit` | bool | no |  |
 | `errorMessage` | cstring | no | If canEdit is false, this will be filled out with text explaining why the player can not make changes. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEdit, errorMessage = C_Traits.CanEditConfig(0)
@@ -53,7 +53,7 @@ canPurchase = C_Traits.CanPurchaseRank(configID, nodeID, nodeEntryID)
 |------|------|---------|-------------|
 | `canPurchase` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPurchase = C_Traits.CanPurchaseRank(0, 0, 0)
@@ -78,7 +78,7 @@ canRefund = C_Traits.CanRefundRank(configID, nodeID)
 |------|------|---------|-------------|
 | `canRefund` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canRefund = C_Traits.CanRefundRank(0, 0)
@@ -104,7 +104,7 @@ success = C_Traits.CascadeRepurchaseRanks(configID, nodeID, [entryID])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.CascadeRepurchaseRanks(0, 0)
@@ -122,7 +122,7 @@ C_Traits.ClearCascadeRepurchaseHistory(configID)
 |------|------|---------|-------------|
 | `configID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Traits.ClearCascadeRepurchaseHistory(0)
@@ -134,7 +134,7 @@ C_Traits.ClearCascadeRepurchaseHistory(0)
 C_Traits.CloseTraitSystemInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Traits.CloseTraitSystemInteraction()
@@ -158,7 +158,7 @@ success = C_Traits.CommitConfig(configID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.CommitConfig(0)
@@ -182,7 +182,7 @@ hasChanges = C_Traits.ConfigHasStagedChanges(configID)
 |------|------|---------|-------------|
 | `hasChanges` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasChanges = C_Traits.ConfigHasStagedChanges(0)
@@ -206,7 +206,7 @@ importString = C_Traits.GenerateImportString(configID)
 |------|------|---------|-------------|
 | `importString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local importString = C_Traits.GenerateImportString(0)
@@ -230,7 +230,7 @@ importString = C_Traits.GenerateInspectImportString(target)
 |------|------|---------|-------------|
 | `importString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local importString = C_Traits.GenerateInspectImportString("")
@@ -255,7 +255,7 @@ condInfo = C_Traits.GetConditionInfo(configID, condID)
 |------|------|---------|-------------|
 | `condInfo` | TraitCondInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local condInfo = C_Traits.GetConditionInfo(0, 0)
@@ -279,7 +279,7 @@ configID = C_Traits.GetConfigIDBySystemID(systemID)
 |------|------|---------|-------------|
 | `configID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configID = C_Traits.GetConfigIDBySystemID(0)
@@ -303,7 +303,7 @@ configID = C_Traits.GetConfigIDByTreeID(treeID)
 |------|------|---------|-------------|
 | `configID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configID = C_Traits.GetConfigIDByTreeID(0)
@@ -327,7 +327,7 @@ configInfo = C_Traits.GetConfigInfo(configID)
 |------|------|---------|-------------|
 | `configInfo` | TraitConfigInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configInfo = C_Traits.GetConfigInfo(0)
@@ -351,7 +351,7 @@ configIDs = C_Traits.GetConfigsByType(configType)
 |------|------|---------|-------------|
 | `configIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configIDs = C_Traits.GetConfigsByType(configType)
@@ -375,7 +375,7 @@ variationID = C_Traits.GetConfigVariationID(systemID)
 |------|------|---------|-------------|
 | `variationID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local variationID = C_Traits.GetConfigVariationID(0)
@@ -399,7 +399,7 @@ definitionInfo = C_Traits.GetDefinitionInfo(definitionID)
 |------|------|---------|-------------|
 | `definitionInfo` | TraitDefinitionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local definitionInfo = C_Traits.GetDefinitionInfo(0)
@@ -424,7 +424,7 @@ entryInfo = C_Traits.GetEntryInfo(configID, entryID)
 |------|------|---------|-------------|
 | `entryInfo` | TraitEntryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entryInfo = C_Traits.GetEntryInfo(0, 0)
@@ -449,7 +449,7 @@ groupCurrencyInfos = C_Traits.GetGroupCurrencyInfo(configID, groupIDs)
 |------|------|---------|-------------|
 | `groupCurrencyInfos` | GroupCurrencyInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local groupCurrencyInfos = C_Traits.GetGroupCurrencyInfo(0, groupIDs)
@@ -473,7 +473,7 @@ displayInfos = C_Traits.GetGroupDisplayInfoByTreeID(treeID)
 |------|------|---------|-------------|
 | `displayInfos` | TraitGroupDisplayInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayInfos = C_Traits.GetGroupDisplayInfoByTreeID(0)
@@ -498,7 +498,7 @@ itemName = C_Traits.GetIncreasedTraitData(nodeID, entryID)
 |------|------|---------|-------------|
 | `itemName` | IncreasedTraitData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemName = C_Traits.GetIncreasedTraitData(0, 0)
@@ -516,7 +516,7 @@ serializationVersion = C_Traits.GetLoadoutSerializationVersion()
 |------|------|---------|-------------|
 | `serializationVersion` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local serializationVersion = C_Traits.GetLoadoutSerializationVersion()
@@ -541,7 +541,7 @@ maxAvailable = C_Traits.GetMaxAvailableTraitCurrency(traitCurrencyID, limitBySou
 |------|------|---------|-------------|
 | `maxAvailable` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxAvailable = C_Traits.GetMaxAvailableTraitCurrency(0, false)
@@ -566,7 +566,7 @@ costs = C_Traits.GetNodeCost(configID, nodeID)
 |------|------|---------|-------------|
 | `costs` | TraitCurrencyCost[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local costs = C_Traits.GetNodeCost(0, 0)
@@ -591,7 +591,7 @@ nodeInfo = C_Traits.GetNodeInfo(configID, nodeID)
 |------|------|---------|-------------|
 | `nodeInfo` | TraitNodeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeInfo = C_Traits.GetNodeInfo(0, 0)
@@ -619,7 +619,7 @@ nodeIDsWithPurchases, nodeIDsWithRefunds, nodeIDsWithSelectionSwaps = C_Traits.G
 | `nodeIDsWithRefunds` | number[] | no |  |
 | `nodeIDsWithSelectionSwaps` | number[] | no | Selection nodes that had a previously committed selected entry, and now have a different selected entry pending |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeIDsWithPurchases, nodeIDsWithRefunds, nodeIDsWithSelectionSwaps = C_Traits.GetStagedChanges(0)
@@ -643,7 +643,7 @@ costs = C_Traits.GetStagedChangesCost(configID)
 |------|------|---------|-------------|
 | `costs` | TraitCurrencyCost[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local costs = C_Traits.GetStagedChangesCost(0)
@@ -668,7 +668,7 @@ subTreeInfo = C_Traits.GetSubTreeInfo(configID, subTreeID)
 |------|------|---------|-------------|
 | `subTreeInfo` | TraitSubTreeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subTreeInfo = C_Traits.GetSubTreeInfo(0, 0)
@@ -692,7 +692,7 @@ systemID = C_Traits.GetSystemIDByTreeID(treeID)
 |------|------|---------|-------------|
 | `systemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local systemID = C_Traits.GetSystemIDByTreeID(0)
@@ -717,7 +717,7 @@ amount = C_Traits.GetTraitCurrencyForAchievement(traitCurrencyID, achievementID)
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_Traits.GetTraitCurrencyForAchievement(0, 0)
@@ -744,7 +744,7 @@ flags, type, currencyTypesID, icon = C_Traits.GetTraitCurrencyInfo(traitCurrency
 | `currencyTypesID` | number | yes |  |
 | `icon` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flags, type, currencyTypesID, icon = C_Traits.GetTraitCurrencyInfo(0)
@@ -769,7 +769,7 @@ description = C_Traits.GetTraitDescription(entryID, rank)
 |------|------|---------|-------------|
 | `description` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_Traits.GetTraitDescription(0, 1)
@@ -793,7 +793,7 @@ flags = C_Traits.GetTraitSystemFlags(configID)
 |------|------|---------|-------------|
 | `flags` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flags = C_Traits.GetTraitSystemFlags(0)
@@ -817,7 +817,7 @@ uiWidgetSetID = C_Traits.GetTraitSystemWidgetSetID(configID)
 |------|------|---------|-------------|
 | `uiWidgetSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiWidgetSetID = C_Traits.GetTraitSystemWidgetSetID(0)
@@ -843,7 +843,7 @@ treeCurrencyInfo = C_Traits.GetTreeCurrencyInfo(configID, treeID, excludeStagedC
 |------|------|---------|-------------|
 | `treeCurrencyInfo` | TreeCurrencyInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeCurrencyInfo = C_Traits.GetTreeCurrencyInfo(0, 0, false)
@@ -867,7 +867,7 @@ result = C_Traits.GetTreeHash(treeID)
 |------|------|---------|-------------|
 | `result` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Traits.GetTreeHash(0)
@@ -892,7 +892,7 @@ treeInfo = C_Traits.GetTreeInfo(configID, treeID)
 |------|------|---------|-------------|
 | `treeInfo` | TraitTreeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeInfo = C_Traits.GetTreeInfo(0, 0)
@@ -918,7 +918,7 @@ nodeIDs = C_Traits.GetTreeNodes(treeID)
 |------|------|---------|-------------|
 | `nodeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeIDs = C_Traits.GetTreeNodes(0)
@@ -936,7 +936,7 @@ hasValidInspectData = C_Traits.HasValidInspectData()
 |------|------|---------|-------------|
 | `hasValidInspectData` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasValidInspectData = C_Traits.HasValidInspectData()
@@ -954,7 +954,7 @@ isReadyForCommit = C_Traits.IsReadyForCommit()
 |------|------|---------|-------------|
 | `isReadyForCommit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReadyForCommit = C_Traits.IsReadyForCommit()
@@ -980,7 +980,7 @@ success = C_Traits.PurchaseAllRanks(configID, nodeID, ignoreCost)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.PurchaseAllRanks(0, 0, false)
@@ -1005,7 +1005,7 @@ success = C_Traits.PurchaseRank(configID, nodeID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.PurchaseRank(0, 0)
@@ -1030,7 +1030,7 @@ success = C_Traits.RefundAllRanks(configID, nodeID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.RefundAllRanks(0, 0)
@@ -1056,7 +1056,7 @@ success = C_Traits.RefundRank(configID, nodeID, [clearEdges])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.RefundRank(0, 0)
@@ -1081,7 +1081,7 @@ success = C_Traits.ResetTree(configID, treeID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.ResetTree(0, 0)
@@ -1107,7 +1107,7 @@ success = C_Traits.ResetTreeByCurrency(configID, treeID, traitCurrencyID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.ResetTreeByCurrency(0, 0, 0)
@@ -1131,7 +1131,7 @@ success = C_Traits.RollbackConfig(configID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.RollbackConfig(0)
@@ -1158,7 +1158,7 @@ success = C_Traits.SetSelection(configID, nodeID, [nodeEntryID], [clearEdges])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.SetSelection(0, 0)
@@ -1182,7 +1182,7 @@ success = C_Traits.StageConfig(configID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.StageConfig(0)
@@ -1194,7 +1194,7 @@ local success = C_Traits.StageConfig(0)
 C_Traits.TalentTestUnlearnSpells()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Traits.TalentTestUnlearnSpells()
@@ -1219,7 +1219,7 @@ success = C_Traits.TryPurchaseAllRanks(configID, nodeID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.TryPurchaseAllRanks(0, 0)
@@ -1244,7 +1244,7 @@ success = C_Traits.TryPurchaseToNode(configID, nodeID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.TryPurchaseToNode(0, 0)
@@ -1270,7 +1270,7 @@ success = C_Traits.TryRefundToNode(configID, nodeID, entryID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Traits.TryRefundToNode(0, 0, 0)

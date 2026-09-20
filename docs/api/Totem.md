@@ -18,7 +18,7 @@ DestroyTotem(slot)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DestroyTotem(1)
@@ -36,7 +36,7 @@ numSlots = GetNumTotemSlots()
 |------|------|---------|-------------|
 | `numSlots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSlots = GetNumTotemSlots()
@@ -60,7 +60,7 @@ cannotDismiss = GetTotemCannotDismiss(slot)
 |------|------|---------|-------------|
 | `cannotDismiss` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cannotDismiss = GetTotemCannotDismiss(1)
@@ -84,7 +84,7 @@ duration = GetTotemDuration(slot)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetTotemDuration(1)
@@ -114,7 +114,7 @@ haveTotem, totemName, startTime, duration, icon, modRate, spellID = GetTotemInfo
 | `modRate` | number | no |  |
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local haveTotem, totemName, startTime, duration, icon, modRate, spellID = GetTotemInfo(1)
@@ -138,7 +138,7 @@ timeLeft = GetTotemTimeLeft(slot)
 |------|------|---------|-------------|
 | `timeLeft` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeft = GetTotemTimeLeft(1)
@@ -156,7 +156,7 @@ TargetTotem(slot)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetTotem(1)

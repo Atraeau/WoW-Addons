@@ -20,7 +20,7 @@ searcher = C_HousingCatalog.CreateCatalogSearcher()
 |------|------|---------|-------------|
 | `searcher` | HousingCatalogSearcher | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local searcher = C_HousingCatalog.CreateCatalogSearcher()
@@ -38,10 +38,10 @@ C_HousingCatalog.DeletePreviewCartDecor(decorGUID)
 |------|------|---------|-------------|
 | `decorGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingCatalog.DeletePreviewCartDecor("Creature-0-0000-0-0-0-0")
+C_HousingCatalog.DeletePreviewCartDecor(UnitGUID("player"))
 ```
 
 ### C_HousingCatalog.DestroyEntry
@@ -59,7 +59,7 @@ C_HousingCatalog.DestroyEntry(entryVariantID, destroyAll)
 | `entryVariantID` | HousingCatalogEntryVariantID | no |  |
 | `destroyAll` | bool | no | If true, deletes all entries within the stack; If false, will only delete one |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.DestroyEntry(entryVariantID, false)
@@ -77,7 +77,7 @@ filterTagGroups = C_HousingCatalog.GetAllFilterTagGroups()
 |------|------|---------|-------------|
 | `filterTagGroups` | HousingCatalogFilterTagGroupInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filterTagGroups = C_HousingCatalog.GetAllFilterTagGroups()
@@ -103,7 +103,7 @@ variantInfos = C_HousingCatalog.GetAllVariantInfosForEntry(entryID)
 |------|------|---------|-------------|
 | `variantInfos` | HousingCatalogEntryVariantInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local variantInfos = C_HousingCatalog.GetAllVariantInfosForEntry(entryID)
@@ -127,7 +127,7 @@ bundleInfo = C_HousingCatalog.GetBundleInfo(bundleCatalogShopProductID)
 |------|------|---------|-------------|
 | `bundleInfo` | HousingBundleInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bundleInfo = C_HousingCatalog.GetBundleInfo(0)
@@ -145,7 +145,7 @@ cartSizeLimit = C_HousingCatalog.GetCartSizeLimit()
 |------|------|---------|-------------|
 | `cartSizeLimit` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cartSizeLimit = C_HousingCatalog.GetCartSizeLimit()
@@ -172,7 +172,7 @@ categoryName, subcategoryName = C_HousingCatalog.GetCatalogCategoryAndSubcategor
 | `categoryName` | string | no |  |
 | `subcategoryName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryName, subcategoryName = C_HousingCatalog.GetCatalogCategoryAndSubcategoryNames(0)
@@ -196,7 +196,7 @@ info = C_HousingCatalog.GetCatalogCategoryInfo(categoryID)
 |------|------|---------|-------------|
 | `info` | HousingCatalogCategoryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogCategoryInfo(0)
@@ -220,7 +220,7 @@ info = C_HousingCatalog.GetCatalogEntryInfo(entryID)
 |------|------|---------|-------------|
 | `info` | HousingCatalogEntryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogEntryInfo(entryID)
@@ -244,7 +244,7 @@ info = C_HousingCatalog.GetCatalogEntryInfoByItem(itemInfo)
 |------|------|---------|-------------|
 | `info` | HousingCatalogEntryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogEntryInfoByItem(6948)
@@ -269,7 +269,7 @@ info = C_HousingCatalog.GetCatalogEntryInfoByRecordID(entryType, recordID)
 |------|------|---------|-------------|
 | `info` | HousingCatalogEntryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogEntryInfoByRecordID(entryType, 0)
@@ -294,7 +294,7 @@ refundTimeStamp = C_HousingCatalog.GetCatalogEntryRefundTimeStampByRecordID(entr
 |------|------|---------|-------------|
 | `refundTimeStamp` | time_t | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundTimeStamp = C_HousingCatalog.GetCatalogEntryRefundTimeStampByRecordID(entryType, 0)
@@ -318,7 +318,7 @@ info = C_HousingCatalog.GetCatalogEntryVariantInfo(entryVariantID)
 |------|------|---------|-------------|
 | `info` | HousingCatalogEntryVariantInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogEntryVariantInfo(entryVariantID)
@@ -342,7 +342,7 @@ info = C_HousingCatalog.GetCatalogSubcategoryInfo(subcategoryID)
 |------|------|---------|-------------|
 | `info` | HousingCatalogSubcategoryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCatalog.GetCatalogSubcategoryInfo(0)
@@ -362,7 +362,7 @@ maxOwnedCount = C_HousingCatalog.GetDecorMaxOwnedCount()
 |------|------|---------|-------------|
 | `maxOwnedCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxOwnedCount = C_HousingCatalog.GetDecorMaxOwnedCount()
@@ -381,7 +381,7 @@ totalOwnedCount, exemptDecorCount = C_HousingCatalog.GetDecorTotalOwnedCount()
 | `totalOwnedCount` | number | no | The total number of owned decor in storage, including both exempt and non-exempt decor |
 | `exemptDecorCount` | number | no | The number of decor that do not count against the max storage limit |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalOwnedCount, exemptDecorCount = C_HousingCatalog.GetDecorTotalOwnedCount()
@@ -407,7 +407,7 @@ destroyableInstanceCount = C_HousingCatalog.GetDestroyableInstanceCount(entryVar
 |------|------|---------|-------------|
 | `destroyableInstanceCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local destroyableInstanceCount = C_HousingCatalog.GetDestroyableInstanceCount(entryVariantID)
@@ -425,7 +425,7 @@ bundleInfos = C_HousingCatalog.GetFeaturedBundles()
 |------|------|---------|-------------|
 | `bundleInfos` | HousingBundleInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bundleInfos = C_HousingCatalog.GetFeaturedBundles()
@@ -443,7 +443,7 @@ infos = C_HousingCatalog.GetFeaturedSmallProducts()
 |------|------|---------|-------------|
 | `infos` | HousingFeaturedSmallProductInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infos = C_HousingCatalog.GetFeaturedSmallProducts()
@@ -469,7 +469,7 @@ marketInfo = C_HousingCatalog.GetMarketInfoForDecor(decorID)
 |------|------|---------|-------------|
 | `marketInfo` | HousingMarketInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local marketInfo = C_HousingCatalog.GetMarketInfoForDecor(0)
@@ -487,7 +487,7 @@ hasEntries = C_HousingCatalog.HasFeaturedEntries()
 |------|------|---------|-------------|
 | `hasEntries` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasEntries = C_HousingCatalog.HasFeaturedEntries()
@@ -506,7 +506,7 @@ C_HousingCatalog.HousingMarketActionAddToCart(productID, withPreview)
 | `productID` | number | no |  |
 | `withPreview` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.HousingMarketActionAddToCart(0, false)
@@ -518,7 +518,7 @@ C_HousingCatalog.HousingMarketActionAddToCart(0, false)
 C_HousingCatalog.HousingMarketActionClearCart()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.HousingMarketActionClearCart()
@@ -536,7 +536,7 @@ C_HousingCatalog.HousingMarketActionRemoveFromCart(productID)
 |------|------|---------|-------------|
 | `productID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.HousingMarketActionRemoveFromCart(0)
@@ -554,7 +554,7 @@ C_HousingCatalog.HousingMarketActionViewBundle(productID)
 |------|------|---------|-------------|
 | `productID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.HousingMarketActionViewBundle(0)
@@ -572,7 +572,7 @@ C_HousingCatalog.HousingMarketActionViewInStore(productID)
 |------|------|---------|-------------|
 | `productID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.HousingMarketActionViewInStore(0)
@@ -596,10 +596,10 @@ isShown = C_HousingCatalog.IsPreviewCartItemShown(decorGUID)
 |------|------|---------|-------------|
 | `isShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isShown = C_HousingCatalog.IsPreviewCartItemShown("Creature-0-0000-0-0-0-0")
+local isShown = C_HousingCatalog.IsPreviewCartItemShown(UnitGUID("player"))
 ```
 
 ### C_HousingCatalog.PromotePreviewDecor
@@ -621,10 +621,10 @@ success = C_HousingCatalog.PromotePreviewDecor(decorID, previewDecorGUID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local success = C_HousingCatalog.PromotePreviewDecor(0, "Creature-0-0000-0-0-0-0")
+local success = C_HousingCatalog.PromotePreviewDecor(0, UnitGUID("player"))
 ```
 
 ### C_HousingCatalog.RequestHousingMarketInfoRefresh
@@ -633,7 +633,7 @@ local success = C_HousingCatalog.PromotePreviewDecor(0, "Creature-0-0000-0-0-0-0
 C_HousingCatalog.RequestHousingMarketInfoRefresh()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.RequestHousingMarketInfoRefresh()
@@ -645,7 +645,7 @@ C_HousingCatalog.RequestHousingMarketInfoRefresh()
 C_HousingCatalog.RequestHousingMarketRefundInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCatalog.RequestHousingMarketRefundInfo()
@@ -669,7 +669,7 @@ categoryIDs = C_HousingCatalog.SearchCatalogCategories(searchParams)
 |------|------|---------|-------------|
 | `categoryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryIDs = C_HousingCatalog.SearchCatalogCategories(searchParams)
@@ -693,7 +693,7 @@ subcategoryIDs = C_HousingCatalog.SearchCatalogSubcategories(searchParams)
 |------|------|---------|-------------|
 | `subcategoryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subcategoryIDs = C_HousingCatalog.SearchCatalogSubcategories(searchParams)
@@ -712,10 +712,10 @@ C_HousingCatalog.SetPreviewCartItemShown(decorGUID, shown)
 | `decorGUID` | WOWGUID | no |  |
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingCatalog.SetPreviewCartItemShown("Creature-0-0000-0-0-0-0", false)
+C_HousingCatalog.SetPreviewCartItemShown(UnitGUID("player"), false)
 ```
 
 ## Events

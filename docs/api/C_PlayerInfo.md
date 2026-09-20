@@ -18,7 +18,7 @@ canEnter = C_PlayerInfo.CanPlayerEnterChromieTime()
 |------|------|---------|-------------|
 | `canEnter` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEnter = C_PlayerInfo.CanPlayerEnterChromieTime()
@@ -36,7 +36,7 @@ canUseAreaLoot = C_PlayerInfo.CanPlayerUseAreaLoot()
 |------|------|---------|-------------|
 | `canUseAreaLoot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseAreaLoot = C_PlayerInfo.CanPlayerUseAreaLoot()
@@ -55,7 +55,7 @@ canUseMountEquipment, failureReason = C_PlayerInfo.CanPlayerUseMountEquipment()
 | `canUseMountEquipment` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseMountEquipment, failureReason = C_PlayerInfo.CanPlayerUseMountEquipment()
@@ -79,7 +79,7 @@ isUseable = C_PlayerInfo.CanUseItem(itemID)
 |------|------|---------|-------------|
 | `isUseable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUseable = C_PlayerInfo.CanUseItem(6948)
@@ -98,7 +98,7 @@ hasAlternateForm, inAlternateForm = C_PlayerInfo.GetAlternateFormInfo()
 | `hasAlternateForm` | bool | no |  |
 | `inAlternateForm` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAlternateForm, inAlternateForm = C_PlayerInfo.GetAlternateFormInfo()
@@ -124,7 +124,7 @@ className, classFilename, classID = C_PlayerInfo.GetClass(playerLocation)
 | `classFilename` | cstring | yes |  |
 | `classID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local className, classFilename, classID = C_PlayerInfo.GetClass(playerLocation)
@@ -148,7 +148,7 @@ difficulty = C_PlayerInfo.GetContentDifficultyCreatureForPlayer(unitToken)
 |------|------|---------|-------------|
 | `difficulty` | RelativeContentDifficulty | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local difficulty = C_PlayerInfo.GetContentDifficultyCreatureForPlayer("player")
@@ -172,7 +172,7 @@ difficulty = C_PlayerInfo.GetContentDifficultyQuestForPlayer(questID)
 |------|------|---------|-------------|
 | `difficulty` | RelativeContentDifficulty | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local difficulty = C_PlayerInfo.GetContentDifficultyQuestForPlayer(0)
@@ -190,7 +190,7 @@ displayID = C_PlayerInfo.GetDisplayID()
 |------|------|---------|-------------|
 | `displayID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayID = C_PlayerInfo.GetDisplayID()
@@ -210,7 +210,7 @@ isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
 | `canGlide` | bool | no |  |
 | `forwardSpeed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isGliding, canGlide, forwardSpeed = C_PlayerInfo.GetGlidingInfo()
@@ -235,7 +235,7 @@ dungeonID = C_PlayerInfo.GetInstancesUnlockedAtLevel(level, isRaid)
 |------|------|---------|-------------|
 | `dungeonID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dungeonID = C_PlayerInfo.GetInstancesUnlockedAtLevel(0, false)
@@ -259,7 +259,7 @@ name = C_PlayerInfo.GetName(playerLocation)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_PlayerInfo.GetName(playerLocation)
@@ -277,7 +277,7 @@ nativeDisplayID = C_PlayerInfo.GetNativeDisplayID()
 |------|------|---------|-------------|
 | `nativeDisplayID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nativeDisplayID = C_PlayerInfo.GetNativeDisplayID()
@@ -301,7 +301,7 @@ creatureDisplayInfoID = C_PlayerInfo.GetPetStableCreatureDisplayInfoID(index)
 |------|------|---------|-------------|
 | `creatureDisplayInfoID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureDisplayInfoID = C_PlayerInfo.GetPetStableCreatureDisplayInfoID(1)
@@ -319,7 +319,7 @@ characterData = C_PlayerInfo.GetPlayerCharacterData()
 |------|------|---------|-------------|
 | `characterData` | PlayerInfoCharacterData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local characterData = C_PlayerInfo.GetPlayerCharacterData()
@@ -345,7 +345,7 @@ ratingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary(playerToken)
 |------|------|---------|-------------|
 | `ratingSummary` | MythicPlusRatingSummary | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ratingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary(playerToken)
@@ -369,7 +369,7 @@ raceID = C_PlayerInfo.GetRace(playerLocation)
 |------|------|---------|-------------|
 | `raceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local raceID = C_PlayerInfo.GetRace(playerLocation)
@@ -393,7 +393,7 @@ sex = C_PlayerInfo.GetSex(playerLocation)
 |------|------|---------|-------------|
 | `sex` | UnitSex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sex = C_PlayerInfo.GetSex(playerLocation)
@@ -417,10 +417,10 @@ isPlayer = C_PlayerInfo.GUIDIsPlayer(guid)
 |------|------|---------|-------------|
 | `isPlayer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isPlayer = C_PlayerInfo.GUIDIsPlayer("Creature-0-0000-0-0-0-0")
+local isPlayer = C_PlayerInfo.GUIDIsPlayer(UnitGUID("player"))
 ```
 
 ### C_PlayerInfo.HasAccountInventoryLock
@@ -435,7 +435,7 @@ hasAccountInventoryLock = C_PlayerInfo.HasAccountInventoryLock()
 |------|------|---------|-------------|
 | `hasAccountInventoryLock` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAccountInventoryLock = C_PlayerInfo.HasAccountInventoryLock()
@@ -459,7 +459,7 @@ isVisible = C_PlayerInfo.HasVisibleInvSlot(slot)
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = C_PlayerInfo.HasVisibleInvSlot(1)
@@ -477,7 +477,7 @@ isAccountBankEnabled = C_PlayerInfo.IsAccountBankEnabled()
 |------|------|---------|-------------|
 | `isAccountBankEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAccountBankEnabled = C_PlayerInfo.IsAccountBankEnabled()
@@ -495,7 +495,7 @@ isCharacterBankEnabled = C_PlayerInfo.IsCharacterBankEnabled()
 |------|------|---------|-------------|
 | `isCharacterBankEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCharacterBankEnabled = C_PlayerInfo.IsCharacterBankEnabled()
@@ -519,7 +519,7 @@ isConnected = C_PlayerInfo.IsConnected([playerLocation])
 |------|------|---------|-------------|
 | `isConnected` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isConnected = C_PlayerInfo.IsConnected()
@@ -537,7 +537,7 @@ isDisplayRaceNative = C_PlayerInfo.IsDisplayRaceNative()
 |------|------|---------|-------------|
 | `isDisplayRaceNative` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisplayRaceNative = C_PlayerInfo.IsDisplayRaceNative()
@@ -561,7 +561,7 @@ isUnlocked = C_PlayerInfo.IsExpansionLandingPageUnlockedForPlayer(expansionID)
 |------|------|---------|-------------|
 | `isUnlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnlocked = C_PlayerInfo.IsExpansionLandingPageUnlockedForPlayer(0)
@@ -579,7 +579,7 @@ isMirrorImage = C_PlayerInfo.IsMirrorImage()
 |------|------|---------|-------------|
 | `isMirrorImage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMirrorImage = C_PlayerInfo.IsMirrorImage()
@@ -598,7 +598,7 @@ isEligible, failureReason = C_PlayerInfo.IsPlayerEligibleForNPE()
 | `isEligible` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEligible, failureReason = C_PlayerInfo.IsPlayerEligibleForNPE()
@@ -617,7 +617,7 @@ isEligible, failureReason = C_PlayerInfo.IsPlayerEligibleForNPEv2()
 | `isEligible` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEligible, failureReason = C_PlayerInfo.IsPlayerEligibleForNPEv2()
@@ -635,7 +635,7 @@ inChromieTime = C_PlayerInfo.IsPlayerInChromieTime()
 |------|------|---------|-------------|
 | `inChromieTime` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inChromieTime = C_PlayerInfo.IsPlayerInChromieTime()
@@ -653,7 +653,7 @@ isInRPE = C_PlayerInfo.IsPlayerInRPE()
 |------|------|---------|-------------|
 | `isInRPE` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInRPE = C_PlayerInfo.IsPlayerInRPE()
@@ -671,7 +671,7 @@ inTimerunningHeroicWorldTier = C_PlayerInfo.IsPlayerInTimerunningHeroicWorldTier
 |------|------|---------|-------------|
 | `inTimerunningHeroicWorldTier` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inTimerunningHeroicWorldTier = C_PlayerInfo.IsPlayerInTimerunningHeroicWorldTier()
@@ -689,7 +689,7 @@ isRestricted = C_PlayerInfo.IsPlayerNPERestricted()
 |------|------|---------|-------------|
 | `isRestricted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRestricted = C_PlayerInfo.IsPlayerNPERestricted()
@@ -707,7 +707,7 @@ isReturning = C_PlayerInfo.IsReturningCharacter()
 |------|------|---------|-------------|
 | `isReturning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReturning = C_PlayerInfo.IsReturningCharacter()
@@ -725,7 +725,7 @@ active = C_PlayerInfo.IsSelfFoundActive()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_PlayerInfo.IsSelfFoundActive()
@@ -743,7 +743,7 @@ isAvailable = C_PlayerInfo.IsTradingPostAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_PlayerInfo.IsTradingPostAvailable()
@@ -761,7 +761,7 @@ isAvailable = C_PlayerInfo.IsTravelersLogAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_PlayerInfo.IsTravelersLogAvailable()
@@ -779,7 +779,7 @@ isAvailable = C_PlayerInfo.IsTutorialsTabAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_PlayerInfo.IsTutorialsTabAvailable()
@@ -797,7 +797,7 @@ display = C_PlayerInfo.ShouldDisplaySurname()
 |------|------|---------|-------------|
 | `display` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local display = C_PlayerInfo.ShouldDisplaySurname()
@@ -821,7 +821,7 @@ unitIsSameServer = C_PlayerInfo.UnitIsSameServer(playerLocation)
 |------|------|---------|-------------|
 | `unitIsSameServer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unitIsSameServer = C_PlayerInfo.UnitIsSameServer(playerLocation)

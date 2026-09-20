@@ -34,7 +34,7 @@ id, name, description, icon, role, recommended, allowedForBoost, masterySpell1, 
 | `masterySpell1` | number | yes |  |
 | `masterySpell2` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local id, name, description, icon, role, recommended, allowedForBoost, masterySpell1, masterySpell2 = GetSpecializationInfoForClassID(0, 1)
@@ -67,7 +67,7 @@ id, name, description, icon, role, recommended, allowedForBoost, masterySpell1, 
 | `masterySpell1` | number | yes |  |
 | `masterySpell2` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local id, name, description, icon, role, recommended, allowedForBoost, masterySpell1, masterySpell2 = GetSpecializationInfoForSpecID(0)
@@ -92,7 +92,7 @@ name = GetSpecializationNameForSpecID(specID, [gender])
 |------|------|---------|-------------|
 | `name` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = GetSpecializationNameForSpecID(0)
@@ -110,7 +110,7 @@ system = GetSpecializationSystem()
 |------|------|---------|-------------|
 | `system` | SpecializationSystem | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local system = GetSpecializationSystem()
@@ -128,7 +128,7 @@ hasLootSpecializations = HasLootSpecializations()
 |------|------|---------|-------------|
 | `hasLootSpecializations` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasLootSpecializations = HasLootSpecializations()

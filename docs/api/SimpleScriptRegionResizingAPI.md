@@ -19,7 +19,7 @@ AdjustPointsOffset(x, y)
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AdjustPointsOffset(x, y)
@@ -33,7 +33,7 @@ Clears all points and immediately invalidates the rect. (Prior to 11.2.0, this w
 ClearAllPoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAllPoints()
@@ -51,7 +51,7 @@ ClearPoint(point)
 |------|------|---------|-------------|
 | `point` | FramePoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPoint(point)
@@ -63,7 +63,7 @@ ClearPoint(point)
 ClearPointsOffset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPointsOffset()
@@ -81,7 +81,7 @@ numPoints = GetNumPoints()
 |------|------|---------|-------------|
 | `numPoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPoints = GetNumPoints()
@@ -110,7 +110,7 @@ point, relativeTo, relativePoint, offsetX, offsetY = GetPoint(anchorIndex, resol
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point, relativeTo, relativePoint, offsetX, offsetY = GetPoint(1, false)
@@ -139,7 +139,7 @@ point, relativeTo, relativePoint, offsetX, offsetY = GetPointByName(point, resol
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point, relativeTo, relativePoint, offsetX, offsetY = GetPointByName(point, false)
@@ -158,7 +158,7 @@ SetAllPoints(relativeTo, doResize)
 | `relativeTo` | ScriptRegion | no |  |
 | `doResize` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllPoints(relativeTo, false)
@@ -176,7 +176,7 @@ SetHeight(height)
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHeight(height)
@@ -198,10 +198,10 @@ SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetPoint(point, relativeTo, relativePoint, offsetX, offsetY)
+SetPoint(point, relativeTo, relativePoint, 1, 1)
 ```
 
 ### SimpleScriptRegionResizingAPI.SetPointsOffset
@@ -217,7 +217,7 @@ SetPointsOffset(x, y)
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPointsOffset(x, y)
@@ -236,7 +236,7 @@ SetSize(x, y)
 | `x` | uiUnit | no |  |
 | `y` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSize(x, y)
@@ -254,7 +254,7 @@ SetWidth(width)
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetWidth(width)

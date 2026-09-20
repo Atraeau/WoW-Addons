@@ -26,10 +26,10 @@ depositCost = C_AuctionHouse.CalculateCommodityDeposit(itemID, duration, quantit
 |------|------|---------|-------------|
 | `depositCost` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local depositCost = C_AuctionHouse.CalculateCommodityDeposit(6948, duration, 0)
+local depositCost = C_AuctionHouse.CalculateCommodityDeposit(6948, 1, 0)
 ```
 
 ### C_AuctionHouse.CalculateItemDeposit
@@ -52,10 +52,10 @@ depositCost = C_AuctionHouse.CalculateItemDeposit(item, duration, quantity)
 |------|------|---------|-------------|
 | `depositCost` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local depositCost = C_AuctionHouse.CalculateItemDeposit(6948, duration, 0)
+local depositCost = C_AuctionHouse.CalculateItemDeposit(6948, 1, 0)
 ```
 
 ### C_AuctionHouse.CanCancelAuction
@@ -76,7 +76,7 @@ canCancelAuction = C_AuctionHouse.CanCancelAuction(ownedAuctionID)
 |------|------|---------|-------------|
 | `canCancelAuction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCancelAuction = C_AuctionHouse.CanCancelAuction(0)
@@ -94,7 +94,7 @@ C_AuctionHouse.CancelAuction(ownedAuctionID)
 |------|------|---------|-------------|
 | `ownedAuctionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.CancelAuction(0)
@@ -106,7 +106,7 @@ C_AuctionHouse.CancelAuction(0)
 C_AuctionHouse.CancelCommoditiesPurchase()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.CancelCommoditiesPurchase()
@@ -118,7 +118,7 @@ C_AuctionHouse.CancelCommoditiesPurchase()
 C_AuctionHouse.CancelSell()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.CancelSell()
@@ -130,7 +130,7 @@ C_AuctionHouse.CancelSell()
 C_AuctionHouse.CloseAuctionHouse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.CloseAuctionHouse()
@@ -149,7 +149,7 @@ C_AuctionHouse.ConfirmCommoditiesPurchase(itemID, quantity)
 | `itemID` | number | no |  |
 | `quantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.ConfirmCommoditiesPurchase(6948, 0)
@@ -170,10 +170,10 @@ C_AuctionHouse.ConfirmPostCommodity(item, duration, quantity, unitPrice)
 | `quantity` | number | no |  |
 | `unitPrice` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_AuctionHouse.ConfirmPostCommodity(6948, duration, 0, "player")
+C_AuctionHouse.ConfirmPostCommodity(6948, 1, 0, "player")
 ```
 
 ### C_AuctionHouse.ConfirmPostItem
@@ -192,10 +192,10 @@ C_AuctionHouse.ConfirmPostItem(item, duration, quantity, [bid], [buyout])
 | `bid` | BigUInteger | yes |  |
 | `buyout` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_AuctionHouse.ConfirmPostItem(6948, duration, 0)
+C_AuctionHouse.ConfirmPostItem(6948, 1, 0)
 ```
 
 ### C_AuctionHouse.FavoritesAreAvailable
@@ -210,7 +210,7 @@ favoritesAreAvailable = C_AuctionHouse.FavoritesAreAvailable()
 |------|------|---------|-------------|
 | `favoritesAreAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local favoritesAreAvailable = C_AuctionHouse.FavoritesAreAvailable()
@@ -234,7 +234,7 @@ priceInfo = C_AuctionHouse.GetAuctionInfoByID(auctionID)
 |------|------|---------|-------------|
 | `priceInfo` | AuctionInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local priceInfo = C_AuctionHouse.GetAuctionInfoByID(0)
@@ -258,7 +258,7 @@ subClasses = C_AuctionHouse.GetAuctionItemSubClasses(classID)
 |------|------|---------|-------------|
 | `subClasses` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subClasses = C_AuctionHouse.GetAuctionItemSubClasses(0)
@@ -282,7 +282,7 @@ listCount = C_AuctionHouse.GetAvailablePostCount(item)
 |------|------|---------|-------------|
 | `listCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local listCount = C_AuctionHouse.GetAvailablePostCount(6948)
@@ -306,7 +306,7 @@ bid = C_AuctionHouse.GetBidInfo(bidIndex)
 |------|------|---------|-------------|
 | `bid` | BidInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bid = C_AuctionHouse.GetBidInfo(1)
@@ -324,7 +324,7 @@ bids = C_AuctionHouse.GetBids()
 |------|------|---------|-------------|
 | `bids` | BidInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bids = C_AuctionHouse.GetBids()
@@ -348,7 +348,7 @@ typeItemKey = C_AuctionHouse.GetBidType(bidTypeIndex)
 |------|------|---------|-------------|
 | `typeItemKey` | ItemKey | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local typeItemKey = C_AuctionHouse.GetBidType(1)
@@ -366,7 +366,7 @@ browseResults = C_AuctionHouse.GetBrowseResults()
 |------|------|---------|-------------|
 | `browseResults` | BrowseResultInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local browseResults = C_AuctionHouse.GetBrowseResults()
@@ -390,7 +390,7 @@ cancelCost = C_AuctionHouse.GetCancelCost(ownedAuctionID)
 |------|------|---------|-------------|
 | `cancelCost` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cancelCost = C_AuctionHouse.GetCancelCost(0)
@@ -415,7 +415,7 @@ result = C_AuctionHouse.GetCommoditySearchResultInfo(itemID, commoditySearchResu
 |------|------|---------|-------------|
 | `result` | CommoditySearchResultInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuctionHouse.GetCommoditySearchResultInfo(6948, 1)
@@ -439,7 +439,7 @@ totalQuantity = C_AuctionHouse.GetCommoditySearchResultsQuantity(itemID)
 |------|------|---------|-------------|
 | `totalQuantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalQuantity = C_AuctionHouse.GetCommoditySearchResultsQuantity(6948)
@@ -463,7 +463,7 @@ extraInfo = C_AuctionHouse.GetExtraBrowseInfo(itemKey)
 |------|------|---------|-------------|
 | `extraInfo` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local extraInfo = C_AuctionHouse.GetExtraBrowseInfo(6948)
@@ -481,7 +481,7 @@ filterGroups = C_AuctionHouse.GetFilterGroups()
 |------|------|---------|-------------|
 | `filterGroups` | AuctionHouseFilterGroup[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filterGroups = C_AuctionHouse.GetFilterGroups()
@@ -505,7 +505,7 @@ isCommodity = C_AuctionHouse.GetItemCommodityStatus(item)
 |------|------|---------|-------------|
 | `isCommodity` | ItemCommodityStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCommodity = C_AuctionHouse.GetItemCommodityStatus(6948)
@@ -529,7 +529,7 @@ itemKey = C_AuctionHouse.GetItemKeyFromItem(item)
 |------|------|---------|-------------|
 | `itemKey` | ItemKey | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemKey = C_AuctionHouse.GetItemKeyFromItem(6948)
@@ -554,7 +554,7 @@ itemKeyInfo = C_AuctionHouse.GetItemKeyInfo(itemKey, restrictQualityToFilter)
 |------|------|---------|-------------|
 | `itemKeyInfo` | ItemKeyInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemKeyInfo = C_AuctionHouse.GetItemKeyInfo(6948, "HELPFUL")
@@ -578,7 +578,7 @@ requiredLevel = C_AuctionHouse.GetItemKeyRequiredLevel(itemKey)
 |------|------|---------|-------------|
 | `requiredLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requiredLevel = C_AuctionHouse.GetItemKeyRequiredLevel(6948)
@@ -603,7 +603,7 @@ result = C_AuctionHouse.GetItemSearchResultInfo(itemKey, itemSearchResultIndex)
 |------|------|---------|-------------|
 | `result` | ItemSearchResultInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AuctionHouse.GetItemSearchResultInfo(6948, 1)
@@ -627,7 +627,7 @@ totalQuantity = C_AuctionHouse.GetItemSearchResultsQuantity(itemKey)
 |------|------|---------|-------------|
 | `totalQuantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalQuantity = C_AuctionHouse.GetItemSearchResultsQuantity(6948)
@@ -645,7 +645,7 @@ maxBid = C_AuctionHouse.GetMaxBidItemBid()
 |------|------|---------|-------------|
 | `maxBid` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBid = C_AuctionHouse.GetMaxBidItemBid()
@@ -663,7 +663,7 @@ maxBuyout = C_AuctionHouse.GetMaxBidItemBuyout()
 |------|------|---------|-------------|
 | `maxBuyout` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBuyout = C_AuctionHouse.GetMaxBidItemBuyout()
@@ -687,7 +687,7 @@ maxUnitPrice = C_AuctionHouse.GetMaxCommoditySearchResultPrice(itemID)
 |------|------|---------|-------------|
 | `maxUnitPrice` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxUnitPrice = C_AuctionHouse.GetMaxCommoditySearchResultPrice(6948)
@@ -711,7 +711,7 @@ maxBid = C_AuctionHouse.GetMaxItemSearchResultBid(itemKey)
 |------|------|---------|-------------|
 | `maxBid` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBid = C_AuctionHouse.GetMaxItemSearchResultBid(6948)
@@ -735,7 +735,7 @@ maxBuyout = C_AuctionHouse.GetMaxItemSearchResultBuyout(itemKey)
 |------|------|---------|-------------|
 | `maxBuyout` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBuyout = C_AuctionHouse.GetMaxItemSearchResultBuyout(6948)
@@ -753,7 +753,7 @@ maxBid = C_AuctionHouse.GetMaxOwnedAuctionBid()
 |------|------|---------|-------------|
 | `maxBid` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBid = C_AuctionHouse.GetMaxOwnedAuctionBid()
@@ -771,7 +771,7 @@ maxBuyout = C_AuctionHouse.GetMaxOwnedAuctionBuyout()
 |------|------|---------|-------------|
 | `maxBuyout` | BigUInteger | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxBuyout = C_AuctionHouse.GetMaxOwnedAuctionBuyout()
@@ -789,7 +789,7 @@ numBids = C_AuctionHouse.GetNumBids()
 |------|------|---------|-------------|
 | `numBids` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numBids = C_AuctionHouse.GetNumBids()
@@ -807,7 +807,7 @@ numBidTypes = C_AuctionHouse.GetNumBidTypes()
 |------|------|---------|-------------|
 | `numBidTypes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numBidTypes = C_AuctionHouse.GetNumBidTypes()
@@ -831,7 +831,7 @@ numSearchResults = C_AuctionHouse.GetNumCommoditySearchResults(itemID)
 |------|------|---------|-------------|
 | `numSearchResults` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSearchResults = C_AuctionHouse.GetNumCommoditySearchResults(6948)
@@ -855,7 +855,7 @@ numItemSearchResults = C_AuctionHouse.GetNumItemSearchResults(itemKey)
 |------|------|---------|-------------|
 | `numItemSearchResults` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numItemSearchResults = C_AuctionHouse.GetNumItemSearchResults(6948)
@@ -873,7 +873,7 @@ numOwnedAuctions = C_AuctionHouse.GetNumOwnedAuctions()
 |------|------|---------|-------------|
 | `numOwnedAuctions` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numOwnedAuctions = C_AuctionHouse.GetNumOwnedAuctions()
@@ -891,7 +891,7 @@ numOwnedAuctionTypes = C_AuctionHouse.GetNumOwnedAuctionTypes()
 |------|------|---------|-------------|
 | `numOwnedAuctionTypes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numOwnedAuctionTypes = C_AuctionHouse.GetNumOwnedAuctionTypes()
@@ -909,7 +909,7 @@ numReplicateItems = C_AuctionHouse.GetNumReplicateItems()
 |------|------|---------|-------------|
 | `numReplicateItems` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numReplicateItems = C_AuctionHouse.GetNumReplicateItems()
@@ -933,7 +933,7 @@ ownedAuction = C_AuctionHouse.GetOwnedAuctionInfo(ownedAuctionIndex)
 |------|------|---------|-------------|
 | `ownedAuction` | OwnedAuctionInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ownedAuction = C_AuctionHouse.GetOwnedAuctionInfo(1)
@@ -951,7 +951,7 @@ ownedAuctions = C_AuctionHouse.GetOwnedAuctions()
 |------|------|---------|-------------|
 | `ownedAuctions` | OwnedAuctionInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ownedAuctions = C_AuctionHouse.GetOwnedAuctions()
@@ -975,7 +975,7 @@ typeItemKey = C_AuctionHouse.GetOwnedAuctionType(ownedAuctionTypeIndex)
 |------|------|---------|-------------|
 | `typeItemKey` | ItemKey | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local typeItemKey = C_AuctionHouse.GetOwnedAuctionType(1)
@@ -993,7 +993,7 @@ quoteDurationSeconds = C_AuctionHouse.GetQuoteDurationRemaining()
 |------|------|---------|-------------|
 | `quoteDurationSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quoteDurationSeconds = C_AuctionHouse.GetQuoteDurationRemaining()
@@ -1018,7 +1018,7 @@ creatureID, displayID = C_AuctionHouse.GetReplicateItemBattlePetInfo(index)
 | `creatureID` | number | no |  |
 | `displayID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureID, displayID = C_AuctionHouse.GetReplicateItemBattlePetInfo(1)
@@ -1059,7 +1059,7 @@ name, texture, count, qualityID, usable, level, levelType, minBid, minIncrement,
 | `itemID` | number | no |  |
 | `hasAllInfo` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, texture, count, qualityID, usable, level, levelType, minBid, minIncrement, buyoutPrice, bidAmount, highBidder, bidderFullName, owner, ownerFullName, saleStatus, itemID, hasAllInfo = C_AuctionHouse.GetReplicateItemInfo(1)
@@ -1083,7 +1083,7 @@ itemLink = C_AuctionHouse.GetReplicateItemLink(index)
 |------|------|---------|-------------|
 | `itemLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLink = C_AuctionHouse.GetReplicateItemLink(1)
@@ -1107,7 +1107,7 @@ timeLeft = C_AuctionHouse.GetReplicateItemTimeLeft(index)
 |------|------|---------|-------------|
 | `timeLeft` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeft = C_AuctionHouse.GetReplicateItemTimeLeft(1)
@@ -1132,7 +1132,7 @@ timeLeftMinSeconds, timeLeftMaxSeconds = C_AuctionHouse.GetTimeLeftBandInfo(time
 | `timeLeftMinSeconds` | number | no |  |
 | `timeLeftMaxSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeftMinSeconds, timeLeftMaxSeconds = C_AuctionHouse.GetTimeLeftBandInfo(timeLeftBand)
@@ -1150,7 +1150,7 @@ hasFavorites = C_AuctionHouse.HasFavorites()
 |------|------|---------|-------------|
 | `hasFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFavorites = C_AuctionHouse.HasFavorites()
@@ -1168,7 +1168,7 @@ hasFullBidResults = C_AuctionHouse.HasFullBidResults()
 |------|------|---------|-------------|
 | `hasFullBidResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullBidResults = C_AuctionHouse.HasFullBidResults()
@@ -1186,7 +1186,7 @@ hasFullBrowseResults = C_AuctionHouse.HasFullBrowseResults()
 |------|------|---------|-------------|
 | `hasFullBrowseResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullBrowseResults = C_AuctionHouse.HasFullBrowseResults()
@@ -1210,7 +1210,7 @@ hasFullResults = C_AuctionHouse.HasFullCommoditySearchResults(itemID)
 |------|------|---------|-------------|
 | `hasFullResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullResults = C_AuctionHouse.HasFullCommoditySearchResults(6948)
@@ -1234,7 +1234,7 @@ hasFullResults = C_AuctionHouse.HasFullItemSearchResults(itemKey)
 |------|------|---------|-------------|
 | `hasFullResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullResults = C_AuctionHouse.HasFullItemSearchResults(6948)
@@ -1252,7 +1252,7 @@ hasFullOwnedAuctionResults = C_AuctionHouse.HasFullOwnedAuctionResults()
 |------|------|---------|-------------|
 | `hasFullOwnedAuctionResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullOwnedAuctionResults = C_AuctionHouse.HasFullOwnedAuctionResults()
@@ -1270,7 +1270,7 @@ hasMaxFavorites = C_AuctionHouse.HasMaxFavorites()
 |------|------|---------|-------------|
 | `hasMaxFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxFavorites = C_AuctionHouse.HasMaxFavorites()
@@ -1294,7 +1294,7 @@ hasSearchResults = C_AuctionHouse.HasSearchResults(itemKey)
 |------|------|---------|-------------|
 | `hasSearchResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSearchResults = C_AuctionHouse.HasSearchResults(6948)
@@ -1318,7 +1318,7 @@ isFavorite = C_AuctionHouse.IsFavoriteItem(itemKey)
 |------|------|---------|-------------|
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFavorite = C_AuctionHouse.IsFavoriteItem(6948)
@@ -1343,7 +1343,7 @@ valid = C_AuctionHouse.IsSellItemValid(item, displayError)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local valid = C_AuctionHouse.IsSellItemValid(6948, false)
@@ -1361,7 +1361,7 @@ canSendThrottledMessage = C_AuctionHouse.IsThrottledMessageSystemReady()
 |------|------|---------|-------------|
 | `canSendThrottledMessage` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSendThrottledMessage = C_AuctionHouse.IsThrottledMessageSystemReady()
@@ -1388,7 +1388,7 @@ itemKey = C_AuctionHouse.MakeItemKey(itemID, itemLevel, itemSuffix, battlePetSpe
 |------|------|---------|-------------|
 | `itemKey` | ItemKey | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemKey = C_AuctionHouse.MakeItemKey(6948, 6948, 6948, 0)
@@ -1407,7 +1407,7 @@ C_AuctionHouse.PlaceBid(auctionID, bidAmount)
 | `auctionID` | number | no |  |
 | `bidAmount` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.PlaceBid(0, bidAmount)
@@ -1434,10 +1434,10 @@ needsConfirmation = C_AuctionHouse.PostCommodity(item, duration, quantity, unitP
 |------|------|---------|-------------|
 | `needsConfirmation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local needsConfirmation = C_AuctionHouse.PostCommodity(6948, duration, 0, "player")
+local needsConfirmation = C_AuctionHouse.PostCommodity(6948, 1, 0, "player")
 ```
 
 ### C_AuctionHouse.PostItem
@@ -1462,10 +1462,10 @@ needsConfirmation = C_AuctionHouse.PostItem(item, duration, quantity, [bid], [bu
 |------|------|---------|-------------|
 | `needsConfirmation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local needsConfirmation = C_AuctionHouse.PostItem(6948, duration, 0)
+local needsConfirmation = C_AuctionHouse.PostItem(6948, 1, 0)
 ```
 
 ### C_AuctionHouse.QueryBids
@@ -1481,7 +1481,7 @@ C_AuctionHouse.QueryBids(sorts, auctionIDs)
 | `sorts` | AuctionHouseSortType[] | no |  |
 | `auctionIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.QueryBids(sorts, auctionIDs)
@@ -1499,7 +1499,7 @@ C_AuctionHouse.QueryOwnedAuctions(sorts)
 |------|------|---------|-------------|
 | `sorts` | AuctionHouseSortType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.QueryOwnedAuctions(sorts)
@@ -1517,7 +1517,7 @@ C_AuctionHouse.RefreshCommoditySearchResults(itemID)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.RefreshCommoditySearchResults(6948)
@@ -1537,7 +1537,7 @@ C_AuctionHouse.RefreshItemSearchResults(itemKey, [minLevelFilter], [maxLevelFilt
 | `minLevelFilter` | number | yes |  |
 | `maxLevelFilter` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.RefreshItemSearchResults(6948)
@@ -1551,7 +1551,7 @@ This function should be used in place of an 'allItem' QueryAuctionItems call to 
 C_AuctionHouse.ReplicateItems()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.ReplicateItems()
@@ -1563,7 +1563,7 @@ C_AuctionHouse.ReplicateItems()
 C_AuctionHouse.RequestMoreBrowseResults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.RequestMoreBrowseResults()
@@ -1587,7 +1587,7 @@ hasFullResults = C_AuctionHouse.RequestMoreCommoditySearchResults(itemID)
 |------|------|---------|-------------|
 | `hasFullResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullResults = C_AuctionHouse.RequestMoreCommoditySearchResults(6948)
@@ -1611,7 +1611,7 @@ hasFullResults = C_AuctionHouse.RequestMoreItemSearchResults(itemKey)
 |------|------|---------|-------------|
 | `hasFullResults` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFullResults = C_AuctionHouse.RequestMoreItemSearchResults(6948)
@@ -1635,7 +1635,7 @@ bidderName = C_AuctionHouse.RequestOwnedAuctionBidderInfo(auctionID)
 |------|------|---------|-------------|
 | `bidderName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bidderName = C_AuctionHouse.RequestOwnedAuctionBidderInfo(0)
@@ -1653,7 +1653,7 @@ C_AuctionHouse.SearchForFavorites(sorts)
 |------|------|---------|-------------|
 | `sorts` | AuctionHouseSortType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SearchForFavorites(sorts)
@@ -1672,7 +1672,7 @@ C_AuctionHouse.SearchForItemKeys(itemKeys, sorts)
 | `itemKeys` | ItemKey[] | no |  |
 | `sorts` | AuctionHouseSortType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SearchForItemKeys(6948, sorts)
@@ -1690,7 +1690,7 @@ C_AuctionHouse.SendBrowseQuery(query)
 |------|------|---------|-------------|
 | `query` | AuctionHouseBrowseQuery | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SendBrowseQuery(query)
@@ -1714,7 +1714,7 @@ C_AuctionHouse.SendSearchQuery(itemKey, sorts, separateOwnerItems, minLevelFilte
 | `minLevelFilter` | number | no | (default: 0) |
 | `maxLevelFilter` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SendSearchQuery(6948, sorts, 6948, "HELPFUL", "HELPFUL")
@@ -1736,7 +1736,7 @@ C_AuctionHouse.SendSellSearchQuery(itemKey, sorts, separateOwnerItems)
 | `sorts` | AuctionHouseSortType[] | no |  |
 | `separateOwnerItems` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SendSellSearchQuery(6948, sorts, 6948)
@@ -1755,7 +1755,7 @@ C_AuctionHouse.SetFavoriteItem(itemKey, setFavorite)
 | `itemKey` | ItemKey | no |  |
 | `setFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.SetFavoriteItem(6948, false)
@@ -1773,7 +1773,7 @@ shouldAutoPopulatePrice = C_AuctionHouse.ShouldAutoPopulatePrice()
 |------|------|---------|-------------|
 | `shouldAutoPopulatePrice` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldAutoPopulatePrice = C_AuctionHouse.ShouldAutoPopulatePrice()
@@ -1792,7 +1792,7 @@ C_AuctionHouse.StartCommoditiesPurchase(itemID, quantity)
 | `itemID` | number | no |  |
 | `quantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AuctionHouse.StartCommoditiesPurchase(6948, 0)
@@ -1810,7 +1810,7 @@ supportsCopperValues = C_AuctionHouse.SupportsCopperValues()
 |------|------|---------|-------------|
 | `supportsCopperValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local supportsCopperValues = C_AuctionHouse.SupportsCopperValues()

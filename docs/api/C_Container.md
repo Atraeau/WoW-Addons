@@ -18,7 +18,7 @@ totalFreeSlots = C_Container.CalculateTotalNumberOfFreeBagSlots()
 |------|------|---------|-------------|
 | `totalFreeSlots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalFreeSlots = C_Container.CalculateTotalNumberOfFreeBagSlots()
@@ -42,10 +42,10 @@ inventoryID = C_Container.ContainerIDToInventoryID(containerID)
 |------|------|---------|-------------|
 | `inventoryID` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local inventoryID = C_Container.ContainerIDToInventoryID(containerID)
+local inventoryID = C_Container.ContainerIDToInventoryID(Enum.BagIndex.Accountbanktab)
 ```
 
 ### C_Container.ContainerRefundItemPurchase
@@ -62,7 +62,7 @@ C_Container.ContainerRefundItemPurchase(containerIndex, slotIndex, isEquipped)
 | `slotIndex` | luaIndex | no |  |
 | `isEquipped` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.ContainerRefundItemPurchase(1, 1, false)
@@ -80,7 +80,7 @@ isDisabled = C_Container.GetBackpackAutosortDisabled()
 |------|------|---------|-------------|
 | `isDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisabled = C_Container.GetBackpackAutosortDisabled()
@@ -98,7 +98,7 @@ isDisabled = C_Container.GetBackpackSellJunkDisabled()
 |------|------|---------|-------------|
 | `isDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisabled = C_Container.GetBackpackSellJunkDisabled()
@@ -122,7 +122,7 @@ name = C_Container.GetBagName(bagIndex)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_Container.GetBagName(1)
@@ -147,7 +147,7 @@ isSet = C_Container.GetBagSlotFlag(bagIndex, flag)
 |------|------|---------|-------------|
 | `isSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSet = C_Container.GetBagSlotFlag(1, flag)
@@ -165,7 +165,7 @@ isDisabled = C_Container.GetBankAutosortDisabled()
 |------|------|---------|-------------|
 | `isDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDisabled = C_Container.GetBankAutosortDisabled()
@@ -189,7 +189,7 @@ freeSlots = C_Container.GetContainerFreeSlots(containerIndex)
 |------|------|---------|-------------|
 | `freeSlots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local freeSlots = C_Container.GetContainerFreeSlots(1)
@@ -216,7 +216,7 @@ startTime, duration, enable = C_Container.GetContainerItemCooldown(containerInde
 | `duration` | number | no |  |
 | `enable` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime, duration, enable = C_Container.GetContainerItemCooldown(1, 1)
@@ -242,7 +242,7 @@ durability, maxDurability = C_Container.GetContainerItemDurability(containerInde
 | `durability` | number | no |  |
 | `maxDurability` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durability, maxDurability = C_Container.GetContainerItemDurability(1, 1)
@@ -268,7 +268,7 @@ inSet, setList = C_Container.GetContainerItemEquipmentSetInfo(containerIndex, sl
 | `inSet` | bool | no |  |
 | `setList` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inSet, setList = C_Container.GetContainerItemEquipmentSetInfo(1, 1)
@@ -293,7 +293,7 @@ containerID = C_Container.GetContainerItemID(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `containerID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local containerID = C_Container.GetContainerItemID(1, 1)
@@ -321,7 +321,11 @@ containerInfo = C_Container.GetContainerItemInfo(containerIndex, slotIndex)
 **Example**
 
 ```lua
-local containerInfo = C_Container.GetContainerItemInfo(1, 1)
+-- Returns a ContainerItemInfo table, or nil for an empty slot
+local info = C_Container.GetContainerItemInfo(0, 1)
+if info then
+    print(info.itemID, info.stackCount, info.hyperlink)
+end
 ```
 
 ### C_Container.GetContainerItemLink
@@ -343,7 +347,7 @@ itemLink = C_Container.GetContainerItemLink(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `itemLink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLink = C_Container.GetContainerItemLink(1, 1)
@@ -370,7 +374,7 @@ currencyInfo = C_Container.GetContainerItemPurchaseCurrency(containerIndex, slot
 |------|------|---------|-------------|
 | `currencyInfo` | ItemPurchaseCurrency | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyInfo = C_Container.GetContainerItemPurchaseCurrency(1, 1, 1, false)
@@ -396,7 +400,7 @@ info = C_Container.GetContainerItemPurchaseInfo(containerIndex, slotIndex, isEqu
 |------|------|---------|-------------|
 | `info` | ItemPurchaseInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Container.GetContainerItemPurchaseInfo(1, 1, false)
@@ -423,7 +427,7 @@ itemInfo = C_Container.GetContainerItemPurchaseItem(containerIndex, slotIndex, i
 |------|------|---------|-------------|
 | `itemInfo` | ItemPurchaseItem | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemInfo = C_Container.GetContainerItemPurchaseItem(1, 1, 1, false)
@@ -448,7 +452,7 @@ questInfo = C_Container.GetContainerItemQuestInfo(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `questInfo` | ItemQuestInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questInfo = C_Container.GetContainerItemQuestInfo(1, 1)
@@ -473,7 +477,7 @@ numFreeSlots, bagFamily = C_Container.GetContainerNumFreeSlots(bagIndex)
 | `numFreeSlots` | number | no |  |
 | `bagFamily` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numFreeSlots, bagFamily = C_Container.GetContainerNumFreeSlots(1)
@@ -500,7 +504,8 @@ numSlots = C_Container.GetContainerNumSlots(containerIndex)
 **Example**
 
 ```lua
-local numSlots = C_Container.GetContainerNumSlots(1)
+local slots = C_Container.GetContainerNumSlots(0)  -- bagID 0 = backpack
+print(slots)
 ```
 
 ### C_Container.GetInsertItemsLeftToRight
@@ -515,7 +520,7 @@ isEnabled = C_Container.GetInsertItemsLeftToRight()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_Container.GetInsertItemsLeftToRight()
@@ -541,7 +546,7 @@ startTime, duration, enable = C_Container.GetItemCooldown(itemID)
 | `duration` | number | no |  |
 | `enable` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime, duration, enable = C_Container.GetItemCooldown(6948)
@@ -559,7 +564,7 @@ maxCurrency = C_Container.GetMaxArenaCurrency()
 |------|------|---------|-------------|
 | `maxCurrency` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxCurrency = C_Container.GetMaxArenaCurrency()
@@ -577,7 +582,7 @@ isEnabled = C_Container.GetSortBagsRightToLeft()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_Container.GetSortBagsRightToLeft()
@@ -602,7 +607,7 @@ hasItem = C_Container.HasContainerItem(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `hasItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasItem = C_Container.HasContainerItem(1, 1)
@@ -627,7 +632,7 @@ isBattlePayItem = C_Container.IsBattlePayItem(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `isBattlePayItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBattlePayItem = C_Container.IsBattlePayItem(1, 1)
@@ -651,7 +656,7 @@ isFiltered = C_Container.IsContainerFiltered(containerIndex)
 |------|------|---------|-------------|
 | `isFiltered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFiltered = C_Container.IsContainerFiltered(1)
@@ -670,7 +675,7 @@ C_Container.PickupContainerItem(containerIndex, slotIndex)
 | `containerIndex` | BagIndex | no |  |
 | `slotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.PickupContainerItem(1, 1)
@@ -688,7 +693,7 @@ itemID = C_Container.PlayerHasHearthstone()
 |------|------|---------|-------------|
 | `itemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_Container.PlayerHasHearthstone()
@@ -706,7 +711,7 @@ C_Container.SetBackpackAutosortDisabled(disable)
 |------|------|---------|-------------|
 | `disable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetBackpackAutosortDisabled(false)
@@ -724,7 +729,7 @@ C_Container.SetBackpackSellJunkDisabled(disable)
 |------|------|---------|-------------|
 | `disable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetBackpackSellJunkDisabled(false)
@@ -743,7 +748,7 @@ C_Container.SetBagPortraitTexture(texture, bagIndex)
 | `texture` | SimpleTexture | no |  |
 | `bagIndex` | BagIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetBagPortraitTexture(texture, 1)
@@ -763,7 +768,7 @@ C_Container.SetBagSlotFlag(bagIndex, flag, isSet)
 | `flag` | BagSlotFlags | no |  |
 | `isSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetBagSlotFlag(1, flag, false)
@@ -781,7 +786,7 @@ C_Container.SetBankAutosortDisabled(disable)
 |------|------|---------|-------------|
 | `disable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetBankAutosortDisabled(false)
@@ -799,7 +804,7 @@ C_Container.SetInsertItemsLeftToRight(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetInsertItemsLeftToRight(false)
@@ -817,7 +822,7 @@ C_Container.SetItemSearch(searchString)
 |------|------|---------|-------------|
 | `searchString` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetItemSearch("")
@@ -835,7 +840,7 @@ C_Container.SetSortBagsRightToLeft(enable)
 |------|------|---------|-------------|
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SetSortBagsRightToLeft(false)
@@ -854,7 +859,7 @@ C_Container.ShowContainerSellCursor(containerIndex, slotIndex)
 | `containerIndex` | BagIndex | no |  |
 | `slotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.ShowContainerSellCursor(1, 1)
@@ -879,7 +884,7 @@ success = C_Container.SocketContainerItem(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_Container.SocketContainerItem(1, 1)
@@ -891,7 +896,7 @@ local success = C_Container.SocketContainerItem(1, 1)
 C_Container.SortAccountBankBags()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SortAccountBankBags()
@@ -903,7 +908,7 @@ C_Container.SortAccountBankBags()
 C_Container.SortBags()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SortBags()
@@ -921,7 +926,7 @@ C_Container.SortBank(bankType)
 |------|------|---------|-------------|
 | `bankType` | BankType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SortBank(bankType)
@@ -933,7 +938,7 @@ C_Container.SortBank(bankType)
 C_Container.SortBankBags()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SortBankBags()
@@ -953,7 +958,7 @@ C_Container.SplitContainerItem(containerIndex, slotIndex, amount)
 | `slotIndex` | luaIndex | no |  |
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.SplitContainerItem(1, 1, 0)
@@ -975,7 +980,7 @@ C_Container.UseContainerItem(containerIndex, slotIndex, [unitToken], [bankType],
 | `bankType` | BankType | yes |  |
 | `reagentBankOpen` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Container.UseContainerItem(1, 1, false)
@@ -993,7 +998,7 @@ used = C_Container.UseHearthstone()
 |------|------|---------|-------------|
 | `used` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local used = C_Container.UseHearthstone()

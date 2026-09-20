@@ -26,7 +26,7 @@ errorName, soundKitID, voiceID = GetGameMessageInfo(gameErrorIndex)
 | `soundKitID` | number | yes |  |
 | `voiceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local errorName, soundKitID, voiceID = GetGameMessageInfo(1)
@@ -38,7 +38,7 @@ local errorName, soundKitID, voiceID = GetGameMessageInfo(1)
 NotWhileDeadError()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NotWhileDeadError()

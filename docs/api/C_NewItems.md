@@ -12,7 +12,7 @@
 C_NewItems.ClearAll()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NewItems.ClearAll()
@@ -37,7 +37,7 @@ isNew = C_NewItems.IsNewItem(containerIndex, slotIndex)
 |------|------|---------|-------------|
 | `isNew` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNew = C_NewItems.IsNewItem(1, 1)
@@ -56,7 +56,7 @@ C_NewItems.RemoveNewItem(containerIndex, slotIndex)
 | `containerIndex` | BagIndex | no |  |
 | `slotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NewItems.RemoveNewItem(1, 1)

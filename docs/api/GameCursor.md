@@ -12,7 +12,7 @@
 ClearCursor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearCursor()
@@ -24,7 +24,7 @@ ClearCursor()
 ClearCursorHoveredItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearCursorHoveredItem()
@@ -42,7 +42,7 @@ result = CursorHasItem()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CursorHasItem()
@@ -60,7 +60,7 @@ result = CursorHasMacro()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CursorHasMacro()
@@ -78,7 +78,7 @@ result = CursorHasMoney()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CursorHasMoney()
@@ -96,7 +96,7 @@ result = CursorHasSpell()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CursorHasSpell()
@@ -108,7 +108,7 @@ local result = CursorHasSpell()
 DeleteCursorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DeleteCursorItem()
@@ -120,7 +120,7 @@ DeleteCursorItem()
 DropCursorMoney()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DropCursorMoney()
@@ -138,7 +138,7 @@ EquipCursorItem(slot)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 EquipCursorItem(1)
@@ -150,7 +150,7 @@ EquipCursorItem(1)
 GetCursorInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 GetCursorInfo()
@@ -168,7 +168,7 @@ amount = GetCursorMoney()
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = GetCursorMoney()
@@ -186,10 +186,10 @@ PickupPlayerMoney(amount)
 |------|------|---------|-------------|
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-PickupPlayerMoney(amount)
+PickupPlayerMoney(0)
 ```
 
 ### GameCursor.ResetCursor
@@ -198,7 +198,7 @@ PickupPlayerMoney(amount)
 ResetCursor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetCursor()
@@ -210,7 +210,7 @@ ResetCursor()
 SellCursorItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SellCursorItem()
@@ -234,7 +234,7 @@ result = SetCursor([name])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = SetCursor()
@@ -258,7 +258,7 @@ result = SetCursorByMode(mode)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = SetCursorByMode(mode)
@@ -276,7 +276,7 @@ SetCursorHoveredItem(item)
 |------|------|---------|-------------|
 | `item` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCursorHoveredItem(6948)
@@ -294,7 +294,7 @@ SetCursorHoveredItemTradeItem(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCursorHoveredItemTradeItem(false)
@@ -313,7 +313,7 @@ SetCursorVirtualItem(itemInfo, cursorType)
 | `itemInfo` | ItemInfo | no |  |
 | `cursorType` | UICursorType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCursorVirtualItem(6948, cursorType)

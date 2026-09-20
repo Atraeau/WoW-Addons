@@ -20,7 +20,7 @@ CinematicFinished(movieType, userCanceled, didError)
 | `userCanceled` | bool | no | (default: False) |
 | `didError` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CinematicFinished(movieType, false, false)
@@ -40,7 +40,7 @@ CinematicStarted(movieType, movieID, canCancel)
 | `movieID` | number | no |  |
 | `canCancel` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CinematicStarted(movieType, 0, false)
@@ -58,7 +58,7 @@ summary = GetCurrentCinematicSummary()
 |------|------|---------|-------------|
 | `summary` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local summary = GetCurrentCinematicSummary()
@@ -76,7 +76,7 @@ inCinematic = InCinematic()
 |------|------|---------|-------------|
 | `inCinematic` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inCinematic = InCinematic()
@@ -94,7 +94,7 @@ MouseOverrideCinematicDisable(doOverride)
 |------|------|---------|-------------|
 | `doOverride` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 MouseOverrideCinematicDisable(false)
@@ -106,7 +106,7 @@ MouseOverrideCinematicDisable(false)
 OpeningCinematic()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OpeningCinematic()
@@ -118,7 +118,7 @@ OpeningCinematic()
 StopCinematic()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopCinematic()

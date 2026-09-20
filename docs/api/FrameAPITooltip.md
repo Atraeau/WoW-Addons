@@ -19,7 +19,7 @@ AddFontStrings(leftFontString, rightFontString)
 | `leftFontString` | SimpleFontString | no |  |
 | `rightFontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddFontStrings(leftFontString, rightFontString)
@@ -33,7 +33,7 @@ Set all padding values to 0.0 and remove the Padding SecretAspect.
 ClearPadding()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPadding()
@@ -57,10 +57,10 @@ leftFontString = GetLeftLine(line)
 |------|------|---------|-------------|
 | `leftFontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local leftFontString = GetLeftLine(line)
+local leftFontString = GetLeftLine(1)
 ```
 
 ### FrameAPITooltip.GetMinimumWidth
@@ -76,7 +76,7 @@ width, forced = GetMinimumWidth()
 | `width` | number | no |  |
 | `forced` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width, forced = GetMinimumWidth()
@@ -97,7 +97,7 @@ right, bottom, left, top = GetPadding()
 | `left` | number | no |  |
 | `top` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local right, bottom, left, top = GetPadding()
@@ -121,10 +121,10 @@ rightFontString = GetRightLine(line)
 |------|------|---------|-------------|
 | `rightFontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local rightFontString = GetRightLine(line)
+local rightFontString = GetRightLine(1)
 ```
 
 ### FrameAPITooltip.SetMinimumWidth
@@ -140,7 +140,7 @@ SetMinimumWidth(width, force)
 | `width` | number | no |  |
 | `force` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinimumWidth(0, false)
@@ -161,7 +161,7 @@ SetPadding(right, bottom, [left], [top])
 | `left` | number | yes |  |
 | `top` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPadding(0, 0)
@@ -184,7 +184,7 @@ SetText(text, colorR, colorG, colorB, alpha, wrap)
 | `alpha` | number | no | (default: 1) |
 | `wrap` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetText("", 0, 0, 0, 0, false)

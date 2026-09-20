@@ -18,7 +18,7 @@ expansionID = C_SeasonInfo.GetCurrentDisplaySeasonExpansion()
 |------|------|---------|-------------|
 | `expansionID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local expansionID = C_SeasonInfo.GetCurrentDisplaySeasonExpansion()
@@ -36,7 +36,7 @@ seasonID = C_SeasonInfo.GetCurrentDisplaySeasonID()
 |------|------|---------|-------------|
 | `seasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seasonID = C_SeasonInfo.GetCurrentDisplaySeasonID()
@@ -54,7 +54,7 @@ timeInSeconds = C_SeasonInfo.GetTimeUntilCurrentPVPSeasonEnd()
 |------|------|---------|-------------|
 | `timeInSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeInSeconds = C_SeasonInfo.GetTimeUntilCurrentPVPSeasonEnd()

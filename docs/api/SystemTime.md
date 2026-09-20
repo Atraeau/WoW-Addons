@@ -19,7 +19,7 @@ hour, minute = GetGameTime()
 | `hour` | number | no |  |
 | `minute` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hour, minute = GetGameTime()
@@ -38,7 +38,7 @@ hour, minute = GetLocalGameTime()
 | `hour` | number | no |  |
 | `minute` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hour, minute = GetLocalGameTime()
@@ -56,7 +56,7 @@ time = GetServerTime()
 |------|------|---------|-------------|
 | `time` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = GetServerTime()
@@ -74,7 +74,7 @@ time = GetSessionTime()
 |------|------|---------|-------------|
 | `time` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = GetSessionTime()
@@ -92,7 +92,7 @@ time = GetTickTime()
 |------|------|---------|-------------|
 | `time` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = GetTickTime()
@@ -113,7 +113,10 @@ time = GetTime()
 **Example**
 
 ```lua
-local time = GetTime()
+-- High-precision seconds since client start; use for timers/throttling, not wall-clock.
+local start = GetTime()
+-- ... later ...
+print(("elapsed: %.3fs"):format(GetTime() - start))
 ```
 
 ### SystemTime.IsUsingFixedTimeStep
@@ -128,7 +131,7 @@ isUsingFixedTimeStep = IsUsingFixedTimeStep()
 |------|------|---------|-------------|
 | `isUsingFixedTimeStep` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingFixedTimeStep = IsUsingFixedTimeStep()

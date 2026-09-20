@@ -12,7 +12,7 @@
 C_SplashScreen.AcknowledgeSplash()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SplashScreen.AcknowledgeSplash()
@@ -30,7 +30,7 @@ canView = C_SplashScreen.CanViewSplashScreen()
 |------|------|---------|-------------|
 | `canView` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canView = C_SplashScreen.CanViewSplashScreen()
@@ -48,7 +48,7 @@ C_SplashScreen.RequestLatestSplashScreen(fromGameMenu)
 |------|------|---------|-------------|
 | `fromGameMenu` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SplashScreen.RequestLatestSplashScreen(false)
@@ -60,7 +60,7 @@ C_SplashScreen.RequestLatestSplashScreen(false)
 C_SplashScreen.SendSplashScreenActionLaunchedTelem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SplashScreen.SendSplashScreenActionLaunchedTelem()
@@ -72,7 +72,7 @@ C_SplashScreen.SendSplashScreenActionLaunchedTelem()
 C_SplashScreen.SendSplashScreenCloseTelem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SplashScreen.SendSplashScreenCloseTelem()

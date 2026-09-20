@@ -18,7 +18,7 @@ IsFirstLoadThisSession = C_Glue.IsFirstLoadThisSession()
 |------|------|---------|-------------|
 | `IsFirstLoadThisSession` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local IsFirstLoadThisSession = C_Glue.IsFirstLoadThisSession()
@@ -36,7 +36,7 @@ isOnGlueScreen = C_Glue.IsOnGlueScreen()
 |------|------|---------|-------------|
 | `isOnGlueScreen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOnGlueScreen = C_Glue.IsOnGlueScreen()

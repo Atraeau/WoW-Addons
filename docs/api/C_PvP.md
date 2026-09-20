@@ -18,7 +18,7 @@ arePvpTalentsUnlocked = C_PvP.ArePvpTalentsUnlocked()
 |------|------|---------|-------------|
 | `arePvpTalentsUnlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local arePvpTalentsUnlocked = C_PvP.ArePvpTalentsUnlocked()
@@ -36,7 +36,7 @@ areTrainingGroundsEnabled = C_PvP.AreTrainingGroundsEnabled()
 |------|------|---------|-------------|
 | `areTrainingGroundsEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areTrainingGroundsEnabled = C_PvP.AreTrainingGroundsEnabled()
@@ -54,7 +54,7 @@ canDisplay = C_PvP.CanDisplayDeaths()
 |------|------|---------|-------------|
 | `canDisplay` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canDisplay = C_PvP.CanDisplayDeaths()
@@ -72,7 +72,7 @@ canDisplay = C_PvP.CanDisplayHonorableKills()
 |------|------|---------|-------------|
 | `canDisplay` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canDisplay = C_PvP.CanDisplayHonorableKills()
@@ -91,7 +91,7 @@ canUse, failureReason = C_PvP.CanPlayerUseRatedPVPUI()
 | `canUse` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse, failureReason = C_PvP.CanPlayerUseRatedPVPUI()
@@ -110,7 +110,7 @@ canUseTrainingGroundsUI, failureReason = C_PvP.CanPlayerUseTrainingGroundsUI()
 | `canUseTrainingGroundsUI` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseTrainingGroundsUI, failureReason = C_PvP.CanPlayerUseTrainingGroundsUI()
@@ -128,7 +128,7 @@ CanSurrenderArena = C_PvP.CanSurrenderArena()
 |------|------|---------|-------------|
 | `CanSurrenderArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local CanSurrenderArena = C_PvP.CanSurrenderArena()
@@ -152,7 +152,7 @@ canTogglePvP = C_PvP.CanToggleWarMode(toggle)
 |------|------|---------|-------------|
 | `canTogglePvP` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canTogglePvP = C_PvP.CanToggleWarMode(false)
@@ -170,7 +170,7 @@ canTogglePvPInArea = C_PvP.CanToggleWarModeInArea()
 |------|------|---------|-------------|
 | `canTogglePvPInArea` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canTogglePvPInArea = C_PvP.CanToggleWarModeInArea()
@@ -188,7 +188,7 @@ doesAffect = C_PvP.DoesMatchOutcomeAffectRating()
 |------|------|---------|-------------|
 | `doesAffect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesAffect = C_PvP.DoesMatchOutcomeAffectRating()
@@ -206,7 +206,7 @@ brawlInfo = C_PvP.GetActiveBrawlInfo()
 |------|------|---------|-------------|
 | `brawlInfo` | PvpBrawlInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local brawlInfo = C_PvP.GetActiveBrawlInfo()
@@ -224,7 +224,7 @@ bracket = C_PvP.GetActiveMatchBracket()
 |------|------|---------|-------------|
 | `bracket` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bracket = C_PvP.GetActiveMatchBracket()
@@ -242,7 +242,7 @@ seconds = C_PvP.GetActiveMatchDuration()
 |------|------|---------|-------------|
 | `seconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = C_PvP.GetActiveMatchDuration()
@@ -260,7 +260,7 @@ state = C_PvP.GetActiveMatchState()
 |------|------|---------|-------------|
 | `state` | PvPMatchState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_PvP.GetActiveMatchState()
@@ -278,7 +278,7 @@ winner = C_PvP.GetActiveMatchWinner()
 |------|------|---------|-------------|
 | `winner` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local winner = C_PvP.GetActiveMatchWinner()
@@ -302,7 +302,7 @@ duration = C_PvP.GetArenaCrowdControlDuration(playerToken)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_PvP.GetArenaCrowdControlDuration(playerToken)
@@ -328,7 +328,7 @@ spellID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)
 | `startTime` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)
@@ -356,7 +356,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetAr
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetArenaRewards(0)
@@ -378,7 +378,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetAr
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetArenaSkirmishRewards()
@@ -402,7 +402,7 @@ specializationID = C_PvP.GetAssignedSpecForBattlefieldQueue(queueID)
 |------|------|---------|-------------|
 | `specializationID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specializationID = C_PvP.GetAssignedSpecForBattlefieldQueue(0)
@@ -422,7 +422,7 @@ brawlInfo = C_PvP.GetAvailableBrawlInfo()
 |------|------|---------|-------------|
 | `brawlInfo` | PvpBrawlInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local brawlInfo = C_PvP.GetAvailableBrawlInfo()
@@ -449,7 +449,7 @@ uiPosx, uiPosy, flagTexture = C_PvP.GetBattlefieldFlagPosition(flagIndex, uiMapI
 | `uiPosy` | number | yes |  |
 | `flagTexture` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiPosx, uiPosy, flagTexture = C_PvP.GetBattlefieldFlagPosition(1, 0)
@@ -474,7 +474,7 @@ info = C_PvP.GetBattlefieldVehicleInfo(vehicleIndex, uiMapID)
 |------|------|---------|-------------|
 | `info` | BattlefieldVehicleInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetBattlefieldVehicleInfo(1, 0)
@@ -498,7 +498,7 @@ vehicles = C_PvP.GetBattlefieldVehicles(uiMapID)
 |------|------|---------|-------------|
 | `vehicles` | BattlefieldVehicleInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vehicles = C_PvP.GetBattlefieldVehicles(0)
@@ -522,7 +522,7 @@ battlegroundInfo = C_PvP.GetBattlegroundInfo(battlegroundIndex)
 |------|------|---------|-------------|
 | `battlegroundInfo` | BattlegroundInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local battlegroundInfo = C_PvP.GetBattlegroundInfo(1)
@@ -551,10 +551,10 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus, hasWon = C_P
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 | `hasWon` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local honor, experience, itemRewards, currencyRewards, roleShortageBonus, hasWon = C_PvP.GetBrawlRewards(brawlType)
+local honor, experience, itemRewards, currencyRewards, roleShortageBonus, hasWon = C_PvP.GetBrawlRewards(Enum.BrawlType.None)
 ```
 
 ### C_PvP.GetBrawlSoloRBGMinItemLevel
@@ -569,7 +569,7 @@ minItemLevel = C_PvP.GetBrawlSoloRBGMinItemLevel()
 |------|------|---------|-------------|
 | `minItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minItemLevel = C_PvP.GetBrawlSoloRBGMinItemLevel()
@@ -587,7 +587,7 @@ statID = C_PvP.GetCustomVictoryStatID()
 |------|------|---------|-------------|
 | `statID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local statID = C_PvP.GetCustomVictoryStatID()
@@ -611,7 +611,7 @@ pvpScalingData = C_PvP.GetGlobalPvpScalingInfoForSpecID(specializationID)
 |------|------|---------|-------------|
 | `pvpScalingData` | PvpScalingData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pvpScalingData = C_PvP.GetGlobalPvpScalingInfoForSpecID(0)
@@ -635,7 +635,7 @@ info = C_PvP.GetHonorRewardInfo(honorLevel)
 |------|------|---------|-------------|
 | `info` | HonorRewardInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetHonorRewardInfo(0)
@@ -659,7 +659,7 @@ battlefields = C_PvP.GetLevelUpBattlegrounds(level)
 |------|------|---------|-------------|
 | `battlefields` | LevelUpBattlegroundInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local battlefields = C_PvP.GetLevelUpBattlegrounds(0)
@@ -683,7 +683,7 @@ info = C_PvP.GetMatchPVPStatColumn(pvpStatID)
 |------|------|---------|-------------|
 | `info` | MatchPVPStatColumn | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetMatchPVPStatColumn(0)
@@ -701,7 +701,7 @@ columns = C_PvP.GetMatchPVPStatColumns()
 |------|------|---------|-------------|
 | `columns` | MatchPVPStatColumn[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local columns = C_PvP.GetMatchPVPStatColumns()
@@ -725,7 +725,7 @@ nextHonorLevelWithReward = C_PvP.GetNextHonorLevelForReward(honorLevel)
 |------|------|---------|-------------|
 | `nextHonorLevelWithReward` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nextHonorLevelWithReward = C_PvP.GetNextHonorLevelForReward(0)
@@ -749,7 +749,7 @@ pvpWaitTime = C_PvP.GetOutdoorPvPWaitTime(uiMapID)
 |------|------|---------|-------------|
 | `pvpWaitTime` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pvpWaitTime = C_PvP.GetOutdoorPvPWaitTime(0)
@@ -767,7 +767,7 @@ specStats = C_PvP.GetPersonalRatedBGBlitzSpecStats()
 |------|------|---------|-------------|
 | `specStats` | RatedBGBlitzSpecStats | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specStats = C_PvP.GetPersonalRatedBGBlitzSpecStats()
@@ -785,7 +785,7 @@ specStats = C_PvP.GetPersonalRatedSoloShuffleSpecStats()
 |------|------|---------|-------------|
 | `specStats` | RatedSoloShuffleSpecStats | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specStats = C_PvP.GetPersonalRatedSoloShuffleSpecStats()
@@ -803,7 +803,7 @@ rewards = C_PvP.GetPostMatchCurrencyRewards()
 |------|------|---------|-------------|
 | `rewards` | PVPPostMatchCurrencyReward[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewards = C_PvP.GetPostMatchCurrencyRewards()
@@ -821,7 +821,7 @@ rewards = C_PvP.GetPostMatchItemRewards()
 |------|------|---------|-------------|
 | `rewards` | PVPPostMatchItemReward[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewards = C_PvP.GetPostMatchItemRewards()
@@ -839,7 +839,7 @@ info = C_PvP.GetPVPActiveMatchPersonalRatedInfo()
 |------|------|---------|-------------|
 | `info` | PVPPersonalRatedInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetPVPActiveMatchPersonalRatedInfo()
@@ -857,7 +857,7 @@ deserterPenalty = C_PvP.GetPVPActiveRatedMatchDeserterPenalty()
 |------|------|---------|-------------|
 | `deserterPenalty` | RatedMatchDeserterPenalty | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deserterPenalty = C_PvP.GetPVPActiveRatedMatchDeserterPenalty()
@@ -875,7 +875,7 @@ achievementID = C_PvP.GetPVPSeasonRewardAchievementID()
 |------|------|---------|-------------|
 | `achievementID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local achievementID = C_PvP.GetPVPSeasonRewardAchievementID()
@@ -893,7 +893,7 @@ unlockLevel = C_PvP.GetPvpTalentsUnlockedLevel()
 |------|------|---------|-------------|
 | `unlockLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unlockLevel = C_PvP.GetPvpTalentsUnlockedLevel()
@@ -918,10 +918,10 @@ id = C_PvP.GetPvpTierID(tierEnum, bracketEnum)
 |------|------|---------|-------------|
 | `id` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local id = C_PvP.GetPvpTierID(0, bracketEnum)
+local id = C_PvP.GetPvpTierID(0, 1)
 ```
 
 ### C_PvP.GetPvpTierInfo
@@ -942,7 +942,7 @@ pvpTierInfo = C_PvP.GetPvpTierInfo(tierID)
 |------|------|---------|-------------|
 | `pvpTierInfo` | PvpTierInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pvpTierInfo = C_PvP.GetPvpTierInfo(0)
@@ -960,7 +960,7 @@ info = C_PvP.GetRandomBGInfo()
 |------|------|---------|-------------|
 | `info` | RandomBGInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetRandomBGInfo()
@@ -982,7 +982,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRandomBGRewards()
@@ -1000,7 +1000,7 @@ info = C_PvP.GetRandomEpicBGInfo()
 |------|------|---------|-------------|
 | `info` | RandomBGInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetRandomEpicBGInfo()
@@ -1022,7 +1022,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRandomEpicBGRewards()
@@ -1044,7 +1044,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRandomTrainingGroundArenaRewards()
@@ -1066,7 +1066,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRandomTrainingGroundBGRewards()
@@ -1088,7 +1088,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRatedBGRewards()
@@ -1106,7 +1106,7 @@ minItemLevel = C_PvP.GetRatedSoloRBGMinItemLevel()
 |------|------|---------|-------------|
 | `minItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minItemLevel = C_PvP.GetRatedSoloRBGMinItemLevel()
@@ -1128,7 +1128,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRatedSoloRBGRewards()
@@ -1146,7 +1146,7 @@ minItemLevel = C_PvP.GetRatedSoloShuffleMinItemLevel()
 |------|------|---------|-------------|
 | `minItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minItemLevel = C_PvP.GetRatedSoloShuffleMinItemLevel()
@@ -1168,7 +1168,7 @@ honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRa
 | `currencyRewards` | BattlefieldCurrencyReward[] | yes |  |
 | `roleShortageBonus` | RoleShortageReward | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local honor, experience, itemRewards, currencyRewards, roleShortageBonus = C_PvP.GetRatedSoloShuffleRewards()
@@ -1193,7 +1193,7 @@ activityItemLevel, weeklyItemLevel = C_PvP.GetRewardItemLevelsByTierEnum(pvpTier
 | `activityItemLevel` | number | no |  |
 | `weeklyItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activityItemLevel, weeklyItemLevel = C_PvP.GetRewardItemLevelsByTierEnum(0)
@@ -1217,7 +1217,7 @@ info = C_PvP.GetScoreInfo(offsetIndex)
 |------|------|---------|-------------|
 | `info` | PVPScoreInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetScoreInfo(1)
@@ -1241,10 +1241,10 @@ info = C_PvP.GetScoreInfoByPlayerGuid(guid)
 |------|------|---------|-------------|
 | `info` | PVPScoreInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_PvP.GetScoreInfoByPlayerGuid("Creature-0-0000-0-0-0-0")
+local info = C_PvP.GetScoreInfoByPlayerGuid(UnitGUID("player"))
 ```
 
 ### C_PvP.GetSeasonBestInfo
@@ -1260,7 +1260,7 @@ tierID, nextTierID = C_PvP.GetSeasonBestInfo()
 | `tierID` | number | no |  |
 | `nextTierID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tierID, nextTierID = C_PvP.GetSeasonBestInfo()
@@ -1284,7 +1284,7 @@ battlemasterListInfo = C_PvP.GetSkirmishInfo(pvpBracket)
 |------|------|---------|-------------|
 | `battlemasterListInfo` | BattlemasterListInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local battlemasterListInfo = C_PvP.GetSkirmishInfo(0)
@@ -1302,7 +1302,7 @@ brawlInfo = C_PvP.GetSpecialEventBrawlInfo()
 |------|------|---------|-------------|
 | `brawlInfo` | PvpBrawlInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local brawlInfo = C_PvP.GetSpecialEventBrawlInfo()
@@ -1326,7 +1326,7 @@ info = C_PvP.GetTeamInfo(factionIndex)
 |------|------|---------|-------------|
 | `info` | PVPTeamInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PvP.GetTeamInfo(1)
@@ -1344,7 +1344,7 @@ trainingGrounds = C_PvP.GetTrainingGrounds()
 |------|------|---------|-------------|
 | `trainingGrounds` | BattlegroundInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trainingGrounds = C_PvP.GetTrainingGrounds()
@@ -1362,7 +1362,7 @@ uiDisplaySeason = C_PvP.GetUIDisplaySeason()
 |------|------|---------|-------------|
 | `uiDisplaySeason` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiDisplaySeason = C_PvP.GetUIDisplaySeason()
@@ -1380,7 +1380,7 @@ rewardBonus = C_PvP.GetWarModeRewardBonus()
 |------|------|---------|-------------|
 | `rewardBonus` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewardBonus = C_PvP.GetWarModeRewardBonus()
@@ -1398,7 +1398,7 @@ defaultBonus = C_PvP.GetWarModeRewardBonusDefault()
 |------|------|---------|-------------|
 | `defaultBonus` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultBonus = C_PvP.GetWarModeRewardBonusDefault()
@@ -1419,7 +1419,7 @@ rewardAchieved, lastWeekRewardAchieved, lastWeekRewardClaimed, pvpTierMaxFromWin
 | `lastWeekRewardClaimed` | bool | no |  |
 | `pvpTierMaxFromWins` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewardAchieved, lastWeekRewardAchieved, lastWeekRewardClaimed, pvpTierMaxFromWins = C_PvP.GetWeeklyChestInfo()
@@ -1439,7 +1439,7 @@ pvpType, isSubZonePvP, factionName = C_PvP.GetZonePVPInfo()
 | `isSubZonePvP` | bool | no |  |
 | `factionName` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pvpType, isSubZonePvP, factionName = C_PvP.GetZonePVPInfo()
@@ -1457,7 +1457,7 @@ hasArenaSkirmishWinToday = C_PvP.HasArenaSkirmishWinToday()
 |------|------|---------|-------------|
 | `hasArenaSkirmishWinToday` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasArenaSkirmishWinToday = C_PvP.HasArenaSkirmishWinToday()
@@ -1477,7 +1477,7 @@ hasStarted = C_PvP.HasMatchStarted()
 |------|------|---------|-------------|
 | `hasStarted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasStarted = C_PvP.HasMatchStarted()
@@ -1495,7 +1495,7 @@ hasRandomTrainingGroundArenaWinToday = C_PvP.HasRandomTrainingGroundArenaWinToda
 |------|------|---------|-------------|
 | `hasRandomTrainingGroundArenaWinToday` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasRandomTrainingGroundArenaWinToday = C_PvP.HasRandomTrainingGroundArenaWinToday()
@@ -1513,7 +1513,7 @@ hasRandomTrainingGroundBGWinToday = C_PvP.HasRandomTrainingGroundBGWinToday()
 |------|------|---------|-------------|
 | `hasRandomTrainingGroundBGWinToday` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasRandomTrainingGroundBGWinToday = C_PvP.HasRandomTrainingGroundBGWinToday()
@@ -1531,7 +1531,7 @@ isActiveBattlefield = C_PvP.IsActiveBattlefield()
 |------|------|---------|-------------|
 | `isActiveBattlefield` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActiveBattlefield = C_PvP.IsActiveBattlefield()
@@ -1549,7 +1549,7 @@ registered = C_PvP.IsActiveMatchRegistered()
 |------|------|---------|-------------|
 | `registered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local registered = C_PvP.IsActiveMatchRegistered()
@@ -1567,7 +1567,7 @@ isArena = C_PvP.IsArena()
 |------|------|---------|-------------|
 | `isArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isArena = C_PvP.IsArena()
@@ -1585,7 +1585,7 @@ isBattleground = C_PvP.IsBattleground()
 |------|------|---------|-------------|
 | `isBattleground` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBattleground = C_PvP.IsBattleground()
@@ -1604,7 +1604,7 @@ battlegroundActive, brawlActive = C_PvP.IsBattlegroundEnlistmentBonusActive()
 | `battlegroundActive` | bool | no |  |
 | `brawlActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local battlegroundActive, brawlActive = C_PvP.IsBattlegroundEnlistmentBonusActive()
@@ -1622,7 +1622,7 @@ isBrawlSoloRBG = C_PvP.IsBrawlSoloRBG()
 |------|------|---------|-------------|
 | `isBrawlSoloRBG` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBrawlSoloRBG = C_PvP.IsBrawlSoloRBG()
@@ -1640,7 +1640,7 @@ isBrawlSoloShuffle = C_PvP.IsBrawlSoloShuffle()
 |------|------|---------|-------------|
 | `isBrawlSoloShuffle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBrawlSoloShuffle = C_PvP.IsBrawlSoloShuffle()
@@ -1658,7 +1658,7 @@ isInBrawl = C_PvP.IsInBrawl()
 |------|------|---------|-------------|
 | `isInBrawl` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInBrawl = C_PvP.IsInBrawl()
@@ -1676,7 +1676,7 @@ isInRatedMatchWithDeserterPenalty = C_PvP.IsInRatedMatchWithDeserterPenalty()
 |------|------|---------|-------------|
 | `isInRatedMatchWithDeserterPenalty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInRatedMatchWithDeserterPenalty = C_PvP.IsInRatedMatchWithDeserterPenalty()
@@ -1694,7 +1694,7 @@ isActive = C_PvP.IsMatchActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_PvP.IsMatchActive()
@@ -1712,7 +1712,7 @@ isComplete = C_PvP.IsMatchComplete()
 |------|------|---------|-------------|
 | `isComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isComplete = C_PvP.IsMatchComplete()
@@ -1730,7 +1730,7 @@ asArena = C_PvP.IsMatchConsideredArena()
 |------|------|---------|-------------|
 | `asArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local asArena = C_PvP.IsMatchConsideredArena()
@@ -1748,7 +1748,7 @@ isFactional = C_PvP.IsMatchFactional()
 |------|------|---------|-------------|
 | `isFactional` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFactional = C_PvP.IsMatchFactional()
@@ -1766,7 +1766,7 @@ isPVPMap = C_PvP.IsPVPMap()
 |------|------|---------|-------------|
 | `isPVPMap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPVPMap = C_PvP.IsPVPMap()
@@ -1784,7 +1784,7 @@ isRatedArena = C_PvP.IsRatedArena()
 |------|------|---------|-------------|
 | `isRatedArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRatedArena = C_PvP.IsRatedArena()
@@ -1802,7 +1802,7 @@ isRatedBattleground = C_PvP.IsRatedBattleground()
 |------|------|---------|-------------|
 | `isRatedBattleground` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRatedBattleground = C_PvP.IsRatedBattleground()
@@ -1820,7 +1820,7 @@ isRatedMap = C_PvP.IsRatedMap()
 |------|------|---------|-------------|
 | `isRatedMap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRatedMap = C_PvP.IsRatedMap()
@@ -1838,7 +1838,7 @@ isRatedSoloRBG = C_PvP.IsRatedSoloRBG()
 |------|------|---------|-------------|
 | `isRatedSoloRBG` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRatedSoloRBG = C_PvP.IsRatedSoloRBG()
@@ -1856,7 +1856,7 @@ isRatedSoloShuffle = C_PvP.IsRatedSoloShuffle()
 |------|------|---------|-------------|
 | `isRatedSoloShuffle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRatedSoloShuffle = C_PvP.IsRatedSoloShuffle()
@@ -1874,7 +1874,7 @@ isSoloRBG = C_PvP.IsSoloRBG()
 |------|------|---------|-------------|
 | `isSoloRBG` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSoloRBG = C_PvP.IsSoloRBG()
@@ -1892,7 +1892,7 @@ isSoloShuffle = C_PvP.IsSoloShuffle()
 |------|------|---------|-------------|
 | `isSoloShuffle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSoloShuffle = C_PvP.IsSoloShuffle()
@@ -1910,7 +1910,7 @@ result = C_PvP.IsSubZonePVPPOI()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_PvP.IsSubZonePVPPOI()
@@ -1934,7 +1934,7 @@ isTrainingGroundsArena = C_PvP.IsTrainingGroundsArena(lfgDungeonsID)
 |------|------|---------|-------------|
 | `isTrainingGroundsArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrainingGroundsArena = C_PvP.IsTrainingGroundsArena(0)
@@ -1958,7 +1958,7 @@ isTrainingGroundsBG = C_PvP.IsTrainingGroundsBG(lfgDungeonsID)
 |------|------|---------|-------------|
 | `isTrainingGroundsBG` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrainingGroundsBG = C_PvP.IsTrainingGroundsBG(0)
@@ -1976,7 +1976,7 @@ warModeActive = C_PvP.IsWarModeActive()
 |------|------|---------|-------------|
 | `warModeActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warModeActive = C_PvP.IsWarModeActive()
@@ -1994,7 +1994,7 @@ warModeDesired = C_PvP.IsWarModeDesired()
 |------|------|---------|-------------|
 | `warModeDesired` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warModeDesired = C_PvP.IsWarModeDesired()
@@ -2012,7 +2012,7 @@ warModeEnabled = C_PvP.IsWarModeFeatureEnabled()
 |------|------|---------|-------------|
 | `warModeEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warModeEnabled = C_PvP.IsWarModeFeatureEnabled()
@@ -2030,7 +2030,7 @@ C_PvP.JoinBattlefield(battlemasterListId)
 |------|------|---------|-------------|
 | `battlemasterListId` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinBattlefield(0)
@@ -2048,7 +2048,7 @@ C_PvP.JoinBrawl(isSpecialBrawl)
 |------|------|---------|-------------|
 | `isSpecialBrawl` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinBrawl(false)
@@ -2060,7 +2060,7 @@ C_PvP.JoinBrawl(false)
 C_PvP.JoinRandomTrainingGroundArena()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinRandomTrainingGroundArena()
@@ -2072,7 +2072,7 @@ C_PvP.JoinRandomTrainingGroundArena()
 C_PvP.JoinRandomTrainingGroundBG()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinRandomTrainingGroundBG()
@@ -2084,7 +2084,7 @@ C_PvP.JoinRandomTrainingGroundBG()
 C_PvP.JoinRatedBGBlitz()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinRatedBGBlitz()
@@ -2102,7 +2102,7 @@ C_PvP.JoinTrainingGround(trainingGroundID)
 |------|------|---------|-------------|
 | `trainingGroundID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.JoinTrainingGround(0)
@@ -2120,7 +2120,7 @@ C_PvP.RequestCrowdControlSpell(playerToken)
 |------|------|---------|-------------|
 | `playerToken` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.RequestCrowdControlSpell(playerToken)
@@ -2138,7 +2138,7 @@ C_PvP.SetPVP(enablePVP)
 |------|------|---------|-------------|
 | `enablePVP` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.SetPVP(false)
@@ -2156,7 +2156,7 @@ C_PvP.SetWarModeDesired(warModeDesired)
 |------|------|---------|-------------|
 | `warModeDesired` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.SetWarModeDesired(false)
@@ -2180,7 +2180,7 @@ success = C_PvP.StartSoloRBGWarGameByName(args)
 |------|------|---------|-------------|
 | `success` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_PvP.StartSoloRBGWarGameByName("")
@@ -2207,7 +2207,7 @@ success = C_PvP.StartSpectatorSoloRBGWarGame(opaqueID1, opaqueID2, specifiedMap,
 |------|------|---------|-------------|
 | `success` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_PvP.StartSpectatorSoloRBGWarGame(0, 0, "", false)
@@ -2219,7 +2219,7 @@ local success = C_PvP.StartSpectatorSoloRBGWarGame(0, 0, "", false)
 C_PvP.TogglePVP()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.TogglePVP()
@@ -2231,7 +2231,7 @@ C_PvP.TogglePVP()
 C_PvP.ToggleWarMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PvP.ToggleWarMode()

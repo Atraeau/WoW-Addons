@@ -12,7 +12,7 @@
 C_StableInfo.BuyStableSlot()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StableInfo.BuyStableSlot()
@@ -24,7 +24,7 @@ C_StableInfo.BuyStableSlot()
 C_StableInfo.ClosePetStables()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StableInfo.ClosePetStables()
@@ -42,7 +42,7 @@ activePets = C_StableInfo.GetActivePetList()
 |------|------|---------|-------------|
 | `activePets` | PetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activePets = C_StableInfo.GetActivePetList()
@@ -60,7 +60,7 @@ petSpecInfos = C_StableInfo.GetAvailablePetSpecInfos()
 |------|------|---------|-------------|
 | `petSpecInfos` | PetSpecInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petSpecInfos = C_StableInfo.GetAvailablePetSpecInfos()
@@ -78,7 +78,7 @@ cost = C_StableInfo.GetNextStableSlotCost()
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_StableInfo.GetNextStableSlotCost()
@@ -96,7 +96,7 @@ numActivePets = C_StableInfo.GetNumActivePets()
 |------|------|---------|-------------|
 | `numActivePets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numActivePets = C_StableInfo.GetNumActivePets()
@@ -114,7 +114,7 @@ numStablePets = C_StableInfo.GetNumStablePets()
 |------|------|---------|-------------|
 | `numStablePets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numStablePets = C_StableInfo.GetNumStablePets()
@@ -132,7 +132,7 @@ numSlots = C_StableInfo.GetNumStableSlots()
 |------|------|---------|-------------|
 | `numSlots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSlots = C_StableInfo.GetNumStableSlots()
@@ -150,7 +150,7 @@ stabledPets = C_StableInfo.GetStabledPetList()
 |------|------|---------|-------------|
 | `stabledPets` | PetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stabledPets = C_StableInfo.GetStabledPetList()
@@ -174,7 +174,7 @@ foodTypes = C_StableInfo.GetStablePetFoodTypes(index)
 |------|------|---------|-------------|
 | `foodTypes` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local foodTypes = C_StableInfo.GetStablePetFoodTypes(1)
@@ -198,7 +198,7 @@ petInfo = C_StableInfo.GetStablePetInfo(index)
 |------|------|---------|-------------|
 | `petInfo` | PetInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petInfo = C_StableInfo.GetStablePetInfo(1)
@@ -216,7 +216,7 @@ isAtStableMaster = C_StableInfo.IsAtStableMaster()
 |------|------|---------|-------------|
 | `isAtStableMaster` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtStableMaster = C_StableInfo.IsAtStableMaster()
@@ -234,7 +234,7 @@ isAvailable = C_StableInfo.IsBonusPetSlotAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_StableInfo.IsBonusPetSlotAvailable()
@@ -258,7 +258,7 @@ isFavorite = C_StableInfo.IsPetFavorite(slot)
 |------|------|---------|-------------|
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFavorite = C_StableInfo.IsPetFavorite(1)
@@ -276,7 +276,7 @@ C_StableInfo.PickupStablePet(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StableInfo.PickupStablePet(1)
@@ -295,7 +295,7 @@ C_StableInfo.SetPetFavorite(slot, isFavorite)
 | `slot` | luaIndex | no |  |
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StableInfo.SetPetFavorite(1, false)
@@ -314,7 +314,7 @@ C_StableInfo.SetPetSlot(index, slot)
 | `index` | luaIndex | no |  |
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StableInfo.SetPetSlot(1, 1)

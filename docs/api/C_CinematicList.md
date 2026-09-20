@@ -18,7 +18,7 @@ cinematics = C_CinematicList.GetUICinematicList()
 |------|------|---------|-------------|
 | `cinematics` | UICinematic[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cinematics = C_CinematicList.GetUICinematicList()

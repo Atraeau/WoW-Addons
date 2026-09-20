@@ -24,7 +24,7 @@ chatBubbles = C_ChatBubbles.GetAllChatBubbles(includeForbidden)
 |------|------|---------|-------------|
 | `chatBubbles` | ChatBubbleFrame[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local chatBubbles = C_ChatBubbles.GetAllChatBubbles(false)

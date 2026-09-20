@@ -12,7 +12,7 @@
 C_CovenantPreview.CloseFromUI()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CovenantPreview.CloseFromUI()
@@ -36,7 +36,7 @@ previewInfo = C_CovenantPreview.GetCovenantInfoForPlayerChoiceResponseID(playerC
 |------|------|---------|-------------|
 | `previewInfo` | CovenantPreviewInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local previewInfo = C_CovenantPreview.GetCovenantInfoForPlayerChoiceResponseID(0)

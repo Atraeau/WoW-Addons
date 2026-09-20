@@ -20,7 +20,7 @@ notchPresent = C_UI.DoesAnyDisplayHaveNotch()
 |------|------|---------|-------------|
 | `notchPresent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local notchPresent = C_UI.DoesAnyDisplayHaveNotch()
@@ -43,7 +43,7 @@ left, right, top, bottom = C_UI.GetTopLeftNotchSafeRegion()
 | `top` | number | no |  |
 | `bottom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = C_UI.GetTopLeftNotchSafeRegion()
@@ -66,7 +66,7 @@ left, right, top, bottom = C_UI.GetTopRightNotchSafeRegion()
 | `top` | number | no |  |
 | `bottom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = C_UI.GetTopRightNotchSafeRegion()
@@ -84,7 +84,7 @@ uiParent = C_UI.GetUIParent()
 |------|------|---------|-------------|
 | `uiParent` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiParent = C_UI.GetUIParent()
@@ -102,7 +102,7 @@ worldFrame = C_UI.GetWorldFrame()
 |------|------|---------|-------------|
 | `worldFrame` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local worldFrame = C_UI.GetWorldFrame()
@@ -114,7 +114,7 @@ local worldFrame = C_UI.GetWorldFrame()
 C_UI.Reload()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UI.Reload()
@@ -134,7 +134,7 @@ willAvoidNotch = C_UI.ShouldUIParentAvoidNotch()
 |------|------|---------|-------------|
 | `willAvoidNotch` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local willAvoidNotch = C_UI.ShouldUIParentAvoidNotch()

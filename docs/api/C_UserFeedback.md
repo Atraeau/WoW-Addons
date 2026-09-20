@@ -25,7 +25,7 @@ success = C_UserFeedback.SubmitBug(bugInfo, suppressNotification)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_UserFeedback.SubmitBug("", false)
@@ -49,7 +49,7 @@ success = C_UserFeedback.SubmitSuggestion(suggestion)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_UserFeedback.SubmitSuggestion("")

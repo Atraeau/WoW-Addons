@@ -18,7 +18,7 @@ fillStyle = GetFillStyle()
 |------|------|---------|-------------|
 | `fillStyle` | StatusBarFillStyle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fillStyle = GetFillStyle()
@@ -38,7 +38,7 @@ value = GetInterpolatedValue()
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = GetInterpolatedValue()
@@ -57,7 +57,7 @@ minValue, maxValue = GetMinMaxValues()
 | `minValue` | number | no |  |
 | `maxValue` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minValue, maxValue = GetMinMaxValues()
@@ -75,7 +75,7 @@ orientation = GetOrientation()
 |------|------|---------|-------------|
 | `orientation` | Orientation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local orientation = GetOrientation()
@@ -93,7 +93,7 @@ renderMode = GetRenderMode()
 |------|------|---------|-------------|
 | `renderMode` | StatusBarRenderMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local renderMode = GetRenderMode()
@@ -111,7 +111,7 @@ isReverseFill = GetReverseFill()
 |------|------|---------|-------------|
 | `isReverseFill` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReverseFill = GetReverseFill()
@@ -129,7 +129,7 @@ rotatesTexture = GetRotatesTexture()
 |------|------|---------|-------------|
 | `rotatesTexture` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rotatesTexture = GetRotatesTexture()
@@ -150,7 +150,7 @@ colorR, colorG, colorB, colorA = GetStatusBarColor()
 | `colorB` | number | no |  |
 | `colorA` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorR, colorG, colorB, colorA = GetStatusBarColor()
@@ -168,7 +168,7 @@ desaturation = GetStatusBarDesaturation()
 |------|------|---------|-------------|
 | `desaturation` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local desaturation = GetStatusBarDesaturation()
@@ -186,7 +186,7 @@ texture = GetStatusBarTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetStatusBarTexture()
@@ -204,7 +204,7 @@ duration = GetTimerDuration()
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetTimerDuration()
@@ -222,7 +222,7 @@ value = GetValue()
 |------|------|---------|-------------|
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = GetValue()
@@ -242,7 +242,7 @@ isInterpolating = IsInterpolating()
 |------|------|---------|-------------|
 | `isInterpolating` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInterpolating = IsInterpolating()
@@ -260,7 +260,7 @@ desaturated = IsStatusBarDesaturated()
 |------|------|---------|-------------|
 | `desaturated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local desaturated = IsStatusBarDesaturated()
@@ -281,7 +281,7 @@ SetColorFill(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorFill(0, 0, 0)
@@ -299,7 +299,7 @@ SetFillStyle(fillStyle)
 |------|------|---------|-------------|
 | `fillStyle` | StatusBarFillStyle | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFillStyle(fillStyle)
@@ -319,7 +319,7 @@ SetMinMaxValues(minValue, maxValue, interpolation)
 | `maxValue` | number | no |  |
 | `interpolation` | StatusBarInterpolation | no | (default: Immediate) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinMaxValues(0, 0, interpolation)
@@ -337,7 +337,7 @@ SetOrientation(orientation)
 |------|------|---------|-------------|
 | `orientation` | Orientation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrientation(orientation)
@@ -355,7 +355,7 @@ SetRenderMode(renderMode)
 |------|------|---------|-------------|
 | `renderMode` | StatusBarRenderMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRenderMode(renderMode)
@@ -373,7 +373,7 @@ SetReverseFill(isReverseFill)
 |------|------|---------|-------------|
 | `isReverseFill` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetReverseFill(false)
@@ -391,7 +391,7 @@ SetRotatesTexture(rotatesTexture)
 |------|------|---------|-------------|
 | `rotatesTexture` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRotatesTexture(false)
@@ -412,7 +412,7 @@ SetStatusBarColor(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStatusBarColor(0, 0, 0)
@@ -430,7 +430,7 @@ SetStatusBarDesaturated(desaturated)
 |------|------|---------|-------------|
 | `desaturated` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStatusBarDesaturated(false)
@@ -448,7 +448,7 @@ SetStatusBarDesaturation(desaturation)
 |------|------|---------|-------------|
 | `desaturation` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStatusBarDesaturation(desaturation)
@@ -472,7 +472,7 @@ success = SetStatusBarTexture(asset)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetStatusBarTexture(asset)
@@ -492,7 +492,7 @@ SetTimerDuration(duration, interpolation, direction)
 | `interpolation` | StatusBarInterpolation | no | (default: Immediate) |
 | `direction` | StatusBarTimerDirection | no | (default: ElapsedTime) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimerDuration(duration, interpolation, direction)
@@ -506,7 +506,7 @@ Immediately finishes any interpolation of the bar and snaps it to the target val
 SetToTargetValue()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToTargetValue()
@@ -525,7 +525,7 @@ SetValue(value, interpolation)
 | `value` | number | no |  |
 | `interpolation` | StatusBarInterpolation | no | (default: Immediate) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetValue(0, interpolation)

@@ -18,7 +18,7 @@ success = C_BarberShop.ApplyCustomizationChoices()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_BarberShop.ApplyCustomizationChoices()
@@ -30,7 +30,7 @@ local success = C_BarberShop.ApplyCustomizationChoices()
 C_BarberShop.Cancel()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.Cancel()
@@ -48,7 +48,7 @@ C_BarberShop.ClearPreviewChoices(clearSavedChoices)
 |------|------|---------|-------------|
 | `clearSavedChoices` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.ClearPreviewChoices(false)
@@ -66,7 +66,7 @@ categories = C_BarberShop.GetAvailableCustomizations()
 |------|------|---------|-------------|
 | `categories` | CharCustomizationCategory[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categories = C_BarberShop.GetAvailableCustomizations()
@@ -84,7 +84,7 @@ zoomLevel = C_BarberShop.GetCurrentCameraZoom()
 |------|------|---------|-------------|
 | `zoomLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local zoomLevel = C_BarberShop.GetCurrentCameraZoom()
@@ -102,7 +102,7 @@ characterData = C_BarberShop.GetCurrentCharacterData()
 |------|------|---------|-------------|
 | `characterData` | PlayerInfoCharacterData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local characterData = C_BarberShop.GetCurrentCharacterData()
@@ -120,7 +120,7 @@ cost = C_BarberShop.GetCurrentCost()
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_BarberShop.GetCurrentCost()
@@ -138,7 +138,7 @@ chrModelID = C_BarberShop.GetViewingChrModel()
 |------|------|---------|-------------|
 | `chrModelID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local chrModelID = C_BarberShop.GetViewingChrModel()
@@ -156,7 +156,7 @@ hasAlteredForm = C_BarberShop.HasAlteredForm()
 |------|------|---------|-------------|
 | `hasAlteredForm` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAlteredForm = C_BarberShop.HasAlteredForm()
@@ -174,7 +174,7 @@ hasChanges = C_BarberShop.HasAnyChanges()
 |------|------|---------|-------------|
 | `hasChanges` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasChanges = C_BarberShop.HasAnyChanges()
@@ -198,7 +198,7 @@ hasCustomizationFeature = C_BarberShop.HasCustomizationFeature(featureMask)
 |------|------|---------|-------------|
 | `hasCustomizationFeature` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasCustomizationFeature = C_BarberShop.HasCustomizationFeature(featureMask)
@@ -216,7 +216,7 @@ isViewingAlteredForm = C_BarberShop.IsViewingAlteredForm()
 |------|------|---------|-------------|
 | `isViewingAlteredForm` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isViewingAlteredForm = C_BarberShop.IsViewingAlteredForm()
@@ -234,7 +234,7 @@ C_BarberShop.MarkCustomizationChoiceAsSeen(choiceID)
 |------|------|---------|-------------|
 | `choiceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.MarkCustomizationChoiceAsSeen(0)
@@ -252,7 +252,7 @@ C_BarberShop.MarkCustomizationOptionAsSeen(optionID)
 |------|------|---------|-------------|
 | `optionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.MarkCustomizationOptionAsSeen(0)
@@ -271,7 +271,7 @@ C_BarberShop.PreviewCustomizationChoice(optionID, choiceID)
 | `optionID` | number | no |  |
 | `choiceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.PreviewCustomizationChoice(0, 0)
@@ -283,7 +283,7 @@ C_BarberShop.PreviewCustomizationChoice(0, 0)
 C_BarberShop.RandomizeCustomizationChoices()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.RandomizeCustomizationChoices()
@@ -295,7 +295,7 @@ C_BarberShop.RandomizeCustomizationChoices()
 C_BarberShop.ResetCameraRotation()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.ResetCameraRotation()
@@ -307,7 +307,7 @@ C_BarberShop.ResetCameraRotation()
 C_BarberShop.ResetCustomizationChoices()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.ResetCustomizationChoices()
@@ -325,7 +325,7 @@ C_BarberShop.RotateCamera(diffDegrees)
 |------|------|---------|-------------|
 | `diffDegrees` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.RotateCamera(0)
@@ -337,7 +337,7 @@ C_BarberShop.RotateCamera(0)
 C_BarberShop.SaveSeenChoices()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SaveSeenChoices()
@@ -355,10 +355,10 @@ C_BarberShop.SetCameraDistanceOffset(offset)
 |------|------|---------|-------------|
 | `offset` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_BarberShop.SetCameraDistanceOffset(0)
+C_BarberShop.SetCameraDistanceOffset(1)
 ```
 
 ### C_BarberShop.SetCameraZoomLevel
@@ -374,7 +374,7 @@ C_BarberShop.SetCameraZoomLevel(zoomLevel, [keepCustomZoom])
 | `zoomLevel` | number | no |  |
 | `keepCustomZoom` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetCameraZoomLevel(0)
@@ -393,7 +393,7 @@ C_BarberShop.SetCustomizationChoice(optionID, choiceID)
 | `optionID` | number | no |  |
 | `choiceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetCustomizationChoice(0, 0)
@@ -411,7 +411,7 @@ C_BarberShop.SetModelDressState(dressedState)
 |------|------|---------|-------------|
 | `dressedState` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetModelDressState(false)
@@ -429,7 +429,7 @@ C_BarberShop.SetSelectedSex(sex)
 |------|------|---------|-------------|
 | `sex` | UnitSex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetSelectedSex(sex)
@@ -447,7 +447,7 @@ C_BarberShop.SetViewingAlteredForm(isViewingAlteredForm)
 |------|------|---------|-------------|
 | `isViewingAlteredForm` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetViewingAlteredForm(false)
@@ -466,7 +466,7 @@ C_BarberShop.SetViewingChrModel([chrModelID], [spellShapeshiftFormID])
 | `chrModelID` | number | yes |  |
 | `spellShapeshiftFormID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetViewingChrModel()
@@ -484,7 +484,7 @@ C_BarberShop.SetViewingShapeshiftForm([shapeshiftFormID])
 |------|------|---------|-------------|
 | `shapeshiftFormID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.SetViewingShapeshiftForm()
@@ -502,7 +502,7 @@ C_BarberShop.ZoomCamera(zoomAmount)
 |------|------|---------|-------------|
 | `zoomAmount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShop.ZoomCamera(0)

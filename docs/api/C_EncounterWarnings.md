@@ -24,7 +24,7 @@ color = C_EncounterWarnings.GetColorForSeverity(severity)
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_EncounterWarnings.GetColorForSeverity(severity)
@@ -48,7 +48,7 @@ warningInfo = C_EncounterWarnings.GetEditModeWarningInfo(severity)
 |------|------|---------|-------------|
 | `warningInfo` | EncounterWarningInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warningInfo = C_EncounterWarnings.GetEditModeWarningInfo(severity)
@@ -68,7 +68,7 @@ play = C_EncounterWarnings.GetPlayCustomSoundsWhenHidden()
 |------|------|---------|-------------|
 | `play` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local play = C_EncounterWarnings.GetPlayCustomSoundsWhenHidden()
@@ -92,7 +92,7 @@ soundKitID = C_EncounterWarnings.GetSoundKitForSeverity(severity)
 |------|------|---------|-------------|
 | `soundKitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local soundKitID = C_EncounterWarnings.GetSoundKitForSeverity(severity)
@@ -112,7 +112,7 @@ shown = C_EncounterWarnings.GetWarningsShown()
 |------|------|---------|-------------|
 | `shown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shown = C_EncounterWarnings.GetWarningsShown()
@@ -130,7 +130,7 @@ isAvailable = C_EncounterWarnings.IsFeatureAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_EncounterWarnings.IsFeatureAvailable()
@@ -148,7 +148,7 @@ isAvailableAndEnabled = C_EncounterWarnings.IsFeatureEnabled()
 |------|------|---------|-------------|
 | `isAvailableAndEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailableAndEnabled = C_EncounterWarnings.IsFeatureEnabled()
@@ -172,7 +172,7 @@ soundHandle = C_EncounterWarnings.PlaySound(severity)
 |------|------|---------|-------------|
 | `soundHandle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local soundHandle = C_EncounterWarnings.PlaySound(severity)
@@ -192,7 +192,7 @@ C_EncounterWarnings.SetPlayCustomSoundsWhenHidden(play)
 |------|------|---------|-------------|
 | `play` | bool | no | If true, allow playing custom sound alerts. Note that sound alerts will not be played if the encounter warnings feature has been disabled. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterWarnings.SetPlayCustomSoundsWhenHidden(false)
@@ -212,7 +212,7 @@ C_EncounterWarnings.SetWarningsShown(shown)
 |------|------|---------|-------------|
 | `shown` | bool | no | If false, hides all warning messages in the default UI. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterWarnings.SetWarningsShown(false)

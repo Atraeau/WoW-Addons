@@ -18,7 +18,7 @@ hideRequiredItems = C_QuestOffer.GetHideRequiredItems()
 |------|------|---------|-------------|
 | `hideRequiredItems` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hideRequiredItems = C_QuestOffer.GetHideRequiredItems()
@@ -36,7 +36,7 @@ reputationRewards = C_QuestOffer.GetQuestOfferMajorFactionReputationRewards()
 |------|------|---------|-------------|
 | `reputationRewards` | QuestRewardReputationInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reputationRewards = C_QuestOffer.GetQuestOfferMajorFactionReputationRewards()
@@ -60,7 +60,7 @@ questRequiredCurrencyInfo = C_QuestOffer.GetQuestRequiredCurrencyInfo(questRewar
 |------|------|---------|-------------|
 | `questRequiredCurrencyInfo` | QuestRequiredCurrencyInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questRequiredCurrencyInfo = C_QuestOffer.GetQuestRequiredCurrencyInfo(1)
@@ -85,7 +85,7 @@ questRewardCurrencyInfo = C_QuestOffer.GetQuestRewardCurrencyInfo(questInfoType,
 |------|------|---------|-------------|
 | `questRewardCurrencyInfo` | QuestRewardCurrencyInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questRewardCurrencyInfo = C_QuestOffer.GetQuestRewardCurrencyInfo("", 1)

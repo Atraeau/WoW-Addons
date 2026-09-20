@@ -19,7 +19,7 @@ AssistUnit(name, exactMatch)
 | `name` | cstring | no |  |
 | `exactMatch` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AssistUnit("", false)
@@ -31,7 +31,7 @@ AssistUnit("", false)
 AttackTarget()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AttackTarget()
@@ -43,7 +43,7 @@ AttackTarget()
 ClearFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFocus()
@@ -61,7 +61,7 @@ willMakeChange = ClearTarget()
 |------|------|---------|-------------|
 | `willMakeChange` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local willMakeChange = ClearTarget()
@@ -79,7 +79,7 @@ FocusUnit(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FocusUnit("")
@@ -97,7 +97,7 @@ isTargetLoose = IsTargetLoose()
 |------|------|---------|-------------|
 | `isTargetLoose` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTargetLoose = IsTargetLoose()
@@ -115,7 +115,7 @@ SetPreferredGamepadInteractTarget([unit])
 |------|------|---------|-------------|
 | `unit` | UnitToken | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPreferredGamepadInteractTarget()
@@ -134,7 +134,7 @@ TargetDirectionEnemy(facing, [coneAngle])
 | `facing` | number | no |  |
 | `coneAngle` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetDirectionEnemy(0)
@@ -146,7 +146,7 @@ TargetDirectionEnemy(0)
 TargetDirectionFinished()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetDirectionFinished()
@@ -165,7 +165,7 @@ TargetDirectionFriend(facing, [coneAngle])
 | `facing` | number | no |  |
 | `coneAngle` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetDirectionFriend(0)
@@ -177,7 +177,7 @@ TargetDirectionFriend(0)
 TargetLastEnemy()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetLastEnemy()
@@ -189,7 +189,7 @@ TargetLastEnemy()
 TargetLastFriend()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetLastFriend()
@@ -201,7 +201,7 @@ TargetLastFriend()
 TargetLastTarget()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetLastTarget()
@@ -219,7 +219,7 @@ TargetNearest(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearest(false)
@@ -237,7 +237,7 @@ TargetNearestEnemy(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestEnemy(false)
@@ -255,7 +255,7 @@ TargetNearestEnemyPlayer(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestEnemyPlayer(false)
@@ -273,7 +273,7 @@ TargetNearestFriend(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestFriend(false)
@@ -291,7 +291,7 @@ TargetNearestFriendPlayer(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestFriendPlayer(false)
@@ -309,7 +309,7 @@ TargetNearestPartyMember(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestPartyMember(false)
@@ -327,7 +327,7 @@ TargetNearestRaidMember(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetNearestRaidMember(false)
@@ -339,7 +339,7 @@ TargetNearestRaidMember(false)
 TargetPriorityHighlightEnd()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetPriorityHighlightEnd()
@@ -357,7 +357,7 @@ TargetPriorityHighlightStart(useStartDelay)
 |------|------|---------|-------------|
 | `useStartDelay` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetPriorityHighlightStart(false)
@@ -369,7 +369,7 @@ TargetPriorityHighlightStart(false)
 TargetToggle()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetToggle()
@@ -388,7 +388,7 @@ TargetUnit(name, exactMatch)
 | `name` | cstring | no |  |
 | `exactMatch` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 TargetUnit("", false)

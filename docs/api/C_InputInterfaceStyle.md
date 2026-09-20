@@ -18,7 +18,7 @@ style = C_InputInterfaceStyle.GetCurrentStyle()
 |------|------|---------|-------------|
 | `style` | InputDeviceInterfaceType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local style = C_InputInterfaceStyle.GetCurrentStyle()

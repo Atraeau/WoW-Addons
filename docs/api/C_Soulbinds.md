@@ -18,7 +18,7 @@ C_Soulbinds.ActivateSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `soulbindID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.ActivateSoulbind(0)
@@ -43,7 +43,7 @@ result, errorDescription = C_Soulbinds.CanActivateSoulbind(soulbindID)
 | `result` | bool | no |  |
 | `errorDescription` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, errorDescription = C_Soulbinds.CanActivateSoulbind(0)
@@ -61,7 +61,7 @@ result = C_Soulbinds.CanModifySoulbind()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.CanModifySoulbind()
@@ -86,7 +86,7 @@ result, errorDescription = C_Soulbinds.CanResetConduitsInSoulbind(soulbindID)
 | `result` | bool | no |  |
 | `errorDescription` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result, errorDescription = C_Soulbinds.CanResetConduitsInSoulbind(0)
@@ -104,7 +104,7 @@ result = C_Soulbinds.CanSwitchActiveSoulbindTreeBranch()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.CanSwitchActiveSoulbindTreeBranch()
@@ -116,7 +116,7 @@ local result = C_Soulbinds.CanSwitchActiveSoulbindTreeBranch()
 C_Soulbinds.CloseUI()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.CloseUI()
@@ -134,7 +134,7 @@ C_Soulbinds.CommitPendingConduitsInSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `soulbindID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.CommitPendingConduitsInSoulbind(0)
@@ -159,7 +159,7 @@ nodeID = C_Soulbinds.FindNodeIDActuallyInstalled(soulbindID, conduitID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_Soulbinds.FindNodeIDActuallyInstalled(0, 0)
@@ -184,7 +184,7 @@ nodeID = C_Soulbinds.FindNodeIDAppearingInstalled(soulbindID, conduitID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_Soulbinds.FindNodeIDAppearingInstalled(0, 0)
@@ -209,7 +209,7 @@ nodeID = C_Soulbinds.FindNodeIDPendingInstall(soulbindID, conduitID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_Soulbinds.FindNodeIDPendingInstall(0, 0)
@@ -234,7 +234,7 @@ nodeID = C_Soulbinds.FindNodeIDPendingUninstall(soulbindID, conduitID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_Soulbinds.FindNodeIDPendingUninstall(0, 0)
@@ -252,7 +252,7 @@ soulbindID = C_Soulbinds.GetActiveSoulbindID()
 |------|------|---------|-------------|
 | `soulbindID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local soulbindID = C_Soulbinds.GetActiveSoulbindID()
@@ -276,7 +276,7 @@ collectionData = C_Soulbinds.GetConduitCollection(conduitType)
 |------|------|---------|-------------|
 | `collectionData` | ConduitCollectionData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionData = C_Soulbinds.GetConduitCollection(conduitType)
@@ -294,7 +294,7 @@ count = C_Soulbinds.GetConduitCollectionCount()
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_Soulbinds.GetConduitCollectionCount()
@@ -318,7 +318,7 @@ collectionData = C_Soulbinds.GetConduitCollectionData(conduitID)
 |------|------|---------|-------------|
 | `collectionData` | ConduitCollectionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionData = C_Soulbinds.GetConduitCollectionData(0)
@@ -336,7 +336,7 @@ collectionData = C_Soulbinds.GetConduitCollectionDataAtCursor()
 |------|------|---------|-------------|
 | `collectionData` | ConduitCollectionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionData = C_Soulbinds.GetConduitCollectionDataAtCursor()
@@ -360,7 +360,7 @@ collectionData = C_Soulbinds.GetConduitCollectionDataByVirtualID(virtualID)
 |------|------|---------|-------------|
 | `collectionData` | ConduitCollectionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local collectionData = C_Soulbinds.GetConduitCollectionDataByVirtualID(0)
@@ -384,7 +384,7 @@ conduitID = C_Soulbinds.GetConduitDisplayed(nodeID)
 |------|------|---------|-------------|
 | `conduitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local conduitID = C_Soulbinds.GetConduitDisplayed(0)
@@ -409,7 +409,7 @@ link = C_Soulbinds.GetConduitHyperlink(conduitID, rank)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_Soulbinds.GetConduitHyperlink(0, 1)
@@ -433,7 +433,7 @@ conduitID = C_Soulbinds.GetConduitIDPendingInstall(nodeID)
 |------|------|---------|-------------|
 | `conduitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local conduitID = C_Soulbinds.GetConduitIDPendingInstall(0)
@@ -458,7 +458,7 @@ quality = C_Soulbinds.GetConduitQuality(conduitID, rank)
 |------|------|---------|-------------|
 | `quality` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quality = C_Soulbinds.GetConduitQuality(0, 1)
@@ -482,7 +482,7 @@ conduitRank = C_Soulbinds.GetConduitRank(conduitID)
 |------|------|---------|-------------|
 | `conduitRank` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local conduitRank = C_Soulbinds.GetConduitRank(0)
@@ -507,7 +507,7 @@ spellID = C_Soulbinds.GetConduitSpellID(conduitID, conduitRank)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_Soulbinds.GetConduitSpellID(0, 1)
@@ -531,7 +531,7 @@ conduitID = C_Soulbinds.GetInstalledConduitID(nodeID)
 |------|------|---------|-------------|
 | `conduitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local conduitID = C_Soulbinds.GetInstalledConduitID(0)
@@ -555,7 +555,7 @@ node = C_Soulbinds.GetNode(nodeID)
 |------|------|---------|-------------|
 | `node` | SoulbindNode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local node = C_Soulbinds.GetNode(0)
@@ -579,7 +579,7 @@ data = C_Soulbinds.GetSoulbindData(soulbindID)
 |------|------|---------|-------------|
 | `data` | SoulbindData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_Soulbinds.GetSoulbindData(0)
@@ -603,7 +603,7 @@ specIDs = C_Soulbinds.GetSpecsAssignedToSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `specIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specIDs = C_Soulbinds.GetSpecsAssignedToSoulbind(0)
@@ -627,7 +627,7 @@ tree = C_Soulbinds.GetTree(treeID)
 |------|------|---------|-------------|
 | `tree` | SoulbindTree | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tree = C_Soulbinds.GetTree(0)
@@ -651,7 +651,7 @@ result = C_Soulbinds.HasAnyInstalledConduitInSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.HasAnyInstalledConduitInSoulbind(0)
@@ -669,7 +669,7 @@ result = C_Soulbinds.HasAnyPendingConduits()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.HasAnyPendingConduits()
@@ -693,7 +693,7 @@ result = C_Soulbinds.HasPendingConduitsInSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.HasPendingConduitsInSoulbind(0)
@@ -717,7 +717,7 @@ result = C_Soulbinds.IsConduitInstalled(nodeID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.IsConduitInstalled(0)
@@ -742,7 +742,7 @@ result = C_Soulbinds.IsConduitInstalledInSoulbind(soulbindID, conduitID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.IsConduitInstalledInSoulbind(0, 0)
@@ -766,7 +766,7 @@ result = C_Soulbinds.IsItemConduitByItemInfo(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.IsItemConduitByItemInfo(6948)
@@ -790,7 +790,7 @@ result = C_Soulbinds.IsNodePendingModify(nodeID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.IsNodePendingModify(0)
@@ -814,7 +814,7 @@ result = C_Soulbinds.IsUnselectedConduitPendingInSoulbind(soulbindID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Soulbinds.IsUnselectedConduitPendingInSoulbind(0)
@@ -834,7 +834,7 @@ C_Soulbinds.ModifyNode(nodeID, conduitID, type)
 | `conduitID` | number | no |  |
 | `type` | SoulbindConduitTransactionType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.ModifyNode(0, 0, type)
@@ -852,7 +852,7 @@ C_Soulbinds.SelectNode(nodeID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.SelectNode(0)
@@ -870,7 +870,7 @@ C_Soulbinds.UnmodifyNode(nodeID)
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Soulbinds.UnmodifyNode(0)

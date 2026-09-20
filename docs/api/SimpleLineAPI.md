@@ -12,7 +12,7 @@
 ClearAllPoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAllPoints()
@@ -33,7 +33,7 @@ relativePoint, relativeTo, offsetX, offsetY = GetEndPoint()
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local relativePoint, relativeTo, offsetX, offsetY = GetEndPoint()
@@ -51,7 +51,7 @@ thickness = GetHitRectThickness()
 |------|------|---------|-------------|
 | `thickness` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local thickness = GetHitRectThickness()
@@ -72,7 +72,7 @@ relativePoint, relativeTo, offsetX, offsetY = GetStartPoint()
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local relativePoint, relativeTo, offsetX, offsetY = GetStartPoint()
@@ -90,7 +90,7 @@ thickness = GetThickness()
 |------|------|---------|-------------|
 | `thickness` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local thickness = GetThickness()
@@ -111,10 +111,10 @@ SetEndPoint(relativePoint, relativeTo, offsetX, offsetY)
 | `offsetX` | uiUnit | no | (default: 0) |
 | `offsetY` | uiUnit | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetEndPoint(relativePoint, relativeTo, offsetX, offsetY)
+SetEndPoint(relativePoint, relativeTo, 1, 1)
 ```
 
 ### SimpleLineAPI.SetHitRectThickness
@@ -129,7 +129,7 @@ SetHitRectThickness(thickness)
 |------|------|---------|-------------|
 | `thickness` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHitRectThickness(thickness)
@@ -150,10 +150,10 @@ SetStartPoint(relativePoint, relativeTo, offsetX, offsetY)
 | `offsetX` | uiUnit | no | (default: 0) |
 | `offsetY` | uiUnit | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetStartPoint(relativePoint, relativeTo, offsetX, offsetY)
+SetStartPoint(relativePoint, relativeTo, 1, 1)
 ```
 
 ### SimpleLineAPI.SetThickness
@@ -168,7 +168,7 @@ SetThickness(thickness)
 |------|------|---------|-------------|
 | `thickness` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetThickness(thickness)

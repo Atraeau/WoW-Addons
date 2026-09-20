@@ -18,7 +18,7 @@ areAvailable = C_VideoOptions.AreHighResTexturesAvailable()
 |------|------|---------|-------------|
 | `areAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAvailable = C_VideoOptions.AreHighResTexturesAvailable()
@@ -36,7 +36,7 @@ size = C_VideoOptions.GetCurrentGameWindowSize()
 |------|------|---------|-------------|
 | `size` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local size = C_VideoOptions.GetCurrentGameWindowSize()
@@ -60,7 +60,7 @@ size = C_VideoOptions.GetDefaultGameWindowSize(monitor)
 |------|------|---------|-------------|
 | `size` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local size = C_VideoOptions.GetDefaultGameWindowSize(0)
@@ -85,7 +85,7 @@ sizes = C_VideoOptions.GetGameWindowSizes(monitor, fullscreen)
 |------|------|---------|-------------|
 | `sizes` | vector2[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sizes = C_VideoOptions.GetGameWindowSizes(0, false)
@@ -103,7 +103,7 @@ adapters = C_VideoOptions.GetGxAdapterInfo()
 |------|------|---------|-------------|
 | `adapters` | GxAdapterInfoDetails[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local adapters = C_VideoOptions.GetGxAdapterInfo()
@@ -121,7 +121,7 @@ isEnabled = C_VideoOptions.IsLinearEnabledOnStart()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_VideoOptions.IsLinearEnabledOnStart()
@@ -139,7 +139,7 @@ isSupported = C_VideoOptions.IsOutlineModeSupported()
 |------|------|---------|-------------|
 | `isSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSupported = C_VideoOptions.IsOutlineModeSupported()
@@ -157,7 +157,7 @@ isSupported = C_VideoOptions.IsPBRWaterSupported()
 |------|------|---------|-------------|
 | `isSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSupported = C_VideoOptions.IsPBRWaterSupported()
@@ -175,7 +175,7 @@ isSupported = C_VideoOptions.IsSecondaryLightingSupported()
 |------|------|---------|-------------|
 | `isSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSupported = C_VideoOptions.IsSecondaryLightingSupported()
@@ -193,7 +193,7 @@ isSupported = C_VideoOptions.IsSpellVisualDensitySystemSupported()
 |------|------|---------|-------------|
 | `isSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSupported = C_VideoOptions.IsSpellVisualDensitySystemSupported()
@@ -212,7 +212,7 @@ C_VideoOptions.SetGameWindowSize(x, y)
 | `x` | number | no |  |
 | `y` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_VideoOptions.SetGameWindowSize(0, 0)

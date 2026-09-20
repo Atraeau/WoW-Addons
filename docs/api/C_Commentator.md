@@ -19,7 +19,7 @@ C_Commentator.AddPlayerOverrideName(playerName, overrideName)
 | `playerName` | string | no |  |
 | `overrideName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.AddPlayerOverrideName("", "")
@@ -37,10 +37,10 @@ C_Commentator.AddTrackedDefensiveAuras(spellIDs)
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.AddTrackedDefensiveAuras(12345)
+C_Commentator.AddTrackedDefensiveAuras(2050)
 ```
 
 ### C_Commentator.AddTrackedOffensiveAuras
@@ -55,10 +55,10 @@ C_Commentator.AddTrackedOffensiveAuras(spellIDs)
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.AddTrackedOffensiveAuras(12345)
+C_Commentator.AddTrackedOffensiveAuras(2050)
 ```
 
 ### C_Commentator.AreTeamsSwapped
@@ -73,7 +73,7 @@ teamsAreSwapped = C_Commentator.AreTeamsSwapped()
 |------|------|---------|-------------|
 | `teamsAreSwapped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local teamsAreSwapped = C_Commentator.AreTeamsSwapped()
@@ -92,7 +92,7 @@ C_Commentator.AssignPlayersToTeam(playerName, teamName)
 | `playerName` | string[] | no |  |
 | `teamName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.AssignPlayersToTeam(playerName, "")
@@ -111,7 +111,7 @@ C_Commentator.AssignPlayersToTeamInCurrentInstance(teamIndex, teamName)
 | `teamIndex` | luaIndex | no |  |
 | `teamName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.AssignPlayersToTeamInCurrentInstance(1, "")
@@ -130,7 +130,7 @@ C_Commentator.AssignPlayerToTeam(playerName, teamName)
 | `playerName` | string | no |  |
 | `teamName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.AssignPlayerToTeam("", "")
@@ -148,7 +148,7 @@ canUseCommentatorCheats = C_Commentator.CanUseCommentatorCheats()
 |------|------|---------|-------------|
 | `canUseCommentatorCheats` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseCommentatorCheats = C_Commentator.CanUseCommentatorCheats()
@@ -160,7 +160,7 @@ local canUseCommentatorCheats = C_Commentator.CanUseCommentatorCheats()
 C_Commentator.ClearCameraTarget()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ClearCameraTarget()
@@ -172,7 +172,7 @@ C_Commentator.ClearCameraTarget()
 C_Commentator.ClearFollowTarget()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ClearFollowTarget()
@@ -190,7 +190,7 @@ C_Commentator.ClearLookAtTarget([lookAtIndex])
 |------|------|---------|-------------|
 | `lookAtIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ClearLookAtTarget()
@@ -202,7 +202,7 @@ C_Commentator.ClearLookAtTarget()
 C_Commentator.EnterInstance()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.EnterInstance()
@@ -214,7 +214,7 @@ C_Commentator.EnterInstance()
 C_Commentator.ExitInstance()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ExitInstance()
@@ -240,7 +240,7 @@ playerIndex, teamIndex, isPet = C_Commentator.FindSpectatedUnit(unitToken)
 | `teamIndex` | luaIndex | no |  |
 | `isPet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerIndex, teamIndex, isPet = C_Commentator.FindSpectatedUnit("player")
@@ -264,7 +264,7 @@ teamName = C_Commentator.FindTeamNameInCurrentInstance(teamIndex)
 |------|------|---------|-------------|
 | `teamName` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local teamName = C_Commentator.FindTeamNameInCurrentInstance(1)
@@ -288,7 +288,7 @@ teamName = C_Commentator.FindTeamNameInDirectory(playerNames)
 |------|------|---------|-------------|
 | `teamName` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local teamName = C_Commentator.FindTeamNameInDirectory(playerNames)
@@ -300,7 +300,7 @@ local teamName = C_Commentator.FindTeamNameInDirectory(playerNames)
 C_Commentator.FlushCommentatorHistory()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.FlushCommentatorHistory()
@@ -320,7 +320,7 @@ C_Commentator.FollowPlayer(factionIndex, playerIndex, [forceInstantTransition])
 | `playerIndex` | luaIndex | no |  |
 | `forceInstantTransition` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.FollowPlayer(1, 1)
@@ -338,7 +338,7 @@ C_Commentator.FollowUnit(token)
 |------|------|---------|-------------|
 | `token` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.FollowUnit("")
@@ -350,7 +350,7 @@ C_Commentator.FollowUnit("")
 C_Commentator.ForceFollowTransition()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ForceFollowTransition()
@@ -369,7 +369,7 @@ teamIndex, playerIndex = C_Commentator.GetAdditionalCameraWeight()
 | `teamIndex` | luaIndex | no |  |
 | `playerIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local teamIndex, playerIndex = C_Commentator.GetAdditionalCameraWeight()
@@ -393,7 +393,7 @@ weight = C_Commentator.GetAdditionalCameraWeightByToken(unitToken)
 |------|------|---------|-------------|
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weight = C_Commentator.GetAdditionalCameraWeightByToken("player")
@@ -411,7 +411,7 @@ nameEntries = C_Commentator.GetAllPlayerOverrideNames()
 |------|------|---------|-------------|
 | `nameEntries` | NameOverrideEntry[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nameEntries = C_Commentator.GetAllPlayerOverrideNames()
@@ -435,7 +435,7 @@ xPos, yPos, zPos, yaw, pitch, roll, fov = C_Commentator.GetCamera()
 | `roll` | number | no |  |
 | `fov` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local xPos, yPos, zPos, yaw, pitch, roll, fov = C_Commentator.GetCamera()
@@ -453,7 +453,7 @@ isColliding = C_Commentator.GetCameraCollision()
 |------|------|---------|-------------|
 | `isColliding` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isColliding = C_Commentator.GetCameraCollision()
@@ -473,7 +473,7 @@ xPos, yPos, zPos = C_Commentator.GetCameraPosition()
 | `yPos` | number | no |  |
 | `zPos` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local xPos, yPos, zPos = C_Commentator.GetCameraPosition()
@@ -485,7 +485,7 @@ local xPos, yPos, zPos = C_Commentator.GetCameraPosition()
 C_Commentator.GetCombatEventInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.GetCombatEventInfo()
@@ -503,7 +503,7 @@ history = C_Commentator.GetCommentatorHistory()
 |------|------|---------|-------------|
 | `history` | CommentatorHistory | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local history = C_Commentator.GetCommentatorHistory()
@@ -521,7 +521,7 @@ state = C_Commentator.GetCommentatorMatchDataState()
 |------|------|---------|-------------|
 | `state` | CommentatorMatchDataState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_Commentator.GetCommentatorMatchDataState()
@@ -539,7 +539,7 @@ mapID = C_Commentator.GetCurrentMapID()
 |------|------|---------|-------------|
 | `mapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID = C_Commentator.GetCurrentMapID()
@@ -557,7 +557,7 @@ percentage = C_Commentator.GetDampeningPercent()
 |------|------|---------|-------------|
 | `percentage` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percentage = C_Commentator.GetDampeningPercent()
@@ -575,7 +575,7 @@ distance = C_Commentator.GetDistanceBeforeForcedHorizontalConvergence()
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distance = C_Commentator.GetDistanceBeforeForcedHorizontalConvergence()
@@ -593,7 +593,7 @@ ms = C_Commentator.GetDurationToForceHorizontalConvergence()
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ms = C_Commentator.GetDurationToForceHorizontalConvergence()
@@ -611,7 +611,7 @@ excludeDistance = C_Commentator.GetExcludeDistance()
 |------|------|---------|-------------|
 | `excludeDistance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local excludeDistance = C_Commentator.GetExcludeDistance()
@@ -629,7 +629,7 @@ weight = C_Commentator.GetHardlockWeight()
 |------|------|---------|-------------|
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weight = C_Commentator.GetHardlockWeight()
@@ -647,7 +647,7 @@ angle = C_Commentator.GetHorizontalAngleThresholdToSmooth()
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local angle = C_Commentator.GetHorizontalAngleThresholdToSmooth()
@@ -671,10 +671,10 @@ indirectSpellID = C_Commentator.GetIndirectSpellID(trackedSpellID)
 |------|------|---------|-------------|
 | `indirectSpellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local indirectSpellID = C_Commentator.GetIndirectSpellID(12345)
+local indirectSpellID = C_Commentator.GetIndirectSpellID(2050)
 ```
 
 ### C_Commentator.GetInstanceInfo
@@ -700,7 +700,7 @@ mapID, mapName, status, instanceIDLow, instanceIDHigh = C_Commentator.GetInstanc
 | `instanceIDLow` | number | no |  |
 | `instanceIDHigh` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID, mapName, status, instanceIDLow, instanceIDHigh = C_Commentator.GetInstanceInfo(1, 1)
@@ -718,7 +718,7 @@ amount = C_Commentator.GetLookAtLerpAmount()
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_Commentator.GetLookAtLerpAmount()
@@ -745,7 +745,7 @@ teamSize, minLevel, maxLevel, numInstances = C_Commentator.GetMapInfo(mapIndex)
 | `maxLevel` | number | no |  |
 | `numInstances` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local teamSize, minLevel, maxLevel, numInstances = C_Commentator.GetMapInfo(1)
@@ -763,7 +763,7 @@ seconds = C_Commentator.GetMatchDuration()
 |------|------|---------|-------------|
 | `seconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = C_Commentator.GetMatchDuration()
@@ -781,7 +781,7 @@ maxNumPlayersPerTeam = C_Commentator.GetMaxNumPlayersPerTeam()
 |------|------|---------|-------------|
 | `maxNumPlayersPerTeam` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxNumPlayersPerTeam = C_Commentator.GetMaxNumPlayersPerTeam()
@@ -799,7 +799,7 @@ maxNumTeams = C_Commentator.GetMaxNumTeams()
 |------|------|---------|-------------|
 | `maxNumTeams` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxNumTeams = C_Commentator.GetMaxNumTeams()
@@ -817,7 +817,7 @@ commentatorMode = C_Commentator.GetMode()
 |------|------|---------|-------------|
 | `commentatorMode` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local commentatorMode = C_Commentator.GetMode()
@@ -835,7 +835,7 @@ ms = C_Commentator.GetMsToHoldForHorizontalMovement()
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ms = C_Commentator.GetMsToHoldForHorizontalMovement()
@@ -853,7 +853,7 @@ ms = C_Commentator.GetMsToHoldForVerticalMovement()
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ms = C_Commentator.GetMsToHoldForVerticalMovement()
@@ -871,7 +871,7 @@ ms = C_Commentator.GetMsToSmoothHorizontalChange()
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ms = C_Commentator.GetMsToSmoothHorizontalChange()
@@ -889,7 +889,7 @@ ms = C_Commentator.GetMsToSmoothVerticalChange()
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ms = C_Commentator.GetMsToSmoothVerticalChange()
@@ -907,7 +907,7 @@ numMaps = C_Commentator.GetNumMaps()
 |------|------|---------|-------------|
 | `numMaps` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numMaps = C_Commentator.GetNumMaps()
@@ -931,7 +931,7 @@ numPlayers = C_Commentator.GetNumPlayers(factionIndex)
 |------|------|---------|-------------|
 | `numPlayers` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPlayers = C_Commentator.GetNumPlayers(1)
@@ -956,7 +956,7 @@ data = C_Commentator.GetOrCreateSeries(teamName1, teamName2)
 |------|------|---------|-------------|
 | `data` | CommentatorSeries | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_Commentator.GetOrCreateSeries("", "")
@@ -984,10 +984,10 @@ startTime, duration, enable = C_Commentator.GetPlayerAuraInfo(teamIndex, playerI
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local startTime, duration, enable = C_Commentator.GetPlayerAuraInfo(1, 1, 12345)
+local startTime, duration, enable = C_Commentator.GetPlayerAuraInfo(1, 1, 2050)
 ```
 
 ### C_Commentator.GetPlayerAuraInfoByUnit
@@ -1011,10 +1011,10 @@ startTime, duration, enable = C_Commentator.GetPlayerAuraInfoByUnit(token, spell
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local startTime, duration, enable = C_Commentator.GetPlayerAuraInfoByUnit(token, 12345)
+local startTime, duration, enable = C_Commentator.GetPlayerAuraInfoByUnit(token, 2050)
 ```
 
 ### C_Commentator.GetPlayerCooldownInfo
@@ -1039,10 +1039,10 @@ startTime, duration, enable = C_Commentator.GetPlayerCooldownInfo(teamIndex, pla
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local startTime, duration, enable = C_Commentator.GetPlayerCooldownInfo(1, 1, 12345)
+local startTime, duration, enable = C_Commentator.GetPlayerCooldownInfo(1, 1, 2050)
 ```
 
 ### C_Commentator.GetPlayerCooldownInfoByUnit
@@ -1066,10 +1066,10 @@ startTime, duration, enable = C_Commentator.GetPlayerCooldownInfoByUnit(unitToke
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local startTime, duration, enable = C_Commentator.GetPlayerCooldownInfoByUnit("player", 12345)
+local startTime, duration, enable = C_Commentator.GetPlayerCooldownInfoByUnit("player", 2050)
 ```
 
 ### C_Commentator.GetPlayerCrowdControlInfo
@@ -1093,7 +1093,7 @@ spellID, expiration, duration = C_Commentator.GetPlayerCrowdControlInfo(teamInde
 | `expiration` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID, expiration, duration = C_Commentator.GetPlayerCrowdControlInfo(1, 1)
@@ -1119,7 +1119,7 @@ spellID, expiration, duration = C_Commentator.GetPlayerCrowdControlInfoByUnit(to
 | `expiration` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID, expiration, duration = C_Commentator.GetPlayerCrowdControlInfoByUnit(token)
@@ -1144,7 +1144,7 @@ info = C_Commentator.GetPlayerData(teamIndex, playerIndex)
 |------|------|---------|-------------|
 | `info` | CommentatorPlayerData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Commentator.GetPlayerData(1, 1)
@@ -1169,7 +1169,7 @@ hasFlag = C_Commentator.GetPlayerFlagInfo(teamIndex, playerIndex)
 |------|------|---------|-------------|
 | `hasFlag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFlag = C_Commentator.GetPlayerFlagInfo(1, 1)
@@ -1193,7 +1193,7 @@ hasFlag = C_Commentator.GetPlayerFlagInfoByUnit(unitToken)
 |------|------|---------|-------------|
 | `hasFlag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFlag = C_Commentator.GetPlayerFlagInfoByUnit("player")
@@ -1221,7 +1221,7 @@ startTime, duration, enable = C_Commentator.GetPlayerItemCooldownInfo(teamIndex,
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime, duration, enable = C_Commentator.GetPlayerItemCooldownInfo(1, 1, 6948)
@@ -1248,7 +1248,7 @@ startTime, duration, enable = C_Commentator.GetPlayerItemCooldownInfoByUnit(unit
 | `duration` | number | no |  |
 | `enable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime, duration, enable = C_Commentator.GetPlayerItemCooldownInfoByUnit("player", 6948)
@@ -1272,7 +1272,7 @@ overrideName = C_Commentator.GetPlayerOverrideName(originalName)
 |------|------|---------|-------------|
 | `overrideName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overrideName = C_Commentator.GetPlayerOverrideName("")
@@ -1301,10 +1301,10 @@ charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellCharges(t
 | `startTime` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellCharges(1, 1, 12345)
+local charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellCharges(1, 1, 2050)
 ```
 
 ### C_Commentator.GetPlayerSpellChargesByUnit
@@ -1329,10 +1329,10 @@ charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellChargesBy
 | `startTime` | number | no |  |
 | `duration` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellChargesByUnit("player", 12345)
+local charges, maxCharges, startTime, duration = C_Commentator.GetPlayerSpellChargesByUnit("player", 2050)
 ```
 
 ### C_Commentator.GetPositionLerpAmount
@@ -1347,7 +1347,7 @@ amount = C_Commentator.GetPositionLerpAmount()
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_Commentator.GetPositionLerpAmount()
@@ -1365,7 +1365,7 @@ enabled = C_Commentator.GetSmoothFollowTransitioning()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_Commentator.GetSmoothFollowTransitioning()
@@ -1383,7 +1383,7 @@ weight = C_Commentator.GetSoftlockWeight()
 |------|------|---------|-------------|
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local weight = C_Commentator.GetSoftlockWeight()
@@ -1401,7 +1401,7 @@ factor = C_Commentator.GetSpeedFactor()
 |------|------|---------|-------------|
 | `factor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factor = C_Commentator.GetSpeedFactor()
@@ -1425,7 +1425,7 @@ pos = C_Commentator.GetStartLocation(mapID)
 |------|------|---------|-------------|
 | `pos` | vector3 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pos = C_Commentator.GetStartLocation(0)
@@ -1449,7 +1449,7 @@ color = C_Commentator.GetTeamColor(teamIndex)
 |------|------|---------|-------------|
 | `color` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_Commentator.GetTeamColor(1)
@@ -1473,7 +1473,7 @@ color = C_Commentator.GetTeamColorByUnit(unitToken)
 |------|------|---------|-------------|
 | `color` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_Commentator.GetTeamColorByUnit("player")
@@ -1491,7 +1491,7 @@ timeLeft = C_Commentator.GetTimeLeftInMatch()
 |------|------|---------|-------------|
 | `timeLeft` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeft = C_Commentator.GetTimeLeftInMatch()
@@ -1515,10 +1515,10 @@ trackedSpellID = C_Commentator.GetTrackedSpellID(indirectSpellID)
 |------|------|---------|-------------|
 | `trackedSpellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local trackedSpellID = C_Commentator.GetTrackedSpellID(12345)
+local trackedSpellID = C_Commentator.GetTrackedSpellID(2050)
 ```
 
 ### C_Commentator.GetTrackedSpells
@@ -1542,7 +1542,7 @@ spells, result = C_Commentator.GetTrackedSpells(teamIndex, playerIndex, category
 | `spells` | number[] | yes |  |
 | `result` | TrackedSpellsResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spells, result = C_Commentator.GetTrackedSpells(1, 1, category)
@@ -1568,7 +1568,7 @@ spells, result = C_Commentator.GetTrackedSpellsByUnit(unitToken, category)
 | `spells` | number[] | yes |  |
 | `result` | TrackedSpellsResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spells, result = C_Commentator.GetTrackedSpellsByUnit("player", category)
@@ -1592,7 +1592,7 @@ data = C_Commentator.GetUnitData(unitToken)
 |------|------|---------|-------------|
 | `data` | CommentatorUnitData | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_Commentator.GetUnitData("player")
@@ -1619,7 +1619,7 @@ name, minPlayers, maxPlayers, isArena = C_Commentator.GetWargameInfo(listID)
 | `maxPlayers` | number | no |  |
 | `isArena` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, minPlayers, maxPlayers, isArena = C_Commentator.GetWargameInfo(0)
@@ -1644,7 +1644,7 @@ hasOffensiveAura, hasDefensiveAura = C_Commentator.HasTrackedAuras(token)
 | `hasOffensiveAura` | bool | no |  |
 | `hasDefensiveAura` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasOffensiveAura, hasDefensiveAura = C_Commentator.HasTrackedAuras(token)
@@ -1662,7 +1662,7 @@ isSmartCameraLocked = C_Commentator.IsSmartCameraLocked()
 |------|------|---------|-------------|
 | `isSmartCameraLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSmartCameraLocked = C_Commentator.IsSmartCameraLocked()
@@ -1680,7 +1680,7 @@ isSpectating = C_Commentator.IsSpectating()
 |------|------|---------|-------------|
 | `isSpectating` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSpectating = C_Commentator.IsSpectating()
@@ -1704,10 +1704,10 @@ isDefensiveTrigger = C_Commentator.IsTrackedDefensiveAura(spellID)
 |------|------|---------|-------------|
 | `isDefensiveTrigger` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isDefensiveTrigger = C_Commentator.IsTrackedDefensiveAura(12345)
+local isDefensiveTrigger = C_Commentator.IsTrackedDefensiveAura(2050)
 ```
 
 ### C_Commentator.IsTrackedOffensiveAura
@@ -1728,10 +1728,10 @@ isOffensiveTrigger = C_Commentator.IsTrackedOffensiveAura(spellID)
 |------|------|---------|-------------|
 | `isOffensiveTrigger` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isOffensiveTrigger = C_Commentator.IsTrackedOffensiveAura(12345)
+local isOffensiveTrigger = C_Commentator.IsTrackedOffensiveAura(2050)
 ```
 
 ### C_Commentator.IsTrackedSpell
@@ -1755,10 +1755,10 @@ isTracked = C_Commentator.IsTrackedSpell(teamIndex, playerIndex, spellID, catego
 |------|------|---------|-------------|
 | `isTracked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isTracked = C_Commentator.IsTrackedSpell(1, 1, 12345, category)
+local isTracked = C_Commentator.IsTrackedSpell(1, 1, 2050, category)
 ```
 
 ### C_Commentator.IsTrackedSpellByUnit
@@ -1781,10 +1781,10 @@ isTracked = C_Commentator.IsTrackedSpellByUnit(unitToken, spellID, category)
 |------|------|---------|-------------|
 | `isTracked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isTracked = C_Commentator.IsTrackedSpellByUnit("player", 12345, category)
+local isTracked = C_Commentator.IsTrackedSpellByUnit("player", 2050, category)
 ```
 
 ### C_Commentator.IsUsingSmartCamera
@@ -1799,7 +1799,7 @@ isUsingSmartCamera = C_Commentator.IsUsingSmartCamera()
 |------|------|---------|-------------|
 | `isUsingSmartCamera` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingSmartCamera = C_Commentator.IsUsingSmartCamera()
@@ -1819,7 +1819,7 @@ C_Commentator.LookAtPlayer(factionIndex, playerIndex, [lookAtIndex])
 | `playerIndex` | luaIndex | no |  |
 | `lookAtIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.LookAtPlayer(1, 1)
@@ -1831,7 +1831,7 @@ C_Commentator.LookAtPlayer(1, 1)
 C_Commentator.RemoveAllOverrideNames()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.RemoveAllOverrideNames()
@@ -1849,7 +1849,7 @@ C_Commentator.RemovePlayerOverrideName(originalPlayerName)
 |------|------|---------|-------------|
 | `originalPlayerName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.RemovePlayerOverrideName("")
@@ -1868,7 +1868,7 @@ C_Commentator.RequestPlayerCooldownInfo(teamIndex, playerIndex)
 | `teamIndex` | luaIndex | no |  |
 | `playerIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.RequestPlayerCooldownInfo(1, 1)
@@ -1880,7 +1880,7 @@ C_Commentator.RequestPlayerCooldownInfo(1, 1)
 C_Commentator.ResetFoVTarget()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ResetFoVTarget()
@@ -1899,7 +1899,7 @@ C_Commentator.ResetSeriesScores(teamName1, teamName2)
 | `teamName1` | string | no |  |
 | `teamName2` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ResetSeriesScores("", "")
@@ -1911,7 +1911,7 @@ C_Commentator.ResetSeriesScores("", "")
 C_Commentator.ResetSettings()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ResetSettings()
@@ -1923,7 +1923,7 @@ C_Commentator.ResetSettings()
 C_Commentator.ResetTrackedAuras()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ResetTrackedAuras()
@@ -1952,7 +1952,7 @@ result = C_Commentator.SendAddonMessage(prefix, message, [chatType], [target])
 |------|------|---------|-------------|
 | `result` | SendAddonMessageResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Commentator.SendAddonMessage("", "")
@@ -1981,7 +1981,7 @@ result = C_Commentator.SendAddonMessageLogged(prefix, message, [chatType], [targ
 |------|------|---------|-------------|
 | `result` | SendAddonMessageResult | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Commentator.SendAddonMessageLogged("", "")
@@ -2001,7 +2001,7 @@ C_Commentator.SetAdditionalCameraWeight(teamIndex, playerIndex, weight)
 | `playerIndex` | luaIndex | no |  |
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetAdditionalCameraWeight(1, 1, 0)
@@ -2020,7 +2020,7 @@ C_Commentator.SetAdditionalCameraWeightByToken(unitToken, weight)
 | `unitToken` | UnitToken | no |  |
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetAdditionalCameraWeightByToken("player", 0)
@@ -2038,10 +2038,10 @@ C_Commentator.SetBlocklistedAuras(spellIDs)
 |------|------|---------|-------------|
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetBlocklistedAuras(12345)
+C_Commentator.SetBlocklistedAuras(2050)
 ```
 
 ### C_Commentator.SetBlocklistedCooldowns
@@ -2057,10 +2057,10 @@ C_Commentator.SetBlocklistedCooldowns(specID, spellIDs)
 | `specID` | number | no |  |
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetBlocklistedCooldowns(0, 12345)
+C_Commentator.SetBlocklistedCooldowns(0, 2050)
 ```
 
 ### C_Commentator.SetBlocklistedItemCooldowns
@@ -2075,7 +2075,7 @@ C_Commentator.SetBlocklistedItemCooldowns(itemIDs)
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetBlocklistedItemCooldowns(6948)
@@ -2099,7 +2099,7 @@ C_Commentator.SetCamera(xPos, yPos, zPos, yaw, pitch, roll, fov)
 | `roll` | number | no |  |
 | `fov` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetCamera(0, 0, 0, 0, 0, 0, 0)
@@ -2117,7 +2117,7 @@ C_Commentator.SetCameraCollision(collide)
 |------|------|---------|-------------|
 | `collide` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetCameraCollision(false)
@@ -2138,7 +2138,7 @@ C_Commentator.SetCameraPosition(xPos, yPos, zPos, snapToLocation)
 | `zPos` | number | no |  |
 | `snapToLocation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetCameraPosition(0, 0, 0, false)
@@ -2156,7 +2156,7 @@ C_Commentator.SetCheatsEnabled(enableCheats)
 |------|------|---------|-------------|
 | `enableCheats` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetCheatsEnabled(false)
@@ -2174,7 +2174,7 @@ C_Commentator.SetCommentatorHistory(history)
 |------|------|---------|-------------|
 | `history` | CommentatorHistory | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetCommentatorHistory(history)
@@ -2192,7 +2192,7 @@ C_Commentator.SetDistanceBeforeForcedHorizontalConvergence(distance)
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetDistanceBeforeForcedHorizontalConvergence(0)
@@ -2210,7 +2210,7 @@ C_Commentator.SetDurationToForceHorizontalConvergence(ms)
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetDurationToForceHorizontalConvergence(0)
@@ -2228,7 +2228,7 @@ C_Commentator.SetExcludeDistance(excludeDistance)
 |------|------|---------|-------------|
 | `excludeDistance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetExcludeDistance(0)
@@ -2247,7 +2247,7 @@ C_Commentator.SetFollowCameraSpeeds(elasticSpeed, minSpeed)
 | `elasticSpeed` | number | no |  |
 | `minSpeed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetFollowCameraSpeeds(0, 0)
@@ -2265,7 +2265,7 @@ C_Commentator.SetHardlockWeight(weight)
 |------|------|---------|-------------|
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetHardlockWeight(0)
@@ -2283,7 +2283,7 @@ C_Commentator.SetHorizontalAngleThresholdToSmooth(angle)
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetHorizontalAngleThresholdToSmooth(0)
@@ -2301,7 +2301,7 @@ C_Commentator.SetLookAtLerpAmount(amount)
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetLookAtLerpAmount(0)
@@ -2320,7 +2320,7 @@ C_Commentator.SetMapAndInstanceIndex(mapIndex, instanceIndex)
 | `mapIndex` | luaIndex | no |  |
 | `instanceIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMapAndInstanceIndex(1, 1)
@@ -2338,7 +2338,7 @@ C_Commentator.SetMouseDisabled(disabled)
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMouseDisabled(false)
@@ -2356,7 +2356,7 @@ C_Commentator.SetMoveSpeed(newSpeed)
 |------|------|---------|-------------|
 | `newSpeed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMoveSpeed(0)
@@ -2374,7 +2374,7 @@ C_Commentator.SetMsToHoldForHorizontalMovement(ms)
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMsToHoldForHorizontalMovement(0)
@@ -2392,7 +2392,7 @@ C_Commentator.SetMsToHoldForVerticalMovement(ms)
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMsToHoldForVerticalMovement(0)
@@ -2410,7 +2410,7 @@ C_Commentator.SetMsToSmoothHorizontalChange(ms)
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMsToSmoothHorizontalChange(0)
@@ -2428,7 +2428,7 @@ C_Commentator.SetMsToSmoothVerticalChange(ms)
 |------|------|---------|-------------|
 | `ms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetMsToSmoothVerticalChange(0)
@@ -2446,7 +2446,7 @@ C_Commentator.SetPositionLerpAmount(amount)
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetPositionLerpAmount(0)
@@ -2465,10 +2465,10 @@ C_Commentator.SetRequestedDebuffCooldowns(specID, spellIDs)
 | `specID` | number | no |  |
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetRequestedDebuffCooldowns(0, 12345)
+C_Commentator.SetRequestedDebuffCooldowns(0, 2050)
 ```
 
 ### C_Commentator.SetRequestedDefensiveCooldowns
@@ -2484,10 +2484,10 @@ C_Commentator.SetRequestedDefensiveCooldowns(specID, spellIDs)
 | `specID` | number | no |  |
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetRequestedDefensiveCooldowns(0, 12345)
+C_Commentator.SetRequestedDefensiveCooldowns(0, 2050)
 ```
 
 ### C_Commentator.SetRequestedItemCooldowns
@@ -2502,7 +2502,7 @@ C_Commentator.SetRequestedItemCooldowns(itemIDs)
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetRequestedItemCooldowns(6948)
@@ -2521,10 +2521,10 @@ C_Commentator.SetRequestedOffensiveCooldowns(specID, spellIDs)
 | `specID` | number | no |  |
 | `spellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetRequestedOffensiveCooldowns(0, 12345)
+C_Commentator.SetRequestedOffensiveCooldowns(0, 2050)
 ```
 
 ### C_Commentator.SetSeriesScore
@@ -2542,7 +2542,7 @@ C_Commentator.SetSeriesScore(teamName1, teamName2, scoringTeamName, score)
 | `scoringTeamName` | string | no |  |
 | `score` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSeriesScore("", "", "", 0)
@@ -2563,7 +2563,7 @@ C_Commentator.SetSeriesScores(teamName1, teamName2, score1, score2)
 | `score1` | number | no |  |
 | `score2` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSeriesScores("", "", 0, 0)
@@ -2581,7 +2581,7 @@ C_Commentator.SetSmartCameraLocked(locked)
 |------|------|---------|-------------|
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSmartCameraLocked(false)
@@ -2599,7 +2599,7 @@ C_Commentator.SetSmoothFollowTransitioning(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSmoothFollowTransitioning(false)
@@ -2617,7 +2617,7 @@ C_Commentator.SetSoftlockWeight(weight)
 |------|------|---------|-------------|
 | `weight` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSoftlockWeight(0)
@@ -2635,7 +2635,7 @@ C_Commentator.SetSpeedFactor(factor)
 |------|------|---------|-------------|
 | `factor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetSpeedFactor(0)
@@ -2653,10 +2653,10 @@ C_Commentator.SetTargetHeightOffset(offset)
 |------|------|---------|-------------|
 | `offset` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Commentator.SetTargetHeightOffset(0)
+C_Commentator.SetTargetHeightOffset(1)
 ```
 
 ### C_Commentator.SetUseSmartCamera
@@ -2671,7 +2671,7 @@ C_Commentator.SetUseSmartCamera(useSmartCamera)
 |------|------|---------|-------------|
 | `useSmartCamera` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SetUseSmartCamera(false)
@@ -2683,7 +2683,7 @@ C_Commentator.SetUseSmartCamera(false)
 C_Commentator.SnapCameraLookAtPoint()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SnapCameraLookAtPoint()
@@ -2707,10 +2707,10 @@ spellUsesItemCharges = C_Commentator.SpellUsesItemCharges(spellID)
 |------|------|---------|-------------|
 | `spellUsesItemCharges` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellUsesItemCharges = C_Commentator.SpellUsesItemCharges(12345)
+local spellUsesItemCharges = C_Commentator.SpellUsesItemCharges(2050)
 ```
 
 ### C_Commentator.StartWargame
@@ -2729,7 +2729,7 @@ C_Commentator.StartWargame(listID, teamSize, tournamentRules, teamOneCaptain, te
 | `teamOneCaptain` | string | no |  |
 | `teamTwoCaptain` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.StartWargame(0, 0, false, "", "")
@@ -2741,7 +2741,7 @@ C_Commentator.StartWargame(0, 0, false, "", "")
 C_Commentator.SwapTeamSides()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.SwapTeamSides()
@@ -2753,7 +2753,7 @@ C_Commentator.SwapTeamSides()
 C_Commentator.ToggleCheats()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ToggleCheats()
@@ -2771,7 +2771,7 @@ C_Commentator.UpdateMapInfo([targetPlayer])
 |------|------|---------|-------------|
 | `targetPlayer` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.UpdateMapInfo()
@@ -2783,7 +2783,7 @@ C_Commentator.UpdateMapInfo()
 C_Commentator.UpdatePlayerInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.UpdatePlayerInfo()
@@ -2795,7 +2795,7 @@ C_Commentator.UpdatePlayerInfo()
 C_Commentator.ZoomIn()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ZoomIn()
@@ -2813,7 +2813,7 @@ C_Commentator.ZoomIn_Position([zoomAmount])
 |------|------|---------|-------------|
 | `zoomAmount` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ZoomIn_Position()
@@ -2825,7 +2825,7 @@ C_Commentator.ZoomIn_Position()
 C_Commentator.ZoomOut()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ZoomOut()
@@ -2843,7 +2843,7 @@ C_Commentator.ZoomOut_Position([zoomAmount])
 |------|------|---------|-------------|
 | `zoomAmount` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Commentator.ZoomOut_Position()

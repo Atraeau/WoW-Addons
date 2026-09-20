@@ -20,7 +20,7 @@ areInvasionsAvailable = C_InvasionInfo.AreInvasionsAvailable()
 |------|------|---------|-------------|
 | `areInvasionsAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areInvasionsAvailable = C_InvasionInfo.AreInvasionsAvailable()
@@ -44,7 +44,7 @@ invasionID = C_InvasionInfo.GetInvasionForUiMapID(uiMapID)
 |------|------|---------|-------------|
 | `invasionID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invasionID = C_InvasionInfo.GetInvasionForUiMapID(0)
@@ -68,7 +68,7 @@ invasionInfo = C_InvasionInfo.GetInvasionInfo(invasionID)
 |------|------|---------|-------------|
 | `invasionInfo` | InvasionMapInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invasionInfo = C_InvasionInfo.GetInvasionInfo(0)
@@ -92,7 +92,7 @@ timeLeftMinutes = C_InvasionInfo.GetInvasionTimeLeft(invasionID)
 |------|------|---------|-------------|
 | `timeLeftMinutes` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeftMinutes = C_InvasionInfo.GetInvasionTimeLeft(0)

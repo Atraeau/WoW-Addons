@@ -20,7 +20,7 @@ AdvanceTime(delta)
 |------|------|---------|-------------|
 | `delta` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AdvanceTime(delta)
@@ -34,7 +34,7 @@ Resets the clock to a zero time value.
 ResetTime()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetTime()
@@ -54,7 +54,7 @@ RewindTime(delta)
 |------|------|---------|-------------|
 | `delta` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RewindTime(delta)
@@ -74,7 +74,7 @@ SetTime(time)
 |------|------|---------|-------------|
 | `time` | FrameTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTime(time)

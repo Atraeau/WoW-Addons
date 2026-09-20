@@ -24,7 +24,7 @@ configurationWarnings = C_ConfigurationWarnings.GetConfigurationWarnings(include
 |------|------|---------|-------------|
 | `configurationWarnings` | ConfigurationWarning[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configurationWarnings = C_ConfigurationWarnings.GetConfigurationWarnings(false)
@@ -48,7 +48,7 @@ hasSeenConfigurationWarning = C_ConfigurationWarnings.GetConfigurationWarningSee
 |------|------|---------|-------------|
 | `hasSeenConfigurationWarning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSeenConfigurationWarning = C_ConfigurationWarnings.GetConfigurationWarningSeen(configurationWarning)
@@ -72,7 +72,7 @@ configurationWarningString = C_ConfigurationWarnings.GetConfigurationWarningStri
 |------|------|---------|-------------|
 | `configurationWarningString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local configurationWarningString = C_ConfigurationWarnings.GetConfigurationWarningString(configurationWarning)
@@ -90,7 +90,7 @@ C_ConfigurationWarnings.SetConfigurationWarningSeen(configurationWarning)
 |------|------|---------|-------------|
 | `configurationWarning` | ConfigurationWarning | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ConfigurationWarnings.SetConfigurationWarningSeen(configurationWarning)

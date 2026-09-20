@@ -24,7 +24,7 @@ widgets = C_UIWidgetManager.GetAllWidgetsBySetID(setID)
 |------|------|---------|-------------|
 | `widgets` | UIWidgetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgets = C_UIWidgetManager.GetAllWidgetsBySetID(0)
@@ -42,7 +42,7 @@ setID = C_UIWidgetManager.GetBelowMinimapWidgetSetID()
 |------|------|---------|-------------|
 | `setID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setID = C_UIWidgetManager.GetBelowMinimapWidgetSetID()
@@ -66,7 +66,7 @@ widgetInfo = C_UIWidgetManager.GetBulletTextListWidgetVisualizationInfo(widgetID
 |------|------|---------|-------------|
 | `widgetInfo` | BulletTextListWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetBulletTextListWidgetVisualizationInfo(0)
@@ -90,7 +90,7 @@ widgetInfo = C_UIWidgetManager.GetButtonHeaderWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | ButtonHeaderWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetButtonHeaderWidgetVisualizationInfo(0)
@@ -114,7 +114,7 @@ widgetInfo = C_UIWidgetManager.GetCaptureBarWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | CaptureBarWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetCaptureBarWidgetVisualizationInfo(0)
@@ -138,7 +138,7 @@ widgetInfo = C_UIWidgetManager.GetCaptureZoneVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | CaptureZoneVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetCaptureZoneVisualizationInfo(0)
@@ -162,7 +162,7 @@ widgetInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo(widgetI
 |------|------|---------|-------------|
 | `widgetInfo` | DiscreteProgressStepsVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo(0)
@@ -186,7 +186,7 @@ widgetInfo = C_UIWidgetManager.GetDoubleIconAndTextWidgetVisualizationInfo(widge
 |------|------|---------|-------------|
 | `widgetInfo` | DoubleIconAndTextWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetDoubleIconAndTextWidgetVisualizationInfo(0)
@@ -210,7 +210,7 @@ widgetInfo = C_UIWidgetManager.GetDoubleStateIconRowVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | DoubleStateIconRowVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetDoubleStateIconRowVisualizationInfo(0)
@@ -234,7 +234,7 @@ widgetInfo = C_UIWidgetManager.GetDoubleStatusBarWidgetVisualizationInfo(widgetI
 |------|------|---------|-------------|
 | `widgetInfo` | DoubleStatusBarWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetDoubleStatusBarWidgetVisualizationInfo(0)
@@ -258,7 +258,7 @@ widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | FillUpFramesWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetFillUpFramesWidgetVisualizationInfo(0)
@@ -282,7 +282,7 @@ widgetInfo = C_UIWidgetManager.GetHorizontalCurrenciesWidgetVisualizationInfo(wi
 |------|------|---------|-------------|
 | `widgetInfo` | HorizontalCurrenciesWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetHorizontalCurrenciesWidgetVisualizationInfo(0)
@@ -306,7 +306,7 @@ widgetInfo = C_UIWidgetManager.GetIconAndTextWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | IconAndTextWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetIconAndTextWidgetVisualizationInfo(0)
@@ -330,7 +330,7 @@ widgetInfo = C_UIWidgetManager.GetIconTextAndBackgroundWidgetVisualizationInfo(w
 |------|------|---------|-------------|
 | `widgetInfo` | IconTextAndBackgroundWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetIconTextAndBackgroundWidgetVisualizationInfo(0)
@@ -354,7 +354,7 @@ widgetInfo = C_UIWidgetManager.GetIconTextAndCurrenciesWidgetVisualizationInfo(w
 |------|------|---------|-------------|
 | `widgetInfo` | IconTextAndCurrenciesWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetIconTextAndCurrenciesWidgetVisualizationInfo(0)
@@ -378,7 +378,7 @@ widgetInfo = C_UIWidgetManager.GetItemDisplayVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | ItemDisplayVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetItemDisplayVisualizationInfo(0)
@@ -402,7 +402,7 @@ widgetInfo = C_UIWidgetManager.GetMapPinAnimationWidgetVisualizationInfo(widgetI
 |------|------|---------|-------------|
 | `widgetInfo` | MapPinAnimationWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetMapPinAnimationWidgetVisualizationInfo(0)
@@ -420,7 +420,7 @@ setID = C_UIWidgetManager.GetObjectiveTrackerWidgetSetID()
 |------|------|---------|-------------|
 | `setID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setID = C_UIWidgetManager.GetObjectiveTrackerWidgetSetID()
@@ -438,7 +438,7 @@ setID = C_UIWidgetManager.GetPowerBarWidgetSetID()
 |------|------|---------|-------------|
 | `setID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setID = C_UIWidgetManager.GetPowerBarWidgetSetID()
@@ -462,7 +462,7 @@ widgetInfo = C_UIWidgetManager.GetPreyHuntProgressWidgetVisualizationInfo(widget
 |------|------|---------|-------------|
 | `widgetInfo` | PreyHuntProgressWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetPreyHuntProgressWidgetVisualizationInfo(0)
@@ -486,7 +486,7 @@ widgetInfo = C_UIWidgetManager.GetScenarioHeaderCurrenciesAndBackgroundWidgetVis
 |------|------|---------|-------------|
 | `widgetInfo` | ScenarioHeaderCurrenciesAndBackgroundWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetScenarioHeaderCurrenciesAndBackgroundWidgetVisualizationInfo(0)
@@ -510,7 +510,7 @@ widgetInfo = C_UIWidgetManager.GetScenarioHeaderDelvesWidgetVisualizationInfo(wi
 |------|------|---------|-------------|
 | `widgetInfo` | ScenarioHeaderDelvesWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetScenarioHeaderDelvesWidgetVisualizationInfo(0)
@@ -534,7 +534,7 @@ widgetInfo = C_UIWidgetManager.GetScenarioHeaderTimerWidgetVisualizationInfo(wid
 |------|------|---------|-------------|
 | `widgetInfo` | ScenarioHeaderTimerWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetScenarioHeaderTimerWidgetVisualizationInfo(0)
@@ -558,7 +558,7 @@ widgetInfo = C_UIWidgetManager.GetSpacerVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | SpacerVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetSpacerVisualizationInfo(0)
@@ -582,7 +582,7 @@ widgetInfo = C_UIWidgetManager.GetSpellDisplayVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | SpellDisplayVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetSpellDisplayVisualizationInfo(0)
@@ -606,7 +606,7 @@ widgetInfo = C_UIWidgetManager.GetStackedResourceTrackerWidgetVisualizationInfo(
 |------|------|---------|-------------|
 | `widgetInfo` | StackedResourceTrackerWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetStackedResourceTrackerWidgetVisualizationInfo(0)
@@ -630,7 +630,7 @@ widgetInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | StatusBarWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo(0)
@@ -654,7 +654,7 @@ widgetInfo = C_UIWidgetManager.GetTextColumnRowVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | TextColumnRowVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextColumnRowVisualizationInfo(0)
@@ -678,7 +678,7 @@ widgetInfo = C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | TextureAndTextRowVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextureAndTextRowVisualizationInfo(0)
@@ -702,7 +702,7 @@ widgetInfo = C_UIWidgetManager.GetTextureAndTextVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | TextureAndTextVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextureAndTextVisualizationInfo(0)
@@ -726,7 +726,7 @@ widgetInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo(widgetID
 |------|------|---------|-------------|
 | `widgetInfo` | TextureWithAnimationVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo(0)
@@ -750,7 +750,7 @@ widgetInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | TextWithStateWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(0)
@@ -774,7 +774,7 @@ widgetInfo = C_UIWidgetManager.GetTextWithSubtextWidgetVisualizationInfo(widgetI
 |------|------|---------|-------------|
 | `widgetInfo` | TextWithSubtextWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTextWithSubtextWidgetVisualizationInfo(0)
@@ -792,7 +792,7 @@ setID = C_UIWidgetManager.GetTopCenterWidgetSetID()
 |------|------|---------|-------------|
 | `setID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setID = C_UIWidgetManager.GetTopCenterWidgetSetID()
@@ -816,7 +816,7 @@ widgetInfo = C_UIWidgetManager.GetTugOfWarWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | TugOfWarWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetTugOfWarWidgetVisualizationInfo(0)
@@ -840,7 +840,7 @@ widgetInfo = C_UIWidgetManager.GetUnitPowerBarWidgetVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | UnitPowerBarWidgetVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetUnitPowerBarWidgetVisualizationInfo(0)
@@ -864,7 +864,7 @@ widgetSetInfo = C_UIWidgetManager.GetWidgetSetInfo(widgetSetID)
 |------|------|---------|-------------|
 | `widgetSetInfo` | UIWidgetSetInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetSetInfo = C_UIWidgetManager.GetWidgetSetInfo(0)
@@ -888,7 +888,7 @@ widgetInfo = C_UIWidgetManager.GetZoneControlVisualizationInfo(widgetID)
 |------|------|---------|-------------|
 | `widgetInfo` | ZoneControlVisualizationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local widgetInfo = C_UIWidgetManager.GetZoneControlVisualizationInfo(0)
@@ -907,10 +907,10 @@ C_UIWidgetManager.RegisterUnitForWidgetUpdates(unitToken, isGuid)
 | `unitToken` | string | no |  |
 | `isGuid` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_UIWidgetManager.RegisterUnitForWidgetUpdates("player", "Creature-0-0000-0-0-0-0")
+C_UIWidgetManager.RegisterUnitForWidgetUpdates("player", UnitGUID("player"))
 ```
 
 ### C_UIWidgetManager.SetProcessingUnit
@@ -925,7 +925,7 @@ C_UIWidgetManager.SetProcessingUnit([unit])
 |------|------|---------|-------------|
 | `unit` | UnitToken | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UIWidgetManager.SetProcessingUnit()
@@ -943,7 +943,7 @@ C_UIWidgetManager.SetProcessingUnitGuid([unit])
 |------|------|---------|-------------|
 | `unit` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_UIWidgetManager.SetProcessingUnitGuid()
@@ -962,10 +962,10 @@ C_UIWidgetManager.UnregisterUnitForWidgetUpdates(unitToken, isGuid)
 | `unitToken` | string | no |  |
 | `isGuid` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_UIWidgetManager.UnregisterUnitForWidgetUpdates("player", "Creature-0-0000-0-0-0-0")
+C_UIWidgetManager.UnregisterUnitForWidgetUpdates("player", UnitGUID("player"))
 ```
 
 ## Events

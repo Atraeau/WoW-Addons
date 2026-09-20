@@ -18,7 +18,7 @@ color = GetEndColor()
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = GetEndColor()
@@ -36,7 +36,7 @@ color = GetStartColor()
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = GetStartColor()
@@ -54,7 +54,7 @@ SetEndColor(color)
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEndColor(color)
@@ -72,7 +72,7 @@ SetStartColor(color)
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStartColor(color)

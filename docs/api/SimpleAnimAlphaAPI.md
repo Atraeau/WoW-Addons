@@ -18,7 +18,7 @@ normalizedAlpha = GetFromAlpha()
 |------|------|---------|-------------|
 | `normalizedAlpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local normalizedAlpha = GetFromAlpha()
@@ -36,7 +36,7 @@ normalizedAlpha = GetToAlpha()
 |------|------|---------|-------------|
 | `normalizedAlpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local normalizedAlpha = GetToAlpha()
@@ -54,7 +54,7 @@ SetFromAlpha(normalizedAlpha)
 |------|------|---------|-------------|
 | `normalizedAlpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFromAlpha(0)
@@ -72,7 +72,7 @@ SetToAlpha(normalizedAlpha)
 |------|------|---------|-------------|
 | `normalizedAlpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToAlpha(0)

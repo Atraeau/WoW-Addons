@@ -14,7 +14,7 @@ Cancels all in-progress editing of the selected target, which will reset any uns
 C_HousingBasicMode.CancelActiveEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.CancelActiveEditing()
@@ -28,7 +28,7 @@ Attempt to save the changes made to the currently selected decor instance
 C_HousingBasicMode.CommitDecorMovement()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.CommitDecorMovement()
@@ -42,7 +42,7 @@ Attempt to save the changes made to the House Exterior's position within the plo
 C_HousingBasicMode.CommitHouseExteriorPosition()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.CommitHouseExteriorPosition()
@@ -54,7 +54,7 @@ C_HousingBasicMode.CommitHouseExteriorPosition()
 C_HousingBasicMode.FinishPlacingNewDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.FinishPlacingNewDecor()
@@ -74,7 +74,7 @@ info = C_HousingBasicMode.GetHoveredDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingBasicMode.GetHoveredDecorInfo()
@@ -94,7 +94,7 @@ info = C_HousingBasicMode.GetSelectedDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingBasicMode.GetSelectedDecorInfo()
@@ -114,7 +114,7 @@ hasSelectedDecor = C_HousingBasicMode.IsDecorSelected()
 |------|------|---------|-------------|
 | `hasSelectedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedDecor = C_HousingBasicMode.IsDecorSelected()
@@ -134,7 +134,7 @@ freePlaceEnabled = C_HousingBasicMode.IsFreePlaceEnabled()
 |------|------|---------|-------------|
 | `freePlaceEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local freePlaceEnabled = C_HousingBasicMode.IsFreePlaceEnabled()
@@ -152,7 +152,7 @@ isGridSnapEnabled = C_HousingBasicMode.IsGridSnapEnabled()
 |------|------|---------|-------------|
 | `isGridSnapEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isGridSnapEnabled = C_HousingBasicMode.IsGridSnapEnabled()
@@ -170,7 +170,7 @@ gridVisible = C_HousingBasicMode.IsGridVisible()
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gridVisible = C_HousingBasicMode.IsGridVisible()
@@ -190,7 +190,7 @@ isHouseExteriorHovered = C_HousingBasicMode.IsHouseExteriorHovered()
 |------|------|---------|-------------|
 | `isHouseExteriorHovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorHovered = C_HousingBasicMode.IsHouseExteriorHovered()
@@ -210,7 +210,7 @@ isHouseExteriorSelected = C_HousingBasicMode.IsHouseExteriorSelected()
 |------|------|---------|-------------|
 | `isHouseExteriorSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorSelected = C_HousingBasicMode.IsHouseExteriorSelected()
@@ -230,7 +230,7 @@ isHoveringDecor = C_HousingBasicMode.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingBasicMode.IsHoveringDecor()
@@ -248,7 +248,7 @@ hasPendingDecor = C_HousingBasicMode.IsPlacingNewDecor()
 |------|------|---------|-------------|
 | `hasPendingDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPendingDecor = C_HousingBasicMode.IsPlacingNewDecor()
@@ -262,7 +262,7 @@ Attempt to return the currently selected decor instance back to the house chest
 C_HousingBasicMode.RemoveSelectedDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.RemoveSelectedDecor()
@@ -282,7 +282,7 @@ C_HousingBasicMode.RotateDecor(rotDegrees)
 |------|------|---------|-------------|
 | `rotDegrees` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.RotateDecor(0)
@@ -302,7 +302,7 @@ C_HousingBasicMode.RotateHouseExterior(rotDegrees)
 |------|------|---------|-------------|
 | `rotDegrees` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.RotateHouseExterior(0)
@@ -322,7 +322,7 @@ C_HousingBasicMode.SetFreePlaceEnabled(freePlaceEnabled)
 |------|------|---------|-------------|
 | `freePlaceEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.SetFreePlaceEnabled(false)
@@ -340,7 +340,7 @@ C_HousingBasicMode.SetGridSnapEnabled(isGridSnapEnabled)
 |------|------|---------|-------------|
 | `isGridSnapEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.SetGridSnapEnabled(false)
@@ -358,7 +358,7 @@ C_HousingBasicMode.SetGridVisible(gridVisible)
 |------|------|---------|-------------|
 | `gridVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.SetGridVisible(false)
@@ -376,7 +376,7 @@ C_HousingBasicMode.StartPlacingNewDecor(catalogEntryVariantID)
 |------|------|---------|-------------|
 | `catalogEntryVariantID` | HousingCatalogEntryVariantID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.StartPlacingNewDecor(catalogEntryVariantID)
@@ -395,7 +395,7 @@ C_HousingBasicMode.StartPlacingPreviewDecor(decorRecordID, [bundleCatalogShopPro
 | `decorRecordID` | number | no |  |
 | `bundleCatalogShopProductID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingBasicMode.StartPlacingPreviewDecor(0)

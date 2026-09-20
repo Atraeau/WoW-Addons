@@ -12,7 +12,7 @@
 C_LobbyMatchmakerInfo.AbandonQueue()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LobbyMatchmakerInfo.AbandonQueue()
@@ -30,7 +30,7 @@ C_LobbyMatchmakerInfo.EnterQueue(playlistEntry)
 |------|------|---------|-------------|
 | `playlistEntry` | PartyPlaylistEntry | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LobbyMatchmakerInfo.EnterQueue(playlistEntry)
@@ -48,7 +48,7 @@ playlistEntry = C_LobbyMatchmakerInfo.GetCurrQueuePlaylistEntry()
 |------|------|---------|-------------|
 | `playlistEntry` | PartyPlaylistEntry | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playlistEntry = C_LobbyMatchmakerInfo.GetCurrQueuePlaylistEntry()
@@ -66,7 +66,7 @@ queueState = C_LobbyMatchmakerInfo.GetCurrQueueState()
 |------|------|---------|-------------|
 | `queueState` | PlunderstormQueueState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local queueState = C_LobbyMatchmakerInfo.GetCurrQueueState()
@@ -84,7 +84,7 @@ queueFromMainlineEnabled = C_LobbyMatchmakerInfo.GetQueueFromMainlineEnabled()
 |------|------|---------|-------------|
 | `queueFromMainlineEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local queueFromMainlineEnabled = C_LobbyMatchmakerInfo.GetQueueFromMainlineEnabled()
@@ -102,7 +102,7 @@ queueStartTime = C_LobbyMatchmakerInfo.GetQueueStartTime()
 |------|------|---------|-------------|
 | `queueStartTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local queueStartTime = C_LobbyMatchmakerInfo.GetQueueStartTime()
@@ -120,7 +120,7 @@ isInQueue = C_LobbyMatchmakerInfo.IsInQueue()
 |------|------|---------|-------------|
 | `isInQueue` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInQueue = C_LobbyMatchmakerInfo.IsInQueue()
@@ -138,7 +138,7 @@ C_LobbyMatchmakerInfo.RespondToQueuePop(acceptQueue)
 |------|------|---------|-------------|
 | `acceptQueue` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LobbyMatchmakerInfo.RespondToQueuePop(false)

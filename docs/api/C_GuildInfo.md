@@ -18,7 +18,7 @@ enabled = C_GuildInfo.AreGuildEventsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GuildInfo.AreGuildEventsEnabled()
@@ -36,7 +36,7 @@ canEditOfficerNote = C_GuildInfo.CanEditOfficerNote()
 |------|------|---------|-------------|
 | `canEditOfficerNote` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEditOfficerNote = C_GuildInfo.CanEditOfficerNote()
@@ -54,7 +54,7 @@ canSpeakInGuildChat = C_GuildInfo.CanSpeakInGuildChat()
 |------|------|---------|-------------|
 | `canSpeakInGuildChat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSpeakInGuildChat = C_GuildInfo.CanSpeakInGuildChat()
@@ -72,7 +72,7 @@ canViewOfficerNote = C_GuildInfo.CanViewOfficerNote()
 |------|------|---------|-------------|
 | `canViewOfficerNote` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canViewOfficerNote = C_GuildInfo.CanViewOfficerNote()
@@ -90,7 +90,7 @@ C_GuildInfo.Demote(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Demote("")
@@ -102,7 +102,7 @@ C_GuildInfo.Demote("")
 C_GuildInfo.Disband()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Disband()
@@ -126,7 +126,7 @@ newsInfo = C_GuildInfo.GetGuildNewsInfo(index)
 |------|------|---------|-------------|
 | `newsInfo` | GuildNewsInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newsInfo = C_GuildInfo.GetGuildNewsInfo(1)
@@ -150,10 +150,10 @@ rankOrder = C_GuildInfo.GetGuildRankOrder(guid)
 |------|------|---------|-------------|
 | `rankOrder` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local rankOrder = C_GuildInfo.GetGuildRankOrder("Creature-0-0000-0-0-0-0")
+local rankOrder = C_GuildInfo.GetGuildRankOrder(UnitGUID("player"))
 ```
 
 ### C_GuildInfo.GetGuildTabardInfo
@@ -174,7 +174,7 @@ tabardInfo = C_GuildInfo.GetGuildTabardInfo([unit])
 |------|------|---------|-------------|
 | `tabardInfo` | GuildTabardInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tabardInfo = C_GuildInfo.GetGuildTabardInfo()
@@ -192,7 +192,7 @@ infoText = C_GuildInfo.GetInfoText()
 |------|------|---------|-------------|
 | `infoText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infoText = C_GuildInfo.GetInfoText()
@@ -210,7 +210,7 @@ motd = C_GuildInfo.GetMOTD()
 |------|------|---------|-------------|
 | `motd` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local motd = C_GuildInfo.GetMOTD()
@@ -233,7 +233,7 @@ loaded, preferredLocaleID, preferredDatacenterLocalityID, lastPreferredLocaleCha
 | `lastPreferredDatacenterLocalityChangeDate` | time_t | no |  |
 | `changeCooldownDays` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loaded, preferredLocaleID, preferredDatacenterLocalityID, lastPreferredLocaleChangeDate, lastPreferredDatacenterLocalityChangeDate, changeCooldownDays = C_GuildInfo.GetPreferredPlaySettings()
@@ -252,7 +252,7 @@ canChangeLocale, canChangeDatacenterLocality = C_GuildInfo.GetPreferredPlaySetti
 | `canChangeLocale` | bool | no |  |
 | `canChangeDatacenterLocality` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChangeLocale, canChangeDatacenterLocality = C_GuildInfo.GetPreferredPlaySettingsFeatures()
@@ -276,7 +276,7 @@ permissions = C_GuildInfo.GuildControlGetRankFlags(rankOrder)
 |------|------|---------|-------------|
 | `permissions` | bool[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local permissions = C_GuildInfo.GuildControlGetRankFlags(1)
@@ -288,7 +288,7 @@ local permissions = C_GuildInfo.GuildControlGetRankFlags(1)
 C_GuildInfo.GuildRoster()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.GuildRoster()
@@ -306,7 +306,7 @@ C_GuildInfo.Invite(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Invite("")
@@ -324,7 +324,7 @@ separateStream = C_GuildInfo.IsDiscordStreamSeparate()
 |------|------|---------|-------------|
 | `separateStream` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local separateStream = C_GuildInfo.IsDiscordStreamSeparate()
@@ -342,7 +342,7 @@ enabled = C_GuildInfo.IsEncounterGuildNewsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GuildInfo.IsEncounterGuildNewsEnabled()
@@ -360,7 +360,7 @@ isOfficer = C_GuildInfo.IsGuildOfficer()
 |------|------|---------|-------------|
 | `isOfficer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOfficer = C_GuildInfo.IsGuildOfficer()
@@ -385,10 +385,10 @@ isGuildRankAssignmentAllowed = C_GuildInfo.IsGuildRankAssignmentAllowed(guid, ra
 |------|------|---------|-------------|
 | `isGuildRankAssignmentAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isGuildRankAssignmentAllowed = C_GuildInfo.IsGuildRankAssignmentAllowed("Creature-0-0000-0-0-0-0", 1)
+local isGuildRankAssignmentAllowed = C_GuildInfo.IsGuildRankAssignmentAllowed(UnitGUID("player"), 1)
 ```
 
 ### C_GuildInfo.IsGuildReputationEnabled
@@ -403,7 +403,7 @@ enabled = C_GuildInfo.IsGuildReputationEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_GuildInfo.IsGuildReputationEnabled()
@@ -415,7 +415,7 @@ local enabled = C_GuildInfo.IsGuildReputationEnabled()
 C_GuildInfo.Leave()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Leave()
@@ -439,7 +439,7 @@ exists = C_GuildInfo.MemberExistsByName(name)
 |------|------|---------|-------------|
 | `exists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exists = C_GuildInfo.MemberExistsByName("")
@@ -457,7 +457,7 @@ C_GuildInfo.Promote(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Promote("")
@@ -476,10 +476,10 @@ C_GuildInfo.QueryGuildMemberRecipes(guildMemberGUID, skillLineID)
 | `guildMemberGUID` | WOWGUID | no |  |
 | `skillLineID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GuildInfo.QueryGuildMemberRecipes("Creature-0-0000-0-0-0-0", 0)
+C_GuildInfo.QueryGuildMemberRecipes(UnitGUID("player"), 0)
 ```
 
 ### C_GuildInfo.QueryGuildMembersForRecipe
@@ -502,10 +502,10 @@ updatedRecipeSpellID = C_GuildInfo.QueryGuildMembersForRecipe(skillLineID, recip
 |------|------|---------|-------------|
 | `updatedRecipeSpellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local updatedRecipeSpellID = C_GuildInfo.QueryGuildMembersForRecipe(0, 12345)
+local updatedRecipeSpellID = C_GuildInfo.QueryGuildMembersForRecipe(0, 2050)
 ```
 
 ### C_GuildInfo.RemoveFromGuild
@@ -520,10 +520,10 @@ C_GuildInfo.RemoveFromGuild(guid)
 |------|------|---------|-------------|
 | `guid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GuildInfo.RemoveFromGuild("Creature-0-0000-0-0-0-0")
+C_GuildInfo.RemoveFromGuild(UnitGUID("player"))
 ```
 
 ### C_GuildInfo.RequestGuildRename
@@ -538,7 +538,7 @@ C_GuildInfo.RequestGuildRename(desiredName)
 |------|------|---------|-------------|
 | `desiredName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.RequestGuildRename("")
@@ -550,7 +550,7 @@ C_GuildInfo.RequestGuildRename("")
 C_GuildInfo.RequestGuildRenameRefund()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.RequestGuildRenameRefund()
@@ -568,7 +568,7 @@ startedSuccessfully = C_GuildInfo.RequestPreferredPlaySettings()
 |------|------|---------|-------------|
 | `startedSuccessfully` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startedSuccessfully = C_GuildInfo.RequestPreferredPlaySettings()
@@ -586,7 +586,7 @@ C_GuildInfo.RequestRenameNameCheck(desiredName)
 |------|------|---------|-------------|
 | `desiredName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.RequestRenameNameCheck("")
@@ -604,7 +604,7 @@ ableToRequest = C_GuildInfo.RequestRenameStatus()
 |------|------|---------|-------------|
 | `ableToRequest` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ableToRequest = C_GuildInfo.RequestRenameStatus()
@@ -623,10 +623,10 @@ C_GuildInfo.SetGuildRankOrder(guid, rankOrder)
 | `guid` | WOWGUID | no |  |
 | `rankOrder` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GuildInfo.SetGuildRankOrder("Creature-0-0000-0-0-0-0", 1)
+C_GuildInfo.SetGuildRankOrder(UnitGUID("player"), 1)
 ```
 
 ### C_GuildInfo.SetInfoText
@@ -641,7 +641,7 @@ C_GuildInfo.SetInfoText(infoText)
 |------|------|---------|-------------|
 | `infoText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.SetInfoText("")
@@ -659,7 +659,7 @@ C_GuildInfo.SetLeader(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.SetLeader("")
@@ -677,7 +677,7 @@ C_GuildInfo.SetMOTD(motd)
 |------|------|---------|-------------|
 | `motd` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.SetMOTD("")
@@ -697,10 +697,10 @@ C_GuildInfo.SetNote(guid, note, isPublic)
 | `note` | cstring | no |  |
 | `isPublic` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GuildInfo.SetNote("Creature-0-0000-0-0-0-0", "", false)
+C_GuildInfo.SetNote(UnitGUID("player"), "", false)
 ```
 
 ### C_GuildInfo.SetPreferredPlaySettings
@@ -722,7 +722,7 @@ startedSuccessfully = C_GuildInfo.SetPreferredPlaySettings(preferredLocaleID, pr
 |------|------|---------|-------------|
 | `startedSuccessfully` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startedSuccessfully = C_GuildInfo.SetPreferredPlaySettings(0, 0)
@@ -740,7 +740,7 @@ C_GuildInfo.Uninvite(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GuildInfo.Uninvite("")

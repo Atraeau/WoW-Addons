@@ -18,7 +18,7 @@ isInProgress = C_InstanceEncounter.IsEncounterInProgress()
 |------|------|---------|-------------|
 | `isInProgress` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInProgress = C_InstanceEncounter.IsEncounterInProgress()
@@ -36,7 +36,7 @@ isLimitingResurrections = C_InstanceEncounter.IsEncounterLimitingResurrections()
 |------|------|---------|-------------|
 | `isLimitingResurrections` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLimitingResurrections = C_InstanceEncounter.IsEncounterLimitingResurrections()
@@ -54,7 +54,7 @@ isSuppressingRelease = C_InstanceEncounter.IsEncounterSuppressingRelease()
 |------|------|---------|-------------|
 | `isSuppressingRelease` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuppressingRelease = C_InstanceEncounter.IsEncounterSuppressingRelease()
@@ -72,7 +72,7 @@ shouldShow = C_InstanceEncounter.ShouldShowTimelineForEncounter()
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_InstanceEncounter.ShouldShowTimelineForEncounter()

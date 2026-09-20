@@ -18,7 +18,7 @@ hasURL = C_ExternalEventURL.HasURL()
 |------|------|---------|-------------|
 | `hasURL` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasURL = C_ExternalEventURL.HasURL()
@@ -36,7 +36,7 @@ isNew = C_ExternalEventURL.IsNew()
 |------|------|---------|-------------|
 | `isNew` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNew = C_ExternalEventURL.IsNew()
@@ -48,7 +48,7 @@ local isNew = C_ExternalEventURL.IsNew()
 C_ExternalEventURL.LaunchURL()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ExternalEventURL.LaunchURL()

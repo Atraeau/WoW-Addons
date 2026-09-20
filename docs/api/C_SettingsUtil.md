@@ -12,7 +12,7 @@
 C_SettingsUtil.NotifySettingsLoaded()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SettingsUtil.NotifySettingsLoaded()
@@ -31,7 +31,7 @@ C_SettingsUtil.OpenSettingsPanel([openToCategoryID], [scrollToElementName])
 | `openToCategoryID` | number | yes |  |
 | `scrollToElementName` | stringView | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SettingsUtil.OpenSettingsPanel()

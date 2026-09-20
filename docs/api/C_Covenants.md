@@ -18,7 +18,7 @@ covenantID = C_Covenants.GetActiveCovenantID()
 |------|------|---------|-------------|
 | `covenantID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local covenantID = C_Covenants.GetActiveCovenantID()
@@ -42,7 +42,7 @@ data = C_Covenants.GetCovenantData(covenantID)
 |------|------|---------|-------------|
 | `data` | CovenantData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_Covenants.GetCovenantData(0)
@@ -60,7 +60,7 @@ covenantID = C_Covenants.GetCovenantIDs()
 |------|------|---------|-------------|
 | `covenantID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local covenantID = C_Covenants.GetCovenantIDs()

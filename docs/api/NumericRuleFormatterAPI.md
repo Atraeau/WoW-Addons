@@ -20,7 +20,7 @@ AddBreakpoint(breakpoint)
 |------|------|---------|-------------|
 | `breakpoint` | NumericRuleFormatBreakpoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddBreakpoint(breakpoint)
@@ -34,7 +34,7 @@ Removes all configured breakpoints from the formatter.
 ClearBreakpoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearBreakpoints()
@@ -54,7 +54,7 @@ copy = Copy()
 |------|------|---------|-------------|
 | `copy` | NumericRuleFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local copy = Copy()
@@ -74,7 +74,7 @@ breakpoints = GetBreakpoints()
 |------|------|---------|-------------|
 | `breakpoints` | NumericRuleFormatBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local breakpoints = GetBreakpoints()
@@ -94,7 +94,7 @@ SetBreakpoints(breakpoints)
 |------|------|---------|-------------|
 | `breakpoints` | NumericRuleFormatBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBreakpoints(breakpoints)

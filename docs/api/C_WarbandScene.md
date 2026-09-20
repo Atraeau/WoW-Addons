@@ -18,7 +18,7 @@ warbandSceneID = C_WarbandScene.GetRandomEntryID()
 |------|------|---------|-------------|
 | `warbandSceneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warbandSceneID = C_WarbandScene.GetRandomEntryID()
@@ -42,7 +42,7 @@ warbandSceneEntry = C_WarbandScene.GetWarbandSceneEntry(warbandSceneID)
 |------|------|---------|-------------|
 | `warbandSceneEntry` | WarbandSceneEntry | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warbandSceneEntry = C_WarbandScene.GetWarbandSceneEntry(0)
@@ -66,7 +66,7 @@ owned = C_WarbandScene.HasWarbandScene(warbandSceneID)
 |------|------|---------|-------------|
 | `owned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local owned = C_WarbandScene.HasWarbandScene(0)
@@ -90,7 +90,7 @@ favorite = C_WarbandScene.IsFavorite(warbandSceneID)
 |------|------|---------|-------------|
 | `favorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local favorite = C_WarbandScene.IsFavorite(0)
@@ -114,7 +114,7 @@ matchingEntryIDs = C_WarbandScene.SearchWarbandSceneEntries(searchParams)
 |------|------|---------|-------------|
 | `matchingEntryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchingEntryIDs = C_WarbandScene.SearchWarbandSceneEntries(searchParams)
@@ -133,7 +133,7 @@ C_WarbandScene.SetFavorite(warbandSceneID, favorite)
 | `warbandSceneID` | number | no |  |
 | `favorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_WarbandScene.SetFavorite(0, false)
@@ -151,7 +151,7 @@ areWarbandScenesAvailable = C_WarbandScene.WarbandScenesAvailable()
 |------|------|---------|-------------|
 | `areWarbandScenesAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areWarbandScenesAvailable = C_WarbandScene.WarbandScenesAvailable()

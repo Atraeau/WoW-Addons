@@ -18,7 +18,7 @@ canSave = CanSaveTabardNow()
 |------|------|---------|-------------|
 | `canSave` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSave = CanSaveTabardNow()
@@ -37,7 +37,7 @@ CycleVariation(variationIndex, delta)
 | `variationIndex` | luaIndex | no |  |
 | `delta` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CycleVariation(1, 0)
@@ -55,7 +55,7 @@ GetLowerEmblemTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 GetLowerEmblemTexture(texture)
@@ -73,7 +73,7 @@ GetUpperEmblemTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 GetUpperEmblemTexture(texture)
@@ -85,7 +85,7 @@ GetUpperEmblemTexture(texture)
 InitializeTabardColors()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 InitializeTabardColors()
@@ -103,7 +103,7 @@ isGuildTabard = IsGuildTabard()
 |------|------|---------|-------------|
 | `isGuildTabard` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isGuildTabard = IsGuildTabard()
@@ -115,7 +115,7 @@ local isGuildTabard = IsGuildTabard()
 Save()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Save()

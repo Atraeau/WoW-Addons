@@ -14,7 +14,7 @@ Adds any cursor-held money to the current trade offer.
 C_TradeInfo.AddTradeMoney()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeInfo.AddTradeMoney()
@@ -32,10 +32,10 @@ C_TradeInfo.PickupTradeMoney(amount)
 |------|------|---------|-------------|
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TradeInfo.PickupTradeMoney(amount)
+C_TradeInfo.PickupTradeMoney(0)
 ```
 
 ### C_TradeInfo.SetTradeMoney
@@ -52,10 +52,10 @@ C_TradeInfo.SetTradeMoney(amount)
 |------|------|---------|-------------|
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TradeInfo.SetTradeMoney(amount)
+C_TradeInfo.SetTradeMoney(0)
 ```
 
 ### C_TradeInfo.ShouldShowTradeOfferWarning
@@ -70,7 +70,7 @@ shouldShow = C_TradeInfo.ShouldShowTradeOfferWarning()
 |------|------|---------|-------------|
 | `shouldShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShow = C_TradeInfo.ShouldShowTradeOfferWarning()

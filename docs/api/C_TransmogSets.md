@@ -12,7 +12,7 @@
 C_TransmogSets.ClearLatestSource()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.ClearLatestSource()
@@ -30,7 +30,7 @@ C_TransmogSets.ClearNewSource(sourceID)
 |------|------|---------|-------------|
 | `sourceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.ClearNewSource(0)
@@ -49,7 +49,7 @@ C_TransmogSets.ClearSetNewSourcesForSlot(transmogSetID, slot)
 | `transmogSetID` | number | no |  |
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.ClearSetNewSourcesForSlot(0, 1)
@@ -67,7 +67,7 @@ sets = C_TransmogSets.GetAllSets()
 |------|------|---------|-------------|
 | `sets` | TransmogSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sets = C_TransmogSets.GetAllSets()
@@ -91,7 +91,7 @@ sources = C_TransmogSets.GetAllSourceIDs(transmogSetID)
 |------|------|---------|-------------|
 | `sources` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogSets.GetAllSourceIDs(0)
@@ -109,7 +109,7 @@ sets = C_TransmogSets.GetAvailableSets()
 |------|------|---------|-------------|
 | `sets` | TransmogSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sets = C_TransmogSets.GetAvailableSets()
@@ -133,7 +133,7 @@ baseTransmogSetID = C_TransmogSets.GetBaseSetID(transmogSetID)
 |------|------|---------|-------------|
 | `baseTransmogSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local baseTransmogSetID = C_TransmogSets.GetBaseSetID(0)
@@ -151,7 +151,7 @@ sets = C_TransmogSets.GetBaseSets()
 |------|------|---------|-------------|
 | `sets` | TransmogSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sets = C_TransmogSets.GetBaseSets()
@@ -175,7 +175,7 @@ isChecked = C_TransmogSets.GetBaseSetsFilter(index)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isChecked = C_TransmogSets.GetBaseSetsFilter(1)
@@ -194,7 +194,7 @@ detailsCameraID, vendorCameraID = C_TransmogSets.GetCameraIDs()
 | `detailsCameraID` | number | yes |  |
 | `vendorCameraID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local detailsCameraID, vendorCameraID = C_TransmogSets.GetCameraIDs()
@@ -213,7 +213,7 @@ numCollected, numTotal = C_TransmogSets.GetFilteredBaseSetsCounts()
 | `numCollected` | number | no |  |
 | `numTotal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numCollected, numTotal = C_TransmogSets.GetFilteredBaseSetsCounts()
@@ -232,7 +232,7 @@ numCollected, numTotal = C_TransmogSets.GetFullBaseSetsCounts()
 | `numCollected` | number | no |  |
 | `numTotal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numCollected, numTotal = C_TransmogSets.GetFullBaseSetsCounts()
@@ -257,7 +257,7 @@ isFavorite, isGroupFavorite = C_TransmogSets.GetIsFavorite(transmogSetID)
 | `isFavorite` | bool | no |  |
 | `isGroupFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFavorite, isGroupFavorite = C_TransmogSets.GetIsFavorite(0)
@@ -275,7 +275,7 @@ sourceID = C_TransmogSets.GetLatestSource()
 |------|------|---------|-------------|
 | `sourceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sourceID = C_TransmogSets.GetLatestSource()
@@ -299,7 +299,7 @@ set = C_TransmogSets.GetSetInfo(transmogSetID)
 |------|------|---------|-------------|
 | `set` | TransmogSetInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local set = C_TransmogSets.GetSetInfo(0)
@@ -323,7 +323,7 @@ sourceIDs = C_TransmogSets.GetSetNewSources(transmogSetID)
 |------|------|---------|-------------|
 | `sourceIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sourceIDs = C_TransmogSets.GetSetNewSources(0)
@@ -347,7 +347,7 @@ apppearances = C_TransmogSets.GetSetPrimaryAppearances(transmogSetID)
 |------|------|---------|-------------|
 | `apppearances` | TransmogSetPrimaryAppearanceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local apppearances = C_TransmogSets.GetSetPrimaryAppearances(0)
@@ -371,7 +371,7 @@ setIDs = C_TransmogSets.GetSetsContainingSourceID(sourceID)
 |------|------|---------|-------------|
 | `setIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setIDs = C_TransmogSets.GetSetsContainingSourceID(0)
@@ -395,7 +395,7 @@ isChecked = C_TransmogSets.GetSetsFilter(index)
 |------|------|---------|-------------|
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isChecked = C_TransmogSets.GetSetsFilter(1)
@@ -420,7 +420,7 @@ sources = C_TransmogSets.GetSourceIDsForSlot(transmogSetID, slot)
 |------|------|---------|-------------|
 | `sources` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogSets.GetSourceIDsForSlot(0, 1)
@@ -445,7 +445,7 @@ sources = C_TransmogSets.GetSourcesForSlot(transmogSetID, slot)
 |------|------|---------|-------------|
 | `sources` | AppearanceSourceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sources = C_TransmogSets.GetSourcesForSlot(0, 1)
@@ -463,7 +463,7 @@ classID = C_TransmogSets.GetTransmogSetsClassFilter()
 |------|------|---------|-------------|
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classID = C_TransmogSets.GetTransmogSetsClassFilter()
@@ -481,7 +481,7 @@ sets = C_TransmogSets.GetUsableSets()
 |------|------|---------|-------------|
 | `sets` | TransmogSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sets = C_TransmogSets.GetUsableSets()
@@ -500,7 +500,7 @@ numCollected, numTotal = C_TransmogSets.GetValidBaseSetsCountsForCharacter()
 | `numCollected` | number | no |  |
 | `numTotal` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numCollected, numTotal = C_TransmogSets.GetValidBaseSetsCountsForCharacter()
@@ -524,7 +524,7 @@ classID = C_TransmogSets.GetValidClassForSet(transmogSetID)
 |------|------|---------|-------------|
 | `classID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local classID = C_TransmogSets.GetValidClassForSet(0)
@@ -548,7 +548,7 @@ sets = C_TransmogSets.GetVariantSets(transmogSetID)
 |------|------|---------|-------------|
 | `sets` | TransmogSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sets = C_TransmogSets.GetVariantSets(0)
@@ -566,7 +566,7 @@ hasAnyValidSets = C_TransmogSets.HasAnyValidSets()
 |------|------|---------|-------------|
 | `hasAnyValidSets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyValidSets = C_TransmogSets.HasAnyValidSets()
@@ -584,7 +584,7 @@ hasAvailableSets = C_TransmogSets.HasAvailableSets()
 |------|------|---------|-------------|
 | `hasAvailableSets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAvailableSets = C_TransmogSets.HasAvailableSets()
@@ -602,7 +602,7 @@ hasUsableSets = C_TransmogSets.HasUsableSets()
 |------|------|---------|-------------|
 | `hasUsableSets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUsableSets = C_TransmogSets.HasUsableSets()
@@ -626,7 +626,7 @@ isCollected = C_TransmogSets.IsBaseSetCollected(transmogSetID)
 |------|------|---------|-------------|
 | `isCollected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCollected = C_TransmogSets.IsBaseSetCollected(0)
@@ -650,7 +650,7 @@ isNew = C_TransmogSets.IsNewSource(sourceID)
 |------|------|---------|-------------|
 | `isNew` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isNew = C_TransmogSets.IsNewSource(0)
@@ -674,7 +674,7 @@ isVisible = C_TransmogSets.IsSetVisible(transmogSetID)
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = C_TransmogSets.IsSetVisible(0)
@@ -692,7 +692,7 @@ isUsingDefaultBaseSetsFilters = C_TransmogSets.IsUsingDefaultBaseSetsFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultBaseSetsFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultBaseSetsFilters = C_TransmogSets.IsUsingDefaultBaseSetsFilters()
@@ -710,7 +710,7 @@ isUsingDefaultSetsFilters = C_TransmogSets.IsUsingDefaultSetsFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultSetsFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultSetsFilters = C_TransmogSets.IsUsingDefaultSetsFilters()
@@ -729,7 +729,7 @@ C_TransmogSets.SetBaseSetsFilter(index, isChecked)
 | `index` | luaIndex | no |  |
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetBaseSetsFilter(1, false)
@@ -741,7 +741,7 @@ C_TransmogSets.SetBaseSetsFilter(1, false)
 C_TransmogSets.SetDefaultBaseSetsFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetDefaultBaseSetsFilters()
@@ -753,7 +753,7 @@ C_TransmogSets.SetDefaultBaseSetsFilters()
 C_TransmogSets.SetDefaultSetsFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetDefaultSetsFilters()
@@ -777,7 +777,7 @@ hasNewSources = C_TransmogSets.SetHasNewSources(transmogSetID)
 |------|------|---------|-------------|
 | `hasNewSources` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasNewSources = C_TransmogSets.SetHasNewSources(0)
@@ -802,7 +802,7 @@ hasNewSources = C_TransmogSets.SetHasNewSourcesForSlot(transmogSetID, slot)
 |------|------|---------|-------------|
 | `hasNewSources` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasNewSources = C_TransmogSets.SetHasNewSourcesForSlot(0, 1)
@@ -821,7 +821,7 @@ C_TransmogSets.SetIsFavorite(transmogSetID, isFavorite)
 | `transmogSetID` | number | no |  |
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetIsFavorite(0, false)
@@ -840,7 +840,7 @@ C_TransmogSets.SetSetsFilter(index, isChecked)
 | `index` | luaIndex | no |  |
 | `isChecked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetSetsFilter(1, false)
@@ -858,7 +858,7 @@ C_TransmogSets.SetTransmogSetsClassFilter(classID)
 |------|------|---------|-------------|
 | `classID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TransmogSets.SetTransmogSetsClassFilter(0)

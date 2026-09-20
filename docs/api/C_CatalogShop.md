@@ -24,7 +24,7 @@ canPurchaseProducts = C_CatalogShop.BulkPurchaseProducts(productIDs)
 |------|------|---------|-------------|
 | `canPurchaseProducts` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPurchaseProducts = C_CatalogShop.BulkPurchaseProducts(productIDs)
@@ -42,10 +42,10 @@ C_CatalogShop.BulkRefundDecors(decorGUIDs)
 |------|------|---------|-------------|
 | `decorGUIDs` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_CatalogShop.BulkRefundDecors("Creature-0-0000-0-0-0-0")
+C_CatalogShop.BulkRefundDecors(UnitGUID("player"))
 ```
 
 ### C_CatalogShop.CloseCatalogShopInteraction
@@ -54,7 +54,7 @@ C_CatalogShop.BulkRefundDecors("Creature-0-0000-0-0-0-0")
 C_CatalogShop.CloseCatalogShopInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.CloseCatalogShopInteraction()
@@ -72,7 +72,7 @@ C_CatalogShop.ConfirmHousingPurchase(productIDs)
 |------|------|---------|-------------|
 | `productIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.ConfirmHousingPurchase(productIDs)
@@ -97,7 +97,7 @@ vcProductID = C_CatalogShop.FindBestCurrencyProductForNeededAmount(vcCurrencyCod
 |------|------|---------|-------------|
 | `vcProductID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vcProductID = C_CatalogShop.FindBestCurrencyProductForNeededAmount("", 0)
@@ -115,7 +115,7 @@ categoryIDs = C_CatalogShop.GetAvailableCategoryIDs()
 |------|------|---------|-------------|
 | `categoryIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryIDs = C_CatalogShop.GetAvailableCategoryIDs()
@@ -133,7 +133,7 @@ raceIDs = C_CatalogShop.GetAvailableTransmogRaceInfos()
 |------|------|---------|-------------|
 | `raceIDs` | AvailableRaceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local raceIDs = C_CatalogShop.GetAvailableTransmogRaceInfos()
@@ -157,7 +157,7 @@ item = C_CatalogShop.GetCatalogShopProductDisplayInfo(catalogShopProductID)
 |------|------|---------|-------------|
 | `item` | CatalogShopProductDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local item = C_CatalogShop.GetCatalogShopProductDisplayInfo(0)
@@ -181,7 +181,7 @@ categoryInfo = C_CatalogShop.GetCategoryInfo(categoryID)
 |------|------|---------|-------------|
 | `categoryInfo` | CatalogShopCategoryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryInfo = C_CatalogShop.GetCategoryInfo(0)
@@ -206,7 +206,7 @@ sectionInfo = C_CatalogShop.GetCategorySectionInfo(categoryID, sectionID)
 |------|------|---------|-------------|
 | `sectionInfo` | CatalogShopSectionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sectionInfo = C_CatalogShop.GetCategorySectionInfo(0, 0)
@@ -225,7 +225,7 @@ errorResultEnum, errorResultRaw = C_CatalogShop.GetFailureInfo()
 | `errorResultEnum` | StoreError | yes |  |
 | `errorResultRaw` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local errorResultEnum, errorResultRaw = C_CatalogShop.GetFailureInfo()
@@ -249,7 +249,7 @@ categoryInfo = C_CatalogShop.GetFirstCategoryByProductID(productID)
 |------|------|---------|-------------|
 | `categoryInfo` | CatalogShopCategoryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryInfo = C_CatalogShop.GetFirstCategoryByProductID(0)
@@ -267,7 +267,7 @@ newProducts = C_CatalogShop.GetNewProducts()
 |------|------|---------|-------------|
 | `newProducts` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newProducts = C_CatalogShop.GetNewProducts()
@@ -291,7 +291,7 @@ timeRemainingSecs = C_CatalogShop.GetProductAvailabilityTimeRemainingSecs(catalo
 |------|------|---------|-------------|
 | `timeRemainingSecs` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeRemainingSecs = C_CatalogShop.GetProductAvailabilityTimeRemainingSecs(0)
@@ -315,7 +315,7 @@ childIDs = C_CatalogShop.GetProductIDsForBundle(bundleProductID)
 |------|------|---------|-------------|
 | `childIDs` | CatalogShopBundleChildInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local childIDs = C_CatalogShop.GetProductIDsForBundle(0)
@@ -339,7 +339,7 @@ productIDs = C_CatalogShop.GetProductIDsForCategory(categoryID)
 |------|------|---------|-------------|
 | `productIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local productIDs = C_CatalogShop.GetProductIDsForCategory(0)
@@ -364,7 +364,7 @@ productIDs = C_CatalogShop.GetProductIDsForCategorySection(categoryID, sectionID
 |------|------|---------|-------------|
 | `productIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local productIDs = C_CatalogShop.GetProductIDsForCategorySection(0, 0)
@@ -388,7 +388,7 @@ productInfo = C_CatalogShop.GetProductInfo(productID)
 |------|------|---------|-------------|
 | `productInfo` | CatalogShopProductInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local productInfo = C_CatalogShop.GetProductInfo(0)
@@ -414,7 +414,7 @@ sortOrder = C_CatalogShop.GetProductSortOrder(categoryID, sectionID, productID)
 |------|------|---------|-------------|
 | `sortOrder` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sortOrder = C_CatalogShop.GetProductSortOrder(0, 0, 0)
@@ -439,7 +439,7 @@ refundableDecorInfos, minTimeRemainingSeconds = C_CatalogShop.GetRefundableDecor
 | `refundableDecorInfos` | RefundableDecorInfo[] | no |  |
 | `minTimeRemainingSeconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundableDecorInfos, minTimeRemainingSeconds = C_CatalogShop.GetRefundableDecors()
@@ -463,7 +463,7 @@ sectionIDs = C_CatalogShop.GetSectionIDsForCategory(categoryID)
 |------|------|---------|-------------|
 | `sectionIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sectionIDs = C_CatalogShop.GetSectionIDsForCategory(0)
@@ -487,10 +487,10 @@ spellVisualInfo = C_CatalogShop.GetSpellVisualInfoForMount(spellVisualID)
 |------|------|---------|-------------|
 | `spellVisualInfo` | CatalogShopSpellVisualInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local spellVisualInfo = C_CatalogShop.GetSpellVisualInfoForMount(12345)
+local spellVisualInfo = C_CatalogShop.GetSpellVisualInfoForMount(2050)
 ```
 
 ### C_CatalogShop.GetVCProductInfos
@@ -505,7 +505,7 @@ vcProductInfos = C_CatalogShop.GetVCProductInfos()
 |------|------|---------|-------------|
 | `vcProductInfos` | CatalogShopVCProductInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vcProductInfos = C_CatalogShop.GetVCProductInfos()
@@ -529,7 +529,7 @@ balance = C_CatalogShop.GetVirtualCurrencyBalance(currencyCode)
 |------|------|---------|-------------|
 | `balance` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local balance = C_CatalogShop.GetVirtualCurrencyBalance("")
@@ -547,7 +547,7 @@ hasNewProducts = C_CatalogShop.HasNewProducts()
 |------|------|---------|-------------|
 | `hasNewProducts` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasNewProducts = C_CatalogShop.HasNewProducts()
@@ -571,7 +571,7 @@ isIncludedInAnyBundle = C_CatalogShop.IsProductIncludedInAnyBundle(productID)
 |------|------|---------|-------------|
 | `isIncludedInAnyBundle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIncludedInAnyBundle = C_CatalogShop.IsProductIncludedInAnyBundle(0)
@@ -589,7 +589,7 @@ value = C_CatalogShop.IsShop2Enabled()
 |------|------|---------|-------------|
 | `value` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_CatalogShop.IsShop2Enabled()
@@ -607,7 +607,7 @@ C_CatalogShop.OnLegalDisclaimerClicked(catalogShopProductID)
 |------|------|---------|-------------|
 | `catalogShopProductID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.OnLegalDisclaimerClicked(0)
@@ -619,7 +619,7 @@ C_CatalogShop.OnLegalDisclaimerClicked(0)
 C_CatalogShop.OnLegalPersonalizedOptOutClicked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.OnLegalPersonalizedOptOutClicked()
@@ -637,7 +637,7 @@ shoppingSessionUUIDStr = C_CatalogShop.OpenCatalogShopInteractionFromHouse()
 |------|------|---------|-------------|
 | `shoppingSessionUUIDStr` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shoppingSessionUUIDStr = C_CatalogShop.OpenCatalogShopInteractionFromHouse()
@@ -655,7 +655,7 @@ shoppingSessionUUIDStr = C_CatalogShop.OpenCatalogShopInteractionFromShop()
 |------|------|---------|-------------|
 | `shoppingSessionUUIDStr` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shoppingSessionUUIDStr = C_CatalogShop.OpenCatalogShopInteractionFromShop()
@@ -675,7 +675,7 @@ C_CatalogShop.ProductDisplayedTelemetry(categoryId, sectionId, catalogShopProduc
 | `sectionId` | number | no |  |
 | `catalogShopProductID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.ProductDisplayedTelemetry(0, 0, 0)
@@ -696,7 +696,7 @@ C_CatalogShop.ProductSelectedTelemetry(categoryId, sectionId, catalogShopProduct
 | `catalogShopProductID` | number | no |  |
 | `wasCodeSelection` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.ProductSelectedTelemetry(0, 0, 0, false)
@@ -720,7 +720,7 @@ canPurchase = C_CatalogShop.PurchaseProduct(productID)
 |------|------|---------|-------------|
 | `canPurchase` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPurchase = C_CatalogShop.PurchaseProduct(0)
@@ -732,7 +732,7 @@ local canPurchase = C_CatalogShop.PurchaseProduct(0)
 C_CatalogShop.RefreshRefundableDecors()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.RefreshRefundableDecors()
@@ -750,7 +750,7 @@ C_CatalogShop.RefreshVirtualCurrencyBalance(currencyCode)
 |------|------|---------|-------------|
 | `currencyCode` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.RefreshVirtualCurrencyBalance("")
@@ -768,7 +768,7 @@ shouldShowHousingWarning = C_CatalogShop.ShouldShowHousingWarning()
 |------|------|---------|-------------|
 | `shouldShowHousingWarning` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShowHousingWarning = C_CatalogShop.ShouldShowHousingWarning()
@@ -786,7 +786,7 @@ C_CatalogShop.StartHousingVCPurchaseConfirmation(productID)
 |------|------|---------|-------------|
 | `productID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CatalogShop.StartHousingVCPurchaseConfirmation(0)

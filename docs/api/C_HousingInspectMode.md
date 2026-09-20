@@ -14,7 +14,7 @@ Enters inspect mode, enabling decor inspection
 C_HousingInspectMode.EnterInspectMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingInspectMode.EnterInspectMode()
@@ -28,7 +28,7 @@ Exits inspect mode, disabling decor inspection
 C_HousingInspectMode.ExitInspectMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingInspectMode.ExitInspectMode()
@@ -48,7 +48,7 @@ decorGUID = C_HousingInspectMode.GetHoveredDecorGUID()
 |------|------|---------|-------------|
 | `decorGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local decorGUID = C_HousingInspectMode.GetHoveredDecorGUID()
@@ -68,7 +68,7 @@ isHoveringDecor = C_HousingInspectMode.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingInspectMode.IsHoveringDecor()
@@ -88,7 +88,7 @@ isInInspectMode = C_HousingInspectMode.IsInInspectMode()
 |------|------|---------|-------------|
 | `isInInspectMode` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInInspectMode = C_HousingInspectMode.IsInInspectMode()

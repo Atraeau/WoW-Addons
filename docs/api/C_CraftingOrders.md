@@ -18,7 +18,7 @@ areNotesDisabled = C_CraftingOrders.AreOrderNotesDisabled()
 |------|------|---------|-------------|
 | `areNotesDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areNotesDisabled = C_CraftingOrders.AreOrderNotesDisabled()
@@ -44,7 +44,7 @@ deposit = C_CraftingOrders.CalculateCraftingOrderPostingFee(skillLineAbilityID, 
 |------|------|---------|-------------|
 | `deposit` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deposit = C_CraftingOrders.CalculateCraftingOrderPostingFee(0, orderType, orderDuration)
@@ -62,7 +62,7 @@ C_CraftingOrders.CancelOrder(orderID)
 |------|------|---------|-------------|
 | `orderID` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.CancelOrder(orderID)
@@ -86,7 +86,7 @@ canOrder = C_CraftingOrders.CanOrderSkillAbility(skillLineAbilityID)
 |------|------|---------|-------------|
 | `canOrder` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canOrder = C_CraftingOrders.CanOrderSkillAbility(0)
@@ -105,7 +105,7 @@ C_CraftingOrders.ClaimOrder(orderID, profession)
 | `orderID` | BigUInteger | no |  |
 | `profession` | Profession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.ClaimOrder(orderID, profession)
@@ -117,7 +117,7 @@ C_CraftingOrders.ClaimOrder(orderID, profession)
 C_CraftingOrders.CloseCrafterCraftingOrders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.CloseCrafterCraftingOrders()
@@ -129,7 +129,7 @@ C_CraftingOrders.CloseCrafterCraftingOrders()
 C_CraftingOrders.CloseCustomerCraftingOrders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.CloseCustomerCraftingOrders()
@@ -149,7 +149,7 @@ C_CraftingOrders.FulfillOrder(orderID, crafterNote, profession)
 | `crafterNote` | string | no |  |
 | `profession` | Profession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.FulfillOrder(orderID, "", profession)
@@ -167,7 +167,7 @@ order = C_CraftingOrders.GetClaimedOrder()
 |------|------|---------|-------------|
 | `order` | CraftingOrderInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local order = C_CraftingOrders.GetClaimedOrder()
@@ -185,7 +185,7 @@ buckets = C_CraftingOrders.GetCrafterBuckets()
 |------|------|---------|-------------|
 | `buckets` | CraftingOrderBucketInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buckets = C_CraftingOrders.GetCrafterBuckets()
@@ -203,7 +203,7 @@ orders = C_CraftingOrders.GetCrafterOrders()
 |------|------|---------|-------------|
 | `orders` | CraftingOrderInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local orders = C_CraftingOrders.GetCrafterOrders()
@@ -221,7 +221,7 @@ time = C_CraftingOrders.GetCraftingOrderTime()
 |------|------|---------|-------------|
 | `time` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = C_CraftingOrders.GetCraftingOrderTime()
@@ -239,7 +239,7 @@ categories = C_CraftingOrders.GetCustomerCategories()
 |------|------|---------|-------------|
 | `categories` | CraftingOrderCustomerCategory[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categories = C_CraftingOrders.GetCustomerCategories()
@@ -263,7 +263,7 @@ results = C_CraftingOrders.GetCustomerOptions(params)
 |------|------|---------|-------------|
 | `results` | CraftingOrderCustomerSearchResults | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local results = C_CraftingOrders.GetCustomerOptions(params)
@@ -281,7 +281,7 @@ customerOrders = C_CraftingOrders.GetCustomerOrders()
 |------|------|---------|-------------|
 | `customerOrders` | CraftingOrderInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local customerOrders = C_CraftingOrders.GetCustomerOrders()
@@ -299,7 +299,7 @@ skillLineID = C_CraftingOrders.GetDefaultOrdersSkillLine()
 |------|------|---------|-------------|
 | `skillLineID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineID = C_CraftingOrders.GetDefaultOrdersSkillLine()
@@ -317,7 +317,7 @@ myOrders = C_CraftingOrders.GetMyOrders()
 |------|------|---------|-------------|
 | `myOrders` | CraftingOrderInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local myOrders = C_CraftingOrders.GetMyOrders()
@@ -335,7 +335,7 @@ numFavorites = C_CraftingOrders.GetNumFavoriteCustomerOptions()
 |------|------|---------|-------------|
 | `numFavorites` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numFavorites = C_CraftingOrders.GetNumFavoriteCustomerOptions()
@@ -359,7 +359,7 @@ claimInfo = C_CraftingOrders.GetOrderClaimInfo(profession)
 |------|------|---------|-------------|
 | `claimInfo` | CraftingOrderClaimsRemainingInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local claimInfo = C_CraftingOrders.GetOrderClaimInfo(profession)
@@ -377,7 +377,7 @@ infos = C_CraftingOrders.GetPersonalOrdersInfo()
 |------|------|---------|-------------|
 | `infos` | CraftingOrderPersonalOrdersInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infos = C_CraftingOrders.GetPersonalOrdersInfo()
@@ -395,7 +395,7 @@ hasFavorites = C_CraftingOrders.HasFavoriteCustomerOptions()
 |------|------|---------|-------------|
 | `hasFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFavorites = C_CraftingOrders.HasFavoriteCustomerOptions()
@@ -419,7 +419,7 @@ favorited = C_CraftingOrders.IsCustomerOptionFavorited(recipeID)
 |------|------|---------|-------------|
 | `favorited` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local favorited = C_CraftingOrders.IsCustomerOptionFavorited(0)
@@ -437,7 +437,7 @@ C_CraftingOrders.ListMyOrders(request)
 |------|------|---------|-------------|
 | `request` | CraftingOrderRequestMyOrdersInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.ListMyOrders(request)
@@ -449,7 +449,7 @@ C_CraftingOrders.ListMyOrders(request)
 C_CraftingOrders.OpenCrafterCraftingOrders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.OpenCrafterCraftingOrders()
@@ -461,7 +461,7 @@ C_CraftingOrders.OpenCrafterCraftingOrders()
 C_CraftingOrders.OpenCustomerCraftingOrders()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.OpenCustomerCraftingOrders()
@@ -485,7 +485,7 @@ recraftable = C_CraftingOrders.OrderCanBeRecrafted(orderID)
 |------|------|---------|-------------|
 | `recraftable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recraftable = C_CraftingOrders.OrderCanBeRecrafted(orderID)
@@ -497,7 +497,7 @@ local recraftable = C_CraftingOrders.OrderCanBeRecrafted(orderID)
 C_CraftingOrders.ParseCustomerOptions()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.ParseCustomerOptions()
@@ -515,7 +515,7 @@ C_CraftingOrders.PlaceNewOrder(orderInfo)
 |------|------|---------|-------------|
 | `orderInfo` | NewCraftingOrderInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.PlaceNewOrder(orderInfo)
@@ -535,7 +535,7 @@ C_CraftingOrders.RejectOrder(orderID, crafterNote, profession)
 | `crafterNote` | string | no |  |
 | `profession` | Profession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.RejectOrder(orderID, "", profession)
@@ -554,7 +554,7 @@ C_CraftingOrders.ReleaseOrder(orderID, profession)
 | `orderID` | BigUInteger | no |  |
 | `profession` | Profession | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.ReleaseOrder(orderID, profession)
@@ -572,7 +572,7 @@ C_CraftingOrders.RequestCrafterOrders(request)
 |------|------|---------|-------------|
 | `request` | CraftingOrderRequestInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.RequestCrafterOrders(request)
@@ -590,7 +590,7 @@ C_CraftingOrders.RequestCustomerOrders(request)
 |------|------|---------|-------------|
 | `request` | CraftingOrderRequestInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.RequestCustomerOrders(request)
@@ -609,7 +609,7 @@ C_CraftingOrders.SetCustomerOptionFavorited(recipeID, favorited)
 | `recipeID` | number | no |  |
 | `favorited` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.SetCustomerOptionFavorited(0, false)
@@ -627,7 +627,7 @@ showTab = C_CraftingOrders.ShouldShowCraftingOrderTab()
 |------|------|---------|-------------|
 | `showTab` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local showTab = C_CraftingOrders.ShouldShowCraftingOrderTab()
@@ -651,7 +651,7 @@ hasOrders = C_CraftingOrders.SkillLineHasOrders(skillLineID)
 |------|------|---------|-------------|
 | `hasOrders` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasOrders = C_CraftingOrders.SkillLineHasOrders(0)
@@ -663,7 +663,7 @@ local hasOrders = C_CraftingOrders.SkillLineHasOrders(0)
 C_CraftingOrders.UpdateIgnoreList()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CraftingOrders.UpdateIgnoreList()

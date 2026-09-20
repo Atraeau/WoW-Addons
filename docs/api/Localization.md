@@ -25,7 +25,7 @@ result = AbbreviateLargeNumbers(number, [options])
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = AbbreviateLargeNumbers(0)
@@ -50,7 +50,7 @@ result = AbbreviateNumbers(number, [options])
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = AbbreviateNumbers(0)
@@ -75,7 +75,7 @@ result = BreakUpLargeNumbers(largeNumber, natural)
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = BreakUpLargeNumbers(0, false)
@@ -99,7 +99,7 @@ result = CaseAccentInsensitiveParse(name)
 |------|------|---------|-------------|
 | `result` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CaseAccentInsensitiveParse("")
@@ -123,7 +123,7 @@ config = CreateAbbreviateConfig(data)
 |------|------|---------|-------------|
 | `config` | AbbreviateConfig | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local config = CreateAbbreviateConfig(data)
@@ -150,10 +150,10 @@ declinedNames = DeclineName(name, [gender], declensionSet, [namePartType])
 |------|------|---------|-------------|
 | `declinedNames` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local declinedNames = DeclineName("", declensionSet)
+local declinedNames = DeclineName("", 1)
 ```
 
 ### Localization.GetDefaultAbbreviationBreakpoints
@@ -174,7 +174,7 @@ breakpoints = GetDefaultAbbreviationBreakpoints([locale])
 |------|------|---------|-------------|
 | `breakpoints` | NumberAbbreviationBreakpoint[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local breakpoints = GetDefaultAbbreviationBreakpoints()
@@ -200,7 +200,7 @@ numDeclensionSets = GetNumDeclensionSets(name, [gender], [namePartType])
 |------|------|---------|-------------|
 | `numDeclensionSets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDeclensionSets = GetNumDeclensionSets("")
@@ -218,7 +218,7 @@ enabled = IsEuropeanNumbers()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsEuropeanNumbers()
@@ -242,7 +242,7 @@ result = LocalizedClassList(isFemale)
 |------|------|---------|-------------|
 | `result` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = LocalizedClassList(false)
@@ -260,7 +260,7 @@ SetEuropeanNumbers(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEuropeanNumbers(false)

@@ -19,7 +19,7 @@ deltaX, deltaY = GetCursorDelta()
 | `deltaX` | number | no |  |
 | `deltaY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local deltaX, deltaY = GetCursorDelta()
@@ -38,7 +38,7 @@ posX, posY = GetCursorPosition()
 | `posX` | number | no |  |
 | `posY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local posX, posY = GetCursorPosition()
@@ -56,7 +56,7 @@ buttonName = GetMouseButtonClicked()
 |------|------|---------|-------------|
 | `buttonName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buttonName = GetMouseButtonClicked()
@@ -80,7 +80,7 @@ buttonName = GetMouseButtonName(button)
 |------|------|---------|-------------|
 | `buttonName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buttonName = GetMouseButtonName(button)
@@ -98,7 +98,7 @@ region = GetMouseFoci()
 |------|------|---------|-------------|
 | `region` | ScriptRegion[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local region = GetMouseFoci()
@@ -122,7 +122,7 @@ modifierString = GetStringFromModifiers(modifiers)
 |------|------|---------|-------------|
 | `modifierString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modifierString = GetStringFromModifiers(0)
@@ -140,7 +140,7 @@ down = IsAltKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsAltKeyDown()
@@ -158,7 +158,7 @@ down = IsControlKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsControlKeyDown()
@@ -183,7 +183,7 @@ down = IsKeyDown(keyOrMouseName, excludeBindingState)
 |------|------|---------|-------------|
 | `down` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsKeyDown("", false)
@@ -201,7 +201,7 @@ down = IsLeftAltKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsLeftAltKeyDown()
@@ -219,7 +219,7 @@ down = IsLeftControlKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsLeftControlKeyDown()
@@ -237,7 +237,7 @@ down = IsLeftMetaKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsLeftMetaKeyDown()
@@ -255,7 +255,7 @@ down = IsLeftShiftKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsLeftShiftKeyDown()
@@ -273,7 +273,7 @@ down = IsMetaKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsMetaKeyDown()
@@ -291,7 +291,7 @@ down = IsModifierKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsModifierKeyDown()
@@ -315,7 +315,7 @@ down = IsMouseButtonDown([button])
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsMouseButtonDown()
@@ -333,7 +333,7 @@ down = IsRightAltKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsRightAltKeyDown()
@@ -351,7 +351,7 @@ down = IsRightControlKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsRightControlKeyDown()
@@ -369,7 +369,7 @@ down = IsRightMetaKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsRightMetaKeyDown()
@@ -387,7 +387,7 @@ down = IsRightShiftKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsRightShiftKeyDown()
@@ -405,7 +405,7 @@ down = IsShiftKeyDown()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsShiftKeyDown()
@@ -423,7 +423,7 @@ down = IsUsingGamepad()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsUsingGamepad()
@@ -441,7 +441,7 @@ down = IsUsingMouse()
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local down = IsUsingMouse()
@@ -459,7 +459,7 @@ modifiers = MakeModifiers()
 |------|------|---------|-------------|
 | `modifiers` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modifiers = MakeModifiers()
@@ -480,7 +480,7 @@ SetCursorPosition(xPosition, yPosition)
 | `xPosition` | uiUnit | no |  |
 | `yPosition` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCursorPosition(xPosition, yPosition)
@@ -500,7 +500,7 @@ SimulateMouseClick(button)
 |------|------|---------|-------------|
 | `button` | mouseButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SimulateMouseClick(button)
@@ -520,7 +520,7 @@ SimulateMouseDown(button)
 |------|------|---------|-------------|
 | `button` | mouseButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SimulateMouseDown(button)
@@ -540,7 +540,7 @@ SimulateMouseUp(button)
 |------|------|---------|-------------|
 | `button` | mouseButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SimulateMouseUp(button)
@@ -560,7 +560,7 @@ SimulateMouseWheel(delta)
 |------|------|---------|-------------|
 | `delta` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SimulateMouseWheel(0)

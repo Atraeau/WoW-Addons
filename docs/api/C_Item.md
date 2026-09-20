@@ -12,7 +12,7 @@
 C_Item.ActionBindsItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ActionBindsItem()
@@ -24,7 +24,7 @@ C_Item.ActionBindsItem()
 C_Item.BindEnchant()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.BindEnchant()
@@ -48,7 +48,7 @@ canBeRefunded = C_Item.CanBeRefunded(itemLocation)
 |------|------|---------|-------------|
 | `canBeRefunded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canBeRefunded = C_Item.CanBeRefunded(6948)
@@ -73,7 +73,7 @@ canTransmog, errorCode = C_Item.CanItemTransmogAppearance(itemLoc)
 | `canTransmog` | bool | no |  |
 | `errorCode` | TransmogOutfitSlotError | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canTransmog, errorCode = C_Item.CanItemTransmogAppearance(6948)
@@ -97,7 +97,7 @@ canBeScrapped = C_Item.CanScrapItem(itemLoc)
 |------|------|---------|-------------|
 | `canBeScrapped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canBeScrapped = C_Item.CanScrapItem(6948)
@@ -121,7 +121,7 @@ isItemViewable = C_Item.CanViewItemPowers(itemLoc)
 |------|------|---------|-------------|
 | `isItemViewable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemViewable = C_Item.CanViewItemPowers(6948)
@@ -133,7 +133,7 @@ local isItemViewable = C_Item.CanViewItemPowers(6948)
 C_Item.ConfirmBindOnUse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ConfirmBindOnUse()
@@ -151,10 +151,10 @@ C_Item.ConfirmDeleteItem(itemGUID)
 |------|------|---------|-------------|
 | `itemGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Item.ConfirmDeleteItem("Creature-0-0000-0-0-0-0")
+C_Item.ConfirmDeleteItem(UnitGUID("player"))
 ```
 
 ### C_Item.ConfirmNoRefundOnUse
@@ -163,7 +163,7 @@ C_Item.ConfirmDeleteItem("Creature-0-0000-0-0-0-0")
 C_Item.ConfirmNoRefundOnUse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ConfirmNoRefundOnUse()
@@ -175,7 +175,7 @@ C_Item.ConfirmNoRefundOnUse()
 C_Item.ConfirmOnUse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ConfirmOnUse()
@@ -193,10 +193,10 @@ C_Item.DeleteItem(itemGUID)
 |------|------|---------|-------------|
 | `itemGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Item.DeleteItem("Creature-0-0000-0-0-0-0")
+C_Item.DeleteItem(UnitGUID("player"))
 ```
 
 ### C_Item.DoesItemContainSpec
@@ -219,7 +219,7 @@ result = C_Item.DoesItemContainSpec(itemInfo, classID, specID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.DoesItemContainSpec(6948, 0, 0)
@@ -243,7 +243,7 @@ itemExists = C_Item.DoesItemExist(emptiableItemLocation)
 |------|------|---------|-------------|
 | `itemExists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemExists = C_Item.DoesItemExist(6948)
@@ -267,7 +267,7 @@ itemExists = C_Item.DoesItemExistByID(itemInfo)
 |------|------|---------|-------------|
 | `itemExists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemExists = C_Item.DoesItemExistByID(6948)
@@ -291,7 +291,7 @@ matchesBonusTree = C_Item.DoesItemMatchBonusTreeReplacement(itemLoc)
 |------|------|---------|-------------|
 | `matchesBonusTree` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchesBonusTree = C_Item.DoesItemMatchBonusTreeReplacement(6948)
@@ -315,7 +315,7 @@ matches = C_Item.DoesItemMatchSpellItemCondition(itemLoc)
 |------|------|---------|-------------|
 | `matches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matches = C_Item.DoesItemMatchSpellItemCondition(6948)
@@ -339,7 +339,7 @@ matchesTargetEnchantingSpell = C_Item.DoesItemMatchTargetEnchantingSpell(itemLoc
 |------|------|---------|-------------|
 | `matchesTargetEnchantingSpell` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchesTargetEnchantingSpell = C_Item.DoesItemMatchTargetEnchantingSpell(6948)
@@ -363,7 +363,7 @@ matchesTrackJump = C_Item.DoesItemMatchTrackJump(itemLoc)
 |------|------|---------|-------------|
 | `matchesTrackJump` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local matchesTrackJump = C_Item.DoesItemMatchTrackJump(6948)
@@ -381,7 +381,7 @@ C_Item.DropItemOnUnit(unitGUID)
 |------|------|---------|-------------|
 | `unitGUID` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.DropItemOnUnit("player")
@@ -399,7 +399,7 @@ C_Item.EndBoundTradeable(type)
 |------|------|---------|-------------|
 | `type` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.EndBoundTradeable("")
@@ -417,7 +417,7 @@ C_Item.EndRefund(type)
 |------|------|---------|-------------|
 | `type` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.EndRefund(0)
@@ -436,7 +436,7 @@ C_Item.EquipItemByName(itemInfo, [dstSlot])
 | `itemInfo` | ItemInfo | no |  |
 | `dstSlot` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.EquipItemByName(6948)
@@ -460,7 +460,7 @@ info = C_Item.GetAppliedItemTransmogInfo(itemLoc)
 |------|------|---------|-------------|
 | `info` | ItemTransmogInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Item.GetAppliedItemTransmogInfo(6948)
@@ -484,7 +484,7 @@ info = C_Item.GetBaseItemTransmogInfo(itemLoc)
 |------|------|---------|-------------|
 | `info` | ItemTransmogInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Item.GetBaseItemTransmogInfo(6948)
@@ -508,7 +508,7 @@ currentItemLevel = C_Item.GetCurrentItemLevel(itemLocation)
 |------|------|---------|-------------|
 | `currentItemLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentItemLevel = C_Item.GetCurrentItemLevel(6948)
@@ -532,7 +532,7 @@ info = C_Item.GetCurrentItemTransmogInfo(itemLoc)
 |------|------|---------|-------------|
 | `info` | ItemTransmogInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Item.GetCurrentItemTransmogInfo(6948)
@@ -557,7 +557,7 @@ itemLink = C_Item.GetDelvePreviewItemLink(itemID, context)
 |------|------|---------|-------------|
 | `itemLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLink = C_Item.GetDelvePreviewItemLink(6948, context)
@@ -582,7 +582,7 @@ itemQuality = C_Item.GetDelvePreviewItemQuality(itemID, context)
 |------|------|---------|-------------|
 | `itemQuality` | ItemQuality | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemQuality = C_Item.GetDelvePreviewItemQuality(6948, context)
@@ -608,7 +608,7 @@ actualItemLevel, previewLevel, sparseItemLevel = C_Item.GetDetailedItemLevelInfo
 | `previewLevel` | bool | no |  |
 | `sparseItemLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local actualItemLevel, previewLevel, sparseItemLevel = C_Item.GetDetailedItemLevelInfo(6948)
@@ -633,7 +633,7 @@ spellID = C_Item.GetFirstTriggeredSpellForItem(itemID, itemQuality)
 |------|------|---------|-------------|
 | `spellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_Item.GetFirstTriggeredSpellForItem(6948, 6948)
@@ -658,7 +658,7 @@ result = C_Item.GetItemChildInfo(itemInfo, [slotID])
 |------|------|---------|-------------|
 | `result` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemChildInfo(6948)
@@ -682,7 +682,7 @@ result = C_Item.GetItemClassInfo(itemClassID)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemClassInfo(6948)
@@ -706,7 +706,7 @@ icon = C_Item.GetItemConversionOutputIcon(itemLoc)
 |------|------|---------|-------------|
 | `icon` | fileID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local icon = C_Item.GetItemConversionOutputIcon(6948)
@@ -732,7 +732,7 @@ startTimeSeconds, durationSeconds, enableCooldownTimer = C_Item.GetItemCooldown(
 | `durationSeconds` | number | no |  |
 | `enableCooldownTimer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTimeSeconds, durationSeconds, enableCooldownTimer = C_Item.GetItemCooldown(6948)
@@ -763,7 +763,8 @@ count = C_Item.GetItemCount(itemInfo, includeBank, includeUses, includeReagentBa
 **Example**
 
 ```lua
-local count = C_Item.GetItemCount(6948, false, false, false, false)
+local count = C_Item.GetItemCount(6948, false, false)  -- bags only
+print("You have", count)
 ```
 
 ### C_Item.GetItemCreationContext
@@ -785,7 +786,7 @@ itemID, creationContext = C_Item.GetItemCreationContext(itemInfo)
 | `itemID` | number | no |  |
 | `creationContext` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, creationContext = C_Item.GetItemCreationContext(6948)
@@ -809,7 +810,7 @@ result = C_Item.GetItemFamily(itemInfo)
 |------|------|---------|-------------|
 | `result` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemFamily(6948)
@@ -835,7 +836,7 @@ gemName, gemLink = C_Item.GetItemGem(hyperlink, index)
 | `gemName` | string | no |  |
 | `gemLink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gemName, gemLink = C_Item.GetItemGem("", 1)
@@ -860,7 +861,7 @@ gemID = C_Item.GetItemGemID(itemInfo, index)
 |------|------|---------|-------------|
 | `gemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gemID = C_Item.GetItemGemID(6948, 1)
@@ -884,7 +885,7 @@ itemGUID = C_Item.GetItemGUID(itemLocation)
 |------|------|---------|-------------|
 | `itemGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemGUID = C_Item.GetItemGUID(6948)
@@ -908,7 +909,7 @@ icon = C_Item.GetItemIcon(itemLocation)
 |------|------|---------|-------------|
 | `icon` | fileID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local icon = C_Item.GetItemIcon(6948)
@@ -932,7 +933,7 @@ icon = C_Item.GetItemIconByID(itemInfo)
 |------|------|---------|-------------|
 | `icon` | fileID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local icon = C_Item.GetItemIconByID(6948)
@@ -956,7 +957,7 @@ itemID = C_Item.GetItemID(itemLocation)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_Item.GetItemID(6948)
@@ -980,10 +981,10 @@ itemID = C_Item.GetItemIDByGUID(itemGUID)
 |------|------|---------|-------------|
 | `itemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemID = C_Item.GetItemIDByGUID("Creature-0-0000-0-0-0-0")
+local itemID = C_Item.GetItemIDByGUID(UnitGUID("player"))
 ```
 
 ### C_Item.GetItemIDForItemInfo
@@ -1004,7 +1005,7 @@ itemID = C_Item.GetItemIDForItemInfo(itemInfo)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_Item.GetItemIDForItemInfo(6948)
@@ -1048,7 +1049,9 @@ itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType,
 **Example**
 
 ```lua
-local itemName, itemLink, itemQuality, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, sellPrice, classID, subclassID, bindType, expansionID, setID, isCraftingReagent, itemDescription = C_Item.GetItemInfo(6948)
+-- May return nil until the item is cached; listen for GET_ITEM_INFO_RECEIVED.
+local name, link, quality, itemLevel = C_Item.GetItemInfo(6948)  -- Hearthstone
+print(name, quality, itemLevel)
 ```
 
 ### C_Item.GetItemInfoInstant
@@ -1078,7 +1081,9 @@ itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subClassID = C_Item.
 **Example**
 
 ```lua
-local itemID, itemType, itemSubType, itemEquipLoc, icon, classID, subClassID = C_Item.GetItemInfoInstant(6948)
+-- Instant, cache-independent basics
+local itemID, itemType, itemSubType, equipLoc, icon = C_Item.GetItemInfoInstant(6948)
+print(itemID, itemType, icon)
 ```
 
 ### C_Item.GetItemInventorySlotInfo
@@ -1099,7 +1104,7 @@ result = C_Item.GetItemInventorySlotInfo(inventorySlot)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemInventorySlotInfo(1)
@@ -1123,7 +1128,7 @@ result = C_Item.GetItemInventorySlotKey(inventorySlot)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemInventorySlotKey(1)
@@ -1147,7 +1152,7 @@ inventoryType = C_Item.GetItemInventoryType(itemLocation)
 |------|------|---------|-------------|
 | `inventoryType` | InventoryType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inventoryType = C_Item.GetItemInventoryType(6948)
@@ -1171,7 +1176,7 @@ inventoryType = C_Item.GetItemInventoryTypeByID(itemInfo)
 |------|------|---------|-------------|
 | `inventoryType` | InventoryType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inventoryType = C_Item.GetItemInventoryTypeByID(6948)
@@ -1195,7 +1200,7 @@ setID = C_Item.GetItemLearnTransmogSet(itemInfo)
 |------|------|---------|-------------|
 | `setID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setID = C_Item.GetItemLearnTransmogSet(6948)
@@ -1219,7 +1224,7 @@ itemLink = C_Item.GetItemLink(itemLocation)
 |------|------|---------|-------------|
 | `itemLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemLink = C_Item.GetItemLink(6948)
@@ -1243,10 +1248,10 @@ itemLink = C_Item.GetItemLinkByGUID(itemGUID)
 |------|------|---------|-------------|
 | `itemLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemLink = C_Item.GetItemLinkByGUID("Creature-0-0000-0-0-0-0")
+local itemLink = C_Item.GetItemLinkByGUID(UnitGUID("player"))
 ```
 
 ### C_Item.GetItemLocation
@@ -1267,10 +1272,10 @@ itemLocation = C_Item.GetItemLocation(itemGUID)
 |------|------|---------|-------------|
 | `itemLocation` | ItemLocation | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemLocation = C_Item.GetItemLocation("Creature-0-0000-0-0-0-0")
+local itemLocation = C_Item.GetItemLocation(UnitGUID("player"))
 ```
 
 ### C_Item.GetItemMaxStackSize
@@ -1291,7 +1296,7 @@ stackSize = C_Item.GetItemMaxStackSize(itemLocation)
 |------|------|---------|-------------|
 | `stackSize` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stackSize = C_Item.GetItemMaxStackSize(6948)
@@ -1315,7 +1320,7 @@ stackSize = C_Item.GetItemMaxStackSizeByID(itemInfo)
 |------|------|---------|-------------|
 | `stackSize` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stackSize = C_Item.GetItemMaxStackSizeByID(6948)
@@ -1339,7 +1344,7 @@ itemName = C_Item.GetItemName(itemLocation)
 |------|------|---------|-------------|
 | `itemName` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemName = C_Item.GetItemName(6948)
@@ -1363,7 +1368,7 @@ itemName = C_Item.GetItemNameByID(itemInfo)
 |------|------|---------|-------------|
 | `itemName` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemName = C_Item.GetItemNameByID(6948)
@@ -1387,7 +1392,7 @@ socketCount = C_Item.GetItemNumAddedSockets(itemInfo)
 |------|------|---------|-------------|
 | `socketCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local socketCount = C_Item.GetItemNumAddedSockets(6948)
@@ -1411,7 +1416,7 @@ socketCount = C_Item.GetItemNumSockets(itemInfo)
 |------|------|---------|-------------|
 | `socketCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local socketCount = C_Item.GetItemNumSockets(6948)
@@ -1435,7 +1440,7 @@ itemQuality = C_Item.GetItemQuality(itemLocation)
 |------|------|---------|-------------|
 | `itemQuality` | ItemQuality | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemQuality = C_Item.GetItemQuality(6948)
@@ -1459,7 +1464,7 @@ itemQuality = C_Item.GetItemQualityByID(itemInfo)
 |------|------|---------|-------------|
 | `itemQuality` | ItemQuality | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemQuality = C_Item.GetItemQualityByID(6948)
@@ -1486,7 +1491,7 @@ colorRGBR, colorRGBG, colorRGBB, qualityString = C_Item.GetItemQualityColor(qual
 | `colorRGBB` | number | no |  |
 | `qualityString` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local colorRGBR, colorRGBG, colorRGBB, qualityString = C_Item.GetItemQualityColor(quality)
@@ -1510,7 +1515,7 @@ result = C_Item.GetItemSetInfo(setID)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.GetItemSetInfo(0)
@@ -1534,7 +1539,7 @@ specTable = C_Item.GetItemSpecInfo(itemInfo)
 |------|------|---------|-------------|
 | `specTable` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specTable = C_Item.GetItemSpecInfo(6948)
@@ -1559,7 +1564,7 @@ spellName, spellID = C_Item.GetItemSpell(itemInfo)
 | `spellName` | cstring | no |  |
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellName, spellID = C_Item.GetItemSpell(6948)
@@ -1584,7 +1589,7 @@ statTable = C_Item.GetItemStatDelta(itemLink1, itemLink2)
 |------|------|---------|-------------|
 | `statTable` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local statTable = C_Item.GetItemStatDelta(6948, 6948)
@@ -1608,7 +1613,7 @@ statTable = C_Item.GetItemStats(itemLink)
 |------|------|---------|-------------|
 | `statTable` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local statTable = C_Item.GetItemStats(6948)
@@ -1634,7 +1639,7 @@ subClassName, subClassUsesInvType = C_Item.GetItemSubClassInfo(itemClassID, item
 | `subClassName` | cstring | no |  |
 | `subClassUsesInvType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subClassName, subClassUsesInvType = C_Item.GetItemSubClassInfo(6948, 6948)
@@ -1659,7 +1664,7 @@ limitCategory, limitMax = C_Item.GetItemUniqueness(itemInfo)
 | `limitCategory` | number | no |  |
 | `limitMax` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local limitCategory, limitMax = C_Item.GetItemUniqueness(6948)
@@ -1686,7 +1691,7 @@ isUnique, limitCategoryName, limitCategoryCount, limitCategoryID = C_Item.GetIte
 | `limitCategoryCount` | number | yes |  |
 | `limitCategoryID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnique, limitCategoryName, limitCategoryCount, limitCategoryID = C_Item.GetItemUniquenessByID(6948)
@@ -1710,7 +1715,7 @@ itemUpgradeInfo = C_Item.GetItemUpgradeInfo(itemInfo)
 |------|------|---------|-------------|
 | `itemUpgradeInfo` | ItemUpgradeInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemUpgradeInfo = C_Item.GetItemUpgradeInfo(6948)
@@ -1738,7 +1743,7 @@ name, icon, quantity, maxQuantity, totalEarned = C_Item.GetLimitedCurrencyItemIn
 | `maxQuantity` | number | no |  |
 | `totalEarned` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, quantity, maxQuantity, totalEarned = C_Item.GetLimitedCurrencyItemInfo(6948)
@@ -1763,7 +1768,7 @@ itemSetSpellIDs = C_Item.GetSetBonusesForSpecializationByItemID(specID, itemID)
 |------|------|---------|-------------|
 | `itemSetSpellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemSetSpellIDs = C_Item.GetSetBonusesForSpecializationByItemID(0, 6948)
@@ -1787,7 +1792,7 @@ stackCount = C_Item.GetStackCount(itemLocation)
 |------|------|---------|-------------|
 | `stackCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stackCount = C_Item.GetStackCount(6948)
@@ -1811,7 +1816,7 @@ enchants = C_Item.GetWeaponEnchantInfo(weaponSlot)
 |------|------|---------|-------------|
 | `enchants` | WeaponEnchantInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enchants = C_Item.GetWeaponEnchantInfo(1)
@@ -1835,7 +1840,7 @@ isAnimaItem = C_Item.IsAnimaItemByID(itemInfo)
 |------|------|---------|-------------|
 | `isAnimaItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAnimaItem = C_Item.IsAnimaItemByID(6948)
@@ -1859,7 +1864,7 @@ result = C_Item.IsArtifactPowerItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsArtifactPowerItem(6948)
@@ -1883,7 +1888,7 @@ isBound = C_Item.IsBound(itemLocation)
 |------|------|---------|-------------|
 | `isBound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBound = C_Item.IsBound(6948)
@@ -1909,7 +1914,7 @@ isBoundToAccountUntilEquip = C_Item.IsBoundToAccountUntilEquip(itemLocation)
 |------|------|---------|-------------|
 | `isBoundToAccountUntilEquip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBoundToAccountUntilEquip = C_Item.IsBoundToAccountUntilEquip(6948)
@@ -1933,7 +1938,7 @@ result = C_Item.IsConsumableItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsConsumableItem(6948)
@@ -1957,7 +1962,7 @@ result = C_Item.IsCorruptedItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsCorruptedItem(6948)
@@ -1981,7 +1986,7 @@ result = C_Item.IsCosmeticItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsCosmeticItem(6948)
@@ -2007,7 +2012,7 @@ result = C_Item.IsCurioItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsCurioItem(6948)
@@ -2031,7 +2036,7 @@ result = C_Item.IsCurrentItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsCurrentItem(6948)
@@ -2057,7 +2062,7 @@ isDecor = C_Item.IsDecorItem(itemInfo)
 |------|------|---------|-------------|
 | `isDecor` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDecor = C_Item.IsDecorItem(6948)
@@ -2081,7 +2086,7 @@ isDressableItem = C_Item.IsDressableItemByID(itemInfo)
 |------|------|---------|-------------|
 | `isDressableItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDressableItem = C_Item.IsDressableItemByID(6948)
@@ -2105,7 +2110,7 @@ result = C_Item.IsEquippableItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsEquippableItem(6948)
@@ -2129,7 +2134,7 @@ result = C_Item.IsEquippedItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsEquippedItem(6948)
@@ -2153,7 +2158,7 @@ result = C_Item.IsEquippedItemType(type)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsEquippedItemType("")
@@ -2177,7 +2182,7 @@ result = C_Item.IsHarmfulItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsHarmfulItem(6948)
@@ -2201,7 +2206,7 @@ result = C_Item.IsHelpfulItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsHelpfulItem(6948)
@@ -2225,7 +2230,7 @@ isItemBindToAccount = C_Item.IsItemBindToAccount(itemInfo)
 |------|------|---------|-------------|
 | `isItemBindToAccount` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemBindToAccount = C_Item.IsItemBindToAccount(6948)
@@ -2251,7 +2256,7 @@ isItemBindToAccountUntilEquip = C_Item.IsItemBindToAccountUntilEquip(itemInfo)
 |------|------|---------|-------------|
 | `isItemBindToAccountUntilEquip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemBindToAccountUntilEquip = C_Item.IsItemBindToAccountUntilEquip(6948)
@@ -2275,7 +2280,7 @@ isConduit = C_Item.IsItemConduit(itemLoc)
 |------|------|---------|-------------|
 | `isConduit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isConduit = C_Item.IsItemConduit(6948)
@@ -2299,7 +2304,7 @@ isItemConvertibleAndValidForPlayer = C_Item.IsItemConvertibleAndValidForPlayer(i
 |------|------|---------|-------------|
 | `isItemConvertibleAndValidForPlayer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemConvertibleAndValidForPlayer = C_Item.IsItemConvertibleAndValidForPlayer(6948)
@@ -2323,7 +2328,7 @@ isCorrupted = C_Item.IsItemCorrupted(itemLoc)
 |------|------|---------|-------------|
 | `isCorrupted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCorrupted = C_Item.IsItemCorrupted(6948)
@@ -2347,7 +2352,7 @@ isCorruptionRelated = C_Item.IsItemCorruptionRelated(itemLoc)
 |------|------|---------|-------------|
 | `isCorruptionRelated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCorruptionRelated = C_Item.IsItemCorruptionRelated(6948)
@@ -2371,7 +2376,7 @@ isCorruptionResistant = C_Item.IsItemCorruptionResistant(itemLoc)
 |------|------|---------|-------------|
 | `isCorruptionResistant` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCorruptionResistant = C_Item.IsItemCorruptionResistant(6948)
@@ -2395,7 +2400,7 @@ isCached = C_Item.IsItemDataCached(itemLocation)
 |------|------|---------|-------------|
 | `isCached` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCached = C_Item.IsItemDataCached(6948)
@@ -2419,7 +2424,7 @@ isCached = C_Item.IsItemDataCachedByID(itemInfo)
 |------|------|---------|-------------|
 | `isCached` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCached = C_Item.IsItemDataCachedByID(6948)
@@ -2443,10 +2448,10 @@ valid = C_Item.IsItemGUIDInInventory(itemGUID)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local valid = C_Item.IsItemGUIDInInventory("Creature-0-0000-0-0-0-0")
+local valid = C_Item.IsItemGUIDInInventory(UnitGUID("player"))
 ```
 
 ### C_Item.IsItemInRange
@@ -2468,7 +2473,7 @@ result = C_Item.IsItemInRange(itemInfo, targetToken)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsItemInRange(6948, "")
@@ -2492,7 +2497,7 @@ isKeystone = C_Item.IsItemKeystoneByID(itemInfo)
 |------|------|---------|-------------|
 | `isKeystone` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isKeystone = C_Item.IsItemKeystoneByID(6948)
@@ -2516,7 +2521,7 @@ isItemSpecificToPlayerClass = C_Item.IsItemSpecificToPlayerClass(itemInfo)
 |------|------|---------|-------------|
 | `isItemSpecificToPlayerClass` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemSpecificToPlayerClass = C_Item.IsItemSpecificToPlayerClass(6948)
@@ -2540,7 +2545,7 @@ isLocked = C_Item.IsLocked(itemLocation)
 |------|------|---------|-------------|
 | `isLocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLocked = C_Item.IsLocked(6948)
@@ -2566,7 +2571,7 @@ result = C_Item.IsRelicItem(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.IsRelicItem(6948)
@@ -2591,7 +2596,7 @@ usable, noMana = C_Item.IsUsableItem(itemInfo)
 | `usable` | bool | no |  |
 | `noMana` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local usable, noMana = C_Item.IsUsableItem(6948)
@@ -2615,7 +2620,7 @@ result = C_Item.ItemHasRange(itemInfo)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_Item.ItemHasRange(6948)
@@ -2633,7 +2638,7 @@ C_Item.LockItem(itemLocation)
 |------|------|---------|-------------|
 | `itemLocation` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.LockItem(6948)
@@ -2651,10 +2656,10 @@ C_Item.LockItemByGUID(itemGUID)
 |------|------|---------|-------------|
 | `itemGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Item.LockItemByGUID("Creature-0-0000-0-0-0-0")
+C_Item.LockItemByGUID(UnitGUID("player"))
 ```
 
 ### C_Item.PickupItem
@@ -2669,7 +2674,7 @@ C_Item.PickupItem(itemInfo)
 |------|------|---------|-------------|
 | `itemInfo` | ItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.PickupItem(6948)
@@ -2681,7 +2686,7 @@ C_Item.PickupItem(6948)
 C_Item.ReplaceEnchant()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ReplaceEnchant()
@@ -2693,7 +2698,7 @@ C_Item.ReplaceEnchant()
 C_Item.ReplaceTradeEnchant()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ReplaceTradeEnchant()
@@ -2705,7 +2710,7 @@ C_Item.ReplaceTradeEnchant()
 C_Item.ReplaceTradeskillEnchant()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.ReplaceTradeskillEnchant()
@@ -2723,7 +2728,7 @@ C_Item.RequestLoadItemData(itemLocation)
 |------|------|---------|-------------|
 | `itemLocation` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.RequestLoadItemData(6948)
@@ -2741,7 +2746,7 @@ C_Item.RequestLoadItemDataByID(itemInfo)
 |------|------|---------|-------------|
 | `itemInfo` | ItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.RequestLoadItemDataByID(6948)
@@ -2759,7 +2764,7 @@ C_Item.UnlockItem(itemLocation)
 |------|------|---------|-------------|
 | `itemLocation` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.UnlockItem(6948)
@@ -2777,10 +2782,10 @@ C_Item.UnlockItemByGUID(itemGUID)
 |------|------|---------|-------------|
 | `itemGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Item.UnlockItemByGUID("Creature-0-0000-0-0-0-0")
+C_Item.UnlockItemByGUID(UnitGUID("player"))
 ```
 
 ### C_Item.UseItemByName
@@ -2796,7 +2801,7 @@ C_Item.UseItemByName(itemInfo, [target])
 | `itemInfo` | ItemInfo | no |  |
 | `target` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Item.UseItemByName(6948)

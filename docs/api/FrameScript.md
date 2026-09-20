@@ -18,7 +18,7 @@ AddSourceLocationExclude(fileName)
 |------|------|---------|-------------|
 | `fileName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddSourceLocationExclude("")
@@ -44,7 +44,7 @@ canAccessAllValues = canaccessallvalues(values)
 |------|------|---------|-------------|
 | `canAccessAllValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccessAllValues = canaccessallvalues(values)
@@ -64,7 +64,7 @@ canAccessSecrets = canaccesssecrets()
 |------|------|---------|-------------|
 | `canAccessSecrets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccessSecrets = canaccesssecrets()
@@ -90,7 +90,7 @@ canAccessTable = canaccesstable(table)
 |------|------|---------|-------------|
 | `canAccessTable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccessTable = canaccesstable(table)
@@ -116,7 +116,7 @@ canAccessValue = canaccessvalue(value)
 |------|------|---------|-------------|
 | `canAccessValue` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccessValue = canaccessvalue(value)
@@ -140,7 +140,7 @@ frame = CreateFrameWithOptions(options)
 |------|------|---------|-------------|
 | `frame` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frame = CreateFrameWithOptions(options)
@@ -164,7 +164,7 @@ object = CreateFromMixins(mixins)
 |------|------|---------|-------------|
 | `object` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local object = CreateFromMixins(mixins)
@@ -191,7 +191,7 @@ secureDelegateFunction = CreateSecureDelegate(luaFunction, [options])
 |------|------|---------|-------------|
 | `secureDelegateFunction` | LuaValueReference | no | A secure delegate function that calls through to the original Lua function. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local secureDelegateFunction = CreateSecureDelegate(luaFunction)
@@ -216,7 +216,7 @@ window = CreateWindow(popupStyle, topMost)
 |------|------|---------|-------------|
 | `window` | SimpleWindow | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local window = CreateWindow(false, false)
@@ -230,7 +230,7 @@ Starts a timer for profiling. The final time can be obtained by calling debugpro
 debugprofilestart()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 debugprofilestart()
@@ -250,7 +250,7 @@ elapsedMilliseconds = debugprofilestop()
 |------|------|---------|-------------|
 | `elapsedMilliseconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elapsedMilliseconds = debugprofilestop()
@@ -264,7 +264,7 @@ Removes the ability for the immediate calling function to access secret values.
 dropsecretaccess()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 dropsecretaccess()
@@ -290,7 +290,7 @@ result = dumpobject([value])
 |------|------|---------|-------------|
 | `result` | LuaValueReference | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = dumpobject()
@@ -308,7 +308,7 @@ height = GetCallstackHeight()
 |------|------|---------|-------------|
 | `height` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetCallstackHeight()
@@ -326,7 +326,7 @@ eventID = GetCurrentEventID()
 |------|------|---------|-------------|
 | `eventID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local eventID = GetCurrentEventID()
@@ -344,7 +344,7 @@ height = GetErrorCallstackHeight()
 |------|------|---------|-------------|
 | `height` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetErrorCallstackHeight()
@@ -371,7 +371,7 @@ totalElapsedTime, numExecutedHandlers, slowestHandlerName, slowestHandlerTime = 
 | `slowestHandlerName` | cstring | no |  |
 | `slowestHandlerTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalElapsedTime, numExecutedHandlers, slowestHandlerName, slowestHandlerTime = GetEventTime(1)
@@ -395,7 +395,7 @@ forbiddenTable = GetForbiddenObjectTable(object)
 |------|------|---------|-------------|
 | `forbiddenTable` | FrameScriptObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local forbiddenTable = GetForbiddenObjectTable(object)
@@ -413,7 +413,7 @@ limits = GetScriptBucketThrottleLimits()
 |------|------|---------|-------------|
 | `limits` | ScriptBucketThrottleLimits | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local limits = GetScriptBucketThrottleLimits()
@@ -431,7 +431,7 @@ location = GetSourceLocation()
 |------|------|---------|-------------|
 | `location` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local location = GetSourceLocation()
@@ -457,7 +457,7 @@ isAnyValueSecret = hasanysecretvalues(values)
 |------|------|---------|-------------|
 | `isAnyValueSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAnyValueSecret = hasanysecretvalues(values)
@@ -483,7 +483,7 @@ isSecretOrContentsSecret = issecrettable(table)
 |------|------|---------|-------------|
 | `isSecretOrContentsSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSecretOrContentsSecret = issecrettable(table)
@@ -512,7 +512,11 @@ isSecret = issecretvalue(value)
 **Example**
 
 ```lua
-local isSecret = issecretvalue(value)
+-- True if the value is a protected "secret" value (WoW 12.0). Safe on any value, incl. nil.
+local threat = UnitThreatSituation("player", "target")
+if issecretvalue(threat) then
+    print("threat is secret in this context")
+end
 ```
 
 ### FrameScript.mapvalues
@@ -536,7 +540,7 @@ mapped = mapvalues(func, values)
 |------|------|---------|-------------|
 | `mapped` | LuaValueReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapped = mapvalues(func, values)
@@ -561,7 +565,7 @@ outObject = Mixin(object, mixins)
 |------|------|---------|-------------|
 | `outObject` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local outObject = Mixin(object, mixins)
@@ -580,7 +584,7 @@ RegisterEventCallback(eventName, callback)
 | `eventName` | cstring | no |  |
 | `callback` | EventCallbackType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterEventCallback("", callback)
@@ -600,7 +604,7 @@ RegisterUnitEventCallback(eventName, callback, unit)
 | `callback` | EventCallbackType | no |  |
 | `unit` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterUnitEventCallback("", callback, "player")
@@ -618,7 +622,7 @@ RunScript(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RunScript("")
@@ -644,7 +648,7 @@ scrubbed = scrub(values)
 |------|------|---------|-------------|
 | `scrubbed` | LuaValueReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scrubbed = scrub(values)
@@ -670,7 +674,7 @@ scrubbed = scrubsecretvalues(values)
 |------|------|---------|-------------|
 | `scrubbed` | LuaValueReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scrubbed = scrubsecretvalues(values)
@@ -696,7 +700,7 @@ unwrapped = secretunwrap(values)
 |------|------|---------|-------------|
 | `unwrapped` | LuaValueReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unwrapped = secretunwrap(values)
@@ -722,7 +726,7 @@ wrapped = secretwrap(values)
 |------|------|---------|-------------|
 | `wrapped` | LuaValueReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wrapped = secretwrap(values)
@@ -750,7 +754,7 @@ results = securecallmethod(object, method, arguments)
 |------|------|---------|-------------|
 | `results` | LuaValueReference | no | Results from the executed function. If an error occurred, this result list will be empty. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local results = securecallmethod(object, "", arguments)
@@ -777,7 +781,7 @@ copy = securecopy([value], [options])
 |------|------|---------|-------------|
 | `copy` | LuaValueReference | no | The copied value. For tables, recursive and shared references within the copied graph are preserved. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local copy = securecopy()
@@ -795,7 +799,7 @@ SetErrorCallstackHeight([height])
 |------|------|---------|-------------|
 | `height` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetErrorCallstackHeight()
@@ -814,10 +818,10 @@ settablesecurity(table, option)
 | `table` | LuaValueVariant | no |  |
 | `option` | TableSecurityOption | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-settablesecurity(table, option)
+settablesecurity(table, Enum.TableSecurityOption.DisallowTaintedAccess)
 ```
 
 ### FrameScript.UnregisterEventCallback
@@ -833,7 +837,7 @@ UnregisterEventCallback(eventName, callback)
 | `eventName` | cstring | no |  |
 | `callback` | EventCallbackType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnregisterEventCallback("", callback)
@@ -853,7 +857,7 @@ UnregisterUnitEventCallback(eventName, callback, unit)
 | `callback` | EventCallbackType | no |  |
 | `unit` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UnregisterUnitEventCallback("", callback, "player")

@@ -20,7 +20,7 @@ duration = C_DurationUtil.CreateDuration()
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_DurationUtil.CreateDuration()
@@ -40,7 +40,7 @@ binding = C_DurationUtil.CreateDurationTextBinding()
 |------|------|---------|-------------|
 | `binding` | DurationTextBinding | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local binding = C_DurationUtil.CreateDurationTextBinding()
@@ -60,7 +60,7 @@ clock = C_DurationUtil.CreateManualClock()
 |------|------|---------|-------------|
 | `clock` | LuaDurationManualClock | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clock = C_DurationUtil.CreateManualClock()

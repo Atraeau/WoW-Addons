@@ -24,7 +24,7 @@ canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(itemLocation)
 |------|------|---------|-------------|
 | `canUse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(6948)
@@ -36,7 +36,7 @@ local canUse = C_ChallengeMode.CanUseKeystoneInCurrentMap(6948)
 C_ChallengeMode.ClearKeystone()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChallengeMode.ClearKeystone()
@@ -48,7 +48,7 @@ C_ChallengeMode.ClearKeystone()
 C_ChallengeMode.CloseKeystoneFrame()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChallengeMode.CloseKeystoneFrame()
@@ -66,7 +66,7 @@ mapChallengeModeID = C_ChallengeMode.GetActiveChallengeMapID()
 |------|------|---------|-------------|
 | `mapChallengeModeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapChallengeModeID = C_ChallengeMode.GetActiveChallengeMapID()
@@ -86,7 +86,7 @@ activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.
 | `activeAffixIDs` | number[] | no |  |
 | `wasActiveKeystoneCharged` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
@@ -112,7 +112,7 @@ name, description, filedataid = C_ChallengeMode.GetAffixInfo(affixID)
 | `description` | cstring | no |  |
 | `filedataid` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, description, filedataid = C_ChallengeMode.GetAffixInfo(0)
@@ -130,7 +130,7 @@ info = C_ChallengeMode.GetChallengeCompletionInfo()
 |------|------|---------|-------------|
 | `info` | ChallengeCompletionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ChallengeMode.GetChallengeCompletionInfo()
@@ -149,7 +149,7 @@ numDeaths, timeLost = C_ChallengeMode.GetDeathCount()
 | `numDeaths` | number | no |  |
 | `timeLost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDeaths, timeLost = C_ChallengeMode.GetDeathCount()
@@ -175,7 +175,7 @@ scoreColor = C_ChallengeMode.GetDungeonScoreRarityColor(dungeonScore)
 |------|------|---------|-------------|
 | `scoreColor` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scoreColor = C_ChallengeMode.GetDungeonScoreRarityColor(0)
@@ -193,7 +193,7 @@ topAttempt = C_ChallengeMode.GetGuildLeaders()
 |------|------|---------|-------------|
 | `topAttempt` | ChallengeModeGuildTopAttempt[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local topAttempt = C_ChallengeMode.GetGuildLeaders()
@@ -219,7 +219,7 @@ levelScore = C_ChallengeMode.GetKeystoneLevelRarityColor(level)
 |------|------|---------|-------------|
 | `levelScore` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levelScore = C_ChallengeMode.GetKeystoneLevelRarityColor(0)
@@ -239,7 +239,7 @@ timeLeftSeconds = C_ChallengeMode.GetLeaverPenaltyWarningTimeLeft()
 |------|------|---------|-------------|
 | `timeLeftSeconds` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeLeftSeconds = C_ChallengeMode.GetLeaverPenaltyWarningTimeLeft()
@@ -257,7 +257,7 @@ displayScores = C_ChallengeMode.GetMapScoreInfo()
 |------|------|---------|-------------|
 | `displayScores` | MythicPlusRatingLinkInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayScores = C_ChallengeMode.GetMapScoreInfo()
@@ -275,7 +275,7 @@ mapChallengeModeIDs = C_ChallengeMode.GetMapTable()
 |------|------|---------|-------------|
 | `mapChallengeModeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapChallengeModeIDs = C_ChallengeMode.GetMapTable()
@@ -304,7 +304,7 @@ name, id, timeLimit, texture, backgroundTexture, mapID = C_ChallengeMode.GetMapU
 | `backgroundTexture` | number | no |  |
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, id, timeLimit, texture, backgroundTexture, mapID = C_ChallengeMode.GetMapUIInfo(0)
@@ -324,7 +324,7 @@ overallDungeonScore = C_ChallengeMode.GetOverallDungeonScore()
 |------|------|---------|-------------|
 | `overallDungeonScore` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local overallDungeonScore = C_ChallengeMode.GetOverallDungeonScore()
@@ -349,7 +349,7 @@ damageMod, healthMod = C_ChallengeMode.GetPowerLevelDamageHealthMod(powerLevel)
 | `damageMod` | number | no |  |
 | `healthMod` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local damageMod, healthMod = C_ChallengeMode.GetPowerLevelDamageHealthMod(0)
@@ -369,7 +369,7 @@ mapChallengeModeID, affixIDs, keystoneLevel = C_ChallengeMode.GetSlottedKeystone
 | `affixIDs` | number[] | no |  |
 | `keystoneLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapChallengeModeID, affixIDs, keystoneLevel = C_ChallengeMode.GetSlottedKeystoneInfo()
@@ -395,7 +395,7 @@ specificDungeonOverallScoreColor = C_ChallengeMode.GetSpecificDungeonOverallScor
 |------|------|---------|-------------|
 | `specificDungeonOverallScoreColor` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specificDungeonOverallScoreColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(0)
@@ -421,7 +421,7 @@ specificDungeonScoreColor = C_ChallengeMode.GetSpecificDungeonScoreRarityColor(s
 |------|------|---------|-------------|
 | `specificDungeonScoreColor` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specificDungeonScoreColor = C_ChallengeMode.GetSpecificDungeonScoreRarityColor(0)
@@ -439,7 +439,7 @@ startTime = C_ChallengeMode.GetStartTime()
 |------|------|---------|-------------|
 | `startTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime = C_ChallengeMode.GetStartTime()
@@ -457,7 +457,7 @@ hasSlottedKeystone = C_ChallengeMode.HasSlottedKeystone()
 |------|------|---------|-------------|
 | `hasSlottedKeystone` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSlottedKeystone = C_ChallengeMode.HasSlottedKeystone()
@@ -475,7 +475,7 @@ challengeModeActive = C_ChallengeMode.IsChallengeModeActive()
 |------|------|---------|-------------|
 | `challengeModeActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local challengeModeActive = C_ChallengeMode.IsChallengeModeActive()
@@ -493,7 +493,7 @@ canReset = C_ChallengeMode.IsChallengeModeResettable()
 |------|------|---------|-------------|
 | `canReset` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canReset = C_ChallengeMode.IsChallengeModeResettable()
@@ -511,7 +511,7 @@ removalSuccessful = C_ChallengeMode.RemoveKeystone()
 |------|------|---------|-------------|
 | `removalSuccessful` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removalSuccessful = C_ChallengeMode.RemoveKeystone()
@@ -529,7 +529,7 @@ C_ChallengeMode.RequestLeaders(mapChallengeModeID)
 |------|------|---------|-------------|
 | `mapChallengeModeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChallengeMode.RequestLeaders(0)
@@ -541,7 +541,7 @@ C_ChallengeMode.RequestLeaders(0)
 C_ChallengeMode.Reset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChallengeMode.Reset()
@@ -553,7 +553,7 @@ C_ChallengeMode.Reset()
 C_ChallengeMode.SlotKeystone()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ChallengeMode.SlotKeystone()
@@ -571,7 +571,7 @@ success = C_ChallengeMode.StartChallengeMode()
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ChallengeMode.StartChallengeMode()

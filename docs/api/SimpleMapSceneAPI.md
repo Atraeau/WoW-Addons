@@ -18,7 +18,7 @@ maxCharacterSlotCount = GetMaxCharacterSlotCount()
 |------|------|---------|-------------|
 | `maxCharacterSlotCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxCharacterSlotCount = GetMaxCharacterSlotCount()
@@ -37,7 +37,7 @@ layer, sublayer = GetModelDrawLayer()
 | `layer` | DrawLayer | no |  |
 | `sublayer` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layer, sublayer = GetModelDrawLayer()
@@ -58,7 +58,7 @@ left, right, top, bottom = GetViewInsets()
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = GetViewInsets()
@@ -76,7 +76,7 @@ SetModelDrawLayer(layer)
 |------|------|---------|-------------|
 | `layer` | DrawLayer | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetModelDrawLayer(layer)
@@ -97,7 +97,7 @@ SetViewInsets(left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetViewInsets(left, right, top, bottom)

@@ -19,10 +19,10 @@ ApplySpellVisualKit(spellVisualKitID, oneShot)
 | `spellVisualKitID` | number | no |  |
 | `oneShot` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-ApplySpellVisualKit(12345, false)
+ApplySpellVisualKit(2050, false)
 ```
 
 ### FrameAPICharacterModelBase.CanSetUnit
@@ -37,7 +37,7 @@ CanSetUnit(unit)
 |------|------|---------|-------------|
 | `unit` | UnitToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CanSetUnit("player")
@@ -57,7 +57,7 @@ FreezeAnimation(anim, variation, frame)
 | `variation` | number | no |  |
 | `frame` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FreezeAnimation(anim, 0, 0)
@@ -75,7 +75,7 @@ displayID = GetDisplayInfo()
 |------|------|---------|-------------|
 | `displayID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayID = GetDisplayInfo()
@@ -93,7 +93,7 @@ doBlend = GetDoBlend()
 |------|------|---------|-------------|
 | `doBlend` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doBlend = GetDoBlend()
@@ -111,7 +111,7 @@ keepModelOnHide = GetKeepModelOnHide()
 |------|------|---------|-------------|
 | `keepModelOnHide` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local keepModelOnHide = GetKeepModelOnHide()
@@ -135,7 +135,7 @@ hasAnimation = HasAnimation(anim)
 |------|------|---------|-------------|
 | `hasAnimation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnimation = HasAnimation(anim)
@@ -154,7 +154,7 @@ PlayAnimKit(animKit, loop)
 | `animKit` | number | no |  |
 | `loop` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PlayAnimKit(0, false)
@@ -166,7 +166,7 @@ PlayAnimKit(0, false)
 RefreshCamera()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RefreshCamera()
@@ -178,7 +178,7 @@ RefreshCamera()
 RefreshUnit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RefreshUnit()
@@ -197,7 +197,7 @@ SetAnimation(anim, [variation])
 | `anim` | AnimationDataEnum | no |  |
 | `variation` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAnimation(anim)
@@ -209,7 +209,7 @@ SetAnimation(anim)
 SetBarberShopAlternateForm()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBarberShopAlternateForm()
@@ -227,7 +227,7 @@ SetCamDistanceScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCamDistanceScale(0)
@@ -246,7 +246,7 @@ SetCreature(creatureID, displayID)
 | `creatureID` | number | no |  |
 | `displayID` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCreature(0, 0)
@@ -265,7 +265,7 @@ SetDisplayInfo(displayID, [mountDisplayID])
 | `displayID` | number | no |  |
 | `mountDisplayID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDisplayInfo(0)
@@ -283,7 +283,7 @@ SetDoBlend(doBlend)
 |------|------|---------|-------------|
 | `doBlend` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDoBlend(false)
@@ -303,7 +303,7 @@ SetItem(itemID, [appearanceModID], [itemVisualID])
 | `appearanceModID` | number | yes |  |
 | `itemVisualID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetItem(6948)
@@ -323,7 +323,7 @@ SetItemAppearance(itemAppearanceID, [itemVisualID], [itemSubclass])
 | `itemVisualID` | number | yes |  |
 | `itemSubclass` | ItemWeaponSubclass | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetItemAppearance(6948)
@@ -341,7 +341,7 @@ SetKeepModelOnHide(keepModelOnHide)
 |------|------|---------|-------------|
 | `keepModelOnHide` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetKeepModelOnHide(false)
@@ -359,7 +359,7 @@ SetPortraitZoom(zoom)
 |------|------|---------|-------------|
 | `zoom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPortraitZoom(0)
@@ -378,7 +378,7 @@ SetRotation(radians, animate)
 | `radians` | number | no |  |
 | `animate` | bool | no | (default: True) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRotation(0, false)
@@ -404,7 +404,7 @@ success = SetUnit(unit, blend, [useNativeForm])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetUnit("player", false)
@@ -416,7 +416,7 @@ local success = SetUnit("player", false)
 StopAnimKit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopAnimKit()
@@ -428,7 +428,7 @@ StopAnimKit()
 ZeroCachedCenterXY()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ZeroCachedCenterXY()

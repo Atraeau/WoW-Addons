@@ -25,7 +25,7 @@ quality = C_PetBattles.GetBreedQuality(petOwner, slot)
 |------|------|---------|-------------|
 | `quality` | BattlePetBreedQuality | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quality = C_PetBattles.GetBreedQuality(petOwner, 1)
@@ -50,7 +50,7 @@ iconFileID = C_PetBattles.GetIcon(petOwner, slot)
 |------|------|---------|-------------|
 | `iconFileID` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local iconFileID = C_PetBattles.GetIcon(petOwner, 1)
@@ -76,7 +76,7 @@ customName, speciesName = C_PetBattles.GetName(petOwner, slot)
 | `customName` | string | no |  |
 | `speciesName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local customName, speciesName = C_PetBattles.GetName(petOwner, 1)
@@ -94,7 +94,7 @@ isPlayerNPC = C_PetBattles.IsPlayerNPC()
 |------|------|---------|-------------|
 | `isPlayerNPC` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlayerNPC = C_PetBattles.IsPlayerNPC()
@@ -112,7 +112,7 @@ isWildBattle = C_PetBattles.IsWildBattle()
 |------|------|---------|-------------|
 | `isWildBattle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWildBattle = C_PetBattles.IsWildBattle()

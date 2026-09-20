@@ -18,7 +18,7 @@ SetInWorldUIVisibility(visible)
 |------|------|---------|-------------|
 | `visible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetInWorldUIVisibility(false)
@@ -36,7 +36,7 @@ SetUIVisibility(visible)
 |------|------|---------|-------------|
 | `visible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUIVisibility(false)

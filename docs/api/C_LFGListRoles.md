@@ -18,7 +18,7 @@ roles = C_LFGListRoles.GetRoles()
 |------|------|---------|-------------|
 | `roles` | LFGRoles | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roles = C_LFGListRoles.GetRoles()
@@ -36,7 +36,7 @@ roles = C_LFGListRoles.GetSavedRoles()
 |------|------|---------|-------------|
 | `roles` | LFGRoles | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roles = C_LFGListRoles.GetSavedRoles()
@@ -61,7 +61,7 @@ success = C_LFGListRoles.SetRoles(roles, limitToClassRoles)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_LFGListRoles.SetRoles(roles, false)

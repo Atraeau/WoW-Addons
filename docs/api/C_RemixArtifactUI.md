@@ -12,7 +12,7 @@
 C_RemixArtifactUI.ClearRemixArtifactItem()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_RemixArtifactUI.ClearRemixArtifactItem()
@@ -37,7 +37,7 @@ uiCameraID, altHandUICameraID = C_RemixArtifactUI.GetAppearanceInfoByID(artifact
 | `uiCameraID` | number | no |  |
 | `altHandUICameraID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiCameraID, altHandUICameraID = C_RemixArtifactUI.GetAppearanceInfoByID(0)
@@ -55,7 +55,7 @@ artifactArtInfo = C_RemixArtifactUI.GetArtifactArtInfo()
 |------|------|---------|-------------|
 | `artifactArtInfo` | RemixArtifactArtInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactArtInfo = C_RemixArtifactUI.GetArtifactArtInfo()
@@ -79,7 +79,7 @@ itemID, altItemID, artifactAppearanceID, appearanceModID, itemAppearanceID, altI
 | `altItemAppearanceID` | number | yes |  |
 | `altOnTop` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, altItemID, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_RemixArtifactUI.GetArtifactItemInfo()
@@ -97,7 +97,7 @@ reqitemID = C_RemixArtifactUI.GetCurrArtifactItemID()
 |------|------|---------|-------------|
 | `reqitemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reqitemID = C_RemixArtifactUI.GetCurrArtifactItemID()
@@ -115,7 +115,7 @@ specIndex = C_RemixArtifactUI.GetCurrItemSpecIndex()
 |------|------|---------|-------------|
 | `specIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specIndex = C_RemixArtifactUI.GetCurrItemSpecIndex()
@@ -133,7 +133,7 @@ traitTreeID = C_RemixArtifactUI.GetCurrTraitTreeID()
 |------|------|---------|-------------|
 | `traitTreeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local traitTreeID = C_RemixArtifactUI.GetCurrTraitTreeID()
@@ -157,7 +157,7 @@ isRemixArtifact = C_RemixArtifactUI.ItemInSlotIsRemixArtifact(invSlot)
 |------|------|---------|-------------|
 | `isRemixArtifact` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRemixArtifact = C_RemixArtifactUI.ItemInSlotIsRemixArtifact(1)

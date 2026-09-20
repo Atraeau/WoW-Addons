@@ -14,7 +14,7 @@ Disable radial progress bar rendering and restore standard texture display.
 ClearRadialProgressBar()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearRadialProgressBar()
@@ -26,7 +26,7 @@ ClearRadialProgressBar()
 ClearSVG()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearSVG()
@@ -40,7 +40,7 @@ Disable shader based nineslice texture rendering. Since SetAtlas will automatica
 ClearTextureSlice()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearTextureSlice()
@@ -52,7 +52,7 @@ ClearTextureSlice()
 ClearVertexOffsets()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearVertexOffsets()
@@ -70,7 +70,7 @@ atlas = GetAtlas()
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlas = GetAtlas()
@@ -88,7 +88,7 @@ blendMode = GetBlendMode()
 |------|------|---------|-------------|
 | `blendMode` | BlendMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blendMode = GetBlendMode()
@@ -106,7 +106,7 @@ desaturation = GetDesaturation()
 |------|------|---------|-------------|
 | `desaturation` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local desaturation = GetDesaturation()
@@ -124,7 +124,7 @@ tiling = GetHorizTile()
 |------|------|---------|-------------|
 | `tiling` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tiling = GetHorizTile()
@@ -144,7 +144,7 @@ offset = GetRadialProgressBarEndOffset()
 |------|------|---------|-------------|
 | `offset` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offset = GetRadialProgressBarEndOffset()
@@ -164,7 +164,7 @@ feather = GetRadialProgressBarFeather()
 |------|------|---------|-------------|
 | `feather` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local feather = GetRadialProgressBarFeather()
@@ -184,7 +184,7 @@ percent = GetRadialProgressBarPercent()
 |------|------|---------|-------------|
 | `percent` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percent = GetRadialProgressBarPercent()
@@ -204,7 +204,7 @@ reverse = GetRadialProgressBarReverse()
 |------|------|---------|-------------|
 | `reverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reverse = GetRadialProgressBarReverse()
@@ -224,7 +224,7 @@ offset = GetRadialProgressBarStartOffset()
 |------|------|---------|-------------|
 | `offset` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offset = GetRadialProgressBarStartOffset()
@@ -243,7 +243,7 @@ radians, normalizedRotationPoint = GetRotation()
 | `radians` | number | no |  |
 | `normalizedRotationPoint` | vector2 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local radians, normalizedRotationPoint = GetRotation()
@@ -268,7 +268,7 @@ ulX, ulY, llX, llY, urX, urY, lrX, lrY = GetTexCoord()
 | `lrX` | number | no |  |
 | `lrY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ulX, ulY, llX, llY, urX, urY, lrX, lrY = GetTexCoord()
@@ -286,7 +286,7 @@ bias = GetTexelSnappingBias()
 |------|------|---------|-------------|
 | `bias` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bias = GetTexelSnappingBias()
@@ -304,7 +304,7 @@ textureFile = GetTexture()
 |------|------|---------|-------------|
 | `textureFile` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureFile = GetTexture()
@@ -322,7 +322,7 @@ textureFile = GetTextureFileID()
 |------|------|---------|-------------|
 | `textureFile` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureFile = GetTextureFileID()
@@ -340,7 +340,7 @@ textureFile = GetTextureFilePath()
 |------|------|---------|-------------|
 | `textureFile` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureFile = GetTextureFilePath()
@@ -361,7 +361,7 @@ left, top, right, bottom = GetTextureSliceMargins()
 | `right` | number | no |  |
 | `bottom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, top, right, bottom = GetTextureSliceMargins()
@@ -379,7 +379,7 @@ sliceMode = GetTextureSliceMode()
 |------|------|---------|-------------|
 | `sliceMode` | UITextureSliceMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sliceMode = GetTextureSliceMode()
@@ -404,7 +404,7 @@ offsetX, offsetY = GetVertexOffset(vertexIndex)
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetVertexOffset(1)
@@ -422,7 +422,7 @@ tiling = GetVertTile()
 |------|------|---------|-------------|
 | `tiling` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tiling = GetVertTile()
@@ -440,7 +440,7 @@ blocking = IsBlockingLoadRequested()
 |------|------|---------|-------------|
 | `blocking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blocking = IsBlockingLoadRequested()
@@ -458,7 +458,7 @@ desaturated = IsDesaturated()
 |------|------|---------|-------------|
 | `desaturated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local desaturated = IsDesaturated()
@@ -476,7 +476,7 @@ snap = IsSnappingToPixelGrid()
 |------|------|---------|-------------|
 | `snap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local snap = IsSnappingToPixelGrid()
@@ -488,7 +488,7 @@ local snap = IsSnappingToPixelGrid()
 ResetTexCoord()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ResetTexCoord()
@@ -511,7 +511,7 @@ SetAtlas(atlas, useAtlasSize, [filterMode], [resetTexCoords], [wrapModeHorizonta
 | `wrapModeHorizontal` | cstring | yes |  |
 | `wrapModeVertical` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAtlas(atlas, false)
@@ -529,7 +529,7 @@ SetBlendMode(blendMode)
 |------|------|---------|-------------|
 | `blendMode` | BlendMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBlendMode(blendMode)
@@ -547,7 +547,7 @@ SetBlockingLoadsRequested(blocking)
 |------|------|---------|-------------|
 | `blocking` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetBlockingLoadsRequested(false)
@@ -568,7 +568,7 @@ SetColorTexture(colorR, colorG, colorB, [a])
 | `colorB` | number | no |  |
 | `a` | SingleColorValue | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetColorTexture(0, 0, 0)
@@ -586,7 +586,7 @@ SetDesaturated(desaturated)
 |------|------|---------|-------------|
 | `desaturated` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturated(false)
@@ -604,7 +604,7 @@ SetDesaturation(desaturation)
 |------|------|---------|-------------|
 | `desaturation` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturation(desaturation)
@@ -624,7 +624,7 @@ SetGradient(orientation, minColor, maxColor)
 | `minColor` | colorRGBA | no |  |
 | `maxColor` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetGradient(orientation, minColor, maxColor)
@@ -642,7 +642,7 @@ SetHorizTile(tiling)
 |------|------|---------|-------------|
 | `tiling` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHorizTile(false)
@@ -660,7 +660,7 @@ SetMask(file)
 |------|------|---------|-------------|
 | `file` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMask("")
@@ -680,10 +680,10 @@ SetRadialProgressBarEndOffset(offset)
 |------|------|---------|-------------|
 | `offset` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetRadialProgressBarEndOffset(offset)
+SetRadialProgressBarEndOffset(1)
 ```
 
 ### SimpleTextureBaseAPI.SetRadialProgressBarFeather
@@ -700,7 +700,7 @@ SetRadialProgressBarFeather(feather)
 |------|------|---------|-------------|
 | `feather` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRadialProgressBarFeather(feather)
@@ -720,7 +720,7 @@ SetRadialProgressBarPercent(percent)
 |------|------|---------|-------------|
 | `percent` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRadialProgressBarPercent(percent)
@@ -740,7 +740,7 @@ SetRadialProgressBarReverse(reverse)
 |------|------|---------|-------------|
 | `reverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRadialProgressBarReverse(false)
@@ -760,10 +760,10 @@ SetRadialProgressBarStartOffset(offset)
 |------|------|---------|-------------|
 | `offset` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetRadialProgressBarStartOffset(offset)
+SetRadialProgressBarStartOffset(1)
 ```
 
 ### SimpleTextureBaseAPI.SetRotation
@@ -779,7 +779,7 @@ SetRotation(radians, [normalizedRotationPoint])
 | `radians` | number | no |  |
 | `normalizedRotationPoint` | vector2 | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRotation(0)
@@ -797,7 +797,7 @@ SetSnapToPixelGrid(snap)
 |------|------|---------|-------------|
 | `snap` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSnapToPixelGrid(false)
@@ -819,10 +819,10 @@ SetSpriteSheetCell(cell, numRows, numColumns, [cellWidth], [cellHeight])
 | `cellWidth` | number | yes |  |
 | `cellHeight` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetSpriteSheetCell(cell, 0, 0)
+SetSpriteSheetCell(1, 0, 0)
 ```
 
 ### SimpleTextureBaseAPI.SetSVG
@@ -843,7 +843,7 @@ success = SetSVG(svgAsset)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetSVG(svgAsset)
@@ -864,7 +864,7 @@ SetTexCoord(left, right, bottom, top)
 | `bottom` | number | no |  |
 | `top` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTexCoord(0, 0, 0, 0)
@@ -882,7 +882,7 @@ SetTexelSnappingBias(bias)
 |------|------|---------|-------------|
 | `bias` | normalizedValue | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTexelSnappingBias(bias)
@@ -909,7 +909,7 @@ success = SetTexture([textureAsset], [wrapModeHorizontal], [wrapModeVertical], [
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetTexture()
@@ -932,7 +932,7 @@ SetTextureSliceMargins(left, top, right, bottom)
 | `right` | number | no |  |
 | `bottom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextureSliceMargins(0, 0, 0, 0)
@@ -952,7 +952,7 @@ SetTextureSliceMode(sliceMode)
 |------|------|---------|-------------|
 | `sliceMode` | UITextureSliceMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextureSliceMode(sliceMode)
@@ -972,10 +972,10 @@ SetVertexOffset(vertexIndex, offsetX, offsetY)
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetVertexOffset(1, offsetX, offsetY)
+SetVertexOffset(1, 1, 1)
 ```
 
 ### SimpleTextureBaseAPI.SetVertTile
@@ -990,7 +990,7 @@ SetVertTile(tiling)
 |------|------|---------|-------------|
 | `tiling` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetVertTile(false)

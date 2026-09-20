@@ -18,7 +18,7 @@ activeTimerunningSeasonID = C_TimerunningUI.GetActiveTimerunningSeasonID()
 |------|------|---------|-------------|
 | `activeTimerunningSeasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeTimerunningSeasonID = C_TimerunningUI.GetActiveTimerunningSeasonID()

@@ -24,7 +24,7 @@ localeInfos = GetAvailableLocaleInfo(ignoreLocaleRestrictions)
 |------|------|---------|-------------|
 | `localeInfos` | LocaleInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localeInfos = GetAvailableLocaleInfo(false)
@@ -48,7 +48,7 @@ localeName = GetAvailableLocales(ignoreLocaleRestrictions)
 |------|------|---------|-------------|
 | `localeName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localeName = GetAvailableLocales(false)
@@ -66,7 +66,7 @@ region = GetCurrentRegion()
 |------|------|---------|-------------|
 | `region` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local region = GetCurrentRegion()
@@ -84,7 +84,7 @@ localeName = GetLocale()
 |------|------|---------|-------------|
 | `localeName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localeName = GetLocale()
@@ -102,7 +102,7 @@ localeName = GetOSLocale()
 |------|------|---------|-------------|
 | `localeName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local localeName = GetOSLocale()

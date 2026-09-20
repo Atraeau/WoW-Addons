@@ -24,7 +24,7 @@ allDisplayInfo = C_AlliedRaces.GetAllRacialAbilitiesFromID(raceID)
 |------|------|---------|-------------|
 | `allDisplayInfo` | AlliedRaceRacialAbility[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allDisplayInfo = C_AlliedRaces.GetAllRacialAbilitiesFromID(0)
@@ -48,7 +48,7 @@ info = C_AlliedRaces.GetRaceInfoByID(raceID)
 |------|------|---------|-------------|
 | `info` | AlliedRaceInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AlliedRaces.GetRaceInfoByID(0)

@@ -20,7 +20,7 @@ canShow = C_EventScheduler.CanShowEvents()
 |------|------|---------|-------------|
 | `canShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canShow = C_EventScheduler.CanShowEvents()
@@ -40,7 +40,7 @@ C_EventScheduler.ClearReminder(eventKey)
 |------|------|---------|-------------|
 | `eventKey` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EventScheduler.ClearReminder("")
@@ -60,7 +60,7 @@ name = C_EventScheduler.GetActiveContinentName()
 |------|------|---------|-------------|
 | `name` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_EventScheduler.GetActiveContinentName()
@@ -86,7 +86,7 @@ uiMapID = C_EventScheduler.GetEventUiMapID(areaPoiID)
 |------|------|---------|-------------|
 | `uiMapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = C_EventScheduler.GetEventUiMapID(0)
@@ -112,7 +112,7 @@ name = C_EventScheduler.GetEventZoneName(areaPoiID)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_EventScheduler.GetEventZoneName(0)
@@ -132,7 +132,7 @@ events = C_EventScheduler.GetOngoingEvents()
 |------|------|---------|-------------|
 | `events` | OngoingEventInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_EventScheduler.GetOngoingEvents()
@@ -152,7 +152,7 @@ events = C_EventScheduler.GetScheduledEvents()
 |------|------|---------|-------------|
 | `events` | ScheduledEventInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_EventScheduler.GetScheduledEvents()
@@ -172,7 +172,7 @@ hasData = C_EventScheduler.HasData()
 |------|------|---------|-------------|
 | `hasData` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasData = C_EventScheduler.HasData()
@@ -192,7 +192,7 @@ hasSavedReminders = C_EventScheduler.HasSavedReminders()
 |------|------|---------|-------------|
 | `hasSavedReminders` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSavedReminders = C_EventScheduler.HasSavedReminders()
@@ -206,7 +206,7 @@ Requests events from the server, subject to throttle
 C_EventScheduler.RequestEvents()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EventScheduler.RequestEvents()
@@ -226,7 +226,7 @@ C_EventScheduler.SetReminder(eventKey)
 |------|------|---------|-------------|
 | `eventKey` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EventScheduler.SetReminder("")

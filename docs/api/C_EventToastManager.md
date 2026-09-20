@@ -24,7 +24,7 @@ toastInfo = C_EventToastManager.GetLevelUpDisplayToastsFromLevel(level)
 |------|------|---------|-------------|
 | `toastInfo` | EventToastInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local toastInfo = C_EventToastManager.GetLevelUpDisplayToastsFromLevel(0)
@@ -42,7 +42,7 @@ toastInfo = C_EventToastManager.GetNextToastToDisplay()
 |------|------|---------|-------------|
 | `toastInfo` | EventToastInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local toastInfo = C_EventToastManager.GetNextToastToDisplay()
@@ -54,7 +54,7 @@ local toastInfo = C_EventToastManager.GetNextToastToDisplay()
 C_EventToastManager.RemoveCurrentToast()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EventToastManager.RemoveCurrentToast()

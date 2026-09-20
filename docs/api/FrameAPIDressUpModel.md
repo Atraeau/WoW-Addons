@@ -12,7 +12,7 @@
 Dress()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Dress()
@@ -30,7 +30,7 @@ enabled = GetAutoDress()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetAutoDress()
@@ -54,7 +54,7 @@ itemTransmogInfo = GetItemTransmogInfo(inventorySlot)
 |------|------|---------|-------------|
 | `itemTransmogInfo` | ItemTransmogInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemTransmogInfo = GetItemTransmogInfo(1)
@@ -72,7 +72,7 @@ infoList = GetItemTransmogInfoList()
 |------|------|---------|-------------|
 | `infoList` | ItemTransmogInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infoList = GetItemTransmogInfoList()
@@ -90,7 +90,7 @@ enabled = GetObeyHideInTransmogFlag()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetObeyHideInTransmogFlag()
@@ -108,7 +108,7 @@ sheathed = GetSheathed()
 |------|------|---------|-------------|
 | `sheathed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sheathed = GetSheathed()
@@ -126,7 +126,7 @@ enabled = GetUseTransmogChoices()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetUseTransmogChoices()
@@ -144,7 +144,7 @@ enabled = GetUseTransmogSkin()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = GetUseTransmogSkin()
@@ -162,7 +162,7 @@ ready = IsGeoReady()
 |------|------|---------|-------------|
 | `ready` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ready = IsGeoReady()
@@ -186,7 +186,7 @@ allowed = IsSlotAllowed(slot)
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = IsSlotAllowed(1)
@@ -210,7 +210,7 @@ visible = IsSlotVisible(slot)
 |------|------|---------|-------------|
 | `visible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local visible = IsSlotVisible(1)
@@ -228,7 +228,7 @@ SetAutoDress(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAutoDress(false)
@@ -254,7 +254,7 @@ result = SetItemTransmogInfo(itemTransmogInfo, [inventorySlot], ignoreChildItems
 |------|------|---------|-------------|
 | `result` | ItemTryOnReason | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = SetItemTransmogInfo(6948, 6948)
@@ -272,7 +272,7 @@ SetObeyHideInTransmogFlag(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetObeyHideInTransmogFlag(false)
@@ -291,7 +291,7 @@ SetSheathed(sheathed, hideWeapons)
 | `sheathed` | bool | no | (default: False) |
 | `hideWeapons` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetSheathed(false, false)
@@ -309,7 +309,7 @@ SetUseTransmogChoices(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseTransmogChoices(false)
@@ -327,7 +327,7 @@ SetUseTransmogSkin(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseTransmogSkin(false)
@@ -353,7 +353,7 @@ result = TryOn(linkOrItemModifiedAppearanceID, [handSlotName], [spellEnchantID])
 |------|------|---------|-------------|
 | `result` | ItemTryOnReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = TryOn(6948)
@@ -365,7 +365,7 @@ local result = TryOn(6948)
 Undress()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Undress()
@@ -383,7 +383,7 @@ UndressSlot(inventorySlot)
 |------|------|---------|-------------|
 | `inventorySlot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UndressSlot(1)

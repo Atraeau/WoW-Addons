@@ -19,7 +19,7 @@ osShortcutsDisabledCVar, osShortcutsDisabled = C_MacOptions.AreOSShortcutsDisabl
 | `osShortcutsDisabledCVar` | bool | yes |  |
 | `osShortcutsDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local osShortcutsDisabledCVar, osShortcutsDisabled = C_MacOptions.AreOSShortcutsDisabled()
@@ -37,7 +37,7 @@ result = C_MacOptions.GetGameBundleName()
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_MacOptions.GetGameBundleName()
@@ -55,7 +55,7 @@ result = C_MacOptions.HasNewStyleInputMonitoring()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_MacOptions.HasNewStyleInputMonitoring()
@@ -73,7 +73,7 @@ result = C_MacOptions.IsInputMonitoringEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_MacOptions.IsInputMonitoringEnabled()
@@ -91,7 +91,7 @@ result = C_MacOptions.IsMicrophoneEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_MacOptions.IsMicrophoneEnabled()
@@ -109,7 +109,7 @@ result = C_MacOptions.IsUniversalAccessEnabled()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_MacOptions.IsUniversalAccessEnabled()
@@ -121,7 +121,7 @@ local result = C_MacOptions.IsUniversalAccessEnabled()
 C_MacOptions.OpenInputMonitoring()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MacOptions.OpenInputMonitoring()
@@ -133,7 +133,7 @@ C_MacOptions.OpenInputMonitoring()
 C_MacOptions.OpenMicrophoneRequestDialogue()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MacOptions.OpenMicrophoneRequestDialogue()
@@ -145,7 +145,7 @@ C_MacOptions.OpenMicrophoneRequestDialogue()
 C_MacOptions.OpenUniversalAccess()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MacOptions.OpenUniversalAccess()
@@ -163,7 +163,7 @@ C_MacOptions.SetOSShortcutsDisabled(disable)
 |------|------|---------|-------------|
 | `disable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MacOptions.SetOSShortcutsDisabled(false)

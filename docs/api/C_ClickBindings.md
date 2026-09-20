@@ -24,10 +24,10 @@ canBeBound = C_ClickBindings.CanSpellBeClickBound(spellID)
 |------|------|---------|-------------|
 | `canBeBound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canBeBound = C_ClickBindings.CanSpellBeClickBound(12345)
+local canBeBound = C_ClickBindings.CanSpellBeClickBound(2050)
 ```
 
 ### C_ClickBindings.ExecuteBinding
@@ -44,7 +44,7 @@ C_ClickBindings.ExecuteBinding(targetToken, button, modifiers)
 | `button` | cstring | no |  |
 | `modifiers` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClickBindings.ExecuteBinding("", "", 0)
@@ -69,7 +69,7 @@ type = C_ClickBindings.GetBindingType(button, modifiers)
 |------|------|---------|-------------|
 | `type` | ClickBindingType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type = C_ClickBindings.GetBindingType("", 0)
@@ -94,7 +94,7 @@ effectiveButton = C_ClickBindings.GetEffectiveInteractionButton(button, modifier
 |------|------|---------|-------------|
 | `effectiveButton` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local effectiveButton = C_ClickBindings.GetEffectiveInteractionButton("", 0)
@@ -112,7 +112,7 @@ infoVec = C_ClickBindings.GetProfileInfo()
 |------|------|---------|-------------|
 | `infoVec` | ClickBindingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infoVec = C_ClickBindings.GetProfileInfo()
@@ -130,7 +130,7 @@ tutorialShown = C_ClickBindings.GetTutorialShown()
 |------|------|---------|-------------|
 | `tutorialShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tutorialShown = C_ClickBindings.GetTutorialShown()
@@ -142,7 +142,7 @@ local tutorialShown = C_ClickBindings.GetTutorialShown()
 C_ClickBindings.ResetCurrentProfile()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClickBindings.ResetCurrentProfile()
@@ -160,7 +160,7 @@ C_ClickBindings.SetProfileByInfo(infoVec)
 |------|------|---------|-------------|
 | `infoVec` | ClickBindingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClickBindings.SetProfileByInfo(infoVec)
@@ -172,7 +172,7 @@ C_ClickBindings.SetProfileByInfo(infoVec)
 C_ClickBindings.SetTutorialShown()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ClickBindings.SetTutorialShown()

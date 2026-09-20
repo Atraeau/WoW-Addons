@@ -18,7 +18,7 @@ worldSafeLocs = C_WorldSafeLocsUIInternal.GetWorldSafeLocs()
 |------|------|---------|-------------|
 | `worldSafeLocs` | WorldSafeLocInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local worldSafeLocs = C_WorldSafeLocsUIInternal.GetWorldSafeLocs()

@@ -24,7 +24,7 @@ categories = C_SpellDiminish.GetAllSpellDiminishCategories([ruleset])
 |------|------|---------|-------------|
 | `categories` | SpellDiminishCategoryInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categories = C_SpellDiminish.GetAllSpellDiminishCategories()
@@ -48,7 +48,7 @@ categoryInfo = C_SpellDiminish.GetSpellDiminishCategoryInfo(category)
 |------|------|---------|-------------|
 | `categoryInfo` | SpellDiminishCategoryInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categoryInfo = C_SpellDiminish.GetSpellDiminishCategoryInfo(category)
@@ -66,7 +66,7 @@ isSystemSupported = C_SpellDiminish.IsSystemSupported()
 |------|------|---------|-------------|
 | `isSystemSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSystemSupported = C_SpellDiminish.IsSystemSupported()
@@ -91,7 +91,7 @@ isTracked = C_SpellDiminish.ShouldTrackSpellDiminishCategory(category, ruleset)
 |------|------|---------|-------------|
 | `isTracked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTracked = C_SpellDiminish.ShouldTrackSpellDiminishCategory(category, ruleset)

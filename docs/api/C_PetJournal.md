@@ -12,7 +12,7 @@
 C_PetJournal.ClearHoveredBattlePet()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetJournal.ClearHoveredBattlePet()
@@ -24,7 +24,7 @@ C_PetJournal.ClearHoveredBattlePet()
 C_PetJournal.ClearSearchFilter()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetJournal.ClearSearchFilter()
@@ -42,10 +42,10 @@ C_PetJournal.DismissSummonedPet(petID)
 |------|------|---------|-------------|
 | `petID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_PetJournal.DismissSummonedPet(petID)
+C_PetJournal.DismissSummonedPet(UnitGUID("player"))
 ```
 
 ### C_PetJournal.GetDisplayIDByIndex
@@ -67,7 +67,7 @@ displayID = C_PetJournal.GetDisplayIDByIndex(speciesID, index)
 |------|------|---------|-------------|
 | `displayID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayID = C_PetJournal.GetDisplayIDByIndex(0, 1)
@@ -92,7 +92,7 @@ displayProbability = C_PetJournal.GetDisplayProbabilityByIndex(speciesID, index)
 |------|------|---------|-------------|
 | `displayProbability` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local displayProbability = C_PetJournal.GetDisplayProbabilityByIndex(0, 1)
@@ -116,7 +116,7 @@ link = C_PetJournal.GetNonBattlePetLinkByIndex(index)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_PetJournal.GetNonBattlePetLinkByIndex(1)
@@ -140,7 +140,7 @@ numDisplays = C_PetJournal.GetNumDisplays(speciesID)
 |------|------|---------|-------------|
 | `numDisplays` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDisplays = C_PetJournal.GetNumDisplays(0)
@@ -165,7 +165,7 @@ maxAllowed, numPets = C_PetJournal.GetNumPetsInJournal(creatureID)
 | `maxAllowed` | number | no |  |
 | `numPets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxAllowed, numPets = C_PetJournal.GetNumPetsInJournal(0)
@@ -183,7 +183,7 @@ ownedPetIDs = C_PetJournal.GetOwnedPetIDs()
 |------|------|---------|-------------|
 | `ownedPetIDs` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ownedPetIDs = C_PetJournal.GetOwnedPetIDs()
@@ -209,7 +209,7 @@ name, icon, petType = C_PetJournal.GetPetAbilityInfo(abilityID)
 | `icon` | fileID | no |  |
 | `petType` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, petType = C_PetJournal.GetPetAbilityInfo(0)
@@ -233,7 +233,7 @@ info = C_PetJournal.GetPetAbilityListTable(speciesID)
 |------|------|---------|-------------|
 | `info` | PetAbilityLevelInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_PetJournal.GetPetAbilityListTable(0)
@@ -257,10 +257,10 @@ info = C_PetJournal.GetPetInfoTableByPetID(petID)
 |------|------|---------|-------------|
 | `info` | PetJournalPetInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_PetJournal.GetPetInfoTableByPetID(petID)
+local info = C_PetJournal.GetPetInfoTableByPetID(UnitGUID("player"))
 ```
 
 ### C_PetJournal.GetPetInfoTableBySpeciesID
@@ -281,7 +281,7 @@ petInfo = C_PetJournal.GetPetInfoTableBySpeciesID(speciesID)
 |------|------|---------|-------------|
 | `petInfo` | PetJournalPetInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petInfo = C_PetJournal.GetPetInfoTableBySpeciesID(0)
@@ -309,7 +309,7 @@ petID, ability1ID, ability2ID, ability3ID, locked = C_PetJournal.GetPetLoadOutIn
 | `ability3ID` | number | no |  |
 | `locked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petID, ability1ID, ability2ID, ability3ID, locked = C_PetJournal.GetPetLoadOutInfo(1)
@@ -335,10 +335,10 @@ isSummonable, error, errorText = C_PetJournal.GetPetSummonInfo(battlePetGUID)
 | `error` | PetJournalError | no |  |
 | `errorText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isSummonable, error, errorText = C_PetJournal.GetPetSummonInfo("Creature-0-0000-0-0-0-0")
+local isSummonable, error, errorText = C_PetJournal.GetPetSummonInfo(UnitGUID("player"))
 ```
 
 ### C_PetJournal.GetSearchFilter
@@ -353,7 +353,7 @@ filterText = C_PetJournal.GetSearchFilter()
 |------|------|---------|-------------|
 | `filterText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filterText = C_PetJournal.GetSearchFilter()
@@ -371,7 +371,7 @@ hasFavorites = C_PetJournal.HasFavoritePets()
 |------|------|---------|-------------|
 | `hasFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFavorites = C_PetJournal.HasFavoritePets()
@@ -395,10 +395,10 @@ isSummoned = C_PetJournal.IsCurrentlySummoned(petID)
 |------|------|---------|-------------|
 | `isSummoned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isSummoned = C_PetJournal.IsCurrentlySummoned(petID)
+local isSummoned = C_PetJournal.IsCurrentlySummoned(UnitGUID("player"))
 ```
 
 ### C_PetJournal.IsUsingDefaultFilters
@@ -413,7 +413,7 @@ isUsingDefaultFilters = C_PetJournal.IsUsingDefaultFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultFilters = C_PetJournal.IsUsingDefaultFilters()
@@ -437,10 +437,10 @@ isSummonable = C_PetJournal.PetIsSummonable(battlePetGUID)
 |------|------|---------|-------------|
 | `isSummonable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isSummonable = C_PetJournal.PetIsSummonable("Creature-0-0000-0-0-0-0")
+local isSummonable = C_PetJournal.PetIsSummonable(UnitGUID("player"))
 ```
 
 ### C_PetJournal.PetUsesRandomDisplay
@@ -461,7 +461,7 @@ usesRandomDisplay = C_PetJournal.PetUsesRandomDisplay(speciesID)
 |------|------|---------|-------------|
 | `usesRandomDisplay` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local usesRandomDisplay = C_PetJournal.PetUsesRandomDisplay(0)
@@ -473,7 +473,7 @@ local usesRandomDisplay = C_PetJournal.PetUsesRandomDisplay(0)
 C_PetJournal.SetDefaultFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetJournal.SetDefaultFilters()
@@ -491,10 +491,10 @@ C_PetJournal.SetHoveredBattlePet(battlePetGUID)
 |------|------|---------|-------------|
 | `battlePetGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_PetJournal.SetHoveredBattlePet("Creature-0-0000-0-0-0-0")
+C_PetJournal.SetHoveredBattlePet(UnitGUID("player"))
 ```
 
 ### C_PetJournal.SetSearchFilter
@@ -509,7 +509,7 @@ C_PetJournal.SetSearchFilter(filterText)
 |------|------|---------|-------------|
 | `filterText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetJournal.SetSearchFilter("HELPFUL")
@@ -527,10 +527,10 @@ C_PetJournal.SpellTargetBattlePet(battlePetGUID)
 |------|------|---------|-------------|
 | `battlePetGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_PetJournal.SpellTargetBattlePet("Creature-0-0000-0-0-0-0")
+C_PetJournal.SpellTargetBattlePet(UnitGUID("player"))
 ```
 
 ## Events

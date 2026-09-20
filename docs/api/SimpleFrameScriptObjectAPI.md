@@ -20,7 +20,7 @@ AddAccessRestrictions(restrictions)
 |------|------|---------|-------------|
 | `restrictions` | ScriptObjectAccessRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddAccessRestrictions(restrictions)
@@ -40,7 +40,7 @@ AddForbiddenAspects(aspects)
 |------|------|---------|-------------|
 | `aspects` | ForbiddenAspect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddForbiddenAspects(aspects)
@@ -58,7 +58,7 @@ AddSecretAspect(aspect)
 |------|------|---------|-------------|
 | `aspect` | SecretAspect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 AddSecretAspect(aspect)
@@ -78,7 +78,7 @@ canAccess = CanBeAccessedInContext()
 |------|------|---------|-------------|
 | `canAccess` | bool | no | False if access is denied, such as when execution is tainted and the object is forbidden or enforcing access restrictions. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAccess = CanBeAccessedInContext()
@@ -98,7 +98,7 @@ restrictions = GetAccessRestrictions()
 |------|------|---------|-------------|
 | `restrictions` | ScriptObjectAccessRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local restrictions = GetAccessRestrictions()
@@ -118,7 +118,7 @@ aspects = GetForbiddenAspects()
 |------|------|---------|-------------|
 | `aspects` | ForbiddenAspect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local aspects = GetForbiddenAspects()
@@ -144,7 +144,7 @@ aspects = GetInheritableForbiddenAspects(path)
 |------|------|---------|-------------|
 | `aspects` | ForbiddenAspect | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local aspects = GetInheritableForbiddenAspects(path)
@@ -162,7 +162,7 @@ name = GetName()
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = GetName()
@@ -180,7 +180,7 @@ objectTable = GetObjectTable()
 |------|------|---------|-------------|
 | `objectTable` | FrameScriptObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objectTable = GetObjectTable()
@@ -198,7 +198,7 @@ objectType = GetObjectType()
 |------|------|---------|-------------|
 | `objectType` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objectType = GetObjectType()
@@ -218,7 +218,7 @@ hasAccessConstraints = HasAccessConstraints()
 |------|------|---------|-------------|
 | `hasAccessConstraints` | bool | no | True if this object is forbidden or subject to conditional access restrictions. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAccessConstraints = HasAccessConstraints()
@@ -244,7 +244,7 @@ hasAnyAccessRestriction = HasAnyAccessRestrictions([restrictions])
 |------|------|---------|-------------|
 | `hasAnyAccessRestriction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyAccessRestriction = HasAnyAccessRestrictions()
@@ -270,7 +270,7 @@ hasAnyForbiddenAspect = HasAnyForbiddenAspects([aspects])
 |------|------|---------|-------------|
 | `hasAnyForbiddenAspect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyForbiddenAspect = HasAnyForbiddenAspects()
@@ -288,7 +288,7 @@ hasSecretAspect = HasAnySecretAspect()
 |------|------|---------|-------------|
 | `hasSecretAspect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretAspect = HasAnySecretAspect()
@@ -312,7 +312,7 @@ hasSecretAspect = HasSecretAspect(aspect)
 |------|------|---------|-------------|
 | `hasSecretAspect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretAspect = HasSecretAspect(aspect)
@@ -330,7 +330,7 @@ hasSecretValues = HasSecretValues()
 |------|------|---------|-------------|
 | `hasSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretValues = HasSecretValues()
@@ -350,7 +350,7 @@ isForbidden = IsForbidden()
 |------|------|---------|-------------|
 | `isForbidden` | bool | no | True if this object has been explicitly marked as forbidden, regardless of the current Lua execution context. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isForbidden = IsForbidden()
@@ -374,7 +374,7 @@ isType = IsObjectType(objectType)
 |------|------|---------|-------------|
 | `isType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isType = IsObjectType("")
@@ -392,7 +392,7 @@ isPreventingSecretValues = IsPreventingSecretValues()
 |------|------|---------|-------------|
 | `isPreventingSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPreventingSecretValues = IsPreventingSecretValues()
@@ -404,7 +404,7 @@ local isPreventingSecretValues = IsPreventingSecretValues()
 SetForbidden()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetForbidden()
@@ -418,7 +418,7 @@ Reset all script accessible values to their default values. If possible, clears 
 SetToDefaults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToDefaults()

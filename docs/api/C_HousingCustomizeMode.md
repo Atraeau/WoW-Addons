@@ -21,7 +21,7 @@ C_HousingCustomizeMode.ApplyDyeToSelectedDecor(dyeSlotID, [dyeColorID])
 | `dyeSlotID` | number | no |  |
 | `dyeColorID` | number | yes | If not provided, clears the dye from the specified dye slot, returning that part of the decor asset to its default color |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyDyeToSelectedDecor(1)
@@ -42,7 +42,7 @@ C_HousingCustomizeMode.ApplyPetToSelectedDecor([petID], petBehavior)
 | `petID` | WOWGUID | yes |  |
 | `petBehavior` | HousingPetBehaviorType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyPetToSelectedDecor(petBehavior)
@@ -62,7 +62,7 @@ C_HousingCustomizeMode.ApplyThemeToRoom(themeSetID)
 |------|------|---------|-------------|
 | `themeSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyThemeToRoom(0)
@@ -82,7 +82,7 @@ C_HousingCustomizeMode.ApplyThemeToSelectedRoomComponent(themeSetID)
 |------|------|---------|-------------|
 | `themeSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyThemeToSelectedRoomComponent(0)
@@ -102,7 +102,7 @@ C_HousingCustomizeMode.ApplyWallpaperToAllWalls(roomComponentTextureRecID)
 |------|------|---------|-------------|
 | `roomComponentTextureRecID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyWallpaperToAllWalls(0)
@@ -122,7 +122,7 @@ C_HousingCustomizeMode.ApplyWallpaperToSelectedRoomComponent(roomComponentTextur
 |------|------|---------|-------------|
 | `roomComponentTextureRecID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ApplyWallpaperToSelectedRoomComponent(0)
@@ -136,7 +136,7 @@ Cancels all in-progress editing of the selected target, which will reset any una
 C_HousingCustomizeMode.CancelActiveEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.CancelActiveEditing()
@@ -150,7 +150,7 @@ Clears all previewed dye changes on the selected decor; Does not clear any alrea
 C_HousingCustomizeMode.ClearDyesForSelectedDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ClearDyesForSelectedDecor()
@@ -164,7 +164,7 @@ Deselect the currently selected room component, if there is one
 C_HousingCustomizeMode.ClearTargetRoomComponent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCustomizeMode.ClearTargetRoomComponent()
@@ -184,7 +184,7 @@ hasChanges = C_HousingCustomizeMode.CommitDyesForSelectedDecor()
 |------|------|---------|-------------|
 | `hasChanges` | bool | no | True if there were any changes to save |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasChanges = C_HousingCustomizeMode.CommitDyesForSelectedDecor()
@@ -204,7 +204,7 @@ info = C_HousingCustomizeMode.GetHoveredDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCustomizeMode.GetHoveredDecorInfo()
@@ -224,7 +224,7 @@ info = C_HousingCustomizeMode.GetHoveredRoomComponentInfo()
 |------|------|---------|-------------|
 | `info` | HousingRoomComponentInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCustomizeMode.GetHoveredRoomComponentInfo()
@@ -244,7 +244,7 @@ numDyesToRemove = C_HousingCustomizeMode.GetNumDyesToRemoveOnSelectedDecor()
 |------|------|---------|-------------|
 | `numDyesToRemove` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDyesToRemove = C_HousingCustomizeMode.GetNumDyesToRemoveOnSelectedDecor()
@@ -264,7 +264,7 @@ numDyesToSpend = C_HousingCustomizeMode.GetNumDyesToSpendOnSelectedDecor()
 |------|------|---------|-------------|
 | `numDyesToSpend` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numDyesToSpend = C_HousingCustomizeMode.GetNumDyesToSpendOnSelectedDecor()
@@ -284,7 +284,7 @@ previewDyes = C_HousingCustomizeMode.GetPreviewDyesOnSelectedDecor()
 |------|------|---------|-------------|
 | `previewDyes` | PreviewDyeSlotInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local previewDyes = C_HousingCustomizeMode.GetPreviewDyesOnSelectedDecor()
@@ -304,7 +304,7 @@ recentDyes = C_HousingCustomizeMode.GetRecentlyUsedDyes()
 |------|------|---------|-------------|
 | `recentDyes` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentDyes = C_HousingCustomizeMode.GetRecentlyUsedDyes()
@@ -324,7 +324,7 @@ recentThemeSets = C_HousingCustomizeMode.GetRecentlyUsedThemeSets()
 |------|------|---------|-------------|
 | `recentThemeSets` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentThemeSets = C_HousingCustomizeMode.GetRecentlyUsedThemeSets()
@@ -344,7 +344,7 @@ recentWallpapers = C_HousingCustomizeMode.GetRecentlyUsedWallpapers()
 |------|------|---------|-------------|
 | `recentWallpapers` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recentWallpapers = C_HousingCustomizeMode.GetRecentlyUsedWallpapers()
@@ -364,7 +364,7 @@ info = C_HousingCustomizeMode.GetSelectedDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCustomizeMode.GetSelectedDecorInfo()
@@ -385,7 +385,7 @@ petID, petBehavior = C_HousingCustomizeMode.GetSelectedDecorPetInfo()
 | `petID` | WOWGUID | yes |  |
 | `petBehavior` | HousingPetBehaviorType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petID, petBehavior = C_HousingCustomizeMode.GetSelectedDecorPetInfo()
@@ -405,7 +405,7 @@ info = C_HousingCustomizeMode.GetSelectedRoomComponentInfo()
 |------|------|---------|-------------|
 | `info` | HousingRoomComponentInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCustomizeMode.GetSelectedRoomComponentInfo()
@@ -431,7 +431,7 @@ name = C_HousingCustomizeMode.GetThemeSetInfo(themeSetID)
 |------|------|---------|-------------|
 | `name` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_HousingCustomizeMode.GetThemeSetInfo(0)
@@ -457,7 +457,7 @@ availableWallpapers = C_HousingCustomizeMode.GetWallpapersForRoomComponentType(t
 |------|------|---------|-------------|
 | `availableWallpapers` | RoomComponentWallpaper[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local availableWallpapers = C_HousingCustomizeMode.GetWallpapersForRoomComponentType(type)
@@ -477,7 +477,7 @@ hasSelectedDecor = C_HousingCustomizeMode.IsDecorSelected()
 |------|------|---------|-------------|
 | `hasSelectedDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedDecor = C_HousingCustomizeMode.IsDecorSelected()
@@ -497,7 +497,7 @@ isHouseExteriorDoorHovered = C_HousingCustomizeMode.IsHouseExteriorDoorHovered()
 |------|------|---------|-------------|
 | `isHouseExteriorDoorHovered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHouseExteriorDoorHovered = C_HousingCustomizeMode.IsHouseExteriorDoorHovered()
@@ -517,7 +517,7 @@ isHoveringDecor = C_HousingCustomizeMode.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingCustomizeMode.IsHoveringDecor()
@@ -537,7 +537,7 @@ isHovering = C_HousingCustomizeMode.IsHoveringRoomComponent()
 |------|------|---------|-------------|
 | `isHovering` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHovering = C_HousingCustomizeMode.IsHoveringRoomComponent()
@@ -557,7 +557,7 @@ hasSelectedComponent = C_HousingCustomizeMode.IsRoomComponentSelected()
 |------|------|---------|-------------|
 | `hasSelectedComponent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedComponent = C_HousingCustomizeMode.IsRoomComponentSelected()
@@ -584,7 +584,7 @@ variantSupported = C_HousingCustomizeMode.RoomComponentSupportsVariant(component
 |------|------|---------|-------------|
 | `variantSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local variantSupported = C_HousingCustomizeMode.RoomComponentSupportsVariant(0, 0)
@@ -612,10 +612,10 @@ doorTypeSupported = C_HousingCustomizeMode.RoomConnectionSupportsDoorType(roomGU
 |------|------|---------|-------------|
 | `doorTypeSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local doorTypeSupported = C_HousingCustomizeMode.RoomConnectionSupportsDoorType("Creature-0-0000-0-0-0-0", 0, newDoortype)
+local doorTypeSupported = C_HousingCustomizeMode.RoomConnectionSupportsDoorType(UnitGUID("player"), 0, newDoortype)
 ```
 
 ### C_HousingCustomizeMode.SetRoomComponentCeilingType
@@ -634,10 +634,10 @@ C_HousingCustomizeMode.SetRoomComponentCeilingType(roomGUID, componentID, ceilin
 | `componentID` | number | no |  |
 | `ceilingType` | HousingRoomComponentCeilingType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingCustomizeMode.SetRoomComponentCeilingType("Creature-0-0000-0-0-0-0", 0, ceilingType)
+C_HousingCustomizeMode.SetRoomComponentCeilingType(UnitGUID("player"), 0, ceilingType)
 ```
 
 ### C_HousingCustomizeMode.SetRoomComponentDoorType
@@ -656,10 +656,10 @@ C_HousingCustomizeMode.SetRoomComponentDoorType(roomGUID, componentID, newDoorty
 | `componentID` | number | no |  |
 | `newDoortype` | HousingRoomComponentDoorType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingCustomizeMode.SetRoomComponentDoorType("Creature-0-0000-0-0-0-0", 0, newDoortype)
+C_HousingCustomizeMode.SetRoomComponentDoorType(UnitGUID("player"), 0, newDoortype)
 ```
 
 ## Events

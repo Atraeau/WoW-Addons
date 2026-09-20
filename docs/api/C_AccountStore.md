@@ -24,7 +24,7 @@ purchaseStarted = C_AccountStore.BeginPurchase(itemID)
 |------|------|---------|-------------|
 | `purchaseStarted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local purchaseStarted = C_AccountStore.BeginPurchase(6948)
@@ -48,7 +48,7 @@ categories = C_AccountStore.GetCategories(storeFrontID)
 |------|------|---------|-------------|
 | `categories` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categories = C_AccountStore.GetCategories(0)
@@ -72,7 +72,7 @@ info = C_AccountStore.GetCategoryInfo(categoryID)
 |------|------|---------|-------------|
 | `info` | AccountStoreCategoryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AccountStore.GetCategoryInfo(0)
@@ -96,7 +96,7 @@ itemIDs = C_AccountStore.GetCategoryItems(categoryID)
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemIDs = C_AccountStore.GetCategoryItems(0)
@@ -120,7 +120,7 @@ amount = C_AccountStore.GetCurrencyAvailable(currencyID)
 |------|------|---------|-------------|
 | `amount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_AccountStore.GetCurrencyAvailable(0)
@@ -144,7 +144,7 @@ currencyID = C_AccountStore.GetCurrencyIDForStore(storeFrontID)
 |------|------|---------|-------------|
 | `currencyID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyID = C_AccountStore.GetCurrencyIDForStore(0)
@@ -168,7 +168,7 @@ info = C_AccountStore.GetCurrencyInfo(currencyID)
 |------|------|---------|-------------|
 | `info` | AccountStoreCurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AccountStore.GetCurrencyInfo(0)
@@ -192,7 +192,7 @@ info = C_AccountStore.GetItemInfo(itemID)
 |------|------|---------|-------------|
 | `info` | AccountStoreItemInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AccountStore.GetItemInfo(6948)
@@ -216,7 +216,7 @@ state = C_AccountStore.GetStoreFrontState(storeFrontID)
 |------|------|---------|-------------|
 | `state` | AccountStoreState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_AccountStore.GetStoreFrontState(0)
@@ -240,7 +240,7 @@ refundStarted = C_AccountStore.RefundItem(itemID)
 |------|------|---------|-------------|
 | `refundStarted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundStarted = C_AccountStore.RefundItem(6948)
@@ -258,7 +258,7 @@ C_AccountStore.RequestStoreFrontInfoUpdate(storeFrontID)
 |------|------|---------|-------------|
 | `storeFrontID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AccountStore.RequestStoreFrontInfoUpdate(0)

@@ -28,7 +28,7 @@ result = C_LocaleContext.CompareStrings(left, right, strength)
 |------|------|---------|-------------|
 | `result` | number | no | The comparison result: less than, equal to, or greater than zero. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.CompareStrings("", "", strength)
@@ -55,7 +55,7 @@ byteOffsets = C_LocaleContext.FindBreaks(text, breakType)
 |------|------|---------|-------------|
 | `byteOffsets` | number[] | no | The native UTF-8 string indices for the text boundaries. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local byteOffsets = C_LocaleContext.FindBreaks("", breakType)
@@ -83,7 +83,7 @@ byteOffsets = C_LocaleContext.FindStringMatches(text, pattern, strength)
 |------|------|---------|-------------|
 | `byteOffsets` | number[] | no | The UTF-8 byte offsets of matches in the text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local byteOffsets = C_LocaleContext.FindStringMatches("", "", strength)
@@ -109,7 +109,7 @@ result = C_LocaleContext.FoldCase(text)
 |------|------|---------|-------------|
 | `result` | string | no | The case-folded string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FoldCase("")
@@ -136,7 +136,7 @@ result = C_LocaleContext.FormatCurrency(number, currencyCode)
 |------|------|---------|-------------|
 | `result` | string | no | The localized currency text produced by the formatter. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FormatCurrency(0, "")
@@ -164,7 +164,7 @@ result = C_LocaleContext.FormatDate(unixTimeSeconds, style, timeZone)
 |------|------|---------|-------------|
 | `result` | string | no | The formatted date string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FormatDate(0, style, "")
@@ -193,7 +193,7 @@ result = C_LocaleContext.FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, t
 |------|------|---------|-------------|
 | `result` | string | no | The formatted date and time string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FormatDateTime(0, dateStyle, timeStyle, "")
@@ -220,7 +220,7 @@ result = C_LocaleContext.FormatNumber(number, style)
 |------|------|---------|-------------|
 | `result` | string | no | The localized number text produced by the formatter. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FormatNumber(0, style)
@@ -248,7 +248,7 @@ result = C_LocaleContext.FormatTime(unixTimeSeconds, style, timeZone)
 |------|------|---------|-------------|
 | `result` | string | no | The formatted time string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.FormatTime(0, style, "")
@@ -275,7 +275,7 @@ result = C_LocaleContext.GetCurrencyName(currencyCode, style)
 |------|------|---------|-------------|
 | `result` | string | no | The display string for the currency, or the currency code itself if no localized name is available. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.GetCurrencyName("", style)
@@ -301,7 +301,7 @@ result = C_LocaleContext.GetDisplayName(displayLocale)
 |------|------|---------|-------------|
 | `result` | string | no | The displayable name for the locale. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.GetDisplayName("")
@@ -321,7 +321,7 @@ result = C_LocaleContext.GetLocale()
 |------|------|---------|-------------|
 | `result` | string | no | The locale ID of this locale context. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.GetLocale()
@@ -348,7 +348,7 @@ result = C_LocaleContext.GetSortKey(text, strength)
 |------|------|---------|-------------|
 | `result` | string | no | The sort key bytes excluding the terminating zero byte. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.GetSortKey("", strength)
@@ -374,7 +374,7 @@ result = C_LocaleContext.Length(text)
 |------|------|---------|-------------|
 | `result` | number | no | The number of character boundaries minus the initial boundary. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.Length("")
@@ -400,7 +400,7 @@ result = C_LocaleContext.ParseCurrency(text)
 |------|------|---------|-------------|
 | `result` | CurrencyParseResult | no | The numeric amount and ISO 4217 currency code parsed from the localized currency text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.ParseCurrency("")
@@ -427,7 +427,7 @@ result = C_LocaleContext.ParseNumber(text, style)
 |------|------|---------|-------------|
 | `result` | number | no | The numeric value parsed from the localized number text. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.ParseNumber("", style)
@@ -454,7 +454,7 @@ result = C_LocaleContext.SelectPlural(number, pluralType)
 |------|------|---------|-------------|
 | `result` | string | no | The plural keyword for the rule that applies to the number. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.SelectPlural(0, pluralType)
@@ -480,7 +480,7 @@ success = C_LocaleContext.SetLocale(locale)
 |------|------|---------|-------------|
 | `success` | bool | no | True if the locale was updated. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_LocaleContext.SetLocale("")
@@ -506,7 +506,7 @@ result = C_LocaleContext.ToLower(text)
 |------|------|---------|-------------|
 | `result` | string | no | The lowercased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.ToLower("")
@@ -532,7 +532,7 @@ result = C_LocaleContext.ToTitle(text)
 |------|------|---------|-------------|
 | `result` | string | no | The titlecased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.ToTitle("")
@@ -558,7 +558,7 @@ result = C_LocaleContext.ToUpper(text)
 |------|------|---------|-------------|
 | `result` | string | no | The uppercased string, which may be longer or shorter than the original. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.ToUpper("")
@@ -584,7 +584,7 @@ result = C_LocaleContext.TransformLocale(transform)
 |------|------|---------|-------------|
 | `result` | string | no | The transformed locale string. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_LocaleContext.TransformLocale(transform)

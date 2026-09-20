@@ -24,7 +24,7 @@ allowed = C_PartyInfo.AllowedToDoPartyConversion(toRaid)
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = C_PartyInfo.AllowedToDoPartyConversion(false)
@@ -42,7 +42,7 @@ canFormCrossFactionParties = C_PartyInfo.CanFormCrossFactionParties()
 |------|------|---------|-------------|
 | `canFormCrossFactionParties` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canFormCrossFactionParties = C_PartyInfo.CanFormCrossFactionParties()
@@ -60,7 +60,7 @@ allowedToInvite = C_PartyInfo.CanInvite()
 |------|------|---------|-------------|
 | `allowedToInvite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowedToInvite = C_PartyInfo.CanInvite()
@@ -80,7 +80,7 @@ canStart = C_PartyInfo.CanStartInstanceAbandonVote()
 |------|------|---------|-------------|
 | `canStart` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canStart = C_PartyInfo.CanStartInstanceAbandonVote()
@@ -98,7 +98,7 @@ restrictionsActive = C_PartyInfo.ChallengeModeRestrictionsActive()
 |------|------|---------|-------------|
 | `restrictionsActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local restrictionsActive = C_PartyInfo.ChallengeModeRestrictionsActive()
@@ -112,7 +112,7 @@ Immediately convert to raid with no regard for potentially destructive actions.
 C_PartyInfo.ConfirmConvertToRaid()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConfirmConvertToRaid()
@@ -131,10 +131,10 @@ C_PartyInfo.ConfirmInviteTravelPass(targetName, targetGUID)
 | `targetName` | cstring | no |  |
 | `targetGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_PartyInfo.ConfirmInviteTravelPass("", "Creature-0-0000-0-0-0-0")
+C_PartyInfo.ConfirmInviteTravelPass("", UnitGUID("player"))
 ```
 
 ### C_PartyInfo.ConfirmInviteUnit
@@ -151,7 +151,7 @@ C_PartyInfo.ConfirmInviteUnit(targetName)
 |------|------|---------|-------------|
 | `targetName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConfirmInviteUnit("")
@@ -171,7 +171,7 @@ C_PartyInfo.ConfirmLeaveParty([category])
 |------|------|---------|-------------|
 | `category` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConfirmLeaveParty()
@@ -189,7 +189,7 @@ C_PartyInfo.ConfirmReadyCheck(isReady)
 |------|------|---------|-------------|
 | `isReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConfirmReadyCheck(false)
@@ -212,7 +212,7 @@ C_PartyInfo.ConfirmRequestInviteFromUnit(targetName, [tank], [healer], [dps])
 | `healer` | bool | yes |  |
 | `dps` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConfirmRequestInviteFromUnit("")
@@ -224,7 +224,7 @@ C_PartyInfo.ConfirmRequestInviteFromUnit("")
 C_PartyInfo.ConvertToParty()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConvertToParty()
@@ -238,7 +238,7 @@ Usually this will convert to raid immediately. In some cases (e.g. PartySync) th
 C_PartyInfo.ConvertToRaid()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.ConvertToRaid()
@@ -250,7 +250,7 @@ C_PartyInfo.ConvertToRaid()
 C_PartyInfo.DelveTeleportOut()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.DelveTeleportOut()
@@ -269,7 +269,7 @@ C_PartyInfo.DemoteAssistant(name, [exactNameMatch])
 | `name` | cstring | no |  |
 | `exactNameMatch` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.DemoteAssistant("")
@@ -293,7 +293,7 @@ success = C_PartyInfo.DoCountdown(seconds)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_PartyInfo.DoCountdown(0)
@@ -305,7 +305,7 @@ local success = C_PartyInfo.DoCountdown(0)
 C_PartyInfo.DoReadyCheck()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.DoReadyCheck()
@@ -323,7 +323,7 @@ categories = C_PartyInfo.GetActiveCategories()
 |------|------|---------|-------------|
 | `categories` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local categories = C_PartyInfo.GetActiveCategories()
@@ -341,7 +341,7 @@ methods = C_PartyInfo.GetAvailableLootMethods()
 |------|------|---------|-------------|
 | `methods` | LootMethod[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local methods = C_PartyInfo.GetAvailableLootMethods()
@@ -362,7 +362,7 @@ durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonShutdownTime()
 | `durationSeconds` | number | no | (default: 0) |
 | `timeLeftSeconds` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonShutdownTime()
@@ -383,7 +383,7 @@ durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonVoteCooldownTim
 | `durationSeconds` | number | no | (default: 0) |
 | `timeLeftSeconds` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonVoteCooldownTime()
@@ -404,7 +404,7 @@ votesRequired, keystoneOwnerVoteWeight = C_PartyInfo.GetInstanceAbandonVoteRequi
 | `votesRequired` | number | no | (default: 0) |
 | `keystoneOwnerVoteWeight` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local votesRequired, keystoneOwnerVoteWeight = C_PartyInfo.GetInstanceAbandonVoteRequirements()
@@ -424,7 +424,7 @@ response = C_PartyInfo.GetInstanceAbandonVoteResponse()
 |------|------|---------|-------------|
 | `response` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local response = C_PartyInfo.GetInstanceAbandonVoteResponse()
@@ -445,7 +445,7 @@ durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonVoteTime()
 | `durationSeconds` | number | no | (default: 0) |
 | `timeLeftSeconds` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSeconds, timeLeftSeconds = C_PartyInfo.GetInstanceAbandonVoteTime()
@@ -469,10 +469,10 @@ invalidQueues = C_PartyInfo.GetInviteConfirmationInvalidQueues(inviteGUID)
 |------|------|---------|-------------|
 | `invalidQueues` | QueueSpecificInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local invalidQueues = C_PartyInfo.GetInviteConfirmationInvalidQueues("Creature-0-0000-0-0-0-0")
+local invalidQueues = C_PartyInfo.GetInviteConfirmationInvalidQueues(UnitGUID("player"))
 ```
 
 ### C_PartyInfo.GetInviteReferralInfo
@@ -497,10 +497,10 @@ outReferredByGuid, outReferredByName, outRelationType, outIsQuickJoin, outClubId
 | `outIsQuickJoin` | bool | no |  |
 | `outClubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local outReferredByGuid, outReferredByName, outRelationType, outIsQuickJoin, outClubId = C_PartyInfo.GetInviteReferralInfo("Creature-0-0000-0-0-0-0")
+local outReferredByGuid, outReferredByName, outRelationType, outIsQuickJoin, outClubId = C_PartyInfo.GetInviteReferralInfo(UnitGUID("player"))
 ```
 
 ### C_PartyInfo.GetLootMethod
@@ -517,7 +517,7 @@ method, masterLootPartyID, masterLooterRaidID = C_PartyInfo.GetLootMethod()
 | `masterLootPartyID` | number | yes |  |
 | `masterLooterRaidID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local method, masterLootPartyID, masterLooterRaidID = C_PartyInfo.GetLootMethod()
@@ -535,7 +535,7 @@ methodStyle = C_PartyInfo.GetLootMethodStyle()
 |------|------|---------|-------------|
 | `methodStyle` | LootMethodStyles | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local methodStyle = C_PartyInfo.GetLootMethodStyle()
@@ -560,7 +560,7 @@ minItemLevel, playerNameWithLowestItemLevel = C_PartyInfo.GetMinItemLevel(avgIte
 | `minItemLevel` | number | no |  |
 | `playerNameWithLowestItemLevel` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minItemLevel, playerNameWithLowestItemLevel = C_PartyInfo.GetMinItemLevel(6948)
@@ -584,7 +584,7 @@ minLevel = C_PartyInfo.GetMinLevel([category])
 |------|------|---------|-------------|
 | `minLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minLevel = C_PartyInfo.GetMinLevel()
@@ -604,7 +604,7 @@ count = C_PartyInfo.GetNumInstanceAbandonGroupVoteResponses()
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_PartyInfo.GetNumInstanceAbandonGroupVoteResponses()
@@ -622,7 +622,7 @@ restrictTo = C_PartyInfo.GetRestrictPings()
 |------|------|---------|-------------|
 | `restrictTo` | RestrictPingsTo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local restrictTo = C_PartyInfo.GetRestrictPings()
@@ -642,7 +642,7 @@ C_PartyInfo.InviteUnit(targetName)
 |------|------|---------|-------------|
 | `targetName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.InviteUnit("")
@@ -660,7 +660,7 @@ active = C_PartyInfo.IsChallengeModeActive()
 |------|------|---------|-------------|
 | `active` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local active = C_PartyInfo.IsChallengeModeActive()
@@ -678,7 +678,7 @@ isKeystoneOwner = C_PartyInfo.IsChallengeModeKeystoneOwner()
 |------|------|---------|-------------|
 | `isKeystoneOwner` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isKeystoneOwner = C_PartyInfo.IsChallengeModeKeystoneOwner()
@@ -702,7 +702,7 @@ isCrossFactionParty = C_PartyInfo.IsCrossFactionParty([category])
 |------|------|---------|-------------|
 | `isCrossFactionParty` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCrossFactionParty = C_PartyInfo.IsCrossFactionParty()
@@ -720,7 +720,7 @@ isDelveComplete = C_PartyInfo.IsDelveComplete()
 |------|------|---------|-------------|
 | `isDelveComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDelveComplete = C_PartyInfo.IsDelveComplete()
@@ -738,7 +738,7 @@ isDelveComplete = C_PartyInfo.IsDelveInProgress()
 |------|------|---------|-------------|
 | `isDelveComplete` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDelveComplete = C_PartyInfo.IsDelveInProgress()
@@ -763,10 +763,10 @@ isInGroup = C_PartyInfo.IsGUIDInGroup(guid, [category])
 |------|------|---------|-------------|
 | `isInGroup` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isInGroup = C_PartyInfo.IsGUIDInGroup("Creature-0-0000-0-0-0-0")
+local isInGroup = C_PartyInfo.IsGUIDInGroup(UnitGUID("player"))
 ```
 
 ### C_PartyInfo.IsLootMethodAvailable
@@ -787,7 +787,7 @@ available = C_PartyInfo.IsLootMethodAvailable(method)
 |------|------|---------|-------------|
 | `available` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local available = C_PartyInfo.IsLootMethodAvailable(method)
@@ -811,7 +811,7 @@ isFull = C_PartyInfo.IsPartyFull([category])
 |------|------|---------|-------------|
 | `isFull` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFull = C_PartyInfo.IsPartyFull()
@@ -829,7 +829,7 @@ isPartyInJailersTower = C_PartyInfo.IsPartyInJailersTower()
 |------|------|---------|-------------|
 | `isPartyInJailersTower` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPartyInJailersTower = C_PartyInfo.IsPartyInJailersTower()
@@ -847,7 +847,7 @@ isPartyWalkIn = C_PartyInfo.IsPartyWalkIn()
 |------|------|---------|-------------|
 | `isPartyWalkIn` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPartyWalkIn = C_PartyInfo.IsPartyWalkIn()
@@ -865,7 +865,7 @@ isRaidListEnabled = C_PartyInfo.IsRaidListEnabled()
 |------|------|---------|-------------|
 | `isRaidListEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRaidListEnabled = C_PartyInfo.IsRaidListEnabled()
@@ -883,7 +883,7 @@ isRaidListSupported = C_PartyInfo.IsRaidListSupported()
 |------|------|---------|-------------|
 | `isRaidListSupported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRaidListSupported = C_PartyInfo.IsRaidListSupported()
@@ -903,7 +903,7 @@ C_PartyInfo.LeaveParty([category])
 |------|------|---------|-------------|
 | `category` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.LeaveParty()
@@ -922,7 +922,7 @@ C_PartyInfo.PromoteToAssistant(name, [exactNameMatch])
 | `name` | cstring | no |  |
 | `exactNameMatch` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.PromoteToAssistant("")
@@ -941,7 +941,7 @@ C_PartyInfo.PromoteToLeader(name, [exactNameMatch])
 | `name` | cstring | no |  |
 | `exactNameMatch` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.PromoteToLeader("")
@@ -964,7 +964,7 @@ C_PartyInfo.RequestInviteFromUnit(targetName, [tank], [healer], [dps])
 | `healer` | bool | yes |  |
 | `dps` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.RequestInviteFromUnit("")
@@ -988,7 +988,7 @@ updated = C_PartyInfo.SetEveryoneIsAssistant(isAssistant)
 |------|------|---------|-------------|
 | `updated` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local updated = C_PartyInfo.SetEveryoneIsAssistant(false)
@@ -1008,7 +1008,7 @@ C_PartyInfo.SetInstanceAbandonVoteResponse(response)
 |------|------|---------|-------------|
 | `response` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.SetInstanceAbandonVoteResponse(false)
@@ -1033,7 +1033,7 @@ success = C_PartyInfo.SetLootMethod(method, [lootMaster])
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_PartyInfo.SetLootMethod(method)
@@ -1051,7 +1051,7 @@ C_PartyInfo.SetRestrictPings(restrictTo)
 |------|------|---------|-------------|
 | `restrictTo` | RestrictPingsTo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.SetRestrictPings(restrictTo)
@@ -1065,7 +1065,7 @@ Start the vote
 C_PartyInfo.StartInstanceAbandonVote()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.StartInstanceAbandonVote()
@@ -1085,7 +1085,7 @@ C_PartyInfo.UninviteUnit(name, [reason], [exactNameMatch])
 | `reason` | cstring | yes |  |
 | `exactNameMatch` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PartyInfo.UninviteUnit("")

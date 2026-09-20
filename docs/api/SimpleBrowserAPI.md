@@ -12,7 +12,7 @@
 ClearFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearFocus()
@@ -24,7 +24,7 @@ ClearFocus()
 CopyExternalLink()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CopyExternalLink()
@@ -36,7 +36,7 @@ CopyExternalLink()
 DeleteCookies()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 DeleteCookies()
@@ -48,7 +48,7 @@ DeleteCookies()
 NavigateBack()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NavigateBack()
@@ -60,7 +60,7 @@ NavigateBack()
 NavigateForward()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NavigateForward()
@@ -78,7 +78,7 @@ NavigateHome(urlType)
 |------|------|---------|-------------|
 | `urlType` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NavigateHome("")
@@ -90,7 +90,7 @@ NavigateHome("")
 NavigateReload()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NavigateReload()
@@ -102,7 +102,7 @@ NavigateReload()
 NavigateStop()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 NavigateStop()
@@ -114,7 +114,7 @@ NavigateStop()
 OpenExternalLink()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OpenExternalLink()
@@ -132,7 +132,7 @@ OpenTicket(index)
 |------|------|---------|-------------|
 | `index` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 OpenTicket(1)
@@ -144,7 +144,7 @@ OpenTicket(1)
 SetFocus()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFocus()
@@ -162,7 +162,7 @@ SetZoom(zoom)
 |------|------|---------|-------------|
 | `zoom` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetZoom(0)

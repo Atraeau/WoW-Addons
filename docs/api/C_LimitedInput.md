@@ -24,10 +24,10 @@ allowed = C_LimitedInput.LimitedInputAllowed(type)
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local allowed = C_LimitedInput.LimitedInputAllowed(type)
+local allowed = C_LimitedInput.LimitedInputAllowed(Enum.LimitedInputType.MouseMove)
 ```
 
 ## Types

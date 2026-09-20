@@ -19,7 +19,7 @@ offsetX, offsetY = GetOffset()
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetOffset()
@@ -37,7 +37,7 @@ order = GetOrder()
 |------|------|---------|-------------|
 | `order` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local order = GetOrder()
@@ -56,10 +56,10 @@ SetOffset(offsetX, offsetY)
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetOffset(offsetX, offsetY)
+SetOffset(1, 1)
 ```
 
 ### SimpleControlPointAPI.SetOrder
@@ -74,7 +74,7 @@ SetOrder(order)
 |------|------|---------|-------------|
 | `order` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrder(0)
@@ -93,7 +93,7 @@ SetParent(parent, [order])
 | `parent` | SimplePathAnim | no |  |
 | `order` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParent(parent)

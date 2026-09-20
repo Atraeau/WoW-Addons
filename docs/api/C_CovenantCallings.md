@@ -18,7 +18,7 @@ unlocked = C_CovenantCallings.AreCallingsUnlocked()
 |------|------|---------|-------------|
 | `unlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unlocked = C_CovenantCallings.AreCallingsUnlocked()
@@ -30,7 +30,7 @@ local unlocked = C_CovenantCallings.AreCallingsUnlocked()
 C_CovenantCallings.RequestCallings()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CovenantCallings.RequestCallings()

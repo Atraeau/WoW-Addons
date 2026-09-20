@@ -29,7 +29,7 @@ left, right, top, bottom = C_NamePlateManager.GetNamePlateHitTestInsets(type)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local left, right, top, bottom = C_NamePlateManager.GetNamePlateHitTestInsets(type)
@@ -55,7 +55,7 @@ isBehindCamera = C_NamePlateManager.IsNamePlateUnitBehindCamera(unitToken)
 |------|------|---------|-------------|
 | `isBehindCamera` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBehindCamera = C_NamePlateManager.IsNamePlateUnitBehindCamera("player")
@@ -79,7 +79,7 @@ C_NamePlateManager.SetNamePlateHitTestInsets(type, left, right, top, bottom)
 | `top` | uiUnit | no |  |
 | `bottom` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NamePlateManager.SetNamePlateHitTestInsets(type, left, right, top, bottom)
@@ -100,7 +100,7 @@ C_NamePlateManager.SetNamePlateSimplified(unitToken, isSimplified)
 | `unitToken` | UnitTokenNamePlate | no |  |
 | `isSimplified` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NamePlateManager.SetNamePlateSimplified("player", false)

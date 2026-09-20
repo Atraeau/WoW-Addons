@@ -24,7 +24,7 @@ canHaveSecondaryAppearance = C_Transmog.CanHaveSecondaryAppearanceForSlotID(slot
 |------|------|---------|-------------|
 | `canHaveSecondaryAppearance` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canHaveSecondaryAppearance = C_Transmog.CanHaveSecondaryAppearanceForSlotID(1)
@@ -48,7 +48,7 @@ transmogIDList = C_Transmog.ExtractTransmogIDList(input)
 |------|------|---------|-------------|
 | `transmogIDList` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local transmogIDList = C_Transmog.ExtractTransmogIDList("")
@@ -72,7 +72,7 @@ setItems = C_Transmog.GetAllSetAppearancesByID(setID)
 |------|------|---------|-------------|
 | `setItems` | TransmogSetItemInfo[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setItems = C_Transmog.GetAllSetAppearancesByID(0)
@@ -96,7 +96,7 @@ itemID = C_Transmog.GetItemIDForSource(itemModifiedAppearanceID)
 |------|------|---------|-------------|
 | `itemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_Transmog.GetItemIDForSource(6948)
@@ -120,10 +120,10 @@ slot = C_Transmog.GetSlotForInventoryType(inventoryType)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slot = C_Transmog.GetSlotForInventoryType(inventoryType)
+local slot = C_Transmog.GetSlotForInventoryType(1)
 ```
 
 ### C_Transmog.GetSlotVisualInfo
@@ -144,7 +144,7 @@ slotVisualInfo = C_Transmog.GetSlotVisualInfo(transmogLocation)
 |------|------|---------|-------------|
 | `slotVisualInfo` | TransmogSlotVisualInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotVisualInfo = C_Transmog.GetSlotVisualInfo(transmogLocation)
@@ -162,7 +162,7 @@ isAtNPC = C_Transmog.IsAtTransmogNPC()
 |------|------|---------|-------------|
 | `isAtNPC` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtNPC = C_Transmog.IsAtTransmogNPC()

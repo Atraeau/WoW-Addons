@@ -26,7 +26,7 @@ anim = CreateAnimation([animationType], [name], [templateName])
 |------|------|---------|-------------|
 | `anim` | SimpleAnim | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anim = CreateAnimation()
@@ -38,7 +38,7 @@ local anim = CreateAnimation()
 Finish()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Finish()
@@ -56,7 +56,7 @@ anims = GetAnimations()
 |------|------|---------|-------------|
 | `anims` | SimpleAnim | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anims = GetAnimations()
@@ -74,7 +74,7 @@ animationSpeedMultiplier = GetAnimationSpeedMultiplier()
 |------|------|---------|-------------|
 | `animationSpeedMultiplier` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local animationSpeedMultiplier = GetAnimationSpeedMultiplier()
@@ -92,7 +92,7 @@ durationSec = GetDuration()
 |------|------|---------|-------------|
 | `durationSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local durationSec = GetDuration()
@@ -110,7 +110,7 @@ elapsedSec = GetElapsed()
 |------|------|---------|-------------|
 | `elapsedSec` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elapsedSec = GetElapsed()
@@ -128,7 +128,7 @@ loopType = GetLooping()
 |------|------|---------|-------------|
 | `loopType` | LoopType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loopType = GetLooping()
@@ -146,7 +146,7 @@ loopState = GetLoopState()
 |------|------|---------|-------------|
 | `loopState` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loopState = GetLoopState()
@@ -164,7 +164,7 @@ progress = GetProgress()
 |------|------|---------|-------------|
 | `progress` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local progress = GetProgress()
@@ -189,7 +189,7 @@ script = GetScript(scriptTypeName, bindingType)
 |------|------|---------|-------------|
 | `script` | LuaFunctionReference | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local script = GetScript(scriptTypeName, bindingType)
@@ -213,7 +213,7 @@ hasScript = HasScript(scriptName)
 |------|------|---------|-------------|
 | `hasScript` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasScript = HasScript("")
@@ -239,7 +239,7 @@ success = HookScript(scriptTypeName, script, bindingType)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = HookScript(scriptTypeName, script, bindingType)
@@ -257,7 +257,7 @@ isDone = IsDone()
 |------|------|---------|-------------|
 | `isDone` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDone = IsDone()
@@ -275,7 +275,7 @@ isPaused = IsPaused()
 |------|------|---------|-------------|
 | `isPaused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPaused = IsPaused()
@@ -293,7 +293,7 @@ isPendingFinish = IsPendingFinish()
 |------|------|---------|-------------|
 | `isPendingFinish` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPendingFinish = IsPendingFinish()
@@ -311,7 +311,7 @@ isPlaying = IsPlaying()
 |------|------|---------|-------------|
 | `isPlaying` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlaying = IsPlaying()
@@ -329,7 +329,7 @@ isReverse = IsReverse()
 |------|------|---------|-------------|
 | `isReverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReverse = IsReverse()
@@ -347,7 +347,7 @@ isSetToFinalAlpha = IsSetToFinalAlpha()
 |------|------|---------|-------------|
 | `isSetToFinalAlpha` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSetToFinalAlpha = IsSetToFinalAlpha()
@@ -359,7 +359,7 @@ local isSetToFinalAlpha = IsSetToFinalAlpha()
 Pause()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Pause()
@@ -378,10 +378,10 @@ Play(reverse, offset)
 | `reverse` | bool | no | (default: False) |
 | `offset` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-Play(false, 0)
+Play(false, 1)
 ```
 
 ### SimpleAnimGroupAPI.RemoveAnimations
@@ -390,7 +390,7 @@ Play(false, 0)
 RemoveAnimations()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RemoveAnimations()
@@ -409,10 +409,10 @@ Restart(reverse, offset)
 | `reverse` | bool | no | (default: False) |
 | `offset` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-Restart(false, 0)
+Restart(false, 1)
 ```
 
 ### SimpleAnimGroupAPI.SetAnimationSpeedMultiplier
@@ -427,7 +427,7 @@ SetAnimationSpeedMultiplier(animationSpeedMultiplier)
 |------|------|---------|-------------|
 | `animationSpeedMultiplier` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAnimationSpeedMultiplier(0)
@@ -445,7 +445,7 @@ SetLooping(loopType)
 |------|------|---------|-------------|
 | `loopType` | LoopType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetLooping(loopType)
@@ -463,7 +463,7 @@ SetPlaying(play)
 |------|------|---------|-------------|
 | `play` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPlaying(false)
@@ -482,7 +482,7 @@ SetScript(scriptTypeName, [script])
 | `scriptTypeName` | ScriptTypeName | no |  |
 | `script` | LuaFunctionReference | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScript(scriptTypeName)
@@ -500,7 +500,7 @@ SetToFinalAlpha(setToFinalAlpha)
 |------|------|---------|-------------|
 | `setToFinalAlpha` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToFinalAlpha(false)
@@ -512,7 +512,7 @@ SetToFinalAlpha(false)
 Stop()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Stop()

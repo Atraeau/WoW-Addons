@@ -20,7 +20,7 @@ canChangeHitTestPoints = CanChangeHitTestPoints()
 |------|------|---------|-------------|
 | `canChangeHitTestPoints` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canChangeHitTestPoints = CanChangeHitTestPoints()
@@ -34,7 +34,7 @@ Clears the anchor points that determine where the mouse interacts with the namep
 ClearAllHitTestPoints()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearAllHitTestPoints()
@@ -54,7 +54,7 @@ anchors = GetHitTestPoints()
 |------|------|---------|-------------|
 | `anchors` | AnchorBinding[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anchors = GetHitTestPoints()
@@ -74,7 +74,7 @@ SetAllHitTestPoints(relativeTo)
 |------|------|---------|-------------|
 | `relativeTo` | ScriptRegion | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAllHitTestPoints(relativeTo)
@@ -94,7 +94,7 @@ SetHitTestPoints(anchors)
 |------|------|---------|-------------|
 | `anchors` | AnchorBinding[] | no | List of anchor points to use for hit testing. All existing points will be cleared. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHitTestPoints(anchors)
@@ -112,7 +112,7 @@ SetStackingBoundsFrame(frame)
 |------|------|---------|-------------|
 | `frame` | SimpleFrame | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStackingBoundsFrame(frame)

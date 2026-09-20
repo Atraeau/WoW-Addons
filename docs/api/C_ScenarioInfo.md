@@ -24,7 +24,7 @@ scenarioCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo(criteriaIndex)
 |------|------|---------|-------------|
 | `scenarioCriteriaInfo` | ScenarioCriteriaInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scenarioCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo(1)
@@ -49,7 +49,7 @@ scenarioCriteriaInfo = C_ScenarioInfo.GetCriteriaInfoByStep(stepID, criteriaInde
 |------|------|---------|-------------|
 | `scenarioCriteriaInfo` | ScenarioCriteriaInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scenarioCriteriaInfo = C_ScenarioInfo.GetCriteriaInfoByStep(0, 1)
@@ -67,7 +67,7 @@ info = C_ScenarioInfo.GetDisplayInfo()
 |------|------|---------|-------------|
 | `info` | ScenarioDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_ScenarioInfo.GetDisplayInfo()
@@ -91,10 +91,10 @@ typeString = C_ScenarioInfo.GetJailersTowerTypeString(runType)
 |------|------|---------|-------------|
 | `typeString` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local typeString = C_ScenarioInfo.GetJailersTowerTypeString(runType)
+local typeString = C_ScenarioInfo.GetJailersTowerTypeString(Enum.JailersTowerType.TwistingCorridors)
 ```
 
 ### C_ScenarioInfo.GetScenarioIconInfo
@@ -115,7 +115,7 @@ scenarioInfos = C_ScenarioInfo.GetScenarioIconInfo(uiMapID)
 |------|------|---------|-------------|
 | `scenarioInfos` | ScenarioIconInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scenarioInfos = C_ScenarioInfo.GetScenarioIconInfo(0)
@@ -133,7 +133,7 @@ scenarioInfo = C_ScenarioInfo.GetScenarioInfo()
 |------|------|---------|-------------|
 | `scenarioInfo` | ScenarioInformation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scenarioInfo = C_ScenarioInfo.GetScenarioInfo()
@@ -157,7 +157,7 @@ scenarioStepInfo = C_ScenarioInfo.GetScenarioStepInfo([scenarioStepID])
 |------|------|---------|-------------|
 | `scenarioStepInfo` | ScenarioStepInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scenarioStepInfo = C_ScenarioInfo.GetScenarioStepInfo()
@@ -177,7 +177,7 @@ spellIDs = C_ScenarioInfo.GetTieredEntranceActiveSpells()
 |------|------|---------|-------------|
 | `spellIDs` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellIDs = C_ScenarioInfo.GetTieredEntranceActiveSpells()
@@ -203,7 +203,7 @@ actualValue, percentValue, percentValueString = C_ScenarioInfo.GetUnitCriteriaPr
 | `percentValue` | number | no |  |
 | `percentValueString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local actualValue, percentValue, percentValueString = C_ScenarioInfo.GetUnitCriteriaProgressValues("player")
@@ -221,7 +221,7 @@ isTieredEntrance = C_ScenarioInfo.IsTieredEntranceScenario()
 |------|------|---------|-------------|
 | `isTieredEntrance` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTieredEntrance = C_ScenarioInfo.IsTieredEntranceScenario()

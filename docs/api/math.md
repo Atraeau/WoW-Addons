@@ -28,7 +28,7 @@ clampedValue = math.clamp(value, minimum, maximum)
 |------|------|---------|-------------|
 | `clampedValue` | number | no | The clamped value. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clampedValue = math.clamp(0, 0, 0)
@@ -54,7 +54,7 @@ finite = math.isfinite(value)
 |------|------|---------|-------------|
 | `finite` | bool | no | True if the value is neither infinite nor NaN; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local finite = math.isfinite(0)
@@ -80,7 +80,7 @@ infinite = math.isinf(value)
 |------|------|---------|-------------|
 | `infinite` | bool | no | True if the value is positive or negative infinity; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infinite = math.isinf(0)
@@ -106,7 +106,7 @@ nan = math.isnan(value)
 |------|------|---------|-------------|
 | `nan` | bool | no | True if the value is NaN; otherwise false. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nan = math.isnan(0)
@@ -134,7 +134,7 @@ interpolatedValue = math.lerp(startValue, endValue, amount)
 |------|------|---------|-------------|
 | `interpolatedValue` | number | no | The interpolated value. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interpolatedValue = math.lerp(0, 0, 0)
@@ -162,7 +162,7 @@ normalizedValue = math.normalize(value, minimum, maximum)
 |------|------|---------|-------------|
 | `normalizedValue` | number | no | The normalized value. Values outside the input range produce results outside [0, 1]. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local normalizedValue = math.normalize(0, 0, 0)
@@ -192,7 +192,7 @@ remappedValue = math.remap(value, sourceMinimum, sourceMaximum, destinationMinim
 |------|------|---------|-------------|
 | `remappedValue` | number | no | The mapped value. Values outside the source range are extrapolated beyond the destination range. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remappedValue = math.remap(0, 0, 0, 0, 0)
@@ -219,7 +219,7 @@ roundedValue = math.round(value, decimalPlaces)
 |------|------|---------|-------------|
 | `roundedValue` | number | no | The rounded value. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roundedValue = math.round(0, 0)
@@ -245,7 +245,7 @@ saturatedValue = math.saturate(value)
 |------|------|---------|-------------|
 | `saturatedValue` | number | no | The value clamped to the inclusive range [0, 1]. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local saturatedValue = math.saturate(0)
@@ -271,7 +271,7 @@ sign = math.sign(value)
 |------|------|---------|-------------|
 | `sign` | number | no | The sign of the value. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sign = math.sign(0)
@@ -299,7 +299,7 @@ wrapped = math.wrap(value, minimum, maximum)
 |------|------|---------|-------------|
 | `wrapped` | number | no | The wrapped value, greater than or equal to minimum and less than maximum. If minimum equals maximum, returns minimum. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local wrapped = math.wrap(0, 0, 0)

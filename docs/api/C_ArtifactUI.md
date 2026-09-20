@@ -24,7 +24,7 @@ success = C_ArtifactUI.AddPower(powerID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_ArtifactUI.AddPower(0)
@@ -42,7 +42,7 @@ C_ArtifactUI.ApplyCursorRelicToSlot(relicSlotIndex)
 |------|------|---------|-------------|
 | `relicSlotIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.ApplyCursorRelicToSlot(1)
@@ -67,7 +67,7 @@ canApply = C_ArtifactUI.CanApplyArtifactRelic(relicItemID, onlyUnlocked)
 |------|------|---------|-------------|
 | `canApply` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canApply = C_ArtifactUI.CanApplyArtifactRelic(6948, false)
@@ -91,7 +91,7 @@ canApply = C_ArtifactUI.CanApplyCursorRelicToSlot(relicSlotIndex)
 |------|------|---------|-------------|
 | `canApply` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canApply = C_ArtifactUI.CanApplyCursorRelicToSlot(1)
@@ -116,7 +116,7 @@ canApply = C_ArtifactUI.CanApplyRelicItemIDToEquippedArtifactSlot(relicItemID, r
 |------|------|---------|-------------|
 | `canApply` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canApply = C_ArtifactUI.CanApplyRelicItemIDToEquippedArtifactSlot(6948, 1)
@@ -141,7 +141,7 @@ canApply = C_ArtifactUI.CanApplyRelicItemIDToSlot(relicItemID, relicSlotIndex)
 |------|------|---------|-------------|
 | `canApply` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canApply = C_ArtifactUI.CanApplyRelicItemIDToSlot(6948, 1)
@@ -159,7 +159,7 @@ canRespec = C_ArtifactUI.CheckRespecNPC()
 |------|------|---------|-------------|
 | `canRespec` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canRespec = C_ArtifactUI.CheckRespecNPC()
@@ -171,7 +171,7 @@ local canRespec = C_ArtifactUI.CheckRespecNPC()
 C_ArtifactUI.Clear()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.Clear()
@@ -183,7 +183,7 @@ C_ArtifactUI.Clear()
 C_ArtifactUI.ClearForgeCamera()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.ClearForgeCamera()
@@ -195,7 +195,7 @@ C_ArtifactUI.ClearForgeCamera()
 C_ArtifactUI.ConfirmRespec()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.ConfirmRespec()
@@ -213,7 +213,7 @@ hasAnyRelicsSlotted = C_ArtifactUI.DoesEquippedArtifactHaveAnyRelicsSlotted()
 |------|------|---------|-------------|
 | `hasAnyRelicsSlotted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyRelicsSlotted = C_ArtifactUI.DoesEquippedArtifactHaveAnyRelicsSlotted()
@@ -250,7 +250,7 @@ artifactAppearanceID, appearanceName, displayIndex, unlocked, failureDescription
 | `modelSaturation` | number | no |  |
 | `obtainable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactAppearanceID, appearanceName, displayIndex, unlocked, failureDescription, uiCameraID, altHandCameraID, swatchColorR, swatchColorG, swatchColorB, modelOpacity, modelSaturation, obtainable = C_ArtifactUI.GetAppearanceInfo(1, 1)
@@ -287,7 +287,7 @@ artifactAppearanceSetID, artifactAppearanceID, appearanceName, displayIndex, unl
 | `modelSaturation` | number | no |  |
 | `obtainable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactAppearanceSetID, artifactAppearanceID, appearanceName, displayIndex, unlocked, failureDescription, uiCameraID, altHandCameraID, swatchColorR, swatchColorG, swatchColorB, modelOpacity, modelSaturation, obtainable = C_ArtifactUI.GetAppearanceInfoByID(0)
@@ -314,7 +314,7 @@ artifactAppearanceSetID, appearanceSetName, appearanceSetDescription, numAppeara
 | `appearanceSetDescription` | string | no |  |
 | `numAppearances` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactAppearanceSetID, appearanceSetName, appearanceSetDescription, numAppearances = C_ArtifactUI.GetAppearanceSetInfo(1)
@@ -332,7 +332,7 @@ artifactArtInfo = C_ArtifactUI.GetArtifactArtInfo()
 |------|------|---------|-------------|
 | `artifactArtInfo` | ArtifactArtInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactArtInfo = C_ArtifactUI.GetArtifactArtInfo()
@@ -362,7 +362,7 @@ itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, a
 | `altOnTop` | bool | no |  |
 | `tier` | ArtifactTiers | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, tier = C_ArtifactUI.GetArtifactInfo()
@@ -380,7 +380,7 @@ itemID = C_ArtifactUI.GetArtifactItemID()
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_ArtifactUI.GetArtifactItemID()
@@ -398,7 +398,7 @@ tier = C_ArtifactUI.GetArtifactTier()
 |------|------|---------|-------------|
 | `tier` | ArtifactTiers | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tier = C_ArtifactUI.GetArtifactTier()
@@ -423,7 +423,7 @@ name, icon = C_ArtifactUI.GetArtifactXPRewardTargetInfo(artifactCategoryID)
 | `name` | string | no |  |
 | `icon` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon = C_ArtifactUI.GetArtifactXPRewardTargetInfo(0)
@@ -448,7 +448,7 @@ cost = C_ArtifactUI.GetCostForPointAtRank(rank, tier)
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_ArtifactUI.GetCostForPointAtRank(1, tier)
@@ -466,7 +466,7 @@ artifactArtInfo = C_ArtifactUI.GetEquippedArtifactArtInfo()
 |------|------|---------|-------------|
 | `artifactArtInfo` | ArtifactArtInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactArtInfo = C_ArtifactUI.GetEquippedArtifactArtInfo()
@@ -496,7 +496,7 @@ itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, a
 | `altOnTop` | bool | no |  |
 | `tier` | ArtifactTiers | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, tier = C_ArtifactUI.GetEquippedArtifactInfo()
@@ -514,7 +514,7 @@ itemID = C_ArtifactUI.GetEquippedArtifactItemID()
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID = C_ArtifactUI.GetEquippedArtifactItemID()
@@ -538,7 +538,7 @@ numRelicSlots = C_ArtifactUI.GetEquippedArtifactNumRelicSlots(onlyUnlocked)
 |------|------|---------|-------------|
 | `numRelicSlots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numRelicSlots = C_ArtifactUI.GetEquippedArtifactNumRelicSlots(false)
@@ -565,7 +565,7 @@ name, icon, slotTypeName, link = C_ArtifactUI.GetEquippedArtifactRelicInfo(relic
 | `slotTypeName` | cstring | no | Matches the socket identifiers used in the socketing system. |
 | `link` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, slotTypeName, link = C_ArtifactUI.GetEquippedArtifactRelicInfo(1)
@@ -589,7 +589,7 @@ lockedReason = C_ArtifactUI.GetEquippedRelicLockedReason(relicSlotIndex)
 |------|------|---------|-------------|
 | `lockedReason` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lockedReason = C_ArtifactUI.GetEquippedRelicLockedReason(1)
@@ -609,7 +609,7 @@ forgeRotationX, forgeRotationY, forgeRotationZ = C_ArtifactUI.GetForgeRotation()
 | `forgeRotationY` | number | no |  |
 | `forgeRotationZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local forgeRotationX, forgeRotationY, forgeRotationZ = C_ArtifactUI.GetForgeRotation()
@@ -633,7 +633,7 @@ itemIevelIncrease = C_ArtifactUI.GetItemLevelIncreaseProvidedByRelic(itemLinkOrI
 |------|------|---------|-------------|
 | `itemIevelIncrease` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemIevelIncrease = C_ArtifactUI.GetItemLevelIncreaseProvidedByRelic(6948)
@@ -653,7 +653,7 @@ spellID, powerCost, currentRank = C_ArtifactUI.GetMetaPowerInfo()
 | `powerCost` | number | no |  |
 | `currentRank` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID, powerCost, currentRank = C_ArtifactUI.GetMetaPowerInfo()
@@ -671,7 +671,7 @@ numAppearanceSets = C_ArtifactUI.GetNumAppearanceSets()
 |------|------|---------|-------------|
 | `numAppearanceSets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numAppearanceSets = C_ArtifactUI.GetNumAppearanceSets()
@@ -689,7 +689,7 @@ numObtainedArtifacts = C_ArtifactUI.GetNumObtainedArtifacts()
 |------|------|---------|-------------|
 | `numObtainedArtifacts` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numObtainedArtifacts = C_ArtifactUI.GetNumObtainedArtifacts()
@@ -713,7 +713,7 @@ numRelicSlots = C_ArtifactUI.GetNumRelicSlots(onlyUnlocked)
 |------|------|---------|-------------|
 | `numRelicSlots` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numRelicSlots = C_ArtifactUI.GetNumRelicSlots(false)
@@ -731,7 +731,7 @@ pointsRemaining = C_ArtifactUI.GetPointsRemaining()
 |------|------|---------|-------------|
 | `pointsRemaining` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pointsRemaining = C_ArtifactUI.GetPointsRemaining()
@@ -755,7 +755,7 @@ link = C_ArtifactUI.GetPowerHyperlink(powerID)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_ArtifactUI.GetPowerHyperlink(0)
@@ -779,7 +779,7 @@ powerInfo = C_ArtifactUI.GetPowerInfo(powerID)
 |------|------|---------|-------------|
 | `powerInfo` | ArtifactPowerInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerInfo = C_ArtifactUI.GetPowerInfo(0)
@@ -803,7 +803,7 @@ linkingPowerID = C_ArtifactUI.GetPowerLinks(powerID)
 |------|------|---------|-------------|
 | `linkingPowerID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local linkingPowerID = C_ArtifactUI.GetPowerLinks(0)
@@ -821,7 +821,7 @@ powerID = C_ArtifactUI.GetPowers()
 |------|------|---------|-------------|
 | `powerID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerID = C_ArtifactUI.GetPowers()
@@ -845,7 +845,7 @@ powerIDs = C_ArtifactUI.GetPowersAffectedByRelic(relicSlotIndex)
 |------|------|---------|-------------|
 | `powerIDs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerIDs = C_ArtifactUI.GetPowersAffectedByRelic(1)
@@ -869,7 +869,7 @@ powerIDs = C_ArtifactUI.GetPowersAffectedByRelicItemLink(relicItemInfo)
 |------|------|---------|-------------|
 | `powerIDs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerIDs = C_ArtifactUI.GetPowersAffectedByRelicItemLink(6948)
@@ -887,7 +887,7 @@ artifactAppearanceID = C_ArtifactUI.GetPreviewAppearance()
 |------|------|---------|-------------|
 | `artifactAppearanceID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactAppearanceID = C_ArtifactUI.GetPreviewAppearance()
@@ -914,7 +914,7 @@ name, icon, slotTypeName, link = C_ArtifactUI.GetRelicInfo(relicSlotIndex)
 | `slotTypeName` | cstring | no | Matches the socket identifiers used in the socketing system. |
 | `link` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, slotTypeName, link = C_ArtifactUI.GetRelicInfo(1)
@@ -941,7 +941,7 @@ name, icon, slotTypeName, link = C_ArtifactUI.GetRelicInfoByItemID(itemID)
 | `slotTypeName` | cstring | no | Matches the socket identifiers used in the socketing system. |
 | `link` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, slotTypeName, link = C_ArtifactUI.GetRelicInfoByItemID(6948)
@@ -965,7 +965,7 @@ lockedReason = C_ArtifactUI.GetRelicLockedReason(relicSlotIndex)
 |------|------|---------|-------------|
 | `lockedReason` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lockedReason = C_ArtifactUI.GetRelicLockedReason(1)
@@ -989,7 +989,7 @@ slotTypeName = C_ArtifactUI.GetRelicSlotType(relicSlotIndex)
 |------|------|---------|-------------|
 | `slotTypeName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotTypeName = C_ArtifactUI.GetRelicSlotType(1)
@@ -1007,7 +1007,7 @@ artifactArtInfo = C_ArtifactUI.GetRespecArtifactArtInfo()
 |------|------|---------|-------------|
 | `artifactArtInfo` | ArtifactArtInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactArtInfo = C_ArtifactUI.GetRespecArtifactArtInfo()
@@ -1037,7 +1037,7 @@ itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, a
 | `altOnTop` | bool | no |  |
 | `tier` | ArtifactTiers | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemID, altItemID, name, icon, xp, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, tier = C_ArtifactUI.GetRespecArtifactInfo()
@@ -1055,7 +1055,7 @@ cost = C_ArtifactUI.GetRespecCost()
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_ArtifactUI.GetRespecCost()
@@ -1081,10 +1081,10 @@ totalArtifactPowerCost = C_ArtifactUI.GetTotalPowerCost(startingTrait, numTraits
 |------|------|---------|-------------|
 | `totalArtifactPowerCost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local totalArtifactPowerCost = C_ArtifactUI.GetTotalPowerCost(startingTrait, 0, artifactTier)
+local totalArtifactPowerCost = C_ArtifactUI.GetTotalPowerCost(1, 0, artifactTier)
 ```
 
 ### C_ArtifactUI.GetTotalPurchasedRanks
@@ -1099,7 +1099,7 @@ totalPurchasedRanks = C_ArtifactUI.GetTotalPurchasedRanks()
 |------|------|---------|-------------|
 | `totalPurchasedRanks` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalPurchasedRanks = C_ArtifactUI.GetTotalPurchasedRanks()
@@ -1117,7 +1117,7 @@ artifactDisabled = C_ArtifactUI.IsArtifactDisabled()
 |------|------|---------|-------------|
 | `artifactDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactDisabled = C_ArtifactUI.IsArtifactDisabled()
@@ -1141,7 +1141,7 @@ isArtifact = C_ArtifactUI.IsArtifactItem(itemLocation)
 |------|------|---------|-------------|
 | `isArtifact` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isArtifact = C_ArtifactUI.IsArtifactItem(6948)
@@ -1159,7 +1159,7 @@ isAtForge = C_ArtifactUI.IsAtForge()
 |------|------|---------|-------------|
 | `isAtForge` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtForge = C_ArtifactUI.IsAtForge()
@@ -1177,7 +1177,7 @@ artifactDisabled = C_ArtifactUI.IsEquippedArtifactDisabled()
 |------|------|---------|-------------|
 | `artifactDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactDisabled = C_ArtifactUI.IsEquippedArtifactDisabled()
@@ -1195,7 +1195,7 @@ artifactMaxed = C_ArtifactUI.IsEquippedArtifactMaxed()
 |------|------|---------|-------------|
 | `artifactMaxed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local artifactMaxed = C_ArtifactUI.IsEquippedArtifactMaxed()
@@ -1213,7 +1213,7 @@ isEffectivelyMaxed = C_ArtifactUI.IsMaxedByRulesOrEffect()
 |------|------|---------|-------------|
 | `isEffectivelyMaxed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEffectivelyMaxed = C_ArtifactUI.IsMaxedByRulesOrEffect()
@@ -1237,7 +1237,7 @@ known = C_ArtifactUI.IsPowerKnown(powerID)
 |------|------|---------|-------------|
 | `known` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local known = C_ArtifactUI.IsPowerKnown(0)
@@ -1255,7 +1255,7 @@ isViewedArtifactEquipped = C_ArtifactUI.IsViewedArtifactEquipped()
 |------|------|---------|-------------|
 | `isViewedArtifactEquipped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isViewedArtifactEquipped = C_ArtifactUI.IsViewedArtifactEquipped()
@@ -1273,7 +1273,7 @@ C_ArtifactUI.SetAppearance(artifactAppearanceID)
 |------|------|---------|-------------|
 | `artifactAppearanceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.SetAppearance(0)
@@ -1285,7 +1285,7 @@ C_ArtifactUI.SetAppearance(0)
 C_ArtifactUI.SetForgeCamera()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.SetForgeCamera()
@@ -1305,7 +1305,7 @@ C_ArtifactUI.SetForgeRotation(forgeRotationX, forgeRotationY, forgeRotationZ)
 | `forgeRotationY` | number | no |  |
 | `forgeRotationZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.SetForgeRotation(0, 0, 0)
@@ -1325,7 +1325,7 @@ C_ArtifactUI.SetPreviewAppearance(artifactAppearanceID)
 |------|------|---------|-------------|
 | `artifactAppearanceID` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ArtifactUI.SetPreviewAppearance(0)
@@ -1343,7 +1343,7 @@ shouldSuppressForgeRotation = C_ArtifactUI.ShouldSuppressForgeRotation()
 |------|------|---------|-------------|
 | `shouldSuppressForgeRotation` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldSuppressForgeRotation = C_ArtifactUI.ShouldSuppressForgeRotation()

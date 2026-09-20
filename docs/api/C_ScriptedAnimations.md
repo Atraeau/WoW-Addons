@@ -18,7 +18,7 @@ scriptedAnimationEffects = C_ScriptedAnimations.GetAllScriptedAnimationEffects()
 |------|------|---------|-------------|
 | `scriptedAnimationEffects` | ScriptedAnimationEffect[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scriptedAnimationEffects = C_ScriptedAnimations.GetAllScriptedAnimationEffects()

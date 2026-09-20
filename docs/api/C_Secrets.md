@@ -29,7 +29,7 @@ isUnitComparisonPermitted = C_Secrets.CanCompareUnitTokens(unit1, unit2)
 |------|------|---------|-------------|
 | `isUnitComparisonPermitted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitComparisonPermitted = C_Secrets.CanCompareUnitTokens("player", "player")
@@ -55,7 +55,7 @@ secrecy = C_Secrets.GetPowerTypeSecrecy(powerType)
 |------|------|---------|-------------|
 | `secrecy` | SecrecyLevel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local secrecy = C_Secrets.GetPowerTypeSecrecy(powerType)
@@ -81,10 +81,10 @@ secrecy = C_Secrets.GetSpellAuraSecrecy(spellIdentifier)
 |------|------|---------|-------------|
 | `secrecy` | SecrecyLevel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local secrecy = C_Secrets.GetSpellAuraSecrecy(12345)
+local secrecy = C_Secrets.GetSpellAuraSecrecy(2050)
 ```
 
 ### C_Secrets.GetSpellCastSecrecy
@@ -107,10 +107,10 @@ secrecy = C_Secrets.GetSpellCastSecrecy(spellIdentifier)
 |------|------|---------|-------------|
 | `secrecy` | SecrecyLevel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local secrecy = C_Secrets.GetSpellCastSecrecy(12345)
+local secrecy = C_Secrets.GetSpellCastSecrecy(2050)
 ```
 
 ### C_Secrets.GetSpellCooldownSecrecy
@@ -133,10 +133,10 @@ secrecy = C_Secrets.GetSpellCooldownSecrecy(spellIdentifier)
 |------|------|---------|-------------|
 | `secrecy` | SecrecyLevel | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local secrecy = C_Secrets.GetSpellCooldownSecrecy(12345)
+local secrecy = C_Secrets.GetSpellCooldownSecrecy(2050)
 ```
 
 ### C_Secrets.HasSecretRestrictions
@@ -153,7 +153,7 @@ hasSecretRestrictions = C_Secrets.HasSecretRestrictions()
 |------|------|---------|-------------|
 | `hasSecretRestrictions` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretRestrictions = C_Secrets.HasSecretRestrictions()
@@ -179,10 +179,10 @@ isCooldownSecret = C_Secrets.ShouldActionCooldownBeSecret(actionID)
 |------|------|---------|-------------|
 | `isCooldownSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCooldownSecret = C_Secrets.ShouldActionCooldownBeSecret(actionID)
+local isCooldownSecret = C_Secrets.ShouldActionCooldownBeSecret(1)
 ```
 
 ### C_Secrets.ShouldAurasBeSecret
@@ -199,7 +199,7 @@ hasSecretAuras = C_Secrets.ShouldAurasBeSecret()
 |------|------|---------|-------------|
 | `hasSecretAuras` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretAuras = C_Secrets.ShouldAurasBeSecret()
@@ -219,7 +219,7 @@ hasSecretCooldowns = C_Secrets.ShouldCooldownsBeSecret()
 |------|------|---------|-------------|
 | `hasSecretCooldowns` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretCooldowns = C_Secrets.ShouldCooldownsBeSecret()
@@ -245,10 +245,10 @@ isAuraSecret = C_Secrets.ShouldSpellAuraBeSecret(spellIdentifier)
 |------|------|---------|-------------|
 | `isAuraSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isAuraSecret = C_Secrets.ShouldSpellAuraBeSecret(12345)
+local isAuraSecret = C_Secrets.ShouldSpellAuraBeSecret(2050)
 ```
 
 ### C_Secrets.ShouldSpellBookItemCooldownBeSecret
@@ -272,10 +272,10 @@ isCooldownSecret = C_Secrets.ShouldSpellBookItemCooldownBeSecret(spellBookItemSl
 |------|------|---------|-------------|
 | `isCooldownSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCooldownSecret = C_Secrets.ShouldSpellBookItemCooldownBeSecret(1, 12345)
+local isCooldownSecret = C_Secrets.ShouldSpellBookItemCooldownBeSecret(1, 2050)
 ```
 
 ### C_Secrets.ShouldSpellCooldownBeSecret
@@ -298,10 +298,10 @@ isCooldownSecret = C_Secrets.ShouldSpellCooldownBeSecret(spellIdentifier)
 |------|------|---------|-------------|
 | `isCooldownSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isCooldownSecret = C_Secrets.ShouldSpellCooldownBeSecret(12345)
+local isCooldownSecret = C_Secrets.ShouldSpellCooldownBeSecret(2050)
 ```
 
 ### C_Secrets.ShouldTotemSlotBeSecret
@@ -324,7 +324,7 @@ isTotemSecret = C_Secrets.ShouldTotemSlotBeSecret(slot)
 |------|------|---------|-------------|
 | `isTotemSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTotemSecret = C_Secrets.ShouldTotemSlotBeSecret(1)
@@ -350,10 +350,10 @@ isTotemSecret = C_Secrets.ShouldTotemSpellBeSecret(spellID)
 |------|------|---------|-------------|
 | `isTotemSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isTotemSecret = C_Secrets.ShouldTotemSpellBeSecret(12345)
+local isTotemSecret = C_Secrets.ShouldTotemSpellBeSecret(2050)
 ```
 
 ### C_Secrets.ShouldUnitAuraIndexBeSecret
@@ -378,7 +378,7 @@ isAuraSecret = C_Secrets.ShouldUnitAuraIndexBeSecret(unit, index, [filter])
 |------|------|---------|-------------|
 | `isAuraSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAuraSecret = C_Secrets.ShouldUnitAuraIndexBeSecret("player", 1)
@@ -405,7 +405,7 @@ isAuraSecret = C_Secrets.ShouldUnitAuraInstanceBeSecret(unit, auraInstanceID)
 |------|------|---------|-------------|
 | `isAuraSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAuraSecret = C_Secrets.ShouldUnitAuraInstanceBeSecret("player", 0)
@@ -432,7 +432,7 @@ isAuraSecret = C_Secrets.ShouldUnitAuraSlotBeSecret(unit, slot)
 |------|------|---------|-------------|
 | `isAuraSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAuraSecret = C_Secrets.ShouldUnitAuraSlotBeSecret("player", 1)
@@ -459,7 +459,7 @@ isUnitComparisonSecret = C_Secrets.ShouldUnitComparisonBeSecret(unit1, unit2)
 |------|------|---------|-------------|
 | `isUnitComparisonSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitComparisonSecret = C_Secrets.ShouldUnitComparisonBeSecret("player", "player")
@@ -485,7 +485,7 @@ isUnitHealthMaxSecret = C_Secrets.ShouldUnitHealthMaxBeSecret(unit)
 |------|------|---------|-------------|
 | `isUnitHealthMaxSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitHealthMaxSecret = C_Secrets.ShouldUnitHealthMaxBeSecret("player")
@@ -511,7 +511,7 @@ isUnitIdentitySecret = C_Secrets.ShouldUnitIdentityBeSecret(unit)
 |------|------|---------|-------------|
 | `isUnitIdentitySecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitIdentitySecret = C_Secrets.ShouldUnitIdentityBeSecret("player")
@@ -538,7 +538,7 @@ isUnitPowerSecret = C_Secrets.ShouldUnitPowerBeSecret(unit, [powerType])
 |------|------|---------|-------------|
 | `isUnitPowerSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitPowerSecret = C_Secrets.ShouldUnitPowerBeSecret("player")
@@ -565,7 +565,7 @@ isUnitPowerMaxSecret = C_Secrets.ShouldUnitPowerMaxBeSecret(unit, [powerType])
 |------|------|---------|-------------|
 | `isUnitPowerMaxSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitPowerMaxSecret = C_Secrets.ShouldUnitPowerMaxBeSecret("player")
@@ -592,10 +592,10 @@ isSpellCastSecret = C_Secrets.ShouldUnitSpellCastBeSecret(unit, spellIdentifier)
 |------|------|---------|-------------|
 | `isSpellCastSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isSpellCastSecret = C_Secrets.ShouldUnitSpellCastBeSecret("player", 12345)
+local isSpellCastSecret = C_Secrets.ShouldUnitSpellCastBeSecret("player", 2050)
 ```
 
 ### C_Secrets.ShouldUnitSpellCastingBeSecret
@@ -618,7 +618,7 @@ isSpellCastingSecret = C_Secrets.ShouldUnitSpellCastingBeSecret(unit)
 |------|------|---------|-------------|
 | `isSpellCastingSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSpellCastingSecret = C_Secrets.ShouldUnitSpellCastingBeSecret("player")
@@ -638,7 +638,7 @@ hasSecretStats = C_Secrets.ShouldUnitStatsBeSecret()
 |------|------|---------|-------------|
 | `hasSecretStats` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretStats = C_Secrets.ShouldUnitStatsBeSecret()
@@ -665,7 +665,7 @@ isUnitThreatSecret = C_Secrets.ShouldUnitThreatStateBeSecret(unit, [mobUnit])
 |------|------|---------|-------------|
 | `isUnitThreatSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitThreatSecret = C_Secrets.ShouldUnitThreatStateBeSecret("player")
@@ -692,7 +692,7 @@ isUnitThreatSecret = C_Secrets.ShouldUnitThreatValuesBeSecret(unit, mobUnit)
 |------|------|---------|-------------|
 | `isUnitThreatSecret` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnitThreatSecret = C_Secrets.ShouldUnitThreatValuesBeSecret("player", "player")

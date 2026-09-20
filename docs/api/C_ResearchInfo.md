@@ -24,7 +24,7 @@ digSites = C_ResearchInfo.GetDigSitesForMap(uiMapID)
 |------|------|---------|-------------|
 | `digSites` | DigSiteMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local digSites = C_ResearchInfo.GetDigSitesForMap(0)

@@ -20,7 +20,7 @@ loopTimerDuration = C_EncounterTimeline.AddEditModeEvents()
 |------|------|---------|-------------|
 | `loopTimerDuration` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loopTimerDuration = C_EncounterTimeline.AddEditModeEvents()
@@ -46,7 +46,7 @@ eventID = C_EncounterTimeline.AddScriptEvent(eventInfo)
 |------|------|---------|-------------|
 | `eventID` | EncounterTimelineEventID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local eventID = C_EncounterTimeline.AddScriptEvent(eventInfo)
@@ -60,7 +60,7 @@ Cancels all custom timeline events, removing them from the timeline.
 C_EncounterTimeline.CancelAllScriptEvents()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.CancelAllScriptEvents()
@@ -74,7 +74,7 @@ Removes all Edit Mode events from the timeline.
 C_EncounterTimeline.CancelEditModeEvents()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.CancelEditModeEvents()
@@ -94,7 +94,7 @@ C_EncounterTimeline.CancelScriptEvent(eventID)
 |------|------|---------|-------------|
 | `eventID` | EncounterTimelineEventID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.CancelScriptEvent(eventID)
@@ -114,7 +114,7 @@ C_EncounterTimeline.FinishScriptEvent(eventID)
 |------|------|---------|-------------|
 | `eventID` | EncounterTimelineEventID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.FinishScriptEvent(eventID)
@@ -134,7 +134,7 @@ currentTime = C_EncounterTimeline.GetCurrentTime()
 |------|------|---------|-------------|
 | `currentTime` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currentTime = C_EncounterTimeline.GetCurrentTime()
@@ -161,7 +161,7 @@ color = C_EncounterTimeline.GetEventColor(eventID, [overrideTrigger])
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = C_EncounterTimeline.GetEventColor(eventID)
@@ -187,7 +187,7 @@ count = C_EncounterTimeline.GetEventCountBySource(source)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = C_EncounterTimeline.GetEventCountBySource(source)
@@ -207,7 +207,7 @@ highlightTime = C_EncounterTimeline.GetEventHighlightTime()
 |------|------|---------|-------------|
 | `highlightTime` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local highlightTime = C_EncounterTimeline.GetEventHighlightTime()
@@ -233,7 +233,7 @@ info = C_EncounterTimeline.GetEventInfo(eventID)
 |------|------|---------|-------------|
 | `info` | EncounterTimelineEventInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_EncounterTimeline.GetEventInfo(eventID)
@@ -253,7 +253,7 @@ events = C_EncounterTimeline.GetEventList()
 |------|------|---------|-------------|
 | `events` | EncounterTimelineEventID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_EncounterTimeline.GetEventList()
@@ -279,7 +279,7 @@ state = C_EncounterTimeline.GetEventState(eventID)
 |------|------|---------|-------------|
 | `state` | EncounterTimelineEventState | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local state = C_EncounterTimeline.GetEventState(eventID)
@@ -305,7 +305,7 @@ timeElapsed = C_EncounterTimeline.GetEventTimeElapsed(eventID)
 |------|------|---------|-------------|
 | `timeElapsed` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeElapsed = C_EncounterTimeline.GetEventTimeElapsed(eventID)
@@ -331,7 +331,7 @@ duration = C_EncounterTimeline.GetEventTimer(eventID)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = C_EncounterTimeline.GetEventTimer(eventID)
@@ -357,7 +357,7 @@ timeRemaining = C_EncounterTimeline.GetEventTimeRemaining(eventID)
 |------|------|---------|-------------|
 | `timeRemaining` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local timeRemaining = C_EncounterTimeline.GetEventTimeRemaining(eventID)
@@ -384,7 +384,7 @@ track, trackSortIndex = C_EncounterTimeline.GetEventTrack(eventID)
 | `track` | EncounterTimelineTrack | no |  |
 | `trackSortIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local track, trackSortIndex = C_EncounterTimeline.GetEventTrack(eventID)
@@ -413,7 +413,7 @@ events = C_EncounterTimeline.GetSortedEventList([maxEventCount], [maxEventDurati
 |------|------|---------|-------------|
 | `events` | EncounterTimelineEventID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_EncounterTimeline.GetSortedEventList(false, false)
@@ -439,7 +439,7 @@ trackInfo = C_EncounterTimeline.GetTrackInfo(track)
 |------|------|---------|-------------|
 | `trackInfo` | EncounterTimelineTrackInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackInfo = C_EncounterTimeline.GetTrackInfo(track)
@@ -459,7 +459,7 @@ tracks = C_EncounterTimeline.GetTrackList()
 |------|------|---------|-------------|
 | `tracks` | EncounterTimelineTrackInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tracks = C_EncounterTimeline.GetTrackList()
@@ -485,7 +485,7 @@ maxEventDuration = C_EncounterTimeline.GetTrackMaxEventDuration(track)
 |------|------|---------|-------------|
 | `maxEventDuration` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxEventDuration = C_EncounterTimeline.GetTrackMaxEventDuration(track)
@@ -511,7 +511,7 @@ trackType = C_EncounterTimeline.GetTrackType(track)
 |------|------|---------|-------------|
 | `trackType` | EncounterTimelineTrackType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackType = C_EncounterTimeline.GetTrackType(track)
@@ -531,7 +531,7 @@ viewType = C_EncounterTimeline.GetViewType()
 |------|------|---------|-------------|
 | `viewType` | EncounterTimelineViewType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local viewType = C_EncounterTimeline.GetViewType()
@@ -551,7 +551,7 @@ hasActiveEvents = C_EncounterTimeline.HasActiveEvents()
 |------|------|---------|-------------|
 | `hasActiveEvents` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasActiveEvents = C_EncounterTimeline.HasActiveEvents()
@@ -571,7 +571,7 @@ hasAnyEvents = C_EncounterTimeline.HasAnyEvents()
 |------|------|---------|-------------|
 | `hasAnyEvents` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyEvents = C_EncounterTimeline.HasAnyEvents()
@@ -591,7 +591,7 @@ hasPausedEvents = C_EncounterTimeline.HasPausedEvents()
 |------|------|---------|-------------|
 | `hasPausedEvents` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPausedEvents = C_EncounterTimeline.HasPausedEvents()
@@ -611,7 +611,7 @@ hasVisibleEvents = C_EncounterTimeline.HasVisibleEvents()
 |------|------|---------|-------------|
 | `hasVisibleEvents` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasVisibleEvents = C_EncounterTimeline.HasVisibleEvents()
@@ -637,7 +637,7 @@ blocked = C_EncounterTimeline.IsEventBlocked(eventID)
 |------|------|---------|-------------|
 | `blocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blocked = C_EncounterTimeline.IsEventBlocked(eventID)
@@ -657,7 +657,7 @@ isAvailable = C_EncounterTimeline.IsFeatureAvailable()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_EncounterTimeline.IsFeatureAvailable()
@@ -677,7 +677,7 @@ isAvailableAndEnabled = C_EncounterTimeline.IsFeatureEnabled()
 |------|------|---------|-------------|
 | `isAvailableAndEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailableAndEnabled = C_EncounterTimeline.IsFeatureEnabled()
@@ -697,7 +697,7 @@ C_EncounterTimeline.PauseScriptEvent(eventID)
 |------|------|---------|-------------|
 | `eventID` | EncounterTimelineEventID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.PauseScriptEvent(eventID)
@@ -717,7 +717,7 @@ C_EncounterTimeline.ResumeScriptEvent(eventID)
 |------|------|---------|-------------|
 | `eventID` | EncounterTimelineEventID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.ResumeScriptEvent(eventID)
@@ -739,7 +739,7 @@ C_EncounterTimeline.SetEventIconTextures(eventID, includeIcons, textures)
 | `includeIcons` | EncounterEventIconmask | no | Mask to apply to candidate icons. Any icon bits not present in this set will not be assigned to textures. |
 | `textures` | SimpleTexture[] | no | Array of texture objects to update. This will change the assigned atlases and alpha values of the region, applying secret aspects to protect the data. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.SetEventIconTextures(eventID, includeIcons, textures)
@@ -759,7 +759,7 @@ C_EncounterTimeline.SetViewType(viewType)
 |------|------|---------|-------------|
 | `viewType` | EncounterTimelineViewType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EncounterTimeline.SetViewType(viewType)

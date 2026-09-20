@@ -18,7 +18,7 @@ FlashClientIcon(briefly)
 |------|------|---------|-------------|
 | `briefly` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 FlashClientIcon(false)
@@ -36,7 +36,7 @@ billingTimeRested = GetBillingTimeRested()
 |------|------|---------|-------------|
 | `billingTimeRested` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local billingTimeRested = GetBillingTimeRested()
@@ -60,7 +60,7 @@ fileID = GetFileIDFromPath(filePath)
 |------|------|---------|-------------|
 | `fileID` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fileID = GetFileIDFromPath("")
@@ -78,7 +78,7 @@ framerate = GetFramerate()
 |------|------|---------|-------------|
 | `framerate` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local framerate = GetFramerate()
@@ -96,7 +96,7 @@ isCpuBound = IsCpuBound()
 |------|------|---------|-------------|
 | `isCpuBound` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCpuBound = IsCpuBound()
@@ -114,7 +114,7 @@ isHandheld = PlatformIsHandheld()
 |------|------|---------|-------------|
 | `isHandheld` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHandheld = PlatformIsHandheld()
@@ -132,7 +132,7 @@ ReportBug(description)
 |------|------|---------|-------------|
 | `description` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ReportBug("")
@@ -150,7 +150,7 @@ ReportSuggestion(description)
 |------|------|---------|-------------|
 | `description` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ReportSuggestion("")
@@ -162,7 +162,7 @@ ReportSuggestion("")
 RestartGx()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RestartGx()
@@ -174,7 +174,7 @@ RestartGx()
 Screenshot()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Screenshot()
@@ -186,7 +186,7 @@ Screenshot()
 UIReload()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UIReload()
@@ -198,7 +198,7 @@ UIReload()
 UpdateWindow()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateWindow()

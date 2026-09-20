@@ -18,7 +18,7 @@ areAnyBankTypesViewable = C_Bank.AreAnyBankTypesViewable()
 |------|------|---------|-------------|
 | `areAnyBankTypesViewable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local areAnyBankTypesViewable = C_Bank.AreAnyBankTypesViewable()
@@ -36,7 +36,7 @@ C_Bank.AutoDepositItemsIntoBank(bankType)
 |------|------|---------|-------------|
 | `bankType` | BankType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Bank.AutoDepositItemsIntoBank(bankType)
@@ -61,7 +61,7 @@ slot = C_Bank.BankBagTypeAndIDToInvSlot(bankType, slotIndex)
 |------|------|---------|-------------|
 | `slot` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slot = C_Bank.BankBagTypeAndIDToInvSlot(bankType, 1)
@@ -85,7 +85,7 @@ canDepositMoney = C_Bank.CanDepositMoney(bankType)
 |------|------|---------|-------------|
 | `canDepositMoney` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canDepositMoney = C_Bank.CanDepositMoney(bankType)
@@ -109,7 +109,7 @@ canPurchaseBankTab = C_Bank.CanPurchaseBankTab(bankType)
 |------|------|---------|-------------|
 | `canPurchaseBankTab` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canPurchaseBankTab = C_Bank.CanPurchaseBankTab(bankType)
@@ -133,7 +133,7 @@ canUseBank = C_Bank.CanUseBank(bankType)
 |------|------|---------|-------------|
 | `canUseBank` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseBank = C_Bank.CanUseBank(bankType)
@@ -157,7 +157,7 @@ canViewBank = C_Bank.CanViewBank(bankType)
 |------|------|---------|-------------|
 | `canViewBank` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canViewBank = C_Bank.CanViewBank(bankType)
@@ -181,7 +181,7 @@ canWithdrawMoney = C_Bank.CanWithdrawMoney(bankType)
 |------|------|---------|-------------|
 | `canWithdrawMoney` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canWithdrawMoney = C_Bank.CanWithdrawMoney(bankType)
@@ -193,7 +193,7 @@ local canWithdrawMoney = C_Bank.CanWithdrawMoney(bankType)
 C_Bank.CloseBankFrame()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Bank.CloseBankFrame()
@@ -212,10 +212,10 @@ C_Bank.DepositMoney(bankType, amount)
 | `bankType` | BankType | no |  |
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Bank.DepositMoney(bankType, amount)
+C_Bank.DepositMoney(bankType, 0)
 ```
 
 ### C_Bank.DoesBankTypeSupportAutoDeposit
@@ -236,7 +236,7 @@ doesBankTypeSupportAutoDeposit = C_Bank.DoesBankTypeSupportAutoDeposit(bankType)
 |------|------|---------|-------------|
 | `doesBankTypeSupportAutoDeposit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesBankTypeSupportAutoDeposit = C_Bank.DoesBankTypeSupportAutoDeposit(bankType)
@@ -260,7 +260,7 @@ doesBankTypeSupportMoneyTransfer = C_Bank.DoesBankTypeSupportMoneyTransfer(bankT
 |------|------|---------|-------------|
 | `doesBankTypeSupportMoneyTransfer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesBankTypeSupportMoneyTransfer = C_Bank.DoesBankTypeSupportMoneyTransfer(bankType)
@@ -284,7 +284,7 @@ reason = C_Bank.FetchBankLockedReason(bankType)
 |------|------|---------|-------------|
 | `reason` | BankLockedReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reason = C_Bank.FetchBankLockedReason(bankType)
@@ -308,7 +308,7 @@ amount = C_Bank.FetchDepositedMoney(bankType)
 |------|------|---------|-------------|
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local amount = C_Bank.FetchDepositedMoney(bankType)
@@ -332,7 +332,7 @@ numPurchasedBankTabs = C_Bank.FetchMaxNumBankTabs(bankType)
 |------|------|---------|-------------|
 | `numPurchasedBankTabs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPurchasedBankTabs = C_Bank.FetchMaxNumBankTabs(bankType)
@@ -356,7 +356,7 @@ nextPurchasableTabData = C_Bank.FetchNextPurchasableBankTabData(bankType)
 |------|------|---------|-------------|
 | `nextPurchasableTabData` | PurchasableBankTabData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nextPurchasableTabData = C_Bank.FetchNextPurchasableBankTabData(bankType)
@@ -380,7 +380,7 @@ numPurchasedBankTabs = C_Bank.FetchNumPurchasedBankTabs(bankType)
 |------|------|---------|-------------|
 | `numPurchasedBankTabs` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numPurchasedBankTabs = C_Bank.FetchNumPurchasedBankTabs(bankType)
@@ -404,7 +404,7 @@ purchasedBankTabData = C_Bank.FetchPurchasedBankTabData(bankType)
 |------|------|---------|-------------|
 | `purchasedBankTabData` | BankTabData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local purchasedBankTabData = C_Bank.FetchPurchasedBankTabData(bankType)
@@ -428,7 +428,7 @@ purchasedBankTabIDs = C_Bank.FetchPurchasedBankTabIDs(bankType)
 |------|------|---------|-------------|
 | `purchasedBankTabIDs` | BagIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local purchasedBankTabIDs = C_Bank.FetchPurchasedBankTabIDs(bankType)
@@ -446,7 +446,7 @@ viewableBankTypes = C_Bank.FetchViewableBankTypes()
 |------|------|---------|-------------|
 | `viewableBankTypes` | BankType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local viewableBankTypes = C_Bank.FetchViewableBankTypes()
@@ -470,7 +470,7 @@ hasMaxBankTabs = C_Bank.HasMaxBankTabs(bankType)
 |------|------|---------|-------------|
 | `hasMaxBankTabs` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxBankTabs = C_Bank.HasMaxBankTabs(bankType)
@@ -495,7 +495,7 @@ isItemAllowedInBankType = C_Bank.IsItemAllowedInBankType(bankType, itemLocation)
 |------|------|---------|-------------|
 | `isItemAllowedInBankType` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isItemAllowedInBankType = C_Bank.IsItemAllowedInBankType(bankType, 6948)
@@ -513,7 +513,7 @@ C_Bank.PurchaseBankTab(bankType)
 |------|------|---------|-------------|
 | `bankType` | BankType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Bank.PurchaseBankTab(bankType)
@@ -531,7 +531,7 @@ shouldUsePlayerBagsInBank = C_Bank.ShouldUsePlayerBagsInBank()
 |------|------|---------|-------------|
 | `shouldUsePlayerBagsInBank` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldUsePlayerBagsInBank = C_Bank.ShouldUsePlayerBagsInBank()
@@ -553,10 +553,10 @@ C_Bank.UpdateBankTabSettings(bankType, tabID, tabName, tabIcon, depositFlags)
 | `tabIcon` | cstring | no |  |
 | `depositFlags` | BagSlotFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Bank.UpdateBankTabSettings(bankType, tabID, "", "", depositFlags)
+C_Bank.UpdateBankTabSettings(bankType, Enum.BagIndex.Accountbanktab, "", "", depositFlags)
 ```
 
 ### C_Bank.WithdrawMoney
@@ -572,10 +572,10 @@ C_Bank.WithdrawMoney(bankType, amount)
 | `bankType` | BankType | no |  |
 | `amount` | WOWMONEY | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Bank.WithdrawMoney(bankType, amount)
+C_Bank.WithdrawMoney(bankType, 0)
 ```
 
 ## Events

@@ -18,7 +18,7 @@ allowed = C_QuestSession.CanStart()
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = C_QuestSession.CanStart()
@@ -36,7 +36,7 @@ allowed = C_QuestSession.CanStop()
 |------|------|---------|-------------|
 | `allowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local allowed = C_QuestSession.CanStop()
@@ -54,7 +54,7 @@ exists = C_QuestSession.Exists()
 |------|------|---------|-------------|
 | `exists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exists = C_QuestSession.Exists()
@@ -72,7 +72,7 @@ command = C_QuestSession.GetAvailableSessionCommand()
 |------|------|---------|-------------|
 | `command` | QuestSessionCommand | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local command = C_QuestSession.GetAvailableSessionCommand()
@@ -90,7 +90,7 @@ command = C_QuestSession.GetPendingCommand()
 |------|------|---------|-------------|
 | `command` | QuestSessionCommand | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local command = C_QuestSession.GetPendingCommand()
@@ -108,7 +108,7 @@ proposedMaxLevel = C_QuestSession.GetProposedMaxLevelForSession()
 |------|------|---------|-------------|
 | `proposedMaxLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local proposedMaxLevel = C_QuestSession.GetProposedMaxLevelForSession()
@@ -126,7 +126,7 @@ details = C_QuestSession.GetSessionBeginDetails()
 |------|------|---------|-------------|
 | `details` | QuestSessionPlayerDetails | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local details = C_QuestSession.GetSessionBeginDetails()
@@ -144,7 +144,7 @@ questID = C_QuestSession.GetSuperTrackedQuest()
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_QuestSession.GetSuperTrackedQuest()
@@ -162,7 +162,7 @@ hasJoined = C_QuestSession.HasJoined()
 |------|------|---------|-------------|
 | `hasJoined` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasJoined = C_QuestSession.HasJoined()
@@ -180,7 +180,7 @@ hasPendingCommand = C_QuestSession.HasPendingCommand()
 |------|------|---------|-------------|
 | `hasPendingCommand` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPendingCommand = C_QuestSession.HasPendingCommand()
@@ -192,7 +192,7 @@ local hasPendingCommand = C_QuestSession.HasPendingCommand()
 C_QuestSession.RequestSessionStart()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestSession.RequestSessionStart()
@@ -204,7 +204,7 @@ C_QuestSession.RequestSessionStart()
 C_QuestSession.RequestSessionStop()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestSession.RequestSessionStop()
@@ -222,7 +222,7 @@ C_QuestSession.SendSessionBeginResponse(beginSession)
 |------|------|---------|-------------|
 | `beginSession` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestSession.SendSessionBeginResponse(false)
@@ -241,7 +241,7 @@ C_QuestSession.SetQuestIsSuperTracked(questID, superTrack)
 | `questID` | number | no |  |
 | `superTrack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_QuestSession.SetQuestIsSuperTracked(0, false)

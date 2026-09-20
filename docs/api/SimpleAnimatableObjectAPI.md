@@ -25,7 +25,7 @@ group = CreateAnimationGroup([name], [templateName])
 |------|------|---------|-------------|
 | `group` | SimpleAnimGroup | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local group = CreateAnimationGroup()
@@ -43,7 +43,7 @@ groups = GetAnimationGroups()
 |------|------|---------|-------------|
 | `groups` | SimpleAnimGroup | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local groups = GetAnimationGroups()
@@ -55,7 +55,7 @@ local groups = GetAnimationGroups()
 StopAnimating()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopAnimating()

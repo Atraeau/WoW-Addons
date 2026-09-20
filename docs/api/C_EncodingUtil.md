@@ -26,10 +26,10 @@ output = C_EncodingUtil.CompressString(source, method, level)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local output = C_EncodingUtil.CompressString(source, method, level)
+local output = C_EncodingUtil.CompressString(source, Enum.CompressionMethod.Deflate, Enum.CompressionLevel.Default)
 ```
 
 ### C_EncodingUtil.DecodeBase64
@@ -51,10 +51,10 @@ output = C_EncodingUtil.DecodeBase64(source, variant)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local output = C_EncodingUtil.DecodeBase64(source, variant)
+local output = C_EncodingUtil.DecodeBase64(source, Enum.Base64Variant.Standard)
 ```
 
 ### C_EncodingUtil.DecodeHex
@@ -75,7 +75,7 @@ output = C_EncodingUtil.DecodeHex(source)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local output = C_EncodingUtil.DecodeHex("")
@@ -100,10 +100,10 @@ output = C_EncodingUtil.DecompressString(source, method)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local output = C_EncodingUtil.DecompressString(source, method)
+local output = C_EncodingUtil.DecompressString(source, Enum.CompressionMethod.Deflate)
 ```
 
 ### C_EncodingUtil.DeserializeCBOR
@@ -124,7 +124,7 @@ value = C_EncodingUtil.DeserializeCBOR(source)
 |------|------|---------|-------------|
 | `value` | LuaValueVariant | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_EncodingUtil.DeserializeCBOR(source)
@@ -148,7 +148,7 @@ value = C_EncodingUtil.DeserializeJSON(source)
 |------|------|---------|-------------|
 | `value` | LuaValueVariant | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local value = C_EncodingUtil.DeserializeJSON("")
@@ -173,10 +173,10 @@ output = C_EncodingUtil.EncodeBase64(source, variant)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local output = C_EncodingUtil.EncodeBase64(source, variant)
+local output = C_EncodingUtil.EncodeBase64(source, Enum.Base64Variant.Standard)
 ```
 
 ### C_EncodingUtil.EncodeHex
@@ -197,7 +197,7 @@ output = C_EncodingUtil.EncodeHex(source)
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local output = C_EncodingUtil.EncodeHex(source)
@@ -222,7 +222,7 @@ output = C_EncodingUtil.SerializeCBOR([value], [options])
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local output = C_EncodingUtil.SerializeCBOR()
@@ -247,7 +247,7 @@ output = C_EncodingUtil.SerializeJSON([value], [options])
 |------|------|---------|-------------|
 | `output` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local output = C_EncodingUtil.SerializeJSON()

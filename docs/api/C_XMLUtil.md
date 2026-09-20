@@ -24,7 +24,7 @@ info = C_XMLUtil.GetTemplateInfo(name)
 |------|------|---------|-------------|
 | `info` | XMLTemplateInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_XMLUtil.GetTemplateInfo("")
@@ -42,7 +42,7 @@ templates = C_XMLUtil.GetTemplates()
 |------|------|---------|-------------|
 | `templates` | XMLTemplateListInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local templates = C_XMLUtil.GetTemplates()

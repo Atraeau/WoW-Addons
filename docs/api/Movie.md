@@ -18,7 +18,7 @@ CancelPreloadingMovie(movieId)
 |------|------|---------|-------------|
 | `movieId` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 CancelPreloadingMovie(0)
@@ -44,7 +44,7 @@ inProgress, downloaded, total = GetMovieDownloadProgress(movieId)
 | `downloaded` | BigUInteger | no |  |
 | `total` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inProgress, downloaded, total = GetMovieDownloadProgress(0)
@@ -68,7 +68,7 @@ isLocal = IsMovieLocal(movieId)
 |------|------|---------|-------------|
 | `isLocal` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLocal = IsMovieLocal(0)
@@ -92,7 +92,7 @@ isPlayable = IsMoviePlayable(movieId)
 |------|------|---------|-------------|
 | `isPlayable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlayable = IsMoviePlayable(0)
@@ -116,7 +116,7 @@ readable = IsMovieReadable(movieId)
 |------|------|---------|-------------|
 | `readable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local readable = IsMovieReadable(0)
@@ -134,7 +134,7 @@ PreloadMovie(movieId)
 |------|------|---------|-------------|
 | `movieId` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PreloadMovie(0)

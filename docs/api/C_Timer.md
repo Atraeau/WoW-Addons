@@ -22,7 +22,10 @@ C_Timer.After(seconds, callback)
 **Example**
 
 ```lua
-C_Timer.After(0, callback)
+-- Run a function once after a delay (in seconds)
+C_Timer.After(2, function()
+    print("2 seconds later")
+end)
 ```
 
 ### C_Timer.NewTicker
@@ -48,7 +51,11 @@ cbObject = C_Timer.NewTicker(seconds, callback, [iterations])
 **Example**
 
 ```lua
-local cbObject = C_Timer.NewTicker(0, callback)
+-- Repeat every 5s; pass a 3rd arg to limit iterations (omit for infinite)
+local ticker = C_Timer.NewTicker(5, function()
+    print("tick")
+end, 3)
+-- ticker:Cancel()  -- stop early
 ```
 
 ### C_Timer.NewTimedSignalMap
@@ -71,7 +78,7 @@ signalMap = C_Timer.NewTimedSignalMap(callback)
 |------|------|---------|-------------|
 | `signalMap` | TimedSignalMap | no | The newly created timed signal map. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local signalMap = C_Timer.NewTimedSignalMap(callback)
@@ -96,7 +103,7 @@ cbObject = C_Timer.NewTimer(seconds, callback)
 |------|------|---------|-------------|
 | `cbObject` | TickerCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cbObject = C_Timer.NewTimer(0, callback)

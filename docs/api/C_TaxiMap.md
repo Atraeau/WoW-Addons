@@ -26,7 +26,7 @@ taxiNodes = C_TaxiMap.GetAllTaxiNodes(uiMapID)
 |------|------|---------|-------------|
 | `taxiNodes` | TaxiNodeInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local taxiNodes = C_TaxiMap.GetAllTaxiNodes(0)
@@ -52,7 +52,7 @@ mapTaxiNodes = C_TaxiMap.GetTaxiNodesForMap(uiMapID)
 |------|------|---------|-------------|
 | `mapTaxiNodes` | MapTaxiNodeInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapTaxiNodes = C_TaxiMap.GetTaxiNodesForMap(0)
@@ -76,7 +76,7 @@ shouldShowNodes = C_TaxiMap.ShouldMapShowTaxiNodes(uiMapID)
 |------|------|---------|-------------|
 | `shouldShowNodes` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldShowNodes = C_TaxiMap.ShouldMapShowTaxiNodes(0)

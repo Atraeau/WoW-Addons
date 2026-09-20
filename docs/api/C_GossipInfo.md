@@ -12,7 +12,7 @@
 C_GossipInfo.CloseGossip()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.CloseGossip()
@@ -30,7 +30,7 @@ forceGossip = C_GossipInfo.ForceGossip()
 |------|------|---------|-------------|
 | `forceGossip` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local forceGossip = C_GossipInfo.ForceGossip()
@@ -48,7 +48,7 @@ info = C_GossipInfo.GetActiveQuests()
 |------|------|---------|-------------|
 | `info` | GossipQuestUIInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_GossipInfo.GetActiveQuests()
@@ -66,7 +66,7 @@ info = C_GossipInfo.GetAvailableQuests()
 |------|------|---------|-------------|
 | `info` | GossipQuestUIInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_GossipInfo.GetAvailableQuests()
@@ -84,7 +84,7 @@ description = C_GossipInfo.GetCompletedOptionDescriptionString()
 |------|------|---------|-------------|
 | `description` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_GossipInfo.GetCompletedOptionDescriptionString()
@@ -102,7 +102,7 @@ description = C_GossipInfo.GetCustomGossipDescriptionString()
 |------|------|---------|-------------|
 | `description` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_GossipInfo.GetCustomGossipDescriptionString()
@@ -126,7 +126,7 @@ reputationInfo = C_GossipInfo.GetFriendshipReputation(friendshipFactionID)
 |------|------|---------|-------------|
 | `reputationInfo` | FriendshipReputationInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reputationInfo = C_GossipInfo.GetFriendshipReputation(0)
@@ -150,7 +150,7 @@ rankInfo = C_GossipInfo.GetFriendshipReputationRanks(friendshipFactionID)
 |------|------|---------|-------------|
 | `rankInfo` | FriendshipReputationRankInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rankInfo = C_GossipInfo.GetFriendshipReputationRanks(0)
@@ -168,7 +168,7 @@ numQuests = C_GossipInfo.GetNumActiveQuests()
 |------|------|---------|-------------|
 | `numQuests` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numQuests = C_GossipInfo.GetNumActiveQuests()
@@ -186,7 +186,7 @@ numQuests = C_GossipInfo.GetNumAvailableQuests()
 |------|------|---------|-------------|
 | `numQuests` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numQuests = C_GossipInfo.GetNumAvailableQuests()
@@ -204,7 +204,7 @@ info = C_GossipInfo.GetOptions()
 |------|------|---------|-------------|
 | `info` | GossipOptionUIInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_GossipInfo.GetOptions()
@@ -228,7 +228,7 @@ gossipOptionUIWidgetSetsAndTypes = C_GossipInfo.GetOptionUIWidgetSetsAndTypesByO
 |------|------|---------|-------------|
 | `gossipOptionUIWidgetSetsAndTypes` | GossipOptionUIWidgetSetAndType[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gossipOptionUIWidgetSetsAndTypes = C_GossipInfo.GetOptionUIWidgetSetsAndTypesByOptionID(0)
@@ -252,7 +252,7 @@ gossipPoiID = C_GossipInfo.GetPoiForUiMapID(uiMapID)
 |------|------|---------|-------------|
 | `gossipPoiID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gossipPoiID = C_GossipInfo.GetPoiForUiMapID(0)
@@ -277,7 +277,7 @@ gossipPoiInfo = C_GossipInfo.GetPoiInfo(uiMapID, gossipPoiID)
 |------|------|---------|-------------|
 | `gossipPoiInfo` | GossipPoiInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gossipPoiInfo = C_GossipInfo.GetPoiInfo(0, 0)
@@ -295,7 +295,7 @@ gossipText = C_GossipInfo.GetText()
 |------|------|---------|-------------|
 | `gossipText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local gossipText = C_GossipInfo.GetText()
@@ -307,7 +307,7 @@ local gossipText = C_GossipInfo.GetText()
 C_GossipInfo.RefreshOptions()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.RefreshOptions()
@@ -325,7 +325,7 @@ C_GossipInfo.SelectActiveQuest(optionID)
 |------|------|---------|-------------|
 | `optionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.SelectActiveQuest(0)
@@ -343,7 +343,7 @@ C_GossipInfo.SelectAvailableQuest(optionID)
 |------|------|---------|-------------|
 | `optionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.SelectAvailableQuest(0)
@@ -363,7 +363,7 @@ C_GossipInfo.SelectOption(optionID, [text], [confirmed])
 | `text` | cstring | yes |  |
 | `confirmed` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.SelectOption(0)
@@ -383,7 +383,7 @@ C_GossipInfo.SelectOptionByIndex(optionID, [text], [confirmed])
 | `text` | cstring | yes |  |
 | `confirmed` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GossipInfo.SelectOptionByIndex(0)

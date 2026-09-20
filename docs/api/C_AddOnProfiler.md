@@ -20,7 +20,7 @@ C_AddOnProfiler.AddMeasuredCallEvent(name)
 |------|------|---------|-------------|
 | `name` | stringView | no | User-defined string describing the measured event. This should be kept under 48 bytes to avoid memory allocations. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOnProfiler.AddMeasuredCallEvent(name)
@@ -40,7 +40,7 @@ C_AddOnProfiler.AddPerformanceMessageShown(msg)
 |------|------|---------|-------------|
 | `msg` | AddOnPerformanceMessage | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AddOnProfiler.AddPerformanceMessageShown(msg)
@@ -60,7 +60,7 @@ msg = C_AddOnProfiler.CheckForPerformanceMessage()
 |------|------|---------|-------------|
 | `msg` | AddOnPerformanceMessage | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local msg = C_AddOnProfiler.CheckForPerformanceMessage()
@@ -87,7 +87,7 @@ result = C_AddOnProfiler.GetAddOnMetric(name, metric)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AddOnProfiler.GetAddOnMetric("", metric)
@@ -113,7 +113,7 @@ result = C_AddOnProfiler.GetApplicationMetric(metric)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AddOnProfiler.GetApplicationMetric(metric)
@@ -139,7 +139,7 @@ result = C_AddOnProfiler.GetOverallMetric(metric)
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_AddOnProfiler.GetOverallMetric(metric)
@@ -159,7 +159,7 @@ frequency = C_AddOnProfiler.GetTicksPerSecond()
 |------|------|---------|-------------|
 | `frequency` | BigInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local frequency = C_AddOnProfiler.GetTicksPerSecond()
@@ -186,7 +186,7 @@ results = C_AddOnProfiler.GetTopKAddOnsForMetric(metric, k)
 |------|------|---------|-------------|
 | `results` | AddOnProfilerResult[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local results = C_AddOnProfiler.GetTopKAddOnsForMetric(metric, 0)
@@ -206,7 +206,7 @@ enabled = C_AddOnProfiler.IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_AddOnProfiler.IsEnabled()
@@ -234,7 +234,7 @@ results, returns = C_AddOnProfiler.MeasureCall(func, arguments)
 | `results` | AddOnProfilerCallResults | no |  |
 | `returns` | LuaValueVariant | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local results, returns = C_AddOnProfiler.MeasureCall(func, arguments)

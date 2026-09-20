@@ -26,7 +26,7 @@ point = CreateControlPoint([name], [templateName], [order])
 |------|------|---------|-------------|
 | `point` | SimpleControlPoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point = CreateControlPoint()
@@ -44,7 +44,7 @@ points = GetControlPoints()
 |------|------|---------|-------------|
 | `points` | SimpleControlPoint | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local points = GetControlPoints()
@@ -62,7 +62,7 @@ curveType = GetCurveType()
 |------|------|---------|-------------|
 | `curveType` | CurveType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curveType = GetCurveType()
@@ -80,7 +80,7 @@ maxOrder = GetMaxControlPointOrder()
 |------|------|---------|-------------|
 | `maxOrder` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxOrder = GetMaxControlPointOrder()
@@ -98,7 +98,7 @@ SetCurveType(curveType)
 |------|------|---------|-------------|
 | `curveType` | CurveType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCurveType(curveType)

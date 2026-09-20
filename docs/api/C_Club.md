@@ -18,7 +18,7 @@ C_Club.AcceptInvitation(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.AcceptInvitation(clubId)
@@ -37,7 +37,7 @@ C_Club.AddClubStreamChatChannel(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.AddClubStreamChatChannel(clubId, streamId)
@@ -56,7 +56,7 @@ C_Club.AdvanceStreamViewMarker(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.AdvanceStreamViewMarker(clubId, streamId)
@@ -80,7 +80,7 @@ membersReady = C_Club.AreMembersReady(clubId)
 |------|------|---------|-------------|
 | `membersReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local membersReady = C_Club.AreMembersReady(clubId)
@@ -100,7 +100,7 @@ C_Club.AssignMemberRole(clubId, memberId, roleId)
 | `memberId` | ClubMemberOpaqueId | no |  |
 | `roleId` | ClubRoleIdentifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.AssignMemberRole(clubId, memberId, roleId)
@@ -127,7 +127,7 @@ canResolve = C_Club.CanResolvePlayerLocationFromClubMessageData(clubId, streamId
 |------|------|---------|-------------|
 | `canResolve` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canResolve = C_Club.CanResolvePlayerLocationFromClubMessageData(clubId, streamId, epoch, position)
@@ -139,7 +139,7 @@ local canResolve = C_Club.CanResolvePlayerLocationFromClubMessageData(clubId, st
 C_Club.ClearAutoAdvanceStreamViewMarker()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.ClearAutoAdvanceStreamViewMarker()
@@ -151,7 +151,7 @@ C_Club.ClearAutoAdvanceStreamViewMarker()
 C_Club.ClearClubPresenceSubscription()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.ClearClubPresenceSubscription()
@@ -177,7 +177,7 @@ comparison = C_Club.CompareBattleNetDisplayName(clubId, lhsMemberId, rhsMemberId
 |------|------|---------|-------------|
 | `comparison` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local comparison = C_Club.CompareBattleNetDisplayName(clubId, 0, 0)
@@ -200,10 +200,10 @@ C_Club.CreateClub(name, [shortName], description, clubType, avatarId, [isCrossFa
 | `avatarId` | number | no |  |
 | `isCrossFaction` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Club.CreateClub("", "", clubType, 0)
+C_Club.CreateClub("", "", Enum.ClubType.BattleNet, 0)
 ```
 
 ### C_Club.CreateStream
@@ -223,7 +223,7 @@ C_Club.CreateStream(clubId, name, subject, leadersAndModeratorsOnly)
 | `subject` | string | no |  |
 | `leadersAndModeratorsOnly` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.CreateStream(clubId, "", "", false)
@@ -247,7 +247,7 @@ C_Club.CreateTicket(clubId, [allowedRedeemCount], [duration], [defaultStreamId],
 | `defaultStreamId` | ClubStreamId | yes |  |
 | `isCrossFaction` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.CreateTicket(clubId)
@@ -265,7 +265,7 @@ C_Club.DeclineInvitation(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.DeclineInvitation(clubId)
@@ -285,7 +285,7 @@ C_Club.DestroyClub(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.DestroyClub(clubId)
@@ -305,7 +305,7 @@ C_Club.DestroyMessage(clubId, streamId, messageId)
 | `streamId` | ClubStreamId | no |  |
 | `messageId` | ClubMessageIdentifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.DestroyMessage(clubId, streamId, messageId)
@@ -326,7 +326,7 @@ C_Club.DestroyStream(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.DestroyStream(clubId, streamId)
@@ -347,7 +347,7 @@ C_Club.DestroyTicket(clubId, ticketId)
 | `clubId` | ClubId | no |  |
 | `ticketId` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.DestroyTicket(clubId, "")
@@ -365,7 +365,7 @@ hasUnreadMessages = C_Club.DoesAnyCommunityHaveUnreadMessages()
 |------|------|---------|-------------|
 | `hasUnreadMessages` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasUnreadMessages = C_Club.DoesAnyCommunityHaveUnreadMessages()
@@ -389,7 +389,7 @@ hasMembersOfOppositeFaction = C_Club.DoesCommunityHaveMembersOfTheOppositeFactio
 |------|------|---------|-------------|
 | `hasMembersOfOppositeFaction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMembersOfOppositeFaction = C_Club.DoesCommunityHaveMembersOfTheOppositeFaction(clubId)
@@ -415,7 +415,7 @@ C_Club.EditClub(clubId, [name], [shortName], [description], [avatarId], [broadca
 | `broadcast` | string | yes |  |
 | `crossFaction` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.EditClub(clubId)
@@ -436,7 +436,7 @@ C_Club.EditMessage(clubId, streamId, messageId, message)
 | `messageId` | ClubMessageIdentifier | no |  |
 | `message` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.EditMessage(clubId, streamId, messageId, "")
@@ -460,7 +460,7 @@ C_Club.EditStream(clubId, streamId, [name], [subject], [leadersAndModeratorsOnly
 | `subject` | string | yes |  |
 | `leadersAndModeratorsOnly` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.EditStream(clubId, streamId)
@@ -472,7 +472,7 @@ C_Club.EditStream(clubId, streamId)
 C_Club.Flush()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.Flush()
@@ -484,7 +484,7 @@ C_Club.Flush()
 C_Club.FocusCommunityStreams()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.FocusCommunityStreams()
@@ -502,7 +502,7 @@ C_Club.FocusMembers(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.FocusMembers(clubId)
@@ -527,7 +527,7 @@ focused = C_Club.FocusStream(clubId, streamId)
 |------|------|---------|-------------|
 | `focused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local focused = C_Club.FocusStream(clubId, streamId)
@@ -552,7 +552,7 @@ assignableRoles = C_Club.GetAssignableRoles(clubId, memberId)
 |------|------|---------|-------------|
 | `assignableRoles` | ClubRoleIdentifier[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local assignableRoles = C_Club.GetAssignableRoles(clubId, memberId)
@@ -578,10 +578,10 @@ avatarIds = C_Club.GetAvatarIdList(clubType)
 |------|------|---------|-------------|
 | `avatarIds` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local avatarIds = C_Club.GetAvatarIdList(clubType)
+local avatarIds = C_Club.GetAvatarIdList(Enum.ClubType.BattleNet)
 ```
 
 ### C_Club.GetClubCapacity
@@ -596,7 +596,7 @@ capacity = C_Club.GetClubCapacity()
 |------|------|---------|-------------|
 | `capacity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local capacity = C_Club.GetClubCapacity()
@@ -620,7 +620,7 @@ info = C_Club.GetClubInfo(clubId)
 |------|------|---------|-------------|
 | `info` | ClubInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Club.GetClubInfo(clubId)
@@ -644,10 +644,10 @@ clubLimits = C_Club.GetClubLimits(clubType)
 |------|------|---------|-------------|
 | `clubLimits` | ClubLimits | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local clubLimits = C_Club.GetClubLimits(clubType)
+local clubLimits = C_Club.GetClubLimits(Enum.ClubType.BattleNet)
 ```
 
 ### C_Club.GetClubMembers
@@ -669,7 +669,7 @@ members = C_Club.GetClubMembers(clubId, [streamId])
 |------|------|---------|-------------|
 | `members` | ClubMemberOpaqueId[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local members = C_Club.GetClubMembers(clubId)
@@ -695,7 +695,7 @@ privilegeInfo = C_Club.GetClubPrivileges(clubId)
 |------|------|---------|-------------|
 | `privilegeInfo` | ClubPrivilegeInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local privilegeInfo = C_Club.GetClubPrivileges(clubId)
@@ -719,7 +719,7 @@ settings = C_Club.GetClubStreamNotificationSettings(clubId)
 |------|------|---------|-------------|
 | `settings` | ClubStreamNotificationSetting[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local settings = C_Club.GetClubStreamNotificationSettings(clubId)
@@ -743,7 +743,7 @@ errorCode = C_Club.GetCommunityNameResultText(result)
 |------|------|---------|-------------|
 | `errorCode` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local errorCode = C_Club.GetCommunityNameResultText(result)
@@ -761,7 +761,7 @@ guildClubId = C_Club.GetGuildClubId()
 |------|------|---------|-------------|
 | `guildClubId` | ClubId | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local guildClubId = C_Club.GetGuildClubId()
@@ -782,7 +782,7 @@ messageInfo, clubId, streamId, clubType = C_Club.GetInfoFromLastCommunityChatLin
 | `streamId` | ClubStreamId | no |  |
 | `clubType` | ClubType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local messageInfo, clubId, streamId, clubType = C_Club.GetInfoFromLastCommunityChatLine()
@@ -812,7 +812,7 @@ candidates = C_Club.GetInvitationCandidates([filter], [maxResults], [cursorPosit
 |------|------|---------|-------------|
 | `candidates` | ClubInvitationCandidateInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local candidates = C_Club.GetInvitationCandidates(clubId)
@@ -838,7 +838,7 @@ invitation = C_Club.GetInvitationInfo(clubId)
 |------|------|---------|-------------|
 | `invitation` | ClubSelfInvitationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invitation = C_Club.GetInvitationInfo(clubId)
@@ -864,7 +864,7 @@ invitations = C_Club.GetInvitationsForClub(clubId)
 |------|------|---------|-------------|
 | `invitations` | ClubInvitationInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invitations = C_Club.GetInvitationsForClub(clubId)
@@ -884,7 +884,7 @@ invitations = C_Club.GetInvitationsForSelf()
 |------|------|---------|-------------|
 | `invitations` | ClubSelfInvitationInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invitations = C_Club.GetInvitationsForSelf()
@@ -910,7 +910,7 @@ error, info, showError = C_Club.GetLastTicketResponse(ticket)
 | `info` | ClubInfo | yes |  |
 | `showError` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local error, info, showError = C_Club.GetLastTicketResponse("")
@@ -935,7 +935,7 @@ info = C_Club.GetMemberInfo(clubId, memberId)
 |------|------|---------|-------------|
 | `info` | ClubMemberInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Club.GetMemberInfo(clubId, memberId)
@@ -961,7 +961,7 @@ info = C_Club.GetMemberInfoForSelf(clubId)
 |------|------|---------|-------------|
 | `info` | ClubMemberInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Club.GetMemberInfoForSelf(clubId)
@@ -989,7 +989,7 @@ message = C_Club.GetMessageInfo(clubId, streamId, messageId)
 |------|------|---------|-------------|
 | `message` | ClubMessageInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local message = C_Club.GetMessageInfo(clubId, streamId, messageId)
@@ -1016,7 +1016,7 @@ ranges = C_Club.GetMessageRanges(clubId, streamId)
 |------|------|---------|-------------|
 | `ranges` | ClubMessageRange[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ranges = C_Club.GetMessageRanges(clubId, streamId)
@@ -1045,7 +1045,7 @@ messages = C_Club.GetMessagesBefore(clubId, streamId, newest, count)
 |------|------|---------|-------------|
 | `messages` | ClubMessageInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local messages = C_Club.GetMessagesBefore(clubId, streamId, newest, 0)
@@ -1074,7 +1074,7 @@ messages = C_Club.GetMessagesInRange(clubId, streamId, oldest, newest)
 |------|------|---------|-------------|
 | `messages` | ClubMessageInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local messages = C_Club.GetMessagesInRange(clubId, streamId, oldest, newest)
@@ -1099,7 +1099,7 @@ streamInfo = C_Club.GetStreamInfo(clubId, streamId)
 |------|------|---------|-------------|
 | `streamInfo` | ClubStreamInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local streamInfo = C_Club.GetStreamInfo(clubId, streamId)
@@ -1123,7 +1123,7 @@ streams = C_Club.GetStreams(clubId)
 |------|------|---------|-------------|
 | `streams` | ClubStreamInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local streams = C_Club.GetStreams(clubId)
@@ -1148,7 +1148,7 @@ lastReadTime = C_Club.GetStreamViewMarker(clubId, streamId)
 |------|------|---------|-------------|
 | `lastReadTime` | BigUInteger | yes | nil if stream view is at current |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lastReadTime = C_Club.GetStreamViewMarker(clubId, streamId)
@@ -1166,7 +1166,7 @@ clubs = C_Club.GetSubscribedClubs()
 |------|------|---------|-------------|
 | `clubs` | ClubInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clubs = C_Club.GetSubscribedClubs()
@@ -1192,7 +1192,7 @@ tickets = C_Club.GetTickets(clubId)
 |------|------|---------|-------------|
 | `tickets` | ClubTicketInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tickets = C_Club.GetTickets(clubId)
@@ -1216,7 +1216,7 @@ accountMuted = C_Club.IsAccountMuted(clubId)
 |------|------|---------|-------------|
 | `accountMuted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accountMuted = C_Club.IsAccountMuted(clubId)
@@ -1244,7 +1244,7 @@ isBeginningOfStream = C_Club.IsBeginningOfStream(clubId, streamId, messageId)
 |------|------|---------|-------------|
 | `isBeginningOfStream` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isBeginningOfStream = C_Club.IsBeginningOfStream(clubId, streamId, messageId)
@@ -1262,7 +1262,7 @@ clubsEnabled = C_Club.IsEnabled()
 |------|------|---------|-------------|
 | `clubsEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clubsEnabled = C_Club.IsEnabled()
@@ -1280,7 +1280,7 @@ restrictionReason = C_Club.IsRestricted()
 |------|------|---------|-------------|
 | `restrictionReason` | ClubRestrictionReason | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local restrictionReason = C_Club.IsRestricted()
@@ -1305,7 +1305,7 @@ subscribed = C_Club.IsSubscribedToStream(clubId, streamId)
 |------|------|---------|-------------|
 | `subscribed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local subscribed = C_Club.IsSubscribedToStream(clubId, streamId)
@@ -1326,7 +1326,7 @@ C_Club.KickMember(clubId, memberId)
 | `clubId` | ClubId | no |  |
 | `memberId` | ClubMemberOpaqueId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.KickMember(clubId, memberId)
@@ -1344,7 +1344,7 @@ C_Club.LeaveClub(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.LeaveClub(clubId)
@@ -1362,7 +1362,7 @@ C_Club.RedeemTicket(ticketId)
 |------|------|---------|-------------|
 | `ticketId` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.RedeemTicket("")
@@ -1382,7 +1382,7 @@ C_Club.RequestInvitationsForClub(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.RequestInvitationsForClub(clubId)
@@ -1411,7 +1411,7 @@ alreadyHasMessages = C_Club.RequestMoreMessagesBefore(clubId, streamId, [message
 |------|------|---------|-------------|
 | `alreadyHasMessages` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alreadyHasMessages = C_Club.RequestMoreMessagesBefore(clubId, streamId)
@@ -1429,7 +1429,7 @@ C_Club.RequestTicket(ticketId)
 |------|------|---------|-------------|
 | `ticketId` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.RequestTicket("")
@@ -1449,7 +1449,7 @@ C_Club.RequestTickets(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.RequestTickets(clubId)
@@ -1470,7 +1470,7 @@ C_Club.RevokeInvitation(clubId, memberId)
 | `clubId` | ClubId | no |  |
 | `memberId` | ClubMemberOpaqueId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.RevokeInvitation(clubId, memberId)
@@ -1489,7 +1489,7 @@ C_Club.SendBattleTagFriendRequest(guildClubId, memberId)
 | `guildClubId` | ClubId | no |  |
 | `memberId` | ClubMemberOpaqueId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SendBattleTagFriendRequest(guildClubId, memberId)
@@ -1508,7 +1508,7 @@ C_Club.SendCharacterInvitation(clubId, character)
 | `clubId` | ClubId | no |  |
 | `character` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SendCharacterInvitation(clubId, "")
@@ -1529,7 +1529,7 @@ C_Club.SendInvitation(clubId, memberId)
 | `clubId` | ClubId | no |  |
 | `memberId` | ClubMemberOpaqueId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SendInvitation(clubId, memberId)
@@ -1549,7 +1549,7 @@ C_Club.SendMessage(clubId, streamId, message)
 | `streamId` | ClubStreamId | no |  |
 | `message` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SendMessage(clubId, streamId, "")
@@ -1568,7 +1568,7 @@ C_Club.SendTitleFriendRequest(guildClubId, memberId)
 | `guildClubId` | ClubId | no |  |
 | `memberId` | ClubMemberOpaqueId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SendTitleFriendRequest(guildClubId, memberId)
@@ -1589,7 +1589,7 @@ C_Club.SetAutoAdvanceStreamViewMarker(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetAutoAdvanceStreamViewMarker(clubId, streamId)
@@ -1609,10 +1609,10 @@ C_Club.SetAvatarTexture(texture, avatarId, clubType)
 | `avatarId` | number | no |  |
 | `clubType` | ClubType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Club.SetAvatarTexture(texture, 0, clubType)
+C_Club.SetAvatarTexture(texture, 0, Enum.ClubType.BattleNet)
 ```
 
 ### C_Club.SetClubMemberNote
@@ -1631,7 +1631,7 @@ C_Club.SetClubMemberNote(clubId, memberId, note)
 | `memberId` | ClubMemberOpaqueId | no |  |
 | `note` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetClubMemberNote(clubId, memberId, "")
@@ -1651,7 +1651,7 @@ C_Club.SetClubPresenceSubscription(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetClubPresenceSubscription(clubId)
@@ -1670,7 +1670,7 @@ C_Club.SetClubStreamNotificationSettings(clubId, settings)
 | `clubId` | ClubId | no |  |
 | `settings` | ClubStreamNotificationSetting[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetClubStreamNotificationSettings(clubId, settings)
@@ -1688,7 +1688,7 @@ C_Club.SetCommunityID(communityID)
 |------|------|---------|-------------|
 | `communityID` | BigUInteger | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetCommunityID("player")
@@ -1707,7 +1707,7 @@ C_Club.SetFavorite(clubId, isFavorite)
 | `clubId` | ClubId | no |  |
 | `isFavorite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetFavorite(clubId, false)
@@ -1726,7 +1726,7 @@ C_Club.SetSocialQueueingEnabled(clubId, enabled)
 | `clubId` | ClubId | no |  |
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.SetSocialQueueingEnabled(clubId, false)
@@ -1750,10 +1750,10 @@ clubTypeIsAllowed = C_Club.ShouldAllowClubType(clubType)
 |------|------|---------|-------------|
 | `clubTypeIsAllowed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local clubTypeIsAllowed = C_Club.ShouldAllowClubType(clubType)
+local clubTypeIsAllowed = C_Club.ShouldAllowClubType(Enum.ClubType.BattleNet)
 ```
 
 ### C_Club.UnfocusAllStreams
@@ -1768,7 +1768,7 @@ C_Club.UnfocusAllStreams(unsubscribe)
 |------|------|---------|-------------|
 | `unsubscribe` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.UnfocusAllStreams(false)
@@ -1786,7 +1786,7 @@ C_Club.UnfocusMembers(clubId)
 |------|------|---------|-------------|
 | `clubId` | ClubId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.UnfocusMembers(clubId)
@@ -1805,7 +1805,7 @@ C_Club.UnfocusStream(clubId, streamId)
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Club.UnfocusStream(clubId, streamId)
@@ -1831,10 +1831,10 @@ result = C_Club.ValidateText(clubType, text, clubFieldType)
 |------|------|---------|-------------|
 | `result` | ValidateNameResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_Club.ValidateText(clubType, "", clubFieldType)
+local result = C_Club.ValidateText(Enum.ClubType.BattleNet, "", Enum.ClubFieldType.ClubName)
 ```
 
 ## Events

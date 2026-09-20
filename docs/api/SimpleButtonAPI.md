@@ -12,7 +12,7 @@
 ClearDisabledTexture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearDisabledTexture()
@@ -24,7 +24,7 @@ ClearDisabledTexture()
 ClearHighlightTexture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearHighlightTexture()
@@ -36,7 +36,7 @@ ClearHighlightTexture()
 ClearNormalTexture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearNormalTexture()
@@ -48,7 +48,7 @@ ClearNormalTexture()
 ClearPushedTexture()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearPushedTexture()
@@ -67,7 +67,7 @@ Click(button, isDown)
 | `button` | cstring | no | (default: LeftButton) |
 | `isDown` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Click("", false)
@@ -79,7 +79,7 @@ Click("", false)
 Disable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Disable()
@@ -91,7 +91,7 @@ Disable()
 Enable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Enable()
@@ -109,7 +109,7 @@ buttonState = GetButtonState()
 |------|------|---------|-------------|
 | `buttonState` | SimpleButtonStateToken | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buttonState = GetButtonState()
@@ -127,7 +127,7 @@ font = GetDisabledFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetDisabledFontObject()
@@ -145,7 +145,7 @@ texture = GetDisabledTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetDisabledTexture()
@@ -163,7 +163,7 @@ fontString = GetFontString()
 |------|------|---------|-------------|
 | `fontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontString = GetFontString()
@@ -181,7 +181,7 @@ font = GetHighlightFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetHighlightFontObject()
@@ -199,7 +199,7 @@ texture = GetHighlightTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetHighlightTexture()
@@ -217,7 +217,7 @@ motionScriptsWhileDisabled = GetMotionScriptsWhileDisabled()
 |------|------|---------|-------------|
 | `motionScriptsWhileDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local motionScriptsWhileDisabled = GetMotionScriptsWhileDisabled()
@@ -235,7 +235,7 @@ font = GetNormalFontObject()
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local font = GetNormalFontObject()
@@ -253,7 +253,7 @@ texture = GetNormalTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetNormalTexture()
@@ -272,7 +272,7 @@ offsetX, offsetY = GetPushedTextOffset()
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetX, offsetY = GetPushedTextOffset()
@@ -290,7 +290,7 @@ texture = GetPushedTexture()
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local texture = GetPushedTexture()
@@ -308,7 +308,7 @@ text = GetText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetText()
@@ -326,7 +326,7 @@ height = GetTextHeight()
 |------|------|---------|-------------|
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local height = GetTextHeight()
@@ -344,7 +344,7 @@ width = GetTextWidth()
 |------|------|---------|-------------|
 | `width` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width = GetTextWidth()
@@ -362,7 +362,7 @@ isEnabled = IsEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = IsEnabled()
@@ -380,7 +380,7 @@ RegisterForClicks(buttons)
 |------|------|---------|-------------|
 | `buttons` | ClickButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterForClicks(buttons)
@@ -398,7 +398,7 @@ RegisterForMouse(buttons)
 |------|------|---------|-------------|
 | `buttons` | ClickButton | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RegisterForMouse(buttons)
@@ -417,7 +417,7 @@ SetButtonState(buttonState, lock)
 | `buttonState` | SimpleButtonStateToken | no |  |
 | `lock` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetButtonState(buttonState, false)
@@ -435,7 +435,7 @@ SetDisabledAtlas(atlas)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDisabledAtlas(atlas)
@@ -453,7 +453,7 @@ SetDisabledFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDisabledFontObject(font)
@@ -471,7 +471,7 @@ SetDisabledTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDisabledTexture(asset)
@@ -489,7 +489,7 @@ SetEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEnabled(false)
@@ -507,7 +507,7 @@ SetFontString(fontString)
 |------|------|---------|-------------|
 | `fontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontString(fontString)
@@ -525,7 +525,7 @@ SetFormattedText(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFormattedText("")
@@ -544,7 +544,7 @@ SetHighlightAtlas(atlas, [blendMode])
 | `atlas` | textureAtlas | no |  |
 | `blendMode` | BlendMode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHighlightAtlas(atlas)
@@ -562,7 +562,7 @@ SetHighlightFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHighlightFontObject(font)
@@ -581,7 +581,7 @@ SetHighlightTexture(asset, [blendMode])
 | `asset` | TextureAsset | no |  |
 | `blendMode` | BlendMode | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetHighlightTexture(asset)
@@ -599,7 +599,7 @@ SetMotionScriptsWhileDisabled(motionScriptsWhileDisabled)
 |------|------|---------|-------------|
 | `motionScriptsWhileDisabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMotionScriptsWhileDisabled(false)
@@ -617,7 +617,7 @@ SetNormalAtlas(atlas)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNormalAtlas(atlas)
@@ -635,7 +635,7 @@ SetNormalFontObject(font)
 |------|------|---------|-------------|
 | `font` | SimpleFont | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNormalFontObject(font)
@@ -653,7 +653,7 @@ SetNormalTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetNormalTexture(asset)
@@ -671,7 +671,7 @@ SetPushedAtlas(atlas)
 |------|------|---------|-------------|
 | `atlas` | textureAtlas | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPushedAtlas(atlas)
@@ -690,10 +690,10 @@ SetPushedTextOffset(offsetX, offsetY)
 | `offsetX` | uiUnit | no |  |
 | `offsetY` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetPushedTextOffset(offsetX, offsetY)
+SetPushedTextOffset(1, 1)
 ```
 
 ### SimpleButtonAPI.SetPushedTexture
@@ -708,7 +708,7 @@ SetPushedTexture(asset)
 |------|------|---------|-------------|
 | `asset` | TextureAsset | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPushedTexture(asset)
@@ -726,7 +726,7 @@ SetText(text)
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetText("")

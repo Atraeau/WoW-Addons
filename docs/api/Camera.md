@@ -20,7 +20,7 @@ fieldOfViewDegreesDefault, fieldOfViewDegreesPlayerMin, fieldOfViewDegreesPlayer
 | `fieldOfViewDegreesPlayerMin` | number | no |  |
 | `fieldOfViewDegreesPlayerMax` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fieldOfViewDegreesDefault, fieldOfViewDegreesPlayerMin, fieldOfViewDegreesPlayerMax = GetCameraFOVDefaults()
@@ -53,7 +53,7 @@ posX, posY, posZ, lookAtX, lookAtY, lookAtZ, animID, animVariation, animFrame, u
 | `animFrame` | number | no |  |
 | `useModelCenter` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local posX, posY, posZ, lookAtX, lookAtY, lookAtZ, animID, animVariation, animFrame, useModelCenter = GetUICameraInfo(0)

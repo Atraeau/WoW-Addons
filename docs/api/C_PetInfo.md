@@ -24,7 +24,7 @@ canEat = C_PetInfo.CanPetEatItem(itemID)
 |------|------|---------|-------------|
 | `canEat` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEat = C_PetInfo.CanPetEatItem(6948)
@@ -42,7 +42,7 @@ foodTypes = C_PetInfo.GetPetFoodTypes()
 |------|------|---------|-------------|
 | `foodTypes` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local foodTypes = C_PetInfo.GetPetFoodTypes()
@@ -62,7 +62,7 @@ happiness, damagePercentage, loyaltyRate = C_PetInfo.GetPetHappiness()
 | `damagePercentage` | number | no |  |
 | `loyaltyRate` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local happiness, damagePercentage, loyaltyRate = C_PetInfo.GetPetHappiness()
@@ -80,7 +80,7 @@ loyaltyName = C_PetInfo.GetPetLoyalty()
 |------|------|---------|-------------|
 | `loyaltyName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local loyaltyName = C_PetInfo.GetPetLoyalty()
@@ -98,7 +98,7 @@ talentTreeName = C_PetInfo.GetPetTalentTree()
 |------|------|---------|-------------|
 | `talentTreeName` | stringView | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local talentTreeName = C_PetInfo.GetPetTalentTree()
@@ -122,7 +122,7 @@ petTamers = C_PetInfo.GetPetTamersForMap(uiMapID)
 |------|------|---------|-------------|
 | `petTamers` | PetTamerMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local petTamers = C_PetInfo.GetPetTamersForMap(0)
@@ -141,7 +141,7 @@ totalPoints, usedPoints = C_PetInfo.GetPetTrainingPoints()
 | `totalPoints` | number | no |  |
 | `usedPoints` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalPoints, usedPoints = C_PetInfo.GetPetTrainingPoints()
@@ -159,7 +159,7 @@ modelSceneID = C_PetInfo.GetPetUIModelSceneID()
 |------|------|---------|-------------|
 | `modelSceneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelSceneID = C_PetInfo.GetPetUIModelSceneID()
@@ -183,7 +183,7 @@ spellID = C_PetInfo.GetSpellForPetAction(actionID)
 |------|------|---------|-------------|
 | `spellID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_PetInfo.GetSpellForPetAction(0)
@@ -207,7 +207,7 @@ isPassive = C_PetInfo.IsPetActionPassive(actionID)
 |------|------|---------|-------------|
 | `isPassive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPassive = C_PetInfo.IsPetActionPassive(0)
@@ -225,7 +225,7 @@ C_PetInfo.PetAbandon([petNumber])
 |------|------|---------|-------------|
 | `petNumber` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetInfo.PetAbandon()
@@ -237,7 +237,7 @@ C_PetInfo.PetAbandon()
 C_PetInfo.PetAssistMode()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetInfo.PetAssistMode()
@@ -257,7 +257,7 @@ C_PetInfo.PetRename(name, [petNumber], [declensions])
 | `petNumber` | number | yes |  |
 | `declensions` | cstring[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_PetInfo.PetRename("")

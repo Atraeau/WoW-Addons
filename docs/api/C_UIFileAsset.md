@@ -26,7 +26,7 @@ assetFileID = C_UIFileAsset.GetFileID(asset)
 |------|------|---------|-------------|
 | `assetFileID` | fileID | yes | The file ID corresponding to the given asset. If the asset is already a file ID, it is returned unchanged; otherwise returns nil if the file path is not known to the client. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local assetFileID = C_UIFileAsset.GetFileID(asset)
@@ -52,7 +52,7 @@ isValid = C_UIFileAsset.IsKnownFile(asset)
 |------|------|---------|-------------|
 | `isValid` | bool | no | True if the asset is shipped with the client or refers to a known loose file. Existence or openability of loose files is not verified. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_UIFileAsset.IsKnownFile(asset)
@@ -78,7 +78,7 @@ isLooseFile = C_UIFileAsset.IsLooseFile(asset)
 |------|------|---------|-------------|
 | `isLooseFile` | bool | no | True if the asset refers to a loose file known to the client. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLooseFile = C_UIFileAsset.IsLooseFile(asset)

@@ -26,7 +26,7 @@ canApproximate = CanApproximate(seconds)
 |------|------|---------|-------------|
 | `canApproximate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canApproximate = CanApproximate(seconds)
@@ -46,7 +46,7 @@ canRound = CanRoundUpIntervals()
 |------|------|---------|-------------|
 | `canRound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canRound = CanRoundUpIntervals()
@@ -66,7 +66,7 @@ canRound = CanRoundUpLastUnit()
 |------|------|---------|-------------|
 | `canRound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canRound = CanRoundUpLastUnit()
@@ -92,7 +92,7 @@ count = EvaluateDesiredUnitCount(seconds)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = EvaluateDesiredUnitCount(seconds)
@@ -118,7 +118,7 @@ interval = EvaluateMaxInterval(seconds)
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interval = EvaluateMaxInterval(seconds)
@@ -144,7 +144,7 @@ interval = EvaluateMinInterval(seconds)
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interval = EvaluateMinInterval(seconds)
@@ -171,7 +171,7 @@ formattedSeconds = Format(seconds, [abbreviation])
 |------|------|---------|-------------|
 | `formattedSeconds` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formattedSeconds = Format(seconds)
@@ -197,7 +197,7 @@ formattedSeconds = FormatZero([abbreviation])
 |------|------|---------|-------------|
 | `formattedSeconds` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formattedSeconds = FormatZero()
@@ -217,7 +217,7 @@ approximationSeconds = GetApproximationSeconds()
 |------|------|---------|-------------|
 | `approximationSeconds` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local approximationSeconds = GetApproximationSeconds()
@@ -237,7 +237,7 @@ convert = GetConvertToLower()
 |------|------|---------|-------------|
 | `convert` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local convert = GetConvertToLower()
@@ -257,7 +257,7 @@ abbreviation = GetDefaultAbbreviation()
 |------|------|---------|-------------|
 | `abbreviation` | SecondsFormatterAbbreviation | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local abbreviation = GetDefaultAbbreviation()
@@ -277,7 +277,7 @@ count = GetDesiredUnitCount()
 |------|------|---------|-------------|
 | `count` | number | yes | Nil if configured to use a curve. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local count = GetDesiredUnitCount()
@@ -297,7 +297,7 @@ curve = GetDesiredUnitCountCurve()
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | yes | Nil if configured to static unit count. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = GetDesiredUnitCountCurve()
@@ -317,7 +317,7 @@ interval = GetMaxInterval()
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | yes | Nil if configured to use a curve. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interval = GetMaxInterval()
@@ -337,7 +337,7 @@ curve = GetMaxIntervalCurve()
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | yes | Nil if configured to static interval band. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = GetMaxIntervalCurve()
@@ -357,7 +357,7 @@ threshold = GetMillisecondsThreshold()
 |------|------|---------|-------------|
 | `threshold` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local threshold = GetMillisecondsThreshold()
@@ -377,7 +377,7 @@ interval = GetMinInterval()
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | yes | Nil if configured to use a curve. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local interval = GetMinInterval()
@@ -397,7 +397,7 @@ curve = GetMinIntervalCurve()
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | yes | Nil if configured to static interval band. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve = GetMinIntervalCurve()
@@ -417,7 +417,7 @@ rounding = GetRounding()
 |------|------|---------|-------------|
 | `rounding` | SecondsFormatterRounding | no | The configured rounding mode. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rounding = GetRounding()
@@ -437,7 +437,7 @@ strip = GetStripIntervalWhitespace()
 |------|------|---------|-------------|
 | `strip` | SecondsFormatterIntervalWhitespace | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local strip = GetStripIntervalWhitespace()
@@ -451,7 +451,7 @@ Resets all stored configuration of the formatter.
 Reset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Reset()
@@ -471,7 +471,7 @@ SetApproximationSeconds(seconds)
 |------|------|---------|-------------|
 | `seconds` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetApproximationSeconds(seconds)
@@ -491,7 +491,7 @@ SetCanRoundUpIntervals(canRound)
 |------|------|---------|-------------|
 | `canRound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCanRoundUpIntervals(false)
@@ -511,7 +511,7 @@ SetCanRoundUpLastUnit(canRound)
 |------|------|---------|-------------|
 | `canRound` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCanRoundUpLastUnit(false)
@@ -531,7 +531,7 @@ SetConvertToLower(convert)
 |------|------|---------|-------------|
 | `convert` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetConvertToLower(false)
@@ -551,7 +551,7 @@ SetDefaultAbbreviation(abbreviation)
 |------|------|---------|-------------|
 | `abbreviation` | SecondsFormatterAbbreviation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDefaultAbbreviation(abbreviation)
@@ -571,7 +571,7 @@ SetDesiredUnitCount(count)
 |------|------|---------|-------------|
 | `count` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesiredUnitCount(0)
@@ -591,7 +591,7 @@ SetDesiredUnitCountCurve(curve)
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesiredUnitCountCurve(curve)
@@ -611,7 +611,7 @@ SetMaxInterval(interval)
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxInterval(interval)
@@ -631,7 +631,7 @@ SetMaxIntervalCurve(curve)
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMaxIntervalCurve(curve)
@@ -651,7 +651,7 @@ SetMillisecondsThreshold(threshold)
 |------|------|---------|-------------|
 | `threshold` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMillisecondsThreshold(threshold)
@@ -671,7 +671,7 @@ SetMinInterval(interval)
 |------|------|---------|-------------|
 | `interval` | SecondsFormatterInterval | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinInterval(interval)
@@ -691,7 +691,7 @@ SetMinIntervalCurve(curve)
 |------|------|---------|-------------|
 | `curve` | LuaCurveObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetMinIntervalCurve(curve)
@@ -711,7 +711,7 @@ SetRounding(rounding)
 |------|------|---------|-------------|
 | `rounding` | SecondsFormatterRounding | no | The rounding mode to use. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRounding(rounding)
@@ -731,7 +731,7 @@ SetStripIntervalWhitespace(strip)
 |------|------|---------|-------------|
 | `strip` | SecondsFormatterIntervalWhitespace | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetStripIntervalWhitespace(strip)

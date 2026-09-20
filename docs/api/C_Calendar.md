@@ -12,7 +12,7 @@
 C_Calendar.AddEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.AddEvent()
@@ -30,7 +30,7 @@ ready = C_Calendar.AreNamesReady()
 |------|------|---------|-------------|
 | `ready` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local ready = C_Calendar.AreNamesReady()
@@ -48,7 +48,7 @@ canAddEvent = C_Calendar.CanAddEvent()
 |------|------|---------|-------------|
 | `canAddEvent` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canAddEvent = C_Calendar.CanAddEvent()
@@ -66,7 +66,7 @@ canSendInvite = C_Calendar.CanSendInvite()
 |------|------|---------|-------------|
 | `canSendInvite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSendInvite = C_Calendar.CanSendInvite()
@@ -78,7 +78,7 @@ local canSendInvite = C_Calendar.CanSendInvite()
 C_Calendar.CloseEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.CloseEvent()
@@ -104,10 +104,10 @@ canComplain = C_Calendar.ContextMenuEventCanComplain(offsetMonths, monthDay, eve
 |------|------|---------|-------------|
 | `canComplain` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canComplain = C_Calendar.ContextMenuEventCanComplain(0, monthDay, 1)
+local canComplain = C_Calendar.ContextMenuEventCanComplain(1, 1, 1)
 ```
 
 ### C_Calendar.ContextMenuEventCanEdit
@@ -130,10 +130,10 @@ canEdit = C_Calendar.ContextMenuEventCanEdit(offsetMonths, monthDay, eventIndex)
 |------|------|---------|-------------|
 | `canEdit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canEdit = C_Calendar.ContextMenuEventCanEdit(0, monthDay, 1)
+local canEdit = C_Calendar.ContextMenuEventCanEdit(1, 1, 1)
 ```
 
 ### C_Calendar.ContextMenuEventCanRemove
@@ -156,10 +156,10 @@ canRemove = C_Calendar.ContextMenuEventCanRemove(offsetMonths, monthDay, eventIn
 |------|------|---------|-------------|
 | `canRemove` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canRemove = C_Calendar.ContextMenuEventCanRemove(0, monthDay, 1)
+local canRemove = C_Calendar.ContextMenuEventCanRemove(1, 1, 1)
 ```
 
 ### C_Calendar.ContextMenuEventClipboard
@@ -174,7 +174,7 @@ exists = C_Calendar.ContextMenuEventClipboard()
 |------|------|---------|-------------|
 | `exists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local exists = C_Calendar.ContextMenuEventClipboard()
@@ -186,7 +186,7 @@ local exists = C_Calendar.ContextMenuEventClipboard()
 C_Calendar.ContextMenuEventCopy()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuEventCopy()
@@ -204,7 +204,7 @@ calendarType = C_Calendar.ContextMenuEventGetCalendarType()
 |------|------|---------|-------------|
 | `calendarType` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local calendarType = C_Calendar.ContextMenuEventGetCalendarType()
@@ -223,10 +223,10 @@ C_Calendar.ContextMenuEventPaste(offsetMonths, monthDay)
 | `offsetMonths` | number | no |  |
 | `monthDay` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.ContextMenuEventPaste(0, monthDay)
+C_Calendar.ContextMenuEventPaste(1, 1)
 ```
 
 ### C_Calendar.ContextMenuEventRemove
@@ -235,7 +235,7 @@ C_Calendar.ContextMenuEventPaste(0, monthDay)
 C_Calendar.ContextMenuEventRemove()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuEventRemove()
@@ -247,7 +247,7 @@ C_Calendar.ContextMenuEventRemove()
 C_Calendar.ContextMenuEventSignUp()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuEventSignUp()
@@ -265,7 +265,7 @@ info = C_Calendar.ContextMenuGetEventIndex()
 |------|------|---------|-------------|
 | `info` | CalendarEventIndexInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.ContextMenuGetEventIndex()
@@ -277,7 +277,7 @@ local info = C_Calendar.ContextMenuGetEventIndex()
 C_Calendar.ContextMenuInviteAvailable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuInviteAvailable()
@@ -289,7 +289,7 @@ C_Calendar.ContextMenuInviteAvailable()
 C_Calendar.ContextMenuInviteDecline()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuInviteDecline()
@@ -301,7 +301,7 @@ C_Calendar.ContextMenuInviteDecline()
 C_Calendar.ContextMenuInviteRemove()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuInviteRemove()
@@ -313,7 +313,7 @@ C_Calendar.ContextMenuInviteRemove()
 C_Calendar.ContextMenuInviteTentative()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.ContextMenuInviteTentative()
@@ -333,10 +333,10 @@ C_Calendar.ContextMenuSelectEvent(offsetMonths, monthDay, eventIndex)
 | `monthDay` | luaIndex | no |  |
 | `eventIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.ContextMenuSelectEvent(0, monthDay, 1)
+C_Calendar.ContextMenuSelectEvent(1, 1, 1)
 ```
 
 ### C_Calendar.CreateCommunitySignUpEvent
@@ -345,7 +345,7 @@ C_Calendar.ContextMenuSelectEvent(0, monthDay, 1)
 C_Calendar.CreateCommunitySignUpEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.CreateCommunitySignUpEvent()
@@ -357,7 +357,7 @@ C_Calendar.CreateCommunitySignUpEvent()
 C_Calendar.CreateGuildAnnouncementEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.CreateGuildAnnouncementEvent()
@@ -369,7 +369,7 @@ C_Calendar.CreateGuildAnnouncementEvent()
 C_Calendar.CreateGuildSignUpEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.CreateGuildSignUpEvent()
@@ -381,7 +381,7 @@ C_Calendar.CreateGuildSignUpEvent()
 C_Calendar.CreatePlayerEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.CreatePlayerEvent()
@@ -393,7 +393,7 @@ C_Calendar.CreatePlayerEvent()
 C_Calendar.EventAvailable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventAvailable()
@@ -411,7 +411,7 @@ canEdit = C_Calendar.EventCanEdit()
 |------|------|---------|-------------|
 | `canEdit` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEdit = C_Calendar.EventCanEdit()
@@ -423,7 +423,7 @@ local canEdit = C_Calendar.EventCanEdit()
 C_Calendar.EventClearAutoApprove()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventClearAutoApprove()
@@ -435,7 +435,7 @@ C_Calendar.EventClearAutoApprove()
 C_Calendar.EventClearLocked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventClearLocked()
@@ -453,7 +453,7 @@ C_Calendar.EventClearModerator(inviteIndex)
 |------|------|---------|-------------|
 | `inviteIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventClearModerator(1)
@@ -465,7 +465,7 @@ C_Calendar.EventClearModerator(1)
 C_Calendar.EventDecline()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventDecline()
@@ -483,7 +483,7 @@ calendarType = C_Calendar.EventGetCalendarType()
 |------|------|---------|-------------|
 | `calendarType` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local calendarType = C_Calendar.EventGetCalendarType()
@@ -501,7 +501,7 @@ info = C_Calendar.EventGetClubId()
 |------|------|---------|-------------|
 | `info` | ClubId | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.EventGetClubId()
@@ -525,7 +525,7 @@ info = C_Calendar.EventGetInvite(eventIndex)
 |------|------|---------|-------------|
 | `info` | CalendarEventInviteInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.EventGetInvite(1)
@@ -549,7 +549,7 @@ time = C_Calendar.EventGetInviteResponseTime(eventIndex)
 |------|------|---------|-------------|
 | `time` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local time = C_Calendar.EventGetInviteResponseTime(1)
@@ -568,7 +568,7 @@ criterion, reverse = C_Calendar.EventGetInviteSortCriterion()
 | `criterion` | string | no |  |
 | `reverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local criterion, reverse = C_Calendar.EventGetInviteSortCriterion()
@@ -586,7 +586,7 @@ inviteIndex = C_Calendar.EventGetSelectedInvite()
 |------|------|---------|-------------|
 | `inviteIndex` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inviteIndex = C_Calendar.EventGetSelectedInvite()
@@ -610,7 +610,7 @@ options = C_Calendar.EventGetStatusOptions(eventIndex)
 |------|------|---------|-------------|
 | `options` | CalendarEventStatusOption[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local options = C_Calendar.EventGetStatusOptions(1)
@@ -634,7 +634,7 @@ textures = C_Calendar.EventGetTextures(eventType)
 |------|------|---------|-------------|
 | `textures` | CalendarEventTextureInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textures = C_Calendar.EventGetTextures(eventType)
@@ -652,7 +652,7 @@ types = C_Calendar.EventGetTypes()
 |------|------|---------|-------------|
 | `types` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local types = C_Calendar.EventGetTypes()
@@ -670,7 +670,7 @@ infos = C_Calendar.EventGetTypesDisplayOrdered()
 |------|------|---------|-------------|
 | `infos` | CalendarEventTypeDisplayInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infos = C_Calendar.EventGetTypesDisplayOrdered()
@@ -688,7 +688,7 @@ hasPendingInvite = C_Calendar.EventHasPendingInvite()
 |------|------|---------|-------------|
 | `hasPendingInvite` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPendingInvite = C_Calendar.EventHasPendingInvite()
@@ -706,7 +706,7 @@ haveSettingsChanged = C_Calendar.EventHaveSettingsChanged()
 |------|------|---------|-------------|
 | `haveSettingsChanged` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local haveSettingsChanged = C_Calendar.EventHaveSettingsChanged()
@@ -724,7 +724,7 @@ C_Calendar.EventInvite(name)
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventInvite("")
@@ -742,7 +742,7 @@ C_Calendar.EventRemoveInvite(inviteIndex)
 |------|------|---------|-------------|
 | `inviteIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventRemoveInvite(1)
@@ -760,10 +760,10 @@ C_Calendar.EventRemoveInviteByGuid(guid)
 |------|------|---------|-------------|
 | `guid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.EventRemoveInviteByGuid("Creature-0-0000-0-0-0-0")
+C_Calendar.EventRemoveInviteByGuid(UnitGUID("player"))
 ```
 
 ### C_Calendar.EventSelectInvite
@@ -778,7 +778,7 @@ C_Calendar.EventSelectInvite(inviteIndex)
 |------|------|---------|-------------|
 | `inviteIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSelectInvite(1)
@@ -790,7 +790,7 @@ C_Calendar.EventSelectInvite(1)
 C_Calendar.EventSetAutoApprove()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetAutoApprove()
@@ -808,7 +808,7 @@ C_Calendar.EventSetClubId([clubId])
 |------|------|---------|-------------|
 | `clubId` | ClubId | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetClubId()
@@ -828,10 +828,10 @@ C_Calendar.EventSetDate(month, monthDay, year)
 | `monthDay` | luaIndex | no |  |
 | `year` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.EventSetDate(month, monthDay, 0)
+C_Calendar.EventSetDate(1, 1, 0)
 ```
 
 ### C_Calendar.EventSetDescription
@@ -846,7 +846,7 @@ C_Calendar.EventSetDescription(description)
 |------|------|---------|-------------|
 | `description` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetDescription("")
@@ -865,7 +865,7 @@ C_Calendar.EventSetInviteStatus(eventIndex, status)
 | `eventIndex` | luaIndex | no |  |
 | `status` | CalendarStatus | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetInviteStatus(1, status)
@@ -877,7 +877,7 @@ C_Calendar.EventSetInviteStatus(1, status)
 C_Calendar.EventSetLocked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetLocked()
@@ -895,7 +895,7 @@ C_Calendar.EventSetModerator(inviteIndex)
 |------|------|---------|-------------|
 | `inviteIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetModerator(1)
@@ -913,7 +913,7 @@ C_Calendar.EventSetTextureID(textureIndex)
 |------|------|---------|-------------|
 | `textureIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetTextureID(1)
@@ -932,7 +932,7 @@ C_Calendar.EventSetTime(hour, minute)
 | `hour` | number | no |  |
 | `minute` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetTime(0, 0)
@@ -950,7 +950,7 @@ C_Calendar.EventSetTitle(title)
 |------|------|---------|-------------|
 | `title` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetTitle("")
@@ -968,7 +968,7 @@ C_Calendar.EventSetType(typeIndex)
 |------|------|---------|-------------|
 | `typeIndex` | CalendarEventType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSetType(1)
@@ -980,7 +980,7 @@ C_Calendar.EventSetType(1)
 C_Calendar.EventSignUp()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSignUp()
@@ -999,7 +999,7 @@ C_Calendar.EventSortInvites(criterion, reverse)
 | `criterion` | cstring | no |  |
 | `reverse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventSortInvites("", false)
@@ -1011,7 +1011,7 @@ C_Calendar.EventSortInvites("", false)
 C_Calendar.EventTentative()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.EventTentative()
@@ -1037,7 +1037,7 @@ events = C_Calendar.GetClubCalendarEvents(clubId, startTime, endTime)
 |------|------|---------|-------------|
 | `events` | CalendarDayEvent[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local events = C_Calendar.GetClubCalendarEvents(clubId, startTime, endTime)
@@ -1063,10 +1063,10 @@ event = C_Calendar.GetDayEvent(monthOffset, monthDay, index)
 |------|------|---------|-------------|
 | `event` | CalendarDayEvent | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local event = C_Calendar.GetDayEvent(0, monthDay, 1)
+local event = C_Calendar.GetDayEvent(1, 1, 1)
 ```
 
 ### C_Calendar.GetDefaultGuildFilter
@@ -1081,7 +1081,7 @@ info = C_Calendar.GetDefaultGuildFilter()
 |------|------|---------|-------------|
 | `info` | CalendarGuildFilterInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.GetDefaultGuildFilter()
@@ -1099,7 +1099,7 @@ info = C_Calendar.GetEventIndex()
 |------|------|---------|-------------|
 | `info` | CalendarEventIndexInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.GetEventIndex()
@@ -1125,7 +1125,7 @@ eventIndexInfo = C_Calendar.GetEventIndexInfo(eventID, [monthOffset], [monthDay]
 |------|------|---------|-------------|
 | `eventIndexInfo` | CalendarEventIndexInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local eventIndexInfo = C_Calendar.GetEventIndexInfo(eventID)
@@ -1143,7 +1143,7 @@ info = C_Calendar.GetEventInfo()
 |------|------|---------|-------------|
 | `info` | CalendarEventInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.GetEventInfo()
@@ -1168,10 +1168,10 @@ firstPendingInvite = C_Calendar.GetFirstPendingInvite(offsetMonths, monthDay)
 |------|------|---------|-------------|
 | `firstPendingInvite` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local firstPendingInvite = C_Calendar.GetFirstPendingInvite(0, monthDay)
+local firstPendingInvite = C_Calendar.GetFirstPendingInvite(1, 1)
 ```
 
 ### C_Calendar.GetGuildEventInfo
@@ -1192,7 +1192,7 @@ info = C_Calendar.GetGuildEventInfo(index)
 |------|------|---------|-------------|
 | `info` | CalendarGuildEventInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.GetGuildEventInfo(1)
@@ -1216,7 +1216,7 @@ info = C_Calendar.GetGuildEventSelectionInfo(index)
 |------|------|---------|-------------|
 | `info` | CalendarEventIndexInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Calendar.GetGuildEventSelectionInfo(1)
@@ -1242,10 +1242,10 @@ event = C_Calendar.GetHolidayInfo(monthOffset, monthDay, index)
 |------|------|---------|-------------|
 | `event` | CalendarHolidayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local event = C_Calendar.GetHolidayInfo(0, monthDay, 1)
+local event = C_Calendar.GetHolidayInfo(1, 1, 1)
 ```
 
 ### C_Calendar.GetMaxCreateDate
@@ -1260,7 +1260,7 @@ maxCreateDate = C_Calendar.GetMaxCreateDate()
 |------|------|---------|-------------|
 | `maxCreateDate` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxCreateDate = C_Calendar.GetMaxCreateDate()
@@ -1278,7 +1278,7 @@ minDate = C_Calendar.GetMinDate()
 |------|------|---------|-------------|
 | `minDate` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minDate = C_Calendar.GetMinDate()
@@ -1302,10 +1302,10 @@ monthInfo = C_Calendar.GetMonthInfo(offsetMonths)
 |------|------|---------|-------------|
 | `monthInfo` | CalendarMonthInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local monthInfo = C_Calendar.GetMonthInfo(0)
+local monthInfo = C_Calendar.GetMonthInfo(1)
 ```
 
 ### C_Calendar.GetNextClubId
@@ -1320,7 +1320,7 @@ clubId = C_Calendar.GetNextClubId()
 |------|------|---------|-------------|
 | `clubId` | ClubId | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clubId = C_Calendar.GetNextClubId()
@@ -1345,10 +1345,10 @@ numDayEvents = C_Calendar.GetNumDayEvents(offsetMonths, monthDay)
 |------|------|---------|-------------|
 | `numDayEvents` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local numDayEvents = C_Calendar.GetNumDayEvents(0, monthDay)
+local numDayEvents = C_Calendar.GetNumDayEvents(1, 1)
 ```
 
 ### C_Calendar.GetNumGuildEvents
@@ -1363,7 +1363,7 @@ numGuildEvents = C_Calendar.GetNumGuildEvents()
 |------|------|---------|-------------|
 | `numGuildEvents` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numGuildEvents = C_Calendar.GetNumGuildEvents()
@@ -1381,7 +1381,7 @@ num = C_Calendar.GetNumInvites()
 |------|------|---------|-------------|
 | `num` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local num = C_Calendar.GetNumInvites()
@@ -1399,7 +1399,7 @@ num = C_Calendar.GetNumPendingInvites()
 |------|------|---------|-------------|
 | `num` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local num = C_Calendar.GetNumPendingInvites()
@@ -1425,10 +1425,10 @@ info = C_Calendar.GetRaidInfo(offsetMonths, monthDay, eventIndex)
 |------|------|---------|-------------|
 | `info` | CalendarRaidInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local info = C_Calendar.GetRaidInfo(0, monthDay, 1)
+local info = C_Calendar.GetRaidInfo(1, 1, 1)
 ```
 
 ### C_Calendar.IsActionPending
@@ -1443,7 +1443,7 @@ actionPending = C_Calendar.IsActionPending()
 |------|------|---------|-------------|
 | `actionPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local actionPending = C_Calendar.IsActionPending()
@@ -1461,7 +1461,7 @@ isOpen = C_Calendar.IsEventOpen()
 |------|------|---------|-------------|
 | `isOpen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOpen = C_Calendar.IsEventOpen()
@@ -1482,7 +1482,7 @@ C_Calendar.MassInviteCommunity(clubId, minLevel, maxLevel, [maxRankOrder])
 | `maxLevel` | number | no |  |
 | `maxRankOrder` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.MassInviteCommunity(clubId, 0, 0)
@@ -1502,7 +1502,7 @@ C_Calendar.MassInviteGuild(minLevel, maxLevel, maxRankOrder)
 | `maxLevel` | number | no |  |
 | `maxRankOrder` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.MassInviteGuild(0, 0, 1)
@@ -1514,7 +1514,7 @@ C_Calendar.MassInviteGuild(0, 0, 1)
 C_Calendar.OpenCalendar()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.OpenCalendar()
@@ -1540,10 +1540,10 @@ success = C_Calendar.OpenEvent(offsetMonths, monthDay, index)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local success = C_Calendar.OpenEvent(0, monthDay, 1)
+local success = C_Calendar.OpenEvent(1, 1, 1)
 ```
 
 ### C_Calendar.RemoveEvent
@@ -1552,7 +1552,7 @@ local success = C_Calendar.OpenEvent(0, monthDay, 1)
 C_Calendar.RemoveEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.RemoveEvent()
@@ -1571,10 +1571,10 @@ C_Calendar.SetAbsMonth(month, year)
 | `month` | luaIndex | no |  |
 | `year` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.SetAbsMonth(month, 0)
+C_Calendar.SetAbsMonth(1, 0)
 ```
 
 ### C_Calendar.SetMonth
@@ -1589,10 +1589,10 @@ C_Calendar.SetMonth(offsetMonths)
 |------|------|---------|-------------|
 | `offsetMonths` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Calendar.SetMonth(0)
+C_Calendar.SetMonth(1)
 ```
 
 ### C_Calendar.SetNextClubId
@@ -1607,7 +1607,7 @@ C_Calendar.SetNextClubId([clubId])
 |------|------|---------|-------------|
 | `clubId` | ClubId | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.SetNextClubId()
@@ -1619,7 +1619,7 @@ C_Calendar.SetNextClubId()
 C_Calendar.UpdateEvent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Calendar.UpdateEvent()

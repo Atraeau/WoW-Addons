@@ -19,7 +19,7 @@ canCheckInbox, secondsUntilAllowed = C_Mail.CanCheckInbox()
 | `canCheckInbox` | bool | no |  |
 | `secondsUntilAllowed` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canCheckInbox, secondsUntilAllowed = C_Mail.CanCheckInbox()
@@ -43,7 +43,7 @@ info = C_Mail.GetCraftingOrderMailInfo(inboxIndex)
 |------|------|---------|-------------|
 | `info` | CraftingOrderMailInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Mail.GetCraftingOrderMailInfo(1)
@@ -67,7 +67,7 @@ inboxItemHasMoneyAttached = C_Mail.HasInboxMoney(inboxIndex)
 |------|------|---------|-------------|
 | `inboxItemHasMoneyAttached` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local inboxItemHasMoneyAttached = C_Mail.HasInboxMoney(1)
@@ -85,7 +85,7 @@ isCommandPending = C_Mail.IsCommandPending()
 |------|------|---------|-------------|
 | `isCommandPending` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCommandPending = C_Mail.IsCommandPending()
@@ -103,7 +103,7 @@ C_Mail.SetOpeningAll(openingAll)
 |------|------|---------|-------------|
 | `openingAll` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Mail.SetOpeningAll(false)

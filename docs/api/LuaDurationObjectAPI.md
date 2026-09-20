@@ -20,7 +20,7 @@ Assign(other)
 |------|------|---------|-------------|
 | `other` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Assign(other)
@@ -40,7 +40,7 @@ copy = Copy()
 |------|------|---------|-------------|
 | `copy` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local copy = Copy()
@@ -67,7 +67,7 @@ result = EvaluateElapsedDuration(curve, modifier)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateElapsedDuration(curve, modifier)
@@ -94,7 +94,7 @@ result = EvaluateElapsedPercent(curve, modifier)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateElapsedPercent(curve, modifier)
@@ -121,7 +121,7 @@ result = EvaluateRemainingDuration(curve, modifier)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateRemainingDuration(curve, modifier)
@@ -148,7 +148,7 @@ result = EvaluateRemainingPercent(curve, modifier)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateRemainingPercent(curve, modifier)
@@ -175,7 +175,7 @@ result = EvaluateTotalDuration(curve, modifier)
 |------|------|---------|-------------|
 | `result` | LuaCurveEvaluatedResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = EvaluateTotalDuration(curve, modifier)
@@ -202,7 +202,7 @@ formatted = FormatElapsedDuration(formatter, modifier)
 |------|------|---------|-------------|
 | `formatted` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatted = FormatElapsedDuration(formatter, modifier)
@@ -229,7 +229,7 @@ formatted = FormatRemainingDuration(formatter, modifier)
 |------|------|---------|-------------|
 | `formatted` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatted = FormatRemainingDuration(formatter, modifier)
@@ -256,7 +256,7 @@ formatted = FormatTotalDuration(formatter, modifier)
 |------|------|---------|-------------|
 | `formatted` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatted = FormatTotalDuration(formatter, modifier)
@@ -276,7 +276,7 @@ clock = GetClock()
 |------|------|---------|-------------|
 | `clock` | LuaDurationClock | yes | If nil, the duration object is using an internal default clock source equivalent to GetTime(). |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clock = GetClock()
@@ -296,7 +296,7 @@ clockTime = GetClockTime()
 |------|------|---------|-------------|
 | `clockTime` | FrameTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local clockTime = GetClockTime()
@@ -322,7 +322,7 @@ elapsedDuration = GetElapsedDuration(modifier)
 |------|------|---------|-------------|
 | `elapsedDuration` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elapsedDuration = GetElapsedDuration(modifier)
@@ -348,7 +348,7 @@ elapsedPercent = GetElapsedPercent(modifier)
 |------|------|---------|-------------|
 | `elapsedPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elapsedPercent = GetElapsedPercent(modifier)
@@ -374,7 +374,7 @@ endTime = GetEndTime(modifier)
 |------|------|---------|-------------|
 | `endTime` | FrameTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local endTime = GetEndTime(modifier)
@@ -394,7 +394,7 @@ modRate = GetModRate()
 |------|------|---------|-------------|
 | `modRate` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modRate = GetModRate()
@@ -420,7 +420,7 @@ remainingDuration = GetRemainingDuration(modifier)
 |------|------|---------|-------------|
 | `remainingDuration` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remainingDuration = GetRemainingDuration(modifier)
@@ -446,7 +446,7 @@ remainingPercent = GetRemainingPercent(modifier)
 |------|------|---------|-------------|
 | `remainingPercent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remainingPercent = GetRemainingPercent(modifier)
@@ -472,7 +472,7 @@ startTime = GetStartTime(modifier)
 |------|------|---------|-------------|
 | `startTime` | FrameTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local startTime = GetStartTime(modifier)
@@ -498,7 +498,7 @@ totalDuration = GetTotalDuration(modifier)
 |------|------|---------|-------------|
 | `totalDuration` | Seconds | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalDuration = GetTotalDuration(modifier)
@@ -524,7 +524,7 @@ hasExpired = HasExpired(modifier)
 |------|------|---------|-------------|
 | `hasExpired` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasExpired = HasExpired(modifier)
@@ -544,7 +544,7 @@ hasSecretValues = HasSecretValues()
 |------|------|---------|-------------|
 | `hasSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretValues = HasSecretValues()
@@ -570,7 +570,7 @@ hasStarted = HasStarted(modifier)
 |------|------|---------|-------------|
 | `hasStarted` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasStarted = HasStarted(modifier)
@@ -596,7 +596,7 @@ isActive = IsActive(modifier)
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = IsActive(modifier)
@@ -616,7 +616,7 @@ isZero = IsZero()
 |------|------|---------|-------------|
 | `isZero` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isZero = IsZero()
@@ -630,7 +630,7 @@ Resets the duration object to represent a zero duration time span.
 Reset()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Reset()
@@ -650,7 +650,7 @@ SetClock([clock])
 |------|------|---------|-------------|
 | `clock` | LuaDurationClock | yes | If nil, the duration object will use an internal default clock source equivalent to GetTime(). |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetClock()
@@ -672,7 +672,7 @@ SetTimeFromEnd(endTime, duration, modRate)
 | `duration` | Seconds | no |  |
 | `modRate` | number | no | Optional divisor for converting this time span to a base time. (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimeFromEnd(endTime, duration, 0)
@@ -694,7 +694,7 @@ SetTimeFromStart(startTime, duration, modRate)
 | `duration` | Seconds | no |  |
 | `modRate` | number | no | Optional divisor for converting this time span to a base time. (default: 1) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimeFromStart(startTime, duration, 0)
@@ -715,7 +715,7 @@ SetTimeSpan(startTime, endTime)
 | `startTime` | FrameTime | no |  |
 | `endTime` | FrameTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimeSpan(startTime, endTime)
@@ -729,7 +729,7 @@ Resets all state on the duration, and clears the secret values flag.
 SetToDefaults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToDefaults()

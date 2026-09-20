@@ -24,7 +24,7 @@ level = C_MajorFactions.GetCurrentRenownLevel(majorFactionID)
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_MajorFactions.GetCurrentRenownLevel(0)
@@ -48,7 +48,7 @@ data = C_MajorFactions.GetMajorFactionData(majorFactionID)
 |------|------|---------|-------------|
 | `data` | MajorFactionData | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_MajorFactions.GetMajorFactionData(0)
@@ -72,7 +72,7 @@ majorFactionIDs = C_MajorFactions.GetMajorFactionIDs([expansionID])
 |------|------|---------|-------------|
 | `majorFactionIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local majorFactionIDs = C_MajorFactions.GetMajorFactionIDs()
@@ -96,7 +96,7 @@ data = C_MajorFactions.GetMajorFactionProgressionInfo(majorFactionID)
 |------|------|---------|-------------|
 | `data` | MajorFactionProgressionInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_MajorFactions.GetMajorFactionProgressionInfo(0)
@@ -120,7 +120,7 @@ data = C_MajorFactions.GetMajorFactionRenownInfo(majorFactionID)
 |------|------|---------|-------------|
 | `data` | MajorFactionRenownInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_MajorFactions.GetMajorFactionRenownInfo(0)
@@ -144,7 +144,7 @@ levels = C_MajorFactions.GetRenownLevels(majorFactionID)
 |------|------|---------|-------------|
 | `levels` | MajorFactionRenownLevelInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levels = C_MajorFactions.GetRenownLevels(0)
@@ -162,7 +162,7 @@ renownNPCFactionID = C_MajorFactions.GetRenownNPCFactionID()
 |------|------|---------|-------------|
 | `renownNPCFactionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local renownNPCFactionID = C_MajorFactions.GetRenownNPCFactionID()
@@ -187,7 +187,7 @@ rewards = C_MajorFactions.GetRenownRewardsForLevel(majorFactionID, renownLevel)
 |------|------|---------|-------------|
 | `rewards` | MajorFactionRenownRewardInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rewards = C_MajorFactions.GetRenownRewardsForLevel(0, 0)
@@ -212,7 +212,7 @@ totalReputation = C_MajorFactions.GetTotalReputationForRenownLevel(majorFactionI
 |------|------|---------|-------------|
 | `totalReputation` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalReputation = C_MajorFactions.GetTotalReputationForRenownLevel(0, 0)
@@ -236,7 +236,7 @@ hasMaxRenown = C_MajorFactions.HasMaximumRenown(majorFactionID)
 |------|------|---------|-------------|
 | `hasMaxRenown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxRenown = C_MajorFactions.HasMaximumRenown(0)
@@ -260,7 +260,7 @@ isHidden = C_MajorFactions.IsMajorFactionHiddenFromExpansionPage(majorFactionID)
 |------|------|---------|-------------|
 | `isHidden` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHidden = C_MajorFactions.IsMajorFactionHiddenFromExpansionPage(0)
@@ -284,7 +284,7 @@ isWeeklyCapped = C_MajorFactions.IsWeeklyRenownCapped(majorFactionID)
 |------|------|---------|-------------|
 | `isWeeklyCapped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isWeeklyCapped = C_MajorFactions.IsWeeklyRenownCapped(0)
@@ -308,7 +308,7 @@ shouldDisplayMajorFactionAsJourney = C_MajorFactions.ShouldDisplayMajorFactionAs
 |------|------|---------|-------------|
 | `shouldDisplayMajorFactionAsJourney` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldDisplayMajorFactionAsJourney = C_MajorFactions.ShouldDisplayMajorFactionAsJourney(0)
@@ -332,7 +332,7 @@ shouldUseJourneyRewardTrack = C_MajorFactions.ShouldUseJourneyRewardTrack(majorF
 |------|------|---------|-------------|
 | `shouldUseJourneyRewardTrack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldUseJourneyRewardTrack = C_MajorFactions.ShouldUseJourneyRewardTrack(0)

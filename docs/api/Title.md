@@ -18,7 +18,7 @@ result = GetCurrentTitle()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetCurrentTitle()
@@ -36,7 +36,7 @@ result = GetNumTitles()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetNumTitles()
@@ -61,7 +61,7 @@ titleString, playerTitle = GetTitleName(titleMaskID)
 | `titleString` | string | no |  |
 | `playerTitle` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local titleString, playerTitle = GetTitleName(0)
@@ -85,7 +85,7 @@ result = IsTitleKnown(titleMaskID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsTitleKnown(0)
@@ -103,7 +103,7 @@ SetCurrentTitle(titleMaskID)
 |------|------|---------|-------------|
 | `titleMaskID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetCurrentTitle(0)

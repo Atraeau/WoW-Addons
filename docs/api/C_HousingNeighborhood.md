@@ -20,7 +20,7 @@ C_HousingNeighborhood.CancelInviteToNeighborhood(playerName)
 |------|------|---------|-------------|
 | `playerName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.CancelInviteToNeighborhood("")
@@ -38,7 +38,7 @@ canReturn = C_HousingNeighborhood.CanReturnAfterVisitingHouse()
 |------|------|---------|-------------|
 | `canReturn` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canReturn = C_HousingNeighborhood.CanReturnAfterVisitingHouse()
@@ -58,10 +58,10 @@ C_HousingNeighborhood.DemoteToResident(playerGUID)
 |------|------|---------|-------------|
 | `playerGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingNeighborhood.DemoteToResident("Creature-0-0000-0-0-0-0")
+C_HousingNeighborhood.DemoteToResident(UnitGUID("player"))
 ```
 
 ### C_HousingNeighborhood.GetCornerstoneHouseInfo
@@ -78,7 +78,7 @@ houseInfo = C_HousingNeighborhood.GetCornerstoneHouseInfo()
 |------|------|---------|-------------|
 | `houseInfo` | HouseInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local houseInfo = C_HousingNeighborhood.GetCornerstoneHouseInfo()
@@ -98,7 +98,7 @@ neighborhoodInfo = C_HousingNeighborhood.GetCornerstoneNeighborhoodInfo()
 |------|------|---------|-------------|
 | `neighborhoodInfo` | NeighborhoodInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodInfo = C_HousingNeighborhood.GetCornerstoneNeighborhoodInfo()
@@ -118,7 +118,7 @@ purchaseMode = C_HousingNeighborhood.GetCornerstonePurchaseMode()
 |------|------|---------|-------------|
 | `purchaseMode` | CornerstonePurchaseMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local purchaseMode = C_HousingNeighborhood.GetCornerstonePurchaseMode()
@@ -136,7 +136,7 @@ neighborhoodTextureSuffix = C_HousingNeighborhood.GetCurrentNeighborhoodTextureS
 |------|------|---------|-------------|
 | `neighborhoodTextureSuffix` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodTextureSuffix = C_HousingNeighborhood.GetCurrentNeighborhoodTextureSuffix()
@@ -156,7 +156,7 @@ movePrice = C_HousingNeighborhood.GetDiscountedMovePrice()
 |------|------|---------|-------------|
 | `movePrice` | number | no | Can be negative if the refund from moving is more than the cost of the new house |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local movePrice = C_HousingNeighborhood.GetDiscountedMovePrice()
@@ -176,7 +176,7 @@ movecooldownTime = C_HousingNeighborhood.GetMoveCooldownTime()
 |------|------|---------|-------------|
 | `movecooldownTime` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local movecooldownTime = C_HousingNeighborhood.GetMoveCooldownTime()
@@ -194,7 +194,7 @@ neighborhoodPlots = C_HousingNeighborhood.GetNeighborhoodMapData()
 |------|------|---------|-------------|
 | `neighborhoodPlots` | NeighborhoodPlotMapInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodPlots = C_HousingNeighborhood.GetNeighborhoodMapData()
@@ -212,7 +212,7 @@ neighborhoodName = C_HousingNeighborhood.GetNeighborhoodName()
 |------|------|---------|-------------|
 | `neighborhoodName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodName = C_HousingNeighborhood.GetNeighborhoodName()
@@ -236,7 +236,7 @@ neighborhoodName = C_HousingNeighborhood.GetNeighborhoodPlotName(plotIndex)
 |------|------|---------|-------------|
 | `neighborhoodName` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodName = C_HousingNeighborhood.GetNeighborhoodPlotName(1)
@@ -256,7 +256,7 @@ previousHouseIdentifier = C_HousingNeighborhood.GetPreviousHouseIdentifier()
 |------|------|---------|-------------|
 | `previousHouseIdentifier` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local previousHouseIdentifier = C_HousingNeighborhood.GetPreviousHouseIdentifier()
@@ -276,7 +276,7 @@ cantPurchaseReason = C_HousingNeighborhood.HasPermissionToPurchase()
 |------|------|---------|-------------|
 | `cantPurchaseReason` | PurchaseHouseDisabledReason | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cantPurchaseReason = C_HousingNeighborhood.HasPermissionToPurchase()
@@ -296,7 +296,7 @@ C_HousingNeighborhood.InvitePlayerToNeighborhood(playerName)
 |------|------|---------|-------------|
 | `playerName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.InvitePlayerToNeighborhood("")
@@ -314,7 +314,7 @@ isManager = C_HousingNeighborhood.IsNeighborhoodManager()
 |------|------|---------|-------------|
 | `isManager` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isManager = C_HousingNeighborhood.IsNeighborhoodManager()
@@ -332,7 +332,7 @@ isOwner = C_HousingNeighborhood.IsNeighborhoodOwner()
 |------|------|---------|-------------|
 | `isOwner` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOwner = C_HousingNeighborhood.IsNeighborhoodOwner()
@@ -352,7 +352,7 @@ isInUnownedPlot = C_HousingNeighborhood.IsPlayerInOtherPlayersPlot()
 |------|------|---------|-------------|
 | `isInUnownedPlot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInUnownedPlot = C_HousingNeighborhood.IsPlayerInOtherPlayersPlot()
@@ -372,7 +372,7 @@ isAvailable = C_HousingNeighborhood.IsPlotAvailableForPurchase()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_HousingNeighborhood.IsPlotAvailableForPurchase()
@@ -392,7 +392,7 @@ isPlayerOwned = C_HousingNeighborhood.IsPlotOwnedByPlayer()
 |------|------|---------|-------------|
 | `isPlayerOwned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlayerOwned = C_HousingNeighborhood.IsPlotOwnedByPlayer()
@@ -404,7 +404,7 @@ local isPlayerOwned = C_HousingNeighborhood.IsPlotOwnedByPlayer()
 C_HousingNeighborhood.OnBulletinBoardClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.OnBulletinBoardClosed()
@@ -416,7 +416,7 @@ C_HousingNeighborhood.OnBulletinBoardClosed()
 C_HousingNeighborhood.OnCornerstoneClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.OnCornerstoneClosed()
@@ -436,10 +436,10 @@ C_HousingNeighborhood.PromoteToManager(playerGUID)
 |------|------|---------|-------------|
 | `playerGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingNeighborhood.PromoteToManager("Creature-0-0000-0-0-0-0")
+C_HousingNeighborhood.PromoteToManager(UnitGUID("player"))
 ```
 
 ### C_HousingNeighborhood.RequestNeighborhoodInfo
@@ -448,7 +448,7 @@ C_HousingNeighborhood.PromoteToManager("Creature-0-0000-0-0-0-0")
 C_HousingNeighborhood.RequestNeighborhoodInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.RequestNeighborhoodInfo()
@@ -462,7 +462,7 @@ Only available when interacting with a bulletin board game object
 C_HousingNeighborhood.RequestNeighborhoodRoster()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.RequestNeighborhoodRoster()
@@ -476,7 +476,7 @@ Only available when interacting with a bulletin board game object
 C_HousingNeighborhood.RequestPendingNeighborhoodInvites()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.RequestPendingNeighborhoodInvites()
@@ -496,10 +496,10 @@ C_HousingNeighborhood.TransferNeighborhoodOwnership(playerGUID)
 |------|------|---------|-------------|
 | `playerGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingNeighborhood.TransferNeighborhoodOwnership("Creature-0-0000-0-0-0-0")
+C_HousingNeighborhood.TransferNeighborhoodOwnership(UnitGUID("player"))
 ```
 
 ### C_HousingNeighborhood.TryEvictPlayer
@@ -516,7 +516,7 @@ C_HousingNeighborhood.TryEvictPlayer(plotID)
 |------|------|---------|-------------|
 | `plotID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.TryEvictPlayer(0)
@@ -530,7 +530,7 @@ Only available when interacting with a cornerstone game object
 C_HousingNeighborhood.TryMoveHouse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.TryMoveHouse()
@@ -544,7 +544,7 @@ Only available when interacting with a cornerstone game object
 C_HousingNeighborhood.TryPurchasePlot()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingNeighborhood.TryPurchasePlot()

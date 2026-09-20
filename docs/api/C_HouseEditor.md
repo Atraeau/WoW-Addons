@@ -26,7 +26,7 @@ result = C_HouseEditor.ActivateHouseEditorMode(editMode)
 |------|------|---------|-------------|
 | `result` | HousingResult | no | The initial result of the attempt to activate the mode; If Success, mode is either already active, or we've succesfully started making required requests to server; Listen for MODE_CHANGED or MODE_CHANGE_FAILURE events for ultimate end result after server calls |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_HouseEditor.ActivateHouseEditorMode(editMode)
@@ -46,7 +46,7 @@ result = C_HouseEditor.EnterHouseEditor()
 |------|------|---------|-------------|
 | `result` | HousingResult | no | The initial result of the attempt to open the Editor; If Success, Editor is either already active, or we've succesfully started making required requests to server; Listen for MODE_CHANGED or MODE_CHANGE_FAILURE events for ultimate end result after server calls |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_HouseEditor.EnterHouseEditor()
@@ -64,7 +64,7 @@ editMode = C_HouseEditor.GetActiveHouseEditorMode()
 |------|------|---------|-------------|
 | `editMode` | HouseEditorMode | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local editMode = C_HouseEditor.GetActiveHouseEditorMode()
@@ -84,7 +84,7 @@ result = C_HouseEditor.GetHouseEditorAvailability()
 |------|------|---------|-------------|
 | `result` | HousingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_HouseEditor.GetHouseEditorAvailability()
@@ -110,7 +110,7 @@ result = C_HouseEditor.GetHouseEditorModeAvailability(editMode)
 |------|------|---------|-------------|
 | `result` | HousingResult | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_HouseEditor.GetHouseEditorModeAvailability(editMode)
@@ -128,7 +128,7 @@ playerType = C_HouseEditor.GetHouseEditorPlayerType()
 |------|------|---------|-------------|
 | `playerType` | HouseEditorPlayerType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerType = C_HouseEditor.GetHouseEditorPlayerType()
@@ -148,7 +148,7 @@ isEditorActive = C_HouseEditor.IsHouseEditorActive()
 |------|------|---------|-------------|
 | `isEditorActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEditorActive = C_HouseEditor.IsHouseEditorActive()
@@ -174,7 +174,7 @@ isModeActive = C_HouseEditor.IsHouseEditorModeActive(editMode)
 |------|------|---------|-------------|
 | `isModeActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isModeActive = C_HouseEditor.IsHouseEditorModeActive(editMode)
@@ -194,7 +194,7 @@ editorStatusAvailable = C_HouseEditor.IsHouseEditorStatusAvailable()
 |------|------|---------|-------------|
 | `editorStatusAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local editorStatusAvailable = C_HouseEditor.IsHouseEditorStatusAvailable()
@@ -206,7 +206,7 @@ local editorStatusAvailable = C_HouseEditor.IsHouseEditorStatusAvailable()
 C_HouseEditor.LeaveHouseEditor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HouseEditor.LeaveHouseEditor()

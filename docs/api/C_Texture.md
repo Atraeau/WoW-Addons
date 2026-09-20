@@ -18,7 +18,7 @@ C_Texture.ClearTitleIconTexture(texture)
 |------|------|---------|-------------|
 | `texture` | SimpleTexture | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Texture.ClearTitleIconTexture(texture)
@@ -42,7 +42,7 @@ elementID = C_Texture.GetAtlasElementID(atlas)
 |------|------|---------|-------------|
 | `elementID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local elementID = C_Texture.GetAtlasElementID(atlas)
@@ -60,7 +60,7 @@ atlases = C_Texture.GetAtlasElements()
 |------|------|---------|-------------|
 | `atlases` | textureAtlas[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlases = C_Texture.GetAtlasElements()
@@ -84,7 +84,7 @@ atlasExists = C_Texture.GetAtlasExists(atlas)
 |------|------|---------|-------------|
 | `atlasExists` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlasExists = C_Texture.GetAtlasExists(atlas)
@@ -108,7 +108,7 @@ atlasID = C_Texture.GetAtlasID(atlas)
 |------|------|---------|-------------|
 | `atlasID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local atlasID = C_Texture.GetAtlasID(atlas)
@@ -132,7 +132,7 @@ info = C_Texture.GetAtlasInfo(atlas)
 |------|------|---------|-------------|
 | `info` | AtlasInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Texture.GetAtlasInfo(atlas)
@@ -156,7 +156,7 @@ filename = C_Texture.GetFilenameFromFileDataID(fileDataID)
 |------|------|---------|-------------|
 | `filename` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filename = C_Texture.GetFilenameFromFileDataID(0)
@@ -176,10 +176,10 @@ C_Texture.GetTitleIconTexture(titleID, version, callback)
 | `version` | TitleIconVersion | no |  |
 | `callback` | GetTitleIconTextureCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Texture.GetTitleIconTexture("", version, callback)
+C_Texture.GetTitleIconTexture("", Enum.TitleIconVersion.Small, callback)
 ```
 
 ### C_Texture.IsTitleIconTextureReady
@@ -201,10 +201,10 @@ ready = C_Texture.IsTitleIconTextureReady(titleID, version)
 |------|------|---------|-------------|
 | `ready` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local ready = C_Texture.IsTitleIconTextureReady("", version)
+local ready = C_Texture.IsTitleIconTextureReady("", Enum.TitleIconVersion.Small)
 ```
 
 ### C_Texture.SetTitleIconTexture
@@ -221,10 +221,10 @@ C_Texture.SetTitleIconTexture(texture, titleID, version)
 | `titleID` | string | no |  |
 | `version` | TitleIconVersion | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Texture.SetTitleIconTexture(texture, "", version)
+C_Texture.SetTitleIconTexture(texture, "", Enum.TitleIconVersion.Small)
 ```
 
 ### C_Texture.SetURLTexture
@@ -240,7 +240,7 @@ C_Texture.SetURLTexture(texture, url)
 | `texture` | SimpleTexture | no |  |
 | `url` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Texture.SetURLTexture(texture, "")

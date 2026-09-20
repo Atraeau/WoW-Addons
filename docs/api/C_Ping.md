@@ -18,7 +18,7 @@ cooldownInfo = C_Ping.GetCooldownInfo()
 |------|------|---------|-------------|
 | `cooldownInfo` | PingCooldownInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cooldownInfo = C_Ping.GetCooldownInfo()
@@ -36,7 +36,7 @@ pingTypes = C_Ping.GetDefaultPingOptions()
 |------|------|---------|-------------|
 | `pingTypes` | PingTypeInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pingTypes = C_Ping.GetDefaultPingOptions()
@@ -60,7 +60,7 @@ uiTextureKitID = C_Ping.GetTextureKitForType(type)
 |------|------|---------|-------------|
 | `uiTextureKitID` | textureKit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiTextureKitID = C_Ping.GetTextureKitForType(type)
@@ -78,7 +78,7 @@ isEnabled = C_Ping.IsPingSystemEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_Ping.IsPingSystemEnabled()
@@ -96,7 +96,7 @@ C_Ping.SendMacroPing(macroInfo)
 |------|------|---------|-------------|
 | `macroInfo` | PingMacroInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Ping.SendMacroPing(macroInfo)
@@ -114,7 +114,7 @@ C_Ping.TogglePingListener(down)
 |------|------|---------|-------------|
 | `down` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Ping.TogglePingListener(false)

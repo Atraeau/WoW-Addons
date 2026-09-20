@@ -20,7 +20,7 @@ Assign(other)
 |------|------|---------|-------------|
 | `other` | DurationTextBinding | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Assign(other)
@@ -40,7 +40,7 @@ canFormatText = CanFormatText()
 |------|------|---------|-------------|
 | `canFormatText` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canFormatText = CanFormatText()
@@ -60,7 +60,7 @@ canUpdateText = CanUpdateFontString()
 |------|------|---------|-------------|
 | `canUpdateText` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUpdateText = CanUpdateFontString()
@@ -74,7 +74,7 @@ Clears the text color curve used by this binding.
 ClearTextColorCurve()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearTextColorCurve()
@@ -94,7 +94,7 @@ copy = Copy()
 |------|------|---------|-------------|
 | `copy` | DurationTextBinding | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local copy = Copy()
@@ -108,7 +108,7 @@ Disables automatic updates for this duration text binding.
 Disable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Disable()
@@ -122,7 +122,7 @@ Enables automatic updates for this duration text binding.
 Enable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Enable()
@@ -142,7 +142,7 @@ duration = GetDuration()
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local duration = GetDuration()
@@ -162,7 +162,7 @@ text = GetExpiredText()
 |------|------|---------|-------------|
 | `text` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetExpiredText()
@@ -182,7 +182,7 @@ fontString = GetFontString()
 |------|------|---------|-------------|
 | `fontString` | SimpleFontString | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontString = GetFontString()
@@ -202,7 +202,7 @@ text = GetFormattedText()
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetFormattedText()
@@ -222,7 +222,7 @@ color = GetFormattedTextColor()
 |------|------|---------|-------------|
 | `color` | colorRGBA | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local color = GetFormattedTextColor()
@@ -243,7 +243,7 @@ curve, property = GetTextColorCurve()
 | `curve` | LuaColorCurveObject | no |  |
 | `property` | DurationTextBindingProperty | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local curve, property = GetTextColorCurve()
@@ -263,7 +263,7 @@ modifier = GetTimeModifier()
 |------|------|---------|-------------|
 | `modifier` | DurationTimeModifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modifier = GetTimeModifier()
@@ -283,7 +283,7 @@ updateInterval = GetUpdateInterval()
 |------|------|---------|-------------|
 | `updateInterval` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local updateInterval = GetUpdateInterval()
@@ -303,7 +303,7 @@ text = GetZeroDurationText()
 |------|------|---------|-------------|
 | `text` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetZeroDurationText()
@@ -323,7 +323,7 @@ hasSecretValues = HasSecretValues()
 |------|------|---------|-------------|
 | `hasSecretValues` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSecretValues = HasSecretValues()
@@ -343,7 +343,7 @@ enabled = IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsEnabled()
@@ -363,7 +363,7 @@ SetDuration(duration)
 |------|------|---------|-------------|
 | `duration` | LuaDurationObject | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDuration(duration)
@@ -383,7 +383,7 @@ SetEnabled(enabled)
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetEnabled(false)
@@ -403,7 +403,7 @@ SetExpiredText([text])
 |------|------|---------|-------------|
 | `text` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetExpiredText()
@@ -423,7 +423,7 @@ SetFontString(fontString)
 |------|------|---------|-------------|
 | `fontString` | SimpleFontString | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFontString(fontString)
@@ -443,7 +443,7 @@ SetFormatter(formatter)
 |------|------|---------|-------------|
 | `formatter` | NumericFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFormatter(formatter)
@@ -464,7 +464,7 @@ SetTextColorCurve(curve, property)
 | `curve` | LuaColorCurveObject | no |  |
 | `property` | DurationTextBindingProperty | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextColorCurve(curve, property)
@@ -485,7 +485,7 @@ SetTextFormat(formatString, components)
 | `formatString` | stringView | no |  |
 | `components` | DurationTextBindingFormatComponent[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTextFormat(formatString, components)
@@ -505,7 +505,7 @@ SetTimeModifier(modifier)
 |------|------|---------|-------------|
 | `modifier` | DurationTimeModifier | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetTimeModifier(modifier)
@@ -519,7 +519,7 @@ Resets this duration text binding to its default state, clearing the configured 
 SetToDefaults()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToDefaults()
@@ -539,7 +539,7 @@ SetUpdateInterval(updateInterval)
 |------|------|---------|-------------|
 | `updateInterval` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUpdateInterval(0)
@@ -559,7 +559,7 @@ SetZeroDurationText([text])
 |------|------|---------|-------------|
 | `text` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetZeroDurationText()
@@ -573,7 +573,7 @@ Immediately updates the configured font string from the current duration state.
 UpdateFontString()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 UpdateFontString()

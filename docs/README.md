@@ -36,6 +36,15 @@ docs/api/
 Each function is documented as: description → `signature` → argument table →
 returns table → an illustrative example call.
 
-> Note: the client's docs provide signatures, types, and descriptions but not prose
-> usage examples, so the example lines are auto-synthesized from each signature and
-> meant as a starting point. Curate richer examples over time.
+## Examples
+
+Each function shows an example call:
+
+- **Curated** — hand-written, runnable snippets for common functions, kept in
+  [`scripts/api-examples.psd1`](../scripts/api-examples.psd1) keyed by `Namespace.Function`
+  (or bare `Function` for globals). Add entries there to grow coverage; the generator
+  warns about keys that don't match a documented function.
+- **Auto-generated** — for everything else, synthesized from the signature. These are
+  labelled *(auto-generated from the signature — illustrative)* and use realistic values
+  where possible (e.g. real `Enum.<Type>.<Value>` constants for enum arguments,
+  `"player"` for unit tokens).

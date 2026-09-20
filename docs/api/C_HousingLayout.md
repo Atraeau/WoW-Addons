@@ -24,7 +24,7 @@ anyRooms = C_HousingLayout.AnyRoomsOnFloor(floor)
 |------|------|---------|-------------|
 | `anyRooms` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local anyRooms = C_HousingLayout.AnyRoomsOnFloor(0)
@@ -36,7 +36,7 @@ local anyRooms = C_HousingLayout.AnyRoomsOnFloor(0)
 C_HousingLayout.CancelActiveLayoutEditing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.CancelActiveLayoutEditing()
@@ -60,7 +60,7 @@ canSet = C_HousingLayout.CanSetViewedFloor(floor)
 |------|------|---------|-------------|
 | `canSet` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSet = C_HousingLayout.CanSetViewedFloor(0)
@@ -78,7 +78,7 @@ C_HousingLayout.ConfirmStairChoice([choice])
 |------|------|---------|-------------|
 | `choice` | HousingLayoutStairDirection | yes | If not set, the pending stair operation will be cancelled |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.ConfirmStairChoice()
@@ -90,7 +90,7 @@ C_HousingLayout.ConfirmStairChoice()
 C_HousingLayout.DeselectFloorplan()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.DeselectFloorplan()
@@ -102,7 +102,7 @@ C_HousingLayout.DeselectFloorplan()
 C_HousingLayout.DeselectRoomOrDoor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.DeselectRoomOrDoor()
@@ -120,7 +120,7 @@ floor = C_HousingLayout.GetBaseRoomFloor()
 |------|------|---------|-------------|
 | `floor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local floor = C_HousingLayout.GetBaseRoomFloor()
@@ -138,7 +138,7 @@ highestFloorIndex = C_HousingLayout.GetHighestOccupiedFloorIndex()
 |------|------|---------|-------------|
 | `highestFloorIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local highestFloorIndex = C_HousingLayout.GetHighestOccupiedFloorIndex()
@@ -156,7 +156,7 @@ lowestFloorIndex = C_HousingLayout.GetLowestOccupiedFloorIndex()
 |------|------|---------|-------------|
 | `lowestFloorIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lowestFloorIndex = C_HousingLayout.GetLowestOccupiedFloorIndex()
@@ -174,7 +174,7 @@ numRooms = C_HousingLayout.GetNumActiveRooms()
 |------|------|---------|-------------|
 | `numRooms` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numRooms = C_HousingLayout.GetNumActiveRooms()
@@ -194,7 +194,7 @@ placementBudget = C_HousingLayout.GetRoomPlacementBudget()
 |------|------|---------|-------------|
 | `placementBudget` | number | yes | Will be nil if not in an owned House or Plot |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local placementBudget = C_HousingLayout.GetRoomPlacementBudget()
@@ -214,7 +214,7 @@ roomGUID = C_HousingLayout.GetRoomPlayerIsIn()
 |------|------|---------|-------------|
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roomGUID = C_HousingLayout.GetRoomPlayerIsIn()
@@ -233,7 +233,7 @@ roomID, shareCode = C_HousingLayout.GetSelectedBlueprintFloorplan()
 | `roomID` | number | no |  |
 | `shareCode` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roomID, shareCode = C_HousingLayout.GetSelectedBlueprintFloorplan()
@@ -254,7 +254,7 @@ selectedDoorComponentID, roomGUID = C_HousingLayout.GetSelectedDoor()
 | `selectedDoorComponentID` | number | no |  |
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local selectedDoorComponentID, roomGUID = C_HousingLayout.GetSelectedDoor()
@@ -272,7 +272,7 @@ roomID = C_HousingLayout.GetSelectedFloorplan()
 |------|------|---------|-------------|
 | `roomID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roomID = C_HousingLayout.GetSelectedFloorplan()
@@ -292,7 +292,7 @@ roomGUID = C_HousingLayout.GetSelectedRoom()
 |------|------|---------|-------------|
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roomGUID = C_HousingLayout.GetSelectedRoom()
@@ -310,7 +310,7 @@ stairwellRoomCount = C_HousingLayout.GetSelectedStairwellRoomCount()
 |------|------|---------|-------------|
 | `stairwellRoomCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stairwellRoomCount = C_HousingLayout.GetSelectedStairwellRoomCount()
@@ -330,7 +330,7 @@ spentPlacementBudget = C_HousingLayout.GetSpentPlacementBudget()
 |------|------|---------|-------------|
 | `spentPlacementBudget` | number | yes | Will be nil if not in an owned House |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spentPlacementBudget = C_HousingLayout.GetSpentPlacementBudget()
@@ -348,7 +348,7 @@ floor = C_HousingLayout.GetViewedFloor()
 |------|------|---------|-------------|
 | `floor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local floor = C_HousingLayout.GetViewedFloor()
@@ -368,7 +368,7 @@ hasAnySelections = C_HousingLayout.HasAnySelections()
 |------|------|---------|-------------|
 | `hasAnySelections` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnySelections = C_HousingLayout.HasAnySelections()
@@ -388,7 +388,7 @@ hasBudget = C_HousingLayout.HasRoomPlacementBudget()
 |------|------|---------|-------------|
 | `hasBudget` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBudget = C_HousingLayout.HasRoomPlacementBudget()
@@ -406,7 +406,7 @@ hasSelectedBlueprintFloorplan = C_HousingLayout.HasSelectedBlueprintFloorplan()
 |------|------|---------|-------------|
 | `hasSelectedBlueprintFloorplan` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedBlueprintFloorplan = C_HousingLayout.HasSelectedBlueprintFloorplan()
@@ -426,7 +426,7 @@ hasSelectedDoor = C_HousingLayout.HasSelectedDoor()
 |------|------|---------|-------------|
 | `hasSelectedDoor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedDoor = C_HousingLayout.HasSelectedDoor()
@@ -444,7 +444,7 @@ hasSelectedFloorplan = C_HousingLayout.HasSelectedFloorplan()
 |------|------|---------|-------------|
 | `hasSelectedFloorplan` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedFloorplan = C_HousingLayout.HasSelectedFloorplan()
@@ -464,7 +464,7 @@ hasSelectedRoom = C_HousingLayout.HasSelectedRoom()
 |------|------|---------|-------------|
 | `hasSelectedRoom` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasSelectedRoom = C_HousingLayout.HasSelectedRoom()
@@ -488,7 +488,7 @@ hasStairs = C_HousingLayout.HasStairs(roomRecordID)
 |------|------|---------|-------------|
 | `hasStairs` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasStairs = C_HousingLayout.HasStairs(0)
@@ -514,10 +514,10 @@ canPlace = C_HousingLayout.HasValidConnection(roomGUID, componentID, roomId)
 |------|------|---------|-------------|
 | `canPlace` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canPlace = C_HousingLayout.HasValidConnection("Creature-0-0000-0-0-0-0", 0, 0)
+local canPlace = C_HousingLayout.HasValidConnection(UnitGUID("player"), 0, 0)
 ```
 
 ### C_HousingLayout.IsBaseRoom
@@ -538,10 +538,10 @@ isBaseRoom = C_HousingLayout.IsBaseRoom(roomGUID)
 |------|------|---------|-------------|
 | `isBaseRoom` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isBaseRoom = C_HousingLayout.IsBaseRoom("Creature-0-0000-0-0-0-0")
+local isBaseRoom = C_HousingLayout.IsBaseRoom(UnitGUID("player"))
 ```
 
 ### C_HousingLayout.IsDraggingRoom
@@ -557,7 +557,7 @@ isDragging, isAccessibleDrag = C_HousingLayout.IsDraggingRoom()
 | `isDragging` | bool | no |  |
 | `isAccessibleDrag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDragging, isAccessibleDrag = C_HousingLayout.IsDraggingRoom()
@@ -579,10 +579,10 @@ C_HousingLayout.MoveDraggedRoom(sourceDoorIndex, destRoom, destDoorIndex)
 | `destRoom` | WOWGUID | no |  |
 | `destDoorIndex` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingLayout.MoveDraggedRoom(1, destRoom, 1)
+C_HousingLayout.MoveDraggedRoom(1, UnitGUID("player"), 1)
 ```
 
 ### C_HousingLayout.MoveLayoutCamera
@@ -598,7 +598,7 @@ C_HousingLayout.MoveLayoutCamera(direction, isPressed)
 | `direction` | HousingLayoutCameraDirection | no |  |
 | `isPressed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.MoveLayoutCamera(direction, false)
@@ -618,10 +618,10 @@ C_HousingLayout.RemoveRoom(roomGUID)
 |------|------|---------|-------------|
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingLayout.RemoveRoom("Creature-0-0000-0-0-0-0")
+C_HousingLayout.RemoveRoom(UnitGUID("player"))
 ```
 
 ### C_HousingLayout.RoomHasStairs
@@ -644,10 +644,10 @@ hasStairs = C_HousingLayout.RoomHasStairs(roomGUID)
 |------|------|---------|-------------|
 | `hasStairs` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local hasStairs = C_HousingLayout.RoomHasStairs("Creature-0-0000-0-0-0-0")
+local hasStairs = C_HousingLayout.RoomHasStairs(UnitGUID("player"))
 ```
 
 ### C_HousingLayout.RotateFocusedRoom
@@ -664,7 +664,7 @@ C_HousingLayout.RotateFocusedRoom(isLeft)
 |------|------|---------|-------------|
 | `isLeft` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.RotateFocusedRoom(false)
@@ -685,10 +685,10 @@ C_HousingLayout.RotateRoom(roomGUID, isLeft)
 | `roomGUID` | WOWGUID | no |  |
 | `isLeft` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_HousingLayout.RotateRoom("Creature-0-0000-0-0-0-0", false)
+C_HousingLayout.RotateRoom(UnitGUID("player"), false)
 ```
 
 ### C_HousingLayout.SelectFloorplan
@@ -703,7 +703,7 @@ C_HousingLayout.SelectFloorplan(roomID)
 |------|------|---------|-------------|
 | `roomID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.SelectFloorplan(0)
@@ -721,7 +721,7 @@ C_HousingLayout.SetViewedFloor(floor)
 |------|------|---------|-------------|
 | `floor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.SetViewedFloor(0)
@@ -733,7 +733,7 @@ C_HousingLayout.SetViewedFloor(0)
 C_HousingLayout.StartDrag()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.StartDrag()
@@ -745,7 +745,7 @@ C_HousingLayout.StartDrag()
 C_HousingLayout.StopDrag()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.StopDrag()
@@ -757,7 +757,7 @@ C_HousingLayout.StopDrag()
 C_HousingLayout.StopDraggingRoom()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingLayout.StopDraggingRoom()
@@ -781,7 +781,7 @@ zoomChanged = C_HousingLayout.ZoomLayoutCamera(zoomIn)
 |------|------|---------|-------------|
 | `zoomChanged` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local zoomChanged = C_HousingLayout.ZoomLayoutCamera(false)

@@ -12,7 +12,7 @@
 C_LootFrame.TryAutoLoot()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LootFrame.TryAutoLoot()

@@ -12,7 +12,7 @@
 C_ItemSocketInfo.AcceptSockets()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemSocketInfo.AcceptSockets()
@@ -30,7 +30,7 @@ C_ItemSocketInfo.ClickSocketButton(index)
 |------|------|---------|-------------|
 | `index` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemSocketInfo.ClickSocketButton(1)
@@ -42,7 +42,7 @@ C_ItemSocketInfo.ClickSocketButton(1)
 C_ItemSocketInfo.CloseSocketInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemSocketInfo.CloseSocketInfo()
@@ -54,7 +54,7 @@ C_ItemSocketInfo.CloseSocketInfo()
 C_ItemSocketInfo.CompleteSocketing()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ItemSocketInfo.CompleteSocketing()
@@ -72,7 +72,7 @@ uiType = C_ItemSocketInfo.GetCurrUIType()
 |------|------|---------|-------------|
 | `uiType` | ItemSocketInfoUIType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiType = C_ItemSocketInfo.GetCurrUIType()
@@ -98,7 +98,7 @@ name, icon, gemMatchesSocket = C_ItemSocketInfo.GetExistingSocketInfo(index)
 | `icon` | fileID | yes |  |
 | `gemMatchesSocket` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, gemMatchesSocket = C_ItemSocketInfo.GetExistingSocketInfo(1)
@@ -122,7 +122,7 @@ existingSocketLink = C_ItemSocketInfo.GetExistingSocketLink(index)
 |------|------|---------|-------------|
 | `existingSocketLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local existingSocketLink = C_ItemSocketInfo.GetExistingSocketLink(1)
@@ -148,7 +148,7 @@ name, icon, gemMatchesSocket = C_ItemSocketInfo.GetNewSocketInfo(index)
 | `icon` | fileID | yes |  |
 | `gemMatchesSocket` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, gemMatchesSocket = C_ItemSocketInfo.GetNewSocketInfo(1)
@@ -172,7 +172,7 @@ newSocketLink = C_ItemSocketInfo.GetNewSocketLink(index)
 |------|------|---------|-------------|
 | `newSocketLink` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newSocketLink = C_ItemSocketInfo.GetNewSocketLink(1)
@@ -190,7 +190,7 @@ numSockets = C_ItemSocketInfo.GetNumSockets()
 |------|------|---------|-------------|
 | `numSockets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numSockets = C_ItemSocketInfo.GetNumSockets()
@@ -208,7 +208,7 @@ socketItemTradeable = C_ItemSocketInfo.GetSocketItemBoundTradeable()
 |------|------|---------|-------------|
 | `socketItemTradeable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local socketItemTradeable = C_ItemSocketInfo.GetSocketItemBoundTradeable()
@@ -228,7 +228,7 @@ name, icon, quality = C_ItemSocketInfo.GetSocketItemInfo()
 | `icon` | fileID | yes |  |
 | `quality` | ItemQuality | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, icon, quality = C_ItemSocketInfo.GetSocketItemInfo()
@@ -246,7 +246,7 @@ socketItemRefundable = C_ItemSocketInfo.GetSocketItemRefundable()
 |------|------|---------|-------------|
 | `socketItemRefundable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local socketItemRefundable = C_ItemSocketInfo.GetSocketItemRefundable()
@@ -270,7 +270,7 @@ socketType = C_ItemSocketInfo.GetSocketTypes(index)
 |------|------|---------|-------------|
 | `socketType` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local socketType = C_ItemSocketInfo.GetSocketTypes(1)
@@ -288,7 +288,7 @@ hasBoundGemProposed = C_ItemSocketInfo.HasBoundGemProposed()
 |------|------|---------|-------------|
 | `hasBoundGemProposed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBoundGemProposed = C_ItemSocketInfo.HasBoundGemProposed()
@@ -312,7 +312,7 @@ isArtifactRelicItem = C_ItemSocketInfo.IsArtifactRelicItem(info)
 |------|------|---------|-------------|
 | `isArtifactRelicItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isArtifactRelicItem = C_ItemSocketInfo.IsArtifactRelicItem(info)

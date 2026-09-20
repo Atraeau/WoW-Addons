@@ -12,7 +12,7 @@
 C_TradeSkillUI.CancelProfessionRespec()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.CancelProfessionRespec()
@@ -36,10 +36,10 @@ canStore = C_TradeSkillUI.CanStoreEnchantInItem(itemGUID)
 |------|------|---------|-------------|
 | `canStore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canStore = C_TradeSkillUI.CanStoreEnchantInItem("Creature-0-0000-0-0-0-0")
+local canStore = C_TradeSkillUI.CanStoreEnchantInItem(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.CanTradeSkillShowCraftingUI
@@ -60,10 +60,10 @@ canShow = C_TradeSkillUI.CanTradeSkillShowCraftingUI(tradeSkillSpellID)
 |------|------|---------|-------------|
 | `canShow` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local canShow = C_TradeSkillUI.CanTradeSkillShowCraftingUI(12345)
+local canShow = C_TradeSkillUI.CanTradeSkillShowCraftingUI(2050)
 ```
 
 ### C_TradeSkillUI.CheckRespecNPC
@@ -78,7 +78,7 @@ canInteract = C_TradeSkillUI.CheckRespecNPC()
 |------|------|---------|-------------|
 | `canInteract` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canInteract = C_TradeSkillUI.CheckRespecNPC()
@@ -90,7 +90,7 @@ local canInteract = C_TradeSkillUI.CheckRespecNPC()
 C_TradeSkillUI.CloseTradeSkill()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.CloseTradeSkill()
@@ -102,7 +102,7 @@ C_TradeSkillUI.CloseTradeSkill()
 C_TradeSkillUI.ConfirmProfessionRespec()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.ConfirmProfessionRespec()
@@ -124,10 +124,10 @@ C_TradeSkillUI.CraftEnchant(recipeSpellID, numCasts, [craftingReagents], [itemTa
 | `itemTarget` | ItemLocation | yes |  |
 | `applyConcentration` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TradeSkillUI.CraftEnchant(12345, 0)
+C_TradeSkillUI.CraftEnchant(2050, 0)
 ```
 
 ### C_TradeSkillUI.CraftRecipe
@@ -147,10 +147,10 @@ C_TradeSkillUI.CraftRecipe(recipeSpellID, numCasts, [craftingReagents], [recipeL
 | `orderID` | BigUInteger | yes |  |
 | `applyConcentration` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TradeSkillUI.CraftRecipe(12345, 0)
+C_TradeSkillUI.CraftRecipe(2050, 0)
 ```
 
 ### C_TradeSkillUI.CraftSalvage
@@ -169,10 +169,10 @@ C_TradeSkillUI.CraftSalvage(recipeSpellID, numCasts, itemTarget, [craftingReagen
 | `craftingReagents` | CraftingReagentInfo[] | yes |  |
 | `applyConcentration` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_TradeSkillUI.CraftSalvage(12345, 0, 6948)
+C_TradeSkillUI.CraftSalvage(2050, 0, 6948)
 ```
 
 ### C_TradeSkillUI.DoesRecraftingRecipeAcceptItem
@@ -194,7 +194,7 @@ result = C_TradeSkillUI.DoesRecraftingRecipeAcceptItem(itemLocation, recipeID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.DoesRecraftingRecipeAcceptItem(6948, 0)
@@ -212,7 +212,7 @@ skillLineID = C_TradeSkillUI.GetAllProfessionTradeSkillLines()
 |------|------|---------|-------------|
 | `skillLineID` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineID = C_TradeSkillUI.GetAllProfessionTradeSkillLines()
@@ -230,7 +230,7 @@ info = C_TradeSkillUI.GetBaseProfessionInfo()
 |------|------|---------|-------------|
 | `info` | ProfessionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetBaseProfessionInfo()
@@ -248,7 +248,7 @@ info = C_TradeSkillUI.GetChildProfessionInfo()
 |------|------|---------|-------------|
 | `info` | ProfessionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetChildProfessionInfo()
@@ -266,7 +266,7 @@ infos = C_TradeSkillUI.GetChildProfessionInfos()
 |------|------|---------|-------------|
 | `infos` | ProfessionInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local infos = C_TradeSkillUI.GetChildProfessionInfos()
@@ -290,7 +290,7 @@ currencyType = C_TradeSkillUI.GetConcentrationCurrencyID(skillLineID)
 |------|------|---------|-------------|
 | `currencyType` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyType = C_TradeSkillUI.GetConcentrationCurrencyID(0)
@@ -315,10 +315,10 @@ numAvailable = C_TradeSkillUI.GetCraftableCount(recipeSpellID, [recipeLevel])
 |------|------|---------|-------------|
 | `numAvailable` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local numAvailable = C_TradeSkillUI.GetCraftableCount(12345)
+local numAvailable = C_TradeSkillUI.GetCraftableCount(2050)
 ```
 
 ### C_TradeSkillUI.GetCraftingOperationInfo
@@ -342,7 +342,7 @@ info = C_TradeSkillUI.GetCraftingOperationInfo(recipeID, craftingReagents, [allo
 |------|------|---------|-------------|
 | `info` | CraftingOperationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetCraftingOperationInfo(0, craftingReagents, false)
@@ -369,7 +369,7 @@ info = C_TradeSkillUI.GetCraftingOperationInfoForOrder(recipeID, craftingReagent
 |------|------|---------|-------------|
 | `info` | CraftingOperationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetCraftingOperationInfoForOrder(0, craftingReagents, orderID, false)
@@ -396,10 +396,10 @@ bonusText = C_TradeSkillUI.GetCraftingReagentBonusText(recipeSpellID, craftingRe
 |------|------|---------|-------------|
 | `bonusText` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local bonusText = C_TradeSkillUI.GetCraftingReagentBonusText(12345, 1, craftingReagents)
+local bonusText = C_TradeSkillUI.GetCraftingReagentBonusText(2050, 1, craftingReagents)
 ```
 
 ### C_TradeSkillUI.GetCraftingTargetItems
@@ -420,7 +420,7 @@ items = C_TradeSkillUI.GetCraftingTargetItems(itemIDs)
 |------|------|---------|-------------|
 | `items` | CraftingTargetItem[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local items = C_TradeSkillUI.GetCraftingTargetItems(6948)
@@ -444,7 +444,7 @@ reagents = C_TradeSkillUI.GetDependentReagents(reagent)
 |------|------|---------|-------------|
 | `reagents` | CraftingReagent[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reagents = C_TradeSkillUI.GetDependentReagents(reagent)
@@ -469,7 +469,7 @@ items = C_TradeSkillUI.GetEnchantItems(recipeID, [craftingReagents])
 |------|------|---------|-------------|
 | `items` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local items = C_TradeSkillUI.GetEnchantItems(0)
@@ -493,10 +493,10 @@ itemID = C_TradeSkillUI.GetFactionSpecificOutputItem(recipeSpellID)
 |------|------|---------|-------------|
 | `itemID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local itemID = C_TradeSkillUI.GetFactionSpecificOutputItem(12345)
+local itemID = C_TradeSkillUI.GetFactionSpecificOutputItem(2050)
 ```
 
 ### C_TradeSkillUI.GetGatheringOperationInfo
@@ -517,7 +517,7 @@ info = C_TradeSkillUI.GetGatheringOperationInfo(recipeID)
 |------|------|---------|-------------|
 | `info` | GatheringOperationInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetGatheringOperationInfo(0)
@@ -542,7 +542,7 @@ cannotModifyHideUnowned, alwaysShowUnowned = C_TradeSkillUI.GetHideUnownedFlags(
 | `cannotModifyHideUnowned` | bool | no |  |
 | `alwaysShowUnowned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cannotModifyHideUnowned, alwaysShowUnowned = C_TradeSkillUI.GetHideUnownedFlags(0)
@@ -566,7 +566,7 @@ quality = C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemInfo)
 |------|------|---------|-------------|
 | `quality` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quality = C_TradeSkillUI.GetItemCraftedQualityByItemInfo(6948)
@@ -590,7 +590,7 @@ info = C_TradeSkillUI.GetItemCraftedQualityInfo(itemInfo)
 |------|------|---------|-------------|
 | `info` | CraftingQualityInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetItemCraftedQualityInfo(6948)
@@ -614,7 +614,7 @@ quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemInfo)
 |------|------|---------|-------------|
 | `quality` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(6948)
@@ -638,7 +638,7 @@ info = C_TradeSkillUI.GetItemReagentQualityInfo(itemInfo)
 |------|------|---------|-------------|
 | `info` | CraftingQualityInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetItemReagentQualityInfo(6948)
@@ -662,10 +662,10 @@ slotMods = C_TradeSkillUI.GetItemSlotModifications(itemGUID)
 |------|------|---------|-------------|
 | `slotMods` | CraftingItemSlotModification[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local slotMods = C_TradeSkillUI.GetItemSlotModifications("Creature-0-0000-0-0-0-0")
+local slotMods = C_TradeSkillUI.GetItemSlotModifications(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.GetItemSlotModificationsForOrder
@@ -686,7 +686,7 @@ slotMods = C_TradeSkillUI.GetItemSlotModificationsForOrder(orderID)
 |------|------|---------|-------------|
 | `slotMods` | CraftingItemSlotModification[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotMods = C_TradeSkillUI.GetItemSlotModificationsForOrder(orderID)
@@ -711,10 +711,10 @@ recipeID, skillLineAbilityID = C_TradeSkillUI.GetOriginalCraftRecipeID(itemGUID)
 | `recipeID` | number | yes |  |
 | `skillLineAbilityID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local recipeID, skillLineAbilityID = C_TradeSkillUI.GetOriginalCraftRecipeID("Creature-0-0000-0-0-0-0")
+local recipeID, skillLineAbilityID = C_TradeSkillUI.GetOriginalCraftRecipeID(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.GetProfessionByInventorySlot
@@ -735,7 +735,7 @@ profession = C_TradeSkillUI.GetProfessionByInventorySlot(slot)
 |------|------|---------|-------------|
 | `profession` | Profession | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local profession = C_TradeSkillUI.GetProfessionByInventorySlot(1)
@@ -753,7 +753,7 @@ skillLineID = C_TradeSkillUI.GetProfessionChildSkillLineID()
 |------|------|---------|-------------|
 | `skillLineID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineID = C_TradeSkillUI.GetProfessionChildSkillLineID()
@@ -771,7 +771,7 @@ profession = C_TradeSkillUI.GetProfessionForCursorItem()
 |------|------|---------|-------------|
 | `profession` | Profession | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local profession = C_TradeSkillUI.GetProfessionForCursorItem()
@@ -795,7 +795,7 @@ info = C_TradeSkillUI.GetProfessionInfoByRecipeID(recipeID)
 |------|------|---------|-------------|
 | `info` | ProfessionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetProfessionInfoByRecipeID(0)
@@ -819,7 +819,7 @@ info = C_TradeSkillUI.GetProfessionInfoBySkillLineID(skillLineID)
 |------|------|---------|-------------|
 | `info` | ProfessionInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetProfessionInfoBySkillLineID(0)
@@ -837,7 +837,7 @@ invSlots = C_TradeSkillUI.GetProfessionInventorySlots()
 |------|------|---------|-------------|
 | `invSlots` | InventorySlots[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local invSlots = C_TradeSkillUI.GetProfessionInventorySlots()
@@ -861,7 +861,7 @@ professionNmae = C_TradeSkillUI.GetProfessionNameForSkillLineAbility(skillLineAb
 |------|------|---------|-------------|
 | `professionNmae` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local professionNmae = C_TradeSkillUI.GetProfessionNameForSkillLineAbility(0)
@@ -885,7 +885,7 @@ skillLineID = C_TradeSkillUI.GetProfessionSkillLineID(profession)
 |------|------|---------|-------------|
 | `skillLineID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineID = C_TradeSkillUI.GetProfessionSkillLineID(profession)
@@ -909,7 +909,7 @@ slots = C_TradeSkillUI.GetProfessionSlots(profession)
 |------|------|---------|-------------|
 | `slots` | luaIndex[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slots = C_TradeSkillUI.GetProfessionSlots(profession)
@@ -934,7 +934,7 @@ knownSpells = C_TradeSkillUI.GetProfessionSpells(professionID, [skillLineID])
 |------|------|---------|-------------|
 | `knownSpells` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local knownSpells = C_TradeSkillUI.GetProfessionSpells(0)
@@ -958,7 +958,7 @@ qualityIDs = C_TradeSkillUI.GetQualitiesForRecipe(recipeID)
 |------|------|---------|-------------|
 | `qualityIDs` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local qualityIDs = C_TradeSkillUI.GetQualitiesForRecipe(0)
@@ -983,7 +983,7 @@ bonusText = C_TradeSkillUI.GetReagentDifficultyText(craftingReagentIndex, crafti
 |------|------|---------|-------------|
 | `bonusText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local bonusText = C_TradeSkillUI.GetReagentDifficultyText(1, craftingReagents)
@@ -1010,10 +1010,10 @@ locked, lockedReason = C_TradeSkillUI.GetReagentSlotStatus(mcrSlotID, recipeSpel
 | `locked` | bool | no |  |
 | `lockedReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local locked, lockedReason = C_TradeSkillUI.GetReagentSlotStatus(1, 12345, 0)
+local locked, lockedReason = C_TradeSkillUI.GetReagentSlotStatus(1, 2050, 0)
 ```
 
 ### C_TradeSkillUI.GetRecipeDescription
@@ -1036,7 +1036,7 @@ description = C_TradeSkillUI.GetRecipeDescription(recipeID, craftingReagents, [a
 |------|------|---------|-------------|
 | `description` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_TradeSkillUI.GetRecipeDescription(0, craftingReagents)
@@ -1061,10 +1061,10 @@ recipeInfo = C_TradeSkillUI.GetRecipeInfo(recipeSpellID, [recipeLevel])
 |------|------|---------|-------------|
 | `recipeInfo` | TradeSkillRecipeInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local recipeInfo = C_TradeSkillUI.GetRecipeInfo(12345)
+local recipeInfo = C_TradeSkillUI.GetRecipeInfo(2050)
 ```
 
 ### C_TradeSkillUI.GetRecipeInfoForSkillLineAbility
@@ -1086,7 +1086,7 @@ recipeInfo = C_TradeSkillUI.GetRecipeInfoForSkillLineAbility(skillLineAbilityID,
 |------|------|---------|-------------|
 | `recipeInfo` | TradeSkillRecipeInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recipeInfo = C_TradeSkillUI.GetRecipeInfoForSkillLineAbility(0)
@@ -1111,7 +1111,7 @@ info = C_TradeSkillUI.GetRecipeItemQualityInfo(recipeID, quality)
 |------|------|---------|-------------|
 | `info` | CraftingQualityInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TradeSkillUI.GetRecipeItemQualityInfo(0, 0)
@@ -1139,10 +1139,10 @@ outputInfo = C_TradeSkillUI.GetRecipeOutputItemData(recipeSpellID, [reagents], [
 |------|------|---------|-------------|
 | `outputInfo` | CraftingRecipeOutputInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local outputInfo = C_TradeSkillUI.GetRecipeOutputItemData(12345)
+local outputInfo = C_TradeSkillUI.GetRecipeOutputItemData(2050)
 ```
 
 ### C_TradeSkillUI.GetRecipeQualityItemIDs
@@ -1163,10 +1163,10 @@ qualityItemIDs = C_TradeSkillUI.GetRecipeQualityItemIDs(recipeSpellID)
 |------|------|---------|-------------|
 | `qualityItemIDs` | number[] | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local qualityItemIDs = C_TradeSkillUI.GetRecipeQualityItemIDs(12345)
+local qualityItemIDs = C_TradeSkillUI.GetRecipeQualityItemIDs(2050)
 ```
 
 ### C_TradeSkillUI.GetRecipeQualityReagentLink
@@ -1189,7 +1189,7 @@ link = C_TradeSkillUI.GetRecipeQualityReagentLink(recipeID, dataSlotIndex, quali
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_TradeSkillUI.GetRecipeQualityReagentLink(0, 1, 1)
@@ -1213,7 +1213,7 @@ requirements = C_TradeSkillUI.GetRecipeRequirements(recipeID)
 |------|------|---------|-------------|
 | `requirements` | CraftingRecipeRequirement[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local requirements = C_TradeSkillUI.GetRecipeRequirements(0)
@@ -1239,10 +1239,10 @@ schematic = C_TradeSkillUI.GetRecipeSchematic(recipeSpellID, isRecraft, [recipeL
 |------|------|---------|-------------|
 | `schematic` | CraftingRecipeSchematic | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local schematic = C_TradeSkillUI.GetRecipeSchematic(12345, false)
+local schematic = C_TradeSkillUI.GetRecipeSchematic(2050, false)
 ```
 
 ### C_TradeSkillUI.GetRecipesTracked
@@ -1263,7 +1263,7 @@ recipeIDs = C_TradeSkillUI.GetRecipesTracked(isRecraft)
 |------|------|---------|-------------|
 | `recipeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recipeIDs = C_TradeSkillUI.GetRecipesTracked(false)
@@ -1287,7 +1287,7 @@ items = C_TradeSkillUI.GetRecraftItems([recipeID])
 |------|------|---------|-------------|
 | `items` | WOWGUID[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local items = C_TradeSkillUI.GetRecraftItems()
@@ -1312,10 +1312,10 @@ warnings = C_TradeSkillUI.GetRecraftRemovalWarnings(itemGUID, replacedReagents)
 |------|------|---------|-------------|
 | `warnings` | cstring[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local warnings = C_TradeSkillUI.GetRecraftRemovalWarnings("Creature-0-0000-0-0-0-0", replacedReagents)
+local warnings = C_TradeSkillUI.GetRecraftRemovalWarnings(UnitGUID("player"), replacedReagents)
 ```
 
 ### C_TradeSkillUI.GetRemainingRecasts
@@ -1330,7 +1330,7 @@ remaining = C_TradeSkillUI.GetRemainingRecasts()
 |------|------|---------|-------------|
 | `remaining` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remaining = C_TradeSkillUI.GetRemainingRecasts()
@@ -1354,7 +1354,7 @@ itemIDs = C_TradeSkillUI.GetSalvagableItemIDs(recipeID)
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemIDs = C_TradeSkillUI.GetSalvagableItemIDs(0)
@@ -1372,7 +1372,7 @@ flag = C_TradeSkillUI.GetShowLearned()
 |------|------|---------|-------------|
 | `flag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flag = C_TradeSkillUI.GetShowLearned()
@@ -1390,7 +1390,7 @@ flag = C_TradeSkillUI.GetShowUnlearned()
 |------|------|---------|-------------|
 | `flag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local flag = C_TradeSkillUI.GetShowUnlearned()
@@ -1414,7 +1414,7 @@ skillLineID = C_TradeSkillUI.GetSkillLineForGear(itemInfo)
 |------|------|---------|-------------|
 | `skillLineID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local skillLineID = C_TradeSkillUI.GetSkillLineForGear(6948)
@@ -1432,7 +1432,7 @@ sourceTypeFilter = C_TradeSkillUI.GetSourceTypeFilter()
 |------|------|---------|-------------|
 | `sourceTypeFilter` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local sourceTypeFilter = C_TradeSkillUI.GetSourceTypeFilter()
@@ -1456,7 +1456,7 @@ professionDisplayName = C_TradeSkillUI.GetTradeSkillDisplayName(skillLineID)
 |------|------|---------|-------------|
 | `professionDisplayName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local professionDisplayName = C_TradeSkillUI.GetTradeSkillDisplayName(0)
@@ -1474,7 +1474,7 @@ hasFavorites = C_TradeSkillUI.HasFavoriteOrderRecipes()
 |------|------|---------|-------------|
 | `hasFavorites` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasFavorites = C_TradeSkillUI.HasFavoriteOrderRecipes()
@@ -1500,10 +1500,10 @@ valid = C_TradeSkillUI.IsEnchantTargetValid(recipeID, itemGUID, [craftingReagent
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local valid = C_TradeSkillUI.IsEnchantTargetValid(0, "Creature-0-0000-0-0-0-0")
+local valid = C_TradeSkillUI.IsEnchantTargetValid(0, UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.IsGuildTradeSkillsEnabled
@@ -1518,7 +1518,7 @@ enabled = C_TradeSkillUI.IsGuildTradeSkillsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_TradeSkillUI.IsGuildTradeSkillsEnabled()
@@ -1542,7 +1542,7 @@ nearFocus = C_TradeSkillUI.IsNearProfessionSpellFocus(profession)
 |------|------|---------|-------------|
 | `nearFocus` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nearFocus = C_TradeSkillUI.IsNearProfessionSpellFocus(profession)
@@ -1560,7 +1560,7 @@ result = C_TradeSkillUI.IsNPCCrafting()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.IsNPCCrafting()
@@ -1584,10 +1584,10 @@ learned = C_TradeSkillUI.IsOriginalCraftRecipeLearned(itemGUID)
 |------|------|---------|-------------|
 | `learned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local learned = C_TradeSkillUI.IsOriginalCraftRecipeLearned("Creature-0-0000-0-0-0-0")
+local learned = C_TradeSkillUI.IsOriginalCraftRecipeLearned(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.IsRecipeFirstCraft
@@ -1608,7 +1608,7 @@ result = C_TradeSkillUI.IsRecipeFirstCraft(recipeID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.IsRecipeFirstCraft(0)
@@ -1632,7 +1632,7 @@ result = C_TradeSkillUI.IsRecipeInBaseSkillLine(recipeID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.IsRecipeInBaseSkillLine(0)
@@ -1657,7 +1657,7 @@ result = C_TradeSkillUI.IsRecipeInSkillLine(recipeID, skillLineID)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.IsRecipeInSkillLine(0, 0)
@@ -1681,7 +1681,7 @@ recipeProfessionLearned = C_TradeSkillUI.IsRecipeProfessionLearned(recipeID)
 |------|------|---------|-------------|
 | `recipeProfessionLearned` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recipeProfessionLearned = C_TradeSkillUI.IsRecipeProfessionLearned(0)
@@ -1706,7 +1706,7 @@ tracked = C_TradeSkillUI.IsRecipeTracked(recipeID, isRecraft)
 |------|------|---------|-------------|
 | `tracked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tracked = C_TradeSkillUI.IsRecipeTracked(0, false)
@@ -1730,10 +1730,10 @@ isEquipped = C_TradeSkillUI.IsRecraftItemEquipped(recraftItemGUID)
 |------|------|---------|-------------|
 | `isEquipped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isEquipped = C_TradeSkillUI.IsRecraftItemEquipped("Creature-0-0000-0-0-0-0")
+local isEquipped = C_TradeSkillUI.IsRecraftItemEquipped(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.IsRecraftReagentValid
@@ -1755,10 +1755,10 @@ valid = C_TradeSkillUI.IsRecraftReagentValid(itemGUID, reagent)
 |------|------|---------|-------------|
 | `valid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local valid = C_TradeSkillUI.IsRecraftReagentValid("Creature-0-0000-0-0-0-0", reagent)
+local valid = C_TradeSkillUI.IsRecraftReagentValid(UnitGUID("player"), reagent)
 ```
 
 ### C_TradeSkillUI.IsRuneforging
@@ -1773,7 +1773,7 @@ result = C_TradeSkillUI.IsRuneforging()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_TradeSkillUI.IsRuneforging()
@@ -1791,7 +1791,7 @@ C_TradeSkillUI.OpenRecipe(recipeID)
 |------|------|---------|-------------|
 | `recipeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.OpenRecipe(0)
@@ -1815,7 +1815,7 @@ opened = C_TradeSkillUI.OpenTradeSkill(skillLineID)
 |------|------|---------|-------------|
 | `opened` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local opened = C_TradeSkillUI.OpenTradeSkill(0)
@@ -1839,7 +1839,7 @@ recraftValid = C_TradeSkillUI.RecraftLimitCategoryValid(reagent)
 |------|------|---------|-------------|
 | `recraftValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local recraftValid = C_TradeSkillUI.RecraftLimitCategoryValid(reagent)
@@ -1866,10 +1866,10 @@ result = C_TradeSkillUI.RecraftRecipe(itemGUID, [craftingReagents], [removedModi
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_TradeSkillUI.RecraftRecipe("Creature-0-0000-0-0-0-0")
+local result = C_TradeSkillUI.RecraftRecipe(UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.RecraftRecipeForOrder
@@ -1894,10 +1894,10 @@ result = C_TradeSkillUI.RecraftRecipeForOrder(orderID, itemGUID, [craftingReagen
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_TradeSkillUI.RecraftRecipeForOrder(orderID, "Creature-0-0000-0-0-0-0")
+local result = C_TradeSkillUI.RecraftRecipeForOrder(orderID, UnitGUID("player"))
 ```
 
 ### C_TradeSkillUI.SetOnlyShowAvailableForOrders
@@ -1912,7 +1912,7 @@ C_TradeSkillUI.SetOnlyShowAvailableForOrders(flag)
 |------|------|---------|-------------|
 | `flag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetOnlyShowAvailableForOrders(false)
@@ -1930,7 +1930,7 @@ C_TradeSkillUI.SetProfessionChildSkillLineID(skillLineID)
 |------|------|---------|-------------|
 | `skillLineID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetProfessionChildSkillLineID(0)
@@ -1950,7 +1950,7 @@ C_TradeSkillUI.SetRecipeTracked(recipeID, tracked, isRecraft)
 | `tracked` | bool | no |  |
 | `isRecraft` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetRecipeTracked(0, false, false)
@@ -1968,7 +1968,7 @@ C_TradeSkillUI.SetShowLearned(flag)
 |------|------|---------|-------------|
 | `flag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetShowLearned(false)
@@ -1986,7 +1986,7 @@ C_TradeSkillUI.SetShowUnlearned(flag)
 |------|------|---------|-------------|
 | `flag` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetShowUnlearned(false)
@@ -2004,7 +2004,7 @@ C_TradeSkillUI.SetSourceTypeFilter(sourceTypeFilter)
 |------|------|---------|-------------|
 | `sourceTypeFilter` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TradeSkillUI.SetSourceTypeFilter("HELPFUL")

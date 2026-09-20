@@ -18,7 +18,7 @@ result = GetAvailableBandwidth()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetAvailableBandwidth()
@@ -36,7 +36,7 @@ result = GetBackgroundLoadingStatus()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetBackgroundLoadingStatus()
@@ -54,7 +54,7 @@ result = GetDownloadedPercentage()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetDownloadedPercentage()
@@ -72,7 +72,7 @@ result = GetFileStreamingStatus()
 |------|------|---------|-------------|
 | `result` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetFileStreamingStatus()

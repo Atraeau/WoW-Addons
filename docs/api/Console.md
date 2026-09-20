@@ -25,7 +25,7 @@ distance = CalculateStringEditDistance(firstString, secondString)
 |------|------|---------|-------------|
 | `distance` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local distance = CalculateStringEditDistance(firstString, secondString)
@@ -51,7 +51,7 @@ result = ConsoleEcho(command, addToHistory, [prefix])
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ConsoleEcho("", false)
@@ -76,7 +76,7 @@ result = ConsoleExec(command, addToHistory)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = ConsoleExec("", false)
@@ -94,7 +94,7 @@ commands = ConsoleGetAllCommands()
 |------|------|---------|-------------|
 | `commands` | ConsoleCommandInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local commands = ConsoleGetAllCommands()
@@ -118,10 +118,10 @@ color = ConsoleGetColorFromType(colorType)
 |------|------|---------|-------------|
 | `color` | colorRGB | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local color = ConsoleGetColorFromType(colorType)
+local color = ConsoleGetColorFromType(Enum.ConsoleColorType.DefaultColor)
 ```
 
 ### Console.ConsoleGetFontHeight
@@ -136,7 +136,7 @@ fontHeightInPixels = ConsoleGetFontHeight()
 |------|------|---------|-------------|
 | `fontHeightInPixels` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local fontHeightInPixels = ConsoleGetFontHeight()
@@ -154,7 +154,7 @@ consoleIsActive = ConsoleIsActive()
 |------|------|---------|-------------|
 | `consoleIsActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local consoleIsActive = ConsoleIsActive()
@@ -172,7 +172,7 @@ ConsolePrintAllMatchingCommands(partialCommandText)
 |------|------|---------|-------------|
 | `partialCommandText` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ConsolePrintAllMatchingCommands("")
@@ -190,7 +190,7 @@ ConsoleSetFontHeight(fontHeightInPixels)
 |------|------|---------|-------------|
 | `fontHeightInPixels` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ConsoleSetFontHeight(0)
@@ -208,7 +208,7 @@ SetConsoleKey(keystring)
 |------|------|---------|-------------|
 | `keystring` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetConsoleKey("")

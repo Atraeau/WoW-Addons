@@ -12,7 +12,7 @@
 C_SuperTrack.ClearAllSuperTracked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.ClearAllSuperTracked()
@@ -24,7 +24,7 @@ C_SuperTrack.ClearAllSuperTracked()
 C_SuperTrack.ClearSuperTrackedContent()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.ClearSuperTrackedContent()
@@ -36,7 +36,7 @@ C_SuperTrack.ClearSuperTrackedContent()
 C_SuperTrack.ClearSuperTrackedMapPin()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.ClearSuperTrackedMapPin()
@@ -54,7 +54,7 @@ type = C_SuperTrack.GetHighestPrioritySuperTrackingType()
 |------|------|---------|-------------|
 | `type` | SuperTrackingType | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type = C_SuperTrack.GetHighestPrioritySuperTrackingType()
@@ -73,7 +73,7 @@ trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
 | `trackableType` | ContentTrackingType | no |  |
 | `trackableID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackableType, trackableID = C_SuperTrack.GetSuperTrackedContent()
@@ -92,7 +92,7 @@ name, description = C_SuperTrack.GetSuperTrackedItemName()
 | `name` | string | no |  |
 | `description` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, description = C_SuperTrack.GetSuperTrackedItemName()
@@ -111,7 +111,7 @@ type, typeID = C_SuperTrack.GetSuperTrackedMapPin()
 | `type` | SuperTrackingMapPinType | no |  |
 | `typeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type, typeID = C_SuperTrack.GetSuperTrackedMapPin()
@@ -129,7 +129,7 @@ questID = C_SuperTrack.GetSuperTrackedQuestID()
 |------|------|---------|-------------|
 | `questID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local questID = C_SuperTrack.GetSuperTrackedQuestID()
@@ -147,7 +147,7 @@ vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
 |------|------|---------|-------------|
 | `vignetteGUID` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local vignetteGUID = C_SuperTrack.GetSuperTrackedVignette()
@@ -165,7 +165,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingAnything()
@@ -183,7 +183,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingContent()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingContent()
@@ -201,7 +201,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingCorpse()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingCorpse()
@@ -219,7 +219,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingMapPin()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingMapPin()
@@ -237,7 +237,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingQuest()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingQuest()
@@ -255,7 +255,7 @@ isSuperTracking = C_SuperTrack.IsSuperTrackingUserWaypoint()
 |------|------|---------|-------------|
 | `isSuperTracking` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSuperTracking = C_SuperTrack.IsSuperTrackingUserWaypoint()
@@ -274,7 +274,7 @@ C_SuperTrack.SetSuperTrackedContent(trackableType, trackableID)
 | `trackableType` | ContentTrackingType | no |  |
 | `trackableID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.SetSuperTrackedContent(trackableType, 0)
@@ -293,7 +293,7 @@ C_SuperTrack.SetSuperTrackedMapPin(type, typeID)
 | `type` | SuperTrackingMapPinType | no |  |
 | `typeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.SetSuperTrackedMapPin(type, 0)
@@ -311,7 +311,7 @@ C_SuperTrack.SetSuperTrackedQuestID(questID)
 |------|------|---------|-------------|
 | `questID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.SetSuperTrackedQuestID(0)
@@ -329,7 +329,7 @@ C_SuperTrack.SetSuperTrackedUserWaypoint(superTracked)
 |------|------|---------|-------------|
 | `superTracked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_SuperTrack.SetSuperTrackedUserWaypoint(false)
@@ -347,10 +347,10 @@ C_SuperTrack.SetSuperTrackedVignette(vignetteGUID)
 |------|------|---------|-------------|
 | `vignetteGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SuperTrack.SetSuperTrackedVignette("Creature-0-0000-0-0-0-0")
+C_SuperTrack.SetSuperTrackedVignette(UnitGUID("player"))
 ```
 
 ## Events

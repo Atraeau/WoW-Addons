@@ -18,7 +18,7 @@ C_LoreText.RequestLoreTextForCampaignID(campaignID)
 |------|------|---------|-------------|
 | `campaignID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LoreText.RequestLoreTextForCampaignID(0)

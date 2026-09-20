@@ -18,7 +18,7 @@ experience = C_BlizzCon2026.GetExperience()
 |------|------|---------|-------------|
 | `experience` | Bc26Experience | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local experience = C_BlizzCon2026.GetExperience()
@@ -36,7 +36,7 @@ isActive = C_BlizzCon2026.IsActive()
 |------|------|---------|-------------|
 | `isActive` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isActive = C_BlizzCon2026.IsActive()
@@ -54,7 +54,7 @@ isEnabled = C_BlizzCon2026.IsColdSwapFeatureEnabled()
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_BlizzCon2026.IsColdSwapFeatureEnabled()
@@ -72,10 +72,10 @@ C_BlizzCon2026.SetExperience(experience)
 |------|------|---------|-------------|
 | `experience` | Bc26Experience | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_BlizzCon2026.SetExperience(experience)
+C_BlizzCon2026.SetExperience(Enum.Bc26Experience.Skyborne)
 ```
 
 ## Events

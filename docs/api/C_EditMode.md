@@ -24,7 +24,7 @@ layoutInfoAsString = C_EditMode.ConvertLayoutInfoToString(layoutInfo)
 |------|------|---------|-------------|
 | `layoutInfoAsString` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layoutInfoAsString = C_EditMode.ConvertLayoutInfoToString(layoutInfo)
@@ -48,7 +48,7 @@ layoutInfo = C_EditMode.ConvertStringToLayoutInfo(layoutInfoAsString)
 |------|------|---------|-------------|
 | `layoutInfo` | EditModeLayoutInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layoutInfo = C_EditMode.ConvertStringToLayoutInfo("")
@@ -66,7 +66,7 @@ accountSettings = C_EditMode.GetAccountSettings()
 |------|------|---------|-------------|
 | `accountSettings` | EditModeSettingInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accountSettings = C_EditMode.GetAccountSettings()
@@ -84,7 +84,7 @@ defaultLayout = C_EditMode.GetEditModeDefaultLayout()
 |------|------|---------|-------------|
 | `defaultLayout` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultLayout = C_EditMode.GetEditModeDefaultLayout()
@@ -102,7 +102,7 @@ layoutInfo = C_EditMode.GetLayouts()
 |------|------|---------|-------------|
 | `layoutInfo` | EditModeLayouts | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local layoutInfo = C_EditMode.GetLayouts()
@@ -126,7 +126,7 @@ isApproved = C_EditMode.IsValidLayoutName(name)
 |------|------|---------|-------------|
 | `isApproved` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isApproved = C_EditMode.IsValidLayoutName("")
@@ -138,7 +138,7 @@ local isApproved = C_EditMode.IsValidLayoutName("")
 C_EditMode.OnEditModeExit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EditMode.OnEditModeExit()
@@ -158,7 +158,7 @@ C_EditMode.OnLayoutAdded(addedLayoutIndex, activateNewLayout, isLayoutImported)
 | `activateNewLayout` | bool | no |  |
 | `isLayoutImported` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EditMode.OnLayoutAdded(1, false, false)
@@ -176,7 +176,7 @@ C_EditMode.OnLayoutDeleted(deletedLayoutIndex)
 |------|------|---------|-------------|
 | `deletedLayoutIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EditMode.OnLayoutDeleted(1)
@@ -194,7 +194,7 @@ C_EditMode.SaveLayouts(saveInfo)
 |------|------|---------|-------------|
 | `saveInfo` | EditModeLayouts | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EditMode.SaveLayouts(saveInfo)
@@ -213,7 +213,7 @@ C_EditMode.SetAccountSetting(setting, value)
 | `setting` | EditModeAccountSetting | no |  |
 | `value` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EditMode.SetAccountSetting(setting, 0)
@@ -231,10 +231,10 @@ C_EditMode.SetActiveLayout(activeLayout)
 |------|------|---------|-------------|
 | `activeLayout` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_EditMode.SetActiveLayout(activeLayout)
+C_EditMode.SetActiveLayout(1)
 ```
 
 ## Events

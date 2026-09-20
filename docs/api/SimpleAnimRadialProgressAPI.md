@@ -18,7 +18,7 @@ percent = GetFromPercent()
 |------|------|---------|-------------|
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percent = GetFromPercent()
@@ -36,7 +36,7 @@ percent = GetToPercent()
 |------|------|---------|-------------|
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local percent = GetToPercent()
@@ -54,7 +54,7 @@ SetFromPercent(percent)
 |------|------|---------|-------------|
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetFromPercent(0)
@@ -72,7 +72,7 @@ SetToPercent(percent)
 |------|------|---------|-------------|
 | `percent` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetToPercent(0)

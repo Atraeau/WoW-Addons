@@ -18,7 +18,7 @@ objects = C_System.GetFrameStack()
 |------|------|---------|-------------|
 | `objects` | ScriptRegion[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local objects = C_System.GetFrameStack()

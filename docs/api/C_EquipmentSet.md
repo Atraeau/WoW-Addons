@@ -19,7 +19,7 @@ C_EquipmentSet.AssignSpecToEquipmentSet(equipmentSetID, specIndex)
 | `equipmentSetID` | number | no |  |
 | `specIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.AssignSpecToEquipmentSet(0, 1)
@@ -37,7 +37,7 @@ canUseEquipmentSets = C_EquipmentSet.CanUseEquipmentSets()
 |------|------|---------|-------------|
 | `canUseEquipmentSets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canUseEquipmentSets = C_EquipmentSet.CanUseEquipmentSets()
@@ -49,7 +49,7 @@ local canUseEquipmentSets = C_EquipmentSet.CanUseEquipmentSets()
 C_EquipmentSet.ClearIgnoredSlotsForSave()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.ClearIgnoredSlotsForSave()
@@ -68,7 +68,7 @@ C_EquipmentSet.CreateEquipmentSet(equipmentSetName, [icon])
 | `equipmentSetName` | cstring | no |  |
 | `icon` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.CreateEquipmentSet("")
@@ -86,7 +86,7 @@ C_EquipmentSet.DeleteEquipmentSet(equipmentSetID)
 |------|------|---------|-------------|
 | `equipmentSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.DeleteEquipmentSet(0)
@@ -110,7 +110,7 @@ hasLockedItems = C_EquipmentSet.EquipmentSetContainsLockedItems(equipmentSetID)
 |------|------|---------|-------------|
 | `hasLockedItems` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasLockedItems = C_EquipmentSet.EquipmentSetContainsLockedItems(0)
@@ -134,7 +134,7 @@ specIndex = C_EquipmentSet.GetEquipmentSetAssignedSpec(equipmentSetID)
 |------|------|---------|-------------|
 | `specIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specIndex = C_EquipmentSet.GetEquipmentSetAssignedSpec(0)
@@ -158,7 +158,7 @@ equipmentSetID = C_EquipmentSet.GetEquipmentSetForSpec(specIndex)
 |------|------|---------|-------------|
 | `equipmentSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local equipmentSetID = C_EquipmentSet.GetEquipmentSetForSpec(1)
@@ -182,7 +182,7 @@ equipmentSetID = C_EquipmentSet.GetEquipmentSetID(equipmentSetName)
 |------|------|---------|-------------|
 | `equipmentSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local equipmentSetID = C_EquipmentSet.GetEquipmentSetID("")
@@ -200,7 +200,7 @@ equipmentSetIDs = C_EquipmentSet.GetEquipmentSetIDs()
 |------|------|---------|-------------|
 | `equipmentSetIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local equipmentSetIDs = C_EquipmentSet.GetEquipmentSetIDs()
@@ -232,7 +232,7 @@ name, iconFileID, setID, isEquipped, numItems, numEquipped, numInInventory, numL
 | `numLost` | number | no |  |
 | `numIgnored` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, iconFileID, setID, isEquipped, numItems, numEquipped, numInInventory, numLost, numIgnored = C_EquipmentSet.GetEquipmentSetInfo(0)
@@ -256,7 +256,7 @@ slotIgnored = C_EquipmentSet.GetIgnoredSlots(equipmentSetID)
 |------|------|---------|-------------|
 | `slotIgnored` | bool[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotIgnored = C_EquipmentSet.GetIgnoredSlots(0)
@@ -280,7 +280,7 @@ itemIDs = C_EquipmentSet.GetItemIDs(equipmentSetID)
 |------|------|---------|-------------|
 | `itemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemIDs = C_EquipmentSet.GetItemIDs(0)
@@ -304,7 +304,7 @@ locations = C_EquipmentSet.GetItemLocations(equipmentSetID)
 |------|------|---------|-------------|
 | `locations` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local locations = C_EquipmentSet.GetItemLocations(0)
@@ -322,7 +322,7 @@ numEquipmentSets = C_EquipmentSet.GetNumEquipmentSets()
 |------|------|---------|-------------|
 | `numEquipmentSets` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numEquipmentSets = C_EquipmentSet.GetNumEquipmentSets()
@@ -340,7 +340,7 @@ C_EquipmentSet.IgnoreSlotForSave(slot)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.IgnoreSlotForSave(1)
@@ -364,7 +364,7 @@ isSlotIgnored = C_EquipmentSet.IsSlotIgnoredForSave(slot)
 |------|------|---------|-------------|
 | `isSlotIgnored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSlotIgnored = C_EquipmentSet.IsSlotIgnoredForSave(1)
@@ -384,7 +384,7 @@ C_EquipmentSet.ModifyEquipmentSet(equipmentSetID, newName, [newIcon])
 | `newName` | cstring | no |  |
 | `newIcon` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.ModifyEquipmentSet(0, "")
@@ -402,7 +402,7 @@ C_EquipmentSet.PickupEquipmentSet(equipmentSetID)
 |------|------|---------|-------------|
 | `equipmentSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.PickupEquipmentSet(0)
@@ -421,7 +421,7 @@ C_EquipmentSet.SaveEquipmentSet(equipmentSetID, [icon])
 | `equipmentSetID` | number | no |  |
 | `icon` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.SaveEquipmentSet(0)
@@ -439,7 +439,7 @@ C_EquipmentSet.UnassignEquipmentSetSpec(equipmentSetID)
 |------|------|---------|-------------|
 | `equipmentSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.UnassignEquipmentSetSpec(0)
@@ -457,7 +457,7 @@ C_EquipmentSet.UnignoreSlotForSave(slot)
 |------|------|---------|-------------|
 | `slot` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_EquipmentSet.UnignoreSlotForSave(1)
@@ -481,7 +481,7 @@ setWasEquipped = C_EquipmentSet.UseEquipmentSet(equipmentSetID)
 |------|------|---------|-------------|
 | `setWasEquipped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local setWasEquipped = C_EquipmentSet.UseEquipmentSet(0)

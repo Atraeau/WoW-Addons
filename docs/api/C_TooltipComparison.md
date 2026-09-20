@@ -20,7 +20,7 @@ C_TooltipComparison.CompareItem(comparisonItem, tooltip, [anchorFrame])
 | `tooltip` | Tooltip | no |  |
 | `anchorFrame` | SimpleFrame | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_TooltipComparison.CompareItem(6948, tooltip)
@@ -47,7 +47,7 @@ lines = C_TooltipComparison.GetItemComparisonDelta(comparisonItem, equippedItem,
 |------|------|---------|-------------|
 | `lines` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local lines = C_TooltipComparison.GetItemComparisonDelta(6948, 6948)
@@ -71,7 +71,7 @@ info = C_TooltipComparison.GetItemComparisonInfo(comparisonItem)
 |------|------|---------|-------------|
 | `info` | TooltipItemComparisonInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_TooltipComparison.GetItemComparisonInfo(6948)

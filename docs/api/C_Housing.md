@@ -12,7 +12,7 @@
 C_Housing.AcceptNeighborhoodOwnership()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.AcceptNeighborhoodOwnership()
@@ -30,7 +30,7 @@ canEditCharter = C_Housing.CanEditCharter()
 |------|------|---------|-------------|
 | `canEditCharter` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canEditCharter = C_Housing.CanEditCharter()
@@ -54,7 +54,7 @@ reason = C_Housing.CanTakeReportScreenshot(plotIndex)
 |------|------|---------|-------------|
 | `reason` | InvalidPlotScreenshotReason | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local reason = C_Housing.CanTakeReportScreenshot(1)
@@ -72,7 +72,7 @@ C_Housing.CreateGuildNeighborhood(neighborhoodName)
 |------|------|---------|-------------|
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.CreateGuildNeighborhood("")
@@ -90,7 +90,7 @@ C_Housing.CreateNeighborhoodCharter(neighborhoodName)
 |------|------|---------|-------------|
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.CreateNeighborhoodCharter("")
@@ -102,7 +102,7 @@ C_Housing.CreateNeighborhoodCharter("")
 C_Housing.DeclineNeighborhoodOwnership()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.DeclineNeighborhoodOwnership()
@@ -126,10 +126,10 @@ factionMatches = C_Housing.DoesFactionMatchNeighborhood(neighborhoodGUID)
 |------|------|---------|-------------|
 | `factionMatches` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local factionMatches = C_Housing.DoesFactionMatchNeighborhood("Creature-0-0000-0-0-0-0")
+local factionMatches = C_Housing.DoesFactionMatchNeighborhood(UnitGUID("player"))
 ```
 
 ### C_Housing.EditNeighborhoodCharter
@@ -144,7 +144,7 @@ C_Housing.EditNeighborhoodCharter(neighborhoodName)
 |------|------|---------|-------------|
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.EditNeighborhoodCharter("")
@@ -162,7 +162,7 @@ houseInfo = C_Housing.GetCurrentHouseInfo()
 |------|------|---------|-------------|
 | `houseInfo` | HouseInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local houseInfo = C_Housing.GetCurrentHouseInfo()
@@ -180,10 +180,10 @@ C_Housing.GetCurrentHouseLevelFavor(houseGuid)
 |------|------|---------|-------------|
 | `houseGuid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.GetCurrentHouseLevelFavor("Creature-0-0000-0-0-0-0")
+C_Housing.GetCurrentHouseLevelFavor(UnitGUID("player"))
 ```
 
 ### C_Housing.GetCurrentHouseRefundAmount
@@ -198,7 +198,7 @@ refundAmount = C_Housing.GetCurrentHouseRefundAmount()
 |------|------|---------|-------------|
 | `refundAmount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundAmount = C_Housing.GetCurrentHouseRefundAmount()
@@ -216,7 +216,7 @@ neighborhoodGUID = C_Housing.GetCurrentNeighborhoodGUID()
 |------|------|---------|-------------|
 | `neighborhoodGUID` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local neighborhoodGUID = C_Housing.GetCurrentNeighborhoodGUID()
@@ -240,7 +240,7 @@ houseFavor = C_Housing.GetHouseLevelFavorForLevel(level)
 |------|------|---------|-------------|
 | `houseFavor` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local houseFavor = C_Housing.GetHouseLevelFavorForLevel(0)
@@ -258,7 +258,7 @@ C_Housing.GetHouseLevelRewardsForLevel(level)
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.GetHouseLevelRewardsForLevel(0)
@@ -276,7 +276,7 @@ accessFlags = C_Housing.GetHousingAccessFlags()
 |------|------|---------|-------------|
 | `accessFlags` | HouseSettingFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accessFlags = C_Housing.GetHousingAccessFlags()
@@ -294,7 +294,7 @@ level = C_Housing.GetMaxHouseLevel()
 |------|------|---------|-------------|
 | `level` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local level = C_Housing.GetMaxHouseLevel()
@@ -318,10 +318,10 @@ neighborhoodTextureSuffix = C_Housing.GetNeighborhoodTextureSuffix(neighborhoodG
 |------|------|---------|-------------|
 | `neighborhoodTextureSuffix` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local neighborhoodTextureSuffix = C_Housing.GetNeighborhoodTextureSuffix("Creature-0-0000-0-0-0-0")
+local neighborhoodTextureSuffix = C_Housing.GetNeighborhoodTextureSuffix(UnitGUID("player"))
 ```
 
 ### C_Housing.GetOthersOwnedHouses
@@ -338,7 +338,7 @@ C_Housing.GetOthersOwnedHouses([playerGUID], [bnetID], isInPlayersGuild)
 | `bnetID` | number | yes |  |
 | `isInPlayersGuild` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.GetOthersOwnedHouses(false)
@@ -350,7 +350,7 @@ C_Housing.GetOthersOwnedHouses(false)
 C_Housing.GetPlayerOwnedHouses()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.GetPlayerOwnedHouses()
@@ -368,7 +368,7 @@ trackedHouse = C_Housing.GetTrackedHouseGuid()
 |------|------|---------|-------------|
 | `trackedHouse` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackedHouse = C_Housing.GetTrackedHouseGuid()
@@ -392,10 +392,10 @@ uiMapID = C_Housing.GetUIMapIDForNeighborhood(neighborhoodGuid)
 |------|------|---------|-------------|
 | `uiMapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local uiMapID = C_Housing.GetUIMapIDForNeighborhood("Creature-0-0000-0-0-0-0")
+local uiMapID = C_Housing.GetUIMapIDForNeighborhood(UnitGUID("player"))
 ```
 
 ### C_Housing.GetVisitCooldownInfo
@@ -410,7 +410,7 @@ spellCooldownInfo = C_Housing.GetVisitCooldownInfo()
 |------|------|---------|-------------|
 | `spellCooldownInfo` | SpellCooldownInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellCooldownInfo = C_Housing.GetVisitCooldownInfo()
@@ -428,7 +428,7 @@ hasAccess = C_Housing.HasHousingExpansionAccess()
 |------|------|---------|-------------|
 | `hasAccess` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAccess = C_Housing.HasHousingExpansionAccess()
@@ -440,7 +440,7 @@ local hasAccess = C_Housing.HasHousingExpansionAccess()
 C_Housing.HouseFinderDeclineNeighborhoodInvitation()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.HouseFinderDeclineNeighborhoodInvitation()
@@ -458,10 +458,10 @@ C_Housing.HouseFinderIgnoreNeighborhood(neighborhoodGuid)
 |------|------|---------|-------------|
 | `neighborhoodGuid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.HouseFinderIgnoreNeighborhood("Creature-0-0000-0-0-0-0")
+C_Housing.HouseFinderIgnoreNeighborhood(UnitGUID("player"))
 ```
 
 ### C_Housing.HouseFinderRequestNeighborhoods
@@ -470,7 +470,7 @@ C_Housing.HouseFinderIgnoreNeighborhood("Creature-0-0000-0-0-0-0")
 C_Housing.HouseFinderRequestNeighborhoods()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.HouseFinderRequestNeighborhoods()
@@ -489,10 +489,10 @@ C_Housing.HouseFinderRequestReservationAndPort(neighborhoodGuid, plotID)
 | `neighborhoodGuid` | WOWGUID | no |  |
 | `plotID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.HouseFinderRequestReservationAndPort("Creature-0-0000-0-0-0-0", 0)
+C_Housing.HouseFinderRequestReservationAndPort(UnitGUID("player"), 0)
 ```
 
 ### C_Housing.IsHousingMarketCartFullRemoveEnabled
@@ -507,7 +507,7 @@ isHousingMarketCartFullRemoveEnabled = C_Housing.IsHousingMarketCartFullRemoveEn
 |------|------|---------|-------------|
 | `isHousingMarketCartFullRemoveEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHousingMarketCartFullRemoveEnabled = C_Housing.IsHousingMarketCartFullRemoveEnabled()
@@ -525,7 +525,7 @@ isHousingMarketEnabled = C_Housing.IsHousingMarketEnabled()
 |------|------|---------|-------------|
 | `isHousingMarketEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHousingMarketEnabled = C_Housing.IsHousingMarketEnabled()
@@ -543,7 +543,7 @@ isHousingMarketShopEnabled = C_Housing.IsHousingMarketShopEnabled()
 |------|------|---------|-------------|
 | `isHousingMarketShopEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHousingMarketShopEnabled = C_Housing.IsHousingMarketShopEnabled()
@@ -561,7 +561,7 @@ isAvailable = C_Housing.IsHousingServiceEnabled()
 |------|------|---------|-------------|
 | `isAvailable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable = C_Housing.IsHousingServiceEnabled()
@@ -579,7 +579,7 @@ isInside = C_Housing.IsInsideHouse()
 |------|------|---------|-------------|
 | `isInside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInside = C_Housing.IsInsideHouse()
@@ -597,7 +597,7 @@ isInside = C_Housing.IsInsideHouseOrPlot()
 |------|------|---------|-------------|
 | `isInside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInside = C_Housing.IsInsideHouseOrPlot()
@@ -615,7 +615,7 @@ isInsideOwnedHouse = C_Housing.IsInsideOwnedHouse()
 |------|------|---------|-------------|
 | `isInsideOwnedHouse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInsideOwnedHouse = C_Housing.IsInsideOwnedHouse()
@@ -633,7 +633,7 @@ isInsideOwnedHouseOrPlot = C_Housing.IsInsideOwnedHouseOrPlot()
 |------|------|---------|-------------|
 | `isInsideOwnedHouseOrPlot` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInsideOwnedHouseOrPlot = C_Housing.IsInsideOwnedHouseOrPlot()
@@ -651,7 +651,7 @@ isInside = C_Housing.IsInsideOwnedPlot()
 |------|------|---------|-------------|
 | `isInside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInside = C_Housing.IsInsideOwnedPlot()
@@ -669,7 +669,7 @@ isInside = C_Housing.IsInsidePlot()
 |------|------|---------|-------------|
 | `isInside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInside = C_Housing.IsInsidePlot()
@@ -687,7 +687,7 @@ isOnNeighborhoodMap = C_Housing.IsOnNeighborhoodMap()
 |------|------|---------|-------------|
 | `isOnNeighborhoodMap` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOnNeighborhoodMap = C_Housing.IsOnNeighborhoodMap()
@@ -699,7 +699,7 @@ local isOnNeighborhoodMap = C_Housing.IsOnNeighborhoodMap()
 C_Housing.LeaveHouse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.LeaveHouse()
@@ -711,7 +711,7 @@ C_Housing.LeaveHouse()
 C_Housing.OnCharterConfirmationAccepted()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnCharterConfirmationAccepted()
@@ -723,7 +723,7 @@ C_Housing.OnCharterConfirmationAccepted()
 C_Housing.OnCharterConfirmationClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnCharterConfirmationClosed()
@@ -735,7 +735,7 @@ C_Housing.OnCharterConfirmationClosed()
 C_Housing.OnCreateCharterNeighborhoodClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnCreateCharterNeighborhoodClosed()
@@ -747,7 +747,7 @@ C_Housing.OnCreateCharterNeighborhoodClosed()
 C_Housing.OnCreateGuildNeighborhoodClosed()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnCreateGuildNeighborhoodClosed()
@@ -765,7 +765,7 @@ C_Housing.OnHouseFinderClickPlot(plotID)
 |------|------|---------|-------------|
 | `plotID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnHouseFinderClickPlot(0)
@@ -777,7 +777,7 @@ C_Housing.OnHouseFinderClickPlot(0)
 C_Housing.OnRequestSignatureClicked()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.OnRequestSignatureClicked()
@@ -795,10 +795,10 @@ C_Housing.OnSignCharterClicked(charterOwnerGUID)
 |------|------|---------|-------------|
 | `charterOwnerGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.OnSignCharterClicked("Creature-0-0000-0-0-0-0")
+C_Housing.OnSignCharterClicked(UnitGUID("player"))
 ```
 
 ### C_Housing.RelinquishHouse
@@ -813,10 +813,10 @@ C_Housing.RelinquishHouse(houseGuid)
 |------|------|---------|-------------|
 | `houseGuid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.RelinquishHouse("Creature-0-0000-0-0-0-0")
+C_Housing.RelinquishHouse(UnitGUID("player"))
 ```
 
 ### C_Housing.RequestCurrentHouseInfo
@@ -825,7 +825,7 @@ C_Housing.RelinquishHouse("Creature-0-0000-0-0-0-0")
 C_Housing.RequestCurrentHouseInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.RequestCurrentHouseInfo()
@@ -844,10 +844,10 @@ C_Housing.RequestHouseFinderNeighborhoodData(neighborhoodGuid, neighborhoodName)
 | `neighborhoodGuid` | WOWGUID | no |  |
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.RequestHouseFinderNeighborhoodData("Creature-0-0000-0-0-0-0", "")
+C_Housing.RequestHouseFinderNeighborhoodData(UnitGUID("player"), "")
 ```
 
 ### C_Housing.RequestPlayerCharacterList
@@ -856,7 +856,7 @@ C_Housing.RequestHouseFinderNeighborhoodData("Creature-0-0000-0-0-0-0", "")
 C_Housing.RequestPlayerCharacterList()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.RequestPlayerCharacterList()
@@ -876,7 +876,7 @@ C_Housing.ResetHouse(resetScope)
 |------|------|---------|-------------|
 | `resetScope` | HousingHouseScope | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.ResetHouse(resetScope)
@@ -888,7 +888,7 @@ C_Housing.ResetHouse(resetScope)
 C_Housing.ReturnAfterVisitingHouse()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.ReturnAfterVisitingHouse()
@@ -907,10 +907,10 @@ C_Housing.SaveHouseSettings(playerGUID, accessFlags)
 | `playerGUID` | WOWGUID | no |  |
 | `accessFlags` | HouseSettingFlags | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.SaveHouseSettings("Creature-0-0000-0-0-0-0", accessFlags)
+C_Housing.SaveHouseSettings(UnitGUID("player"), accessFlags)
 ```
 
 ### C_Housing.SearchBNetFriendNeighborhoods
@@ -931,7 +931,7 @@ isValidBnetFriend = C_Housing.SearchBNetFriendNeighborhoods(bnetName)
 |------|------|---------|-------------|
 | `isValidBnetFriend` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidBnetFriend = C_Housing.SearchBNetFriendNeighborhoods("")
@@ -955,7 +955,7 @@ isValidBnetFriend = C_Housing.SearchBNetFriendNeighborhoodsByID(bnetID)
 |------|------|---------|-------------|
 | `isValidBnetFriend` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValidBnetFriend = C_Housing.SearchBNetFriendNeighborhoodsByID(0)
@@ -973,7 +973,7 @@ C_Housing.SetTrackedHouseGuid([trackedHouse])
 |------|------|---------|-------------|
 | `trackedHouse` | WOWGUID | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.SetTrackedHouseGuid()
@@ -985,7 +985,7 @@ C_Housing.SetTrackedHouseGuid()
 C_Housing.StartTutorial()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.StartTutorial()
@@ -1005,10 +1005,10 @@ C_Housing.TeleportHome(neighborhoodGUID, houseGUID, plotID)
 | `houseGUID` | WOWGUID | no |  |
 | `plotID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.TeleportHome("Creature-0-0000-0-0-0-0", "Creature-0-0000-0-0-0-0", 0)
+C_Housing.TeleportHome(UnitGUID("player"), UnitGUID("player"), 0)
 ```
 
 ### C_Housing.TryRenameNeighborhood
@@ -1023,7 +1023,7 @@ C_Housing.TryRenameNeighborhood(neighborhoodName)
 |------|------|---------|-------------|
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.TryRenameNeighborhood("")
@@ -1035,7 +1035,7 @@ C_Housing.TryRenameNeighborhood("")
 C_Housing.ValidateCreateGuildNeighborhoodSize()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.ValidateCreateGuildNeighborhoodSize()
@@ -1053,7 +1053,7 @@ C_Housing.ValidateNeighborhoodName(neighborhoodName)
 |------|------|---------|-------------|
 | `neighborhoodName` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Housing.ValidateNeighborhoodName("")
@@ -1073,10 +1073,10 @@ C_Housing.VisitHouse(neighborhoodGUID, houseGUID, plotID)
 | `houseGUID` | WOWGUID | no |  |
 | `plotID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_Housing.VisitHouse("Creature-0-0000-0-0-0-0", "Creature-0-0000-0-0-0-0", 0)
+C_Housing.VisitHouse(UnitGUID("player"), UnitGUID("player"), 0)
 ```
 
 ## Events

@@ -24,7 +24,7 @@ result = CanBeRaidTarget(target)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = CanBeRaidTarget(target)
@@ -42,7 +42,7 @@ ClearRaidMarker(raidMarkerIndex)
 |------|------|---------|-------------|
 | `raidMarkerIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearRaidMarker(1)
@@ -69,7 +69,7 @@ nextAvailableRaidTargetMarkerIndex = GetNextAvailableRaidTargetMarkerIndex(start
 |------|------|---------|-------------|
 | `nextAvailableRaidTargetMarkerIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nextAvailableRaidTargetMarkerIndex = GetNextAvailableRaidTargetMarkerIndex(1, false, false, false)
@@ -93,7 +93,7 @@ result = GetRaidTargetIndex(target)
 |------|------|---------|-------------|
 | `result` | luaIndex | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = GetRaidTargetIndex(target)
@@ -117,7 +117,7 @@ result = IsRaidMarkerActive(index)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = IsRaidMarkerActive(1)
@@ -135,7 +135,7 @@ enabled = IsRaidMarkerSystemEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = IsRaidMarkerSystemEnabled()
@@ -154,7 +154,7 @@ PlaceRaidMarker(index, [token])
 | `index` | luaIndex | no |  |
 | `token` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PlaceRaidMarker(1)
@@ -168,7 +168,7 @@ Removes all assigned raid target markers.
 RemoveRaidTargets()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 RemoveRaidTargets()
@@ -187,7 +187,7 @@ SetRaidTarget(target, userIndex)
 | `target` | UnitToken | no |  |
 | `userIndex` | luaIndex | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRaidTarget(target, 1)

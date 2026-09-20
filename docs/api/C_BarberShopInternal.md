@@ -18,7 +18,7 @@ C_BarberShopInternal.SetQAMode(qaModeEnabled)
 |------|------|---------|-------------|
 | `qaModeEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BarberShopInternal.SetQAMode(false)

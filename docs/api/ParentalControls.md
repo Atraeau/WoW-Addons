@@ -18,7 +18,7 @@ remaining = GetSecondsUntilParentalControlsKick()
 |------|------|---------|-------------|
 | `remaining` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local remaining = GetSecondsUntilParentalControlsKick()

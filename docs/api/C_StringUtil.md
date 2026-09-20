@@ -20,7 +20,7 @@ formatter = C_StringUtil.CreateAbbreviatedNumberFormatter()
 |------|------|---------|-------------|
 | `formatter` | AbbreviatedNumberFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatter = C_StringUtil.CreateAbbreviatedNumberFormatter()
@@ -40,7 +40,7 @@ formatter = C_StringUtil.CreateNumericRuleFormatter()
 |------|------|---------|-------------|
 | `formatter` | NumericRuleFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatter = C_StringUtil.CreateNumericRuleFormatter()
@@ -60,7 +60,7 @@ formatter = C_StringUtil.CreateSecondsFormatter()
 |------|------|---------|-------------|
 | `formatter` | SecondsFormatter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatter = C_StringUtil.CreateSecondsFormatter()
@@ -86,7 +86,7 @@ escapedText = C_StringUtil.EscapeDecimalNonPrintables(text)
 |------|------|---------|-------------|
 | `escapedText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local escapedText = C_StringUtil.EscapeDecimalNonPrintables(text)
@@ -112,7 +112,7 @@ escapedText = C_StringUtil.EscapeLuaFormatString(text)
 |------|------|---------|-------------|
 | `escapedText` | stringView | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local escapedText = C_StringUtil.EscapeLuaFormatString("")
@@ -138,7 +138,7 @@ escapedText = C_StringUtil.EscapeLuaPatterns(text)
 |------|------|---------|-------------|
 | `escapedText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local escapedText = C_StringUtil.EscapeLuaPatterns(text)
@@ -164,7 +164,7 @@ escaped = C_StringUtil.EscapeQuotedCodes(text)
 |------|------|---------|-------------|
 | `escaped` | stringView | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local escaped = C_StringUtil.EscapeQuotedCodes("")
@@ -188,7 +188,7 @@ text = C_StringUtil.FloorToNearestString(number)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_StringUtil.FloorToNearestString(0)
@@ -215,7 +215,7 @@ trimmedText = C_StringUtil.RemoveContiguousSpaces(text, maxAllowedSpaces)
 |------|------|---------|-------------|
 | `trimmedText` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trimmedText = C_StringUtil.RemoveContiguousSpaces(text, 0)
@@ -239,7 +239,7 @@ text = C_StringUtil.RoundToNearestString(number)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_StringUtil.RoundToNearestString(0)
@@ -268,7 +268,7 @@ stripped = C_StringUtil.StripHyperlinks(text, maintainColor, maintainBrackets, s
 |------|------|---------|-------------|
 | `stripped` | stringView | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stripped = C_StringUtil.StripHyperlinks("", false, false, false, false, false)
@@ -292,7 +292,7 @@ stripped = C_StringUtil.StripTextureMarkupForLooseFiles(text)
 |------|------|---------|-------------|
 | `stripped` | stringView | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local stripped = C_StringUtil.StripTextureMarkupForLooseFiles("")
@@ -318,7 +318,7 @@ text = C_StringUtil.TruncateWhenZero(number)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_StringUtil.TruncateWhenZero(0)
@@ -346,7 +346,7 @@ text = C_StringUtil.WrapString(infix, [prefix], [suffix])
 |------|------|---------|-------------|
 | `text` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_StringUtil.WrapString(infix)

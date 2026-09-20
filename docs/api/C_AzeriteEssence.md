@@ -19,7 +19,7 @@ C_AzeriteEssence.ActivateEssence(essenceID, milestoneID)
 | `essenceID` | number | no |  |
 | `milestoneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEssence.ActivateEssence(0, 0)
@@ -44,7 +44,7 @@ canActivate = C_AzeriteEssence.CanActivateEssence(essenceID, milestoneID)
 |------|------|---------|-------------|
 | `canActivate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canActivate = C_AzeriteEssence.CanActivateEssence(0, 0)
@@ -68,7 +68,7 @@ canDeactivate = C_AzeriteEssence.CanDeactivateEssence(milestoneID)
 |------|------|---------|-------------|
 | `canDeactivate` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canDeactivate = C_AzeriteEssence.CanDeactivateEssence(0)
@@ -86,7 +86,7 @@ canOpen = C_AzeriteEssence.CanOpenUI()
 |------|------|---------|-------------|
 | `canOpen` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canOpen = C_AzeriteEssence.CanOpenUI()
@@ -98,7 +98,7 @@ local canOpen = C_AzeriteEssence.CanOpenUI()
 C_AzeriteEssence.ClearPendingActivationEssence()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEssence.ClearPendingActivationEssence()
@@ -110,7 +110,7 @@ C_AzeriteEssence.ClearPendingActivationEssence()
 C_AzeriteEssence.CloseForge()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEssence.CloseForge()
@@ -135,7 +135,7 @@ link = C_AzeriteEssence.GetEssenceHyperlink(essenceID, rank)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_AzeriteEssence.GetEssenceHyperlink(0, 1)
@@ -159,7 +159,7 @@ info = C_AzeriteEssence.GetEssenceInfo(essenceID)
 |------|------|---------|-------------|
 | `info` | AzeriteEssenceInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AzeriteEssence.GetEssenceInfo(0)
@@ -177,7 +177,7 @@ essences = C_AzeriteEssence.GetEssences()
 |------|------|---------|-------------|
 | `essences` | AzeriteEssenceInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local essences = C_AzeriteEssence.GetEssences()
@@ -201,7 +201,7 @@ essenceID = C_AzeriteEssence.GetMilestoneEssence(milestoneID)
 |------|------|---------|-------------|
 | `essenceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local essenceID = C_AzeriteEssence.GetMilestoneEssence(0)
@@ -225,7 +225,7 @@ info = C_AzeriteEssence.GetMilestoneInfo(milestoneID)
 |------|------|---------|-------------|
 | `info` | AzeriteMilestoneInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_AzeriteEssence.GetMilestoneInfo(0)
@@ -243,7 +243,7 @@ milestones = C_AzeriteEssence.GetMilestones()
 |------|------|---------|-------------|
 | `milestones` | AzeriteMilestoneInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local milestones = C_AzeriteEssence.GetMilestones()
@@ -267,7 +267,7 @@ spellID = C_AzeriteEssence.GetMilestoneSpell(milestoneID)
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_AzeriteEssence.GetMilestoneSpell(0)
@@ -285,7 +285,7 @@ numUnlockedEssences = C_AzeriteEssence.GetNumUnlockedEssences()
 |------|------|---------|-------------|
 | `numUnlockedEssences` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numUnlockedEssences = C_AzeriteEssence.GetNumUnlockedEssences()
@@ -303,7 +303,7 @@ numUsableEssences = C_AzeriteEssence.GetNumUsableEssences()
 |------|------|---------|-------------|
 | `numUsableEssences` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numUsableEssences = C_AzeriteEssence.GetNumUsableEssences()
@@ -321,7 +321,7 @@ essenceID = C_AzeriteEssence.GetPendingActivationEssence()
 |------|------|---------|-------------|
 | `essenceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local essenceID = C_AzeriteEssence.GetPendingActivationEssence()
@@ -339,7 +339,7 @@ hasNeverActivatedAnyEssences = C_AzeriteEssence.HasNeverActivatedAnyEssences()
 |------|------|---------|-------------|
 | `hasNeverActivatedAnyEssences` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasNeverActivatedAnyEssences = C_AzeriteEssence.HasNeverActivatedAnyEssences()
@@ -357,7 +357,7 @@ hasEssence = C_AzeriteEssence.HasPendingActivationEssence()
 |------|------|---------|-------------|
 | `hasEssence` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasEssence = C_AzeriteEssence.HasPendingActivationEssence()
@@ -375,7 +375,7 @@ isAtForge = C_AzeriteEssence.IsAtForge()
 |------|------|---------|-------------|
 | `isAtForge` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtForge = C_AzeriteEssence.IsAtForge()
@@ -393,7 +393,7 @@ C_AzeriteEssence.SetPendingActivationEssence(essenceID)
 |------|------|---------|-------------|
 | `essenceID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEssence.SetPendingActivationEssence(0)
@@ -411,7 +411,7 @@ C_AzeriteEssence.UnlockMilestone(milestoneID)
 |------|------|---------|-------------|
 | `milestoneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEssence.UnlockMilestone(0)

@@ -18,7 +18,7 @@ activeAzeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 |------|------|---------|-------------|
 | `activeAzeriteItemLocation` | AzeriteItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local activeAzeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
@@ -43,7 +43,7 @@ xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
 | `xp` | number | no |  |
 | `totalLevelXP` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(6948)
@@ -67,7 +67,7 @@ powerLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
 |------|------|---------|-------------|
 | `powerLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerLevel = C_AzeriteItem.GetPowerLevel(6948)
@@ -91,7 +91,7 @@ powerLevel = C_AzeriteItem.GetUnlimitedPowerLevel(azeriteItemLocation)
 |------|------|---------|-------------|
 | `powerLevel` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerLevel = C_AzeriteItem.GetUnlimitedPowerLevel(6948)
@@ -109,7 +109,7 @@ hasActiveAzeriteItem = C_AzeriteItem.HasActiveAzeriteItem()
 |------|------|---------|-------------|
 | `hasActiveAzeriteItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasActiveAzeriteItem = C_AzeriteItem.HasActiveAzeriteItem()
@@ -133,7 +133,7 @@ isAzeriteItem = C_AzeriteItem.IsAzeriteItem(itemLocation)
 |------|------|---------|-------------|
 | `isAzeriteItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAzeriteItem = C_AzeriteItem.IsAzeriteItem(6948)
@@ -151,7 +151,7 @@ isAtMax = C_AzeriteItem.IsAzeriteItemAtMaxLevel()
 |------|------|---------|-------------|
 | `isAtMax` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAtMax = C_AzeriteItem.IsAzeriteItemAtMaxLevel()
@@ -175,7 +175,7 @@ isAzeriteItem = C_AzeriteItem.IsAzeriteItemByID(itemInfo)
 |------|------|---------|-------------|
 | `isAzeriteItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAzeriteItem = C_AzeriteItem.IsAzeriteItemByID(6948)
@@ -199,7 +199,7 @@ isEnabled = C_AzeriteItem.IsAzeriteItemEnabled(azeriteItemLocation)
 |------|------|---------|-------------|
 | `isEnabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled = C_AzeriteItem.IsAzeriteItemEnabled(6948)
@@ -217,7 +217,7 @@ isUnlimitedLevelingUnlocked = C_AzeriteItem.IsUnlimitedLevelingUnlocked()
 |------|------|---------|-------------|
 | `isUnlimitedLevelingUnlocked` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUnlimitedLevelingUnlocked = C_AzeriteItem.IsUnlimitedLevelingUnlocked()

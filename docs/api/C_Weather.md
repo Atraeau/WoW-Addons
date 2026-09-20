@@ -22,7 +22,7 @@ info = C_Weather.GetCurrentWeather()
 |------|------|---------|-------------|
 | `info` | WeatherInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_Weather.GetCurrentWeather()

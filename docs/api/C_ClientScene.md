@@ -24,7 +24,7 @@ isPlaying = C_ClientScene.IsSceneTypeActive([desiredSceneType])
 |------|------|---------|-------------|
 | `isPlaying` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPlaying = C_ClientScene.IsSceneTypeActive()

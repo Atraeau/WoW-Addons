@@ -19,7 +19,7 @@ offsetU, offsetV = GetOffset()
 | `offsetU` | number | no |  |
 | `offsetV` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local offsetU, offsetV = GetOffset()
@@ -38,9 +38,9 @@ SetOffset(offsetU, offsetV)
 | `offsetU` | number | no |  |
 | `offsetV` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetOffset(0, 0)
+SetOffset(1, 1)
 ```
 

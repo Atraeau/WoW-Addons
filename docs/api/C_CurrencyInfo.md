@@ -25,7 +25,7 @@ canTransferCurrency, failureReason = C_CurrencyInfo.CanTransferCurrency(currency
 | `canTransferCurrency` | bool | no |  |
 | `failureReason` | AccountCurrencyTransferResult | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canTransferCurrency, failureReason = C_CurrencyInfo.CanTransferCurrency(0)
@@ -43,7 +43,7 @@ doesCurrentFilterRequireAccountCurrencyData = C_CurrencyInfo.DoesCurrentFilterRe
 |------|------|---------|-------------|
 | `doesCurrentFilterRequireAccountCurrencyData` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local doesCurrentFilterRequireAccountCurrencyData = C_CurrencyInfo.DoesCurrentFilterRequireAccountCurrencyData()
@@ -68,7 +68,7 @@ warModeApplies, limitOncePerTooltip = C_CurrencyInfo.DoesWarModeBonusApply(curre
 | `warModeApplies` | bool | yes |  |
 | `limitOncePerTooltip` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warModeApplies, limitOncePerTooltip = C_CurrencyInfo.DoesWarModeBonusApply(0)
@@ -87,7 +87,7 @@ C_CurrencyInfo.ExpandCurrencyList(index, expand)
 | `index` | luaIndex | no |  |
 | `expand` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.ExpandCurrencyList(1, false)
@@ -111,7 +111,7 @@ accountCurrencyData = C_CurrencyInfo.FetchCurrencyDataFromAccountCharacters(curr
 |------|------|---------|-------------|
 | `accountCurrencyData` | CharacterCurrencyData[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local accountCurrencyData = C_CurrencyInfo.FetchCurrencyDataFromAccountCharacters(0)
@@ -129,7 +129,7 @@ currencyTransferTransactions = C_CurrencyInfo.FetchCurrencyTransferTransactions(
 |------|------|---------|-------------|
 | `currencyTransferTransactions` | CurrencyTransferTransaction[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyTransferTransactions = C_CurrencyInfo.FetchCurrencyTransferTransactions()
@@ -147,7 +147,7 @@ azeriteCurrencyID = C_CurrencyInfo.GetAzeriteCurrencyID()
 |------|------|---------|-------------|
 | `azeriteCurrencyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local azeriteCurrencyID = C_CurrencyInfo.GetAzeriteCurrencyID()
@@ -171,7 +171,7 @@ info = C_CurrencyInfo.GetBackpackCurrencyInfo(index)
 |------|------|---------|-------------|
 | `info` | BackpackCurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetBackpackCurrencyInfo(1)
@@ -196,7 +196,7 @@ info = C_CurrencyInfo.GetBasicCurrencyInfo(currencyType, [quantity])
 |------|------|---------|-------------|
 | `info` | CurrencyDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetBasicCurrencyInfo(0)
@@ -220,10 +220,10 @@ result = C_CurrencyInfo.GetCoinIcon(amount)
 |------|------|---------|-------------|
 | `result` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_CurrencyInfo.GetCoinIcon(amount)
+local result = C_CurrencyInfo.GetCoinIcon(0)
 ```
 
 ### C_CurrencyInfo.GetCoinText
@@ -245,10 +245,10 @@ result = C_CurrencyInfo.GetCoinText(amount, separator)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_CurrencyInfo.GetCoinText(amount, "")
+local result = C_CurrencyInfo.GetCoinText(0, "")
 ```
 
 ### C_CurrencyInfo.GetCoinTextureString
@@ -270,10 +270,10 @@ result = C_CurrencyInfo.GetCoinTextureString(amount, fontHeight)
 |------|------|---------|-------------|
 | `result` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_CurrencyInfo.GetCoinTextureString(amount, 0)
+local result = C_CurrencyInfo.GetCoinTextureString(0, 0)
 ```
 
 ### C_CurrencyInfo.GetCostToTransferCurrency
@@ -295,7 +295,7 @@ totalQuantityConsumed = C_CurrencyInfo.GetCostToTransferCurrency(currencyID, qua
 |------|------|---------|-------------|
 | `totalQuantityConsumed` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local totalQuantityConsumed = C_CurrencyInfo.GetCostToTransferCurrency(0, 0)
@@ -320,7 +320,7 @@ info = C_CurrencyInfo.GetCurrencyContainerInfo(currencyType, quantity)
 |------|------|---------|-------------|
 | `info` | CurrencyDisplayInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetCurrencyContainerInfo(0, 0)
@@ -344,7 +344,7 @@ description = C_CurrencyInfo.GetCurrencyDescription(type)
 |------|------|---------|-------------|
 | `description` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_CurrencyInfo.GetCurrencyDescription(0)
@@ -362,7 +362,7 @@ filterType = C_CurrencyInfo.GetCurrencyFilter()
 |------|------|---------|-------------|
 | `filterType` | CurrencyFilterType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local filterType = C_CurrencyInfo.GetCurrencyFilter()
@@ -386,7 +386,7 @@ currencyID = C_CurrencyInfo.GetCurrencyIDFromLink(currencyLink)
 |------|------|---------|-------------|
 | `currencyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyID = C_CurrencyInfo.GetCurrencyIDFromLink("")
@@ -410,7 +410,7 @@ info = C_CurrencyInfo.GetCurrencyInfo(type)
 |------|------|---------|-------------|
 | `info` | CurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetCurrencyInfo(0)
@@ -434,7 +434,7 @@ info = C_CurrencyInfo.GetCurrencyInfoFromLink(link)
 |------|------|---------|-------------|
 | `info` | CurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetCurrencyInfoFromLink("")
@@ -459,7 +459,7 @@ link = C_CurrencyInfo.GetCurrencyLink(type, [amount])
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_CurrencyInfo.GetCurrencyLink(0)
@@ -483,7 +483,7 @@ info = C_CurrencyInfo.GetCurrencyListInfo(index)
 |------|------|---------|-------------|
 | `info` | CurrencyInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetCurrencyListInfo(1)
@@ -507,7 +507,7 @@ link = C_CurrencyInfo.GetCurrencyListLink(index)
 |------|------|---------|-------------|
 | `link` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local link = C_CurrencyInfo.GetCurrencyListLink(1)
@@ -525,7 +525,7 @@ currencyListSize = C_CurrencyInfo.GetCurrencyListSize()
 |------|------|---------|-------------|
 | `currencyListSize` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyListSize = C_CurrencyInfo.GetCurrencyListSize()
@@ -543,7 +543,7 @@ dragonIslesSuppliesCurrencyID = C_CurrencyInfo.GetDragonIslesSuppliesCurrencyID(
 |------|------|---------|-------------|
 | `dragonIslesSuppliesCurrencyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local dragonIslesSuppliesCurrencyID = C_CurrencyInfo.GetDragonIslesSuppliesCurrencyID()
@@ -569,7 +569,7 @@ factionID = C_CurrencyInfo.GetFactionGrantedByCurrency(currencyID)
 |------|------|---------|-------------|
 | `factionID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionID = C_CurrencyInfo.GetFactionGrantedByCurrency(0)
@@ -594,7 +594,7 @@ maxTransferableAmount = C_CurrencyInfo.GetMaxTransferableAmountFromQuantity(curr
 |------|------|---------|-------------|
 | `maxTransferableAmount` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local maxTransferableAmount = C_CurrencyInfo.GetMaxTransferableAmountFromQuantity(0, 0)
@@ -619,7 +619,7 @@ info = C_CurrencyInfo.GetPlayerCurrencyCategoryInfo(categoryID, includeAccountWi
 |------|------|---------|-------------|
 | `info` | PlayerCurrencyCategoryInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_CurrencyInfo.GetPlayerCurrencyCategoryInfo(0, false)
@@ -637,7 +637,7 @@ warResourceCurrencyID = C_CurrencyInfo.GetWarResourcesCurrencyID()
 |------|------|---------|-------------|
 | `warResourceCurrencyID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local warResourceCurrencyID = C_CurrencyInfo.GetWarResourcesCurrencyID()
@@ -655,7 +655,7 @@ isReady = C_CurrencyInfo.IsAccountCharacterCurrencyDataReady()
 |------|------|---------|-------------|
 | `isReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReady = C_CurrencyInfo.IsAccountCharacterCurrencyDataReady()
@@ -679,7 +679,7 @@ isAccountTransferableCurrency = C_CurrencyInfo.IsAccountTransferableCurrency(cur
 |------|------|---------|-------------|
 | `isAccountTransferableCurrency` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAccountTransferableCurrency = C_CurrencyInfo.IsAccountTransferableCurrency(0)
@@ -703,7 +703,7 @@ isAccountWideCurrency = C_CurrencyInfo.IsAccountWideCurrency(currencyID)
 |------|------|---------|-------------|
 | `isAccountWideCurrency` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAccountWideCurrency = C_CurrencyInfo.IsAccountWideCurrency(0)
@@ -728,7 +728,7 @@ isCurrencyContainer = C_CurrencyInfo.IsCurrencyContainer(currencyID, quantity)
 |------|------|---------|-------------|
 | `isCurrencyContainer` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isCurrencyContainer = C_CurrencyInfo.IsCurrencyContainer(0, 0)
@@ -746,7 +746,7 @@ currencyTransferInProgress = C_CurrencyInfo.IsCurrencyTransferInProgress()
 |------|------|---------|-------------|
 | `currencyTransferInProgress` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencyTransferInProgress = C_CurrencyInfo.IsCurrencyTransferInProgress()
@@ -764,7 +764,7 @@ isReady = C_CurrencyInfo.IsCurrencyTransferTransactionDataReady()
 |------|------|---------|-------------|
 | `isReady` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isReady = C_CurrencyInfo.IsCurrencyTransferTransactionDataReady()
@@ -782,7 +782,7 @@ C_CurrencyInfo.PickupCurrency(type)
 |------|------|---------|-------------|
 | `type` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.PickupCurrency(0)
@@ -806,7 +806,7 @@ hasMaxQuantity = C_CurrencyInfo.PlayerHasMaxQuantity(currencyID)
 |------|------|---------|-------------|
 | `hasMaxQuantity` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxQuantity = C_CurrencyInfo.PlayerHasMaxQuantity(0)
@@ -830,7 +830,7 @@ hasMaxWeeklyQuantity = C_CurrencyInfo.PlayerHasMaxWeeklyQuantity(currencyID)
 |------|------|---------|-------------|
 | `hasMaxWeeklyQuantity` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasMaxWeeklyQuantity = C_CurrencyInfo.PlayerHasMaxWeeklyQuantity(0)
@@ -842,7 +842,7 @@ local hasMaxWeeklyQuantity = C_CurrencyInfo.PlayerHasMaxWeeklyQuantity(0)
 C_CurrencyInfo.RequestCurrencyDataForAccountCharacters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.RequestCurrencyDataForAccountCharacters()
@@ -862,10 +862,10 @@ C_CurrencyInfo.RequestCurrencyFromAccountCharacter(sourceCharacterGUID, currency
 | `currencyID` | number | no |  |
 | `quantity` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_CurrencyInfo.RequestCurrencyFromAccountCharacter("Creature-0-0000-0-0-0-0", 0, 0)
+C_CurrencyInfo.RequestCurrencyFromAccountCharacter(UnitGUID("player"), 0, 0)
 ```
 
 ### C_CurrencyInfo.SetCurrencyBackpack
@@ -881,7 +881,7 @@ C_CurrencyInfo.SetCurrencyBackpack(index, backpack)
 | `index` | luaIndex | no |  |
 | `backpack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.SetCurrencyBackpack(1, false)
@@ -900,7 +900,7 @@ C_CurrencyInfo.SetCurrencyBackpackByID(currencyType, backpack)
 | `currencyType` | number | no |  |
 | `backpack` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.SetCurrencyBackpackByID(0, false)
@@ -918,7 +918,7 @@ C_CurrencyInfo.SetCurrencyFilter(filterType)
 |------|------|---------|-------------|
 | `filterType` | CurrencyFilterType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.SetCurrencyFilter("HELPFUL")
@@ -937,7 +937,7 @@ C_CurrencyInfo.SetCurrencyUnused(index, unused)
 | `index` | luaIndex | no |  |
 | `unused` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CurrencyInfo.SetCurrencyUnused(1, false)

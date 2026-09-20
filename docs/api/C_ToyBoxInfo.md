@@ -18,7 +18,7 @@ C_ToyBoxInfo.ClearFanfare(itemID)
 |------|------|---------|-------------|
 | `itemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ToyBoxInfo.ClearFanfare(6948)
@@ -36,7 +36,7 @@ hasToy = C_ToyBoxInfo.HasAnyToy()
 |------|------|---------|-------------|
 | `hasToy` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasToy = C_ToyBoxInfo.HasAnyToy()
@@ -60,10 +60,10 @@ isToySourceValid = C_ToyBoxInfo.IsToySourceValid(source)
 |------|------|---------|-------------|
 | `isToySourceValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isToySourceValid = C_ToyBoxInfo.IsToySourceValid(source)
+local isToySourceValid = C_ToyBoxInfo.IsToySourceValid(1)
 ```
 
 ### C_ToyBoxInfo.IsUsingDefaultFilters
@@ -78,7 +78,7 @@ isUsingDefaultFilters = C_ToyBoxInfo.IsUsingDefaultFilters()
 |------|------|---------|-------------|
 | `isUsingDefaultFilters` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isUsingDefaultFilters = C_ToyBoxInfo.IsUsingDefaultFilters()
@@ -102,7 +102,7 @@ needsFanfare = C_ToyBoxInfo.NeedsFanfare(itemID)
 |------|------|---------|-------------|
 | `needsFanfare` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local needsFanfare = C_ToyBoxInfo.NeedsFanfare(6948)
@@ -114,7 +114,7 @@ local needsFanfare = C_ToyBoxInfo.NeedsFanfare(6948)
 C_ToyBoxInfo.SetDefaultFilters()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_ToyBoxInfo.SetDefaultFilters()

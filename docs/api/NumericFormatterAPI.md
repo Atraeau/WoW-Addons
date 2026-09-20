@@ -24,7 +24,7 @@ formatted = FormatNumber(number)
 |------|------|---------|-------------|
 | `formatted` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local formatted = FormatNumber(0)

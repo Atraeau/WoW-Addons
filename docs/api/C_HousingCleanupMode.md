@@ -18,7 +18,7 @@ info = C_HousingCleanupMode.GetHoveredDecorInfo()
 |------|------|---------|-------------|
 | `info` | HousingDecorInstanceInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_HousingCleanupMode.GetHoveredDecorInfo()
@@ -36,7 +36,7 @@ isHoveringDecor = C_HousingCleanupMode.IsHoveringDecor()
 |------|------|---------|-------------|
 | `isHoveringDecor` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHoveringDecor = C_HousingCleanupMode.IsHoveringDecor()
@@ -48,7 +48,7 @@ local isHoveringDecor = C_HousingCleanupMode.IsHoveringDecor()
 C_HousingCleanupMode.RemoveSelectedDecor()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_HousingCleanupMode.RemoveSelectedDecor()

@@ -24,7 +24,7 @@ hasPurchaseableProducts = C_StorePublic.DoesGroupHavePurchaseableProducts(groupI
 |------|------|---------|-------------|
 | `hasPurchaseableProducts` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasPurchaseableProducts = C_StorePublic.DoesGroupHavePurchaseableProducts(0)
@@ -43,7 +43,7 @@ C_StorePublic.EventStoreUISetShown(newShown, [contextKey])
 | `newShown` | bool | no |  |
 | `contextKey` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_StorePublic.EventStoreUISetShown(false)
@@ -61,7 +61,7 @@ enabled = C_StorePublic.IsEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_StorePublic.IsEnabled()

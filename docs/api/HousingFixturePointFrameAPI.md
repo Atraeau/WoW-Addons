@@ -18,7 +18,7 @@ hasAttachedFixture = HasAttachedFixture()
 |------|------|---------|-------------|
 | `hasAttachedFixture` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAttachedFixture = HasAttachedFixture()
@@ -36,7 +36,7 @@ isSelected = IsSelected()
 |------|------|---------|-------------|
 | `isSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSelected = IsSelected()
@@ -54,7 +54,7 @@ isValid = IsValid()
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = IsValid()
@@ -66,7 +66,7 @@ local isValid = IsValid()
 Select()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Select()
@@ -84,7 +84,7 @@ SetUpdateCallback(cb)
 |------|------|---------|-------------|
 | `cb` | FixturePointUpdatedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUpdateCallback(cb)

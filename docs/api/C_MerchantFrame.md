@@ -24,7 +24,7 @@ buybackItemID = C_MerchantFrame.GetBuybackItemID(buybackSlotIndex)
 |------|------|---------|-------------|
 | `buybackItemID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local buybackItemID = C_MerchantFrame.GetBuybackItemID(1)
@@ -48,7 +48,7 @@ info = C_MerchantFrame.GetItemInfo(index)
 |------|------|---------|-------------|
 | `info` | MerchantItemInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_MerchantFrame.GetItemInfo(1)
@@ -66,7 +66,7 @@ currencies = C_MerchantFrame.GetMerchantCurrencies()
 |------|------|---------|-------------|
 | `currencies` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencies = C_MerchantFrame.GetMerchantCurrencies()
@@ -84,7 +84,7 @@ numJunkItems = C_MerchantFrame.GetNumJunkItems()
 |------|------|---------|-------------|
 | `numJunkItems` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numJunkItems = C_MerchantFrame.GetNumJunkItems()
@@ -108,7 +108,7 @@ refundable = C_MerchantFrame.IsMerchantItemRefundable(index)
 |------|------|---------|-------------|
 | `refundable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local refundable = C_MerchantFrame.IsMerchantItemRefundable(1)
@@ -126,7 +126,7 @@ enabled = C_MerchantFrame.IsSellAllJunkEnabled()
 |------|------|---------|-------------|
 | `enabled` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local enabled = C_MerchantFrame.IsSellAllJunkEnabled()
@@ -138,7 +138,7 @@ local enabled = C_MerchantFrame.IsSellAllJunkEnabled()
 C_MerchantFrame.SellAllJunkItems()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_MerchantFrame.SellAllJunkItems()

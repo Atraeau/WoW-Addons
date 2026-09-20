@@ -20,7 +20,7 @@ C_BehavioralMessaging.SendNotificationReceipt(dbId, openTimeSeconds, readTimeSec
 | `openTimeSeconds` | number | no |  |
 | `readTimeSeconds` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_BehavioralMessaging.SendNotificationReceipt(dbId, 0, 0)

@@ -12,7 +12,7 @@
 ClearModel()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 ClearModel()
@@ -31,7 +31,7 @@ boxBottom, boxTop = GetActiveBoundingBox()
 | `boxBottom` | vector3 | no |  |
 | `boxTop` | vector3 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local boxBottom, boxTop = GetActiveBoundingBox()
@@ -49,7 +49,7 @@ alpha = GetAlpha()
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local alpha = GetAlpha()
@@ -67,7 +67,7 @@ animation = GetAnimation()
 |------|------|---------|-------------|
 | `animation` | AnimationDataEnum | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local animation = GetAnimation()
@@ -85,7 +85,7 @@ blendOp = GetAnimationBlendOperation()
 |------|------|---------|-------------|
 | `blendOp` | ModelBlendOperation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local blendOp = GetAnimationBlendOperation()
@@ -103,7 +103,7 @@ variation = GetAnimationVariation()
 |------|------|---------|-------------|
 | `variation` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local variation = GetAnimationVariation()
@@ -121,7 +121,7 @@ strength = GetDesaturation()
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local strength = GetDesaturation()
@@ -140,7 +140,7 @@ boxBottom, boxTop = GetMaxBoundingBox()
 | `boxBottom` | vector3 | no |  |
 | `boxTop` | vector3 | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local boxBottom, boxTop = GetMaxBoundingBox()
@@ -158,7 +158,7 @@ file = GetModelFileID()
 |------|------|---------|-------------|
 | `file` | fileID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local file = GetModelFileID()
@@ -176,7 +176,7 @@ path = GetModelPath()
 |------|------|---------|-------------|
 | `path` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local path = GetModelPath()
@@ -194,7 +194,7 @@ guid = GetModelUnitGUID()
 |------|------|---------|-------------|
 | `guid` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local guid = GetModelUnitGUID()
@@ -212,7 +212,7 @@ scale = GetParticleOverrideScale()
 |------|------|---------|-------------|
 | `scale` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetParticleOverrideScale()
@@ -230,7 +230,7 @@ pitch = GetPitch()
 |------|------|---------|-------------|
 | `pitch` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pitch = GetPitch()
@@ -250,7 +250,7 @@ positionX, positionY, positionZ = GetPosition()
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local positionX, positionY, positionZ = GetPosition()
@@ -268,7 +268,7 @@ roll = GetRoll()
 |------|------|---------|-------------|
 | `roll` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roll = GetRoll()
@@ -286,7 +286,7 @@ scale = GetScale()
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local scale = GetScale()
@@ -304,7 +304,7 @@ spellVisualKitID = GetSpellVisualKit()
 |------|------|---------|-------------|
 | `spellVisualKitID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellVisualKitID = GetSpellVisualKit()
@@ -322,7 +322,7 @@ yaw = GetYaw()
 |------|------|---------|-------------|
 | `yaw` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local yaw = GetYaw()
@@ -334,7 +334,7 @@ local yaw = GetYaw()
 Hide()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Hide()
@@ -352,7 +352,7 @@ isLoaded = IsLoaded()
 |------|------|---------|-------------|
 | `isLoaded` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isLoaded = IsLoaded()
@@ -370,7 +370,7 @@ preferringCollisionBounds = IsPreferringModelCollisionBounds()
 |------|------|---------|-------------|
 | `preferringCollisionBounds` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local preferringCollisionBounds = IsPreferringModelCollisionBounds()
@@ -388,7 +388,7 @@ isShown = IsShown()
 |------|------|---------|-------------|
 | `isShown` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isShown = IsShown()
@@ -408,7 +408,7 @@ x, y, z = IsUsingCenterForOrigin()
 | `y` | bool | no |  |
 | `z` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local x, y, z = IsUsingCenterForOrigin()
@@ -426,7 +426,7 @@ isVisible = IsVisible()
 |------|------|---------|-------------|
 | `isVisible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isVisible = IsVisible()
@@ -445,7 +445,7 @@ PlayAnimationKit(animationKit, isLooping)
 | `animationKit` | number | no |  |
 | `isLooping` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 PlayAnimationKit(0, false)
@@ -463,7 +463,7 @@ SetAlpha(alpha)
 |------|------|---------|-------------|
 | `alpha` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAlpha(0)
@@ -484,10 +484,10 @@ SetAnimation(animation, [variation], animSpeed, animOffsetSeconds)
 | `animSpeed` | number | no | (default: 1) |
 | `animOffsetSeconds` | number | no | (default: 0) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetAnimation(animation, 0, 0)
+SetAnimation(animation, 0, 1)
 ```
 
 ### FrameAPIModelSceneFrameActorBase.SetAnimationBlendOperation
@@ -502,7 +502,7 @@ SetAnimationBlendOperation(blendOp)
 |------|------|---------|-------------|
 | `blendOp` | ModelBlendOperation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetAnimationBlendOperation(blendOp)
@@ -520,7 +520,7 @@ SetDesaturation(strength)
 |------|------|---------|-------------|
 | `strength` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDesaturation(0)
@@ -541,7 +541,7 @@ SetGradientMask(gradientIndex0, gradientIndex1, gradientIndex2, gradientIndex3)
 | `gradientIndex2` | number | no |  |
 | `gradientIndex3` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetGradientMask(1, 1, 1, 1)
@@ -561,7 +561,7 @@ SetGradientMaskWithDyes([grad0DyeColorID], [grad1DyeColorID], [grad2DyeColorID])
 | `grad1DyeColorID` | number | yes |  |
 | `grad2DyeColorID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetGradientMaskWithDyes()
@@ -586,7 +586,7 @@ success = SetModelByCreatureDisplayID(creatureDisplayID, useActivePlayerCustomiz
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetModelByCreatureDisplayID(0, false)
@@ -611,7 +611,7 @@ success = SetModelByFileID(asset, useMips)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetModelByFileID(asset, false)
@@ -636,7 +636,7 @@ success = SetModelByPath(asset, useMips)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetModelByPath(asset, false)
@@ -666,7 +666,7 @@ success = SetModelByUnit(unit, sheatheWeapons, autoDress, hideWeapons, usePlayer
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetModelByUnit("player", false, false, false, false, false)
@@ -690,7 +690,7 @@ success = SetModelByUnitCreatureDisplayID(unit)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetModelByUnitCreatureDisplayID("player")
@@ -708,7 +708,7 @@ SetParticleOverrideScale([scale])
 |------|------|---------|-------------|
 | `scale` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetParticleOverrideScale()
@@ -726,7 +726,7 @@ SetPitch(pitch)
 |------|------|---------|-------------|
 | `pitch` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPitch(0)
@@ -755,7 +755,7 @@ success = SetPlayerModelFromGlues([characterIndex], sheatheWeapons, autoDress, h
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = SetPlayerModelFromGlues(false, false, false, false)
@@ -775,7 +775,7 @@ SetPosition(positionX, positionY, positionZ)
 | `positionY` | number | no |  |
 | `positionZ` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPosition(0, 0, 0)
@@ -795,7 +795,7 @@ SetPreferModelCollisionBounds(preferCollisionBounds)
 |------|------|---------|-------------|
 | `preferCollisionBounds` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetPreferModelCollisionBounds(false)
@@ -813,7 +813,7 @@ SetRoll(roll)
 |------|------|---------|-------------|
 | `roll` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRoll(0)
@@ -831,7 +831,7 @@ SetScale(scale)
 |------|------|---------|-------------|
 | `scale` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetScale(0)
@@ -849,7 +849,7 @@ SetShown(show)
 |------|------|---------|-------------|
 | `show` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetShown(false)
@@ -868,10 +868,10 @@ SetSpellVisualKit(spellVisualKitID, oneShot)
 | `spellVisualKitID` | number | no | (default: 0) |
 | `oneShot` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-SetSpellVisualKit(12345, false)
+SetSpellVisualKit(2050, false)
 ```
 
 ### FrameAPIModelSceneFrameActorBase.SetUseCenterForOrigin
@@ -888,7 +888,7 @@ SetUseCenterForOrigin(x, y, z)
 | `y` | bool | no | (default: False) |
 | `z` | bool | no | (default: False) |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUseCenterForOrigin(false, false, false)
@@ -906,7 +906,7 @@ SetYaw(yaw)
 |------|------|---------|-------------|
 | `yaw` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetYaw(0)
@@ -918,7 +918,7 @@ SetYaw(0)
 Show()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Show()
@@ -930,7 +930,7 @@ Show()
 StopAnimationKit()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 StopAnimationKit()
@@ -956,9 +956,9 @@ reason = TryOn(itemLinkOrItemModifiedAppearanceID, [handSlotName], spellEnchantm
 |------|------|---------|-------------|
 | `reason` | ItemTryOnReason | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local reason = TryOn(6948, 12345)
+local reason = TryOn(6948, 2050)
 ```
 

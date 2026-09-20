@@ -18,7 +18,7 @@ text = GetAreaText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetAreaText()
@@ -36,7 +36,7 @@ text = GetMinimapZoneText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetMinimapZoneText()
@@ -60,7 +60,7 @@ text = GetRealZoneText([mapID])
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetRealZoneText()
@@ -78,7 +78,7 @@ text = GetSubZoneText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetSubZoneText()
@@ -96,7 +96,7 @@ text = GetZoneText()
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = GetZoneText()

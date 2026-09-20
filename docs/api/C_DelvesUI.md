@@ -20,7 +20,7 @@ tierInfo = C_DelvesUI.GetActiveDelveTier()
 |------|------|---------|-------------|
 | `tierInfo` | TieredEntranceTierInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tierInfo = C_DelvesUI.GetActiveDelveTier()
@@ -38,7 +38,7 @@ playerCompanionInfoID = C_DelvesUI.GetCompanionInfoForActivePlayer()
 |------|------|---------|-------------|
 | `playerCompanionInfoID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local playerCompanionInfoID = C_DelvesUI.GetCompanionInfoForActivePlayer()
@@ -62,7 +62,7 @@ creatureDisplayInfoID = C_DelvesUI.GetCreatureDisplayInfoForCompanion([companion
 |------|------|---------|-------------|
 | `creatureDisplayInfoID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local creatureDisplayInfoID = C_DelvesUI.GetCreatureDisplayInfoForCompanion()
@@ -89,10 +89,10 @@ curioLink = C_DelvesUI.GetCurioLink(spellID, rarity)
 |------|------|---------|-------------|
 | `curioLink` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local curioLink = C_DelvesUI.GetCurioLink(12345, rarity)
+local curioLink = C_DelvesUI.GetCurioLink(2050, rarity)
 ```
 
 ### C_DelvesUI.GetCurioNodeForCompanion
@@ -114,10 +114,10 @@ nodeID = C_DelvesUI.GetCurioNodeForCompanion(curioType, [companionID])
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local nodeID = C_DelvesUI.GetCurioNodeForCompanion(curioType)
+local nodeID = C_DelvesUI.GetCurioNodeForCompanion(Enum.CurioType.Combat)
 ```
 
 ### C_DelvesUI.GetCurioRarityByTraitCondAccountElementID
@@ -138,7 +138,7 @@ rarity = C_DelvesUI.GetCurioRarityByTraitCondAccountElementID(traitCondAccountEl
 |------|------|---------|-------------|
 | `rarity` | CurioRarity | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rarity = C_DelvesUI.GetCurioRarityByTraitCondAccountElementID(0)
@@ -156,7 +156,7 @@ seasonNumber = C_DelvesUI.GetCurrentDelvesSeasonNumber()
 |------|------|---------|-------------|
 | `seasonNumber` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seasonNumber = C_DelvesUI.GetCurrentDelvesSeasonNumber()
@@ -174,7 +174,7 @@ backgroundWidgetSetID = C_DelvesUI.GetDelveEntranceBackgroundWidgetSetID()
 |------|------|---------|-------------|
 | `backgroundWidgetSetID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local backgroundWidgetSetID = C_DelvesUI.GetDelveEntranceBackgroundWidgetSetID()
@@ -192,7 +192,7 @@ description = C_DelvesUI.GetDelveEntranceDescriptionString()
 |------|------|---------|-------------|
 | `description` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_DelvesUI.GetDelveEntranceDescriptionString()
@@ -210,7 +210,7 @@ header = C_DelvesUI.GetDelveEntranceHeaderString()
 |------|------|---------|-------------|
 | `header` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local header = C_DelvesUI.GetDelveEntranceHeaderString()
@@ -228,7 +228,7 @@ mapID = C_DelvesUI.GetDelveEntranceMapID()
 |------|------|---------|-------------|
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local mapID = C_DelvesUI.GetDelveEntranceMapID()
@@ -246,7 +246,7 @@ levelInfo = C_DelvesUI.GetDelveEntranceTiers()
 |------|------|---------|-------------|
 | `levelInfo` | TieredEntranceTierInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local levelInfo = C_DelvesUI.GetDelveEntranceTiers()
@@ -264,7 +264,7 @@ title = C_DelvesUI.GetDelveEntranceTitleString()
 |------|------|---------|-------------|
 | `title` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local title = C_DelvesUI.GetDelveEntranceTitleString()
@@ -282,7 +282,7 @@ affixSpellIDs = C_DelvesUI.GetDelvesAffixSpellsForSeason()
 |------|------|---------|-------------|
 | `affixSpellIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local affixSpellIDs = C_DelvesUI.GetDelvesAffixSpellsForSeason()
@@ -300,7 +300,7 @@ factionID = C_DelvesUI.GetDelvesFactionForSeason()
 |------|------|---------|-------------|
 | `factionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionID = C_DelvesUI.GetDelvesFactionForSeason()
@@ -320,7 +320,7 @@ minRequiredLevel = C_DelvesUI.GetDelvesMinRequiredLevel()
 |------|------|---------|-------------|
 | `minRequiredLevel` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local minRequiredLevel = C_DelvesUI.GetDelvesMinRequiredLevel()
@@ -344,7 +344,7 @@ factionID = C_DelvesUI.GetFactionForCompanion([companionID])
 |------|------|---------|-------------|
 | `factionID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local factionID = C_DelvesUI.GetFactionForCompanion()
@@ -368,7 +368,7 @@ nodeID = C_DelvesUI.GetFlavorNodeForCompanion([companionID])
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_DelvesUI.GetFlavorNodeForCompanion()
@@ -392,7 +392,7 @@ name = C_DelvesUI.GetFlavorNodeNameForCompanion([companionID])
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = C_DelvesUI.GetFlavorNodeNameForCompanion()
@@ -416,7 +416,7 @@ text = C_DelvesUI.GetLockedTextForCompanion([companionID])
 |------|------|---------|-------------|
 | `text` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local text = C_DelvesUI.GetLockedTextForCompanion()
@@ -440,7 +440,7 @@ modelSceneID = C_DelvesUI.GetModelSceneForCompanion([companionID])
 |------|------|---------|-------------|
 | `modelSceneID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modelSceneID = C_DelvesUI.GetModelSceneForCompanion()
@@ -464,7 +464,7 @@ pdeID = C_DelvesUI.GetPlayerCompanionPDEID([companionID])
 |------|------|---------|-------------|
 | `pdeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pdeID = C_DelvesUI.GetPlayerCompanionPDEID()
@@ -488,7 +488,7 @@ nodeID = C_DelvesUI.GetRoleNodeForCompanion([companionID])
 |------|------|---------|-------------|
 | `nodeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nodeID = C_DelvesUI.GetRoleNodeForCompanion()
@@ -513,10 +513,10 @@ subTreeID = C_DelvesUI.GetRoleSubtreeForCompanion(roleType, [companionID])
 |------|------|---------|-------------|
 | `subTreeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local subTreeID = C_DelvesUI.GetRoleSubtreeForCompanion(roleType)
+local subTreeID = C_DelvesUI.GetRoleSubtreeForCompanion(Enum.CompanionRoleType.Dps)
 ```
 
 ### C_DelvesUI.GetTieredEntranceOptionalAffixTraitTreeID
@@ -531,7 +531,7 @@ treeID = C_DelvesUI.GetTieredEntranceOptionalAffixTraitTreeID()
 |------|------|---------|-------------|
 | `treeID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeID = C_DelvesUI.GetTieredEntranceOptionalAffixTraitTreeID()
@@ -549,7 +549,7 @@ pdeID = C_DelvesUI.GetTieredEntrancePDEID()
 |------|------|---------|-------------|
 | `pdeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local pdeID = C_DelvesUI.GetTieredEntrancePDEID()
@@ -567,7 +567,7 @@ entranceType = C_DelvesUI.GetTieredEntranceType()
 |------|------|---------|-------------|
 | `entranceType` | TieredEntranceType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local entranceType = C_DelvesUI.GetTieredEntranceType()
@@ -591,7 +591,7 @@ treeID = C_DelvesUI.GetTraitTreeForCompanion([companionID])
 |------|------|---------|-------------|
 | `treeID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local treeID = C_DelvesUI.GetTraitTreeForCompanion()
@@ -616,7 +616,7 @@ unseenCurioNodeIDs = C_DelvesUI.GetUnseenCuriosBySlotType(slotType, ownedCurioNo
 |------|------|---------|-------------|
 | `unseenCurioNodeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local unseenCurioNodeIDs = C_DelvesUI.GetUnseenCuriosBySlotType(1, ownedCurioNodeIDs)
@@ -634,7 +634,7 @@ difficulty = C_DelvesUI.GetWorldTierDifficultyForActivePlayer()
 |------|------|---------|-------------|
 | `difficulty` | WorldTierDifficulty | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local difficulty = C_DelvesUI.GetWorldTierDifficultyForActivePlayer()
@@ -652,7 +652,7 @@ result = C_DelvesUI.HasActiveDelve()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_DelvesUI.HasActiveDelve()
@@ -670,7 +670,7 @@ result = C_DelvesUI.HasActiveLair()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_DelvesUI.HasActiveLair()
@@ -688,7 +688,7 @@ result = C_DelvesUI.HasActiveLFGLair()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_DelvesUI.HasActiveLFGLair()
@@ -713,7 +713,7 @@ isEnabled, failureReason = C_DelvesUI.IsDelveEntranceTierEnabled(tier)
 | `isEnabled` | bool | no |  |
 | `failureReason` | string | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isEnabled, failureReason = C_DelvesUI.IsDelveEntranceTierEnabled(0)
@@ -737,7 +737,7 @@ result = C_DelvesUI.IsEligibleForActiveDelveRewards(unit)
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_DelvesUI.IsEligibleForActiveDelveRewards("player")
@@ -755,7 +755,7 @@ result = C_DelvesUI.IsInLair()
 |------|------|---------|-------------|
 | `result` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local result = C_DelvesUI.IsInLair()
@@ -779,7 +779,7 @@ isForCompanion = C_DelvesUI.IsTraitTreeForCompanion(traitTreeID)
 |------|------|---------|-------------|
 | `isForCompanion` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isForCompanion = C_DelvesUI.IsTraitTreeForCompanion(0)
@@ -799,7 +799,7 @@ C_DelvesUI.RequestPartyEligibilityForDelveTiers(mapID)
 |------|------|---------|-------------|
 | `mapID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_DelvesUI.RequestPartyEligibilityForDelveTiers(0)
@@ -818,7 +818,7 @@ C_DelvesUI.SaveSeenCuriosBySlotType(slotType, ownedCurioNodeIDs)
 | `slotType` | CompanionConfigSlotTypes | no |  |
 | `ownedCurioNodeIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_DelvesUI.SaveSeenCuriosBySlotType(1, ownedCurioNodeIDs)
@@ -836,7 +836,7 @@ C_DelvesUI.SelectDelveEntranceTier(tier)
 |------|------|---------|-------------|
 | `tier` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_DelvesUI.SelectDelveEntranceTier(0)

@@ -28,7 +28,10 @@ nameplate = C_NamePlate.GetNamePlateForUnit(unitToken, includeForbidden)
 **Example**
 
 ```lua
-local nameplate = C_NamePlate.GetNamePlateForUnit("player", false)
+local nameplate = C_NamePlate.GetNamePlateForUnit("nameplate1")
+if nameplate then
+    print(nameplate.UnitFrame.healthBar:GetValue())
+end
 ```
 
 ### C_NamePlate.GetNamePlates
@@ -43,7 +46,7 @@ nameplates = C_NamePlate.GetNamePlates()
 |------|------|---------|-------------|
 | `nameplates` | NamePlateFrame[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local nameplates = C_NamePlate.GetNamePlates()
@@ -62,7 +65,7 @@ width, height = C_NamePlate.GetNamePlateSize()
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local width, height = C_NamePlate.GetNamePlateSize()
@@ -81,7 +84,7 @@ C_NamePlate.SetNamePlateSize(width, height)
 | `width` | uiUnit | no |  |
 | `height` | uiUnit | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_NamePlate.SetNamePlateSize(width, height)

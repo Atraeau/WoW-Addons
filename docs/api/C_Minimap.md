@@ -18,7 +18,7 @@ CanTrackBattlePets = C_Minimap.CanTrackBattlePets()
 |------|------|---------|-------------|
 | `CanTrackBattlePets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local CanTrackBattlePets = C_Minimap.CanTrackBattlePets()
@@ -30,7 +30,7 @@ local CanTrackBattlePets = C_Minimap.CanTrackBattlePets()
 C_Minimap.ClearAllTracking()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.ClearAllTracking()
@@ -42,7 +42,7 @@ C_Minimap.ClearAllTracking()
 C_Minimap.ClearMinimapInsetInfo()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.ClearMinimapInsetInfo()
@@ -66,7 +66,7 @@ defaultValue = C_Minimap.GetDefaultTrackingValue(filterType)
 |------|------|---------|-------------|
 | `defaultValue` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local defaultValue = C_Minimap.GetDefaultTrackingValue("HELPFUL")
@@ -84,7 +84,7 @@ draw = C_Minimap.GetDrawGroundTextures()
 |------|------|---------|-------------|
 | `draw` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local draw = C_Minimap.GetDrawGroundTextures()
@@ -102,7 +102,7 @@ worldEffectCount = C_Minimap.GetNumQuestPOIWorldEffects()
 |------|------|---------|-------------|
 | `worldEffectCount` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local worldEffectCount = C_Minimap.GetNumQuestPOIWorldEffects()
@@ -120,7 +120,7 @@ numTrackingTypes = C_Minimap.GetNumTrackingTypes()
 |------|------|---------|-------------|
 | `numTrackingTypes` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local numTrackingTypes = C_Minimap.GetNumTrackingTypes()
@@ -147,7 +147,7 @@ textureCoordsX, textureCoordsY, textureCoordsZ, textureCoordsW = C_Minimap.GetPO
 | `textureCoordsZ` | number | no |  |
 | `textureCoordsW` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local textureCoordsX, textureCoordsY, textureCoordsZ, textureCoordsW = C_Minimap.GetPOITextureCoords()
@@ -171,7 +171,7 @@ trackingType = C_Minimap.GetTrackingFilter(spellIndex)
 |------|------|---------|-------------|
 | `trackingType` | MinimapScriptTrackingFilter | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackingType = C_Minimap.GetTrackingFilter(1)
@@ -195,7 +195,7 @@ trackingInfo = C_Minimap.GetTrackingInfo(spellIndex)
 |------|------|---------|-------------|
 | `trackingInfo` | MinimapScriptTrackingInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local trackingInfo = C_Minimap.GetTrackingInfo(1)
@@ -213,7 +213,7 @@ uiMapID = C_Minimap.GetUiMapID()
 |------|------|---------|-------------|
 | `uiMapID` | number | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local uiMapID = C_Minimap.GetUiMapID()
@@ -231,7 +231,7 @@ yards = C_Minimap.GetViewRadius()
 |------|------|---------|-------------|
 | `yards` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local yards = C_Minimap.GetViewRadius()
@@ -255,7 +255,7 @@ isFiltered = C_Minimap.IsFilteredOut(filterType)
 |------|------|---------|-------------|
 | `isFiltered` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isFiltered = C_Minimap.IsFilteredOut("HELPFUL")
@@ -279,7 +279,7 @@ isInside = C_Minimap.IsInsideQuestBlob(questID)
 |------|------|---------|-------------|
 | `isInside` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isInside = C_Minimap.IsInsideQuestBlob(0)
@@ -297,7 +297,7 @@ isIgnored = C_Minimap.IsRotateMinimapIgnored()
 |------|------|---------|-------------|
 | `isIgnored` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isIgnored = C_Minimap.IsRotateMinimapIgnored()
@@ -315,7 +315,7 @@ IsTrackingAccountCompletedQuests = C_Minimap.IsTrackingAccountCompletedQuests()
 |------|------|---------|-------------|
 | `IsTrackingAccountCompletedQuests` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local IsTrackingAccountCompletedQuests = C_Minimap.IsTrackingAccountCompletedQuests()
@@ -333,7 +333,7 @@ isTrackingBattlePets = C_Minimap.IsTrackingBattlePets()
 |------|------|---------|-------------|
 | `isTrackingBattlePets` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrackingBattlePets = C_Minimap.IsTrackingBattlePets()
@@ -351,7 +351,7 @@ isTrackingHiddenQuests = C_Minimap.IsTrackingHiddenQuests()
 |------|------|---------|-------------|
 | `isTrackingHiddenQuests` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isTrackingHiddenQuests = C_Minimap.IsTrackingHiddenQuests()
@@ -369,7 +369,7 @@ C_Minimap.SetDrawGroundTextures(draw)
 |------|------|---------|-------------|
 | `draw` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.SetDrawGroundTextures(false)
@@ -387,7 +387,7 @@ C_Minimap.SetIgnoreRotateMinimap(ignore)
 |------|------|---------|-------------|
 | `ignore` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.SetIgnoreRotateMinimap(false)
@@ -407,7 +407,7 @@ C_Minimap.SetMinimapInsetInfo(minAngle, maxAngle, scalar)
 | `maxAngle` | number | no |  |
 | `scalar` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.SetMinimapInsetInfo(0, 0, 0)
@@ -426,7 +426,7 @@ C_Minimap.SetTracking(index, on)
 | `index` | luaIndex | no |  |
 | `on` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_Minimap.SetTracking(1, false)
@@ -444,7 +444,7 @@ shouldUse = C_Minimap.ShouldUseHybridMinimap()
 |------|------|---------|-------------|
 | `shouldUse` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local shouldUse = C_Minimap.ShouldUseHybridMinimap()

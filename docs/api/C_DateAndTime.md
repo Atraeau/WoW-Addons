@@ -25,7 +25,7 @@ newDate = C_DateAndTime.AdjustTimeByDays(date, days)
 |------|------|---------|-------------|
 | `newDate` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newDate = C_DateAndTime.AdjustTimeByDays(date, 0)
@@ -50,7 +50,7 @@ newDate = C_DateAndTime.AdjustTimeByMinutes(date, minutes)
 |------|------|---------|-------------|
 | `newDate` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newDate = C_DateAndTime.AdjustTimeByMinutes(date, 0)
@@ -75,7 +75,7 @@ newDate = C_DateAndTime.AdjustTimeByMonths(date, months)
 |------|------|---------|-------------|
 | `newDate` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local newDate = C_DateAndTime.AdjustTimeByMonths(date, 0)
@@ -100,7 +100,7 @@ comparison = C_DateAndTime.CompareCalendarTime(lhsCalendarTime, rhsCalendarTime)
 |------|------|---------|-------------|
 | `comparison` | number | no | -1 if rhsCalendarTime < lhsCalendarTime, 0 if rhsCalendarTime == lhsCalendarTime, 1 if rhsCalendarTime > lhsCalendarTime |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local comparison = C_DateAndTime.CompareCalendarTime(lhsCalendarTime, rhsCalendarTime)
@@ -124,7 +124,7 @@ date = C_DateAndTime.GetCalendarTimeFromEpoch(epoch)
 |------|------|---------|-------------|
 | `date` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local date = C_DateAndTime.GetCalendarTimeFromEpoch(epoch)
@@ -142,7 +142,7 @@ date = C_DateAndTime.GetCurrentCalendarTime()
 |------|------|---------|-------------|
 | `date` | CalendarTime | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local date = C_DateAndTime.GetCurrentCalendarTime()
@@ -160,7 +160,7 @@ seconds = C_DateAndTime.GetSecondsUntilDailyReset()
 |------|------|---------|-------------|
 | `seconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = C_DateAndTime.GetSecondsUntilDailyReset()
@@ -178,7 +178,7 @@ seconds = C_DateAndTime.GetSecondsUntilWeeklyReset()
 |------|------|---------|-------------|
 | `seconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = C_DateAndTime.GetSecondsUntilWeeklyReset()
@@ -196,7 +196,7 @@ serverTimeLocal = C_DateAndTime.GetServerTimeLocal()
 |------|------|---------|-------------|
 | `serverTimeLocal` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local serverTimeLocal = C_DateAndTime.GetServerTimeLocal()
@@ -214,7 +214,7 @@ seconds = C_DateAndTime.GetWeeklyResetStartTime()
 |------|------|---------|-------------|
 | `seconds` | time_t | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local seconds = C_DateAndTime.GetWeeklyResetStartTime()
@@ -232,7 +232,7 @@ isDayTime = C_DateAndTime.IsDayTime()
 |------|------|---------|-------------|
 | `isDayTime` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isDayTime = C_DateAndTime.IsDayTime()

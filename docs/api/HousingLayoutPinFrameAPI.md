@@ -18,7 +18,7 @@ moveRestriction = CanMove()
 |------|------|---------|-------------|
 | `moveRestriction` | HousingLayoutRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local moveRestriction = CanMove()
@@ -36,7 +36,7 @@ removalRestriction = CanRemove()
 |------|------|---------|-------------|
 | `removalRestriction` | HousingLayoutRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local removalRestriction = CanRemove()
@@ -54,7 +54,7 @@ rotateRestriction = CanRotate()
 |------|------|---------|-------------|
 | `rotateRestriction` | HousingLayoutRestriction | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local rotateRestriction = CanRotate()
@@ -72,7 +72,7 @@ Drag(isAccessible)
 |------|------|---------|-------------|
 | `isAccessible` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Drag(false)
@@ -90,7 +90,7 @@ connectionInfo = GetDoorConnectionInfo()
 |------|------|---------|-------------|
 | `connectionInfo` | DoorConnectionInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local connectionInfo = GetDoorConnectionInfo()
@@ -108,7 +108,7 @@ type = GetPinType()
 |------|------|---------|-------------|
 | `type` | HousingLayoutPinType | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local type = GetPinType()
@@ -126,7 +126,7 @@ roomGUID = GetRoomGUID()
 |------|------|---------|-------------|
 | `roomGUID` | WOWGUID | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local roomGUID = GetRoomGUID()
@@ -144,7 +144,7 @@ name = GetRoomName()
 |------|------|---------|-------------|
 | `name` | cstring | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name = GetRoomName()
@@ -164,7 +164,7 @@ isSelected = IsAnyPartOfRoomSelected()
 |------|------|---------|-------------|
 | `isSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSelected = IsAnyPartOfRoomSelected()
@@ -182,7 +182,7 @@ isConnectedToDraggingRoom = IsConnectedToDraggingRoom()
 |------|------|---------|-------------|
 | `isConnectedToDraggingRoom` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isConnectedToDraggingRoom = IsConnectedToDraggingRoom()
@@ -202,7 +202,7 @@ isOccupied = IsOccupiedDoor()
 |------|------|---------|-------------|
 | `isOccupied` | bool | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isOccupied = IsOccupiedDoor()
@@ -220,7 +220,7 @@ isPartOfDraggingRoom = IsPartOfDraggingRoom()
 |------|------|---------|-------------|
 | `isPartOfDraggingRoom` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPartOfDraggingRoom = IsPartOfDraggingRoom()
@@ -240,7 +240,7 @@ isSelected = IsSelected()
 |------|------|---------|-------------|
 | `isSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSelected = IsSelected()
@@ -258,7 +258,7 @@ isValid = IsValid()
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = IsValid()
@@ -276,7 +276,7 @@ isValid = IsValidForSelectedFloorplan()
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = IsValidForSelectedFloorplan()
@@ -288,7 +288,7 @@ local isValid = IsValidForSelectedFloorplan()
 Select()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 Select()
@@ -306,7 +306,7 @@ SetUpdateCallback(cb)
 |------|------|---------|-------------|
 | `cb` | PinUpdatedCallback | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetUpdateCallback(cb)

@@ -18,7 +18,7 @@ targetAlreadySelected = C_GamepadTargeting.Disable()
 |------|------|---------|-------------|
 | `targetAlreadySelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local targetAlreadySelected = C_GamepadTargeting.Disable()
@@ -30,7 +30,7 @@ local targetAlreadySelected = C_GamepadTargeting.Disable()
 C_GamepadTargeting.Enable()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamepadTargeting.Enable()
@@ -48,7 +48,7 @@ hasReticleHoverTarget = C_GamepadTargeting.HasReticleHoverTarget()
 |------|------|---------|-------------|
 | `hasReticleHoverTarget` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasReticleHoverTarget = C_GamepadTargeting.HasReticleHoverTarget()
@@ -66,7 +66,7 @@ C_GamepadTargeting.SetFilter(filter)
 |------|------|---------|-------------|
 | `filter` | GamepadTargetingFilters | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_GamepadTargeting.SetFilter("HELPFUL")

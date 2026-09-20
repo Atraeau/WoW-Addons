@@ -12,7 +12,7 @@
 C_LegendaryCrafting.CloseRuneforgeInteraction()
 ```
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LegendaryCrafting.CloseRuneforgeInteraction()
@@ -30,7 +30,7 @@ C_LegendaryCrafting.CraftRuneforgeLegendary(description)
 |------|------|---------|-------------|
 | `description` | RuneforgeLegendaryCraftDescription | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LegendaryCrafting.CraftRuneforgeLegendary(description)
@@ -56,7 +56,7 @@ info = C_LegendaryCrafting.GetRuneforgeItemPreviewInfo(baseItem, [runeforgePower
 |------|------|---------|-------------|
 | `info` | RuneforgeItemPreviewInfo | yes |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local info = C_LegendaryCrafting.GetRuneforgeItemPreviewInfo(6948)
@@ -80,7 +80,7 @@ componentInfo = C_LegendaryCrafting.GetRuneforgeLegendaryComponentInfo(runeforge
 |------|------|---------|-------------|
 | `componentInfo` | RuneforgeLegendaryComponentInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local componentInfo = C_LegendaryCrafting.GetRuneforgeLegendaryComponentInfo(runeforgeLegendary)
@@ -104,7 +104,7 @@ cost = C_LegendaryCrafting.GetRuneforgeLegendaryCost(baseItem)
 |------|------|---------|-------------|
 | `cost` | CurrencyCost[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_LegendaryCrafting.GetRuneforgeLegendaryCost(6948)
@@ -122,7 +122,7 @@ spellID = C_LegendaryCrafting.GetRuneforgeLegendaryCraftSpellID()
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local spellID = C_LegendaryCrafting.GetRuneforgeLegendaryCraftSpellID()
@@ -140,7 +140,7 @@ currencies = C_LegendaryCrafting.GetRuneforgeLegendaryCurrencies()
 |------|------|---------|-------------|
 | `currencies` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local currencies = C_LegendaryCrafting.GetRuneforgeLegendaryCurrencies()
@@ -165,7 +165,7 @@ cost = C_LegendaryCrafting.GetRuneforgeLegendaryUpgradeCost(runeforgeLegendary, 
 |------|------|---------|-------------|
 | `cost` | CurrencyCost[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_LegendaryCrafting.GetRuneforgeLegendaryUpgradeCost(runeforgeLegendary, 6948)
@@ -193,7 +193,7 @@ name, description = C_LegendaryCrafting.GetRuneforgeModifierInfo(baseItem, [powe
 | `name` | string | no |  |
 | `description` | string[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local name, description = C_LegendaryCrafting.GetRuneforgeModifierInfo(6948, 1, modifiers)
@@ -211,7 +211,7 @@ modifiedReagentItemIDs = C_LegendaryCrafting.GetRuneforgeModifiers()
 |------|------|---------|-------------|
 | `modifiedReagentItemIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local modifiedReagentItemIDs = C_LegendaryCrafting.GetRuneforgeModifiers()
@@ -235,7 +235,7 @@ power = C_LegendaryCrafting.GetRuneforgePowerInfo(runeforgePowerID)
 |------|------|---------|-------------|
 | `power` | RuneforgePower | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local power = C_LegendaryCrafting.GetRuneforgePowerInfo(0)
@@ -261,7 +261,7 @@ primaryRuneforgePowerIDs, otherRuneforgePowerIDs = C_LegendaryCrafting.GetRunefo
 | `primaryRuneforgePowerIDs` | number[] | no |  |
 | `otherRuneforgePowerIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local primaryRuneforgePowerIDs, otherRuneforgePowerIDs = C_LegendaryCrafting.GetRuneforgePowers()
@@ -288,7 +288,7 @@ runeforgePowerIDs = C_LegendaryCrafting.GetRuneforgePowersByClassSpecAndCovenant
 |------|------|---------|-------------|
 | `runeforgePowerIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local runeforgePowerIDs = C_LegendaryCrafting.GetRuneforgePowersByClassSpecAndCovenant()
@@ -312,7 +312,7 @@ slotNames = C_LegendaryCrafting.GetRuneforgePowerSlots(runeforgePowerID)
 |------|------|---------|-------------|
 | `slotNames` | cstring[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local slotNames = C_LegendaryCrafting.GetRuneforgePowerSlots(0)
@@ -336,7 +336,7 @@ isRuneforgeLegendary = C_LegendaryCrafting.IsRuneforgeLegendary(item)
 |------|------|---------|-------------|
 | `isRuneforgeLegendary` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isRuneforgeLegendary = C_LegendaryCrafting.IsRuneforgeLegendary(6948)
@@ -360,7 +360,7 @@ isMaxLevel = C_LegendaryCrafting.IsRuneforgeLegendaryMaxLevel(runeforgeLegendary
 |------|------|---------|-------------|
 | `isMaxLevel` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isMaxLevel = C_LegendaryCrafting.IsRuneforgeLegendaryMaxLevel(runeforgeLegendary)
@@ -385,7 +385,7 @@ isValid = C_LegendaryCrafting.IsUpgradeItemValidForRuneforgeLegendary(runeforgeL
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_LegendaryCrafting.IsUpgradeItemValidForRuneforgeLegendary(runeforgeLegendary, 6948)
@@ -409,7 +409,7 @@ isValid = C_LegendaryCrafting.IsValidRuneforgeBaseItem(baseItem)
 |------|------|---------|-------------|
 | `isValid` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isValid = C_LegendaryCrafting.IsValidRuneforgeBaseItem(6948)
@@ -435,7 +435,7 @@ description = C_LegendaryCrafting.MakeRuneforgeCraftDescription(baseItem, runefo
 |------|------|---------|-------------|
 | `description` | RuneforgeLegendaryCraftDescription | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local description = C_LegendaryCrafting.MakeRuneforgeCraftDescription(6948, 0, modifiers)
@@ -454,7 +454,7 @@ C_LegendaryCrafting.UpgradeRuneforgeLegendary(runeforgeLegendary, upgradeItem)
 | `runeforgeLegendary` | ItemLocation | no |  |
 | `upgradeItem` | ItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LegendaryCrafting.UpgradeRuneforgeLegendary(runeforgeLegendary, 6948)

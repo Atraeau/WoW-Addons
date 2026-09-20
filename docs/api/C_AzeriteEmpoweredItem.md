@@ -25,7 +25,7 @@ canSelect = C_AzeriteEmpoweredItem.CanSelectPower(azeriteEmpoweredItemLocation, 
 |------|------|---------|-------------|
 | `canSelect` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local canSelect = C_AzeriteEmpoweredItem.CanSelectPower(6948, 0)
@@ -43,7 +43,7 @@ C_AzeriteEmpoweredItem.ConfirmAzeriteEmpoweredItemRespec(azeriteEmpoweredItemLoc
 |------|------|---------|-------------|
 | `azeriteEmpoweredItemLocation` | AzeriteEmpoweredItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEmpoweredItem.ConfirmAzeriteEmpoweredItemRespec(6948)
@@ -67,7 +67,7 @@ tierInfo = C_AzeriteEmpoweredItem.GetAllTierInfo(azeriteEmpoweredItemLocation)
 |------|------|---------|-------------|
 | `tierInfo` | AzeriteEmpoweredItemTierInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tierInfo = C_AzeriteEmpoweredItem.GetAllTierInfo(6948)
@@ -92,7 +92,7 @@ tierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(itemInfo, [classID])
 |------|------|---------|-------------|
 | `tierInfo` | AzeriteEmpoweredItemTierInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local tierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(6948)
@@ -110,7 +110,7 @@ cost = C_AzeriteEmpoweredItem.GetAzeriteEmpoweredItemRespecCost()
 |------|------|---------|-------------|
 | `cost` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cost = C_AzeriteEmpoweredItem.GetAzeriteEmpoweredItemRespecCost()
@@ -134,7 +134,7 @@ powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(powerID)
 |------|------|---------|-------------|
 | `powerInfo` | AzeriteEmpoweredItemPowerInfo | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(0)
@@ -160,10 +160,10 @@ powerText = C_AzeriteEmpoweredItem.GetPowerText(azeriteEmpoweredItemLocation, po
 |------|------|---------|-------------|
 | `powerText` | AzeriteEmpoweredItemPowerText | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local powerText = C_AzeriteEmpoweredItem.GetPowerText(6948, 0, level)
+local powerText = C_AzeriteEmpoweredItem.GetPowerText(6948, 0, Enum.AzeritePowerLevel.Base)
 ```
 
 ### C_AzeriteEmpoweredItem.GetSpecsForPower
@@ -184,7 +184,7 @@ specInfo = C_AzeriteEmpoweredItem.GetSpecsForPower(powerID)
 |------|------|---------|-------------|
 | `specInfo` | AzeriteSpecInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local specInfo = C_AzeriteEmpoweredItem.GetSpecsForPower(0)
@@ -208,7 +208,7 @@ hasAnyUnselectedPowers = C_AzeriteEmpoweredItem.HasAnyUnselectedPowers(azeriteEm
 |------|------|---------|-------------|
 | `hasAnyUnselectedPowers` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasAnyUnselectedPowers = C_AzeriteEmpoweredItem.HasAnyUnselectedPowers(6948)
@@ -232,7 +232,7 @@ hasBeenViewed = C_AzeriteEmpoweredItem.HasBeenViewed(azeriteEmpoweredItemLocatio
 |------|------|---------|-------------|
 | `hasBeenViewed` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local hasBeenViewed = C_AzeriteEmpoweredItem.HasBeenViewed(6948)
@@ -256,7 +256,7 @@ isAzeriteEmpoweredItem = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItem(itemLocat
 |------|------|---------|-------------|
 | `isAzeriteEmpoweredItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAzeriteEmpoweredItem = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItem(6948)
@@ -280,7 +280,7 @@ isAzeriteEmpoweredItem = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(itemI
 |------|------|---------|-------------|
 | `isAzeriteEmpoweredItem` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAzeriteEmpoweredItem = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(6948)
@@ -305,7 +305,7 @@ isAzeritePreviewSourceDisplayable = C_AzeriteEmpoweredItem.IsAzeritePreviewSourc
 |------|------|---------|-------------|
 | `isAzeritePreviewSourceDisplayable` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAzeritePreviewSourceDisplayable = C_AzeriteEmpoweredItem.IsAzeritePreviewSourceDisplayable(6948)
@@ -323,7 +323,7 @@ isHeartOfAzerothEquipped = C_AzeriteEmpoweredItem.IsHeartOfAzerothEquipped()
 |------|------|---------|-------------|
 | `isHeartOfAzerothEquipped` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isHeartOfAzerothEquipped = C_AzeriteEmpoweredItem.IsHeartOfAzerothEquipped()
@@ -348,7 +348,7 @@ isPowerAvailableForSpec = C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(powerID
 |------|------|---------|-------------|
 | `isPowerAvailableForSpec` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isPowerAvailableForSpec = C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(0, 0)
@@ -373,7 +373,7 @@ isSelected = C_AzeriteEmpoweredItem.IsPowerSelected(azeriteEmpoweredItemLocation
 |------|------|---------|-------------|
 | `isSelected` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isSelected = C_AzeriteEmpoweredItem.IsPowerSelected(6948, 0)
@@ -398,7 +398,7 @@ success = C_AzeriteEmpoweredItem.SelectPower(azeriteEmpoweredItemLocation, power
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local success = C_AzeriteEmpoweredItem.SelectPower(6948, 0)
@@ -416,7 +416,7 @@ C_AzeriteEmpoweredItem.SetHasBeenViewed(azeriteEmpoweredItemLocation)
 |------|------|---------|-------------|
 | `azeriteEmpoweredItemLocation` | AzeriteEmpoweredItemLocation | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_AzeriteEmpoweredItem.SetHasBeenViewed(6948)

@@ -18,7 +18,7 @@ angle = GetDegrees()
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local angle = GetDegrees()
@@ -38,7 +38,7 @@ point, originX, originY = GetOrigin()
 | `originX` | number | no |  |
 | `originY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local point, originX, originY = GetOrigin()
@@ -56,7 +56,7 @@ angle = GetRadians()
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local angle = GetRadians()
@@ -74,7 +74,7 @@ SetDegrees(angle)
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetDegrees(0)
@@ -94,7 +94,7 @@ SetOrigin(point, originX, originY)
 | `originX` | number | no |  |
 | `originY` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetOrigin(point, 0, 0)
@@ -112,7 +112,7 @@ SetRadians(angle)
 |------|------|---------|-------------|
 | `angle` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 SetRadians(0)

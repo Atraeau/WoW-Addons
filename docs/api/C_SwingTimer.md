@@ -21,10 +21,10 @@ C_SwingTimer.EnableRangeCheck(swingType, enable)
 | `swingType` | PlayerSwingType | no |  |
 | `enable` | bool | no | True if changes in range for the swing type should dispatch PlayerSwingRangeUpdate. False if the swing type no longer needs the event. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_SwingTimer.EnableRangeCheck(swingType, false)
+C_SwingTimer.EnableRangeCheck(Enum.PlayerSwingType.MainHand, false)
 ```
 
 ### C_SwingTimer.IsTargetWithinSwingRange
@@ -47,10 +47,10 @@ isInRange = C_SwingTimer.IsTargetWithinSwingRange(swingType)
 |------|------|---------|-------------|
 | `isInRange` | bool | yes | Nil when no range check could be made, for example there is no target, the target cannot be attacked, or no weapon is equipped for the swing type. Nil must not be treated as out of range. |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isInRange = C_SwingTimer.IsTargetWithinSwingRange(swingType)
+local isInRange = C_SwingTimer.IsTargetWithinSwingRange(Enum.PlayerSwingType.MainHand)
 ```
 
 ## Events

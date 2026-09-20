@@ -25,7 +25,7 @@ cooldownIDs = C_CooldownViewer.GetCooldownViewerCategorySet(category, allowUnlea
 |------|------|---------|-------------|
 | `cooldownIDs` | number[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cooldownIDs = C_CooldownViewer.GetCooldownViewerCategorySet(category, false)
@@ -49,7 +49,7 @@ cooldownInfo = C_CooldownViewer.GetCooldownViewerCooldownInfo(cooldownID)
 |------|------|---------|-------------|
 | `cooldownInfo` | CooldownViewerCooldown | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local cooldownInfo = C_CooldownViewer.GetCooldownViewerCooldownInfo(0)
@@ -67,7 +67,7 @@ groupBuffItems = C_CooldownViewer.GetGroupBuffItems()
 |------|------|---------|-------------|
 | `groupBuffItems` | GroupBuffItem[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local groupBuffItems = C_CooldownViewer.GetGroupBuffItems()
@@ -85,7 +85,7 @@ data = C_CooldownViewer.GetLayoutData()
 |------|------|---------|-------------|
 | `data` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local data = C_CooldownViewer.GetLayoutData()
@@ -109,7 +109,7 @@ validAlertTypes = C_CooldownViewer.GetValidAlertTypes(cooldownID)
 |------|------|---------|-------------|
 | `validAlertTypes` | CooldownViewerAlertEventType[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local validAlertTypes = C_CooldownViewer.GetValidAlertTypes(0)
@@ -128,7 +128,7 @@ isAvailable, failureReason = C_CooldownViewer.IsCooldownViewerAvailable()
 | `isAvailable` | bool | no |  |
 | `failureReason` | string | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local isAvailable, failureReason = C_CooldownViewer.IsCooldownViewerAvailable()
@@ -146,7 +146,7 @@ C_CooldownViewer.SetLayoutData(data)
 |------|------|---------|-------------|
 | `data` | cstring | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_CooldownViewer.SetLayoutData("")

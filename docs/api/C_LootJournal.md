@@ -24,7 +24,7 @@ items = C_LootJournal.GetItemSetItems(setID)
 |------|------|---------|-------------|
 | `items` | LootJournalItemInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local items = C_LootJournal.GetItemSetItems(0)
@@ -49,7 +49,7 @@ itemSets = C_LootJournal.GetItemSets([classID], [specID])
 |------|------|---------|-------------|
 | `itemSets` | LootJournalItemSetInfo[] | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local itemSets = C_LootJournal.GetItemSets()

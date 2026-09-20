@@ -18,7 +18,7 @@ immersiveInteraction = C_ImmersiveInteraction.HasImmersiveInteraction()
 |------|------|---------|-------------|
 | `immersiveInteraction` | bool | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 local immersiveInteraction = C_ImmersiveInteraction.HasImmersiveInteraction()

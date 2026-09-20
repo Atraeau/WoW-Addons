@@ -18,7 +18,7 @@ C_LiveEvent.OnLiveEventBannerClicked(timerunningSeasonID)
 |------|------|---------|-------------|
 | `timerunningSeasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LiveEvent.OnLiveEventBannerClicked(0)
@@ -36,7 +36,7 @@ C_LiveEvent.OnLiveEventPopupClicked(timerunningSeasonID)
 |------|------|---------|-------------|
 | `timerunningSeasonID` | number | no |  |
 
-**Example**
+**Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
 C_LiveEvent.OnLiveEventPopupClicked(0)
