@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "sumneko.lua",
-    "stef-k.wow-api",
     "ketho.wow-api",
     "septh.wow-bundle"
   ]
