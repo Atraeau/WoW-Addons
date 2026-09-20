@@ -3,6 +3,6 @@
 ## Notes: Dumps the client's own APIDocumentation + _G inventory to SavedVariables
 ## Author: kirk.lennstrom@gmail.com
 ## Version: 0.1.0
-## SavedVariables: WowApiExportDB, WowApiExportJSON
+## SavedVariables: WowApiExportDB, WowApiExportJSON, WowApiExportB64
 
 Core.lua

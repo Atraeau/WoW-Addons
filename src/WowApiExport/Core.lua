@@ -15,6 +15,7 @@ local addonName, ns = ...
 
 WowApiExportDB = WowApiExportDB or {}
 WowApiExportJSON = WowApiExportJSON or ""
+WowApiExportB64 = WowApiExportB64 or ""   -- canonical machine-readable payload (base64 of the JSON)
 
 --------------------------------------------------------------------------------
 -- Minimal JSON encoder (fallback when C_EncodingUtil is unavailable)
@@ -59,6 +60,42 @@ local function JsonEncode(v)
 		end
 	end
 	return "null"
+end
+
+--------------------------------------------------------------------------------
+-- Base64 (pure Lua) -- base64 has no quotes/backslashes so it survives the
+-- SavedVariables serializer with zero escaping, making offline parsing trivial.
+--------------------------------------------------------------------------------
+local B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+local B64_LOOKUP = {}
+for k = 1, 64 do B64_LOOKUP[k - 1] = B64_CHARS:sub(k, k) end
+
+local function Base64Encode(data)
+	local byte = string.byte
+	local floor = math.floor
+	local lookup = B64_LOOKUP
+	local out, oi = {}, 0
+	local n = #data
+	local i = 1
+	while i <= n do
+		local b1 = byte(data, i)
+		local b2 = byte(data, i + 1)
+		local b3 = byte(data, i + 2)
+		oi = oi + 1; out[oi] = lookup[floor(b1 / 4)]
+		oi = oi + 1; out[oi] = lookup[(b1 % 4) * 16 + floor((b2 or 0) / 16)]
+		if b2 then
+			oi = oi + 1; out[oi] = lookup[(b2 % 16) * 4 + floor((b3 or 0) / 64)]
+		else
+			oi = oi + 1; out[oi] = "="
+		end
+		if b3 then
+			oi = oi + 1; out[oi] = lookup[b3 % 64]
+		else
+			oi = oi + 1; out[oi] = "="
+		end
+		i = i + 3
+	end
+	return table.concat(out)
 end
 
 --------------------------------------------------------------------------------
@@ -186,12 +223,16 @@ local function Build()
 	WowApiExportDB = data
 
 	-- JSON: prefer the native (fast) serializer if the client has it.
+	local json
 	if C_EncodingUtil and C_EncodingUtil.SerializeJSON then
-		local ok, json = pcall(C_EncodingUtil.SerializeJSON, data)
-		WowApiExportJSON = ok and json or JsonEncode(data)
+		local ok, native = pcall(C_EncodingUtil.SerializeJSON, data)
+		json = ok and native or JsonEncode(data)
 	else
-		WowApiExportJSON = JsonEncode(data)
+		json = JsonEncode(data)
 	end
+	WowApiExportJSON = json
+	-- Canonical payload for offline tooling: base64 of the JSON (no escaping issues).
+	WowApiExportB64 = Base64Encode(json)
 
 	print(("|cff33ff99WowApiExport|r  interface %s, build %s"):format(tostring(interface), tostring(build)))
 	if hasDocs then
