@@ -1,0 +1,77 @@
+# SimpleModelFFXAPI
+
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
+
+**4** functions · **0** events · **0** types
+
+## Functions
+
+### SimpleModelFFXAPI.AddCharacterLight
+
+```lua
+AddCharacterLight([index], light)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `index` | number | yes |  |
+| `light` | ModelLight | no |  |
+
+**Example**
+
+```lua
+AddCharacterLight(light)
+```
+
+### SimpleModelFFXAPI.AddLight
+
+```lua
+AddLight([index], light)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `index` | number | yes |  |
+| `light` | ModelLight | no |  |
+
+**Example**
+
+```lua
+AddLight(light)
+```
+
+### SimpleModelFFXAPI.AddPetLight
+
+```lua
+AddPetLight([index], light)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `index` | number | yes |  |
+| `light` | ModelLight | no |  |
+
+**Example**
+
+```lua
+AddPetLight(light)
+```
+
+### SimpleModelFFXAPI.ResetLights
+
+```lua
+ResetLights()
+```
+
+**Example**
+
+```lua
+ResetLights()
+```
+

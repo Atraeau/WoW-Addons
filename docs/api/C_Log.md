@@ -1,15 +1,81 @@
 # C_Log
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**4** functions
+**4** functions · **0** events · **0** types
+
+## Functions
+
+### C_Log.LogErrorMessage
 
 ```lua
-C_Log.LogErrorMessage()
-C_Log.LogMessage()
-C_Log.LogMessageWithPriority()
-C_Log.LogWarningMessage()
+C_Log.LogErrorMessage(message)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `message` | cstring | no |  |
+
+**Example**
+
+```lua
+C_Log.LogErrorMessage("")
+```
+
+### C_Log.LogMessage
+
+```lua
+C_Log.LogMessage(message)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `message` | cstring | no |  |
+
+**Example**
+
+```lua
+C_Log.LogMessage("")
+```
+
+### C_Log.LogMessageWithPriority
+
+```lua
+C_Log.LogMessageWithPriority(priority, message)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `priority` | LogPriority | no |  |
+| `message` | cstring | no |  |
+
+**Example**
+
+```lua
+C_Log.LogMessageWithPriority(priority, "")
+```
+
+### C_Log.LogWarningMessage
+
+```lua
+C_Log.LogWarningMessage(message)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `message` | cstring | no |  |
+
+**Example**
+
+```lua
+C_Log.LogWarningMessage("")
+```
+

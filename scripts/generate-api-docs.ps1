@@ -208,7 +208,28 @@ if ($systemsRaw.Count -eq 0) {
     return
 }
 
-$systems = $systemsRaw | Sort-Object { if ($_.namespace) { $_.namespace } else { $_.name } }
+# Merge systems that share a namespace (Blizzard splits some across multiple
+# system files) so nothing gets overwritten.
+$agg = [ordered]@{}
+foreach ($s in $systemsRaw) {
+    $key = if ($s.namespace) { $s.namespace } else { $s.name }
+    if (-not $agg.Contains($key)) {
+        $agg[$key] = [pscustomobject]@{
+            namespace     = $s.namespace
+            name          = $s.name
+            documentation = $s.documentation
+            functions     = [System.Collections.Generic.List[object]]::new()
+            events        = [System.Collections.Generic.List[object]]::new()
+            tables        = [System.Collections.Generic.List[object]]::new()
+        }
+    }
+    $o = $agg[$key]
+    if (-not $o.documentation -and $s.documentation) { $o.documentation = $s.documentation }
+    foreach ($f in @($s.functions)) { $o.functions.Add($f) }
+    foreach ($e in @($s.events))    { $o.events.Add($e) }
+    foreach ($t in @($s.tables))    { $o.tables.Add($t) }
+}
+$systems = $agg.Values | Sort-Object { if ($_.namespace) { $_.namespace } else { $_.name } }
 
 $indexRows = @()
 

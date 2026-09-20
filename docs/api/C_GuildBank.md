@@ -1,12 +1,60 @@
 # C_GuildBank
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**1** functions
+**1** functions · **10** events · **0** types
+
+## Functions
+
+### C_GuildBank.IsGuildBankEnabled
 
 ```lua
-C_GuildBank.IsGuildBankEnabled()
+enabled = C_GuildBank.IsGuildBankEnabled()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `enabled` | bool | no |  |
+
+**Example**
+
+```lua
+local enabled = C_GuildBank.IsGuildBankEnabled()
+```
+
+## Events
+
+### GUILDBANKBAGSLOTS_CHANGED
+
+### GUILDBANKFRAME_CLOSED
+
+### GUILDBANKFRAME_OPENED
+
+### GUILDBANK_ITEM_LOCK_CHANGED
+
+### GUILDBANKLOG_UPDATE
+
+### GUILDBANK_TEXT_CHANGED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `guildBankTab` | luaIndex | no |  |
+
+### GUILDBANK_UPDATE_MONEY
+
+### GUILDBANK_UPDATE_TABS
+
+### GUILDBANK_UPDATE_TEXT
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `guildBankTab` | number | no |  |
+
+### GUILDBANK_UPDATE_WITHDRAWMONEY
+

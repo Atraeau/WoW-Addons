@@ -1,13 +1,48 @@
 # C_CovenantCallings
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**2** functions
+**2** functions · **1** events · **0** types
+
+## Functions
+
+### C_CovenantCallings.AreCallingsUnlocked
 
 ```lua
-C_CovenantCallings.AreCallingsUnlocked()
+unlocked = C_CovenantCallings.AreCallingsUnlocked()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unlocked` | bool | no |  |
+
+**Example**
+
+```lua
+local unlocked = C_CovenantCallings.AreCallingsUnlocked()
+```
+
+### C_CovenantCallings.RequestCallings
+
+```lua
 C_CovenantCallings.RequestCallings()
 ```
+
+**Example**
+
+```lua
+C_CovenantCallings.RequestCallings()
+```
+
+## Events
+
+### COVENANT_CALLINGS_UPDATED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `callings` | BountyInfo[] | no |  |
+

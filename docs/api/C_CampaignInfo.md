@@ -1,21 +1,282 @@
 # C_CampaignInfo
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**10** functions
+**10** functions · **0** events · **4** types
+
+## Functions
+
+### C_CampaignInfo.GetAvailableCampaigns
 
 ```lua
-C_CampaignInfo.GetAvailableCampaigns()
-C_CampaignInfo.GetCampaignChapterInfo()
-C_CampaignInfo.GetCampaignID()
-C_CampaignInfo.GetCampaignInfo()
-C_CampaignInfo.GetChapterIDs()
-C_CampaignInfo.GetCurrentChapterID()
-C_CampaignInfo.GetFailureReason()
-C_CampaignInfo.GetState()
-C_CampaignInfo.IsCampaignQuest()
-C_CampaignInfo.SortAsNormalQuest()
+campaignIDs = C_CampaignInfo.GetAvailableCampaigns()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignIDs` | number[] | no |  |
+
+**Example**
+
+```lua
+local campaignIDs = C_CampaignInfo.GetAvailableCampaigns()
+```
+
+### C_CampaignInfo.GetCampaignChapterInfo
+
+```lua
+campaignChapterInfo = C_CampaignInfo.GetCampaignChapterInfo(campaignChapterID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignChapterID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignChapterInfo` | CampaignChapterInfo | yes |  |
+
+**Example**
+
+```lua
+local campaignChapterInfo = C_CampaignInfo.GetCampaignChapterInfo(0)
+```
+
+### C_CampaignInfo.GetCampaignID
+
+```lua
+campaignID = C_CampaignInfo.GetCampaignID(questID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Example**
+
+```lua
+local campaignID = C_CampaignInfo.GetCampaignID(0)
+```
+
+### C_CampaignInfo.GetCampaignInfo
+
+```lua
+campaignInfo = C_CampaignInfo.GetCampaignInfo(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignInfo` | CampaignInfo | yes |  |
+
+**Example**
+
+```lua
+local campaignInfo = C_CampaignInfo.GetCampaignInfo(0)
+```
+
+### C_CampaignInfo.GetChapterIDs
+
+```lua
+chapterIDs = C_CampaignInfo.GetChapterIDs(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `chapterIDs` | number[] | yes |  |
+
+**Example**
+
+```lua
+local chapterIDs = C_CampaignInfo.GetChapterIDs(0)
+```
+
+### C_CampaignInfo.GetCurrentChapterID
+
+```lua
+currentChapterID = C_CampaignInfo.GetCurrentChapterID(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `currentChapterID` | number | yes |  |
+
+**Example**
+
+```lua
+local currentChapterID = C_CampaignInfo.GetCurrentChapterID(0)
+```
+
+### C_CampaignInfo.GetFailureReason
+
+```lua
+failureReason = C_CampaignInfo.GetFailureReason(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `failureReason` | CampaignFailureReason | yes |  |
+
+**Example**
+
+```lua
+local failureReason = C_CampaignInfo.GetFailureReason(0)
+```
+
+### C_CampaignInfo.GetState
+
+```lua
+state = C_CampaignInfo.GetState(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `state` | CampaignState | no |  |
+
+**Example**
+
+```lua
+local state = C_CampaignInfo.GetState(0)
+```
+
+### C_CampaignInfo.IsCampaignQuest
+
+```lua
+isCampaignQuest = C_CampaignInfo.IsCampaignQuest(questID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isCampaignQuest` | bool | no |  |
+
+**Example**
+
+```lua
+local isCampaignQuest = C_CampaignInfo.IsCampaignQuest(0)
+```
+
+### C_CampaignInfo.SortAsNormalQuest
+
+```lua
+sortAsNormalQuest = C_CampaignInfo.SortAsNormalQuest(campaignID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `campaignID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `sortAsNormalQuest` | bool | no |  |
+
+**Example**
+
+```lua
+local sortAsNormalQuest = C_CampaignInfo.SortAsNormalQuest(0)
+```
+
+## Types
+
+### CampaignChapterInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `description` | cstring | no |  |
+| `rewardQuestID` | number | no |  |
+
+### CampaignFailureReason (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `text` | string | no |  |
+| `questID` | number | yes |  |
+| `mapID` | number | yes |  |
+
+### CampaignInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `description` | cstring | no |  |
+| `uiTextureKit` | textureKit | no |  |
+| `isWarCampaign` | bool | no |  |
+| `usesNormalQuestIcons` | bool | no |  |
+| `isContainerCampaign` | bool | no |  |
+| `sortAsNormalQuest` | bool | no |  |
+| `hideFutureChapters` | bool | no |  |
+
+### CampaignState (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `Invalid` | CampaignState | no |  |
+| `Complete` | CampaignState | no |  |
+| `InProgress` | CampaignState | no |  |
+| `Stalled` | CampaignState | no |  |
+

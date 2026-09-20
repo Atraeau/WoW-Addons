@@ -1,0 +1,192 @@
+# FrameAPITooltip
+
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
+
+**9** functions · **0** events · **0** types
+
+## Functions
+
+### FrameAPITooltip.AddFontStrings
+
+```lua
+AddFontStrings(leftFontString, rightFontString)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `leftFontString` | SimpleFontString | no |  |
+| `rightFontString` | SimpleFontString | no |  |
+
+**Example**
+
+```lua
+AddFontStrings(leftFontString, rightFontString)
+```
+
+### FrameAPITooltip.ClearPadding
+
+Set all padding values to 0.0 and remove the Padding SecretAspect.
+
+```lua
+ClearPadding()
+```
+
+**Example**
+
+```lua
+ClearPadding()
+```
+
+### FrameAPITooltip.GetLeftLine
+
+```lua
+leftFontString = GetLeftLine(line)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `line` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `leftFontString` | SimpleFontString | no |  |
+
+**Example**
+
+```lua
+local leftFontString = GetLeftLine(line)
+```
+
+### FrameAPITooltip.GetMinimumWidth
+
+```lua
+width, forced = GetMinimumWidth()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `width` | number | no |  |
+| `forced` | bool | no |  |
+
+**Example**
+
+```lua
+local width, forced = GetMinimumWidth()
+```
+
+### FrameAPITooltip.GetPadding
+
+```lua
+right, bottom, left, top = GetPadding()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `right` | number | no |  |
+| `bottom` | number | no |  |
+| `left` | number | no |  |
+| `top` | number | no |  |
+
+**Example**
+
+```lua
+local right, bottom, left, top = GetPadding()
+```
+
+### FrameAPITooltip.GetRightLine
+
+```lua
+rightFontString = GetRightLine(line)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `line` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `rightFontString` | SimpleFontString | no |  |
+
+**Example**
+
+```lua
+local rightFontString = GetRightLine(line)
+```
+
+### FrameAPITooltip.SetMinimumWidth
+
+```lua
+SetMinimumWidth(width, force)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `width` | number | no |  |
+| `force` | bool | no | (default: False) |
+
+**Example**
+
+```lua
+SetMinimumWidth(0, false)
+```
+
+### FrameAPITooltip.SetPadding
+
+```lua
+SetPadding(right, bottom, [left], [top])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `right` | number | no |  |
+| `bottom` | number | no |  |
+| `left` | number | yes |  |
+| `top` | number | yes |  |
+
+**Example**
+
+```lua
+SetPadding(0, 0)
+```
+
+### FrameAPITooltip.SetText
+
+```lua
+SetText(text, colorR, colorG, colorB, alpha, wrap)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `text` | cstring | no |  |
+| `colorR` | number | no |  |
+| `colorG` | number | no |  |
+| `colorB` | number | no |  |
+| `alpha` | number | no | (default: 1) |
+| `wrap` | bool | no | (default: False) |
+
+**Example**
+
+```lua
+SetText("", 0, 0, 0, 0, false)
+```
+

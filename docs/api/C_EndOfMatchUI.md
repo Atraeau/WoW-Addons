@@ -1,12 +1,62 @@
 # C_EndOfMatchUI
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**1** functions
+**1** functions · **1** events · **4** types
+
+## Functions
+
+### C_EndOfMatchUI.GetEndOfMatchDetails
 
 ```lua
-C_EndOfMatchUI.GetEndOfMatchDetails()
+matchDetails = C_EndOfMatchUI.GetEndOfMatchDetails()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `matchDetails` | MatchDetails | yes |  |
+
+**Example**
+
+```lua
+local matchDetails = C_EndOfMatchUI.GetEndOfMatchDetails()
+```
+
+## Events
+
+### SHOW_END_OF_MATCH_UI
+
+## Types
+
+### EndOfMatchType (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `None` | EndOfMatchType | no |  |
+| `Plunderstorm` | EndOfMatchType | no |  |
+
+### MatchDetail (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `type` | MatchDetailType | no |  |
+| `value` | number | no |  |
+
+### MatchDetails (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `matchType` | EndOfMatchType | no |  |
+| `matchEnded` | bool | no |  |
+| `detailsList` | MatchDetail[] | no |  |
+
+### MatchDetailType (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `Placement` | MatchDetailType | no |  |
+| `Kills` | MatchDetailType | no |  |
+| `PlunderAcquired` | MatchDetailType | no |  |
+

@@ -1,12 +1,33 @@
 # C_ClassColor
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**1** functions
+**1** functions · **0** events · **0** types
+
+## Functions
+
+### C_ClassColor.GetClassColor
 
 ```lua
-C_ClassColor.GetClassColor()
+classColor = C_ClassColor.GetClassColor(className, [tintColor])
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `className` | string | no |  |
+| `tintColor` | colorRGB | yes |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `classColor` | colorRGB | no |  |
+
+**Example**
+
+```lua
+local classColor = C_ClassColor.GetClassColor("")
+```
+

@@ -1,12 +1,44 @@
 # C_SystemVisibilityManager
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**1** functions
+**1** functions · **1** events · **1** types
+
+## Functions
+
+### C_SystemVisibilityManager.IsSystemVisible
 
 ```lua
-C_SystemVisibilityManager.IsSystemVisible()
+visible = C_SystemVisibilityManager.IsSystemVisible(system)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `system` | UISystemType | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `visible` | bool | no |  |
+
+**Example**
+
+```lua
+local visible = C_SystemVisibilityManager.IsSystemVisible(system)
+```
+
+## Events
+
+### SYSTEM_VISIBILITY_CHANGED
+
+## Types
+
+### UISystemType (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `InGameNavigation` | UISystemType | no |  |
+

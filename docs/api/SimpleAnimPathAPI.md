@@ -1,0 +1,106 @@
+# SimpleAnimPathAPI
+
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
+
+**5** functions · **0** events · **0** types
+
+## Functions
+
+### SimpleAnimPathAPI.CreateControlPoint
+
+```lua
+point = CreateControlPoint([name], [templateName], [order])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | yes |  |
+| `templateName` | cstring | yes |  |
+| `order` | number | yes |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `point` | SimpleControlPoint | no |  |
+
+**Example**
+
+```lua
+local point = CreateControlPoint()
+```
+
+### SimpleAnimPathAPI.GetControlPoints
+
+```lua
+points = GetControlPoints()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `points` | SimpleControlPoint | no |  |
+
+**Example**
+
+```lua
+local points = GetControlPoints()
+```
+
+### SimpleAnimPathAPI.GetCurveType
+
+```lua
+curveType = GetCurveType()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `curveType` | CurveType | no |  |
+
+**Example**
+
+```lua
+local curveType = GetCurveType()
+```
+
+### SimpleAnimPathAPI.GetMaxControlPointOrder
+
+```lua
+maxOrder = GetMaxControlPointOrder()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `maxOrder` | number | no |  |
+
+**Example**
+
+```lua
+local maxOrder = GetMaxControlPointOrder()
+```
+
+### SimpleAnimPathAPI.SetCurveType
+
+```lua
+SetCurveType(curveType)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `curveType` | CurveType | no |  |
+
+**Example**
+
+```lua
+SetCurveType(curveType)
+```
+

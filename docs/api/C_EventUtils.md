@@ -1,13 +1,56 @@
 # C_EventUtils
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**2** functions
+**2** functions · **0** events · **0** types
+
+## Functions
+
+### C_EventUtils.IsCallbackEvent
 
 ```lua
-C_EventUtils.IsCallbackEvent()
-C_EventUtils.IsEventValid()
+isCallbackEvent = C_EventUtils.IsCallbackEvent(eventName)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `eventName` | stringView | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isCallbackEvent` | bool | no |  |
+
+**Example**
+
+```lua
+local isCallbackEvent = C_EventUtils.IsCallbackEvent(eventName)
+```
+
+### C_EventUtils.IsEventValid
+
+```lua
+valid = C_EventUtils.IsEventValid(eventName)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `eventName` | stringView | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `valid` | bool | no |  |
+
+**Example**
+
+```lua
+local valid = C_EventUtils.IsEventValid(eventName)
+```
+

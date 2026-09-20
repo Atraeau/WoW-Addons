@@ -1,13 +1,67 @@
 # C_IncomingSummon
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**2** functions
+**2** functions · **0** events · **1** types
+
+## Functions
+
+### C_IncomingSummon.HasIncomingSummon
 
 ```lua
-C_IncomingSummon.HasIncomingSummon()
-C_IncomingSummon.IncomingSummonStatus()
+summon = C_IncomingSummon.HasIncomingSummon(unit)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unit` | UnitToken | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `summon` | bool | no |  |
+
+**Example**
+
+```lua
+local summon = C_IncomingSummon.HasIncomingSummon("player")
+```
+
+### C_IncomingSummon.IncomingSummonStatus
+
+```lua
+status = C_IncomingSummon.IncomingSummonStatus(unit)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unit` | UnitToken | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `status` | SummonStatus | no |  |
+
+**Example**
+
+```lua
+local status = C_IncomingSummon.IncomingSummonStatus("player")
+```
+
+## Types
+
+### SummonStatus (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `None` | SummonStatus | no |  |
+| `Pending` | SummonStatus | no |  |
+| `Accepted` | SummonStatus | no |  |
+| `Declined` | SummonStatus | no |  |
+

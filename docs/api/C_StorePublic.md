@@ -1,14 +1,69 @@
 # C_StorePublic
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**3** functions
+**3** functions · **0** events · **0** types
+
+## Functions
+
+### C_StorePublic.DoesGroupHavePurchaseableProducts
 
 ```lua
-C_StorePublic.DoesGroupHavePurchaseableProducts()
-C_StorePublic.EventStoreUISetShown()
-C_StorePublic.IsEnabled()
+hasPurchaseableProducts = C_StorePublic.DoesGroupHavePurchaseableProducts(groupID)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `groupID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `hasPurchaseableProducts` | bool | no |  |
+
+**Example**
+
+```lua
+local hasPurchaseableProducts = C_StorePublic.DoesGroupHavePurchaseableProducts(0)
+```
+
+### C_StorePublic.EventStoreUISetShown
+
+```lua
+C_StorePublic.EventStoreUISetShown(newShown, [contextKey])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `newShown` | bool | no |  |
+| `contextKey` | string | yes |  |
+
+**Example**
+
+```lua
+C_StorePublic.EventStoreUISetShown(false)
+```
+
+### C_StorePublic.IsEnabled
+
+```lua
+enabled = C_StorePublic.IsEnabled()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `enabled` | bool | no |  |
+
+**Example**
+
+```lua
+local enabled = C_StorePublic.IsEnabled()
+```
+

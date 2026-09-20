@@ -1,12 +1,54 @@
 # C_FrameManager
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**1** functions
+**1** functions · **2** events · **1** types
+
+## Functions
+
+### C_FrameManager.GetFrameVisibilityState
 
 ```lua
-C_FrameManager.GetFrameVisibilityState()
+shouldShow = C_FrameManager.GetFrameVisibilityState(frameType)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `frameType` | UIFrameType | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `shouldShow` | bool | no |  |
+
+**Example**
+
+```lua
+local shouldShow = C_FrameManager.GetFrameVisibilityState(frameType)
+```
+
+## Events
+
+### FRAME_MANAGER_UPDATE_ALL
+
+### FRAME_MANAGER_UPDATE_FRAME
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `type` | UIFrameType | no |  |
+| `show` | bool | no |  |
+
+## Types
+
+### UIFrameType (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `JailersTowerBuffs` | UIFrameType | no |  |
+| `InterruptTutorial` | UIFrameType | no |  |
+

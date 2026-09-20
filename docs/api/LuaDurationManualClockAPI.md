@@ -1,0 +1,82 @@
+# LuaDurationManualClockAPI
+
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
+
+**4** functions · **0** events · **0** types
+
+## Functions
+
+### LuaDurationManualClockAPI.AdvanceTime
+
+Advances the clock by a specified number of seconds.
+
+```lua
+AdvanceTime(delta)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `delta` | Seconds | no |  |
+
+**Example**
+
+```lua
+AdvanceTime(delta)
+```
+
+### LuaDurationManualClockAPI.ResetTime
+
+Resets the clock to a zero time value.
+
+```lua
+ResetTime()
+```
+
+**Example**
+
+```lua
+ResetTime()
+```
+
+### LuaDurationManualClockAPI.RewindTime
+
+Rewinds the clock by a specified number of seconds.
+
+```lua
+RewindTime(delta)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `delta` | Seconds | no |  |
+
+**Example**
+
+```lua
+RewindTime(delta)
+```
+
+### LuaDurationManualClockAPI.SetTime
+
+Sets the current clock timestamp to a given value.
+
+```lua
+SetTime(time)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `time` | FrameTime | no |  |
+
+**Example**
+
+```lua
+SetTime(time)
+```
+

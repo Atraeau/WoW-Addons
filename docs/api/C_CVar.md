@@ -1,23 +1,286 @@
 # C_CVar
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**12** functions
+**12** functions · **0** events · **1** types
+
+## Functions
+
+### C_CVar.AreCVarsLoaded
 
 ```lua
-C_CVar.AreCVarsLoaded()
-C_CVar.GetCVar()
-C_CVar.GetCVarBitfield()
-C_CVar.GetCVarBool()
-C_CVar.GetCVarDefault()
-C_CVar.GetCVarInfo()
-C_CVar.RegisterCVar()
-C_CVar.RemoveTempCVar()
-C_CVar.ResetTestCVars()
-C_CVar.SetCVar()
-C_CVar.SetCVarBitfield()
-C_CVar.SetTempCVar()
+loaded = C_CVar.AreCVarsLoaded()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `loaded` | bool | no |  |
+
+**Example**
+
+```lua
+local loaded = C_CVar.AreCVarsLoaded()
+```
+
+### C_CVar.GetCVar
+
+```lua
+value = C_CVar.GetCVar(name)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `value` | string | yes |  |
+
+**Example**
+
+```lua
+local value = C_CVar.GetCVar("")
+```
+
+### C_CVar.GetCVarBitfield
+
+```lua
+value = C_CVar.GetCVarBitfield(name, index)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `index` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `value` | bool | yes |  |
+
+**Example**
+
+```lua
+local value = C_CVar.GetCVarBitfield("", 1)
+```
+
+### C_CVar.GetCVarBool
+
+```lua
+value = C_CVar.GetCVarBool(name)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `value` | bool | yes |  |
+
+**Example**
+
+```lua
+local value = C_CVar.GetCVarBool("")
+```
+
+### C_CVar.GetCVarDefault
+
+```lua
+defaultValue = C_CVar.GetCVarDefault(name)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `defaultValue` | string | yes |  |
+
+**Example**
+
+```lua
+local defaultValue = C_CVar.GetCVarDefault("")
+```
+
+### C_CVar.GetCVarInfo
+
+```lua
+value, defaultValue, isStoredServerAccount, isStoredServerCharacter, isLockedFromUser, isSecure, isReadOnly = C_CVar.GetCVarInfo(name)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `value` | cstring | no |  |
+| `defaultValue` | cstring | no |  |
+| `isStoredServerAccount` | bool | no |  |
+| `isStoredServerCharacter` | bool | no |  |
+| `isLockedFromUser` | bool | no |  |
+| `isSecure` | bool | no |  |
+| `isReadOnly` | bool | no |  |
+
+**Example**
+
+```lua
+local value, defaultValue, isStoredServerAccount, isStoredServerCharacter, isLockedFromUser, isSecure, isReadOnly = C_CVar.GetCVarInfo("")
+```
+
+### C_CVar.RegisterCVar
+
+```lua
+C_CVar.RegisterCVar(name, [value])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `value` | cstring | yes |  |
+
+**Example**
+
+```lua
+C_CVar.RegisterCVar("")
+```
+
+### C_CVar.RemoveTempCVar
+
+```lua
+C_CVar.RemoveTempCVar(name)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+
+**Example**
+
+```lua
+C_CVar.RemoveTempCVar("")
+```
+
+### C_CVar.ResetTestCVars
+
+```lua
+C_CVar.ResetTestCVars()
+```
+
+**Example**
+
+```lua
+C_CVar.ResetTestCVars()
+```
+
+### C_CVar.SetCVar
+
+```lua
+success = C_CVar.SetCVar(name, [value])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `value` | cstring | yes |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+
+**Example**
+
+```lua
+local success = C_CVar.SetCVar("")
+```
+
+### C_CVar.SetCVarBitfield
+
+```lua
+success = C_CVar.SetCVarBitfield(name, index, value)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `index` | luaIndex | no |  |
+| `value` | bool | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+
+**Example**
+
+```lua
+local success = C_CVar.SetCVarBitfield("", 1, false)
+```
+
+### C_CVar.SetTempCVar
+
+```lua
+C_CVar.SetTempCVar(name, [value])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `value` | cstring | yes |  |
+
+**Example**
+
+```lua
+C_CVar.SetTempCVar("")
+```
+
+## Types
+
+### CVarInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `value` | cstring | no |  |
+| `defaultValue` | cstring | no |  |
+| `isStoredServerAccount` | bool | no |  |
+| `isStoredServerCharacter` | bool | no |  |
+| `isLockedFromUser` | bool | no |  |
+| `isSecure` | bool | no |  |
+| `isReadOnly` | bool | no |  |
+

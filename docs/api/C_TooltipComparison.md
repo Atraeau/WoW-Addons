@@ -1,14 +1,110 @@
 # C_TooltipComparison
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**3** functions
+**3** functions · **1** events · **2** types
+
+## Functions
+
+### C_TooltipComparison.CompareItem
 
 ```lua
-C_TooltipComparison.CompareItem()
-C_TooltipComparison.GetItemComparisonDelta()
-C_TooltipComparison.GetItemComparisonInfo()
+C_TooltipComparison.CompareItem(comparisonItem, tooltip, [anchorFrame])
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `comparisonItem` | TooltipComparisonItem | no |  |
+| `tooltip` | Tooltip | no |  |
+| `anchorFrame` | SimpleFrame | yes |  |
+
+**Example**
+
+```lua
+C_TooltipComparison.CompareItem(6948, tooltip)
+```
+
+### C_TooltipComparison.GetItemComparisonDelta
+
+```lua
+lines = C_TooltipComparison.GetItemComparisonDelta(comparisonItem, equippedItem, [pairedItem], [addPairedStats])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `comparisonItem` | TooltipComparisonItem | no |  |
+| `equippedItem` | TooltipComparisonItem | no |  |
+| `pairedItem` | TooltipComparisonItem | yes |  |
+| `addPairedStats` | bool | yes | Whether the paired item's stats are added or subtracted |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `lines` | string[] | no |  |
+
+**Example**
+
+```lua
+local lines = C_TooltipComparison.GetItemComparisonDelta(6948, 6948)
+```
+
+### C_TooltipComparison.GetItemComparisonInfo
+
+```lua
+info = C_TooltipComparison.GetItemComparisonInfo(comparisonItem)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `comparisonItem` | TooltipComparisonItem | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `info` | TooltipItemComparisonInfo | no |  |
+
+**Example**
+
+```lua
+local info = C_TooltipComparison.GetItemComparisonInfo(6948)
+```
+
+## Events
+
+### TOOLTIP_SHOW_ITEM_COMPARISON
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `comparisonItem` | TooltipComparisonItem | no |  |
+| `tooltip` | Tooltip | no |  |
+| `anchorFrame` | SimpleFrame | yes |  |
+
+## Types
+
+### TooltipComparisonMethod (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `Single` | TooltipComparisonMethod | no |  |
+| `WithBothHands` | TooltipComparisonMethod | no |  |
+| `WithBagMainHandItem` | TooltipComparisonMethod | no |  |
+| `WithBagOffHandItem` | TooltipComparisonMethod | no |  |
+
+### TooltipItemComparisonInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `method` | TooltipComparisonMethod | no | (default: Single) |
+| `item` | TooltipComparisonItem | no |  |
+| `additionalItems` | TooltipComparisonItem[] | no |  |
+

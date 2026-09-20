@@ -1,18 +1,194 @@
 # C_WarbandScene
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**7** functions
+**7** functions · **2** events · **2** types
+
+## Functions
+
+### C_WarbandScene.GetRandomEntryID
 
 ```lua
-C_WarbandScene.GetRandomEntryID()
-C_WarbandScene.GetWarbandSceneEntry()
-C_WarbandScene.HasWarbandScene()
-C_WarbandScene.IsFavorite()
-C_WarbandScene.SearchWarbandSceneEntries()
-C_WarbandScene.SetFavorite()
-C_WarbandScene.WarbandScenesAvailable()
+warbandSceneID = C_WarbandScene.GetRandomEntryID()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no |  |
+
+**Example**
+
+```lua
+local warbandSceneID = C_WarbandScene.GetRandomEntryID()
+```
+
+### C_WarbandScene.GetWarbandSceneEntry
+
+```lua
+warbandSceneEntry = C_WarbandScene.GetWarbandSceneEntry(warbandSceneID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneEntry` | WarbandSceneEntry | no |  |
+
+**Example**
+
+```lua
+local warbandSceneEntry = C_WarbandScene.GetWarbandSceneEntry(0)
+```
+
+### C_WarbandScene.HasWarbandScene
+
+```lua
+owned = C_WarbandScene.HasWarbandScene(warbandSceneID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `owned` | bool | no |  |
+
+**Example**
+
+```lua
+local owned = C_WarbandScene.HasWarbandScene(0)
+```
+
+### C_WarbandScene.IsFavorite
+
+```lua
+favorite = C_WarbandScene.IsFavorite(warbandSceneID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `favorite` | bool | no |  |
+
+**Example**
+
+```lua
+local favorite = C_WarbandScene.IsFavorite(0)
+```
+
+### C_WarbandScene.SearchWarbandSceneEntries
+
+```lua
+matchingEntryIDs = C_WarbandScene.SearchWarbandSceneEntries(searchParams)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `searchParams` | WarbandSceneSearchInfo | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `matchingEntryIDs` | number[] | no |  |
+
+**Example**
+
+```lua
+local matchingEntryIDs = C_WarbandScene.SearchWarbandSceneEntries(searchParams)
+```
+
+### C_WarbandScene.SetFavorite
+
+```lua
+C_WarbandScene.SetFavorite(warbandSceneID, favorite)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no |  |
+| `favorite` | bool | no |  |
+
+**Example**
+
+```lua
+C_WarbandScene.SetFavorite(0, false)
+```
+
+### C_WarbandScene.WarbandScenesAvailable
+
+```lua
+areWarbandScenesAvailable = C_WarbandScene.WarbandScenesAvailable()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `areWarbandScenesAvailable` | bool | no |  |
+
+**Example**
+
+```lua
+local areWarbandScenesAvailable = C_WarbandScene.WarbandScenesAvailable()
+```
+
+## Events
+
+### NEW_WARBAND_SCENE_ADDED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandScenID` | number | no |  |
+
+### WARBAND_SCENE_FAVORITES_UPDATED
+
+## Types
+
+### WarbandSceneEntry (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `warbandSceneID` | number | no | (default: 0) |
+| `name` | cstring | no |  |
+| `description` | cstring | no |  |
+| `source` | cstring | no |  |
+| `quality` | number | no |  |
+| `textureKit` | textureKit | no |  |
+| `isFavorite` | bool | no | (default: False) |
+| `hasFanfare` | bool | no | (default: False) |
+| `sourceType` | number | no | (default: 0) |
+
+### WarbandSceneSearchInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `ownedOnly` | bool | no | (default: False) |
+| `favoritesOnly` | bool | no | (default: False) |
+

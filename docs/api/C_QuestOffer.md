@@ -1,15 +1,125 @@
 # C_QuestOffer
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**4** functions
+**4** functions · **5** events · **1** types
+
+## Functions
+
+### C_QuestOffer.GetHideRequiredItems
 
 ```lua
-C_QuestOffer.GetHideRequiredItems()
-C_QuestOffer.GetQuestOfferMajorFactionReputationRewards()
-C_QuestOffer.GetQuestRequiredCurrencyInfo()
-C_QuestOffer.GetQuestRewardCurrencyInfo()
+hideRequiredItems = C_QuestOffer.GetHideRequiredItems()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `hideRequiredItems` | bool | no |  |
+
+**Example**
+
+```lua
+local hideRequiredItems = C_QuestOffer.GetHideRequiredItems()
+```
+
+### C_QuestOffer.GetQuestOfferMajorFactionReputationRewards
+
+```lua
+reputationRewards = C_QuestOffer.GetQuestOfferMajorFactionReputationRewards()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `reputationRewards` | QuestRewardReputationInfo[] | no |  |
+
+**Example**
+
+```lua
+local reputationRewards = C_QuestOffer.GetQuestOfferMajorFactionReputationRewards()
+```
+
+### C_QuestOffer.GetQuestRequiredCurrencyInfo
+
+```lua
+questRequiredCurrencyInfo = C_QuestOffer.GetQuestRequiredCurrencyInfo(questRewardIndex)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questRewardIndex` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questRequiredCurrencyInfo` | QuestRequiredCurrencyInfo | yes |  |
+
+**Example**
+
+```lua
+local questRequiredCurrencyInfo = C_QuestOffer.GetQuestRequiredCurrencyInfo(1)
+```
+
+### C_QuestOffer.GetQuestRewardCurrencyInfo
+
+```lua
+questRewardCurrencyInfo = C_QuestOffer.GetQuestRewardCurrencyInfo(questInfoType, questRewardIndex)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questInfoType` | cstring | no |  |
+| `questRewardIndex` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questRewardCurrencyInfo` | QuestRewardCurrencyInfo | yes |  |
+
+**Example**
+
+```lua
+local questRewardCurrencyInfo = C_QuestOffer.GetQuestRewardCurrencyInfo("", 1)
+```
+
+## Events
+
+### QUEST_ACCEPT_CONFIRM
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | cstring | no |  |
+| `questTitle` | cstring | no |  |
+| `questID` | number | no |  |
+
+### QUEST_FINISHED
+
+### QUEST_GREETING
+
+### QUEST_ITEM_UPDATE
+
+### QUEST_PROGRESS
+
+## Types
+
+### QuestRequiredCurrencyInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `texture` | fileID | no |  |
+| `name` | cstring | no |  |
+| `currencyID` | number | no |  |
+| `quality` | number | no |  |
+| `requiredAmount` | number | no |  |
+

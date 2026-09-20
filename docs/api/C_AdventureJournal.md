@@ -1,19 +1,67 @@
 # C_AdventureJournal
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**8** functions
+**0** functions · **14** events · **0** types
 
-```lua
-C_AdventureJournal.ActivateEntry()
-C_AdventureJournal.CanBeShown()
-C_AdventureJournal.GetNumAvailableSuggestions()
-C_AdventureJournal.GetPrimaryOffset()
-C_AdventureJournal.GetReward()
-C_AdventureJournal.GetSuggestions()
-C_AdventureJournal.SetPrimaryOffset()
-C_AdventureJournal.UpdateSuggestions()
-```
+## Events
+
+### AJ_DUNGEON_ACTION
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `lfgDungeonID` | number | no |  |
+
+### AJ_OPEN
+
+### AJ_OPEN_COLLECTIONS_ACTION
+
+### AJ_PVE_LFG_ACTION
+
+### AJ_PVP_ACTION
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `battleMasterListID` | number | no |  |
+
+### AJ_PVP_LFG_ACTION
+
+### AJ_PVP_RBG_ACTION
+
+### AJ_PVP_SKIRMISH_ACTION
+
+### AJ_PVP_SPECIAL_BG_ACTION
+
+### AJ_PVP_TRAINING_GROUNDS_ACTION
+
+### AJ_QUEST_LOG_OPEN
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `questID` | number | no |  |
+| `uiMapID` | number | no |  |
+
+### AJ_RAID_ACTION
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `lfgDungeonID` | number | no |  |
+
+### AJ_REFRESH_DISPLAY
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `newAdventureNotice` | bool | no |  |
+
+### AJ_REWARD_DATA_RECEIVED
+

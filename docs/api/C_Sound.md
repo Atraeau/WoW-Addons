@@ -1,17 +1,180 @@
 # C_Sound
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**6** functions
+**6** functions · **2** events · **2** types
+
+## Functions
+
+### C_Sound.GetSoundScaledVolume
 
 ```lua
-C_Sound.GetSoundScaledVolume()
-C_Sound.IsPlaying()
-C_Sound.PlayItemSound()
-C_Sound.PlaySound()
-C_Sound.PlaySoundWithOptions()
-C_Sound.PlayVocalErrorSound()
+scaledVolume = C_Sound.GetSoundScaledVolume(soundHandle)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundHandle` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `scaledVolume` | number | no |  |
+
+**Example**
+
+```lua
+local scaledVolume = C_Sound.GetSoundScaledVolume(0)
+```
+
+### C_Sound.IsPlaying
+
+```lua
+isPlaying = C_Sound.IsPlaying(soundHandle)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundHandle` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isPlaying` | bool | no |  |
+
+**Example**
+
+```lua
+local isPlaying = C_Sound.IsPlaying(0)
+```
+
+### C_Sound.PlayItemSound
+
+```lua
+C_Sound.PlayItemSound(soundType, itemLocation)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundType` | ItemSoundType | no |  |
+| `itemLocation` | ItemLocation | no |  |
+
+**Example**
+
+```lua
+C_Sound.PlayItemSound(soundType, 6948)
+```
+
+### C_Sound.PlaySound
+
+```lua
+success, soundHandle = C_Sound.PlaySound(soundKitID, uiSoundSubType, forceNoDuplicates, runFinishCallback, [overridePriority], [volumeOverride])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundKitID` | number | no |  |
+| `uiSoundSubType` | UISoundSubType | no | (default: g_defaultSI3UISoundSubTypeForLua) |
+| `forceNoDuplicates` | bool | no | (default: False) |
+| `runFinishCallback` | bool | no | (default: False) |
+| `overridePriority` | number | yes |  |
+| `volumeOverride` | number | yes |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+| `soundHandle` | SoundHandle | no |  |
+
+**Example**
+
+```lua
+local success, soundHandle = C_Sound.PlaySound(0, uiSoundSubType, false, false)
+```
+
+### C_Sound.PlaySoundWithOptions
+
+```lua
+success, soundHandle = C_Sound.PlaySoundWithOptions(params)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `params` | PlaySoundParams | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+| `soundHandle` | SoundHandle | no |  |
+
+**Example**
+
+```lua
+local success, soundHandle = C_Sound.PlaySoundWithOptions(params)
+```
+
+### C_Sound.PlayVocalErrorSound
+
+```lua
+C_Sound.PlayVocalErrorSound(vocalErrorSoundID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `vocalErrorSoundID` | Vocalerrorsounds | no |  |
+
+**Example**
+
+```lua
+C_Sound.PlayVocalErrorSound(vocalErrorSoundID)
+```
+
+## Events
+
+### SOUND_DEVICE_UPDATE
+
+### SOUNDKIT_FINISHED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundHandle` | number | no |  |
+
+## Types
+
+### PlaySoundParams (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `soundKitID` | number | no |  |
+| `uiSoundSubType` | UISoundSubType | no | (default: g_defaultSI3UISoundSubTypeForLua) |
+| `forceNoDuplicates` | bool | no | (default: False) |
+| `runFinishCallback` | bool | no | (default: False) |
+| `overridePriority` | number | yes |  |
+| `volumeOverride` | number | yes |  |
+
+### PlaySoundResult (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+| `soundHandle` | SoundHandle | no |  |
+

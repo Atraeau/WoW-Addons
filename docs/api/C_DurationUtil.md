@@ -1,14 +1,68 @@
 # C_DurationUtil
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**3** functions
+**3** functions · **0** events · **0** types
+
+## Functions
+
+### C_DurationUtil.CreateDuration
+
+Creates a zero duration container that can represent a time span.
 
 ```lua
-C_DurationUtil.CreateDuration()
-C_DurationUtil.CreateDurationTextBinding()
-C_DurationUtil.CreateManualClock()
+duration = C_DurationUtil.CreateDuration()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `duration` | LuaDurationObject | no |  |
+
+**Example**
+
+```lua
+local duration = C_DurationUtil.CreateDuration()
+```
+
+### C_DurationUtil.CreateDurationTextBinding
+
+Creates a duration text binding, which automatically updates a font string with formatted text derived from a duration object.
+
+```lua
+binding = C_DurationUtil.CreateDurationTextBinding()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `binding` | DurationTextBinding | no |  |
+
+**Example**
+
+```lua
+local binding = C_DurationUtil.CreateDurationTextBinding()
+```
+
+### C_DurationUtil.CreateManualClock
+
+Creates a manually driven time source for use with duration objects.
+
+```lua
+clock = C_DurationUtil.CreateManualClock()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `clock` | LuaDurationManualClock | no |  |
+
+**Example**
+
+```lua
+local clock = C_DurationUtil.CreateManualClock()
+```
+

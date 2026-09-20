@@ -1,14 +1,73 @@
 # C_LFGListRoles
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**3** functions
+**3** functions · **1** events · **0** types
+
+## Functions
+
+### C_LFGListRoles.GetRoles
 
 ```lua
-C_LFGListRoles.GetRoles()
-C_LFGListRoles.GetSavedRoles()
-C_LFGListRoles.SetRoles()
+roles = C_LFGListRoles.GetRoles()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `roles` | LFGRoles | no |  |
+
+**Example**
+
+```lua
+local roles = C_LFGListRoles.GetRoles()
+```
+
+### C_LFGListRoles.GetSavedRoles
+
+```lua
+roles = C_LFGListRoles.GetSavedRoles()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `roles` | LFGRoles | no |  |
+
+**Example**
+
+```lua
+local roles = C_LFGListRoles.GetSavedRoles()
+```
+
+### C_LFGListRoles.SetRoles
+
+```lua
+success = C_LFGListRoles.SetRoles(roles, limitToClassRoles)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `roles` | LFGRoles | no |  |
+| `limitToClassRoles` | bool | no | (default: False) |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+
+**Example**
+
+```lua
+local success = C_LFGListRoles.SetRoles(roles, false)
+```
+
+## Events
+
+### LFG_LIST_ROLE_UPDATE
+

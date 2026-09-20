@@ -1,14 +1,66 @@
 # C_CombatText
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**3** functions
+**3** functions · **1** events · **0** types
+
+## Functions
+
+### C_CombatText.GetActiveUnit
 
 ```lua
-C_CombatText.GetActiveUnit()
-C_CombatText.GetCurrentEventInfo()
-C_CombatText.SetActiveUnit()
+unitTarget = C_CombatText.GetActiveUnit()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unitTarget` | string | no |  |
+
+**Example**
+
+```lua
+local unitTarget = C_CombatText.GetActiveUnit()
+```
+
+### C_CombatText.GetCurrentEventInfo
+
+```lua
+C_CombatText.GetCurrentEventInfo()
+```
+
+**Example**
+
+```lua
+C_CombatText.GetCurrentEventInfo()
+```
+
+### C_CombatText.SetActiveUnit
+
+```lua
+C_CombatText.SetActiveUnit(unitToken)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unitToken` | UnitToken | no |  |
+
+**Example**
+
+```lua
+C_CombatText.SetActiveUnit("player")
+```
+
+## Events
+
+### COMBAT_TEXT_UPDATE
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `combatTextType` | cstring | no |  |
+

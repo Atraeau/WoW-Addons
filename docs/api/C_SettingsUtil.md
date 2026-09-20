@@ -1,13 +1,52 @@
 # C_SettingsUtil
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**2** functions
+**2** functions · **2** events · **0** types
+
+## Functions
+
+### C_SettingsUtil.NotifySettingsLoaded
 
 ```lua
 C_SettingsUtil.NotifySettingsLoaded()
+```
+
+**Example**
+
+```lua
+C_SettingsUtil.NotifySettingsLoaded()
+```
+
+### C_SettingsUtil.OpenSettingsPanel
+
+```lua
+C_SettingsUtil.OpenSettingsPanel([openToCategoryID], [scrollToElementName])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `openToCategoryID` | number | yes |  |
+| `scrollToElementName` | stringView | yes |  |
+
+**Example**
+
+```lua
 C_SettingsUtil.OpenSettingsPanel()
 ```
+
+## Events
+
+### SETTINGS_LOADED
+
+### SETTINGS_PANEL_OPEN
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `openToCategoryID` | number | yes |  |
+| `scrollToElementName` | stringView | yes |  |
+

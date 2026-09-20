@@ -1,67 +1,120 @@
 # C_PetBattles
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**56** functions
+**5** functions · **0** events · **0** types
+
+## Functions
+
+### C_PetBattles.GetBreedQuality
 
 ```lua
-C_PetBattles.AcceptPVPDuel()
-C_PetBattles.AcceptQueuedPVPMatch()
-C_PetBattles.CanAcceptQueuedPVPMatch()
-C_PetBattles.CanActivePetSwapOut()
-C_PetBattles.CancelPVPDuel()
-C_PetBattles.CanPetSwapIn()
-C_PetBattles.ChangePet()
-C_PetBattles.DeclineQueuedPVPMatch()
-C_PetBattles.ForfeitGame()
-C_PetBattles.GetAbilityEffectInfo()
-C_PetBattles.GetAbilityInfo()
-C_PetBattles.GetAbilityInfoByID()
-C_PetBattles.GetAbilityProcTurnIndex()
-C_PetBattles.GetAbilityState()
-C_PetBattles.GetAbilityStateModification()
-C_PetBattles.GetActivePet()
-C_PetBattles.GetAllEffectNames()
-C_PetBattles.GetAllStates()
-C_PetBattles.GetAttackModifier()
-C_PetBattles.GetAuraInfo()
-C_PetBattles.GetBattleState()
-C_PetBattles.GetBreedQuality()
-C_PetBattles.GetDisplayID()
-C_PetBattles.GetForfeitPenalty()
-C_PetBattles.GetHealth()
-C_PetBattles.GetIcon()
-C_PetBattles.GetLevel()
-C_PetBattles.GetMaxHealth()
-C_PetBattles.GetName()
-C_PetBattles.GetNumAuras()
-C_PetBattles.GetNumPets()
-C_PetBattles.GetPetSpeciesID()
-C_PetBattles.GetPetType()
-C_PetBattles.GetPlayerTrapAbility()
-C_PetBattles.GetPower()
-C_PetBattles.GetPVPMatchmakingInfo()
-C_PetBattles.GetSelectedAction()
-C_PetBattles.GetSpeed()
-C_PetBattles.GetStateValue()
-C_PetBattles.GetTurnTimeInfo()
-C_PetBattles.GetXP()
-C_PetBattles.IsInBattle()
-C_PetBattles.IsPlayerNPC()
-C_PetBattles.IsSkipAvailable()
-C_PetBattles.IsTrapAvailable()
-C_PetBattles.IsWaitingOnOpponent()
-C_PetBattles.IsWildBattle()
-C_PetBattles.SetPendingReportBattlePetTarget()
-C_PetBattles.SetPendingReportTargetFromUnit()
-C_PetBattles.ShouldShowPetSelect()
-C_PetBattles.SkipTurn()
-C_PetBattles.StartPVPDuel()
-C_PetBattles.StartPVPMatchmaking()
-C_PetBattles.StopPVPMatchmaking()
-C_PetBattles.UseAbility()
-C_PetBattles.UseTrap()
+quality = C_PetBattles.GetBreedQuality(petOwner, slot)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `petOwner` | BattlePetOwner | no |  |
+| `slot` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `quality` | BattlePetBreedQuality | no |  |
+
+**Example**
+
+```lua
+local quality = C_PetBattles.GetBreedQuality(petOwner, 1)
+```
+
+### C_PetBattles.GetIcon
+
+```lua
+iconFileID = C_PetBattles.GetIcon(petOwner, slot)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `petOwner` | BattlePetOwner | no |  |
+| `slot` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `iconFileID` | fileID | no |  |
+
+**Example**
+
+```lua
+local iconFileID = C_PetBattles.GetIcon(petOwner, 1)
+```
+
+### C_PetBattles.GetName
+
+```lua
+customName, speciesName = C_PetBattles.GetName(petOwner, slot)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `petOwner` | BattlePetOwner | no |  |
+| `slot` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `customName` | string | no |  |
+| `speciesName` | string | no |  |
+
+**Example**
+
+```lua
+local customName, speciesName = C_PetBattles.GetName(petOwner, 1)
+```
+
+### C_PetBattles.IsPlayerNPC
+
+```lua
+isPlayerNPC = C_PetBattles.IsPlayerNPC()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isPlayerNPC` | bool | no |  |
+
+**Example**
+
+```lua
+local isPlayerNPC = C_PetBattles.IsPlayerNPC()
+```
+
+### C_PetBattles.IsWildBattle
+
+```lua
+isWildBattle = C_PetBattles.IsWildBattle()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isWildBattle` | bool | no |  |
+
+**Example**
+
+```lua
+local isWildBattle = C_PetBattles.IsWildBattle()
+```
+

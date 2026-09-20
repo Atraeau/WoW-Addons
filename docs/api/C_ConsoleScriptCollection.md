@@ -1,15 +1,138 @@
 # C_ConsoleScriptCollection
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**4** functions
+**4** functions · **0** events · **4** types
+
+## Functions
+
+### C_ConsoleScriptCollection.GetCollectionDataByID
 
 ```lua
-C_ConsoleScriptCollection.GetCollectionDataByID()
-C_ConsoleScriptCollection.GetCollectionDataByTag()
-C_ConsoleScriptCollection.GetElements()
-C_ConsoleScriptCollection.GetScriptData()
+data = C_ConsoleScriptCollection.GetCollectionDataByID(collectionID)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `collectionID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `data` | ConsoleScriptCollectionData | yes |  |
+
+**Example**
+
+```lua
+local data = C_ConsoleScriptCollection.GetCollectionDataByID(0)
+```
+
+### C_ConsoleScriptCollection.GetCollectionDataByTag
+
+```lua
+data = C_ConsoleScriptCollection.GetCollectionDataByTag(collectionTag)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `collectionTag` | string | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `data` | ConsoleScriptCollectionData | yes |  |
+
+**Example**
+
+```lua
+local data = C_ConsoleScriptCollection.GetCollectionDataByTag("")
+```
+
+### C_ConsoleScriptCollection.GetElements
+
+```lua
+elementIDs = C_ConsoleScriptCollection.GetElements(collectionID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `collectionID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `elementIDs` | ConsoleScriptCollectionElementData[] | no |  |
+
+**Example**
+
+```lua
+local elementIDs = C_ConsoleScriptCollection.GetElements(0)
+```
+
+### C_ConsoleScriptCollection.GetScriptData
+
+```lua
+data = C_ConsoleScriptCollection.GetScriptData(consoleScriptID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `consoleScriptID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `data` | ConsoleScriptData | no |  |
+
+**Example**
+
+```lua
+local data = C_ConsoleScriptCollection.GetScriptData(0)
+```
+
+## Types
+
+### ConsoleScriptCollectionData (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `ID` | number | no |  |
+| `name` | cstring | no |  |
+
+### ConsoleScriptCollectionElementData (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `collectionID` | number | yes |  |
+| `consoleScriptID` | number | yes |  |
+
+### ConsoleScriptData (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `ID` | number | no |  |
+| `name` | cstring | no |  |
+| `help` | cstring | no |  |
+| `script` | cstring | no |  |
+| `params` | cstring | no |  |
+| `isLuaScript` | bool | no |  |
+
+### ConsoleScriptParameter (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | string | no |  |
+| `description` | string | no |  |
+

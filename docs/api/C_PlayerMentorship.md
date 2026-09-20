@@ -1,16 +1,112 @@
 # C_PlayerMentorship
 
-> Inventory from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:00:15.
-> This lists the functions that exist on the client. Full signatures, arguments,
-> returns and examples require the rich APIDocumentation export (re-run /apiexport
-> then /reload with the updated addon, which force-loads Blizzard_APIDocumentation).
+> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 09:09:13.
 
-**5** functions
+**5** functions · **2** events · **0** types
+
+## Functions
+
+### C_PlayerMentorship.GetMentorLevelRequirement
 
 ```lua
-C_PlayerMentorship.GetMentorLevelRequirement()
-C_PlayerMentorship.GetMentorRequirements()
-C_PlayerMentorship.GetMentorshipStatus()
-C_PlayerMentorship.IsActivePlayerConsideredNewcomer()
-C_PlayerMentorship.IsMentorRestricted()
+level = C_PlayerMentorship.GetMentorLevelRequirement()
 ```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `level` | number | yes |  |
+
+**Example**
+
+```lua
+local level = C_PlayerMentorship.GetMentorLevelRequirement()
+```
+
+### C_PlayerMentorship.GetMentorRequirements
+
+```lua
+achievementIDs, optionalAchievementIDs, optionalCompleteAtLeastCount = C_PlayerMentorship.GetMentorRequirements()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `achievementIDs` | number[] | no |  |
+| `optionalAchievementIDs` | number[] | no |  |
+| `optionalCompleteAtLeastCount` | number | no |  |
+
+**Example**
+
+```lua
+local achievementIDs, optionalAchievementIDs, optionalCompleteAtLeastCount = C_PlayerMentorship.GetMentorRequirements()
+```
+
+### C_PlayerMentorship.GetMentorshipStatus
+
+```lua
+status = C_PlayerMentorship.GetMentorshipStatus(playerLocation)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `playerLocation` | PlayerLocation | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `status` | PlayerMentorshipStatus | no |  |
+
+**Example**
+
+```lua
+local status = C_PlayerMentorship.GetMentorshipStatus(playerLocation)
+```
+
+### C_PlayerMentorship.IsActivePlayerConsideredNewcomer
+
+```lua
+isConsideredNewcomer = C_PlayerMentorship.IsActivePlayerConsideredNewcomer()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isConsideredNewcomer` | bool | no |  |
+
+**Example**
+
+```lua
+local isConsideredNewcomer = C_PlayerMentorship.IsActivePlayerConsideredNewcomer()
+```
+
+### C_PlayerMentorship.IsMentorRestricted
+
+```lua
+isRestricted = C_PlayerMentorship.IsMentorRestricted()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isRestricted` | bool | no |  |
+
+**Example**
+
+```lua
+local isRestricted = C_PlayerMentorship.IsMentorRestricted()
+```
+
+## Events
+
+### MENTORSHIP_STATUS_CHANGED
+
+### NEWCOMER_GRADUATION
+
