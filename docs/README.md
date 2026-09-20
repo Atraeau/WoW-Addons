@@ -22,6 +22,14 @@ any external assumption.
    It auto-locates the newest `WowApiExport.lua`, decodes the payload, and writes one
    file per namespace into [`docs/api/`](api/) plus an index.
 
+## Editor autocomplete (Lua Language Server)
+
+`scripts/generate-lua-definitions.ps1` turns the same dump into
+[`types/WowForeverAPI.lua`](../types/WowForeverAPI.lua) — LuaCATS annotations for every
+function (typed params/returns), enum (`Enum.*` tables), and struct (`@class`). The Lua
+Language Server picks it up via `Lua.workspace.library` in `.vscode/settings.json`, so
+completion and hover in `src/` match this client exactly. Regenerate after a client update.
+
 ## Output layout
 
 ```

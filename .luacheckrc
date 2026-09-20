@@ -11,6 +11,8 @@ exclude_files = {
 	"build/",
 	"dist/",
 	".luarocks/",
+	"types/",   -- generated LSP definitions (annotations only)
+	"vendor/",  -- tracked third-party addons
 }
 
 -- Each addon gets its own private table via the "..." vararg on load:

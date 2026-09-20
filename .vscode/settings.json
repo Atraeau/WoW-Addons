@@ -4,7 +4,15 @@
     "SLASH_HELLOFOREVER1",
     "SLASH_HELLOFOREVER2"
   ],
-  "Lua.workspace.library": [],
+  "Lua.workspace.library": [
+    "types"
+  ],
+  "Lua.workspace.checkThirdParty": false,
+  "Lua.workspace.ignoreDir": [
+    ".vscode",
+    "docs",
+    "vendor"
+  ],
   "files.eol": "\n",
   "[lua]": {
     "editor.insertSpaces": false,
