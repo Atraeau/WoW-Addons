@@ -7,6 +7,9 @@ a modern **12.0**-based engine), plus a generated reference for that client's wh
 Each addon lives under [`src/`](src); one deploy script junction-links them into the live
 game, so you edit here and the game reads your source directly — no copying per change.
 
+**📖 Live API reference:** https://atraeau.github.io/WoW-Addons/ — searchable, browsable, and
+machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Addons/api.json)).
+
 ## Repository map
 
 | Path | What's there |
