@@ -2,10 +2,17 @@
   "Lua.runtime.version": "Lua 5.1",
   "Lua.diagnostics.globals": [
     "SLASH_HELLOFOREVER1",
-    "SLASH_HELLOFOREVER2"
+    "SLASH_HELLOFOREVER2",
+    "SlashCmdList",
+    "FauxScrollFrame_Update",
+    "APIDocumentation",
+    "NUM_BAG_SLOTS",
+    "BACKPACK_CONTAINER",
+    "DEFAULT_CHAT_FRAME"
   ],
   "Lua.workspace.library": [
-    "types"
+    "types",
+    "~\\.vscode\\extensions\\ketho.wow-api-0.22.3\\Annotations\\Core"
   ],
   "Lua.workspace.checkThirdParty": false,
   "Lua.workspace.ignoreDir": [
@@ -17,5 +24,16 @@
   "[lua]": {
     "editor.insertSpaces": false,
     "editor.tabSize": 4
+  },
+  "Lua.runtime.builtin": {
+    "basic": "disable",
+    "debug": "disable",
+    "io": "disable",
+    "math": "disable",
+    "os": "disable",
+    "package": "disable",
+    "string": "disable",
+    "table": "disable",
+    "utf8": "disable"
   }
 }

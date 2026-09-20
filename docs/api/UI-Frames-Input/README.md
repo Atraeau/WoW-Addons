@@ -1,0 +1,72 @@
+# UI, Frames & Input
+
+[← All API groups](../README.md)
+
+**64** namespaces · **1129** functions · **74** events · **152** types
+
+| Namespace | Functions | Events | Types |
+|-----------|-----------|--------|-------|
+| [C_AccessibilityOptions](C_AccessibilityOptions.md) | 0 | 0 | 0 |
+| [C_ActionBar](C_ActionBar.md) | 72 | 15 | 1 |
+| [C_AutoComplete](C_AutoComplete.md) | 4 | 0 | 1 |
+| [C_CinematicList](C_CinematicList.md) | 1 | 0 | 1 |
+| [C_ClickBindings](C_ClickBindings.md) | 9 | 1 | 0 |
+| [C_ColorOverrides](C_ColorOverrides.md) | 6 | 2 | 1 |
+| [C_Cursor](C_Cursor.md) | 1 | 4 | 0 |
+| [C_CursorUtil](C_CursorUtil.md) | 0 | 0 | 1 |
+| [C_CVar](C_CVar.md) | 12 | 0 | 1 |
+| [C_EditMode](C_EditMode.md) | 12 | 1 | 5 |
+| [C_EndOfMatchUI](C_EndOfMatchUI.md) | 1 | 1 | 4 |
+| [C_EventToastManager](C_EventToastManager.md) | 3 | 2 | 1 |
+| [C_FrameManager](C_FrameManager.md) | 1 | 2 | 1 |
+| [C_GamePad](C_GamePad.md) | 25 | 6 | 9 |
+| [C_GamepadTargeting](C_GamepadTargeting.md) | 4 | 0 | 1 |
+| [C_GamepadUI](C_GamepadUI.md) | 5 | 2 | 3 |
+| [C_GenericWidgetDisplay](C_GenericWidgetDisplay.md) | 2 | 1 | 1 |
+| [C_Glue](C_Glue.md) | 2 | 1 | 0 |
+| [C_InputInterfaceStyle](C_InputInterfaceStyle.md) | 1 | 0 | 0 |
+| [C_KeyBindings](C_KeyBindings.md) | 11 | 4 | 5 |
+| [C_LimitedInput](C_LimitedInput.md) | 1 | 0 | 1 |
+| [C_LoadingScreen](C_LoadingScreen.md) | 0 | 2 | 0 |
+| [C_Macro](C_Macro.md) | 4 | 1 | 1 |
+| [C_NamePlate](C_NamePlate.md) | 4 | 0 | 0 |
+| [C_NamePlateManager](C_NamePlateManager.md) | 4 | 7 | 0 |
+| [C_Sound](C_Sound.md) | 6 | 2 | 2 |
+| [C_Texture](C_Texture.md) | 11 | 1 | 4 |
+| [C_TooltipComparison](C_TooltipComparison.md) | 3 | 1 | 2 |
+| [C_TooltipInfo](C_TooltipInfo.md) | 82 | 3 | 0 |
+| [C_UIWidgetManager](C_UIWidgetManager.md) | 42 | 2 | 91 |
+| [Cinematic](Cinematic.md) | 7 | 6 | 0 |
+| [Console](Console.md) | 10 | 7 | 4 |
+| [DurationTextBindingObjectAPI](DurationTextBindingObjectAPI.md) | 30 | 0 | 0 |
+| [Font](Font.md) | 3 | 0 | 3 |
+| [FrameAPIArchaeologyDigSiteFrame](FrameAPIArchaeologyDigSiteFrame.md) | 0 | 0 | 0 |
+| [FrameAPIBlob](FrameAPIBlob.md) | 14 | 0 | 0 |
+| [FrameAPICharacterModelBase](FrameAPICharacterModelBase.md) | 24 | 0 | 0 |
+| [FrameAPICinematicModel](FrameAPICinematicModel.md) | 18 | 0 | 0 |
+| [FrameAPIDressUpModel](FrameAPIDressUpModel.md) | 20 | 0 | 0 |
+| [FrameAPIModelSceneFrame](FrameAPIModelSceneFrame.md) | 47 | 0 | 0 |
+| [FrameAPIModelSceneFrameActor](FrameAPIModelSceneFrameActor.md) | 31 | 0 | 0 |
+| [FrameAPIModelSceneFrameActorBase](FrameAPIModelSceneFrameActorBase.md) | 50 | 0 | 0 |
+| [FrameAPINamePlate](FrameAPINamePlate.md) | 6 | 0 | 0 |
+| [FrameAPISimpleCheckout](FrameAPISimpleCheckout.md) | 8 | 0 | 0 |
+| [FrameAPITabardModel](FrameAPITabardModel.md) | 6 | 0 | 0 |
+| [FrameAPITabardModelBase](FrameAPITabardModelBase.md) | 7 | 0 | 0 |
+| [FrameAPITooltip](FrameAPITooltip.md) | 9 | 0 | 0 |
+| [FrameScript](FrameScript.md) | 38 | 0 | 6 |
+| [GameCursor](GameCursor.md) | 19 | 0 | 0 |
+| [Movie](Movie.md) | 6 | 0 | 0 |
+| [SimpleAnimTextureCoordTranslationAPI](SimpleAnimTextureCoordTranslationAPI.md) | 2 | 0 | 0 |
+| [SimpleEditBoxAPI](SimpleEditBoxAPI.md) | 79 | 0 | 0 |
+| [SimpleFontAPI](SimpleFontAPI.md) | 24 | 0 | 0 |
+| [SimpleFontStringAPI](SimpleFontStringAPI.md) | 57 | 0 | 0 |
+| [SimpleFrameAPI](SimpleFrameAPI.md) | 126 | 0 | 2 |
+| [SimpleFrameScriptObjectAPI](SimpleFrameScriptObjectAPI.md) | 21 | 0 | 0 |
+| [SimpleMaskTextureAPI](SimpleMaskTextureAPI.md) | 0 | 0 | 0 |
+| [SimpleMessageFrameAPI](SimpleMessageFrameAPI.md) | 33 | 0 | 0 |
+| [SimpleMovieAPI](SimpleMovieAPI.md) | 4 | 0 | 0 |
+| [SimpleOffScreenFrameAPI](SimpleOffScreenFrameAPI.md) | 8 | 0 | 0 |
+| [SimpleScrollFrameAPI](SimpleScrollFrameAPI.md) | 9 | 0 | 0 |
+| [SimpleStatusBarAPI](SimpleStatusBarAPI.md) | 28 | 0 | 0 |
+| [SimpleTextureAPI](SimpleTextureAPI.md) | 4 | 0 | 0 |
+| [SimpleTextureBaseAPI](SimpleTextureBaseAPI.md) | 52 | 0 | 0 |

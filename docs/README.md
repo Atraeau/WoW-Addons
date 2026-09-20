@@ -32,17 +32,24 @@ completion and hover in `src/` match this client exactly. Regenerate after a cli
 
 ## Output layout
 
+Namespaces are grouped into category folders (rules in
+[`scripts/api-categories.psd1`](../scripts/api-categories.psd1) — edit and regenerate to
+re-shape the grouping):
+
 ```
 docs/api/
-├─ README.md          # index: every namespace with function/event/type counts
-├─ C_UnitAuras.md     # one file per C_* namespace
-├─ C_Spell.md
-├─ ...
-└─ GlobalFuncs.md     # non-namespaced global functions
+├─ README.md                       # top index: groups with counts
+├─ Spells-Auras-Talents/
+│  ├─ README.md                    # group index: its namespaces
+│  ├─ C_Spell.md                   # one file per C_* namespace
+│  └─ ...
+├─ Items-Inventory/
+│  └─ ...
+└─ Miscellaneous/                  # anything the rules didn't match
 ```
 
-Each function is documented as: description → `signature` → argument table →
-returns table → an illustrative example call.
+Each namespace page has a breadcrumb back to its group and the top index. Each function
+is documented as: description → `signature` → argument table → returns table → example.
 
 ## Examples
 

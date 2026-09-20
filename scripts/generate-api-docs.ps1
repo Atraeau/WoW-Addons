@@ -55,6 +55,24 @@ if (Test-Path $exPath) {
 $script:UsedExamples = @{}
 $script:EnumFirst = @{}   # enum type name -> first field name, for realistic example values
 
+# Category rules (optional, ordered; first match wins). Groups namespaces into folders.
+$Categories = @()
+$catPath = Join-Path $repoRoot 'scripts/api-categories.psd1'
+if (Test-Path $catPath) {
+    try { $Categories = @((Import-PowerShellDataFile -Path $catPath).Categories) }
+    catch { Write-Warning "Could not load $catPath : $_" }
+}
+function Get-Group([string]$name) {
+    $n = ($name -replace '^C_', '').ToLower()
+    foreach ($c in $Categories) {
+        foreach ($pat in @($c.Match)) {
+            if ($n -like "*$($pat.ToLower())*") { return $c.Group }
+        }
+    }
+    return 'Miscellaneous'
+}
+function Slug([string]$g) { return (($g -replace '[^A-Za-z0-9]+', '-').Trim('-')) }
+
 # --- Read the payload ------------------------------------------------------
 # Preferred: WowApiExportB64 = "<base64 of JSON>". Base64 has no quotes/backslashes,
 # so it survives the SavedVariables serializer untouched -- no escaping to undo.
@@ -261,17 +279,21 @@ foreach ($s in $systemsRaw) {
     }
 }
 
-$indexRows = @()
+$groups = [ordered]@{}   # group name -> @{ Slug; Rows }
 
 foreach ($sys in $systems) {
     $ns = if ($sys.namespace) { $sys.namespace } else { $sys.name }
     $fileName = (Sanitize $ns) + '.md'
+    $group = Get-Group $ns
+    $slug = Slug $group
     $funcs = @($sys.functions)
     $events = @($sys.events)
     $tables = @($sys.tables)
 
     $md = @()
     $md += "# $ns"
+    $md += ''
+    $md += "[← API index](../README.md) · group: [$group](README.md)"
     $md += ''
     if ($sys.documentation) { $md += (Cell $sys.documentation); $md += '' }
     $md += "> Generated from the WoW: Forever client (build $($meta.build), interface $($meta.interface)) on $($meta.exportedAt)."
@@ -337,35 +359,65 @@ foreach ($sys in $systems) {
         }
     }
 
-    ($md -join "`n") | Set-Content -Path (Join-Path $OutDir $fileName) -Encoding UTF8
-    $indexRows += [pscustomobject]@{
+    $groupDir = Join-Path $OutDir $slug
+    New-Item -ItemType Directory -Path $groupDir -Force | Out-Null
+    ($md -join "`n") | Set-Content -Path (Join-Path $groupDir $fileName) -Encoding UTF8
+
+    if (-not $groups.Contains($group)) {
+        $groups[$group] = [pscustomobject]@{ Slug = $slug; Rows = [System.Collections.Generic.List[object]]::new() }
+    }
+    $groups[$group].Rows.Add([pscustomobject]@{
         Namespace = $ns; File = $fileName
         Functions = $funcs.Count; Events = $events.Count; Types = $tables.Count
-    }
+    })
 }
 
-# --- Index -----------------------------------------------------------------
+# --- Per-group index pages -------------------------------------------------
+# Order groups by the category file, with Miscellaneous last.
+$groupOrder = @($Categories | ForEach-Object { $_.Group }) + 'Miscellaneous'
+$orderedGroups = @($groups.Keys | Sort-Object { $i = [array]::IndexOf($groupOrder, $_); if ($i -lt 0) { 999 } else { $i } })
+
+foreach ($g in $orderedGroups) {
+    $rows = @($groups[$g].Rows | Sort-Object Namespace)
+    $fSum = ($rows | Measure-Object Functions -Sum).Sum
+    $eSum = ($rows | Measure-Object Events -Sum).Sum
+    $tSum = ($rows | Measure-Object Types -Sum).Sum
+    $gmd = @()
+    $gmd += "# $g"
+    $gmd += ''
+    $gmd += "[← All API groups](../README.md)"
+    $gmd += ''
+    $gmd += "**$($rows.Count)** namespaces · **$fSum** functions · **$eSum** events · **$tSum** types"
+    $gmd += ''
+    $gmd += '| Namespace | Functions | Events | Types |'
+    $gmd += '|-----------|-----------|--------|-------|'
+    foreach ($row in $rows) {
+        $gmd += "| [$($row.Namespace)]($($row.File)) | $($row.Functions) | $($row.Events) | $($row.Types) |"
+    }
+    ($gmd -join "`n") | Set-Content -Path (Join-Path (Join-Path $OutDir $groups[$g].Slug) 'README.md') -Encoding UTF8
+}
+
+# --- Top index (groups) ----------------------------------------------------
 $idx = @()
 $idx += '# WoW: Forever API Reference'
 $idx += ''
-$idx += "Generated from the client's own `APIDocumentation` (build $($meta.build), interface $($meta.interface)) on $($meta.exportedAt)."
+$idx += "Generated from the client's own ``APIDocumentation`` (build $($meta.build), interface $($meta.interface)) on $($meta.exportedAt)."
 $idx += ''
-$idx += "- Systems: **$($meta.systemCount)** · Functions: **$($meta.functionCount)** · Events: **$($meta.eventCount)** · Types: **$($meta.tableCount)**"
-if (-not $meta.hasAPIDocumentation) {
-    $idx += ''
-    $idx += '> ⚠️ APIDocumentation was not present on the client; only the raw `_G` inventory was captured.'
-}
+$idx += "**$($meta.systemCount)** systems · **$($meta.functionCount)** functions · **$($meta.eventCount)** events · **$($meta.tableCount)** types, organized into **$($orderedGroups.Count)** groups."
 $idx += ''
-$idx += '## Namespaces'
-$idx += ''
-$idx += '| Namespace | Functions | Events | Types |'
-$idx += '|-----------|-----------|--------|-------|'
-foreach ($row in ($indexRows | Sort-Object Namespace)) {
-    $idx += "| [$($row.Namespace)]($($row.File)) | $($row.Functions) | $($row.Events) | $($row.Types) |"
+$idx += '| Group | Namespaces | Functions | Events | Types |'
+$idx += '|-------|-----------|-----------|--------|-------|'
+foreach ($g in $orderedGroups) {
+    $rows = @($groups[$g].Rows)
+    $fSum = ($rows | Measure-Object Functions -Sum).Sum
+    $eSum = ($rows | Measure-Object Events -Sum).Sum
+    $tSum = ($rows | Measure-Object Types -Sum).Sum
+    $idx += "| [$g]($($groups[$g].Slug)/README.md) | $($rows.Count) | $fSum | $eSum | $tSum |"
 }
 ($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
 
-Write-Host "Generated $($indexRows.Count) namespace files into $OutDir" -ForegroundColor Green
+$nsCount = ($groups.Values | ForEach-Object { $_.Rows.Count } | Measure-Object -Sum).Sum
+Write-Host "Generated $nsCount namespace files in $($orderedGroups.Count) groups into $OutDir" -ForegroundColor Green
 Write-Host "Curated examples applied: $($script:UsedExamples.Count) / $($Examples.Count)" -ForegroundColor Gray
 $unused = @($Examples.Keys | Where-Object { -not $script:UsedExamples.ContainsKey($_) })
 if ($unused.Count -gt 0) {
