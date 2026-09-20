@@ -1,0 +1,21 @@
+## Interface: 11508
+## Title: Blizz Threat Plates
+## Notes: Blizzard nameplates with threat information.
+## Author: jfrouleau
+## Version: 1.10.2
+## X-Curse-Project-ID: 1443148
+## IconTexture: Interface\AddOns\BlizzThreatPlates\Icon.png
+## Category: Combat
+## SavedVariables:  BlizzThreatPlatesConfig
+## SavedVariablesPerCharacter: BlizzThreatPlatesCharacterConfig
+
+RingBuffer.lua
+Spells.lua
+Roles.lua
+Group.lua
+MobStatus.lua
+Threat.lua
+ThreatIndicator.lua
+PriorityMarker.lua
+Config.lua
+BlizzThreatPlates.lua

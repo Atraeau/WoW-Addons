@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: BTP Compat Check
+## Notes: Probes the live client for the APIs BlizzThreatPlates uses
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.1.0
+
+Core.lua
