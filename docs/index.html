@@ -73,6 +73,9 @@
   .results .r:hover { border-color: var(--accent); }
   .results .r .k { color: var(--muted); font-size: 12px; }
   .loading { padding: 40px 28px; color: var(--muted); }
+  footer.site { border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px;
+    padding: 16px; text-align: center; }
+  footer.site code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
   .toolbanner { background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
     padding: 12px 14px; margin-bottom: 22px; font-size: 13.5px; }
   .toolbanner code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
@@ -104,6 +107,7 @@
   <nav id="nav" aria-label="Namespaces"></nav>
   <main id="main"><div class="loading">Loading the API (this pulls a few MB the first time)…</div></main>
 </div>
+<footer class="site" id="footer"></footer>
 <script>
 "use strict";
 const $ = (s, r=document) => r.querySelector(s);
@@ -291,6 +295,10 @@ async function main(){
     buildIndex();
     buildNav();
     $("#meta").textContent = `build ${api.meta.build} · interface ${api.meta.interface}`;
+    const m = api.meta;
+    $("#footer").innerHTML = `API data captured <b>${m.exportedAt}</b> · interface ${m.interface} · build ${m.build}` +
+      ` — generated from the client's own <code>APIDocumentation</code>. ` +
+      `<a href="https://github.com/Atraeau/WoW-Addons">source</a>`;
     const hash = decodeURIComponent(location.hash.replace(/^#/,""));
     if (hash && SYS.has(hash)) renderNamespace(hash); else $("#main").innerHTML = intro();
   } catch (e) {

@@ -24,14 +24,15 @@
 [CmdletBinding()]
 param(
     [string]$Path,
-    [string]$OutDir
+    [string]$OutDir,
+    [string]$ApiJson   # read a prebuilt api.json directly (CI); skips the game dump
 )
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 
 # --- Locate the SavedVariables dump ---------------------------------------
-if (-not $Path) {
+if (-not $ApiJson -and -not $Path) {
     $config = Get-Content (Join-Path $repoRoot 'wow-dev.config.json') -Raw | ConvertFrom-Json
     $wtf = Join-Path (Join-Path $config.gamePath $config.flavorDir) 'WTF'
     $candidates = Get-ChildItem -Path $wtf -Recurse -Filter 'WowApiExport.lua' -ErrorAction SilentlyContinue |
@@ -42,7 +43,7 @@ if (-not $Path) {
     $Path = $candidates[0].FullName
     Write-Host "Using dump: $Path" -ForegroundColor Gray
 }
-if (-not (Test-Path $Path)) { throw "Dump not found: $Path" }
+if (-not $ApiJson -and -not (Test-Path $Path)) { throw "Dump not found: $Path" }
 if (-not $OutDir) { $OutDir = Join-Path $repoRoot 'docs/api' }
 
 # Curated, runnable examples (optional). Keys: "<Namespace>.<Func>" or "<Func>".
@@ -74,17 +75,22 @@ function Get-Group([string]$name) {
 function Slug([string]$g) { return (($g -replace '[^A-Za-z0-9]+', '-').Trim('-')) }
 
 # --- Read the payload ------------------------------------------------------
-# Preferred: WowApiExportB64 = "<base64 of JSON>". Base64 has no quotes/backslashes,
-# so it survives the SavedVariables serializer untouched -- no escaping to undo.
-$rawFile = Get-Content -Raw -LiteralPath $Path
+# Either a prebuilt api.json (CI) or the game SavedVariables dump (WowApiExportB64,
+# base64 of the JSON -- survives the SavedVariables serializer with no escaping).
 $json = $null
-
-$b64Match = [regex]::Match($rawFile, 'WowApiExportB64\s*=\s*"([A-Za-z0-9+/=]*)"')
-if ($b64Match.Success -and $b64Match.Groups[1].Value.Length -gt 0) {
-    $bytes = [Convert]::FromBase64String($b64Match.Groups[1].Value)
-    $json = [System.Text.Encoding]::UTF8.GetString($bytes)
+if ($ApiJson) {
+    if (-not (Test-Path $ApiJson)) { throw "api.json not found: $ApiJson" }
+    $json = Get-Content -Raw -LiteralPath $ApiJson
+    Write-Host "Using api.json: $ApiJson" -ForegroundColor Gray
 } else {
-    throw "WowApiExportB64 not found (or empty) in $Path. Re-run /apiexport then /reload with the current addon version."
+    $rawFile = Get-Content -Raw -LiteralPath $Path
+    $b64Match = [regex]::Match($rawFile, 'WowApiExportB64\s*=\s*"([A-Za-z0-9+/=]*)"')
+    if ($b64Match.Success -and $b64Match.Groups[1].Value.Length -gt 0) {
+        $bytes = [Convert]::FromBase64String($b64Match.Groups[1].Value)
+        $json = [System.Text.Encoding]::UTF8.GetString($bytes)
+    } else {
+        throw "WowApiExportB64 not found (or empty) in $Path. Re-run /apiexport then /reload with the current addon version."
+    }
 }
 
 $data = $json | ConvertFrom-Json
@@ -420,7 +426,11 @@ foreach ($g in $orderedGroups) {
 # api.json: the full structured API (the authoritative, client-confirmed surface).
 # categories.json: the namespace -> group mapping used by the site nav.
 $siteDir = Split-Path -Parent $OutDir
-$json | Set-Content -Path (Join-Path $siteDir 'api.json') -Encoding UTF8
+# Don't rewrite api.json when it's our input (CI reads docs/api.json directly).
+$apiJsonOut = Join-Path $siteDir 'api.json'
+if (-not ($ApiJson -and ((Resolve-Path $ApiJson).Path -eq (Resolve-Path $apiJsonOut -ErrorAction SilentlyContinue).Path))) {
+    $json | Set-Content -Path $apiJsonOut -Encoding UTF8
+}
 $catObj = [ordered]@{
     meta   = $meta
     groups = @(foreach ($g in $orderedGroups) {

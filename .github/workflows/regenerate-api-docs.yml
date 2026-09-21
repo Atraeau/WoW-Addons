@@ -1,0 +1,49 @@
+name: Regenerate API docs
+
+# When the committed API data (docs/api.json) or any generator/rules change,
+# rebuild the derived artifacts (Markdown reference, categories.json, Lua
+# definitions) from api.json and commit them back. Pages redeploys on the push.
+on:
+  push:
+    branches: [main]
+    paths:
+      - docs/api.json
+      - scripts/generate-api-docs.ps1
+      - scripts/generate-lua-definitions.ps1
+      - scripts/api-categories.psd1
+      - scripts/api-examples.psd1
+      - .github/workflows/regenerate-api-docs.yml
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regen-api-docs
+  cancel-in-progress: false
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Regenerate docs, categories, and Lua definitions from api.json
+        shell: pwsh
+        run: |
+          ./scripts/generate-api-docs.ps1 -ApiJson docs/api.json
+          ./scripts/generate-lua-definitions.ps1 -ApiJson docs/api.json
+
+      - name: Commit regenerated artifacts if changed
+        shell: bash
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain docs/api docs/categories.json types)" ]; then
+            git add docs/api docs/categories.json types
+            git commit -m "chore: regenerate API docs from api.json [skip ci]"
+            git push
+            echo "Regenerated and pushed."
+          else
+            echo "Nothing to regenerate — derived files already match api.json."
+          fi

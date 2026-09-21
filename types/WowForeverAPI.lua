@@ -1,6 +1,6 @@
 ---@meta
 -- WoW: Forever API definitions -- generated from the client's own APIDocumentation.
--- build 69913, interface 16001, exported 2026-09-20 09:09:24.
+-- build 69913, interface 16001, exported 2026-09-20 13:15:25.
 -- Do not edit by hand; regenerate with scripts/generate-lua-definitions.ps1.
 
 Enum = Enum or {}

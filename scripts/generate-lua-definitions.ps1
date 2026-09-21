@@ -18,13 +18,14 @@
 [CmdletBinding()]
 param(
     [string]$Path,
-    [string]$OutFile
+    [string]$OutFile,
+    [string]$ApiJson   # read a prebuilt api.json directly (CI); skips the game dump
 )
 
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 
-if (-not $Path) {
+if (-not $ApiJson -and -not $Path) {
     $config = Get-Content (Join-Path $repoRoot 'wow-dev.config.json') -Raw | ConvertFrom-Json
     $wtf = Join-Path (Join-Path $config.gamePath $config.flavorDir) 'WTF'
     $Path = (Get-ChildItem -Path $wtf -Recurse -Filter 'WowApiExport.lua' -ErrorAction SilentlyContinue |
@@ -32,13 +33,19 @@ if (-not $Path) {
     if (-not $Path) { throw "No WowApiExport.lua found under $wtf. Run /apiexport then /reload." }
 }
 if (-not $OutFile) { $OutFile = Join-Path $repoRoot 'types/WowForeverAPI.lua' }
-Write-Host "Dump: $Path" -ForegroundColor Gray
 
-# --- Read base64 payload ---------------------------------------------------
-$raw = Get-Content -Raw -LiteralPath $Path
-$m = [regex]::Match($raw, 'WowApiExportB64\s*=\s*"([A-Za-z0-9+/=]*)"')
-if (-not $m.Success) { throw "WowApiExportB64 not found in $Path" }
-$json = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($m.Groups[1].Value))
+# --- Read payload ----------------------------------------------------------
+if ($ApiJson) {
+    if (-not (Test-Path $ApiJson)) { throw "api.json not found: $ApiJson" }
+    Write-Host "Using api.json: $ApiJson" -ForegroundColor Gray
+    $json = Get-Content -Raw -LiteralPath $ApiJson
+} else {
+    Write-Host "Dump: $Path" -ForegroundColor Gray
+    $raw = Get-Content -Raw -LiteralPath $Path
+    $m = [regex]::Match($raw, 'WowApiExportB64\s*=\s*"([A-Za-z0-9+/=]*)"')
+    if (-not $m.Success) { throw "WowApiExportB64 not found in $Path" }
+    $json = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($m.Groups[1].Value))
+}
 $data = $json | ConvertFrom-Json
 if (-not $data.meta.hasAPIDocumentation) {
     throw "This dump has no APIDocumentation (names only). Re-run /apiexport (force-loads the docs) then /reload."
