@@ -1,0 +1,5 @@
+# Normalize all text to LF so Windows-local and Linux-CI generation produce
+# identical blobs (prevents the API-doc regeneration Action from churning on
+# CRLF/LF differences). Binary assets are marked so they're left untouched.
+* text=auto eol=lf
+*.png binary
