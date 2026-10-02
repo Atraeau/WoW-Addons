@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**1** functions · **28** events · **0** types
+**1** functions · **30** events · **0** types
 
 ## Functions
 
@@ -60,6 +60,24 @@ local objects = C_System.GetFrameStack()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
+| `button` | cstring | no |  |
+
+### GLOBAL_REGION_MOUSE_DOWN
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `region` | ScriptRegion | no |  |
+| `button` | cstring | no |  |
+
+### GLOBAL_REGION_MOUSE_UP
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `region` | ScriptRegion | no |  |
 | `button` | cstring | no |  |
 
 ### INITIAL_HOTFIXES_APPLIED

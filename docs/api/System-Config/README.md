@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**27** namespaces · **162** functions · **75** events · **8** types
+**27** namespaces · **162** functions · **77** events · **8** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -23,7 +23,7 @@
 | [C_RestrictedActions](C_RestrictedActions.md) | 4 | 5 | 0 |
 | [C_Secrets](C_Secrets.md) | 27 | 0 | 0 |
 | [C_SecureTransfer](C_SecureTransfer.md) | 11 | 5 | 1 |
-| [C_System](C_System.md) | 1 | 28 | 0 |
+| [C_System](C_System.md) | 1 | 30 | 0 |
 | [C_SystemVisibilityManager](C_SystemVisibilityManager.md) | 1 | 1 | 1 |
 | [C_TTSSettings](C_TTSSettings.md) | 19 | 0 | 0 |
 | [C_Tutorial](C_Tutorial.md) | 3 | 6 | 1 |

@@ -1,180 +1,171 @@
-# Totem
+# C_Flyout
 
-[← API index](../README.md) · group: [Units, Combat & PvP](README.md)
+[← API index](../README.md) · group: [Miscellaneous](README.md)
 
 > Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**7** functions · **0** events · **1** types
+**6** functions · **0** events · **2** types
 
 ## Functions
 
-### Totem.DestroyTotem
+### C_Flyout.FlyoutHasSpell
 
 ```lua
-DestroyTotem(slot)
+hasSpell = C_Flyout.FlyoutHasSpell(flyoutID, spellID)
 ```
 
 **Arguments**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-DestroyTotem(1)
-```
-
-### Totem.GetNumTotemSlots
-
-```lua
-numSlots = GetNumTotemSlots()
-```
-
-**Returns**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `numSlots` | number | no |  |
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-local numSlots = GetNumTotemSlots()
-```
-
-### Totem.GetTotemCannotDismiss
-
-```lua
-cannotDismiss = GetTotemCannotDismiss(slot)
-```
-
-**Arguments**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
-
-**Returns**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `cannotDismiss` | bool | yes |  |
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-local cannotDismiss = GetTotemCannotDismiss(1)
-```
-
-### Totem.GetTotemDuration
-
-```lua
-duration = GetTotemDuration(slot)
-```
-
-**Arguments**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
-
-**Returns**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `duration` | LuaDurationObject | no |  |
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-local duration = GetTotemDuration(1)
-```
-
-### Totem.GetTotemInfo
-
-```lua
-haveTotem, totemName, startTime, duration, icon, modRate, spellID = GetTotemInfo(slot)
-```
-
-**Arguments**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
-
-**Returns**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `haveTotem` | bool | no |  |
-| `totemName` | cstring | no |  |
-| `startTime` | number | no |  |
-| `duration` | number | no |  |
-| `icon` | fileID | no |  |
-| `modRate` | number | no |  |
+| `flyoutID` | number | no |  |
 | `spellID` | number | no |  |
 
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `hasSpell` | bool | no |  |
+
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local haveTotem, totemName, startTime, duration, icon, modRate, spellID = GetTotemInfo(1)
+local hasSpell = C_Flyout.FlyoutHasSpell(0, 2050)
 ```
 
-### Totem.GetTotemTimeLeft
+### C_Flyout.GetFlyoutID
 
 ```lua
-timeLeft = GetTotemTimeLeft(slot)
+flyoutID = C_Flyout.GetFlyoutID(index)
 ```
 
 **Arguments**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
+| `index` | luaIndex | no |  |
 
 **Returns**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `timeLeft` | number | yes |  |
+| `flyoutID` | number | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local timeLeft = GetTotemTimeLeft(1)
+local flyoutID = C_Flyout.GetFlyoutID(1)
 ```
 
-### Totem.TargetTotem
+### C_Flyout.GetFlyoutInfo
 
 ```lua
-TargetTotem(slot)
+info = C_Flyout.GetFlyoutInfo(flyoutID)
 ```
 
 **Arguments**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `slot` | luaIndex | no |  |
+| `flyoutID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `info` | FlyoutInfo | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-TargetTotem(1)
+local info = C_Flyout.GetFlyoutInfo(0)
+```
+
+### C_Flyout.GetFlyoutSlotInfo
+
+```lua
+slotInfo = C_Flyout.GetFlyoutSlotInfo(flyoutID, slotIndex)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `flyoutID` | number | no |  |
+| `slotIndex` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `slotInfo` | FlyoutSlotInfo | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local slotInfo = C_Flyout.GetFlyoutSlotInfo(0, 1)
+```
+
+### C_Flyout.GetFlyoutTexture
+
+```lua
+textureID = C_Flyout.GetFlyoutTexture(flyoutID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `flyoutID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `textureID` | fileID | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local textureID = C_Flyout.GetFlyoutTexture(0)
+```
+
+### C_Flyout.GetNumFlyouts
+
+```lua
+numFlyouts = C_Flyout.GetNumFlyouts()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `numFlyouts` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local numFlyouts = C_Flyout.GetNumFlyouts()
 ```
 
 ## Types
 
-### TotemInfoScript (Structure)
+### FlyoutInfo (Structure)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `haveTotem` | bool | no |  |
-| `totemName` | cstring | no |  |
-| `startTime` | number | no |  |
-| `duration` | number | no |  |
-| `icon` | fileID | no |  |
-| `modRate` | number | no |  |
+| `name` | string | no |  |
+| `description` | string | no |  |
+| `numSlots` | number | no |  |
+| `isKnown` | bool | no |  |
+
+### FlyoutSlotInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
 | `spellID` | number | no |  |
+| `overrideSpellID` | number | no |  |
+| `isKnown` | bool | no |  |
+| `name` | string | yes |  |
+| `specID` | number | yes |  |
 

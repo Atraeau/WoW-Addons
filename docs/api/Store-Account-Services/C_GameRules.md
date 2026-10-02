@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Store, Account & Services](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**29** functions · **6** events · **1** types
+**29** functions · **6** events · **2** types
 
 ## Functions
 
@@ -162,6 +162,24 @@ gameModeRecordID = C_GameRules.GetDisplayedGameModeRecordIDAtIndex(displayIndex)
 
 ```lua
 local gameModeRecordID = C_GameRules.GetDisplayedGameModeRecordIDAtIndex(1)
+```
+
+### C_GameRules.GetForeverExperiencePreset
+
+```lua
+preset = C_GameRules.GetForeverExperiencePreset()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `preset` | ForeverExperiencePreset | yes |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local preset = C_GameRules.GetForeverExperiencePreset()
 ```
 
 ### C_GameRules.GetGameModeDisplayInfoByRecordID
@@ -537,28 +555,22 @@ active = C_GameRules.IsWoWHack()
 local active = C_GameRules.IsWoWHack()
 ```
 
-### C_GameRules.SelectClassicExperiencePreset
+### C_GameRules.SetForeverExperiencePreset
 
 ```lua
-C_GameRules.SelectClassicExperiencePreset()
+C_GameRules.SetForeverExperiencePreset(preset)
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `preset` | ForeverExperiencePreset | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GameRules.SelectClassicExperiencePreset()
-```
-
-### C_GameRules.SelectModernExperiencePreset
-
-```lua
-C_GameRules.SelectModernExperiencePreset()
-```
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-C_GameRules.SelectModernExperiencePreset()
+C_GameRules.SetForeverExperiencePreset(Enum.ForeverExperiencePreset.Classic)
 ```
 
 ### C_GameRules.SetSDHDToggleValue
@@ -613,6 +625,13 @@ C_GameRules.SetSDHDToggleValue(false)
 ### GAME_RULES_CHANGED
 
 ## Types
+
+### ForeverExperiencePreset (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `Classic` | ForeverExperiencePreset | no |  |
+| `Modern` | ForeverExperiencePreset | no |  |
 
 ### GameModeDisplayInfo (Structure)
 

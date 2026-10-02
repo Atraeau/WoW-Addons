@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **52** functions · **17** events · **11** types
 
@@ -1207,6 +1207,7 @@ local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `activityIDsFilter` | number[] | yes |  |
+| `showAllLevelRanges` | bool | no |  |
 
 ### LFG_LIST_UPDATE_SEARCH_RESULTS
 

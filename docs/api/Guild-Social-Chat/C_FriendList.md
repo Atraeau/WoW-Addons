@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**31** functions · **27** events · **2** types
+**32** functions · **27** events · **4** types
 
 ## Functions
 
@@ -335,6 +335,24 @@ info = C_FriendList.GetWhoInfo(index)
 local info = C_FriendList.GetWhoInfo(1)
 ```
 
+### C_FriendList.GetWhoRaceFilters
+
+```lua
+filters = C_FriendList.GetWhoRaceFilters()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `filters` | WhoFilter[] | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local filters = C_FriendList.GetWhoRaceFilters()
+```
+
 ### C_FriendList.IsFriend
 
 ```lua
@@ -494,7 +512,7 @@ C_FriendList.RemoveFriendByIndex(1)
 ### C_FriendList.SendWho
 
 ```lua
-C_FriendList.SendWho(filter, [origin])
+C_FriendList.SendWho(filter, [origin], [filters])
 ```
 
 **Arguments**
@@ -503,6 +521,7 @@ C_FriendList.SendWho(filter, [origin])
 |------|------|---------|-------------|
 | `filter` | cstring | no |  |
 | `origin` | number | yes |  |
+| `filters` | SendWhoFilters | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -623,7 +642,7 @@ C_FriendList.ShowFriends()
 ### C_FriendList.SortWho
 
 ```lua
-C_FriendList.SortWho(sorting)
+C_FriendList.SortWho(sorting, [ascending])
 ```
 
 **Arguments**
@@ -631,6 +650,7 @@ C_FriendList.SortWho(sorting)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `sorting` | cstring | no |  |
+| `ascending` | bool | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -792,6 +812,21 @@ C_FriendList.SortWho("")
 | `dnd` | bool | no |  |
 | `afk` | bool | no |  |
 | `rafLinkType` | RafLinkType | no |  |
+
+### SendWhoFilters (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `classIDs` | number[] | no |  |
+| `raceIDs` | number[] | no |  |
+| `uiMapIDs` | number[] | no |  |
+
+### WhoFilter (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `name` | string | no |  |
+| `ID` | number | no |  |
 
 ### WhoInfo (Structure)
 

@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Units, Combat & PvP](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**113** functions · **42** events · **28** types
+**114** functions · **43** events · **28** types
 
 ## Functions
 
@@ -334,6 +334,31 @@ spellID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)
 
 ```lua
 local spellID, startTime, duration = C_PvP.GetArenaCrowdControlInfo(playerToken)
+```
+
+### C_PvP.GetArenaOpponentSpec
+
+```lua
+specializationID, gender = C_PvP.GetArenaOpponentSpec(index)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `index` | luaIndex | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `specializationID` | number | no |  |
+| `gender` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local specializationID, gender = C_PvP.GetArenaOpponentSpec(1)
 ```
 
 ### C_PvP.GetArenaRewards
@@ -2298,6 +2323,14 @@ C_PvP.ToggleWarMode()
 ### PLAYER_ENTERING_BATTLEGROUND
 
 ### PLAYER_JOINED_PVP_MATCH
+
+### PLAYER_PVP_FLAG_CHANGED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isPvpFlagged` | bool | no |  |
 
 ### POST_MATCH_CURRENCY_REWARD_UPDATE
 

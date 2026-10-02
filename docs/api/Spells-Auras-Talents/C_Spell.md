@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Spells, Auras & Talents](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**70** functions · **6** events · **3** types
+**71** functions · **6** events · **3** types
 
 ## Functions
 
@@ -186,6 +186,32 @@ deadlyDebuffInfo = C_Spell.GetDeadlyDebuffInfo(spellIdentifier)
 
 ```lua
 local deadlyDebuffInfo = C_Spell.GetDeadlyDebuffInfo(2050)
+```
+
+### C_Spell.GetItemCooldown
+
+Returns nil if the item is not found or on cooldown
+
+```lua
+spellCooldownInfo = C_Spell.GetItemCooldown(itemID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `itemID` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `spellCooldownInfo` | SpellCooldownInfo | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local spellCooldownInfo = C_Spell.GetItemCooldown(6948)
 ```
 
 ### C_Spell.GetItemModifiedAppearancesApplied

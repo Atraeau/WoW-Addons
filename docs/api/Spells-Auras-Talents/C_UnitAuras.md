@@ -2,13 +2,15 @@
 
 [← API index](../README.md) · group: [Spells, Auras & Talents](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**37** functions · **6** events · **0** types
+**38** functions · **6** events · **0** types
 
 ## Functions
 
 ### C_UnitAuras.AddAuraSound
+
+Registers a sound for an aura event. The sound is stopped after five seconds of playback. The throttleSeconds value must be between 0 and 5 seconds, inclusive.
 
 ```lua
 auraSoundID = C_UnitAuras.AddAuraSound(trigger, sound)
@@ -595,6 +597,34 @@ aura = C_UnitAuras.GetPlayerAuraBySpellID(spellID)
 
 ```lua
 local aura = C_UnitAuras.GetPlayerAuraBySpellID(2050)
+```
+
+### C_UnitAuras.GetRefreshCarryOverDuration
+
+Returns the client-predicted amount of time that a new spellcast of the same spell would carry over to the new application of that aura. Takes an optional spellID to use as the new duration if that cannot be derived from the aura, if that value isn't supplied the aura's spellID will be used
+
+```lua
+newDuration = C_UnitAuras.GetRefreshCarryOverDuration(auraInstanceUnit, auraInstanceID, [spellID])
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `auraInstanceUnit` | UnitToken | no |  |
+| `auraInstanceID` | number | no |  |
+| `spellID` | SpellIdentifier | yes |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `newDuration` | number | yes |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local newDuration = C_UnitAuras.GetRefreshCarryOverDuration("player", 0)
 ```
 
 ### C_UnitAuras.GetRefreshExtendedDuration

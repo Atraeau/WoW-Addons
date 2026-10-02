@@ -1,6 +1,6 @@
 ---@meta
 -- WoW: Forever API definitions -- generated from the client's own APIDocumentation.
--- build 69913, interface 16001, exported 2026-09-20 13:15:25.
+-- build 70170, interface 16001, exported 2026-10-01 21:34:30.
 -- Do not edit by hand; regenerate with scripts/generate-lua-definitions.ps1.
 
 Enum = Enum or {}
@@ -2007,6 +2007,7 @@ Enum.TieredEntranceRewardType = {
 ---@class EditModeLayoutInfo
 ---@field layoutName string
 ---@field layoutType EditModeLayoutType
+---@field interfaceStyle? InputDeviceInterfaceType
 ---@field systems EditModeSystemInfo[]
 
 ---@class EditModeLayouts
@@ -2247,6 +2248,19 @@ Enum.SubscriptionInterstitialType = {
 ---@field icon number
 ---@field text string
 
+---@class FlyoutInfo
+---@field name string
+---@field description string
+---@field numSlots number
+---@field isKnown boolean
+
+---@class FlyoutSlotInfo
+---@field spellID number
+---@field overrideSpellID number
+---@field isKnown boolean
+---@field name? string
+---@field specID? number
+
 ---@class FogOfWarInfo
 ---@field fogOfWarID number
 ---@field backgroundAtlas textureAtlas
@@ -2315,6 +2329,15 @@ Enum.TableSecurityOption = {
 ---@field dnd boolean
 ---@field afk boolean
 ---@field rafLinkType RafLinkType
+
+---@class SendWhoFilters
+---@field classIDs number[]
+---@field raceIDs number[]
+---@field uiMapIDs number[]
+
+---@class WhoFilter
+---@field name string
+---@field ID number
 
 ---@class WhoInfo
 ---@field fullName string
@@ -2395,6 +2418,12 @@ Enum.TableSecurityOption = {
 ---@field deadzoneX? number
 ---@field deadzoneY? number
 ---@field comment? string
+
+---@alias ForeverExperiencePreset number
+Enum.ForeverExperiencePreset = {
+	Classic = 0,
+	Modern = 1,
+}
 
 ---@class GameModeDisplayInfo
 ---@field logo number
@@ -5743,6 +5772,7 @@ Enum.FrameTutorialAccount = {
 	HousingEndeavorsTabSeen = 48,
 	RunesOfPower = 49,
 	HousingPetBeds = 50,
+	Reserved1 = 51,
 }
 
 ---@class EventToastInfo
@@ -7118,6 +7148,7 @@ Enum.VoiceChatStatusCode = {
 	PlayerVoiceChatParentalDisabled = 22,
 	InvalidInputDevice = 23,
 	InvalidOutputDevice = 24,
+	PlayerVoiceChatAgeVerificationRestricted = 25,
 }
 
 ---@alias VoiceTtsStatusCode number
@@ -7412,6 +7443,7 @@ C_EventToastManager = C_EventToastManager or {}
 C_EventUtils = C_EventUtils or {}
 C_ExpansionTrial = C_ExpansionTrial or {}
 C_ExternalEventURL = C_ExternalEventURL or {}
+C_Flyout = C_Flyout or {}
 C_FogOfWar = C_FogOfWar or {}
 C_FrameManager = C_FrameManager or {}
 C_FriendList = C_FriendList or {}
@@ -7467,7 +7499,6 @@ C_LimitedInput = C_LimitedInput or {}
 C_LiveEvent = C_LiveEvent or {}
 C_LoadingScreen = C_LoadingScreen or {}
 C_LobbyMatchmakerInfo = C_LobbyMatchmakerInfo or {}
-C_LocaleContext = C_LocaleContext or {}
 C_Log = C_Log or {}
 C_Loot = C_Loot or {}
 C_LootFrame = C_LootFrame or {}
@@ -7489,6 +7520,7 @@ C_MountJournal = C_MountJournal or {}
 C_MythicPlus = C_MythicPlus or {}
 C_NamePlate = C_NamePlate or {}
 C_NamePlateManager = C_NamePlateManager or {}
+C_NameUtil = C_NameUtil or {}
 C_Navigation = C_Navigation or {}
 C_NeighborhoodInitiative = C_NeighborhoodInitiative or {}
 C_NewItems = C_NewItems or {}
@@ -8178,6 +8210,15 @@ function C_AddOns.SetAddonVersionCheck(enabled) end
 
 ---@return textureKit adventureMapTextureKit
 function C_AdventureMap.GetAdventureMapTextureKit() end
+
+---@return number numMapInsets
+function C_AdventureMap.GetNumMapInsets() end
+
+---@return number numQuestOffers
+function C_AdventureMap.GetNumQuestOffers() end
+
+---@return number numZoneChoices
+function C_AdventureMap.GetNumZoneChoices() end
 
 ---@param questID number
 ---@return AdventureMapQuestPortraitInfo info
@@ -9465,6 +9506,10 @@ function C_BattleNet.SetAFK(isAFK) end
 
 ---@param isAppearOffline boolean
 function C_BattleNet.SetAppearOffline(isAppearOffline) end
+
+---@param bnetAccountID number
+---@param block boolean
+function C_BattleNet.SetBlocked(bnetAccountID, block) end
 
 ---@param text string
 ---@return boolean success
@@ -14072,6 +14117,31 @@ function C_ExternalEventURL.IsNew() end
 
 function C_ExternalEventURL.LaunchURL() end
 
+---@param flyoutID number
+---@param spellID number
+---@return boolean hasSpell
+function C_Flyout.FlyoutHasSpell(flyoutID, spellID) end
+
+---@param index number
+---@return number flyoutID
+function C_Flyout.GetFlyoutID(index) end
+
+---@param flyoutID number
+---@return FlyoutInfo info
+function C_Flyout.GetFlyoutInfo(flyoutID) end
+
+---@param flyoutID number
+---@param slotIndex number
+---@return FlyoutSlotInfo slotInfo
+function C_Flyout.GetFlyoutSlotInfo(flyoutID, slotIndex) end
+
+---@param flyoutID number
+---@return number textureID
+function C_Flyout.GetFlyoutTexture(flyoutID) end
+
+---@return number numFlyouts
+function C_Flyout.GetNumFlyouts() end
+
 ---@param uiMapID number
 ---@return  fogOfWarID
 function C_FogOfWar.GetFogOfWarForMap(uiMapID) end
@@ -15463,6 +15533,9 @@ function C_FriendList.GetSelectedIgnore() end
 ---@return WhoInfo info
 function C_FriendList.GetWhoInfo(index) end
 
+---@return WhoFilter[] filters
+function C_FriendList.GetWhoRaceFilters() end
+
 ---@param guid string
 ---@return boolean isFriend
 function C_FriendList.IsFriend(guid) end
@@ -15491,7 +15564,8 @@ function C_FriendList.RemoveFriendByIndex(index) end
 
 ---@param filter string
 ---@param  number
-function C_FriendList.SendWho(filter, origin) end
+---@param  SendWhoFilters
+function C_FriendList.SendWho(filter, origin, filters) end
 
 ---@param name string
 ---@param notes string
@@ -15514,7 +15588,8 @@ function C_FriendList.SetWhoToUi(whoToUi) end
 function C_FriendList.ShowFriends() end
 
 ---@param sorting string
-function C_FriendList.SortWho(sorting) end
+---@param  boolean
+function C_FriendList.SortWho(sorting, ascending) end
 
 function ClearCursor() end
 
@@ -15687,6 +15762,9 @@ function C_GameRules.GetCurrentGameModeRecordID() end
 ---@return number gameModeRecordID
 function C_GameRules.GetDisplayedGameModeRecordIDAtIndex(displayIndex) end
 
+---@return  preset
+function C_GameRules.GetForeverExperiencePreset() end
+
 ---@param gameModeRecordID number
 ---@return  info
 function C_GameRules.GetGameModeDisplayInfoByRecordID(gameModeRecordID) end
@@ -15752,9 +15830,8 @@ function C_GameRules.IsStandard() end
 ---@return boolean active
 function C_GameRules.IsWoWHack() end
 
-function C_GameRules.SelectClassicExperiencePreset() end
-
-function C_GameRules.SelectModernExperiencePreset() end
+---@param preset ForeverExperiencePreset
+function C_GameRules.SetForeverExperiencePreset(preset) end
 
 ---@param setToSD boolean
 function C_GameRules.SetSDHDToggleValue(setToSD) end
@@ -19632,38 +19709,38 @@ function SetToDefaults() end
 ---@param right string
 ---@param strength CollationStrength
 ---@return number result
-function C_LocaleContext.CompareStrings(left, right, strength) end
+function CompareStrings(left, right, strength) end
 
 --- Opens a break iterator for locating text boundaries in the context locale.
 ---@param text string
 ---@param breakType BreakType
 ---@return number[] byteOffsets
-function C_LocaleContext.FindBreaks(text, breakType) end
+function FindBreaks(text, breakType) end
 
 --- Creates a string search iterator using a collator and returns every match position.
 ---@param text string
 ---@param pattern string
 ---@param strength CollationStrength
 ---@return number[] byteOffsets
-function C_LocaleContext.FindStringMatches(text, pattern, strength) end
+function FindStringMatches(text, pattern, strength) end
 
 --- Case-folds the characters in a string; case-folding is locale-independent and not context-sensitive.
 ---@param text string
 ---@return string result
-function C_LocaleContext.FoldCase(text) end
+function FoldCase(text) end
 
 --- Formats a double as a localized currency value using the provided ISO 4217 currency code.
 ---@param number number
 ---@param currencyCode string
 ---@return string result
-function C_LocaleContext.FormatCurrency(number, currencyCode) end
+function FormatCurrency(number, currencyCode) end
 
 --- Formats Unix time as localized date text using locale date patterns, symbols, style, and optional time zone.
 ---@param unixTimeSeconds number
 ---@param style DateTimeStyle
 ---@param timeZone string
 ---@return string result
-function C_LocaleContext.FormatDate(unixTimeSeconds, style, timeZone) end
+function FormatDate(unixTimeSeconds, style, timeZone) end
 
 --- Formats Unix time as localized date and time text using locale patterns, symbols, styles, and optional time zone.
 ---@param unixTimeSeconds number
@@ -19671,88 +19748,88 @@ function C_LocaleContext.FormatDate(unixTimeSeconds, style, timeZone) end
 ---@param timeStyle DateTimeStyle
 ---@param timeZone string
 ---@return string result
-function C_LocaleContext.FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, timeZone) end
+function FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, timeZone) end
 
 --- Formats a double with locale number formatting using locale symbols, grouping, and the selected non-currency style.
 ---@param number number
 ---@param style NumberStyle
 ---@return string result
-function C_LocaleContext.FormatNumber(number, style) end
+function FormatNumber(number, style) end
 
 --- Formats Unix time as localized time text using locale time patterns, symbols, style, and optional time zone.
 ---@param unixTimeSeconds number
 ---@param style DateTimeStyle
 ---@param timeZone string
 ---@return string result
-function C_LocaleContext.FormatTime(unixTimeSeconds, style, timeZone) end
+function FormatTime(unixTimeSeconds, style, timeZone) end
 
 --- Returns the display name for a currency in the context locale.
 ---@param currencyCode string
 ---@param style CurrencyNameStyle
 ---@return string result
-function C_LocaleContext.GetCurrencyName(currencyCode, style) end
+function GetCurrencyName(currencyCode, style) end
 
 --- Gets a display name suitable for the specified locale.
 ---@param displayLocale string
 ---@return string result
-function C_LocaleContext.GetDisplayName(displayLocale) end
+function GetDisplayName(displayLocale) end
 
 --- Gets the locale used by this locale context.
 ---@return string result
-function C_LocaleContext.GetLocale() end
+function GetLocale() end
 
 --- Transforms a string into a collation sort key.
 ---@param text string
 ---@param strength CollationStrength
 ---@return string result
-function C_LocaleContext.GetSortKey(text, strength) end
+function GetSortKey(text, strength) end
 
 --- Counts character break boundaries in UTF-8 text.
 ---@param text string
 ---@return number result
-function C_LocaleContext.Length(text) end
+function Length(text) end
 
 --- Parses an entire localized currency string into a double amount and ISO 4217 currency code.
 ---@param text string
 ---@return CurrencyParseResult result
-function C_LocaleContext.ParseCurrency(text) end
+function ParseCurrency(text) end
 
 --- Parses an entire localized number string into a double using the selected non-currency number formatter.
 ---@param text string
 ---@param style NumberStyle
 ---@return number result
-function C_LocaleContext.ParseNumber(text, style) end
+function ParseNumber(text, style) end
 
 --- Returns the keyword of the first plural rule that applies to a number.
 ---@param number number
 ---@param pluralType PluralType
 ---@return string result
-function C_LocaleContext.SelectPlural(number, pluralType) end
+function SelectPlural(number, pluralType) end
 
 --- Sets the locale used by this locale context.
 ---@param locale string
 ---@return boolean success
-function C_LocaleContext.SetLocale(locale) end
+function SetLocale(locale) end
 
 --- Lowercases the characters in a string; casing is locale-dependent and context-sensitive.
 ---@param text string
 ---@return string result
-function C_LocaleContext.ToLower(text) end
+function ToLower(text) end
 
 --- Titlecases a string using titlecase positions determined by the default Unicode algorithm.
 ---@param text string
 ---@return string result
-function C_LocaleContext.ToTitle(text) end
+function ToTitle(text) end
 
 --- Uppercases the characters in a string; casing is locale-dependent and context-sensitive.
 ---@param text string
 ---@return string result
-function C_LocaleContext.ToUpper(text) end
+function ToUpper(text) end
 
 --- Applies a locale transform to the context locale and returns the transformed locale string.
 ---@param transform LocaleTransform
 ---@return string result
-function C_LocaleContext.TransformLocale(transform) end
+function TransformLocale(transform) end
 
 --- Clamps a value to the inclusive range defined by the minimum and maximum values.
 ---@param value number
@@ -20840,6 +20917,11 @@ function C_NamePlateManager.SetNamePlateHitTestInsets(type, left, right, top, bo
 ---@param isSimplified boolean
 function C_NamePlateManager.SetNamePlateSimplified(unitToken, isSimplified) end
 
+--- Replaces the character surname separator with a link separator in a full name string.
+---@param fullName string
+---@return string result
+function C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator(fullName) end
+
 ---@param initiativeTaskID number
 function C_NeighborhoodInitiative.AddTrackedInitiativeTask(initiativeTaskID) end
 
@@ -21852,7 +21934,7 @@ function C_PlayerInfo.GUIDIsPlayer(guid) end
 function C_PlayerInfo.GetClass(playerLocation) end
 
 ---@param playerLocation PlayerLocation
----@return  name
+---@return string name
 function C_PlayerInfo.GetName(playerLocation) end
 
 ---@param playerLocation PlayerLocation
@@ -22651,6 +22733,11 @@ function C_PvP.GetArenaCrowdControlDuration(playerToken) end
 ---@return number startTime
 ---@return number duration
 function C_PvP.GetArenaCrowdControlInfo(playerToken) end
+
+---@param index number
+---@return number specializationID
+---@return number gender
+function C_PvP.GetArenaOpponentSpec(index) end
 
 ---@param teamSize number
 ---@return number honor
@@ -27730,6 +27817,8 @@ function C_SocialQueue.IsSystemEnabled() end
 ---@return boolean isSystemSupported
 function C_SocialQueue.IsSystemSupported() end
 
+function C_SocialRestrictions.AcknowledgeAgeVerificationRestriction() end
+
 function C_SocialRestrictions.AcknowledgeRegionalChatDisabled() end
 
 --- Returns true if the player meets all conditions that allow them to receive chat messages.
@@ -27739,6 +27828,14 @@ function C_SocialRestrictions.CanReceiveChat() end
 --- Returns true if the player meets all conditions that allow them to send chat messages.
 ---@return boolean canSendChat
 function C_SocialRestrictions.CanSendChat() end
+
+--- Returns true if the account is restricted by the Age Verification feature.
+---@return boolean restricted
+function C_SocialRestrictions.IsAgeVerificationRestricted() end
+
+--- Returns true if the Age Verification restriction is because the account belongs to a minor, as opposed to an adult who has not yet verified their age.
+---@return boolean isMinor
+function C_SocialRestrictions.IsAgeVerificationRestrictedMinor() end
 
 ---@return boolean disabled
 function C_SocialRestrictions.IsChatDisabled() end
@@ -28159,6 +28256,11 @@ function C_Spell.GetBaseSpell(spellIdentifier, spec) end
 ---@param spellIdentifier SpellIdentifier
 ---@return DeadlyDebuffInfo deadlyDebuffInfo
 function C_Spell.GetDeadlyDebuffInfo(spellIdentifier) end
+
+--- Returns nil if the item is not found or on cooldown
+---@param itemID number
+---@return SpellCooldownInfo spellCooldownInfo
+function C_Spell.GetItemCooldown(itemID) end
 
 ---@param spellID number
 ---@return number[] itemModifiedAppearanceIDs
@@ -30162,8 +30264,14 @@ function C_TradeSkillUI.SetShowUnlearned(flag) end
 ---@param sourceTypeFilter number
 function C_TradeSkillUI.SetSourceTypeFilter(sourceTypeFilter) end
 
+---@return boolean value
+function C_Trainer.GetCategorizeTrainerUI() end
+
 ---@return TrainerType trainerType
 function C_Trainer.GetTrainerType() end
+
+---@param value boolean
+function C_Trainer.SetCategorizeTrainerUI(value) end
 
 ---@param name string
 ---@param icon number
@@ -32215,6 +32323,10 @@ function UnitTrialXP(unit) end
 
 ---@param unit UnitToken
 ---@return boolean result
+function UnitUsesAmmo(unit) end
+
+---@param unit UnitToken
+---@return boolean result
 function UnitUsingVehicle(unit) end
 
 ---@param unit UnitToken
@@ -32256,6 +32368,7 @@ function UnitXPMax(unit) end
 ---@return boolean result
 function WorldLootObjectExists(unit) end
 
+--- Registers a sound for an aura event. The sound is stopped after five seconds of playback. The throttleSeconds value must be between 0 and 5 seconds, inclusive.
 ---@param trigger UnitAuraSoundTrigger
 ---@param sound UnitAuraSoundInfo
 ---@return  auraSoundID
@@ -32377,6 +32490,13 @@ function C_UnitAuras.GetHiddenGroupBuffs() end
 ---@param spellID SpellIdentifier
 ---@return  aura
 function C_UnitAuras.GetPlayerAuraBySpellID(spellID) end
+
+--- Returns the client-predicted amount of time that a new spellcast of the same spell would carry over to the new application of that aura. Takes an optional spellID to use as the new duration if that cannot be derived from the aura, if that value isn't supplied the aura's spellID will be used
+---@param auraInstanceUnit UnitToken
+---@param auraInstanceID number
+---@param  SpellIdentifier
+---@return  newDuration
+function C_UnitAuras.GetRefreshCarryOverDuration(auraInstanceUnit, auraInstanceID, spellID) end
 
 --- Returns the client-predicted new duration of this aura if it were cast again right now. Takes an optional spellID to use as the new duration if that cannot be derived from the aura, if that value isn't supplied the aura's spellID will be used
 ---@param auraInstanceUnit UnitToken

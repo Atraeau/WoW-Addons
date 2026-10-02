@@ -1,16 +1,16 @@
 {
   "meta": {
-    "systemCount": 408,
-    "tableCount": 792,
+    "systemCount": 410,
+    "tableCount": 797,
     "product": "wow_classic_beta",
     "interface": 16001,
-    "buildDate": "Sep 17 2026",
+    "buildDate": "Oct  1 2026",
     "hasAPIDocumentation": true,
-    "eventCount": 1802,
+    "eventCount": 1806,
     "version": "1.60.1",
-    "exportedAt": "2026-09-20 13:15:25",
-    "functionCount": 6577,
-    "build": "69913"
+    "exportedAt": "2026-10-01 21:34:30",
+    "functionCount": 6598,
+    "build": "70170"
   },
   "groups": [
     {
@@ -467,7 +467,7 @@
         "C_EncodingUtil",
         "C_ExternalEventURL",
         "C_Intl",
-        "C_LocaleContext",
+        "C_NameUtil",
         "C_PhotoSharing",
         "C_Platform",
         "C_SettingsUtil",
@@ -482,6 +482,7 @@
         "LuaDurationClockObjectAPI",
         "LuaDurationManualClockAPI",
         "LuaDurationObjectAPI",
+        "LuaLocaleContextAPI",
         "math",
         "NumericFormatterAPI",
         "NumericRuleFormatterAPI",
@@ -529,6 +530,7 @@
       "name": "Miscellaneous",
       "slug": "Miscellaneous",
       "namespaces": [
+        "C_Flyout",
         "C_UI"
       ]
     }

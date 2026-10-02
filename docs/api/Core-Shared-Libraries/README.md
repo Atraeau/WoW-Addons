@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**32** namespaces · **276** functions · **9** events · **14** types
+**33** namespaces · **277** functions · **9** events · **14** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -15,7 +15,7 @@
 | [C_EncodingUtil](C_EncodingUtil.md) | 10 | 0 | 5 |
 | [C_ExternalEventURL](C_ExternalEventURL.md) | 3 | 1 | 0 |
 | [C_Intl](C_Intl.md) | 27 | 0 | 0 |
-| [C_LocaleContext](C_LocaleContext.md) | 22 | 0 | 0 |
+| [C_NameUtil](C_NameUtil.md) | 1 | 0 | 0 |
 | [C_PhotoSharing](C_PhotoSharing.md) | 11 | 5 | 0 |
 | [C_Platform](C_Platform.md) | 0 | 0 | 1 |
 | [C_SettingsUtil](C_SettingsUtil.md) | 2 | 2 | 0 |
@@ -30,6 +30,7 @@
 | [LuaDurationClockObjectAPI](LuaDurationClockObjectAPI.md) | 1 | 0 | 0 |
 | [LuaDurationManualClockAPI](LuaDurationManualClockAPI.md) | 4 | 0 | 0 |
 | [LuaDurationObjectAPI](LuaDurationObjectAPI.md) | 31 | 0 | 0 |
+| [LuaLocaleContextAPI](LuaLocaleContextAPI.md) | 22 | 0 | 0 |
 | [math](math.md) | 11 | 0 | 0 |
 | [NumericFormatterAPI](NumericFormatterAPI.md) | 1 | 0 | 0 |
 | [NumericRuleFormatterAPI](NumericRuleFormatterAPI.md) | 5 | 0 | 0 |

@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **11** functions · **5** events · **1** types
 
@@ -138,7 +138,7 @@ name = C_SecureTransfer.GetTradePartner()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `name` | cstring | yes |  |
+| `name` | string | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 

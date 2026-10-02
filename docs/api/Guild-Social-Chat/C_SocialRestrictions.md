@@ -2,11 +2,23 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**9** functions · **3** events · **0** types
+**12** functions · **4** events · **0** types
 
 ## Functions
+
+### C_SocialRestrictions.AcknowledgeAgeVerificationRestriction
+
+```lua
+C_SocialRestrictions.AcknowledgeAgeVerificationRestriction()
+```
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+C_SocialRestrictions.AcknowledgeAgeVerificationRestriction()
+```
 
 ### C_SocialRestrictions.AcknowledgeRegionalChatDisabled
 
@@ -58,6 +70,46 @@ canSendChat = C_SocialRestrictions.CanSendChat()
 
 ```lua
 local canSendChat = C_SocialRestrictions.CanSendChat()
+```
+
+### C_SocialRestrictions.IsAgeVerificationRestricted
+
+Returns true if the account is restricted by the Age Verification feature.
+
+```lua
+restricted = C_SocialRestrictions.IsAgeVerificationRestricted()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `restricted` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local restricted = C_SocialRestrictions.IsAgeVerificationRestricted()
+```
+
+### C_SocialRestrictions.IsAgeVerificationRestrictedMinor
+
+Returns true if the Age Verification restriction is because the account belongs to a minor, as opposed to an adult who has not yet verified their age.
+
+```lua
+isMinor = C_SocialRestrictions.IsAgeVerificationRestrictedMinor()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isMinor` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local isMinor = C_SocialRestrictions.IsAgeVerificationRestrictedMinor()
 ```
 
 ### C_SocialRestrictions.IsChatDisabled
@@ -169,6 +221,8 @@ C_SocialRestrictions.SetChatDisabled(false)
 ```
 
 ## Events
+
+### ALERT_AGE_VERIFICATION_RESTRICTED
 
 ### ALERT_REGIONAL_CHAT_DISABLED
 

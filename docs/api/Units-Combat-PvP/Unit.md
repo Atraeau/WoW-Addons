@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Units, Combat & PvP](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
-**217** functions · **142** events · **8** types
+**218** functions · **142** events · **8** types
 
 ## Functions
 
@@ -4872,7 +4872,7 @@ targetName = UnitSpellTargetName(unit)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `targetName` | cstring | no |  |
+| `targetName` | string | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -5148,6 +5148,30 @@ result = UnitTrialXP(unit)
 
 ```lua
 local result = UnitTrialXP("player")
+```
+
+### Unit.UnitUsesAmmo
+
+```lua
+result = UnitUsesAmmo(unit)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `unit` | UnitToken | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local result = UnitUsesAmmo("player")
 ```
 
 ### Unit.UnitUsingVehicle

@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Core & Shared Libraries](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **27** functions · **0** events · **0** types
 
@@ -81,7 +81,7 @@ byteOffsets = C_Intl.FindBreaks(text, breakType)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `byteOffsets` | number[] | no | The native UTF-8 string indices for the text boundaries. |
+| `byteOffsets` | luaIndex[] | no | The native UTF-8 string indices for the text boundaries (returned with 1-based indexes for lua convenience). |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -109,7 +109,7 @@ byteOffsets = C_Intl.FindStringMatches(text, pattern, strength)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `byteOffsets` | number[] | no | The UTF-8 byte offsets of matches in the text. |
+| `byteOffsets` | luaIndex[] | no | The UTF-8 byte offsets of matches in the text (returned with 1-based indexes for lua convenience). |
 
 **Example** _(auto-generated from the signature — illustrative)_
 

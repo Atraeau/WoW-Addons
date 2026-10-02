@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Player & Character](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **185** functions · **2** events · **1** types
 
@@ -1353,7 +1353,7 @@ localizedClass, englishClass, localizedRace, englishRace, sex, name, realmName, 
 | `localizedRace` | cstring | no |  |
 | `englishRace` | cstring | no |  |
 | `sex` | number | no |  |
-| `name` | cstring | no |  |
+| `name` | string | no |  |
 | `realmName` | cstring | no |  |
 | `level` | number | yes |  |
 

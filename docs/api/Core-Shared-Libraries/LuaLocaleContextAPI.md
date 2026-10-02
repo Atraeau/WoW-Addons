@@ -1,19 +1,19 @@
-# C_LocaleContext
+# LuaLocaleContextAPI
 
 [← API index](../README.md) · group: [Core & Shared Libraries](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **22** functions · **0** events · **0** types
 
 ## Functions
 
-### C_LocaleContext.CompareStrings
+### LuaLocaleContextAPI.CompareStrings
 
 Compares two UTF-8 strings using the options specified on a collator.
 
 ```lua
-result = C_LocaleContext.CompareStrings(left, right, strength)
+result = CompareStrings(left, right, strength)
 ```
 
 **Arguments**
@@ -33,15 +33,15 @@ result = C_LocaleContext.CompareStrings(left, right, strength)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.CompareStrings("", "", strength)
+local result = CompareStrings("", "", strength)
 ```
 
-### C_LocaleContext.FindBreaks
+### LuaLocaleContextAPI.FindBreaks
 
 Opens a break iterator for locating text boundaries in the context locale.
 
 ```lua
-byteOffsets = C_LocaleContext.FindBreaks(text, breakType)
+byteOffsets = FindBreaks(text, breakType)
 ```
 
 **Arguments**
@@ -55,20 +55,20 @@ byteOffsets = C_LocaleContext.FindBreaks(text, breakType)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `byteOffsets` | number[] | no | The native UTF-8 string indices for the text boundaries. |
+| `byteOffsets` | luaIndex[] | no | The native UTF-8 string indices for the text boundaries (returned with 1-based indexes for lua convenience). |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local byteOffsets = C_LocaleContext.FindBreaks("", breakType)
+local byteOffsets = FindBreaks("", breakType)
 ```
 
-### C_LocaleContext.FindStringMatches
+### LuaLocaleContextAPI.FindStringMatches
 
 Creates a string search iterator using a collator and returns every match position.
 
 ```lua
-byteOffsets = C_LocaleContext.FindStringMatches(text, pattern, strength)
+byteOffsets = FindStringMatches(text, pattern, strength)
 ```
 
 **Arguments**
@@ -83,20 +83,20 @@ byteOffsets = C_LocaleContext.FindStringMatches(text, pattern, strength)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `byteOffsets` | number[] | no | The UTF-8 byte offsets of matches in the text. |
+| `byteOffsets` | luaIndex[] | no | The UTF-8 byte offsets of matches in the text (returned with 1-based indexes for lua convenience). |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local byteOffsets = C_LocaleContext.FindStringMatches("", "", strength)
+local byteOffsets = FindStringMatches("", "", strength)
 ```
 
-### C_LocaleContext.FoldCase
+### LuaLocaleContextAPI.FoldCase
 
 Case-folds the characters in a string; case-folding is locale-independent and not context-sensitive.
 
 ```lua
-result = C_LocaleContext.FoldCase(text)
+result = FoldCase(text)
 ```
 
 **Arguments**
@@ -114,15 +114,15 @@ result = C_LocaleContext.FoldCase(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FoldCase("")
+local result = FoldCase("")
 ```
 
-### C_LocaleContext.FormatCurrency
+### LuaLocaleContextAPI.FormatCurrency
 
 Formats a double as a localized currency value using the provided ISO 4217 currency code.
 
 ```lua
-result = C_LocaleContext.FormatCurrency(number, currencyCode)
+result = FormatCurrency(number, currencyCode)
 ```
 
 **Arguments**
@@ -141,15 +141,15 @@ result = C_LocaleContext.FormatCurrency(number, currencyCode)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FormatCurrency(0, "")
+local result = FormatCurrency(0, "")
 ```
 
-### C_LocaleContext.FormatDate
+### LuaLocaleContextAPI.FormatDate
 
 Formats Unix time as localized date text using locale date patterns, symbols, style, and optional time zone.
 
 ```lua
-result = C_LocaleContext.FormatDate(unixTimeSeconds, style, timeZone)
+result = FormatDate(unixTimeSeconds, style, timeZone)
 ```
 
 **Arguments**
@@ -169,15 +169,15 @@ result = C_LocaleContext.FormatDate(unixTimeSeconds, style, timeZone)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FormatDate(0, style, "")
+local result = FormatDate(0, style, "")
 ```
 
-### C_LocaleContext.FormatDateTime
+### LuaLocaleContextAPI.FormatDateTime
 
 Formats Unix time as localized date and time text using locale patterns, symbols, styles, and optional time zone.
 
 ```lua
-result = C_LocaleContext.FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, timeZone)
+result = FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, timeZone)
 ```
 
 **Arguments**
@@ -198,15 +198,15 @@ result = C_LocaleContext.FormatDateTime(unixTimeSeconds, dateStyle, timeStyle, t
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FormatDateTime(0, dateStyle, timeStyle, "")
+local result = FormatDateTime(0, dateStyle, timeStyle, "")
 ```
 
-### C_LocaleContext.FormatNumber
+### LuaLocaleContextAPI.FormatNumber
 
 Formats a double with locale number formatting using locale symbols, grouping, and the selected non-currency style.
 
 ```lua
-result = C_LocaleContext.FormatNumber(number, style)
+result = FormatNumber(number, style)
 ```
 
 **Arguments**
@@ -225,15 +225,15 @@ result = C_LocaleContext.FormatNumber(number, style)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FormatNumber(0, style)
+local result = FormatNumber(0, style)
 ```
 
-### C_LocaleContext.FormatTime
+### LuaLocaleContextAPI.FormatTime
 
 Formats Unix time as localized time text using locale time patterns, symbols, style, and optional time zone.
 
 ```lua
-result = C_LocaleContext.FormatTime(unixTimeSeconds, style, timeZone)
+result = FormatTime(unixTimeSeconds, style, timeZone)
 ```
 
 **Arguments**
@@ -253,15 +253,15 @@ result = C_LocaleContext.FormatTime(unixTimeSeconds, style, timeZone)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.FormatTime(0, style, "")
+local result = FormatTime(0, style, "")
 ```
 
-### C_LocaleContext.GetCurrencyName
+### LuaLocaleContextAPI.GetCurrencyName
 
 Returns the display name for a currency in the context locale.
 
 ```lua
-result = C_LocaleContext.GetCurrencyName(currencyCode, style)
+result = GetCurrencyName(currencyCode, style)
 ```
 
 **Arguments**
@@ -280,15 +280,15 @@ result = C_LocaleContext.GetCurrencyName(currencyCode, style)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.GetCurrencyName("", style)
+local result = GetCurrencyName("", style)
 ```
 
-### C_LocaleContext.GetDisplayName
+### LuaLocaleContextAPI.GetDisplayName
 
 Gets a display name suitable for the specified locale.
 
 ```lua
-result = C_LocaleContext.GetDisplayName(displayLocale)
+result = GetDisplayName(displayLocale)
 ```
 
 **Arguments**
@@ -306,15 +306,15 @@ result = C_LocaleContext.GetDisplayName(displayLocale)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.GetDisplayName("")
+local result = GetDisplayName("")
 ```
 
-### C_LocaleContext.GetLocale
+### LuaLocaleContextAPI.GetLocale
 
 Gets the locale used by this locale context.
 
 ```lua
-result = C_LocaleContext.GetLocale()
+result = GetLocale()
 ```
 
 **Returns**
@@ -326,15 +326,15 @@ result = C_LocaleContext.GetLocale()
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.GetLocale()
+local result = GetLocale()
 ```
 
-### C_LocaleContext.GetSortKey
+### LuaLocaleContextAPI.GetSortKey
 
 Transforms a string into a collation sort key.
 
 ```lua
-result = C_LocaleContext.GetSortKey(text, strength)
+result = GetSortKey(text, strength)
 ```
 
 **Arguments**
@@ -353,15 +353,15 @@ result = C_LocaleContext.GetSortKey(text, strength)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.GetSortKey("", strength)
+local result = GetSortKey("", strength)
 ```
 
-### C_LocaleContext.Length
+### LuaLocaleContextAPI.Length
 
 Counts character break boundaries in UTF-8 text.
 
 ```lua
-result = C_LocaleContext.Length(text)
+result = Length(text)
 ```
 
 **Arguments**
@@ -379,15 +379,15 @@ result = C_LocaleContext.Length(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.Length("")
+local result = Length("")
 ```
 
-### C_LocaleContext.ParseCurrency
+### LuaLocaleContextAPI.ParseCurrency
 
 Parses an entire localized currency string into a double amount and ISO 4217 currency code.
 
 ```lua
-result = C_LocaleContext.ParseCurrency(text)
+result = ParseCurrency(text)
 ```
 
 **Arguments**
@@ -405,15 +405,15 @@ result = C_LocaleContext.ParseCurrency(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.ParseCurrency("")
+local result = ParseCurrency("")
 ```
 
-### C_LocaleContext.ParseNumber
+### LuaLocaleContextAPI.ParseNumber
 
 Parses an entire localized number string into a double using the selected non-currency number formatter.
 
 ```lua
-result = C_LocaleContext.ParseNumber(text, style)
+result = ParseNumber(text, style)
 ```
 
 **Arguments**
@@ -432,15 +432,15 @@ result = C_LocaleContext.ParseNumber(text, style)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.ParseNumber("", style)
+local result = ParseNumber("", style)
 ```
 
-### C_LocaleContext.SelectPlural
+### LuaLocaleContextAPI.SelectPlural
 
 Returns the keyword of the first plural rule that applies to a number.
 
 ```lua
-result = C_LocaleContext.SelectPlural(number, pluralType)
+result = SelectPlural(number, pluralType)
 ```
 
 **Arguments**
@@ -459,15 +459,15 @@ result = C_LocaleContext.SelectPlural(number, pluralType)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.SelectPlural(0, pluralType)
+local result = SelectPlural(0, pluralType)
 ```
 
-### C_LocaleContext.SetLocale
+### LuaLocaleContextAPI.SetLocale
 
 Sets the locale used by this locale context.
 
 ```lua
-success = C_LocaleContext.SetLocale(locale)
+success = SetLocale(locale)
 ```
 
 **Arguments**
@@ -485,15 +485,15 @@ success = C_LocaleContext.SetLocale(locale)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local success = C_LocaleContext.SetLocale("")
+local success = SetLocale("")
 ```
 
-### C_LocaleContext.ToLower
+### LuaLocaleContextAPI.ToLower
 
 Lowercases the characters in a string; casing is locale-dependent and context-sensitive.
 
 ```lua
-result = C_LocaleContext.ToLower(text)
+result = ToLower(text)
 ```
 
 **Arguments**
@@ -511,15 +511,15 @@ result = C_LocaleContext.ToLower(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.ToLower("")
+local result = ToLower("")
 ```
 
-### C_LocaleContext.ToTitle
+### LuaLocaleContextAPI.ToTitle
 
 Titlecases a string using titlecase positions determined by the default Unicode algorithm.
 
 ```lua
-result = C_LocaleContext.ToTitle(text)
+result = ToTitle(text)
 ```
 
 **Arguments**
@@ -537,15 +537,15 @@ result = C_LocaleContext.ToTitle(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.ToTitle("")
+local result = ToTitle("")
 ```
 
-### C_LocaleContext.ToUpper
+### LuaLocaleContextAPI.ToUpper
 
 Uppercases the characters in a string; casing is locale-dependent and context-sensitive.
 
 ```lua
-result = C_LocaleContext.ToUpper(text)
+result = ToUpper(text)
 ```
 
 **Arguments**
@@ -563,15 +563,15 @@ result = C_LocaleContext.ToUpper(text)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.ToUpper("")
+local result = ToUpper("")
 ```
 
-### C_LocaleContext.TransformLocale
+### LuaLocaleContextAPI.TransformLocale
 
 Applies a locale transform to the context locale and returns the transformed locale string.
 
 ```lua
-result = C_LocaleContext.TransformLocale(transform)
+result = TransformLocale(transform)
 ```
 
 **Arguments**
@@ -589,6 +589,6 @@ result = C_LocaleContext.TransformLocale(transform)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local result = C_LocaleContext.TransformLocale(transform)
+local result = TransformLocale(transform)
 ```
 

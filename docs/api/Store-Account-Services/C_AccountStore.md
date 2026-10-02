@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Store, Account & Services](README.md)
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **11** functions · **5** events · **3** types
 

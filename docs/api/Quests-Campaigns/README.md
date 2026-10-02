@@ -2,12 +2,12 @@
 
 [← All API groups](../README.md)
 
-**14** namespaces · **217** functions · **63** events · **35** types
+**14** namespaces · **220** functions · **63** events · **35** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
 | [C_AdventureJournal](C_AdventureJournal.md) | 0 | 14 | 0 |
-| [C_AdventureMap](C_AdventureMap.md) | 2 | 5 | 1 |
+| [C_AdventureMap](C_AdventureMap.md) | 5 | 5 | 1 |
 | [C_CampaignInfo](C_CampaignInfo.md) | 10 | 0 | 4 |
 | [C_DelvesUI](C_DelvesUI.md) | 40 | 6 | 5 |
 | [C_GossipInfo](C_GossipInfo.md) | 20 | 7 | 10 |

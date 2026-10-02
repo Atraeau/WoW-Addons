@@ -4,7 +4,7 @@
 
 'How is it a secret if we can C it?'
 
-> Generated from the WoW: Forever client (build 69913, interface 16001) on 2026-09-20 13:15:25.
+> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
 
 **27** functions · **0** events · **0** types
 
