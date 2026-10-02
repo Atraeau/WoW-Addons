@@ -808,4 +808,3 @@ Smaller structs with the minimum fields from HousingDecorInstanceInfo needed to 
 | `Always` | LightRadiusIndicatorType | no |  |
 | `Overlap` | LightRadiusIndicatorType | no |  |
 | `Never` | LightRadiusIndicatorType | no |  |
-

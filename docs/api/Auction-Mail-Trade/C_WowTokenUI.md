@@ -118,4 +118,3 @@ C_WowTokenUI.StartTokenSell(UnitGUID("player"))
 | `result` | number | no |  |
 
 ### TOKEN_STATUS_CHANGED
-

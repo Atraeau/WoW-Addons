@@ -686,4 +686,3 @@ C_AddOns.SetAddonVersionCheck(false)
 |------|------|---------|-------------|
 | `loadable` | bool | no |  |
 | `reason` | cstring | no |  |
-

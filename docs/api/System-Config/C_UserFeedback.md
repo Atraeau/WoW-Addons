@@ -56,4 +56,3 @@ success = C_UserFeedback.SubmitSuggestion(suggestion)
 ```lua
 local success = C_UserFeedback.SubmitSuggestion("")
 ```
-

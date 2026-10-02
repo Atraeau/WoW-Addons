@@ -53,4 +53,3 @@ local accessible = C_ArdenwealdGardening.IsGardenAccessible()
 | `active` | number | no |  |
 | `ready` | number | no |  |
 | `remainingSeconds` | time_t | no |  |
-

@@ -101,4 +101,3 @@ local isInInspectMode = C_HousingInspectMode.IsInInspectMode()
 ### HOUSING_INSPECT_MODE_DECOR_HOVERED_CHANGED
 
 ### HOUSING_INSPECT_MODE_STATE_UPDATED
-

@@ -578,4 +578,3 @@ SimulateMouseWheel(0)
 |------|------|---------|-------------|
 | `newMode` | InputDeviceInterfaceType | no |  |
 | `oldMode` | InputDeviceInterfaceType | no |  |
-

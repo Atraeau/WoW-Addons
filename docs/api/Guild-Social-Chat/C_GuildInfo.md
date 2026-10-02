@@ -950,4 +950,3 @@ C_GuildInfo.Uninvite("")
 | `oldGuildName` | cstring | no |  |
 | `reservedName` | cstring | no |  |
 | `reservedNameExpirationTime` | time_t | no |  |
-

@@ -562,4 +562,3 @@ UpdateMouseoverAtPoint(pointX, pointY)
 ```lua
 UpdateMouseoverAtPoint(0, 0)
 ```
-

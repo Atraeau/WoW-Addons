@@ -1076,4 +1076,3 @@ SetWordWrap(wrap)
 ```lua
 SetWordWrap(false)
 ```
-

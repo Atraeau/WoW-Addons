@@ -163,4 +163,3 @@ C_Mail.SetOpeningAll(false)
 ### SEND_MAIL_MONEY_CHANGED
 
 ### UPDATE_PENDING_MAIL
-

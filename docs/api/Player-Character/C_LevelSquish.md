@@ -56,4 +56,3 @@ squishedLevel = C_LevelSquish.ConvertPlayerLevel(level)
 ```lua
 local squishedLevel = C_LevelSquish.ConvertPlayerLevel(0)
 ```
-

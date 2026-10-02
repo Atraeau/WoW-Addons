@@ -60,4 +60,3 @@ local isSocialUISystemEnabled = C_SocialUI.IsSystemEnabled()
 | `Away` | SocialUIPresenceType | no |  |
 | `Busy` | SocialUIPresenceType | no |  |
 | `AppearOffline` | SocialUIPresenceType | no |  |
-

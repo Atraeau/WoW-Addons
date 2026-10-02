@@ -2777,4 +2777,3 @@ C_PvP.ToggleWarMode()
 | `startTime` | time_t | no |  |
 | `minLevel` | number | no |  |
 | `maxLevel` | number | no |  |
-

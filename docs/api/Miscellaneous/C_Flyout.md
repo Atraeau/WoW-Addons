@@ -168,4 +168,3 @@ local numFlyouts = C_Flyout.GetNumFlyouts()
 | `isKnown` | bool | no |  |
 | `name` | string | yes |  |
 | `specID` | number | yes |  |
-

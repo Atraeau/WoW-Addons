@@ -52,4 +52,3 @@ local isPlaying = C_ClientScene.IsSceneTypeActive()
 |------|------|---------|-------------|
 | `DefaultSceneType` | ClientSceneType | no |  |
 | `MinigameSceneType` | ClientSceneType | no |  |
-

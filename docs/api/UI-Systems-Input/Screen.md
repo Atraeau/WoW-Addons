@@ -98,4 +98,3 @@ width = GetScreenWidth()
 ```lua
 local width = GetScreenWidth()
 ```
-

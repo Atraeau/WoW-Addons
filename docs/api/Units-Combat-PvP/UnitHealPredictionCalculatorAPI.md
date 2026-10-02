@@ -706,4 +706,3 @@ SetToDefaults()
 ```lua
 SetToDefaults()
 ```
-

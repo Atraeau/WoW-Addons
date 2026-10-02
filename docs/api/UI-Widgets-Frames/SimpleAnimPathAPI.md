@@ -105,4 +105,3 @@ SetCurveType(curveType)
 ```lua
 SetCurveType(curveType)
 ```
-

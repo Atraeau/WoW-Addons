@@ -297,4 +297,3 @@ Amount for a single target for all casts of the same spellID by a single source 
 | `isMob` | bool | no |  |
 | `amount` | number | no |  |
 | `specIconID` | fileID | no |  |
-

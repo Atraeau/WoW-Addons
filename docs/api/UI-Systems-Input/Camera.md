@@ -60,4 +60,3 @@ posX, posY, posZ, lookAtX, lookAtY, lookAtZ, animID, animVariation, animFrame, u
 ```lua
 local posX, posY, posZ, lookAtX, lookAtY, lookAtZ, animID, animVariation, animFrame, useModelCenter = GetUICameraInfo(0)
 ```
-

@@ -450,4 +450,3 @@ local shouldUseJourneyRewardTrack = C_MajorFactions.ShouldUseJourneyRewardTrack(
 | `title` | cstring | no |  |
 | `description` | cstring | no |  |
 | `level` | number | no |  |
-

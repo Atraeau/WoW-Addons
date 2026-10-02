@@ -109,4 +109,3 @@ local hasEvents = C_DeathRecap.HasRecapEvents()
 ## Types
 
 ### DeathRecapEventInfo (Structure)
-

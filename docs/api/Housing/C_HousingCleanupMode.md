@@ -78,4 +78,3 @@ C_HousingCleanupMode.RemoveSelectedDecor()
 | `None` | HousingCleanupModeTargetType | no |  |
 | `Decor` | HousingCleanupModeTargetType | no |  |
 | `HouseExterior` | HousingCleanupModeTargetType | no |  |
-

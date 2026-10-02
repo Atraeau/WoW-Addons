@@ -80,4 +80,3 @@ C_Log.LogWarningMessage(message)
 ```lua
 C_Log.LogWarningMessage("")
 ```
-

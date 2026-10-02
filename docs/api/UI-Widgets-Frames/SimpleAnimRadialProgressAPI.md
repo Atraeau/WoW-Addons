@@ -79,4 +79,3 @@ SetToPercent(percent)
 ```lua
 SetToPercent(0)
 ```
-

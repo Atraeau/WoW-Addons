@@ -98,4 +98,3 @@ local previewInfo = C_CovenantPreview.GetCovenantInfoForPlayerChoiceResponseID(0
 | `name` | cstring | no |  |
 | `description` | cstring | no |  |
 | `sortOrder` | number | no |  |
-

@@ -138,4 +138,3 @@ isUsingFixedTimeStep = IsUsingFixedTimeStep()
 ```lua
 local isUsingFixedTimeStep = IsUsingFixedTimeStep()
 ```
-

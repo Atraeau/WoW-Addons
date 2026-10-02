@@ -560,4 +560,3 @@ Signaled when the UI needs to display the journeys dashboard at a specific facti
 | `Trinket` | ItemSlotFilterType | no |  |
 | `Other` | ItemSlotFilterType | no |  |
 | `NoFilter` | ItemSlotFilterType | no |  |
-

@@ -38,4 +38,3 @@ C_BehavioralMessaging.SendNotificationReceipt(dbId, 0, 0)
 |------|------|---------|-------------|
 | `notificationType` | string | no |  |
 | `dbId` | NotificationDbId | no |  |
-

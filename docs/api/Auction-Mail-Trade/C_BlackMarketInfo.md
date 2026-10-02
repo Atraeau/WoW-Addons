@@ -42,4 +42,3 @@
 |------|------|---------|-------------|
 | `marketID` | number | no |  |
 | `itemID` | number | no |  |
-

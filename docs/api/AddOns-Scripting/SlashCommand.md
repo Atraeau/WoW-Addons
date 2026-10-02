@@ -43,4 +43,3 @@ SetAllowDangerousScripts(allowed)
 ```lua
 SetAllowDangerousScripts(false)
 ```
-

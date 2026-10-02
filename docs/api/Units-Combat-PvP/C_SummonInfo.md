@@ -121,4 +121,3 @@ isSummonSkippingStartExperience = C_SummonInfo.IsSummonSkippingStartExperience()
 ```lua
 local isSummonSkippingStartExperience = C_SummonInfo.IsSummonSkippingStartExperience()
 ```
-

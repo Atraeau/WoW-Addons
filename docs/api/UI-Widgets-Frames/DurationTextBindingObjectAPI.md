@@ -580,4 +580,3 @@ UpdateFontString()
 ```lua
 UpdateFontString()
 ```
-

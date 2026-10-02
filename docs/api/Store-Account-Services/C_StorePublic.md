@@ -68,4 +68,3 @@ enabled = C_StorePublic.IsEnabled()
 ```lua
 local enabled = C_StorePublic.IsEnabled()
 ```
-

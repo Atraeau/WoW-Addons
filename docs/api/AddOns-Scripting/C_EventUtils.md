@@ -55,4 +55,3 @@ valid = C_EventUtils.IsEventValid(eventName)
 ```lua
 local valid = C_EventUtils.IsEventValid(eventName)
 ```
-

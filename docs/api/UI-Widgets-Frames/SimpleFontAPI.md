@@ -467,4 +467,3 @@ SetTextColor(colorR, colorG, colorB, [a])
 ```lua
 SetTextColor(0, 0, 0)
 ```
-

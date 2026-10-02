@@ -341,4 +341,3 @@ C_CovenantSanctumUI.RequestCatchUpState()
 | `name` | cstring | yes |  |
 | `description` | cstring | yes |  |
 | `toastDescription` | cstring | yes |  |
-

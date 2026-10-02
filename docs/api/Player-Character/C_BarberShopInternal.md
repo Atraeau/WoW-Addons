@@ -25,4 +25,3 @@ C_BarberShopInternal.SetQAMode(qaModeEnabled)
 ```lua
 C_BarberShopInternal.SetQAMode(false)
 ```
-

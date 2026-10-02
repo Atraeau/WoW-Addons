@@ -43,4 +43,3 @@ C_LiveEvent.OnLiveEventPopupClicked(timerunningSeasonID)
 ```lua
 C_LiveEvent.OnLiveEventPopupClicked(0)
 ```
-

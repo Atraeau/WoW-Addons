@@ -70,4 +70,3 @@ local fogOfWarInfo = C_FogOfWar.GetFogOfWarInfo(0)
 | `backgroundAtlas` | textureAtlas | no |  |
 | `maskAtlas` | textureAtlas | no |  |
 | `maskScalar` | number | no |  |
-

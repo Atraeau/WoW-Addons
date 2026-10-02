@@ -78,4 +78,3 @@ local templates = C_XMLUtil.GetTemplates()
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 | `type` | cstring | no |  |
-

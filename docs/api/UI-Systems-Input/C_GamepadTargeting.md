@@ -83,4 +83,3 @@ C_GamepadTargeting.SetFilter("HELPFUL")
 | `Hostile` | GamepadTargetingFilters | no |  |
 | `Friendly` | GamepadTargetingFilters | no |  |
 | `All` | GamepadTargetingFilters | no |  |
-

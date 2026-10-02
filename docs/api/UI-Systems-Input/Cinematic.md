@@ -159,4 +159,3 @@ StopCinematic()
 | `sender` | cstring | yes |  |
 
 ### STOP_MOVIE
-

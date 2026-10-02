@@ -50,4 +50,3 @@ time = GetTimePreciseSec()
 ```lua
 local time = GetTimePreciseSec()
 ```
-

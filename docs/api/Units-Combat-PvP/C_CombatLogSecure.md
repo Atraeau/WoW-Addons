@@ -191,4 +191,3 @@ local shouldShow = C_CombatLogSecure.ShouldShowCurrentEntry()
 | `order` | CombatLogMessageOrder | no |  |
 
 ### COMBAT_LOG_REFILTER_ENTRIES
-

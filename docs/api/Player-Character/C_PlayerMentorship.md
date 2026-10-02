@@ -111,4 +111,3 @@ local isRestricted = C_PlayerMentorship.IsMentorRestricted()
 ### MENTORSHIP_STATUS_CHANGED
 
 ### NEWCOMER_GRADUATION
-

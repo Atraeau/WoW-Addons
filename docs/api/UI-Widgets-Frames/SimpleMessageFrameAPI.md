@@ -630,4 +630,3 @@ SetTimeVisible(timeVisibleSeconds)
 ```lua
 SetTimeVisible(0)
 ```
-

@@ -115,4 +115,3 @@ file = GetUpperEmblemFile()
 ```lua
 local file = GetUpperEmblemFile()
 ```
-

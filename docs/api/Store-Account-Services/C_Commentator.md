@@ -3004,4 +3004,3 @@ C_Commentator.ZoomOut_Position()
 | `PlayerNotFound` | TrackedSpellsResult | no |  |
 | `NoCooldownInfo` | TrackedSpellsResult | no |  |
 | `MismatchedCooldownInfo` | TrackedSpellsResult | no |  |
-

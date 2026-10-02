@@ -55,4 +55,3 @@ isLocked = C_LevelLink.IsSpellLocked(spellID)
 ```lua
 local isLocked = C_LevelLink.IsSpellLocked(2050)
 ```
-

@@ -218,4 +218,3 @@ C_PhotoSharing.UploadPhotoToService("", "")
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `authUrl` | string | no |  |
-

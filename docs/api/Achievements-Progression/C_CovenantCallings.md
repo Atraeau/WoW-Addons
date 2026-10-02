@@ -47,4 +47,3 @@ C_CovenantCallings.RequestCallings()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `callings` | BountyInfo[] | no |  |
-

@@ -129,4 +129,3 @@ C_Tutorial.ReturnToTutorialArea()
 | `RunesOfPower` | FrameTutorialAccount | no |  |
 | `HousingPetBeds` | FrameTutorialAccount | no |  |
 | `Reserved1` | FrameTutorialAccount | no |  |
-

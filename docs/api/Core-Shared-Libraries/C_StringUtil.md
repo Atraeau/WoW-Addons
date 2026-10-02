@@ -365,4 +365,3 @@ local text = C_StringUtil.WrapString(infix)
 | `stripNewlines` | bool | no | If true, remove all '\|n' quoted code sequences. (default: False) |
 | `maintainAtlases` | bool | no | If true, preserve all balanced '\|A' and '\|a' quoted code sequences. (default: False) |
 | `maintainTextures` | bool | no | If true, preserve all balanced '\|T' and '\|t' quoted code sequences. (default: False) |
-

@@ -631,4 +631,3 @@ C_GamePad.StopVibration()
 | `deadzoneX` | number | yes |  |
 | `deadzoneY` | number | yes |  |
 | `comment` | string | yes |  |
-

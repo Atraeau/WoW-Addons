@@ -1434,4 +1434,3 @@ C_SpellBook.ToggleSpellBookItemAutoCast(1, 2050)
 | `shouldHide` | bool | no |  |
 | `specID` | number | yes | Will be nil if this skill line is not associated with a specialization |
 | `offSpecID` | number | yes | Will be nil if this skill line is not associated with a non-active specialization |
-

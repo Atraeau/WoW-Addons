@@ -1361,4 +1361,3 @@ C_Housing.VisitHouse(UnitGUID("player"), UnitGUID("player"), 0)
 | `Customization` | HousingItemToastType | no |  |
 | `Decor` | HousingItemToastType | no |  |
 | `HouseType` | HousingItemToastType | no |  |
-

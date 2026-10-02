@@ -169,4 +169,3 @@ trimmed = string.trim(str, characters)
 ```lua
 local trimmed = string.trim(str, characters)
 ```
-

@@ -1821,4 +1821,3 @@ Used in conjunction with EnableSpellRangeCheck to inform the UI when a spell goe
 | `minRange` | number | no |  |
 | `maxRange` | number | no |  |
 | `spellID` | number | no |  |
-

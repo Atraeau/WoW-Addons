@@ -760,4 +760,3 @@ local success = C_ClassTalents.ViewLoadout(entries)
 | `NoChangesNecessary` | LoadConfigResult | no |  |
 | `LoadInProgress` | LoadConfigResult | no |  |
 | `Ready` | LoadConfigResult | no |  |
-

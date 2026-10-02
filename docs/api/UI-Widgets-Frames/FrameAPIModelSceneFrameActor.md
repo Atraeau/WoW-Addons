@@ -615,4 +615,3 @@ UseUnitSheatheCategory(useCategory)
 ```lua
 UseUnitSheatheCategory(false)
 ```
-

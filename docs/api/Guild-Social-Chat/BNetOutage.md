@@ -31,4 +31,3 @@ OutageDetected()
 ```lua
 OutageDetected()
 ```
-

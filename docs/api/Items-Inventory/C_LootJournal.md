@@ -78,4 +78,3 @@ local itemSets = C_LootJournal.GetItemSets()
 | `setID` | number | no |  |
 | `itemLevel` | number | no |  |
 | `name` | cstring | no |  |
-

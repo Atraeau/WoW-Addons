@@ -72,4 +72,3 @@ local success = C_LFGListRoles.SetRoles(roles, false)
 ## Events
 
 ### LFG_LIST_ROLE_UPDATE
-

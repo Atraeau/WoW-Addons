@@ -57,4 +57,3 @@ isRelated = C_QuestHub.IsQuestCurrentlyRelatedToHub(questID, hubAreaPoiID)
 ```lua
 local isRelated = C_QuestHub.IsQuestCurrentlyRelatedToHub(0, 0)
 ```
-

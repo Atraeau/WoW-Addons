@@ -36,4 +36,3 @@ local worldSafeLocs = C_WorldSafeLocsUIInternal.GetWorldSafeLocs()
 | `continent` | number | no |  |
 | `loc` | vector3 | no |  |
 | `facing` | number | no |  |
-

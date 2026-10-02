@@ -90,4 +90,3 @@ local digSites = C_ResearchInfo.GetDigSitesForMap(0)
 | `name` | cstring | no |  |
 | `poiBlobID` | number | no |  |
 | `textureIndex` | number | no |  |
-

@@ -53,4 +53,3 @@ local shouldShow = C_FrameManager.GetFrameVisibilityState(Enum.UIFrameType.Jaile
 |------|------|---------|-------------|
 | `JailersTowerBuffs` | UIFrameType | no |  |
 | `InterruptTutorial` | UIFrameType | no |  |
-

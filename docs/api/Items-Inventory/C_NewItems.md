@@ -63,4 +63,3 @@ C_NewItems.RemoveNewItem(containerIndex, slotIndex)
 ```lua
 C_NewItems.RemoveNewItem(1, 1)
 ```
-

@@ -87,7 +87,7 @@ function Comment([string]$text) {
 }
 
 $out = [System.Text.StringBuilder]::new()
-function W([string]$s = '') { [void]$out.AppendLine($s) }
+function W([string]$s = '') { [void]$out.Append($s); [void]$out.Append("`n") }  # LF, not AppendLine's CRLF
 
 $meta = $data.meta
 W '---@meta'
@@ -167,7 +167,7 @@ foreach ($sys in $data.systems) {
 # --- Write -----------------------------------------------------------------
 $outDir = Split-Path -Parent $OutFile
 New-Item -ItemType Directory -Path $outDir -Force | Out-Null
-$out.ToString() | Set-Content -Path $OutFile -Encoding UTF8
+[System.IO.File]::WriteAllText($OutFile, $out.ToString(), (New-Object System.Text.UTF8Encoding $false))
 
 Write-Host "Wrote $OutFile" -ForegroundColor Green
 Write-Host "  $fnCount functions, $enumCount enums, $classCount classes" -ForegroundColor Gray

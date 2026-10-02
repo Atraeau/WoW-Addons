@@ -1292,4 +1292,3 @@ C_PartyInfo.UninviteUnit("")
 |------|------|---------|-------------|
 | `QuestSync` | LeavePartyConfirmReason | no |  |
 | `RestrictedChallengeMode` | LeavePartyConfirmReason | no |  |
-

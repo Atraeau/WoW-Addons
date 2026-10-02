@@ -187,4 +187,3 @@ SetFlipBookRows(rows)
 ```lua
 SetFlipBookRows(0)
 ```
-

@@ -218,4 +218,3 @@ local success = C_ItemInteraction.SetPendingItem()
 | `cost` | number | yes |  |
 | `currencyTypeId` | number | yes |  |
 | `dropInSlotSoundKitId` | number | yes |  |
-

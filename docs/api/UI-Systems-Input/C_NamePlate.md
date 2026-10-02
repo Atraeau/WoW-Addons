@@ -91,4 +91,3 @@ C_NamePlate.SetNamePlateSize(width, height)
 ```lua
 C_NamePlate.SetNamePlateSize(width, height)
 ```
-

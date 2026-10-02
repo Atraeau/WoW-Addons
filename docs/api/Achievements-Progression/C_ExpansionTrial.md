@@ -31,4 +31,3 @@ C_ExpansionTrial.OnTrialLevelUpDialogShown()
 ```lua
 C_ExpansionTrial.OnTrialLevelUpDialogShown()
 ```
-

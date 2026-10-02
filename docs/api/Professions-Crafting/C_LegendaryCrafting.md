@@ -489,4 +489,3 @@ C_LegendaryCrafting.UpgradeRuneforgeLegendary(runeforgeLegendary, 6948)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `powerID` | number | no |  |
-

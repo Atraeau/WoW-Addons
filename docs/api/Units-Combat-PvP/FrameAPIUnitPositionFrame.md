@@ -222,4 +222,3 @@ StopPlayerPing()
 ```lua
 StopPlayerPing()
 ```
-

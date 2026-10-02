@@ -66,4 +66,3 @@ local status = C_IncomingSummon.IncomingSummonStatus("player")
 | `Pending` | SummonStatus | no |  |
 | `Accepted` | SummonStatus | no |  |
 | `Declined` | SummonStatus | no |  |
-

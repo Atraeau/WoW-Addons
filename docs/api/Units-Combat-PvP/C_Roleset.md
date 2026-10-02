@@ -68,4 +68,3 @@ blockedRolesets = C_Roleset.GetActiveBlockedRolesets()
 ```lua
 local blockedRolesets = C_Roleset.GetActiveBlockedRolesets()
 ```
-

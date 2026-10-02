@@ -45,4 +45,3 @@ SetOffset(offsetX, offsetY)
 ```lua
 SetOffset(1, 1)
 ```
-

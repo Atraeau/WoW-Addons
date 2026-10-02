@@ -25,4 +25,3 @@ remaining = GetSecondsUntilParentalControlsKick()
 ```lua
 local remaining = GetSecondsUntilParentalControlsKick()
 ```
-

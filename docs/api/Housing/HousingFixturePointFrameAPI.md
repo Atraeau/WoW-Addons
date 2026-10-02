@@ -95,4 +95,3 @@ SetUpdateCallback(cb)
 ## Types
 
 ### FixturePointUpdatedCallback (CallbackType)
-

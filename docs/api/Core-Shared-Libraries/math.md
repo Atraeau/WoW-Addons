@@ -306,4 +306,3 @@ wrapped = math.wrap(value, minimum, maximum)
 ```lua
 local wrapped = math.wrap(0, 0, 0)
 ```
-

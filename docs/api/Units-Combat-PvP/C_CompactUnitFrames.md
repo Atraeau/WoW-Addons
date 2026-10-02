@@ -9,4 +9,3 @@
 ## Events
 
 ### COMPACT_UNIT_FRAME_PROFILES_LOADED
-

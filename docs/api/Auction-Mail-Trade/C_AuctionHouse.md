@@ -2265,4 +2265,3 @@ This signal is not used in the base UI but is included for AddOn ease-of-use. Pa
 | `saleStatus` | number | no |  |
 | `itemID` | number | no |  |
 | `hasAllInfo` | bool | yes |  |
-

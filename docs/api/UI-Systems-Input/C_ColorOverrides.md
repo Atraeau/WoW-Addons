@@ -150,4 +150,3 @@ C_ColorOverrides.SetColorOverride(overrideType, color)
 | `overrideType` | ColorOverride | no |  |
 | `overrideColor` | colorRGB | no |  |
 | `overrideColorString` | string | no |  |
-

@@ -1520,4 +1520,3 @@ C_TransmogOutfitInfo.UpdatePendingSituation(option, false)
 | `errorText` | cstring | no |  |
 | `texture` | fileID | yes |  |
 | `sheatheCategory` | TransmogOutfitSlotOptionSheatheCategory | no |  |
-

@@ -104,4 +104,3 @@ SetViewInsets(left, right, top, bottom)
 ```lua
 SetViewInsets(left, right, top, bottom)
 ```
-

@@ -723,4 +723,3 @@ local success = C_ChallengeMode.StartChallengeMode()
 | `displayInfoID` | number | no |  |
 | `quantity` | number | no |  |
 | `isCurrency` | bool | no |  |
-

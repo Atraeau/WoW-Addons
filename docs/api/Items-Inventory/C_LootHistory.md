@@ -210,4 +210,3 @@ local info = C_LootHistory.GetSortedInfoForDrop(0, 0)
 | `encounterID` | number | no |  |
 | `startTime` | number | no |  |
 | `duration` | number | no |  |
-

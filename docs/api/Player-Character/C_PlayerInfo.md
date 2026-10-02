@@ -851,4 +851,3 @@ The current season rating and well as a list of completed mythic plus runs.
 |------|------|---------|-------------|
 | `currentSeasonScore` | number | no |  |
 | `runs` | MythicPlusRatingMapSummary[] | no |  |
-

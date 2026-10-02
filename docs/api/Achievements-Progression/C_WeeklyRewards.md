@@ -500,4 +500,3 @@ local showRetirementMessage = C_WeeklyRewards.ShouldShowRetirementMessage()
 | `activityTierID` | number | no |  |
 | `difficulty` | number | no |  |
 | `numPoints` | number | no |  |
-

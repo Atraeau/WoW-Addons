@@ -44,4 +44,3 @@ local info = C_ModifiedInstance.GetModifiedInstanceInfoFromMapID(0)
 | `mythicItemLevel` | number | yes |  |
 | `uiTextureKit` | textureKit | no |  |
 | `description` | string | no |  |
-

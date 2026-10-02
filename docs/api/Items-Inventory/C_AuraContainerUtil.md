@@ -386,4 +386,3 @@ local result = C_AuraContainerUtil.ProcessCustomAuraButtonDurationTextOptions()
 | `textFormatter` | NumericFormatter | yes | Optional formatter used to display remaining duration values. Ignored if textFormat is specified. |
 | `textFormat` | DurationTextBindingFormatOptions | yes | Optional text format configuration applied to the duration text binding. Overrides textFormatter when specified. |
 | `textColor` | DurationTextBindingColorOptions | yes | Optional text color configuration applied to the duration text binding. |
-

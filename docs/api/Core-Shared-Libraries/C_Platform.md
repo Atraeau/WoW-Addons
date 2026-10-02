@@ -14,4 +14,3 @@
 |------|------|---------|-------------|
 | `Windows` | ClientPlatformType | no |  |
 | `Macintosh` | ClientPlatformType | no |  |
-

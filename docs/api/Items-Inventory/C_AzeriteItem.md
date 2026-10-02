@@ -265,4 +265,3 @@ local isUnlimitedLevelingUnlocked = C_AzeriteItem.IsUnlimitedLevelingUnlocked()
 |------|------|---------|-------------|
 | `unlockedItem` | AzeriteEmpoweredItemLocation | no |  |
 | `tierIndex` | luaIndex | no |  |
-

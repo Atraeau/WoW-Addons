@@ -32,4 +32,3 @@ classColor = C_ClassColor.GetClassColor(className, [tintColor])
 ```lua
 local classColor = C_ClassColor.GetClassColor("")
 ```
-

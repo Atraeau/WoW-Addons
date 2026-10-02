@@ -79,4 +79,3 @@ success = SetSVG(svgAsset)
 ```lua
 local success = SetSVG(svgAsset)
 ```
-

@@ -836,4 +836,3 @@ ToggleUncollected()
 ## Types
 
 ### HousingCatalogSearchResultsUpdatedCallback (CallbackType)
-

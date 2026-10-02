@@ -43,4 +43,3 @@ local visible = C_SystemVisibilityManager.IsSystemVisible(Enum.UISystemType.InGa
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `InGameNavigation` | UISystemType | no |  |
-

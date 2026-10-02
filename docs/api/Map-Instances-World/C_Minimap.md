@@ -496,4 +496,3 @@ local shouldUse = C_Minimap.ShouldUseHybridMinimap()
 | `type` | cstring | no |  |
 | `subType` | number | no |  |
 | `spellID` | number | yes |  |
-

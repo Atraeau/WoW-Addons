@@ -207,4 +207,3 @@ coloredText = C_ColorUtil.WrapTextInColorCode(text, textColorCode)
 ```lua
 local coloredText = C_ColorUtil.WrapTextInColorCode("", "")
 ```
-

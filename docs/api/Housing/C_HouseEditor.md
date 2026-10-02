@@ -243,4 +243,3 @@ C_HouseEditor.LeaveHouseEditor()
 | `None` | HouseEditorPlayerType | no | Not in a house or plot, or at one without even sufficient visiting permissions |
 | `Owner` | HouseEditorPlayerType | no | Owner of the current house or plot |
 | `Visitor` | HouseEditorPlayerType | no | A visitor of the current house or plot |
-

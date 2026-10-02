@@ -225,4 +225,3 @@ SetUiMapID(uiMapID)
 ```lua
 SetUiMapID(0)
 ```
-

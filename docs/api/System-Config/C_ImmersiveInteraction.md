@@ -31,4 +31,3 @@ local immersiveInteraction = C_ImmersiveInteraction.HasImmersiveInteraction()
 ### IMMERSIVE_INTERACTION_BEGIN
 
 ### IMMERSIVE_INTERACTION_END
-

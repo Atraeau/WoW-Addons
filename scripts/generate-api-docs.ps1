@@ -31,6 +31,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 
+# Always write UTF-8 (no BOM) with LF endings so Windows-local and Linux-CI output
+# are byte-identical (prevents the regeneration Action from churning on CRLF/LF).
+$script:Utf8NoBom = New-Object System.Text.UTF8Encoding $false
+function Write-Lf([string]$path, [string]$text) {
+    [System.IO.File]::WriteAllText($path, ($text -replace "`r`n", "`n").TrimEnd("`n") + "`n", $script:Utf8NoBom)
+}
+
 # --- Locate the SavedVariables dump ---------------------------------------
 if (-not $ApiJson -and -not $Path) {
     $config = Get-Content (Join-Path $repoRoot 'wow-dev.config.json') -Raw | ConvertFrom-Json
@@ -220,7 +227,7 @@ if ($systemsRaw.Count -eq 0) {
         $md = @("# $ns", "") + $note + @("", "**$($fns.Count)** functions", "", '```lua')
         foreach ($fn in $fns) { $md += "$ns.$fn()" }
         $md += '```'
-        ($md -join "`n") | Set-Content -Path (Join-Path $OutDir ((Sanitize $ns) + '.md')) -Encoding UTF8
+        Write-Lf (Join-Path $OutDir ((Sanitize $ns) + '.md')) ($md -join "`n")
         $indexRows += [pscustomobject]@{ Namespace = $ns; File = (Sanitize $ns) + '.md'; Functions = $fns.Count }
     }
 
@@ -228,7 +235,7 @@ if ($systemsRaw.Count -eq 0) {
     $md = @("# Global Functions", "") + $note + @("", "**$($gf.Count)** functions", "", '```lua')
     foreach ($fn in $gf) { $md += "$fn()" }
     $md += '```'
-    ($md -join "`n") | Set-Content -Path (Join-Path $OutDir 'GlobalFunctions.md') -Encoding UTF8
+    Write-Lf (Join-Path $OutDir 'GlobalFunctions.md') ($md -join "`n")
     $indexRows += [pscustomobject]@{ Namespace = 'Global Functions'; File = 'GlobalFunctions.md'; Functions = $gf.Count }
 
     $idx = @('# WoW: Forever API Reference (inventory)', '')
@@ -244,7 +251,7 @@ if ($systemsRaw.Count -eq 0) {
     foreach ($row in ($indexRows | Sort-Object Namespace)) {
         $idx += "| [$($row.Namespace)]($($row.File)) | $($row.Functions) |"
     }
-    ($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
+    Write-Lf (Join-Path $OutDir 'README.md') ($idx -join "`n")
 
     Write-Host "Generated $($indexRows.Count) inventory files into $OutDir" -ForegroundColor Green
     return
@@ -367,7 +374,7 @@ foreach ($sys in $systems) {
 
     $groupDir = Join-Path $OutDir $slug
     New-Item -ItemType Directory -Path $groupDir -Force | Out-Null
-    ($md -join "`n") | Set-Content -Path (Join-Path $groupDir $fileName) -Encoding UTF8
+    Write-Lf (Join-Path $groupDir $fileName) ($md -join "`n")
 
     if (-not $groups.Contains($group)) {
         $groups[$group] = [pscustomobject]@{ Slug = $slug; Rows = [System.Collections.Generic.List[object]]::new() }
@@ -400,7 +407,7 @@ foreach ($g in $orderedGroups) {
     foreach ($row in $rows) {
         $gmd += "| [$($row.Namespace)]($($row.File)) | $($row.Functions) | $($row.Events) | $($row.Types) |"
     }
-    ($gmd -join "`n") | Set-Content -Path (Join-Path (Join-Path $OutDir $groups[$g].Slug) 'README.md') -Encoding UTF8
+    Write-Lf (Join-Path (Join-Path $OutDir $groups[$g].Slug) 'README.md') ($gmd -join "`n")
 }
 
 # --- Top index (groups) ----------------------------------------------------
@@ -420,7 +427,7 @@ foreach ($g in $orderedGroups) {
     $tSum = ($rows | Measure-Object Types -Sum).Sum
     $idx += "| [$g]($($groups[$g].Slug)/README.md) | $($rows.Count) | $fSum | $eSum | $tSum |"
 }
-($idx -join "`n") | Set-Content -Path (Join-Path $OutDir 'README.md') -Encoding UTF8
+Write-Lf (Join-Path $OutDir 'README.md') ($idx -join "`n")
 
 # --- Machine-readable data for the Pages site and external tools -----------
 # api.json: the full structured API (the authoritative, client-confirmed surface).
@@ -429,7 +436,7 @@ $siteDir = Split-Path -Parent $OutDir
 # Don't rewrite api.json when it's our input (CI reads docs/api.json directly).
 $apiJsonOut = Join-Path $siteDir 'api.json'
 if (-not ($ApiJson -and ((Resolve-Path $ApiJson).Path -eq (Resolve-Path $apiJsonOut -ErrorAction SilentlyContinue).Path))) {
-    $json | Set-Content -Path $apiJsonOut -Encoding UTF8
+    Write-Lf $apiJsonOut $json
 }
 $catObj = [ordered]@{
     meta   = $meta
@@ -441,7 +448,7 @@ $catObj = [ordered]@{
         }
     })
 }
-($catObj | ConvertTo-Json -Depth 6) | Set-Content -Path (Join-Path $siteDir 'categories.json') -Encoding UTF8
+Write-Lf (Join-Path $siteDir 'categories.json') ($catObj | ConvertTo-Json -Depth 6)
 
 $nsCount = ($groups.Values | ForEach-Object { $_.Rows.Count } | Measure-Object -Sum).Sum
 Write-Host "Generated $nsCount namespace files in $($orderedGroups.Count) groups into $OutDir" -ForegroundColor Green

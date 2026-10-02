@@ -167,4 +167,3 @@ usesNPOT = UsesNPOT()
 ```lua
 local usesNPOT = UsesNPOT()
 ```
-

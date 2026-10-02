@@ -41,4 +41,3 @@ C_WowSurvey.TriggerSurveyServe(deliveryMoment)
 ## Events
 
 ### SURVEY_DELIVERED
-

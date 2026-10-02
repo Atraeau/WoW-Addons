@@ -29,4 +29,3 @@
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `playerName` | cstring | no |  |
-

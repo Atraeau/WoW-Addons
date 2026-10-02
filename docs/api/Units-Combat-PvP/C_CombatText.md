@@ -65,4 +65,3 @@ C_CombatText.SetActiveUnit("player")
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `combatTextType` | cstring | no |  |
-

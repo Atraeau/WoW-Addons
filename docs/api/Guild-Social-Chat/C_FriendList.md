@@ -841,4 +841,3 @@ C_FriendList.SortWho("")
 | `filename` | string | yes |  |
 | `gender` | number | no |  |
 | `timerunningSeasonID` | number | yes |  |
-

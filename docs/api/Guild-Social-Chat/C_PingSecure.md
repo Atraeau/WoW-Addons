@@ -445,4 +445,3 @@ C_PingSecure.SetTogglePingListenerCallback(cb)
 | `result` | PingResult | no |  |
 
 ### TogglePingListenerCallback (CallbackType)
-

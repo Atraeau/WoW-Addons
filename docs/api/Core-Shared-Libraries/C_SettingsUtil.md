@@ -51,4 +51,3 @@ C_SettingsUtil.OpenSettingsPanel()
 |------|------|---------|-------------|
 | `openToCategoryID` | number | yes |  |
 | `scrollToElementName` | stringView | yes |  |
-

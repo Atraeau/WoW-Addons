@@ -1488,4 +1488,3 @@ local shouldSuppressForgeRotation = C_ArtifactUI.ShouldSuppressForgeRotation()
 | `icon` | fileID | no |  |
 | `slotTypeName` | cstring | no | Matches the socket identifiers used in the socketing system. |
 | `link` | string | no |  |
-

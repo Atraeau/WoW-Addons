@@ -505,4 +505,3 @@ local setWasEquipped = C_EquipmentSet.UseEquipmentSet(0)
 ### EQUIPMENT_SWAP_PENDING
 
 ### TRANSMOG_CUSTOM_SETS_CHANGED
-

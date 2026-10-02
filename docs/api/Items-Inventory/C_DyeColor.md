@@ -214,4 +214,3 @@ local isOwned = C_DyeColor.IsDyeColorOwned(0)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `dyeColorID` | number | no |  |
-

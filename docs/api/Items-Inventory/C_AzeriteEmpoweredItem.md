@@ -479,4 +479,3 @@ C_AzeriteEmpoweredItem.SetHasBeenViewed(6948)
 |------|------|---------|-------------|
 | `classID` | number | no |  |
 | `specID` | number | no |  |
-

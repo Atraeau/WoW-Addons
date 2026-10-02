@@ -367,4 +367,3 @@ local isArtifactRelicItem = C_ItemSocketInfo.IsArtifactRelicItem(info)
 | `name` | string | yes |  |
 | `icon` | fileID | yes |  |
 | `quality` | ItemQuality | no |  |
-

@@ -1860,4 +1860,3 @@ C_Calendar.UpdateEvent()
 | `time` | CalendarTime | no |  |
 | `difficulty` | number | no |  |
 | `difficultyName` | string | yes |  |
-

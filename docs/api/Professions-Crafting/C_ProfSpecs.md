@@ -644,4 +644,3 @@ local hasSpecialization = C_ProfSpecs.SkillLineHasSpecialization(0)
 |------|------|---------|-------------|
 | `skillLineID` | number | no |  |
 | `tradeSkillID` | number | no |  |
-

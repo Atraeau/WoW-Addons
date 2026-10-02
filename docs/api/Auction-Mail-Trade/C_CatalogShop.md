@@ -1097,4 +1097,3 @@ C_CatalogShop.StartHousingVCPurchaseConfirmation(0)
 | `timeRemainingSeconds` | time_t | no |  |
 | `name` | string | no |  |
 | `price` | string | no |  |
-

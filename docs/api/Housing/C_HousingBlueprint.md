@@ -523,4 +523,3 @@ local updatedShareCode = C_HousingBlueprint.UpdateBlueprintStringFromInput("")
 | `name` | string | no |  |
 
 ### HOUSING_BLUEPRINTS_AVAILABILITY_CHANGED
-

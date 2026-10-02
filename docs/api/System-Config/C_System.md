@@ -175,4 +175,3 @@ local objects = C_System.GetFrameStack()
 ### VARIABLES_LOADED
 
 ### WOW_MOUSE_NOT_FOUND
-

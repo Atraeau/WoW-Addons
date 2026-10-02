@@ -42,4 +42,3 @@ local allowed = C_LimitedInput.LimitedInputAllowed(Enum.LimitedInputType.MouseMo
 | `MouseDown` | LimitedInputType | no |  |
 | `MouseUp` | LimitedInputType | no |  |
 | `MouseWheel` | LimitedInputType | no |  |
-

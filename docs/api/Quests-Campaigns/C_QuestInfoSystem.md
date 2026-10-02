@@ -226,4 +226,3 @@ hasRewardSpells = C_QuestInfoSystem.HasQuestRewardSpells([questID])
 ```lua
 local hasRewardSpells = C_QuestInfoSystem.HasQuestRewardSpells()
 ```
-

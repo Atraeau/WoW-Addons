@@ -195,4 +195,3 @@ C_DeathInfo.UseSelfResurrectOption(Enum.SelfResurrectOptionType.Spell, 0)
 |------|------|---------|-------------|
 | `Spell` | SelfResurrectOptionType | no |  |
 | `Item` | SelfResurrectOptionType | no |  |
-

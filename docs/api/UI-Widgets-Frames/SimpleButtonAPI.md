@@ -733,4 +733,3 @@ SetText(text)
 ```lua
 SetText("")
 ```
-

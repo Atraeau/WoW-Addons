@@ -261,4 +261,3 @@ Signaled when the game time transitions between day and night.
 | `GlueScreenShortcut` | TimeEventFlag | no |  |
 | `WeeklyReset` | TimeEventFlag | no |  |
 | `GlobalLaunch` | TimeEventFlag | no |  |
-

@@ -480,4 +480,3 @@ C_HouseExterior.SetHouseExteriorType(0, attachedDecorAction)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `result` | HousingResult | no |  |
-

@@ -178,4 +178,3 @@ SignalAt(key, time)
 ```lua
 SignalAt(0, time)
 ```
-

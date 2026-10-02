@@ -179,4 +179,3 @@ C_Sound.PlayVocalErrorSound(vocalErrorSoundID)
 |------|------|---------|-------------|
 | `success` | bool | no |  |
 | `soundHandle` | SoundHandle | no |  |
-

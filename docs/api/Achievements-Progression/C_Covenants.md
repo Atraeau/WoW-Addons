@@ -99,4 +99,3 @@ local covenantID = C_Covenants.GetCovenantIDs()
 | `factionID` | number | no |  |
 | `name` | cstring | no |  |
 | `soulbindIDs` | number[] | no |  |
-

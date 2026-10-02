@@ -141,4 +141,3 @@ local shouldShowNodes = C_TaxiMap.ShouldMapShowTaxiNodes(0)
 | `useSpecialIcon` | bool | no |  |
 | `specialIconCostString` | string | yes |  |
 | `isMapLayerTransition` | bool | no |  |
-

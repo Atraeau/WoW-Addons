@@ -435,4 +435,3 @@ C_HousingExpertMode.SetPrecisionSubmode(Enum.HousingPrecisionSubmode.Translate)
 | `Translate` | HousingPrecisionSubmode | no |  |
 | `Rotate` | HousingPrecisionSubmode | no |  |
 | `Scale` | HousingPrecisionSubmode | no |  |
-

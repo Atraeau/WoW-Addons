@@ -61,4 +61,3 @@ local zoneAbilityIconID = C_ZoneAbility.GetZoneAbilityIcon(2050)
 | `spellID` | number | no |  |
 | `textureKit` | textureKit | no |  |
 | `tutorialText` | cstring | yes |  |
-

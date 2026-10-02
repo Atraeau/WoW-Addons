@@ -98,4 +98,3 @@ SetParentKey(parentKey, clearOtherKeys)
 ```lua
 SetParentKey("", false)
 ```
-

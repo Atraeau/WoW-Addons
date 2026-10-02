@@ -85,4 +85,3 @@ RemoveMaskTexture(mask)
 ```lua
 RemoveMaskTexture(mask)
 ```
-

@@ -174,4 +174,3 @@
 | `owner` | number | no |  |
 | `petIndex` | number | no |  |
 | `xpChange` | number | no |  |
-

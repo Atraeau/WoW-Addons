@@ -1048,4 +1048,3 @@ local wasSet = C_Map.SetUserWaypoint(point)
 | `minScale` | number | no |  |
 | `maxScale` | number | no |  |
 | `additionalZoomSteps` | number | no |  |
-

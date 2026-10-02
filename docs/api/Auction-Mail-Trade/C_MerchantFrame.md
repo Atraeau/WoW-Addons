@@ -179,4 +179,3 @@ C_MerchantFrame.SellAllJunkItems()
 | `currencyID` | number | yes |  |
 | `spellID` | number | yes |  |
 | `isQuestStartItem` | bool | no | (default: False) |
-

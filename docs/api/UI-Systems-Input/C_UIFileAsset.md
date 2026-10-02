@@ -85,4 +85,3 @@ isLooseFile = C_UIFileAsset.IsLooseFile(asset)
 ```lua
 local isLooseFile = C_UIFileAsset.IsLooseFile(asset)
 ```
-

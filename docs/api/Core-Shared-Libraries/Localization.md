@@ -277,4 +277,3 @@ SetEuropeanNumbers(false)
 | `breakpointData` | NumberAbbreviationBreakpoint[] | yes | Order these from largest to smallest. |
 | `locale` | cstring | yes | Locale controls whether standard asian abbreviation data will be used along with a small change in behavior for large number abbreviation when fractionDivisor is greater than zero. |
 | `config` | AbbreviateConfig | yes | Provides a cached config object for optimal performance when calling abbreviation functions multiple times with the same options. |
-

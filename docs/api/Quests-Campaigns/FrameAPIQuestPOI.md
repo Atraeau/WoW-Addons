@@ -75,4 +75,3 @@ questID, numObjectives = UpdateMouseOverTooltip(x, y)
 ```lua
 local questID, numObjectives = UpdateMouseOverTooltip(0, 0)
 ```
-

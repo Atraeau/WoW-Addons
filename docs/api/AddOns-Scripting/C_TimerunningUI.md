@@ -29,4 +29,3 @@ local activeTimerunningSeasonID = C_TimerunningUI.GetActiveTimerunningSeasonID()
 ## Events
 
 ### REMIX_END_OF_EVENT
-

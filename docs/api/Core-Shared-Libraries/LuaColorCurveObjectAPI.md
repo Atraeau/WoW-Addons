@@ -246,4 +246,3 @@ SetToDefaults()
 |------|------|---------|-------------|
 | `x` | number | no |  |
 | `y` | colorRGBA | no |  |
-

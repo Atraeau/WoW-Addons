@@ -175,4 +175,3 @@ SetThickness(thickness)
 ```lua
 SetThickness(thickness)
 ```
-

@@ -59,4 +59,3 @@ C_ExternalEventURL.LaunchURL()
 ## Events
 
 ### EXTERNAL_EVENT_LAUNCH_URL_FAILED
-

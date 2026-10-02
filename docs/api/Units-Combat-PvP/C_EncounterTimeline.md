@@ -918,4 +918,3 @@ Fired when the current timeline view is being deactivated. The UI should clear a
 | `minimumEventGapDuration` | Seconds | yes | Minimum duration gap that must exist between two sequential candidate events for this track. If two event durations have a distance under this figure, the later of the two events will be artifically kept in the indeterminate track state until it can transition into a later track in the timeline sequence. |
 | `maximumEventCount` | number | yes | The maximum number of events permitted within this track. This only applies to Sorted tracks. |
 | `sortDirection` | EncounterTimelineEventSortDirection | yes | Sort ordering for events within this track. This only applies to Sorted tracks. |
-

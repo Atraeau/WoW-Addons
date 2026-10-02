@@ -1117,4 +1117,3 @@ C_MountJournal.SwapDynamicFlightMode()
 | `animID` | number | no |  |
 | `spellVisualKitID` | number | no |  |
 | `disablePlayerMountPreview` | bool | no |  |
-

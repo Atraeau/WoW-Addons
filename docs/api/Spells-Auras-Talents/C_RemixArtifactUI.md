@@ -206,4 +206,3 @@ local isRemixArtifact = C_RemixArtifactUI.ItemInSlotIsRemixArtifact(1)
 | `itemAppearanceID` | number | yes |  |
 | `altItemAppearanceID` | number | yes |  |
 | `altOnTop` | bool | no |  |
-

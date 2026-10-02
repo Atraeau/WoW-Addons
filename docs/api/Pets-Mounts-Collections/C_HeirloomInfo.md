@@ -171,4 +171,3 @@ C_HeirloomInfo.SetDefaultFilters()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `pendingHeirloomUpgradeSpellcast` | bool | no |  |
-

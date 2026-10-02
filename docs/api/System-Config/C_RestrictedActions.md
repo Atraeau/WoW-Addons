@@ -151,4 +151,3 @@ Fired when the state of an addon restriction type is changing. This event is seq
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `function` | cstring | no |  |
-

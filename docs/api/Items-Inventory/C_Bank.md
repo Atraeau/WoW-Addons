@@ -658,4 +658,3 @@ C_Bank.WithdrawMoney(bankType, 0)
 | `purchasePromptTitle` | cstring | no |  |
 | `purchasePromptBody` | cstring | no |  |
 | `purchasePromptConfirmation` | cstring | no |  |
-

@@ -87,4 +87,3 @@ Only signaled for swing types that have an active range check. See C_SwingTimer.
 | `MainHand` | PlayerSwingType | no |  |
 | `OffHand` | PlayerSwingType | no |  |
 | `Ranged` | PlayerSwingType | no |  |
-

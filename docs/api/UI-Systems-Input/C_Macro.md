@@ -100,4 +100,3 @@ C_Macro.SetMacroExecuteLineCallback(cb)
 ## Types
 
 ### MacroExecuteLineCallback (CallbackType)
-

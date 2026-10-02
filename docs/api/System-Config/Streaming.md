@@ -79,4 +79,3 @@ result = GetFileStreamingStatus()
 ```lua
 local result = GetFileStreamingStatus()
 ```
-

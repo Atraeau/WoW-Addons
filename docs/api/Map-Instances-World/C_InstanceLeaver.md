@@ -37,4 +37,3 @@ local isLeaver = C_InstanceLeaver.IsPlayerLeaver()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `isLeaver` | bool | no |  |
-

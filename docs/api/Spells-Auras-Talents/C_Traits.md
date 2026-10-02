@@ -1586,4 +1586,3 @@ local success = C_Traits.TryRefundToNode(0, 0, 0)
 | `maxQuantity` | number | yes |  |
 | `spent` | number | no |  |
 | `spentInTree` | number | yes |  |
-

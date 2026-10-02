@@ -126,4 +126,3 @@ local hasExtraAction = C_PartyPose.HasExtraAction(0)
 | `titleText` | string | yes |  |
 | `extraButtonText` | string | yes |  |
 | `flags` | PartyPoseFlags | no |  |
-

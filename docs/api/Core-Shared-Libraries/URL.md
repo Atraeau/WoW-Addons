@@ -44,4 +44,3 @@ LoadURLIndex(index, [param])
 ```lua
 LoadURLIndex(1)
 ```
-

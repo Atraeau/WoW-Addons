@@ -19,4 +19,3 @@ C_LootFrame.TryAutoLoot()
 ```lua
 C_LootFrame.TryAutoLoot()
 ```
-

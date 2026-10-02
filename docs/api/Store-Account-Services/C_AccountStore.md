@@ -347,4 +347,3 @@ C_AccountStore.RequestStoreFrontInfoUpdate(0)
 | `transmogSetID` | number | yes |  |
 | `displayIcon` | fileID | yes |  |
 | `refundSecondsRemaining` | time_t | yes |  |
-

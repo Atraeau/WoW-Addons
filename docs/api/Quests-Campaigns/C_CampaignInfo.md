@@ -281,4 +281,3 @@ local sortAsNormalQuest = C_CampaignInfo.SortAsNormalQuest(0)
 | `Complete` | CampaignState | no |  |
 | `InProgress` | CampaignState | no |  |
 | `Stalled` | CampaignState | no |  |
-

@@ -385,4 +385,3 @@ local isTieredEntrance = C_ScenarioInfo.IsTieredEntranceScenario()
 | `spellID` | number | no |  |
 | `name` | string | no |  |
 | `icon` | number | no |  |
-

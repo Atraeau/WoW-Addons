@@ -2452,4 +2452,3 @@ local result = C_Club.ValidateText(Enum.ClubType.BattleNet, "", Enum.ClubFieldTy
 | `Character` | ClubType | no |  |
 | `Guild` | ClubType | no |  |
 | `Other` | ClubType | no |  |
-

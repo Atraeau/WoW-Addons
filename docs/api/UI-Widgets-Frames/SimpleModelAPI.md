@@ -1189,4 +1189,3 @@ UseModelCenterToTransform(useCenter)
 ```lua
 UseModelCenterToTransform(false)
 ```
-

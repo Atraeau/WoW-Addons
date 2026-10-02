@@ -2364,4 +2364,3 @@ C_QuestLog.UpdateCampaignHeaders()
 | `Common` | WorldQuestQuality | no |  |
 | `Rare` | WorldQuestQuality | no |  |
 | `Epic` | WorldQuestQuality | no |  |
-

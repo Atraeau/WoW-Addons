@@ -1165,4 +1165,3 @@ local used = C_Container.UseHearthstone()
 | `isQuestItem` | bool | no |  |
 | `questID` | number | yes |  |
 | `isActive` | bool | no |  |
-

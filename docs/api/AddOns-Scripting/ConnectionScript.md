@@ -213,4 +213,3 @@ selectedRealmName = SelectedRealmName()
 ```lua
 local selectedRealmName = SelectedRealmName()
 ```
-

@@ -297,4 +297,3 @@ C_VideoOptions.SetGameWindowSize(0, 0)
 | `name` | string | no |  |
 | `isLowPower` | bool | no |  |
 | `isExternal` | bool | no |  |
-

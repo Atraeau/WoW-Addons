@@ -503,4 +503,3 @@ SetTextColor(textType, colorR, colorG, colorB, [a])
 ```lua
 SetTextColor(textType, 0, 0, 0)
 ```
-

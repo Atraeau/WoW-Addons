@@ -49,4 +49,3 @@
 | `waitMessage` | cstring | yes |  |
 | `caseTitle` | cstring | yes |  |
 | `caseDescription` | cstring | yes |  |
-

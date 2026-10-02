@@ -55,4 +55,3 @@ C_GenericWidgetDisplay.Close()
 | `frameHeight` | number | no |  |
 | `extraButtonText` | string | yes |  |
 | `closeButtonText` | string | yes |  |
-

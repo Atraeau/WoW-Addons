@@ -61,4 +61,3 @@ local matchDetails = C_EndOfMatchUI.GetEndOfMatchDetails()
 | `Placement` | MatchDetailType | no |  |
 | `Kills` | MatchDetailType | no |  |
 | `PlunderAcquired` | MatchDetailType | no |  |
-

@@ -428,4 +428,3 @@ SetRaidDifficultyID(0, false)
 | `instanceGroupSize` | number | no |  |
 | `lfgDungeonID` | number | yes |  |
 | `hasWorldTier` | bool | no | (default: False) |
-

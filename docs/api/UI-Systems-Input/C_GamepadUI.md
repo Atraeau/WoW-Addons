@@ -167,4 +167,3 @@ local isValid = C_GamepadUI.IsValidGamepadPossessBarStorageSlotIndex(1)
 | `Page3LeftBar` | GamepadStanceBarOverride | no |  |
 | `Page3RightBar` | GamepadStanceBarOverride | no |  |
 | `Page3BottomBar` | GamepadStanceBarOverride | no |  |
-

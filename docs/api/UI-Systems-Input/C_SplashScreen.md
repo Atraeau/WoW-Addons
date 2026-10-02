@@ -112,4 +112,3 @@ C_SplashScreen.SendSplashScreenCloseTelem()
 | `shouldShowQuest` | bool | no |  |
 | `screenType` | SplashScreenType | no |  |
 | `gameMenuRequest` | bool | no |  |
-

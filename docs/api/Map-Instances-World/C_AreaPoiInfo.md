@@ -244,4 +244,3 @@ local isTimed, hideTimerInTooltip = C_AreaPoiInfo.IsAreaPOITimed(0)
 | `isCurrentEvent` | bool | no |  |
 | `isSuppressible` | bool | no |  |
 | `isLocked` | bool | no | (default: False) |
-

@@ -622,4 +622,3 @@ local enabled = C_LFGInfo.IsLFREnabled()
 | `lfgID` | number | no |  |
 | `reason` | number | no |  |
 | `hideEntry` | bool | no |  |
-

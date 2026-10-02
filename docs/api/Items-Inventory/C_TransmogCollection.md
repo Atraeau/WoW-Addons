@@ -1932,4 +1932,3 @@ C_TransmogCollection.UpdateUsableAppearances()
 | `isCollected` | bool | no |  |
 | `isUsable` | bool | no |  |
 | `isHideVisual` | bool | no |  |
-

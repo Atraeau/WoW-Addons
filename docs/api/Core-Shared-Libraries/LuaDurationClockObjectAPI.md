@@ -30,4 +30,3 @@ local start = GetTime()
 -- ... later ...
 print(("elapsed: %.3fs"):format(GetTime() - start))
 ```
-

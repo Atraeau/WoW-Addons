@@ -1063,4 +1063,3 @@ C_CurrencyInfo.SetCurrencyUnused(1, false)
 | `categoryName` | cstring | no |  |
 | `currencyTypes` | number[] | no |  |
 | `childCategories` | number[] | no |  |
-

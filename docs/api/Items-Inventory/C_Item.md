@@ -2976,4 +2976,3 @@ C_Item.UseItemByName(6948)
 | `charges` | number | no |  |
 | `enchantID` | number | no |  |
 | `enchantIconID` | number | no |  |
-

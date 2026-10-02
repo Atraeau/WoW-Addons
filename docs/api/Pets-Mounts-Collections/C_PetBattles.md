@@ -119,4 +119,3 @@ isWildBattle = C_PetBattles.IsWildBattle()
 ```lua
 local isWildBattle = C_PetBattles.IsWildBattle()
 ```
-

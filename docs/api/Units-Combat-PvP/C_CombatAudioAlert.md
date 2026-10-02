@@ -388,4 +388,3 @@ utteranceID = C_CombatAudioAlert.SpeakText(text, category, allowOverlap)
 ```lua
 local utteranceID = C_CombatAudioAlert.SpeakText("", category, false)
 ```
-

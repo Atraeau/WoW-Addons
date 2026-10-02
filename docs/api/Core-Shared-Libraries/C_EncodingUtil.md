@@ -291,4 +291,3 @@ local output = C_EncodingUtil.SerializeJSON()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `ignoreSerializationErrors` | bool | no | If true, attempt to ignore errors from unsupported values and instead replace them where applicable with 'null' JSON values. (default: False) |
-

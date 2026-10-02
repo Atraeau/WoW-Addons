@@ -261,4 +261,3 @@ SetWidth(width)
 ```lua
 SetWidth(width)
 ```
-

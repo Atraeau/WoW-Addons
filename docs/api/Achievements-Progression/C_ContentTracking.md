@@ -486,4 +486,3 @@ local error = C_ContentTracking.ToggleTracking(type, 0, stopType)
 |------|------|---------|-------------|
 | `targetType` | ContentTrackingTargetType | no |  |
 | `targetID` | number | no |  |
-

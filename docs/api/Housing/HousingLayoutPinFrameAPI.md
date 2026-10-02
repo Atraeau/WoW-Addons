@@ -313,4 +313,3 @@ SetUpdateCallback(cb)
 ```lua
 SetUpdateCallback(cb)
 ```
-

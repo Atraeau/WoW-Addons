@@ -644,4 +644,3 @@ C_GameRules.SetSDHDToggleValue(false)
 | `logoUsesDarkBackdrop` | bool | no |  |
 | `characterCreateExtraHeight` | number | no |  |
 | `characterCreateOuterBorder` | fileID | no |  |
-

@@ -88,4 +88,3 @@
 | `shouldShow` | number | yes |  |
 
 ### VEHICLE_UPDATE
-

@@ -316,4 +316,3 @@ local isAtNPC = C_Transmog.IsAtTransmogNPC()
 | `hasUndo` | bool | no |  |
 | `isHideVisual` | bool | no |  |
 | `itemSubclass` | number | no |  |
-

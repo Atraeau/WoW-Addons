@@ -285,4 +285,3 @@ C_CVar.SetTempCVar("")
 | `isLockedFromUser` | bool | no |  |
 | `isSecure` | bool | no |  |
 | `isReadOnly` | bool | no |  |
-

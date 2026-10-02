@@ -141,4 +141,3 @@ C_ToyBoxInfo.SetDefaultFilters()
 | `itemID` | number | yes |  |
 | `isNew` | bool | yes |  |
 | `hasFanfare` | bool | yes |  |
-

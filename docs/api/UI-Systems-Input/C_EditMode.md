@@ -295,4 +295,3 @@ C_EditMode.SetActiveLayout(1)
 | `anchorInfo2` | EditModeAnchorInfo | yes |  |
 | `settings` | EditModeSettingInfo[] | no |  |
 | `isInDefaultPosition` | bool | no |  |
-

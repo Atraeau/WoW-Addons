@@ -172,4 +172,3 @@ local wasClamped = C_Navigation.WasClampedToScreen()
 | `Occluded` | NavigationState | no |  |
 | `InRange` | NavigationState | no |  |
 | `Disabled` | NavigationState | no |  |
-

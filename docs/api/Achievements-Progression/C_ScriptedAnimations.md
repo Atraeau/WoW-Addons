@@ -92,4 +92,3 @@ local scriptedAnimationEffects = C_ScriptedAnimations.GetAllScriptedAnimationEff
 | `CurveRight` | ScriptedAnimationTrajectory | no |  |
 | `CurveRandom` | ScriptedAnimationTrajectory | no |  |
 | `HalfwayBetween` | ScriptedAnimationTrajectory | no |  |
-

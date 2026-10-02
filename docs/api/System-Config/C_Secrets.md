@@ -699,4 +699,3 @@ isUnitThreatSecret = C_Secrets.ShouldUnitThreatValuesBeSecret(unit, mobUnit)
 ```lua
 local isUnitThreatSecret = C_Secrets.ShouldUnitThreatValuesBeSecret("player", "player")
 ```
-

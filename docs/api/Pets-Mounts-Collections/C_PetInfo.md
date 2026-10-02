@@ -318,4 +318,3 @@ C_PetInfo.PetRename("")
 | `name` | cstring | no |  |
 | `atlasName` | string | yes |  |
 | `textureIndex` | number | yes |  |
-

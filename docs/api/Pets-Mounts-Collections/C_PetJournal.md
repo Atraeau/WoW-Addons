@@ -661,4 +661,3 @@ C_PetJournal.SpellTargetBattlePet(UnitGUID("player"))
 | `obtainable` | bool | no |  |
 | `canAttachToDecor` | bool | no |  |
 | `creatureModelScale` | number | yes |  |
-

@@ -204,4 +204,3 @@ C_EncounterEvents.SetEventSound(encounterEventID, trigger, [sound])
 ```lua
 C_EncounterEvents.SetEventSound(0, trigger)
 ```
-

@@ -177,4 +177,3 @@ C_LobbyMatchmakerInfo.RespondToQueuePop(false)
 | `Queued` | PlunderstormQueueState | no |  |
 | `Proposed` | PlunderstormQueueState | no |  |
 | `Suspended` | PlunderstormQueueState | no |  |
-

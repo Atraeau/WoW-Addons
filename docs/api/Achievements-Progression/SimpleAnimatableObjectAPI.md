@@ -62,4 +62,3 @@ StopAnimating()
 ```lua
 StopAnimating()
 ```
-

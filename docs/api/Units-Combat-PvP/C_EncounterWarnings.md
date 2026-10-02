@@ -250,4 +250,3 @@ C_EncounterWarnings.SetWarningsShown(false)
 | `shouldPlaySound` | bool | no |  |
 | `shouldShowChatMessage` | bool | no |  |
 | `shouldShowWarning` | bool | no |  |
-

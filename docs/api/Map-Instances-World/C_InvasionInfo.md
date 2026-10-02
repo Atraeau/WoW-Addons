@@ -111,4 +111,3 @@ local timeLeftMinutes = C_InvasionInfo.GetInvasionTimeLeft(0)
 | `position` | vector2 | no |  |
 | `atlasName` | textureAtlas | no |  |
 | `rewardQuestID` | number | yes |  |
-

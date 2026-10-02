@@ -1406,4 +1406,3 @@ ToggleInputLanguage()
 ```lua
 ToggleInputLanguage()
 ```
-

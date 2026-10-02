@@ -1584,4 +1584,3 @@ C_Garrison.SetAutoCombatSpellFastForward(false)
 | `missionScalar` | number | no |  |
 | `isElite` | bool | no |  |
 | `isRare` | bool | no |  |
-

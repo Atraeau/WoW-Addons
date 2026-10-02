@@ -205,4 +205,3 @@ UpdateWindow()
 ```lua
 UpdateWindow()
 ```
-

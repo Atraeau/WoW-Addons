@@ -543,4 +543,3 @@ C_RecruitAFriend.SummonFriend(UnitGUID("player"), "")
 | `nextReward` | RafReward | yes |  |
 | `numAffordableRewards` | number | no |  |
 | `numRecruits` | number | no |  |
-

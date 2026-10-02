@@ -490,4 +490,3 @@ C_NeighborhoodInitiative.SetViewingNeighborhood(UnitGUID("player"))
 | `milestones` | InitiativeMilestoneInfo[] | no |  |
 | `title` | string | no |  |
 | `description` | string | no |  |
-

@@ -15,4 +15,3 @@
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `memberName` | cstring | no |  |
-

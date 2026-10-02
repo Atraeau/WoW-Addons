@@ -193,4 +193,3 @@ local areWarbandScenesAvailable = C_WarbandScene.WarbandScenesAvailable()
 |------|------|---------|-------------|
 | `ownedOnly` | bool | no | (default: False) |
 | `favoritesOnly` | bool | no | (default: False) |
-

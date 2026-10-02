@@ -67,4 +67,3 @@ SetType(type)
 ```lua
 SetType(type)
 ```
-

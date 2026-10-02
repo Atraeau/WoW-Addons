@@ -6531,4 +6531,3 @@ Only signaled when the active player is a commentator or spectator.
 | `fractionalCounter` | bool | no |  |
 | `animateNumbers` | bool | no |  |
 | `attachTooltipToBar` | bool | no |  |
-

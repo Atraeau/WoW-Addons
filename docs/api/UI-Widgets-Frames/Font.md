@@ -104,4 +104,3 @@ local fontNames = GetFonts()
 | `color` | colorRGBA | no |  |
 | `x` | number | no |  |
 | `y` | number | no |  |
-

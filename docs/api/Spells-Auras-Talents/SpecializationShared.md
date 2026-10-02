@@ -158,4 +158,3 @@ local hasLootSpecializations = HasLootSpecializations()
 |------|------|---------|-------------|
 | `TalentTab` | SpecializationSystem | no |  |
 | `ChrSpecialization` | SpecializationSystem | no |  |
-

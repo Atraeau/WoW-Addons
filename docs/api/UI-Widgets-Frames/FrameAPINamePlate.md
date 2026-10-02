@@ -119,4 +119,3 @@ SetStackingBoundsFrame(frame)
 ```lua
 SetStackingBoundsFrame(frame)
 ```
-

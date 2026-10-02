@@ -49,4 +49,3 @@
 | `Title` | WoWEntitlementType | no |  |
 | `Illusion` | WoWEntitlementType | no |  |
 | `Invalid` | WoWEntitlementType | no |  |
-

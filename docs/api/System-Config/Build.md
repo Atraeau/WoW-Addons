@@ -236,4 +236,3 @@ supportsClipCursor = SupportsClipCursor()
 ```lua
 local supportsClipCursor = SupportsClipCursor()
 ```
-

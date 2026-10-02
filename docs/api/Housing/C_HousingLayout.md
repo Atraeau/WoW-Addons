@@ -919,4 +919,3 @@ Fired when a room being dragged has been snapped to a particular door connection
 | `floor` | number | no |  |
 
 ### SHOW_STAIR_DIRECTION_CONFIRMATION
-

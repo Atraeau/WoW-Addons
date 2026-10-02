@@ -1413,4 +1413,3 @@ local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)
 | `ruRU` | bool | no | (default: False) |
 | `ptBR` | bool | no | (default: False) |
 | `itIT` | bool | no | (default: False) |
-

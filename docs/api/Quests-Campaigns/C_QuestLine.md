@@ -206,4 +206,3 @@ C_QuestLine.RequestQuestLinesForMap(0)
 | `isQuestStart` | bool | no |  |
 | `floorLocation` | QuestLineFloorLocation | no |  |
 | `startMapID` | number | no |  |
-

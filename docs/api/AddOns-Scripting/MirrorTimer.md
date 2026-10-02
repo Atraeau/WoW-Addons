@@ -75,4 +75,3 @@ local progress = GetMirrorTimerProgress("")
 | `paused` | number | no |  |
 | `label` | cstring | no |  |
 | `spellID` | number | no |  |
-

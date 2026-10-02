@@ -248,4 +248,3 @@ SetNumSplinePoints(numSplinePoints)
 ```lua
 SetNumSplinePoints(0)
 ```
-

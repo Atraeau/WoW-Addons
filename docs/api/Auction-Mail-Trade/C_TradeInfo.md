@@ -147,4 +147,3 @@ local shouldShow = C_TradeInfo.ShouldShowTradeOfferWarning()
 ### TRADE_UPDATE
 
 ### TRADE_UPDATE_WARNINGS
-

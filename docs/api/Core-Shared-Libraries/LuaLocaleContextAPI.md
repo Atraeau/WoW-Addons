@@ -591,4 +591,3 @@ result = TransformLocale(transform)
 ```lua
 local result = TransformLocale(transform)
 ```
-

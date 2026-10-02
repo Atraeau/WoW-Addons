@@ -856,4 +856,3 @@ local success = C_SpecializationInfo.SetSpecialization(1)
 | `meetsPreviewPrereq` | bool | no | (default: False) |
 | `isExceptional` | bool | no | (default: False) |
 | `hasGoldBorder` | bool | no | (default: False) |
-

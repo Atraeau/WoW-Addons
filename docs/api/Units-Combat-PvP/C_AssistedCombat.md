@@ -90,4 +90,3 @@ local isAvailable, failureReason = C_AssistedCombat.IsAvailable()
 ## Events
 
 ### ASSISTED_COMBAT_ACTION_SPELL_CAST
-

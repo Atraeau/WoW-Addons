@@ -31,4 +31,3 @@ chatBubbles = C_ChatBubbles.GetAllChatBubbles(includeForbidden)
 ```lua
 local chatBubbles = C_ChatBubbles.GetAllChatBubbles(false)
 ```
-

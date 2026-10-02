@@ -738,4 +738,3 @@ SetStripIntervalWhitespace(strip)
 ```lua
 SetStripIntervalWhitespace(strip)
 ```
-

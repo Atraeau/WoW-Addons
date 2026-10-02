@@ -52,4 +52,3 @@ Sends an update when the mouse enters or leaves something in-world (object, unit
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `anchorType` | WorldCursorAnchorType | no |  |
-

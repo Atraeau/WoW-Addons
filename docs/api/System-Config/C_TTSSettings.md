@@ -380,4 +380,3 @@ overrideMessage = C_TTSSettings.ShouldOverrideMessage(language, messageText)
 ```lua
 local overrideMessage = C_TTSSettings.ShouldOverrideMessage(0, "")
 ```
-

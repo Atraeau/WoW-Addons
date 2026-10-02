@@ -177,4 +177,3 @@ TargetTotem(1)
 | `icon` | fileID | no |  |
 | `modRate` | number | no |  |
 | `spellID` | number | no |  |
-

@@ -404,4 +404,3 @@ Costs are made up of either an Item OR a Currency, so either itemID or currencyI
 | `displayString` | string | no |  |
 | `statValue` | number | no |  |
 | `active` | bool | no |  |
-

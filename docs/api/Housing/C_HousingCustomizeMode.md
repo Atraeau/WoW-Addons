@@ -759,4 +759,3 @@ C_HousingCustomizeMode.SetRoomComponentDoorType(UnitGUID("player"), 0, newDoorty
 |------|------|---------|-------------|
 | `name` | cstring | no |  |
 | `roomComponentTextureRecID` | number | no |  |
-

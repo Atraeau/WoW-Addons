@@ -44,4 +44,3 @@ The weather has taken a turn.
 |------|------|---------|-------------|
 | `type` | WeatherType | no | (default: Clear) |
 | `intensity` | number | no |  |
-

@@ -33,4 +33,3 @@ canUse = C_QuestItemUse.CanUseQuestItemOnObject(item, unit, [checkRange])
 ```lua
 local canUse = C_QuestItemUse.CanUseQuestItemOnObject(6948, "player")
 ```
-

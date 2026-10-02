@@ -173,4 +173,3 @@ UpdateAddOnMemoryUsage()
 ```lua
 UpdateAddOnMemoryUsage()
 ```
-

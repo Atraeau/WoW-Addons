@@ -97,4 +97,3 @@ C_ConfigurationWarnings.SetConfigurationWarningSeen(configurationWarning)
 ```lua
 C_ConfigurationWarnings.SetConfigurationWarningSeen(configurationWarning)
 ```
-

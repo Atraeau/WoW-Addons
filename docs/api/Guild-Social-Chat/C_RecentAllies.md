@@ -410,4 +410,3 @@ C_RecentAllies.TryRequestRecentAlliesData()
 | `pinExpirationDate` | time_t | yes |  |
 | `friendRequestSentThisSession` | bool | no |  |
 | `currentLocation` | string | yes |  |
-

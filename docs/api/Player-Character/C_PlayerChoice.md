@@ -228,4 +228,3 @@ C_PlayerChoice.SendPlayerChoiceResponse(0)
 |------|------|---------|-------------|
 | `factionId` | number | no |  |
 | `quantity` | number | no |  |
-

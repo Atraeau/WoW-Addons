@@ -326,4 +326,3 @@ values = table.values(table)
 ```lua
 local values = table.values(table)
 ```
-

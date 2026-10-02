@@ -648,4 +648,3 @@ C_HousingNeighborhood.TryPurchasePlot()
 | `Basic` | CornerstonePurchaseMode | no |  |
 | `Import` | CornerstonePurchaseMode | no |  |
 | `Move` | CornerstonePurchaseMode | no |  |
-

@@ -95,4 +95,3 @@ C_ChromieTime.SelectChromieTimeOption(0)
 | `alreadyOn` | bool | no |  |
 | `recommended` | bool | no |  |
 | `sortPriority` | number | no |  |
-

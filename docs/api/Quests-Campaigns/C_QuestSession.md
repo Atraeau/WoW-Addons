@@ -295,4 +295,3 @@ C_QuestSession.SetQuestIsSuperTracked(0, false)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 | `guid` | WOWGUID | no |  |
-

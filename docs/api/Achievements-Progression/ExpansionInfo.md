@@ -73,4 +73,3 @@ expansionLevel = GetClassicExpansionLevel()
 ```lua
 local expansionLevel = GetClassicExpansionLevel()
 ```
-

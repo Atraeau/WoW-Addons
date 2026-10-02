@@ -55,4 +55,3 @@ C_AchievementTelemetry.ShowAchievements()
 ```lua
 C_AchievementTelemetry.ShowAchievements()
 ```
-

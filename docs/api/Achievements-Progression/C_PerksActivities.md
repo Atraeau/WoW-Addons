@@ -286,4 +286,3 @@ C_PerksActivities.RemoveTrackedPerksActivity(0)
 | `requiredContributionAmount` | number | no |  |
 | `pendingReward` | bool | no |  |
 | `itemReward` | number | yes |  |
-

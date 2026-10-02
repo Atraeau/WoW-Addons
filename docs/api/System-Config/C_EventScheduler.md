@@ -270,4 +270,3 @@ C_EventScheduler.SetReminder("")
 | `hasReminder` | bool | no | (default: False) |
 | `rewardsClaimed` | bool | no | (default: False) |
 | `displayInfo` | EventDisplayInfo | no |  |
-

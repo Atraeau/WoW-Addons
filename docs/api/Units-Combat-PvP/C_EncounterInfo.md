@@ -64,4 +64,3 @@
 | `creatureID` | number | no |  |
 | `creatureName` | string | no |  |
 | `remainingHealthPercent` | number | no |  |
-

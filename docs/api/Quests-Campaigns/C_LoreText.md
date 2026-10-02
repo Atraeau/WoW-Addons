@@ -45,4 +45,3 @@ C_LoreText.RequestLoreTextForCampaignID(0)
 |------|------|---------|-------------|
 | `text` | string | no |  |
 | `isHeader` | bool | no |  |
-

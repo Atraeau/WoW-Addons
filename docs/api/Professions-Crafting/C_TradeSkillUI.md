@@ -2125,4 +2125,3 @@ C_TradeSkillUI.SetSourceTypeFilter("HELPFUL")
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `isScrapping` | bool | no |  |
-

@@ -170,4 +170,3 @@ C_MacOptions.SetOSShortcutsDisabled(disable)
 ```lua
 C_MacOptions.SetOSShortcutsDisabled(false)
 ```
-

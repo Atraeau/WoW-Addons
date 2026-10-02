@@ -191,4 +191,3 @@ SetText(text, colorR, colorG, colorB, alpha, wrap)
 ```lua
 SetText("", 0, 0, 0, 0, false)
 ```
-

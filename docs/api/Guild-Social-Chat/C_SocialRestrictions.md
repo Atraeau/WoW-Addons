@@ -241,4 +241,3 @@ C_SocialRestrictions.SetChatDisabled(false)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `disabled` | bool | no |  |
-

@@ -954,4 +954,3 @@ local wantsAlteredForm = C_UnitAuras.WantsAlteredForm("player")
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `unitTarget` | UnitTokenVariant | no |  |
-

@@ -830,4 +830,3 @@ C_CraftingOrders.UpdateIgnoreList()
 | `secondarySort` | CraftingOrderSortInfo | no |  |
 | `offset` | number | no |  |
 | `callback` | CraftingOrderRequestMyOrdersCallback | no |  |
-

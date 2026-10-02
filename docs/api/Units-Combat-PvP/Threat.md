@@ -51,4 +51,3 @@ result = IsThreatWarningEnabled()
 ```lua
 local result = IsThreatWarningEnabled()
 ```
-

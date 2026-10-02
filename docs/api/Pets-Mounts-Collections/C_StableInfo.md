@@ -369,4 +369,3 @@ C_StableInfo.SetPetSlot(1, 1)
 | `specID` | number | no |  |
 | `specIndex` | luaIndex | no |  |
 | `specializationName` | string | no |  |
-

@@ -25,4 +25,3 @@ images = C_InterfaceFileManifest.GetInterfaceArtFiles()
 ```lua
 local images = C_InterfaceFileManifest.GetInterfaceArtFiles()
 ```
-

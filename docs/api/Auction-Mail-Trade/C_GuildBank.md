@@ -59,4 +59,3 @@ local enabled = C_GuildBank.IsGuildBankEnabled()
 | `guildBankTab` | number | no |  |
 
 ### GUILDBANK_UPDATE_WITHDRAWMONEY
-

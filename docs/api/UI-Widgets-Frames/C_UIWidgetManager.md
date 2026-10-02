@@ -2291,4 +2291,3 @@ C_UIWidgetManager.UnregisterUnitForWidgetUpdates("player", UnitGUID("player"))
 | `current` | number | no |  |
 | `capturePoint` | number | no |  |
 | `tooltip` | string | no |  |
-

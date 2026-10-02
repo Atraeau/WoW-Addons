@@ -139,4 +139,3 @@ local info = C_AdventureMap.GetQuestPortraitInfo(0)
 | `name` | string | no |  |
 | `text` | string | no |  |
 | `modelSceneID` | number | yes |  |
-

@@ -31,4 +31,3 @@ formatted = FormatNumber(number)
 ```lua
 local formatted = FormatNumber(0)
 ```
-

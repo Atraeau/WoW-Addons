@@ -312,4 +312,3 @@ SetConsoleKey("")
 | `Command` | ConsoleCommandType | no |  |
 | `Macro` | ConsoleCommandType | no |  |
 | `Script` | ConsoleCommandType | no |  |
-

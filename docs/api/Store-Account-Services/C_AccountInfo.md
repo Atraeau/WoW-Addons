@@ -79,4 +79,3 @@ isLocalUser = C_AccountInfo.IsGUIDRelatedToLocalAccount(guid)
 ```lua
 local isLocalUser = C_AccountInfo.IsGUIDRelatedToLocalAccount(UnitGUID("player"))
 ```
-

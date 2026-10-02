@@ -313,4 +313,3 @@ C_SocialQueue.SignalToastDisplayed(UnitGUID("player"), 0)
 |------|------|---------|-------------|
 | `guid` | WOWGUID | no |  |
 | `clubId` | ClubId | yes |  |
-

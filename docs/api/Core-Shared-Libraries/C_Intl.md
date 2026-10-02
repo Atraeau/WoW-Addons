@@ -724,4 +724,3 @@ result = C_Intl.Transliterate(text, transliteratorID)
 ```lua
 local result = C_Intl.Transliterate("", "")
 ```
-

@@ -67,4 +67,3 @@ clock = C_DurationUtil.CreateManualClock()
 ```lua
 local clock = C_DurationUtil.CreateManualClock()
 ```
-

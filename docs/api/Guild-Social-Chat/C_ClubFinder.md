@@ -1373,4 +1373,3 @@ Signals when we recieve the recruits list
 | `lastUpdatedTime` | BigInteger | no |  |
 | `isCrossFaction` | bool | no |  |
 | `realmName` | string | yes |  |
-

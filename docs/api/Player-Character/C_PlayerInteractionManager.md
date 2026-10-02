@@ -177,4 +177,3 @@ C_PlayerInteractionManager.ShardTransferConfirm()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `type` | PlayerInteractionType | no |  |
-

@@ -169,4 +169,3 @@ SetZoom(zoom)
 ```lua
 SetZoom(0)
 ```
-

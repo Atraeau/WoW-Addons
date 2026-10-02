@@ -895,4 +895,3 @@ C_TransmogSets.SetTransmogSetsClassFilter(0)
 |------|------|---------|-------------|
 | `appearanceID` | number | no |  |
 | `collected` | bool | no |  |
-

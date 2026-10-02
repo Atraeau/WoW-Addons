@@ -66,4 +66,3 @@
 | `newAdventureNotice` | bool | no |  |
 
 ### AJ_REWARD_DATA_RECEIVED
-

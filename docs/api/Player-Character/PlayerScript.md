@@ -3382,4 +3382,3 @@ ToggleSit()
 | `rangedAttackPower` | number | no |  |
 | `baseAttackPower` | number | no |  |
 | `baseRangedAttackPower` | number | no |  |
-

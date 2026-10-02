@@ -189,4 +189,3 @@ C_ClickBindings.SetTutorialShown()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `showHighlights` | bool | no |  |
-

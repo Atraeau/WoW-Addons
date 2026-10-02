@@ -108,4 +108,3 @@ C_BlizzCon2026.SetExperience(Enum.Bc26Experience.Skyborne)
 |------|------|---------|-------------|
 | `Skyborne` | Bc26Experience | no |  |
 | `Dungeon` | Bc26Experience | no |  |
-

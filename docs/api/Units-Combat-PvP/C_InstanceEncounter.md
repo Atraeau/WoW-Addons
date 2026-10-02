@@ -127,4 +127,3 @@ Signaled when the in-progress state of an encounter changes.
 |------|------|---------|-------------|
 | `objectiveID` | number | no |  |
 | `objectiveProgress` | number | no |  |
-

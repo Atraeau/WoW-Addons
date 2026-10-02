@@ -116,4 +116,3 @@ local cbObject = C_Timer.NewTimer(0, callback)
 ### TickerCallback (CallbackType)
 
 ### TimerCallback (CallbackType)
-

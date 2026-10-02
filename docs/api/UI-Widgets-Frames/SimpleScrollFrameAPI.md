@@ -163,4 +163,3 @@ UpdateScrollChildRect()
 ```lua
 UpdateScrollChildRect()
 ```
-

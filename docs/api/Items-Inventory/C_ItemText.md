@@ -21,4 +21,3 @@
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `delay` | number | no |  |
-

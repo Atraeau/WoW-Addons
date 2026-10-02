@@ -160,4 +160,3 @@ local result = UnitSetRoleEnum("player")
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `fromName` | cstring | no |  |
-

@@ -1033,4 +1033,3 @@ C_Soulbinds.UnmodifyNode(0)
 |------|------|---------|-------------|
 | `editable` | bool | no |  |
 | `nodes` | SoulbindNode[] | no |  |
-

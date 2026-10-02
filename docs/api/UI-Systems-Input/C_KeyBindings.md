@@ -297,4 +297,3 @@ C_KeyBindings.UpdateTurnStrafeBindingsForCharacter()
 | `Modern` | TurnStrafeStyle | no |  |
 | `Legacy` | TurnStrafeStyle | no |  |
 | `Custom` | TurnStrafeStyle | no |  |
-

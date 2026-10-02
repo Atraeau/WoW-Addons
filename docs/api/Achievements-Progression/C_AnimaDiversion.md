@@ -176,4 +176,3 @@ C_AnimaDiversion.SelectAnimaNode(0, false)
 | `SelectedTemporary` | AnimaDiversionNodeState | no |  |
 | `SelectedPermanent` | AnimaDiversionNodeState | no |  |
 | `Cooldown` | AnimaDiversionNodeState | no |  |
-

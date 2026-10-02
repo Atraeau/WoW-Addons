@@ -911,4 +911,3 @@ UnregisterUnitEventCallback("", callback, "player")
 | `DisallowTaintedAccess` | TableSecurityOption | no |  |
 | `DisallowSecretKeys` | TableSecurityOption | no |  |
 | `SecretWrapContents` | TableSecurityOption | no |  |
-

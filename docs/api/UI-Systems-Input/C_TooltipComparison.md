@@ -109,4 +109,3 @@ local info = C_TooltipComparison.GetItemComparisonInfo(6948)
 | `method` | TooltipComparisonMethod | no | (default: Single) |
 | `item` | TooltipComparisonItem | no |  |
 | `additionalItems` | TooltipComparisonItem[] | no |  |
-

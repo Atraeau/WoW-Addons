@@ -460,4 +460,3 @@ C_HousingBasicMode.StartPlacingPreviewDecor(0)
 | `None` | HousingBasicModeTargetType | no |  |
 | `Decor` | HousingBasicModeTargetType | no |  |
 | `House` | HousingBasicModeTargetType | no |  |
-

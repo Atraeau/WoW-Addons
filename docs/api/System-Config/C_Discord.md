@@ -393,4 +393,3 @@ C_Discord.UpdateGuildLobby()
 ### DISCORD_SERVER_LIST_UPDATE
 
 ### DISCORD_STATUS_UPDATE
-

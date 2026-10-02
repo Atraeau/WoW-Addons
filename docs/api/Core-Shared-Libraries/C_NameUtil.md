@@ -33,4 +33,3 @@ result = C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator(fullName)
 ```lua
 local result = C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator("")
 ```
-

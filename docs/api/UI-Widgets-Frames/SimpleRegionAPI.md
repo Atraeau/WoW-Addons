@@ -307,4 +307,3 @@ SetVertexColorFromBoolean(value, colorIfTrue, colorIfFalse)
 ```lua
 SetVertexColorFromBoolean(false, colorIfTrue, colorIfFalse)
 ```
-

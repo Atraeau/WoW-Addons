@@ -124,4 +124,3 @@ local questRewardCurrencyInfo = C_QuestOffer.GetQuestRewardCurrencyInfo("", 1)
 | `currencyID` | number | no |  |
 | `quality` | number | no |  |
 | `requiredAmount` | number | no |  |
-

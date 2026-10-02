@@ -15,4 +15,3 @@
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `actionType` | UIActionType | no |  |
-

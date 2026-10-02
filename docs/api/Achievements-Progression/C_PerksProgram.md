@@ -609,4 +609,3 @@ C_PerksProgram.SetFrozenPerksVendorItem()
 | `itemModifiedAppearanceID` | number | no |  |
 | `invType` | string | no |  |
 | `quality` | ItemQuality | no |  |
-

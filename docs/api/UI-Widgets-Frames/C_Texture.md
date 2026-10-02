@@ -297,4 +297,3 @@ C_Texture.SetURLTexture(texture, "")
 | `NotFound` | UrlTextureResult | no |  |
 | `Requested` | UrlTextureResult | no |  |
 | `NotAllowed` | UrlTextureResult | no |  |
-

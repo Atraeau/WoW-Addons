@@ -19,4 +19,3 @@
 | `factionIndex` | number | no |  |
 | `gainedBy` | WOWGUID | no |  |
 | `gainedFrom` | WOWGUID | no |  |
-

@@ -216,4 +216,3 @@ C_CombatLog.SetMessageLimit(0)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `messageLimit` | number | no |  |
-

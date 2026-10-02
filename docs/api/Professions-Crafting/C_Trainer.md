@@ -73,4 +73,3 @@ C_Trainer.SetCategorizeTrainerUI(false)
 ### TRAINER_SHOW
 
 ### TRAINER_UPDATE
-

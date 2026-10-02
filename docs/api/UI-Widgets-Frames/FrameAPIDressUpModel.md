@@ -390,4 +390,3 @@ UndressSlot(inventorySlot)
 ```lua
 UndressSlot(1)
 ```
-

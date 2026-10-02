@@ -128,4 +128,3 @@ y = C_CurveUtil.EvaluateGameCurve(curveID, x)
 ```lua
 local y = C_CurveUtil.EvaluateGameCurve(0, 0)
 ```
-

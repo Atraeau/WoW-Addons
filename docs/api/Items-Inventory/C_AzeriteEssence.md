@@ -493,4 +493,3 @@ C_AzeriteEssence.UnlockMilestone(0)
 | `unlocked` | bool | no |  |
 | `rank` | number | yes |  |
 | `slot` | AzeriteEssenceSlot | yes |  |
-

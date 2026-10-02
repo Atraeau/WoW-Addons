@@ -137,4 +137,3 @@ local data = C_ConsoleScriptCollection.GetScriptData(0)
 |------|------|---------|-------------|
 | `name` | string | no |  |
 | `description` | string | no |  |
-

@@ -196,4 +196,3 @@ local shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()
 |------|------|---------|-------------|
 | `target` | string | no |  |
 | `sendMoney` | number | no |  |
-

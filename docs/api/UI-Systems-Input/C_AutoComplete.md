@@ -114,4 +114,3 @@ local isRecognizedName = C_AutoComplete.IsRecognizedName("", 0, 0)
 | `name` | string | no |  |
 | `priority` | AutoCompletePriority | no |  |
 | `bnetID` | number | no |  |
-

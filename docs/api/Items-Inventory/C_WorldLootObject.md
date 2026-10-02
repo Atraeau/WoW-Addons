@@ -215,4 +215,3 @@ C_WorldLootObject.OnWorldLootObjectClick("player", false)
 | `inventoryType` | InventoryType | no |  |
 | `atMaxQuality` | bool | no |  |
 | `isUpgrade` | bool | no |  |
-

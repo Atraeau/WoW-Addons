@@ -47,4 +47,3 @@ local isOnGlueScreen = C_Glue.IsOnGlueScreen()
 ## Events
 
 ### ACCOUNT_CVARS_LOADED
-

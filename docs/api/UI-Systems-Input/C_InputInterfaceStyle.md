@@ -25,4 +25,3 @@ style = C_InputInterfaceStyle.GetCurrentStyle()
 ```lua
 local style = C_InputInterfaceStyle.GetCurrentStyle()
 ```
-

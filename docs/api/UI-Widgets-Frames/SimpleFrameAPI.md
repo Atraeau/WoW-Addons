@@ -2384,4 +2384,3 @@ local registered = UnregisterEvent("")
 | `subLevel` | number | yes |  |
 
 ### FrameEventCallbackType (CallbackType)
-

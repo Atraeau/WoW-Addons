@@ -115,4 +115,3 @@ SetDisabledCheckedTexture(asset)
 ```lua
 SetDisabledCheckedTexture(asset)
 ```
-

@@ -161,4 +161,3 @@ SetScaleTo(scaleX, scaleY)
 ```lua
 SetScaleTo(0, 0)
 ```
-

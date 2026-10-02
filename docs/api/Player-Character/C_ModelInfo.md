@@ -242,4 +242,3 @@ local modelSceneType, modelCameraIDs, modelActorsIDs, flags = C_ModelInfo.GetMod
 | `zoomedPitchOffset` | number | no |  |
 | `zoomedRollOffset` | number | no |  |
 | `flags` | ModelSceneSetting | no |  |
-

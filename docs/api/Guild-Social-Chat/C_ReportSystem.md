@@ -265,4 +265,3 @@ C_ReportSystem.TakeReportScreenshot()
 | `reportType` | ReportType | no |  |
 
 ### REPORT_SCREENSHOT_READY
-

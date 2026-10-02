@@ -591,4 +591,3 @@ local offhandHasWeapon = C_PaperDollInfo.OffhandHasWeapon()
 | `remainingTimeMs` | number | no |  |
 | `chargesRemaining` | number | no |  |
 | `hasExpirationTime` | bool | no |  |
-

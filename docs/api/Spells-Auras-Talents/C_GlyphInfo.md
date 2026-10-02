@@ -25,4 +25,3 @@
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `spellID` | number | no |  |
-

@@ -93,4 +93,3 @@ local info = C_AlliedRaces.GetRaceInfoByID(0)
 | `description` | cstring | no |  |
 | `name` | cstring | no |  |
 | `icon` | fileID | no |  |
-

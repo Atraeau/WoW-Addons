@@ -94,4 +94,3 @@ raidLockExtendFeatureSupported = C_RaidLocks.IsRaidLockExtendFeatureSupported()
 ```lua
 local raidLockExtendFeatureSupported = C_RaidLocks.IsRaidLockExtendFeatureSupported()
 ```
-

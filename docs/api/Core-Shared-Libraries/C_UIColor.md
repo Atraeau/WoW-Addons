@@ -25,4 +25,3 @@ colors = C_UIColor.GetColors()
 ```lua
 local colors = C_UIColor.GetColors()
 ```
-

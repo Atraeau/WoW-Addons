@@ -930,4 +930,3 @@ Signaled when the player or a private party member join a new walk-in instance o
 | `lockedReason` | string | yes |  |
 | `queueAsLFG` | bool | no |  |
 | `difficultyID` | number | no |  |
-

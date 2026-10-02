@@ -578,4 +578,3 @@ C_Reputation.ToggleFactionAtWar(1)
 | `None` | ReputationSortType | no |  |
 | `Account` | ReputationSortType | no |  |
 | `Character` | ReputationSortType | no |  |
-

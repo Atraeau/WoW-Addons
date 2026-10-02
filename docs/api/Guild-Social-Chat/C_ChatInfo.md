@@ -2991,4 +2991,3 @@ C_ChatInfo.UncensorChatLine(0)
 | `chatType` | SendChatMessageType | yes | Chat type string ('SAY', 'EMOTE', etc.). Defaults to 'SAY' if not specified. |
 | `languageID` | number | yes | Language to send the message in. |
 | `target` | cstring | yes | Name of the player to send a message to. Only applies to chat types that support targeted messages. |
-

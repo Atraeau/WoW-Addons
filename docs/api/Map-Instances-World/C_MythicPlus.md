@@ -502,4 +502,3 @@ C_MythicPlus.RequestRewards()
 | `bestTime` | number | no |  |
 | `lastTime` | number | no |  |
 | `medal` | number | no |  |
-

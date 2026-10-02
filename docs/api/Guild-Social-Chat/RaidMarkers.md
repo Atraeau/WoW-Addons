@@ -194,4 +194,3 @@ SetRaidTarget(target, userIndex)
 ```lua
 SetRaidTarget(target, 1)
 ```
-

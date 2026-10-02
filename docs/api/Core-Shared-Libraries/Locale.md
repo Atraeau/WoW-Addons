@@ -118,4 +118,3 @@ local localeName = GetOSLocale()
 |------|------|---------|-------------|
 | `localeId` | number | no |  |
 | `localeName` | cstring | no |  |
-

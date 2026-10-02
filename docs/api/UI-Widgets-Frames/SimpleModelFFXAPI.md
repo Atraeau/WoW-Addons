@@ -76,4 +76,3 @@ ResetLights()
 ```lua
 ResetLights()
 ```
-

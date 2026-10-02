@@ -320,4 +320,3 @@ SetCursorVirtualItem(itemInfo, cursorType)
 ```lua
 SetCursorVirtualItem(6948, cursorType)
 ```
-

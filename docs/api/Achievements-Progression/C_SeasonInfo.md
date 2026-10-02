@@ -61,4 +61,3 @@ timeInSeconds = C_SeasonInfo.GetTimeUntilCurrentPVPSeasonEnd()
 ```lua
 local timeInSeconds = C_SeasonInfo.GetTimeUntilCurrentPVPSeasonEnd()
 ```
-

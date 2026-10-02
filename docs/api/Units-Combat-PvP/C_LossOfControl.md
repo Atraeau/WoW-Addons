@@ -181,4 +181,3 @@ local duration = C_LossOfControl.GetActiveLossOfControlDuration("player", 1)
 | `priority` | number | no |  |
 | `displayType` | number | no |  |
 | `auraInstanceID` | number | yes |  |
-

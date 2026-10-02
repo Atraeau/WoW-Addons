@@ -84,4 +84,3 @@ local overlayInfo = C_MapExplorationInfo.GetExploredMapTextures(0)
 | `isDrawOnTopLayer` | bool | no |  |
 | `fileDataIDs` | number[] | no |  |
 | `hitRect` | UiMapExplorationHitRect | no |  |
-

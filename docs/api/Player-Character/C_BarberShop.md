@@ -531,4 +531,3 @@ C_BarberShop.ZoomCamera(0)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `success` | bool | no |  |
-

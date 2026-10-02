@@ -50,4 +50,3 @@ hasTooltip = UpdateMouseOverTooltip(x, y)
 ```lua
 local hasTooltip = UpdateMouseOverTooltip(0, 0)
 ```
-

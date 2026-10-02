@@ -1996,4 +1996,3 @@ C_VoiceChat.ToggleMuted()
 |------|------|---------|-------------|
 | `voiceID` | number | no |  |
 | `name` | string | no |  |
-

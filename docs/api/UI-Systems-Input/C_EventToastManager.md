@@ -104,4 +104,3 @@ C_EventToastManager.RemoveCurrentToast()
 | `hideSoundKitID` | number | yes |  |
 | `colorTint` | colorRGB | yes |  |
 | `flags` | number | no |  |
-

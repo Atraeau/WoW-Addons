@@ -200,4 +200,3 @@ C_CooldownViewer.SetLayoutData("")
 | `iconID` | fileID | no |  |
 | `flags` | GroupBuffItemFlags | no |  |
 | `isKnown` | bool | no |  |
-

@@ -758,4 +758,3 @@ C_BattleNet.SetFriendTags(0, friendTags)
 | `regionID` | number | no |  |
 | `isInCurrentRegion` | bool | no |  |
 | `timerunningSeasonID` | number | yes |  |
-

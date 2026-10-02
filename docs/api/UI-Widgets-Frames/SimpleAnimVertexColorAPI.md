@@ -79,4 +79,3 @@ SetStartColor(color)
 ```lua
 SetStartColor(color)
 ```
-

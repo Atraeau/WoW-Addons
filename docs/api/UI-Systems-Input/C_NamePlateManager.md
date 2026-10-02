@@ -166,4 +166,3 @@ C_NamePlateManager.SetNamePlateSimplified("player", false)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `unitToken` | UnitTokenType | no |  |
-

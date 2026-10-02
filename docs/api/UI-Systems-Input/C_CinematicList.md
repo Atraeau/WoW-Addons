@@ -39,4 +39,3 @@ local cinematics = C_CinematicList.GetUICinematicList()
 | `title` | string | yes |  |
 | `disableAutoPlay` | bool | no |  |
 | `orderID` | number | no |  |
-

@@ -124,4 +124,3 @@ C_IslandsQueue.RequestPreloadRewardData(0)
 |------|------|---------|-------------|
 | `difficultyId` | number | no |  |
 | `previewRewardQuestId` | number | no |  |
-

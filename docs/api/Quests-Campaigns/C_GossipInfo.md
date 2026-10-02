@@ -538,4 +538,3 @@ C_GossipInfo.SelectOptionByIndex(0)
 | `isImportant` | bool | no |  |
 | `isMeta` | bool | no |  |
 | `questInfoID` | number | no |  |
-

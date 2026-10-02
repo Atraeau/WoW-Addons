@@ -218,4 +218,3 @@ C_AchievementInfo.SetPortraitTexture(textureObject)
 | `criteriaID` | number | yes |  |
 | `elapsed` | time_t | yes |  |
 | `duration` | number | yes |  |
-

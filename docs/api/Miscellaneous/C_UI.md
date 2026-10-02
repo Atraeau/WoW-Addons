@@ -147,4 +147,3 @@ local willAvoidNotch = C_UI.ShouldUIParentAvoidNotch()
 ### NOTCHED_DISPLAY_MODE_CHANGED
 
 ### UI_SCALE_CHANGED
-

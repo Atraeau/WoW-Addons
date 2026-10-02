@@ -496,4 +496,3 @@ local showUpgradeBanner = ShouldShowExpansionUpgradeBanner()
 | `Standard` | SubscriptionInterstitialType | no |  |
 | `LeftNpeArea` | SubscriptionInterstitialType | no |  |
 | `MaxLevel` | SubscriptionInterstitialType | no |  |
-

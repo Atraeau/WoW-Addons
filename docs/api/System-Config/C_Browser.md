@@ -53,4 +53,3 @@ C_Browser.CloseFullscreenBrowser()
 ### SIMPLE_BROWSER_WEB_PROXY_FAILED
 
 ### SIMPLE_CHECKOUT_CLOSED
-

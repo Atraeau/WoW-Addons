@@ -861,4 +861,3 @@ SetUseCircularEdge(useCircularEdge)
 ```lua
 SetUseCircularEdge(false)
 ```
-

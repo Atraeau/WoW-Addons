@@ -351,4 +351,3 @@ SetColorWheelThumbTexture(texture)
 ```lua
 SetColorWheelThumbTexture(texture)
 ```
-

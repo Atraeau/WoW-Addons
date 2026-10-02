@@ -491,4 +491,3 @@ local awaitingData = C_ContributionCollector.IsAwaitingRewardQuestData(0)
 | `FailedConditionCheck` | ContributionResult | no |  |
 | `UnableToCompleteTurnIn` | ContributionResult | no |  |
 | `InternalError` | ContributionResult | no |  |
-

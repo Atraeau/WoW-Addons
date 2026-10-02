@@ -43,4 +43,3 @@ SetAbbreviateNumberData(data)
 ```lua
 SetAbbreviateNumberData(data)
 ```
-

@@ -360,4 +360,3 @@ C_SuperTrack.SetSuperTrackedVignette(UnitGUID("player"))
 ### SUPER_TRACKING_CHANGED
 
 ### SUPER_TRACKING_PATH_UPDATED
-

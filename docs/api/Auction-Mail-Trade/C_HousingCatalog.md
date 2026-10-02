@@ -893,4 +893,3 @@ Represents a single stack of instances of an object in the Catalog, that are all
 | `icon` | number | no |  |
 | `price` | number | no |  |
 | `salePrice` | number | yes |  |
-

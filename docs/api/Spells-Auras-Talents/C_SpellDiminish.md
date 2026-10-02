@@ -129,4 +129,3 @@ local isTracked = C_SpellDiminish.ShouldTrackSpellDiminishCategory(category, rul
 | `duration` | number | no |  |
 | `showCountdown` | bool | no |  |
 | `isImmune` | bool | no |  |
-

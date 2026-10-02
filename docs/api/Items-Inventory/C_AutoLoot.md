@@ -25,4 +25,3 @@ C_AutoLoot.SetUseAutoLootToggle(useAutoLootToggle)
 ```lua
 C_AutoLoot.SetUseAutoLootToggle(false)
 ```
-

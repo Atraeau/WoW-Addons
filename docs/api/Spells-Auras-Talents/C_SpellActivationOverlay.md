@@ -71,4 +71,3 @@ local isSpellOverlayed = C_SpellActivationOverlay.IsSpellOverlayed(2050)
 | `r` | number | no |  |
 | `g` | number | no |  |
 | `b` | number | no |  |
-

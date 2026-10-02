@@ -45,4 +45,3 @@ NotWhileDeadError()
 ```lua
 NotWhileDeadError()
 ```
-

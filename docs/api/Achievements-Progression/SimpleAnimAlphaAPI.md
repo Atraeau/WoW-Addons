@@ -79,4 +79,3 @@ SetToAlpha(normalizedAlpha)
 ```lua
 SetToAlpha(0)
 ```
-

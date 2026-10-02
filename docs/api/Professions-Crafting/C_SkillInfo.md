@@ -190,4 +190,3 @@ C_SkillInfo.SetSelectedSkill(1)
 | `parentSkillLineID` | number | no |  |
 | `skillLineCategoryID` | number | no |  |
 | `description` | cstring | no |  |
-

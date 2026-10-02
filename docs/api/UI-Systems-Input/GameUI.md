@@ -43,4 +43,3 @@ SetUIVisibility(visible)
 ```lua
 SetUIVisibility(false)
 ```
-

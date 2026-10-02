@@ -289,4 +289,3 @@ C_TaskQuest.RequestPreloadRewardData(questID)
 ```lua
 C_TaskQuest.RequestPreloadRewardData(0)
 ```
-

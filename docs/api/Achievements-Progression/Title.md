@@ -110,4 +110,3 @@ SetCurrentTitle(titleMaskID)
 ```lua
 SetCurrentTitle(0)
 ```
-

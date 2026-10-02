@@ -280,4 +280,3 @@ local results, returns = C_AddOnProfiler.MeasureCall(func, arguments)
 |------|------|---------|-------------|
 | `addOnName` | cstring | no |  |
 | `metricValue` | number | no |  |
-

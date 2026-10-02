@@ -227,4 +227,3 @@ local raceInfo = C_CreatureInfo.GetRaceInfo(0)
 | `raceName` | string | no |  |
 | `clientFileString` | string | no |  |
 | `raceID` | number | no |  |
-

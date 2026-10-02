@@ -187,4 +187,3 @@ local vignetteGUIDs = C_VignetteInfo.GetVignettes()
 | `addPaddingAboveTooltipWidgets` | bool | yes |  |
 | `mapPin` | UIMapPinInfo | yes |  |
 | `objectiveType` | VignetteObjectiveType | yes |  |
-

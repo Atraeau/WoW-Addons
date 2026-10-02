@@ -348,4 +348,3 @@ local isLegacyLootModeEnabled = C_Loot.IsLegacyLootModeEnabled()
 ### TRIAL_CAP_REACHED_MONEY
 
 ### UPDATE_MASTER_LOOT_LIST
-

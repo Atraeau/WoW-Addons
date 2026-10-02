@@ -23,4 +23,3 @@ C_CombatLogInternal.GetCurrentEventInfo()
 ## Events
 
 ### COMBAT_LOG_EVENT_INTERNAL_UNFILTERED
-

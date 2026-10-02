@@ -141,4 +141,3 @@ C_Ping.TogglePingListener(false)
 | `orderIndex` | number | no |  |
 | `type` | PingSubjectType | no |  |
 | `uiTextureKitID` | textureKit | no |  |
-
