@@ -116,3 +116,36 @@ local color = data.stateOnly and data.stateColor or GetColor(data.unit, data.isT
 **Behavior after patch:** threat readable → normal numeric meter; threat secret → bars show each
 unit's aggro **state by color** (grey/yellow/orange/red), sized by state, no numbers; no errors and
 no false pull warnings. A full numeric meter is not possible on this engine by design.
+
+### ThreatClassic2 — secret unit names / `isForever` detection (follow-up)
+
+**Symptom:** `core/core.lua:227 attempted to index a table that cannot be indexed with secret keys`
+(a secret `UnitName` used as a table key in `FilterTarget`).
+
+**Cause:** same detection bug as TidyPlates — `isForever` could never be true, so the addon's
+modern-engine handling (secret unit names, encounter-name matching) never ran on Forever.
+
+**Fix — `core/core.lua`, three edits:**
+
+```lua
+-- 1. line ~74: detect the modern engine via issecretvalue, not WOW_PROJECT_MAINLINE
+-- before: local isForever = isMainline and select(4, GetBuildInfo()) < 20000
+local isForever = (issecretvalue ~= nil) and select(4, GetBuildInfo()) < 20000
+
+-- 2. FilterTarget (line ~223): unit names are secret -> match encounter name on Forever too
+-- before: if isMainline then
+if isMainline or isForever then
+    return currentEncounterName and IsEncounterInProgress() and C.filter.targetList[currentEncounterName]
+end
+
+-- 3. event registration (line ~1590): register ENCOUNTER_START/END on Forever so
+--    currentEncounterName populates (the encounter-name matching above depends on it)
+-- before: if isMainline then
+if isMainline or isForever then
+    self.frame:RegisterEvent("ENCOUNTER_START")
+    self.frame:RegisterEvent("ENCOUNTER_END")
+end
+```
+
+Consequence: the target-list filter on Forever matches by **boss encounter name** (not arbitrary
+unit names), same as mainline — unit names are secret, so there's no alternative.
