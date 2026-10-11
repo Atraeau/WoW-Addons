@@ -30,6 +30,14 @@ function (typed params/returns), enum (`Enum.*` tables), and struct (`@class`). 
 Language Server picks it up via `Lua.workspace.library` in `.vscode/settings.json`, so
 completion and hover in `src/` match this client exactly. Regenerate after a client update.
 
+## Lint globals (luacheck)
+
+`scripts/generate-luacheck-globals.ps1` turns the same dump into
+[`types/luacheck-globals.lua`](../types/luacheck-globals.lua): a list of every global
+function, `C_*` namespace and `Enum` the client exports. `.luacheckrc` merges it into
+`read_globals`, so the hand-picked list there stays short while the lint matches this
+client. Regenerate it alongside the docs after a client update.
+
 ## Output layout
 
 Namespaces are grouped into category folders (rules in
