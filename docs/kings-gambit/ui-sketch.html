@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>King's Gambit UI Sketch</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #161b22; --panel2: #1c232d; --line: #2d3748; --text: #e6edf3;
+    --muted: #8b98a9; --gold: #e3b341; --good: #3fb950; --warn: #d29922; --bad: #f85149; --info: #58a6ff;
+    --need: #3fb950; --off: #58a6ff; --gift: #d2a8ff; --pass: #8b98a9;
+    --warrior:#C79C6E; --paladin:#F58CBA; --hunter:#ABD473; --rogue:#FFF569; --priest:#fff;
+    --mage:#69CCF0; --warlock:#9482C9; --druid:#FF7D0A; --shaman:#0070DE;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 18px; margin: 40px 0 4px; color: var(--gold); }
+  p.lead { color: var(--muted); margin: 0 0 8px; max-width: 70ch; }
+  .note { color: var(--muted); font-size: 13px; max-width: 70ch; margin: 4px 0 14px; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
+  .cap { font-size: 12px; color: var(--muted); margin: 6px 2px 0; }
+
+  /* Game-style frame */
+  .frame { background: rgba(22,27,34,.96); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 24px rgba(0,0,0,.45); overflow: hidden; }
+  .frame .title { display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--panel2); border-bottom: 1px solid var(--line); font-weight: 600; font-size: 13px; }
+  .frame .title .x { margin-left: auto; color: var(--muted); }
+  .frame .body { padding: 10px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--good); }
+  .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+
+  .item { display: flex; gap: 8px; align-items: center; }
+  .icon { width: 34px; height: 34px; border-radius: 4px; border: 2px solid #a335ee; background: linear-gradient(135deg,#3b2a55,#1b1230); flex: none; }
+  .icon.rare { border-color: #0070dd; background: linear-gradient(135deg,#1d3557,#0e1a2e); }
+  .iname { font-weight: 600; color: #c58cff; } .iname.rare { color: #5aa2ff; }
+  .sub { color: var(--muted); font-size: 12px; }
+
+  .btns { display: flex; gap: 6px; margin-top: 8px; }
+  button { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button.sel { outline: 2px solid currentColor; }
+  .b-need { color: var(--need); } .b-off { color: var(--off); } .b-gift { color: var(--gift); } .b-pass { color: var(--pass); }
+  .btns button { flex: 1; font-weight: 600; }
+  .primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
+
+  .bar { height: 6px; background: #0b0f14; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .bar > i { display: block; height: 100%; width: 100%; background: var(--gold); transform-origin: left; }
+  .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .small { font-size: 12px; color: var(--muted); }
+  .pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .pill.need { color: var(--need); border-color: var(--need); } .pill.off { color: var(--off); border-color: var(--off); }
+  .pill.gift { color: var(--gift); border-color: var(--gift); } .pill.pass { color: var(--pass); }
+  .pill.wait { color: var(--warn); border-color: var(--warn); }
+
+  /* Scene */
+  .scene { position: relative; aspect-ratio: 16/9; border-radius: 8px; border: 1px solid var(--line); overflow: hidden;
+    background: radial-gradient(ellipse at 50% 85%, #2b3a2a 0%, #151d17 55%, #0b0f0c 100%); }
+  .hero { position: absolute; left: 50%; top: 52%; width: 7%; height: 30%; transform: translate(-50%,-50%); border-radius: 40% 40% 12% 12%; background: #0d1210; border: 1px dashed #556; }
+  .hero::after { content: "your character"; position: absolute; top: 105%; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; color: #9aa; }
+  .safe { position: absolute; left: 28%; right: 28%; top: 14%; bottom: 14%; border: 1px dashed rgba(227,179,65,.55); border-radius: 8px; }
+  .safe span { position: absolute; top: 4px; left: 8px; font-size: 11px; color: var(--gold); }
+  .scene .frame.pop { position: absolute; right: 2%; bottom: 7%; width: 24%; min-width: 210px; font-size: 12px; }
+  .scene .sync { position: absolute; left: 2%; bottom: 3%; font-size: 11px; color: var(--muted); background: rgba(0,0,0,.5); padding: 3px 8px; border-radius: 4px; }
+  .scene .mini { position: absolute; right: 2%; top: 4%; font-size: 11px; color: var(--muted); background: rgba(0,0,0,.5); padding: 3px 8px; border-radius: 4px; }
+  .callout { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .callout b { color: var(--text); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; position: sticky; top: 0; background: var(--panel2); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.you td { background: rgba(88,166,255,.08); }
+  tr.flag td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+  .c-warrior{color:var(--warrior)} .c-paladin{color:var(--paladin)} .c-hunter{color:var(--hunter)} .c-rogue{color:var(--rogue)}
+  .c-priest{color:var(--priest)} .c-mage{color:var(--mage)} .c-warlock{color:var(--warlock)} .c-druid{color:var(--druid)} .c-shaman{color:var(--shaman)}
+  .tabs { display: flex; gap: 4px; padding: 6px 10px 0; background: var(--panel2); border-bottom: 1px solid var(--line); }
+  .tabs span { padding: 5px 10px; font-size: 12px; color: var(--muted); border: 1px solid transparent; border-bottom: 0; border-radius: 4px 4px 0 0; }
+  .tabs span.on { color: var(--text); background: var(--panel); border-color: var(--line); }
+  .banner { background: #3d2f00; border-bottom: 1px solid var(--warn); color: var(--gold); padding: 5px 10px; font-size: 12px; font-weight: 600; }
+  .opt { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 4px; margin-top: 6px; background: var(--panel2); }
+  .opt .t { font-weight: 600; } .opt .d { color: var(--muted); font-size: 12px; }
+  .opt:hover { border-color: var(--muted); cursor: pointer; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>King's Gambit — UI sketch</h1>
+  <p class="lead">Rough layouts for the real frames. This is a sketch to react to, not final art: placements, wording and which information appears are what we're deciding.
+  Companion to the <a href="manifesto.md" style="color:var(--info)">manifesto</a> and <a href="design-journal.md" style="color:var(--info)">design journal</a>.</p>
+  <div class="legend">
+    <span class="pill need">Need</span><span class="pill off">Off-spec</span><span class="pill gift">Gift → player</span><span class="pill pass">Pass</span><span class="pill wait">waiting</span>
+  </div>
+
+  <h2>1. In the raid: subtle, off-center, never on your character</h2>
+  <p class="note">The bid popup sits at a screen edge. The dashed gold box is the center safe zone: nothing of ours is allowed in it, and nothing covers your character. Every frame is movable, lockable, scalable and fades with opacity.</p>
+  <div class="scene">
+    <div class="safe"><span>center safe zone (empty)</span></div>
+    <div class="hero"></div>
+    <div class="mini">Gambit · you're #14 of 31</div>
+    <div class="sync"><span class="dot"></span> In sync · head 7f3a…c21e</div>
+    <div class="frame pop">
+      <div class="title"><span>Loot · Boss 3</span><span class="x">⚙</span></div>
+      <div class="body">
+        <div class="item"><div class="icon"></div><div><div class="iname">Gauntlets of the Ashen Vow</div><div class="sub">Hands · ilvl 78</div></div></div>
+        <div class="btns"><button class="b-need">Need</button><button class="b-off">Off</button><button class="b-gift">Gift</button><button class="b-pass">Pass</button></div>
+        <div class="bar"><i id="mini-bar"></i></div>
+        <div class="row small" style="margin-top:4px"><span>9 of 24 eligible have bid</span><span id="mini-sec">22s</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="callout"><b>Keybind-first:</b> N / O / G / P answer the topmost item without the mouse. <b>Alert cue:</b> a soft sound and a gentle edge pulse, both tunable down to silent.</p>
+
+  <h2>2. The bid popup, in more detail</h2>
+  <div class="grid">
+    <div>
+      <div class="frame">
+        <div class="title"><span>Loot · Boss 3 · 3 items</span><span class="x">⚙ ✕</span></div>
+        <div class="body">
+          <div class="item"><div class="icon"></div><div><div class="iname">Gauntlets of the Ashen Vow</div><div class="sub">Hands · ilvl 78</div></div><span class="pill need" style="margin-left:auto">you: Need</span></div>
+          <div class="item" style="margin-top:8px"><div class="icon rare"></div><div><div class="iname rare">Cloak of Quiet Embers</div><div class="sub">Back · ilvl 71</div></div><span class="pill wait" style="margin-left:auto">undecided</span></div>
+          <div class="item" style="margin-top:8px"><div class="icon"></div><div><div class="iname">Band of Hollow Oaths</div><div class="sub">Finger · ilvl 76</div></div><span class="pill pass" style="margin-left:auto">you: Pass</span></div>
+          <div class="btns"><button class="b-need">Need</button><button class="b-off">Off</button><button class="b-gift">Gift ▾</button><button class="b-pass">Pass</button></div>
+          <div class="bar"><i></i></div>
+          <div class="row small" style="margin-top:4px"><span>Resolves early when everyone eligible has bid</span><span>18s</span></div>
+        </div>
+      </div>
+      <div class="cap">A boss with several drops: one popup, one row per item. Answer in any order; you can change an answer until the timer ends.</div>
+    </div>
+    <div>
+      <div class="frame">
+        <div class="title"><span>Gift → who?</span><span class="x">✕</span></div>
+        <div class="body">
+          <div class="small">You pay the position; they get the item. You can change this until it resolves, or re-route it afterward.</div>
+          <div class="opt"><span class="c-mage t">Aldric</span><span class="d">#2 · Mage</span></div>
+          <div class="opt"><span class="c-priest t">Mirel</span><span class="d">#5 · Priest</span></div>
+          <div class="opt"><span class="c-warrior t">Brann</span><span class="d">#9 · Warrior</span></div>
+          <div class="small" style="margin-top:8px">Search a name…</div>
+        </div>
+      </div>
+      <div class="cap">Gifting goes in any direction, including upward. This is how a player near the bottom turns a minor upgrade into a win for someone higher.</div>
+    </div>
+    <div>
+      <div class="frame">
+        <div class="title"><span>It's your pick · draft</span><span class="x">⚙</span></div>
+        <div class="body">
+          <div class="small">You're next in line (#3). Pick one item. You'll move to the bottom.</div>
+          <div class="opt"><div class="icon"></div><div><div class="t iname">Gauntlets of the Ashen Vow</div><div class="d">3 others want this</div></div></div>
+          <div class="opt"><div class="icon rare"></div><div><div class="t iname rare">Cloak of Quiet Embers</div><div class="d">nobody else wants this</div></div></div>
+          <div class="btns"><button class="primary">Claim Gauntlets</button><button class="b-pass">Skip my turn</button></div>
+          <div class="bar"><i></i></div>
+        </div>
+      </div>
+      <div class="cap">Priority draft: the top remaining needer picks live. Skipping is always free.</div>
+    </div>
+  </div>
+
+  <h2>3. Master Looter panel</h2>
+  <p class="note">Everything the loot master needs in one place, including the "everyone has bid" signal and the auto-distribute step. Whether the timer is fixed or open-ended is a per-raid setting.</p>
+  <div class="frame">
+    <div class="title"><span class="dot"></span><span>Loot master · Boss 3</span><span class="pill" style="margin-left:8px">Timer: 30s</span><span class="x">⚙ ✕</span></div>
+    <div class="body">
+      <div class="grid" style="grid-template-columns: 1.1fr 1fr">
+        <div>
+          <table>
+            <tr><th>Item</th><th>Needs</th><th>Off</th><th>State</th></tr>
+            <tr><td><span class="iname">Gauntlets of the Ashen Vow</span></td><td class="num">4</td><td class="num">1</td><td><span class="pill wait">bidding · 18s</span></td></tr>
+            <tr><td><span class="iname rare">Cloak of Quiet Embers</span></td><td class="num">0</td><td class="num">0</td><td><span class="pill wait">bidding · 18s</span></td></tr>
+            <tr><td><span class="iname">Band of Hollow Oaths</span></td><td class="num">1</td><td class="num">0</td><td><span class="pill need">ready</span></td></tr>
+          </table>
+          <div class="btns" style="margin-top:10px">
+            <button>+30s</button><button>Resolve now</button><button>Put up by link…</button><button class="primary">Confirm &amp; distribute</button>
+          </div>
+          <div class="small" style="margin-top:8px">Confirming records the win and hands the item over automatically (<code>GiveMasterLoot</code>).</div>
+        </div>
+        <div>
+          <table>
+            <tr><th>Who's bid</th><th>Answer</th></tr>
+            <tr><td><span class="c-mage">Aldric</span> · #2</td><td><span class="pill need">Need</span></td></tr>
+            <tr><td><span class="c-priest">Mirel</span> · #5</td><td><span class="pill gift">Gift → Aldric</span></td></tr>
+            <tr><td><span class="c-warrior">Brann</span> · #9</td><td><span class="pill pass">Pass</span></td></tr>
+            <tr><td><span class="c-druid">Tavi</span> · #14 <span class="pill" title="no addon">whisper</span></td><td><span class="pill wait">waiting</span></td></tr>
+            <tr><td><span class="c-hunter">Wren</span> · #21</td><td><span class="pill wait">waiting</span></td></tr>
+          </table>
+          <div class="small" style="margin-top:6px">15 more waiting… Players without the addon answer by whisper.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>4. Standings window (opened on demand)</h2>
+  <p class="note">The transparency surfaces: stat columns, a camp-watch flag (set by an officer, never automatic), history with undo, and a sync status that anyone can check.</p>
+  <div class="frame">
+    <div class="title"><span>Standings · Main</span><span class="pill" style="margin-left:8px">31 members</span><span class="x"><span class="dot"></span> In sync</span></div>
+    <div class="tabs"><span class="on">Main</span><span>Off-spec</span><span>History</span><span>Sync</span></div>
+    <div class="body" style="padding:0">
+      <table>
+        <tr><th class="num">#</th><th>Player</th><th>Last win</th><th class="num">Raids since</th><th class="num">Time at position</th><th class="num">Upgrade passes</th><th></th></tr>
+        <tr class="flag"><td class="num">1</td><td><span class="c-rogue">Kest</span></td><td>Cloak of Quiet Embers</td><td class="num">9</td><td class="num">3w 2d</td><td class="num">6</td><td><span class="pill wait" title="camp-watch (officer flag)">watch</span></td></tr>
+        <tr><td class="num">2</td><td><span class="c-mage">Aldric</span></td><td>Staff of Lesser Tides</td><td class="num">7</td><td class="num">2w 4d</td><td class="num">1</td><td></td></tr>
+        <tr><td class="num">3</td><td><span class="c-shaman">Orsa</span></td><td>—</td><td class="num">12</td><td class="num">5w</td><td class="num">0</td><td></td></tr>
+        <tr class="you"><td class="num">14</td><td><span class="c-warlock">You</span></td><td>Band of Hollow Oaths</td><td class="num">3</td><td class="num">6d</td><td class="num">0</td><td></td></tr>
+        <tr><td class="num">31</td><td><span class="c-paladin">Lio</span></td><td>Gauntlets of the Ashen Vow</td><td class="num">0</td><td class="num">2h</td><td class="num">0</td><td></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:20px">
+    <div>
+      <div class="frame">
+        <div class="title"><span>History</span><span class="x">officer view</span></div>
+        <div class="body small">
+          <div class="row"><span>#412 · Lio won <span class="iname">Gauntlets of the Ashen Vow</span></span><button style="padding:1px 8px">Undo</button></div>
+          <div class="row" style="margin-top:6px"><span>#411 · Mirel passed (upgrade) · Band of Hollow Oaths</span><span></span></div>
+          <div class="row" style="margin-top:6px"><span>#410 · <b style="color:var(--warn)">Correction</b>: Kest → #1 · "mis-award fix" · by Raidlead</span><span></span></div>
+        </div>
+      </div>
+      <div class="cap">Mistakes are fixed forward: a recent award can be undone exactly; older ones use a visible correction with a reason.</div>
+    </div>
+    <div>
+      <div class="frame">
+        <div class="title"><span>Sync</span><span class="x"><span class="dot warn"></span> catching up</span></div>
+        <div class="body small">
+          <div>Your head: <code>7f3a…c21e</code> (event 412)</div>
+          <div>Raidlead: <code>7f3a…c21e</code> <span style="color:var(--good)">✔ match</span></div>
+          <div>Mirel: <code>5b10…09aa</code> <span style="color:var(--warn)">behind by 2 events</span></div>
+          <div>Tavi: <i>no addon</i> (whisper mode)</div>
+        </div>
+      </div>
+      <div class="cap">The same view is used in training: "do all of you show the same head?"</div>
+    </div>
+  </div>
+
+  <h2>5. Nobody bid: the salvager decides</h2>
+  <p class="note">If nobody wants an item, it's offered lowest-first. Whoever claims it (usually at the bottom, so it costs almost nothing) decides what happens. If everyone passes, it goes to the Master Looter or designated disenchanter, then the guild bank.</p>
+  <div class="grid">
+    <div class="frame">
+      <div class="title"><span>Nobody bid · you're first in line</span><span class="x">✕</span></div>
+      <div class="body">
+        <div class="item"><div class="icon rare"></div><div><div class="iname rare">Cloak of Quiet Embers</div><div class="sub">Back · ilvl 71</div></div></div>
+        <div class="small" style="margin-top:8px">Claiming moves you to the bottom (you're already near it). Then choose:</div>
+        <div class="opt"><span class="t">Keep it</span><span class="d">use it or hold it</span></div>
+        <div class="opt"><span class="t">Gift it up</span><span class="d">to anyone who could use it</span></div>
+        <div class="opt"><span class="t">Sell it</span><span class="d">your gold</span></div>
+        <div class="opt"><span class="t">Disenchant</span><span class="d">your mats</span></div>
+        <div class="opt"><span class="t">Donate to guild bank</span><span class="d">visible in the record</span></div>
+        <div class="btns"><button class="primary">Claim</button><button class="b-pass">Pass</button></div>
+      </div>
+    </div>
+    <div class="frame">
+      <div class="title"><span>Everyone passed</span><span class="x">✕</span></div>
+      <div class="body">
+        <div class="item"><div class="icon rare"></div><div><div class="iname rare">Cloak of Quiet Embers</div><div class="sub">Back · ilvl 71</div></div></div>
+        <div class="small" style="margin-top:8px">No one claimed this. Designated disenchanter: <b>Raidlead</b>.</div>
+        <div class="btns"><button class="primary">Send to Raidlead for DE</button></div>
+        <div class="small" style="margin-top:6px">Mats go to the guild bank. This is logged.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>6. Training mode</h2>
+  <p class="note">The same frames, running on a simulated raid. A banner makes it impossible to mistake for a real session, and the coach explains what happened and why.</p>
+  <div class="frame">
+    <div class="banner">TRAINING · simulated raid · nothing here touches the guild ledger</div>
+    <div class="title"><span>Lesson 3: The minor upgrade</span><span class="pill" style="margin-left:8px">2 of 6 steps</span><span class="x">⚙ ✕</span></div>
+    <div class="body">
+      <div class="grid" style="grid-template-columns: 1fr 1fr">
+        <div>
+          <div class="small">Scenario</div>
+          <div>A small upgrade drops. Everyone near the top passes. Lio (#31) can use it, and Aldric (#2) would love it.</div>
+          <div class="opt" style="margin-top:10px"><span class="t">Your task</span><span class="d">Get the item to Aldric without wasting it.</span></div>
+          <div class="btns" style="margin-top:10px"><button>Hint</button><button>Restart</button><button class="primary">Next step</button></div>
+        </div>
+        <div>
+          <div class="small">Coach</div>
+          <div class="opt" style="cursor:default"><span class="d">Lio won it from the bottom for almost nothing, and can gift it upward. Your position only changes when you win. See "Gifting" in the player guide.</span></div>
+          <div class="small" style="margin-top:10px">Multiplayer session <code>RK-4821</code> · 3 of 3 in sync <span class="dot"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Open design questions</h2>
+  <ul class="note" style="max-width:80ch">
+    <li>Where does each frame anchor by default (popup: right edge lower third; Master Looter panel: left)?</li>
+    <li>Should the popup collapse to a single slim bar when there are many items?</li>
+    <li>Is "Gift" a fourth button, or a small picker attached to Need?</li>
+    <li>Do we want a minimap button, or only <code>/gambit</code> and keybinds?</li>
+  </ul>
+</div>
+<script>
+  // Tiny countdown so the timer bars feel alive.
+  var t = 22, total = 30, bar = document.getElementById('mini-bar'), sec = document.getElementById('mini-sec');
+  setInterval(function () {
+    t = t <= 0 ? total : t - 1;
+    bar.style.transform = 'scaleX(' + (t / total) + ')';
+    sec.textContent = t + 's';
+  }, 1000);
+  // Toggle a selected answer on the buttons.
+  document.querySelectorAll('.btns').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      if (e.target.tagName !== 'BUTTON' || e.target.classList.contains('primary')) return;
+      g.querySelectorAll('button').forEach(function (b) { b.classList.remove('sel'); });
+      e.target.classList.add('sel');
+    });
+  });
+</script>
+</body>
+</html>
