@@ -129,10 +129,21 @@ training scenarios use them to play the part of the world:
 - `Core.lua`: builds the RealHost, calls `KG.NewClient(host)`, and wires `/gambit`.
 - Existing tests keep working; new tests build clients over a MockHost.
 
-## Open questions
+## Decisions (from the open questions)
 
-1. **Throttling:** should the Host expose queue depth and a "drain" notification, or keep
-   throttling invisible? (Lean: expose `host.pending()` so sync can pace itself.)
-2. **Names:** should `normalize` also fold case and strip spaces, or just add the realm?
-3. **Item info cache:** model `GetItemInfo` returning nil until `GET_ITEM_INFO_RECEIVED`
-   fires, as a real Host event, so the engine handles it from the start?
+1. **Throttling:** the Host exposes `pending()` (queue depth) so sync can pace itself. MockHost
+   reports `pendingCount`, which tests can set.
+2. **Names:** `normalize` only adds the realm when it's missing. No case folding.
+3. **Item info:** `itemInfo(link)` may return nil until the item is cached; the Host then emits
+   `item.info` (from `GET_ITEM_INFO_RECEIVED`). MockHost reproduces this with
+   `setItemInfo(link, info, {delayed = true})` and `cacheItem(link)`.
+
+## Conventions fixed while building MockHost
+
+- Host methods use colon calls (`host:now()`), and `host:on(event, fn)` returns an
+  **unsubscribe function**.
+- Subscribing to or emitting an unknown event name is an error, so typos fail loudly.
+- `Host.METHODS` / `Host.EVENTS` / `Host.Missing(host)` in `Host.lua` are the contract the
+  contract tests check, and RealHost will be checked against them in game.
+- Code that runs on both MockHost and the client stays Lua 5.1-safe (no `//`, no bitwise
+  operators), since the client's Lua is 5.1-based.

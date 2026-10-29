@@ -12,7 +12,6 @@ local Standings = SK.modules.Standings
 
 M.GENESIS = "0000000000000000"
 M.VERSION = 1
-M.chains = {} -- [listId] = chain
 
 local function eventId(ev)
     return Hash.Sum(ev.prev .. "|" .. Hash.Canon({
@@ -73,29 +72,3 @@ function M.Load(listId, events)
     return chain
 end
 
-function M.Get(listId) return M.chains[listId] end
-
--- Create a new list (writes its CreateList genesis event) and persist it.
-function M.Create(listId, name, author, ts)
-    if M.chains[listId] then return nil, "exists" end
-    local chain = M.NewChain(listId)
-    local ev, err = M.Append(chain, "CreateList", { name = name }, author, ts)
-    if not ev then return nil, err end
-    M.chains[listId] = chain
-    SK.db.lists[listId] = { events = chain.events }
-    return chain
-end
-
--- Load and verify every persisted list. A list that fails verification is reported
--- and left untouched in SavedVariables (never silently repaired or discarded).
-function M:OnInit()
-    for listId, rec in pairs(SK.db.lists) do
-        local chain, err, idx = M.Load(listId, rec.events or {})
-        if chain then
-            rec.events = chain.events
-            M.chains[listId] = chain
-        else
-            SK:Print(("list '%s' failed verification at event %s: %s"):format(listId, tostring(idx), tostring(err)))
-        end
-    end
-end

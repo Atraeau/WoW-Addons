@@ -85,3 +85,46 @@ function M.Canon(v)
     end
     error("Canon: unsupported type " .. t)
 end
+
+-- Inverse of Canon. Returns the value, or nil + "malformed".
+function M.Decode(s)
+    if type(s) ~= "string" then return nil, "malformed" end
+    local pos = 1
+    local function value()
+        local c = s:sub(pos, pos)
+        if c == "s" then
+            local colon = s:find(":", pos, true)
+            local len = colon and tonumber(s:sub(pos + 1, colon - 1))
+            if not len or colon + len > #s then error("bad string") end
+            local str = s:sub(colon + 1, colon + len)
+            pos = colon + len + 1
+            return str
+        elseif c == "n" then
+            local e = s:find("[=,}]", pos) or (#s + 1)
+            local n = tonumber(s:sub(pos + 1, e - 1))
+            if not n then error("bad number") end
+            pos = e
+            return n
+        elseif c == "T" then pos = pos + 1; return true
+        elseif c == "F" then pos = pos + 1; return false
+        elseif c == "~" then pos = pos + 1; return nil
+        elseif c == "{" then
+            pos = pos + 1
+            local t = {}
+            while s:sub(pos, pos) ~= "}" do
+                local k = value()
+                if k == nil or s:sub(pos, pos) ~= "=" then error("bad key") end
+                pos = pos + 1
+                t[k] = value()
+                if s:sub(pos, pos) ~= "," then error("bad separator") end
+                pos = pos + 1
+            end
+            pos = pos + 1
+            return t
+        end
+        error("bad token")
+    end
+    local ok, v = pcall(value)
+    if not ok or pos ~= #s + 1 then return nil, "malformed" end
+    return v
+end

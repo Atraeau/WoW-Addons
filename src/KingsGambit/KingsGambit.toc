@@ -10,6 +10,9 @@ Core.lua
 Hash.lua
 Standings.lua
 Ledger.lua
+Host.lua
+MockHost.lua
+Client.lua
 Sync.lua
 Loot.lua
 UI.lua
