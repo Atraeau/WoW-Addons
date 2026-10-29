@@ -102,6 +102,24 @@ function handlers.Transfer(s, ev, d)
     return true
 end
 
+-- Nobody wanted the item: it went to the disenchanter (and from there to the guild bank). No position change.
+function handlers.Disenchant(s, ev, d)
+    if not isName(d.item) then return nil, "baditem" end
+    if not isName(d.to) then return nil, "badrecipient" end
+    return true
+end
+
+local SALVAGE_ACTIONS = { keep = true, gift = true, sell = true, disenchant = true, bank = true }
+
+-- What the player who claimed a backstop item did with it. Recorded for transparency only.
+function handlers.Salvage(s, ev, d)
+    local a = s.awards[d.award]
+    if not a or a.reverted then return nil, "noaward" end
+    if not SALVAGE_ACTIONS[d.action] then return nil, "badaction" end
+    a.salvage = d.action
+    return true
+end
+
 -- Officer correction: place a member at an explicit position. A reason is mandatory.
 function handlers.MovePlayer(s, ev, d)
     local m = s.members[d.member]
