@@ -1,7 +1,7 @@
--- Salvage Kings: namespace, saved-variable schema, module registry, /sk entry point.
--- Design: docs/salvage-kings/ (manifesto, rationale, design-journal).
+-- King's Gambit: namespace, saved-variable schema, module registry, /gambit entry point.
+-- Design: docs/kings-gambit/ (manifesto, rationale, design-journal).
 local ADDON, SK = ...
-_G.SalvageKings = SK
+_G.KingsGambit = SK
 
 SK.name = ADDON
 SK.SCHEMA = 1
@@ -14,19 +14,19 @@ function SK:NewModule(name)
     return m
 end
 
--- SalvageKingsDB (account-wide, the shared ledger):
+-- KingsGambitDB (account-wide, the shared ledger):
 --   schema   number
 --   lists    { [listId] = { name, events = {}, head = "" } }   -- append-only per-list chain
 --   config   { officerDE = nil, guildBankMode = false, bidTimer = 30, ... }
--- SalvageKingsCharDB (per character): ui = { frame positions, scale, opacity, hints }
+-- KingsGambitCharDB (per character): ui = { frame positions, scale, opacity, hints }
 local function InitDB()
-    SalvageKingsDB = SalvageKingsDB or {}
-    local db = SalvageKingsDB
+    KingsGambitDB = KingsGambitDB or {}
+    local db = KingsGambitDB
     db.schema = db.schema or SK.SCHEMA
     db.lists = db.lists or {}
     db.config = db.config or {}
-    SalvageKingsCharDB = SalvageKingsCharDB or { ui = {} }
-    SK.db, SK.char = db, SalvageKingsCharDB
+    KingsGambitCharDB = KingsGambitCharDB or { ui = {} }
+    SK.db, SK.char = db, KingsGambitCharDB
 end
 
 function SK:Print(...)
@@ -45,16 +45,16 @@ frame:SetScript("OnEvent", function(_, event, name)
     end
 end)
 
-SLASH_SALVAGEKINGS1 = "/sk"
-SlashCmdList["SALVAGEKINGS"] = function(msg)
+SLASH_KINGSGAMBIT1 = "/gambit"
+SlashCmdList["KINGSGAMBIT"] = function(msg)
     local cmd = (msg or ""):match("^(%S*)"):lower()
     local ui = SK.modules.UI
     if cmd == "" or cmd == "show" then
         if ui and ui.Toggle then ui:Toggle() else SK:Print("v0.0.1 scaffold -- no UI yet") end
     else
-        SK:Print("commands: /sk [show]")
+        SK:Print("commands: /gambit [show]")
     end
 end
 
--- Long-form alias; /sk kept as the short command (lineage: Suicide Kings).
-SLASH_SALVAGEKINGS2 = "/salvage"
+-- Short alias.
+SLASH_KINGSGAMBIT2 = "/kg"

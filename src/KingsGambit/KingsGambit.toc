@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: King's Gambit
+## Notes: Transparent, tamper-evident King's Gambit raid loot ledger
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.0.1
+## SavedVariables: KingsGambitDB
+## SavedVariablesPerCharacter: KingsGambitCharDB
+
+Core.lua
+Ledger.lua
+Standings.lua
+Sync.lua
+Loot.lua
+UI.lua

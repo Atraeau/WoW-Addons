@@ -1,6 +1,6 @@
-# Salvage Kings — Rationale & Player Guide
+# King's Gambit — Rationale & Player Guide
 
-*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
+*King's Gambit is derived from the classic Suicide Kings strategy and named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
 
 *How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the
 values behind it and the [design journal](design-journal.md) for how each rule

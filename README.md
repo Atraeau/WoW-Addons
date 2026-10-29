@@ -29,7 +29,7 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | --- | --- | --- |
 | HelloForever | [`src/HelloForever`](src/HelloForever) | Example addon produced by the scaffolder (`/hf`) |
 | WowBagSorter | [`src/WowBagSorter`](src/WowBagSorter) | Bag/bank sorter (originally Classic 1.13; may need 12.0 fixes) |
-| SalvageKings | [`src/SalvageKings`](src/SalvageKings) | Salvage Kings raid loot ledger (derived from Suicide Kings) |
+| KingsGambit | [`src/KingsGambit`](src/KingsGambit) | King's Gambit raid loot ledger (derived from Suicide Kings) |
 | WowApiExport | [`src/WowApiExport`](src/WowApiExport) | Dev tool — dumps the client's own API docs (`/apiexport`) |
 | BTPCompatCheck | [`src/BTPCompatCheck`](src/BTPCompatCheck) | Dev tool — probes which APIs exist on the client (`/btpcheck`) |
 | BlizzThreatPlates | [`vendor/BlizzThreatPlates`](vendor/BlizzThreatPlates) | Patched third-party addon (MIT) — see [PATCHES.md](vendor/BlizzThreatPlates/PATCHES.md) |

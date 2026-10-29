@@ -1,6 +1,6 @@
-# The Salvage Kings Loot Manifesto
+# The King's Gambit Loot Manifesto
 
-*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
+*King's Gambit is derived from the classic Suicide Kings strategy and named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
 
 *We are uncovering better ways of sharing raid loot by doing it together.*
 Through this work we have come to value:
