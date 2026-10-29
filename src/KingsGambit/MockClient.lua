@@ -37,7 +37,7 @@ function M.New(opts)
 
     local clock = opts.clock or 1000
     local clock0, unix0 = clock, opts.unix or 1760000000
-    local seed = (opts.seed or 1) % PM_MOD
+    local seed = ((opts.seed or 1) % PM_MOD) + 0.0 -- float: exact, and no 32-bit integer overflow on any runtime
     if seed == 0 then seed = 1 end
 
     local S = {

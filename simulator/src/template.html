@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>King's Gambit Simulator</title>
+<style>
+  :root {
+    --bg: #0e1116; --panel: #161b22; --panel2: #1c232d; --line: #2d3748; --text: #e6edf3; --muted: #8b98a9;
+    --gold: #e3b341; --good: #3fb950; --warn: #d29922; --bad: #f85149; --info: #58a6ff;
+    --need: #3fb950; --off: #58a6ff; --gift: #d2a8ff; --pass: #8b98a9;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .banner { background: #3d2f00; border-bottom: 1px solid var(--warn); color: var(--gold); padding: 6px 16px; font-weight: 600; font-size: 13px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 22px; margin: 0 0 2px; } h2 { font-size: 14px; margin: 0 0 8px; color: var(--gold); text-transform: uppercase; letter-spacing: .05em; }
+  .sub { color: var(--muted); margin: 0 0 14px; }
+  .layout { display: grid; gap: 16px; grid-template-columns: 220px 1fr 280px; align-items: start; }
+  @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+  .card.good { border-color: var(--good); } .card.bad { border-color: var(--bad); }
+  button { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+  button:hover:not(:disabled) { border-color: var(--muted); } button:disabled { opacity: .45; cursor: default; }
+  button.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
+  button.sel { outline: 2px solid currentColor; }
+  .b-need { color: var(--need); } .b-off { color: var(--off); } .b-gift { color: var(--gift); } .b-pass { color: var(--pass); }
+  .scen { display: block; width: 100%; text-align: left; margin-bottom: 6px; }
+  .scen.on { border-color: var(--gold); color: var(--gold); }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .spread { justify-content: space-between; }
+  .muted { color: var(--muted); } .small { font-size: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .pill.need { color: var(--need); border-color: var(--need); } .pill.off { color: var(--off); border-color: var(--off); }
+  .pill.gift { color: var(--gift); border-color: var(--gift); } .pill.pass { color: var(--pass); } .pill.wait { color: var(--warn); border-color: var(--warn); }
+  .pill.win { color: var(--good); border-color: var(--good); } .pill.phase { color: var(--gold); border-color: var(--gold); font-weight: 600; }
+  .bar { height: 6px; background: #0b0f14; border-radius: 3px; overflow: hidden; margin: 8px 0 2px; }
+  .bar > i { display: block; height: 100%; background: var(--gold); transition: width .2s linear; }
+  .iname { font-weight: 600; color: #c58cff; }
+  .you td { background: rgba(88,166,255,.08); }
+  ol.stand { margin: 0; padding: 0; list-style: none; }
+  ol.stand li { display: flex; gap: 8px; padding: 3px 6px; border-bottom: 1px solid var(--line); }
+  ol.stand .n { color: var(--muted); width: 22px; text-align: right; }
+  ol.stand li.moved { background: rgba(63,185,80,.12); }
+  ol.stand li.you { color: var(--info); }
+  .turn { border: 1px solid var(--gold); background: rgba(227,179,65,.07); border-radius: 6px; padding: 10px; margin-bottom: 12px; }
+  .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
+  .loading { padding: 40px; text-align: center; color: var(--muted); }
+  code { background: var(--panel2); padding: 0 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="banner">TRAINING · simulated raid · nothing here touches a real ledger or the game</div>
+<div class="wrap">
+  <h1>King's Gambit simulator</h1>
+  <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You"), at the bottom of the list.</p>
+  <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
+</div>
+
+<!--KG_FENGARI-->
+<!--KG_ENGINE-->
+<!--KG_API-->
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const call = (name, a, b) => JSON.parse(window.KG(name, a, b));
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", backstop: "Backstop", review: "Review", done: "Done", cancelled: "Cancelled" };
+
+  let scenarios = [], current = "first-drop", seed = 1, st = null;
+  let running = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+
+  function start(id) {
+    current = id; result = null; lastMsg = "";
+    st = call("start", id, seed);
+    prevOrder = st.order || []; moved = {};
+    render();
+  }
+
+  function act(name, a, b) {
+    const r = call(name, a, b);
+    if (r.ok === false) lastMsg = "Not allowed: " + (r.why || "that action isn't available right now");
+    else lastMsg = "";
+    if (r.phase) st = r;
+    updateMoved();
+    render();
+  }
+
+  function updateMoved() {
+    moved = {};
+    (st.order || []).forEach((n, i) => { if (prevOrder.indexOf(n) !== i && prevOrder.length) moved[n] = true; });
+    if (st.phase === "done" || st.phase === "review") return;
+    prevOrder = st.order || [];
+  }
+
+  function chip(a) {
+    if (!a) return '<span class="pill wait">&hellip;</span>';
+    if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + esc(a.to) + "</span>";
+    if (a.kind === "pass") return '<span class="pill pass">pass' + (a.passKind ? " (" + esc(a.passKind) + ")" : "") + "</span>";
+    return '<span class="pill ' + a.kind + '">' + a.kind + "</span>";
+  }
+
+  function remaining() {
+    if (st.deadline == null) return null;
+    return Math.max(0, st.deadline - st.now);
+  }
+
+  function timerHtml() {
+    const rem = remaining();
+    if (rem == null) return '<div class="muted small">No timer: open-ended, you decide when to close.</div>';
+    const total = st.phase === "bidding" ? st.cfg.bidSeconds : (st.turn && st.turn.type === "claim" ? st.cfg.claimSeconds : st.cfg.pickSeconds);
+    return '<div class="bar"><i style="width:' + Math.min(100, (rem / total) * 100) + '%"></i></div><div class="small muted">' + rem.toFixed(0) + "s left</div>";
+  }
+
+  function itemName(id) { return st.items[id - 1] ? esc(st.items[id - 1].link) : "?"; }
+
+  function turnHtml() {
+    const t = st.turn;
+    if (!t) return "";
+    if (t.player !== "You") {
+      return '<div class="turn muted">Waiting for <b>' + esc(t.player) + "</b> to " + (t.type === "pick" ? "pick" : "claim or decline") + "&hellip;" + timerHtml() + "</div>";
+    }
+    if (t.type === "pick") {
+      return '<div class="turn"><b>It\'s your pick.</b> You\'re next in line. Choose one item (you\'ll drop to the bottom), or skip, which is always free.' +
+        '<div class="row" style="margin-top:8px">' + t.options.map((id) => '<button class="primary" data-act="pick" data-a="' + id + '">Claim ' + itemName(id) + "</button>").join("") +
+        '<button data-act="skip">Skip my turn</button></div>' + timerHtml() + "</div>";
+    }
+    return '<div class="turn"><b>Offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
+      "Claiming costs you almost nothing at the bottom. You can keep it, or gift it up to someone who can use it." +
+      '<div class="row" style="margin-top:8px"><button class="primary" data-act="claim" data-a="">Claim it</button>' +
+      '<button data-act="claimGift">Claim and gift to</button>' + giftSelect() + '<button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
+  }
+
+  function giftSelect() {
+    const names = (st.players || []).map((p) => p.name).filter((n) => n !== "You");
+    if (!giftTo || names.indexOf(giftTo) < 0) giftTo = names[0] || "";
+    return '<select id="giftTo">' + names.map((n) => '<option' + (n === giftTo ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>";
+  }
+
+  function itemsHtml() {
+    const bidding = st.phase === "bidding";
+    const mine = (st.players || []).filter((p) => p.name === "You")[0];
+    let h = '<table><tr><th>Item</th><th>Status</th>' + (bidding ? "<th>Your answer</th>" : "") + "</tr>";
+    st.items.forEach((it, i) => {
+      let status = '<span class="pill wait">open</span>';
+      if (it.status === "awarded") status = '<span class="pill win">' + esc(it.winner) + (it.to !== it.winner ? " &rarr; " + esc(it.to) : "") + " (" + it.tier + ")</span>";
+      else if (it.status === "de") status = '<span class="pill">disenchant</span>';
+      let ans = "";
+      if (bidding) {
+        const a = mine && mine.answers[i];
+        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
+        ans = '<td><div class="row">' + b("need", "Need") + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+      }
+      h += '<tr><td><span class="iname">' + esc(it.link) + "</span></td><td>" + status + "</td>" + ans + "</tr>";
+    });
+    return h + "</table>" + (bidding ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll">Pass on everything</button></div>' : "");
+  }
+
+  function playersHtml() {
+    let h = '<table><tr><th>Who\'s answered</th>' + st.items.map((it) => '<th class="small">' + esc(it.link.split(" ")[0]) + "&hellip;</th>").join("") + "</tr>";
+    (st.players || []).forEach((p) => {
+      h += '<tr class="' + (p.name === "You" ? "you" : "") + '"><td>' + esc(p.name) + "</td>" + p.answers.map((a) => "<td>" + chip(a) + "</td>").join("") + "</tr>";
+    });
+    return h + "</table>";
+  }
+
+  function standingsHtml(order, title) {
+    if (!order || !order.length) return "";
+    return '<div class="card"><h2>' + title + '</h2><ol class="stand">' + order.map((n, i) =>
+      '<li class="' + (n === "You" ? "you " : "") + (moved[n] && title === "Standings" ? "moved" : "") + '"><span class="n">' + (i + 1) + "</span><span>" + esc(n) + "</span></li>").join("") + "</ol></div>";
+  }
+
+  function pendingHtml() {
+    if (!st.pending || !st.pending.length) return "";
+    return '<div class="card"><h2>Will be recorded</h2>' + st.pending.map((a) => {
+      if (a.type === "award") return "<div class=\"small\">" + esc(a.member) + " wins <span class=\"iname\">" + esc(a.item) + "</span> (" + a.tier + ")" + (a.to !== a.member ? " &rarr; " + esc(a.to) : "") + "</div>";
+      if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to " + esc(a.to) + " to disenchant</div>";
+      return "<div class=\"small muted\">" + esc(a.member) + " joins the " + esc(a.list) + " list</div>";
+    }).join("") + (st.phase === "review" ? '<div class="small muted" style="margin-top:6px">Nothing is written to the ledger until you confirm.</div>' : "") + "</div>";
+  }
+
+  function controlsHtml() {
+    const p = st.phase;
+    let h = '<div class="row" style="margin-top:10px">';
+    if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
+    if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
+    if (p === "done") h += '<button data-act="undo">Undo last award</button>';
+    return h + "</div>";
+  }
+
+  function resultHtml() {
+    if (st.phase !== "done") return "";
+    result = result || call("check");
+    return '<div class="card ' + (result.ok ? "good" : "bad") + '"><h2>' + (result.ok ? "Matches the lesson" : "Different from the lesson") + "</h2><div>" + esc(result.message || "") +
+      '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
+  }
+
+  function render() {
+    if (!st) return;
+    const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
+    const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + "</h2><div>" + esc(st.lesson.text) + "</div></div>" : "";
+    $("#app").innerHTML =
+      '<div class="layout"><div>' +
+        '<div class="card"><h2>Scenarios</h2>' + sideScen + "</div>" +
+        '<div class="card"><h2>Time</h2><div class="row"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
+          [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") + "</div>" +
+          '<div class="small muted" style="margin-top:6px">Simulated clock: ' + st.now.toFixed(0) + 's<br>Ledger head: <code>' + esc(st.head.slice(0, 8)) + "</code></div></div>" +
+      "</div><div>" + lesson +
+        '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
+          (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
+          turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
+        resultHtml() + pendingHtml() +
+        '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
+      "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
+        '<div class="card"><h2>History</h2><div class="log">' + (st.log.length ? st.log.map((l) => "<div>" + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>" +
+      "</div></div>";
+  }
+
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-act]");
+    if (!el || !st) return;
+    const a = el.dataset.a, b = el.dataset.b;
+    switch (el.dataset.act) {
+      case "scenario": seed = 1; start(a); break;
+      case "again": seed += 1; start(current); break;
+      case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
+      case "toggle": running = !running; render(); break;
+      case "speed": speed = Number(a); render(); break;
+      case "bid": act("bid", a, b === "gift" ? giftTo : ""); break;
+      case "claimGift": act("claim", giftTo); break;
+      case "claim": act("claim", ""); break;
+      default: act(el.dataset.act, a, b);
+    }
+  });
+  document.addEventListener("change", (e) => { if (e.target.id === "giftTo") giftTo = e.target.value; });
+
+  setInterval(() => {
+    if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
+    st = call("advance", speed * 0.25);
+    updateMoved();
+    render();
+  }, 250);
+
+  window.addEventListener("load", () => {
+    if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Check your connection (the page loads a Lua runtime from a CDN).</div>'; return; }
+    scenarios = call("scenarios");
+    start(current);
+  });
+})();
+</script>
+</body>
+</html>

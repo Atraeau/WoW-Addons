@@ -12,7 +12,7 @@ local PM_MOD = 2147483647
 --       dropRate, duplicateRate (0..1, default 0).
 function M.New(opts)
     opts = opts or {}
-    local seed = (opts.seed or 1) % PM_MOD
+    local seed = ((opts.seed or 1) % PM_MOD) + 0.0
     if seed == 0 then seed = 1 end
     local function rnd()
         seed = (seed * 16807) % PM_MOD

@@ -42,9 +42,23 @@ local function fnv(str, h)
     return h
 end
 
+-- 8 hex digits of a 32-bit value held in a float. string.format("%x") is avoided on purpose:
+-- some Lua runtimes (e.g. fengari, which runs in browsers) have 32-bit integers and refuse
+-- values of 2^31 and above.
+local HEX = "0123456789abcdef"
+local function hex8(n)
+    local out = {}
+    for i = 8, 1, -1 do
+        local d = n % 16
+        out[i] = HEX:sub(d + 1, d + 1)
+        n = (n - d) / 16
+    end
+    return table.concat(out)
+end
+
 -- 64 bits as 16 hex chars (two FNV-1a passes with different seeds).
 function M.Sum(str)
-    return ("%08x%08x"):format(fnv(str, 2166136261), fnv(str, 2654435761))
+    return hex8(fnv(str, 2166136261.0)) .. hex8(fnv(str, 2654435761.0))
 end
 
 local function keyLess(a, b)
@@ -61,7 +75,8 @@ function M.Canon(v)
     elseif t == "number" then
         if v ~= v or v == math.huge or v == -math.huge then error("Canon: non-finite number") end
         if v == math.floor(v) and v > -9007199254740992 and v < 9007199254740992 then
-            return ("n%d"):format(v)
+            if v == 0 then return "n0" end
+            return ("n%.0f"):format(v) -- same text as %d, but safe for values beyond 32 bits
         end
         return ("n%.17g"):format(v)
     elseif t == "boolean" then
