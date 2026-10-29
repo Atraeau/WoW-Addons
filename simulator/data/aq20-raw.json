@@ -1,5 +1,5 @@
 {
- "source": "Wowhead Classic drop tables (www.wowhead.com/classic), rare+ drops (AQ20 tokens are rare or epic), class spell books and recipes excluded, collected 2026-10-29. INCOMPLETE: Wowhead began rate limiting before General Rajaxx (only its token rows were captured), Moam, Buru the Gorger and Ossirian the Unscarred could be collected.",
+ "source": "Wowhead Classic drop tables (www.wowhead.com/classic), rare+ drops (AQ20 tokens are rare or epic), class spell books and recipes excluded, collected 2026-10-29. INCOMPLETE: Wowhead began rate limiting part-way through: General Rajaxx may be missing a few rarer items (its list was cut off), and Moam, Buru the Gorger and Ossirian the Unscarred are not collected yet.",
  "raid": "Ruins of Ahn'Qiraj (AQ20)",
  "bosses": [
   ["Kurinnaxx", 15348, [[20885,"Qiraji Martial Drape",3,0,12,0,153,0.38],[20889,"Qiraji Regal Drape",3,0,12,0,1350,0.383],[21502,"Sand Reaver Wristguards",3,9,4,3,0,0.201],[21500,"Belt of the Inquisition",3,6,4,1,0,0.184],[21503,"Belt of the Sand Reaver",3,6,4,4,0,0.187],[21501,"Toughened Silithid Hide Gloves",3,10,4,2,0,0.191],[20888,"Qiraji Ceremonial Ring",3,0,12,0,284,0.105],[20884,"Qiraji Magisterial Ring",3,0,12,0,1219,0.097],[21498,"Qiraji Sacrificial Dagger",4,13,2,15,0,0.095],[21499,"Vestments of the Shifting Sands",4,5,4,1,0,0.102]]],
