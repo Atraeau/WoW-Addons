@@ -9,6 +9,7 @@ on:
       - 'src/KingsGambit/**'
       - 'tests/**'
       - 'simulator/**'
+      - 'tools/**'
       - 'scripts/build-simulator.lua'
       - '.github/workflows/tests.yml'
   pull_request:
@@ -16,6 +17,7 @@ on:
       - 'src/KingsGambit/**'
       - 'tests/**'
       - 'simulator/**'
+      - 'tools/**'
       - 'scripts/build-simulator.lua'
       - '.github/workflows/tests.yml'
 

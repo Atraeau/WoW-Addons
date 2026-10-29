@@ -1,0 +1,70 @@
+-- The audit tool: verify a saved ledger from a SavedVariables file, report standings and history.
+local H = ...
+local SK, test, eq = H.SK, H.test, H.eq
+local MockClient, Engine = SK.modules.MockClient, SK.modules.Engine
+
+local audit = dofile("tools/kgaudit.lua")
+local mods = audit.loadEngine(".")
+
+local function savedFile(mutate)
+    local client = MockClient.New({ name = "Raidlead", realm = "Realm" })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, n in ipairs { "Aldric", "Brann", "Cass" } do engine:Append("main", "AddMember", { member = n .. "-Realm", class = "MAGE" }) end
+    client:advance(60)
+    engine:Append("main", "Award", { member = "Aldric-Realm", item = "Gauntlets of the Ashen Vow" })
+    engine:Append("main", "Pass", { member = "Cass-Realm", item = "Gauntlets of the Ashen Vow", kind = "upgrade" })
+    local db = client:storage().account
+    if mutate then mutate(db) end
+    local path = (os.getenv("TEMP") or os.getenv("TMPDIR") or ".") .. "/kg-test-" .. tostring(os.time()) .. tostring(math.random(1e6)) .. ".lua"
+    local f = assert(io.open(path, "w"))
+    f:write("KingsGambitDB = " .. audit.dump(db) .. "\nKingsGambitCharDB = { }\n")
+    f:close()
+    return path, engine
+end
+
+H.section("Audit tool")
+test("a good ledger file verifies", function()
+    local path, engine = savedFile()
+    local db = assert(audit.loadSaved(path))
+    local results = audit.verify(db, mods)
+    eq(#results, 1); assert(results[1].ok); eq(results[1].events, 6); eq(results[1].head, engine:Get("main").head)
+    os.remove(path)
+end)
+test("a tampered ledger file is caught, with the event number", function()
+    local path = savedFile(function(db) db.lists.main.events[5].data.member = "Cass-Realm" end)
+    local db = assert(audit.loadSaved(path))
+    local results = audit.verify(db, mods)
+    assert(not results[1].ok); eq(results[1].reason, "badhash"); eq(results[1].index, 5)
+    os.remove(path)
+end)
+test("standings come out in order with wins and last win", function()
+    local path = savedFile()
+    local rows = assert(audit.standings(assert(audit.loadSaved(path)), mods, "main"))
+    eq(#rows, 3); eq(rows[1].name, "Brann"); eq(rows[3].name, "Aldric"); eq(rows[3].wins, 1)
+    eq(rows[3].lastWinItem, "Gauntlets of the Ashen Vow"); eq(rows[2].upgradePasses, 1)
+    local md = audit.markdown(rows, "Standings: main")
+    assert(md:find("| 3 | Aldric | 1 |", 1, true), md); assert(md:find("Gauntlets of the Ashen Vow", 1, true))
+    os.remove(path)
+end)
+test("standings refuse a ledger that does not verify", function()
+    local path = savedFile(function(db) db.lists.main.events[4].data.member = "Evil-Realm" end)
+    local rows, why = audit.standings(assert(audit.loadSaved(path)), mods, "main")
+    eq(rows, nil); assert(why:find("does not verify"), why)
+    os.remove(path)
+end)
+test("history is readable and limited", function()
+    local path = savedFile()
+    local lines = assert(audit.history(assert(audit.loadSaved(path)), "main", 2))
+    eq(#lines, 2); assert(lines[1]:find("Gauntlets of the Ashen Vow"), lines[1]); assert(lines[2]:find("passed on"), lines[2])
+    assert(lines[1]:find("Aldric won", 1, true))
+    os.remove(path)
+end)
+test("unknown lists and unreadable files give clear errors", function()
+    local path = savedFile()
+    local db = assert(audit.loadSaved(path))
+    local _, a = audit.standings(db, mods, "nope"); assert(a:find("no such list"))
+    local _, b = audit.history(db, "nope"); assert(b:find("no such list"))
+    local c = select(2, audit.loadSaved("does-not-exist.lua")); assert(c)
+    os.remove(path)
+end)
