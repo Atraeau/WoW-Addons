@@ -72,3 +72,37 @@ function M.Load(listId, events)
     return chain
 end
 
+
+-- Fast load for large stored ledgers: structure, linkage (seq and prev) and rules are checked
+-- and the standings are rebuilt, but event hashes are NOT recomputed. Call VerifyStep until it
+-- reports "done" to verify them in slices. Returns chain, or nil + reason + index.
+function M.LoadFast(listId, events)
+    local chain = M.NewChain(listId)
+    for i, ev in ipairs(events) do
+        if type(ev) ~= "table" or type(ev.id) ~= "string" or type(ev.prev) ~= "string" or type(ev.data) ~= "table"
+            or ev.seq ~= i or ev.prev ~= chain.head or ev.list ~= listId or ev.v ~= M.VERSION then
+            return nil, "malformed", i
+        end
+        local ok, err = Standings.Apply(chain.state, ev)
+        if not ok then return nil, err, i end
+        chain.events[i] = ev
+        chain.byId[ev.id] = ev
+        chain.head = ev.id
+    end
+    chain.verified = 0
+    return chain
+end
+
+-- Recompute the hashes of the next `count` unverified events. Returns "more", "done", or
+-- "bad" plus the index of the first event whose hash does not match.
+function M.VerifyStep(chain, count)
+    local from = (chain.verified or #chain.events) + 1
+    local to = math.min(from + count - 1, #chain.events)
+    for i = from, to do
+        local ev = chain.events[i]
+        local ok, id = pcall(eventId, ev)
+        if not ok or id ~= ev.id then return "bad", i end
+    end
+    chain.verified = to
+    return (to >= #chain.events) and "done" or "more"
+end

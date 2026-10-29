@@ -9,23 +9,28 @@ local M = SK:NewModule("Hash")
 local TWO32 = 4294967296
 local PRIME = 16777619 -- FNV-1a 32-bit prime
 
-local bxor = (bit and bit.bxor) or (bit32 and bit32.bxor)
+-- XOR of two 4-bit values, tabulated once. Byte XOR is then two lookups. This is used on every
+-- runtime instead of a bit library, so hashes are identical everywhere (game, tests, browser)
+-- and there is no per-byte function call.
+local XOR4 = {}
+for a = 0, 15 do
+    for b = 0, 15 do
+        local r, p, x, y = 0, 1, a, b
+        for _ = 1, 4 do
+            local xa, yb = x % 2, y % 2
+            if xa ~= yb then r = r + p end
+            x, y, p = (x - xa) / 2, (y - yb) / 2, p * 2
+        end
+        XOR4[a * 16 + b] = r
+    end
+end
 
--- h XOR b for a 32-bit h and a byte b.
+-- h XOR b for a 32-bit h and a byte b (only the low byte of h changes).
 local function xorByte(h, b)
-    if bxor then
-        local r = bxor(h, b)
-        if r < 0 then r = r + TWO32 end
-        return r
-    end
     local lo = h % 256
-    local r, p, a, c = 0, 1, lo, b
-    for _ = 1, 8 do
-        local x, y = a % 2, c % 2
-        if x ~= y then r = r + p end
-        a, c, p = (a - x) / 2, (c - y) / 2, p * 2
-    end
-    return h - lo + r
+    local al = lo % 16
+    local bl = b % 16
+    return h - lo + XOR4[(lo - al) / 16 * 16 + (b - bl) / 16] * 16 + XOR4[al * 16 + bl]
 end
 
 -- h * PRIME mod 2^32 without exceeding double precision (split into 16-bit halves).

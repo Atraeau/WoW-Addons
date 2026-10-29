@@ -10,24 +10,59 @@ Engine.__index = Engine
 -- Build an engine over a Client. Persisted lists are loaded and fully verified; a list that
 -- fails verification is reported in engine.problems and left untouched in storage
 -- (never silently repaired or discarded).
-function M.New(client)
+-- opts.syncVerifyLimit (default 2000): lists up to this many events are fully hash-verified right
+-- away; longer ones are loaded fast and verified in the background (see Engine:verifyTick).
+function M.New(client, opts)
     local acct = client:storage().account
     acct.schema = acct.schema or 1
     acct.lists = acct.lists or {}
     acct.config = acct.config or {}
-    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {} }, Engine)
+    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {}, verifying = {},
+        verifyLimit = (opts and opts.syncVerifyLimit) or 2000, verifyBatch = (opts and opts.verifyBatch) or 250 }, Engine)
     for listId, rec in pairs(acct.lists) do
-        local chain, err, idx = Ledger.Load(listId, rec.events or {})
+        local events = rec.events or {}
+        local lazy = #events > c.verifyLimit
+        local chain, err, idx
+        if lazy then chain, err, idx = Ledger.LoadFast(listId, events) else chain, err, idx = Ledger.Load(listId, events) end
         if chain then
             rec.events = chain.events -- keep the saved table and the live chain in step
             c.chains[listId] = chain
+            if lazy then c.verifying[listId] = chain end
         else
             c.problems[listId] = { reason = err, index = idx }
             client:print(("list '%s' failed verification at event %s: %s"):format(listId, tostring(idx), tostring(err)))
         end
     end
+    if next(c.verifying) then
+        c.verifyTimer = client:every(0.05, function() c:verifyTick() end)
+    end
     return c
 end
+
+-- Background hash verification of large lists, a slice per tick so login never stalls. A list that
+-- fails is reported and taken out of use (its saved data is left untouched).
+function Engine:verifyTick()
+    for listId, chain in pairs(self.verifying) do
+        local status, idx = Ledger.VerifyStep(chain, self.verifyBatch)
+        if status == "done" then
+            self.verifying[listId] = nil
+            self:fire("verified", listId, nil)
+        elseif status == "bad" then
+            self.verifying[listId] = nil
+            self.chains[listId] = nil
+            self.problems[listId] = { reason = "badhash", index = idx }
+            self.client:print(("list '%s' failed verification at event %d: badhash"):format(listId, idx))
+            self:fire("corrupt", listId, nil)
+        end
+        break -- one list per tick keeps each tick small
+    end
+    if not next(self.verifying) and self.verifyTimer then
+        self.client:cancel(self.verifyTimer)
+        self.verifyTimer = nil
+    end
+end
+
+function Engine:IsVerified(listId) return self.chains[listId] ~= nil and self.verifying[listId] == nil end
 
 function Engine:Get(listId) return self.chains[listId] end
 

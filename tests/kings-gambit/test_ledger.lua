@@ -23,6 +23,12 @@ test("different data hashes differently", function()
     assert(Hash.Sum("hello") ~= Hash.Sum("hellp"))
     assert(Hash.Canon({ a = "1" }) ~= Hash.Canon({ a = 1 }), "string vs number must differ")
 end)
+test("the hash algorithm is locked (golden values from two different Lua runtimes)", function()
+    -- These two were computed in a browser (fengari, Lua 5.3 with 32-bit integers) with the first
+    -- implementation. If they ever change, every stored ledger would stop verifying.
+    eq(Hash.Sum("hello Fenn-Realm"), "3dcf24964da09ca2")
+    eq(Hash.Sum("hello Zed-Realm"), "0dda1aa26cc53a36")
+end)
 test("hash is 16 hex chars", function() assert(Hash.Sum("x"):match("^%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x$")) end)
 
 H.section("Standings")
