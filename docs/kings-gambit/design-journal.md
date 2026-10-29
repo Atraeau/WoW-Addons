@@ -42,7 +42,7 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
   (vs. storing standings directly.) Gives history, audit, and undo, and is what
   makes integrity-checking possible at all.
 - **Hash-chained events; a head hash fingerprints the whole history.** Lets any
-  two clients prove they agree (or detect desync/corruption) cheaply.
+  two peers prove they agree (or detect desync/corruption) cheaply.
 - **Trust model: trusted-officer + hash chain, no cryptography.** (vs. signed
   events / real crypto.) A guild isn't a bank; the chain reliably catches
   *mistakes, dropped messages, and desync* — it does not try to stop a
@@ -165,26 +165,26 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
 
 ### Testability, simulation & training (added 2026-10-28)
 
-- **The WoW *API* is abstracted behind a `Host` interface; the UI is not.** The ledger,
-  standings, draft engine and every other rule reach the game only through the Host:
+- **The WoW *API* is abstracted behind a `Client` interface; the UI is not.** The ledger,
+  standings, draft engine and every other rule reach the game only through the Client:
   clock, RNG, timers, raid roster and ranks (leader/assistant), loot (Master Looter
   candidates, loot slots, `GiveMasterLoot`), addon comms, whispers, trades, and
   persistence. They never call WoW globals directly. Why: this is the only way to test
   the rules headlessly, and it makes simulation nearly free.
 - **The UI is real, always.** We build the actual frames and use them for real raids,
   tests and training alike. We don't build a parallel mock UI. The UI talks to the
-  engine, and the engine talks to a Host, so swapping the Host swaps where the data
+  engine, and the engine talks to a Client, so swapping the Client swaps where the data
   comes from without touching the UI.
-- **Three Host implementations, one engine, one UI.**
-  - **RealHost** talks to the WoW client.
-  - **MockHost** is headless, with a scriptable clock, seeded RNG, fake roster and fake
+- **Three Client implementations, one engine, one UI.**
+  - **RealClient** talks to the WoW client.
+  - **MockClient** is headless, with a scriptable clock, seeded RNG, fake roster and fake
     loot. It runs the rule tests under plain Lua 5.4 (CI) and inside the game.
-  - **SimHost** is MockHost made interactive: a fake raid with bot raiders, driven live
+  - **SimClient** is MockClient made interactive: a fake raid with bot raiders, driven live
     by the learner through the real UI. This is training mode.
 - **In-game self-tests.** `/gambit test` runs the same suites inside the client (the
   test files load on demand so they cost nothing in normal play). This catches
   differences between Lua 5.4 and the client's Lua, such as the `bit` library. The real
-  UI is checked here too, by driving it over a MockHost (open the popup, click Need,
+  UI is checked here too, by driving it over a MockClient (open the popup, click Need,
   assert the resulting event), since UI code can't run outside the client.
 - **Training / simulation mode, with the Master Looter as the first audience.**
   - A sandboxed list that is clearly labeled and **never synced or gossiped**; its
@@ -196,36 +196,36 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
     on the rationale doc, and can check what the learner chose against what the rules allow.
   - Because the ledger is event-sourced, a **real past session can be replayed** as a
     training scenario.
-- **Synchronization is testable and teachable too.** Comms go through the Host, so we can
-  simulate several clients at once, in two ways:
-  - **Virtual clients in one process (automated tests).** Each virtual client has its own
-    engine instance and its own MockHost, joined by a **SimNetwork** that can add latency,
+- **Synchronization is testable and teachable too.** Comms go through the Client, so we can
+  simulate several engines at once, in two ways:
+  - **Virtual engines in one process (automated tests).** Each virtual engine has its own
+    engine instance and its own MockClient, joined by a **SimNetwork** that can add latency,
     drop, duplicate and reorder messages, and partition the group. The tests assert that
-    every client converges to the same head hash and standings. Cases: a late joiner, an
+    every engine converges to the same head hash and standings. Cases: a late joiner, an
     officer who was offline and returns, two officers writing at once (a fork), a lost
     message, a corrupted event.
   - **Real people practicing together (training).** Several players each run the addon in
     training mode and sync over the real addon channel, but on a **separate training
-    prefix and session code**, so they exercise the real RealHost comms path without
+    prefix and session code**, so they exercise the real RealClient comms path without
     touching the guild ledger. Training lists can't merge with guild lists.
   - **Confidence cues.** The UI shows a clear sync status (in sync / catching up / diverged),
     compares head hashes between participants, and training scenarios end with a check
     ("do all of you show the same head?"), so learners can see they did it right.
   - **Consequence for the code:** the engine must be instantiable (no module-level
-    singletons such as `Ledger.chains`). Each client, real or simulated, owns its own
-    state and Host.
+    singletons such as `Ledger.chains`). Each engine, real or simulated, owns its own
+    state and Client.
 - **Field testing in a real dungeon (low stakes).** The mock can only be as right as our
   understanding of the client, so we validate against the real thing early and cheaply:
-  - **RealHost first, then a field test.** RealHost is written right after MockHost, and
+  - **RealClient first, then a field test.** RealClient is written right after MockClient, and
     the same contract suite runs against it in the game (`/gambit test`), starting solo in
     town. That catches wrong signatures and Secret Values surprises before anyone else is involved.
   - **A sandboxed field list**, never synced to the guild ledger, so a dungeon run can't
     pollute real standings.
   - **Dry-run and live modes.** Dry-run logs what the addon *would* hand out
     (`GiveMasterLoot` is not called). Live actually gives the items, fine in a normal dungeon.
-  - **Record and replay.** Field mode records every Host call and event with timestamps
+  - **Record and replay.** Field mode records every Client call and event with timestamps
     into SavedVariables. We read the trace after the run, fix whatever differs from the mock,
-    and turn each discovery into a permanent MockHost test, so real-world surprises become
+    and turn each discovery into a permanent MockClient test, so real-world surprises become
     regression tests.
   - **What a run is for:** Master Looter setup in a dungeon group, the real order of
     `LOOT_OPENED` and `LOOT_SLOT_CLEARED`, `GiveMasterLoot` candidate indexing, async
@@ -233,14 +233,14 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
     window, `C_EncodingUtil` and the `bit` library, and SavedVariables across a real logout.
   - **Known real-world constraint:** the client can restrict outgoing addon chat messages
     (`AreOutgoingAddonChatMessagesRestricted`, `AddonRestrictionStateChanged`), for example
-    during boss encounters. The Host will report this (`send` returns `false, "restricted"`
+    during boss encounters. The Client will report this (`send` returns `false, "restricted"`
     and a `comms.restrictionChanged` event), and sync must queue and retry afterward. A boss
     fight is a good field test for exactly this.
   - **Needs other players** for sync: a few people running the addon in the same party
     (a guildie or alts), with at least one player *without* it to exercise the whisper fallback.
-- **Phasing change:** a new Phase 1.5 (Host abstraction, MockHost, shared test harness,
-  CI) comes before the UI work, so the real UI is built against the Host from the start.
-  Training mode (SimHost, scenarios, coach) follows the loot session. The multi-client
+- **Phasing change:** a new Phase 1.5 (Client abstraction, MockClient, shared test harness,
+  CI) comes before the UI work, so the real UI is built against the Client from the start.
+  Training mode (SimClient, scenarios, coach) follows the loot session. The multi-engine
   SimNetwork tests land with Phase 3 (sync), and the multi-player training sessions with
   Phase 4.5.
 
@@ -258,10 +258,10 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
 - We deliberately **planned extensively before writing code** — the manifesto
   and this journal are the "thinking on paper" that precedes Phase 0.
 - The plan is phased MVP → full: (0) rationale doc + scaffold, (1) ledger core,
-  **(1.5) Host API abstraction + MockHost + test harness + CI**, **(1.6) RealHost + in-game
+  **(1.5) Client API abstraction + MockClient + test harness + CI**, **(1.6) RealClient + in-game
   contract tests + dungeon field test**, (2) standings UI +
   manual ops, (3) sync, (4) loot session + draft, **(4.5) training / simulation mode**,
   (5) transparency + corrections/trades, (6) external sync, (7) polish.
 - Verification leans on **deterministic replay unit checks** (replay a crafted
-  event log, assert the standings), multi-client convergence tests, and
+  event log, assert the standings), multi-engine convergence tests, and
   validating every WoW API call against the exported `docs/api.json`.

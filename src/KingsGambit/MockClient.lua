@@ -1,12 +1,12 @@
--- King's Gambit: MockHost, a headless fake of the WoW API (Phase 1.5).
+-- King's Gambit: MockClient, a headless fake of the WoW API (Phase 1.5).
 -- Runs under plain Lua and inside the game. Time, randomness, raid, loot, comms and
 -- trades are all scripted by the test (or training scenario) through the control
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
--- Design: docs/kings-gambit/host-interface.md
+-- Design: docs/kings-gambit/client-interface.md
 local _, SK = ...
-local M = SK:NewModule("MockHost")
+local M = SK:NewModule("MockClient")
 local Hash = SK.modules.Hash
-local Host = SK.modules.Host
+local Client = SK.modules.Client
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 local PM_MOD = 2147483647 -- Park-Miller: state * 16807 stays below 2^53, so it is exact
@@ -56,7 +56,7 @@ function M.New(opts)
         sent = {},    -- everything the client tried to send
         given = {},   -- loot handed out through give()
         printed = {}, logs = {}, sounds = {},
-        onSend = nil, -- SimNetwork hooks in here: function(host, message)
+        onSend = nil, -- SimNetwork hooks in here: function(client, message)
         pendingCount = 0,
     }
 
@@ -116,7 +116,7 @@ function M.New(opts)
 
     ---------------------------------------------------------------- events
     function h:on(event, fn)
-        assert(Host.IsEvent(event), "unknown host event: " .. tostring(event))
+        assert(Client.IsEvent(event), "unknown client event: " .. tostring(event))
         local list = S.handlers[event]
         if not list then list = {}; S.handlers[event] = list end
         local entry = { fn = fn, active = true }
@@ -125,7 +125,7 @@ function M.New(opts)
     end
 
     function h:emit(event, payload)
-        assert(Host.IsEvent(event), "unknown host event: " .. tostring(event))
+        assert(Client.IsEvent(event), "unknown client event: " .. tostring(event))
         local list = S.handlers[event]
         if not list then return end
         local snapshot = {}
@@ -362,7 +362,7 @@ function M.New(opts)
     function h:enterWorld() self:emit("world.entered") end
 
     -- Simulate /reload: timers, handlers and prefix registrations vanish; storage, clock and
-    -- the simulated world survive. The caller builds a fresh client over the same host.
+    -- the simulated world survive. The caller builds a fresh client over the same client.
     function h:reload()
         S.timers, S.handlers, S.prefixes = {}, {}, {}
         return self

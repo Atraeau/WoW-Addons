@@ -1,50 +1,49 @@
--- King's Gambit: a client owns its ledger state and talks to the world only through a Host.
--- No module-level state: tests and training can run many clients in one process.
+-- King's Gambit: the Client contract (Phase 1.5).
+-- The Client is the only way the engine touches the WoW API. This file lists what a Client
+-- must provide so RealClient, MockClient and SimClient can be checked against the same contract.
+-- Design: docs/kings-gambit/client-interface.md
 local _, SK = ...
 local M = SK:NewModule("Client")
-local Ledger = SK.modules.Ledger
 
-local Client = {}
-Client.__index = Client
+-- Methods are called with a colon: client:now(), client:send(...).
+M.METHODS = {
+    -- time and randomness
+    "now", "serverTime", "after", "every", "cancel", "random",
+    -- identity and roster
+    "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
+    -- loot
+    "lootMethod", "isMasterLooter", "lootSlots", "candidates", "give", "itemInfo",
+    -- communication
+    "registerPrefix", "send", "pending", "whisper", "announce", "serialize", "deserialize",
+    -- trade
+    "trade", "tradeableUntil",
+    -- environment and storage
+    "storage", "playSound", "print", "log",
+    -- events
+    "on",
+}
 
--- Build a client over a Host. Persisted lists are loaded and fully verified; a list that
--- fails verification is reported in client.problems and left untouched in storage
--- (never silently repaired or discarded).
-function M.New(host)
-    local acct = host:storage().account
-    acct.schema = acct.schema or 1
-    acct.lists = acct.lists or {}
-    acct.config = acct.config or {}
-    local c = setmetatable({ host = host, db = acct, chains = {}, problems = {} }, Client)
-    for listId, rec in pairs(acct.lists) do
-        local chain, err, idx = Ledger.Load(listId, rec.events or {})
-        if chain then
-            rec.events = chain.events -- keep the saved table and the live chain in step
-            c.chains[listId] = chain
-        else
-            c.problems[listId] = { reason = err, index = idx }
-            host:print(("list '%s' failed verification at event %s: %s"):format(listId, tostring(idx), tostring(err)))
-        end
+M.EVENTS = {
+    "roster.changed", "lootMethod.changed",
+    "loot.opened", "loot.slotCleared", "loot.closed",
+    "comms.received", "whisper.received",
+    "trade.changed", "trade.closed",
+    "encounter.ended", "world.entered",
+    "item.info",
+}
+
+local eventSet = {}
+for _, e in ipairs(M.EVENTS) do eventSet[e] = true end
+
+function M.IsEvent(name) return eventSet[name] == true end
+
+-- Names a client is missing from the contract (empty list = conforms).
+function M.Missing(client)
+    local missing = {}
+    for _, name in ipairs(M.METHODS) do
+        if type(client[name]) ~= "function" then missing[#missing + 1] = name end
     end
-    return c
-end
-
-function Client:Get(listId) return self.chains[listId] end
-
--- Create a list (writes its CreateList genesis event) and persist it.
-function Client:CreateList(listId, name)
-    if self.chains[listId] or self.problems[listId] then return nil, "exists" end
-    local chain = Ledger.NewChain(listId)
-    local ev, err = Ledger.Append(chain, "CreateList", { name = name }, self.host:me(), self.host:serverTime())
-    if not ev then return nil, err end
-    self.chains[listId] = chain
-    self.db.lists[listId] = { events = chain.events }
-    return chain
-end
-
--- Author an event on a list as this client, stamped with the Host's clock.
-function Client:Append(listId, type_, data)
-    local chain = self.chains[listId]
-    if not chain then return nil, "nolist" end
-    return Ledger.Append(chain, type_, data, self.host:me(), self.host:serverTime())
+    if type(client.caps) ~= "table" then missing[#missing + 1] = "caps" end
+    if type(client.maxMessage) ~= "number" then missing[#missing + 1] = "maxMessage" end
+    return missing
 end
