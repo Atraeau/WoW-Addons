@@ -41,7 +41,7 @@ engine is plain Lua with no game dependency, so it is fully tested outside WoW.
 
 - Design: [`docs/kings-gambit/`](docs/kings-gambit/): [manifesto](docs/kings-gambit/manifesto.md),
   [player guide](docs/kings-gambit/rationale.md), [design journal](docs/kings-gambit/design-journal.md) (every decision and why),
-  [client interface](docs/kings-gambit/client-interface.md), [UI sketch](docs/kings-gambit/ui-sketch.html)
+  [client interface](docs/kings-gambit/client-interface.md), [ledger format](docs/kings-gambit/ledger-format.md), [UI sketch](docs/kings-gambit/ui-sketch.html)
 - Try it: open [`simulator/index.html`](simulator/README.md) in a browser: the real engine over a simulated raid,
   with training scenarios and a sync lab
 - Audit: [`tools/`](tools/README.md): verify a saved ledger and print standings/history without the game

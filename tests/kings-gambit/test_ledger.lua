@@ -29,6 +29,18 @@ test("the hash algorithm is locked (golden values from two different Lua runtime
     eq(Hash.Sum("hello Fenn-Realm"), "3dcf24964da09ca2")
     eq(Hash.Sum("hello Zed-Realm"), "0dda1aa26cc53a36")
 end)
+test("the worked example in docs/kings-gambit/ledger-format.md is real", function()
+    eq(Hash.Sum(""), "811c9dc59e3779b1"); eq(Hash.Sum("abc"), "1a47e90bdf63f96f")
+    local chain = Ledger.NewChain("main")
+    local function add(t, d, ts) return assert(Ledger.Append(chain, t, d, "Raidlead-Realm", ts)) end
+    eq(add("CreateList", { name = "Main" }, 1760000000).id, "afd137672323aec3")
+    eq(add("AddMember", { member = "Aldric-Realm", class = "MAGE" }, 1760000010).id, "9290606d89d766d1")
+    eq(add("AddMember", { member = "Brann-Realm" }, 1760000020).id, "2e846a527f771216")
+    eq(add("Award", { member = "Aldric-Realm", item = "Gauntlets of the Ashen Vow" }, 1760000100).id, "1364c5f42bad9da8")
+    eq(table.concat(chain.state.order, ","), "Brann-Realm,Aldric-Realm")
+    eq(Hash.Canon({ v = 1, list = "main", seq = 1, ts = 1760000000, author = "Raidlead-Realm", type = "CreateList", data = { name = "Main" } }),
+        "{s6:author=s14:Raidlead-Realm,s4:data={s4:name=s4:Main,},s4:list=s4:main,s3:seq=n1,s2:ts=n1760000000,s4:type=s10:CreateList,s1:v=n1,}")
+end)
 test("hash is 16 hex chars", function() assert(Hash.Sum("x"):match("^%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x$")) end)
 
 H.section("Standings")
