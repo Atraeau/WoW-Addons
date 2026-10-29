@@ -246,6 +246,168 @@ function api.check()
     return { ok = ok and true or false, message = message }
 end
 
+
+---------------------------------------------------------------- sync lab
+-- Several real engines (each with its own MockClient) joined by a SimNetwork. Nothing here is
+-- special-cased: the Sync module is the same code that will run in the game.
+local lab
+
+local function labLog(text) lab.log[#lab.log + 1] = { t = lab.net.time, text = text } end
+
+local function labAddPeer()
+    local i = #lab.peers + 1
+    local name = lab.names[i]
+    if not name then return false end
+    local net = lab.net
+    local client = S.MockClient.New({ name = name, realm = "Realm", seed = 1000 + i,
+        clock = 1000 + net.time, unix = 1760000000 + math.floor(net.time) })
+    local engine = S.Engine.New(client)
+    local sync = S.Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
+    net:attach(client)
+    sync:start()
+    local peer = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, restricted = false }
+    sync:on("forkResolved", function(p)
+        if p.winner == "theirs" then
+            labLog(name .. " found a fork at event " .. p.at .. " and switched to the longer chain; " .. p.orphaned .. " of their own events were set aside for review")
+        else
+            labLog(name .. " found a fork at event " .. p.at .. " and kept their chain (it was the longer one)")
+        end
+    end)
+    lab.peers[i] = peer
+    return peer
+end
+
+local function labReset()
+    lab = { net = S.SimNetwork.New({ seed = 3, latency = 0.15 }), peers = {}, log = {}, counter = 0, groups = nil,
+        names = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn" } }
+    for _ = 1, 4 do labAddPeer() end
+    local a = lab.peers[1]
+    a.engine:CreateList("main", "Main")
+    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
+    lab.counter = 5
+    lab.net:advance(4)
+    lab.log = {}
+    labLog("Four players are in sync. Try splitting the network, then writing at both ends.")
+end
+
+local function labState()
+    if not lab then labReset() end
+    -- the "majority" head: what most peers agree on (ties go to the longer chain)
+    local tally = {}
+    for _, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        local h = c and c.head or "none"
+        local t = tally[h] or { head = h, n = 0, len = c and #c.events or 0 }
+        t.n = t.n + 1
+        tally[h] = t
+    end
+    local best
+    for _, t in pairs(tally) do
+        if not best or t.n > best.n or (t.n == best.n and t.len > best.len) then best = t end
+    end
+    local majorityChain
+    for _, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        if c and c.head == best.head then majorityChain = c; break end
+    end
+    local out = { time = lab.net.time, inFlight = lab.net:inFlight(), stats = lab.net.stats, peers = {}, log = lab.log,
+        drop = lab.net.dropRate, dup = lab.net.duplicateRate, split = lab.groups, canAdd = #lab.peers < #lab.names }
+    for i, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        local n = c and #c.events or 0
+        local head = c and c.head or "none"
+        local status = "in sync"
+        if head ~= best.head then
+            -- behind = our whole history is a prefix of the majority's; diverged = it split off
+            status = (c == nil or (majorityChain and majorityChain.byId[head])) and "behind" or "diverged"
+        end
+        local order = {}
+        if c then for j, m in ipairs(c.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
+        local orphans = 0
+        for _, o in ipairs(p.engine.db.orphans or {}) do orphans = orphans + #o.events end
+        local st = p.sync:status()
+        out.peers[i] = { index = i, name = p.name, count = n, head = head:sub(1, 8), status = status, order = order,
+            members = c and #c.state.order or 0, pending = st.pending, blocked = st.blocked, rejected = st.rejected,
+            orphans = orphans, restricted = p.restricted }
+    end
+    return out
+end
+
+function api.lab_state() return labState() end
+function api.lab_reset() labReset(); return labState() end
+function api.lab_advance(sec) if not lab then labReset() end lab.net:advance(tonumber(sec) or 0); return labState() end
+
+function api.lab_write(i, kind)
+    if not lab then labReset() end
+    local p = lab.peers[tonumber(i)]
+    if not p then return { error = "no such player" } end
+    local chain = p.engine:Get("main")
+    lab.counter = lab.counter + 1
+    local ev, err
+    if kind == "member" then
+        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter .. "-Realm" })
+        if ev then labLog(p.name .. " added a member") end
+    else
+        local top = chain and chain.state.order[1]
+        if not top then return labState() end
+        ev, err = p.engine:Append("main", "Award", { member = top, item = "Item " .. lab.counter })
+        if ev then labLog(p.name .. " gave an item to " .. short(top)) end
+    end
+    local s = labState()
+    if not ev then s.error = tostring(err) end
+    return s
+end
+
+-- spec like "1|234": peers in the same group can talk, groups cannot.
+function api.lab_partition(spec)
+    if not lab then labReset() end
+    local groups, names, desc = {}, {}, {}
+    for part in tostring(spec):gmatch("[^|]+") do
+        local g, label = {}, {}
+        for digit in part:gmatch("%d") do
+            local p = lab.peers[tonumber(digit)]
+            if p then g[#g + 1] = p.full; label[#label + 1] = p.name end
+        end
+        if #g > 0 then groups[#groups + 1] = g; desc[#desc + 1] = table.concat(label, " + ") end
+    end
+    lab.net:partition(groups)
+    lab.groups = table.concat(desc, "  |  ")
+    labLog("Network split: " .. lab.groups)
+    return labState()
+end
+
+function api.lab_heal()
+    if not lab then labReset() end
+    lab.net:heal(); lab.groups = nil
+    labLog("The network healed. Watch the heads converge.")
+    return labState()
+end
+
+function api.lab_net(drop, dup)
+    if not lab then labReset() end
+    lab.net.dropRate = tonumber(drop) or 0
+    lab.net.duplicateRate = tonumber(dup) or 0
+    labLog(("Network: %d%% of messages lost, %d%% duplicated"):format(lab.net.dropRate * 100, lab.net.duplicateRate * 100))
+    return labState()
+end
+
+function api.lab_restrict(i, flag)
+    if not lab then labReset() end
+    local p = lab.peers[tonumber(i)]
+    if not p then return labState() end
+    p.restricted = (flag == "1")
+    p.client:setRestricted(p.restricted)
+    labLog(p.name .. (p.restricted and " can no longer send addon messages (like during a boss fight)" or " can send again"))
+    return labState()
+end
+
+function api.lab_join()
+    if not lab then labReset() end
+    local p = labAddPeer()
+    if p then labLog(p.name .. " logged in with no data and will catch up") end
+    return labState()
+end
+
 -- JS entry point: window.KG(name, a, b) -> JSON string.
 js.global.KG = function(_, name, a, b)
     local fn = api[name]

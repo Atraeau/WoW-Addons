@@ -51,6 +51,13 @@
   select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
   .loading { padding: 40px; text-align: center; color: var(--muted); }
   code { background: var(--panel2); padding: 0 4px; border-radius: 3px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs button.on { border-color: var(--gold); color: var(--gold); }
+  .pill.good { color: var(--good); border-color: var(--good); } .pill.warn { color: var(--warn); border-color: var(--warn); } .pill.bad { color: var(--bad); border-color: var(--bad); }
+  .peers { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-bottom: 16px; }
+  .peer.good { border-color: var(--good); } .peer.warn { border-color: var(--warn); } .peer.bad { border-color: var(--bad); }
+  .mini { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
+  .hint { font-size: 13px; margin: 0 0 6px; }
 </style>
 </head>
 <body>
@@ -58,7 +65,9 @@
 <div class="wrap">
   <h1>King's Gambit simulator</h1>
   <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You"), at the bottom of the list.</p>
+  <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button></div>
   <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
+  <div id="lab" hidden></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari-web.js" integrity="sha384-aqYZ5bBpWDOXcXQUTRXOLnaFjrqrMw1BiHjk/1cz75A3ytQtdNkW1QfTe7kTlLR6" crossorigin="anonymous"></script>
@@ -2581,6 +2590,168 @@ function api.check()
     return { ok = ok and true or false, message = message }
 end
 
+
+---------------------------------------------------------------- sync lab
+-- Several real engines (each with its own MockClient) joined by a SimNetwork. Nothing here is
+-- special-cased: the Sync module is the same code that will run in the game.
+local lab
+
+local function labLog(text) lab.log[#lab.log + 1] = { t = lab.net.time, text = text } end
+
+local function labAddPeer()
+    local i = #lab.peers + 1
+    local name = lab.names[i]
+    if not name then return false end
+    local net = lab.net
+    local client = S.MockClient.New({ name = name, realm = "Realm", seed = 1000 + i,
+        clock = 1000 + net.time, unix = 1760000000 + math.floor(net.time) })
+    local engine = S.Engine.New(client)
+    local sync = S.Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
+    net:attach(client)
+    sync:start()
+    local peer = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, restricted = false }
+    sync:on("forkResolved", function(p)
+        if p.winner == "theirs" then
+            labLog(name .. " found a fork at event " .. p.at .. " and switched to the longer chain; " .. p.orphaned .. " of their own events were set aside for review")
+        else
+            labLog(name .. " found a fork at event " .. p.at .. " and kept their chain (it was the longer one)")
+        end
+    end)
+    lab.peers[i] = peer
+    return peer
+end
+
+local function labReset()
+    lab = { net = S.SimNetwork.New({ seed = 3, latency = 0.15 }), peers = {}, log = {}, counter = 0, groups = nil,
+        names = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn" } }
+    for _ = 1, 4 do labAddPeer() end
+    local a = lab.peers[1]
+    a.engine:CreateList("main", "Main")
+    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
+    lab.counter = 5
+    lab.net:advance(4)
+    lab.log = {}
+    labLog("Four players are in sync. Try splitting the network, then writing at both ends.")
+end
+
+local function labState()
+    if not lab then labReset() end
+    -- the "majority" head: what most peers agree on (ties go to the longer chain)
+    local tally = {}
+    for _, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        local h = c and c.head or "none"
+        local t = tally[h] or { head = h, n = 0, len = c and #c.events or 0 }
+        t.n = t.n + 1
+        tally[h] = t
+    end
+    local best
+    for _, t in pairs(tally) do
+        if not best or t.n > best.n or (t.n == best.n and t.len > best.len) then best = t end
+    end
+    local majorityChain
+    for _, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        if c and c.head == best.head then majorityChain = c; break end
+    end
+    local out = { time = lab.net.time, inFlight = lab.net:inFlight(), stats = lab.net.stats, peers = {}, log = lab.log,
+        drop = lab.net.dropRate, dup = lab.net.duplicateRate, split = lab.groups, canAdd = #lab.peers < #lab.names }
+    for i, p in ipairs(lab.peers) do
+        local c = p.engine:Get("main")
+        local n = c and #c.events or 0
+        local head = c and c.head or "none"
+        local status = "in sync"
+        if head ~= best.head then
+            -- behind = our whole history is a prefix of the majority's; diverged = it split off
+            status = (c == nil or (majorityChain and majorityChain.byId[head])) and "behind" or "diverged"
+        end
+        local order = {}
+        if c then for j, m in ipairs(c.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
+        local orphans = 0
+        for _, o in ipairs(p.engine.db.orphans or {}) do orphans = orphans + #o.events end
+        local st = p.sync:status()
+        out.peers[i] = { index = i, name = p.name, count = n, head = head:sub(1, 8), status = status, order = order,
+            members = c and #c.state.order or 0, pending = st.pending, blocked = st.blocked, rejected = st.rejected,
+            orphans = orphans, restricted = p.restricted }
+    end
+    return out
+end
+
+function api.lab_state() return labState() end
+function api.lab_reset() labReset(); return labState() end
+function api.lab_advance(sec) if not lab then labReset() end lab.net:advance(tonumber(sec) or 0); return labState() end
+
+function api.lab_write(i, kind)
+    if not lab then labReset() end
+    local p = lab.peers[tonumber(i)]
+    if not p then return { error = "no such player" } end
+    local chain = p.engine:Get("main")
+    lab.counter = lab.counter + 1
+    local ev, err
+    if kind == "member" then
+        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter .. "-Realm" })
+        if ev then labLog(p.name .. " added a member") end
+    else
+        local top = chain and chain.state.order[1]
+        if not top then return labState() end
+        ev, err = p.engine:Append("main", "Award", { member = top, item = "Item " .. lab.counter })
+        if ev then labLog(p.name .. " gave an item to " .. short(top)) end
+    end
+    local s = labState()
+    if not ev then s.error = tostring(err) end
+    return s
+end
+
+-- spec like "1|234": peers in the same group can talk, groups cannot.
+function api.lab_partition(spec)
+    if not lab then labReset() end
+    local groups, names, desc = {}, {}, {}
+    for part in tostring(spec):gmatch("[^|]+") do
+        local g, label = {}, {}
+        for digit in part:gmatch("%d") do
+            local p = lab.peers[tonumber(digit)]
+            if p then g[#g + 1] = p.full; label[#label + 1] = p.name end
+        end
+        if #g > 0 then groups[#groups + 1] = g; desc[#desc + 1] = table.concat(label, " + ") end
+    end
+    lab.net:partition(groups)
+    lab.groups = table.concat(desc, "  |  ")
+    labLog("Network split: " .. lab.groups)
+    return labState()
+end
+
+function api.lab_heal()
+    if not lab then labReset() end
+    lab.net:heal(); lab.groups = nil
+    labLog("The network healed. Watch the heads converge.")
+    return labState()
+end
+
+function api.lab_net(drop, dup)
+    if not lab then labReset() end
+    lab.net.dropRate = tonumber(drop) or 0
+    lab.net.duplicateRate = tonumber(dup) or 0
+    labLog(("Network: %d%% of messages lost, %d%% duplicated"):format(lab.net.dropRate * 100, lab.net.duplicateRate * 100))
+    return labState()
+end
+
+function api.lab_restrict(i, flag)
+    if not lab then labReset() end
+    local p = lab.peers[tonumber(i)]
+    if not p then return labState() end
+    p.restricted = (flag == "1")
+    p.client:setRestricted(p.restricted)
+    labLog(p.name .. (p.restricted and " can no longer send addon messages (like during a boss fight)" or " can send again"))
+    return labState()
+end
+
+function api.lab_join()
+    if not lab then labReset() end
+    local p = labAddPeer()
+    if p then labLog(p.name .. " logged in with no data and will catch up") end
+    return labState()
+end
+
 -- JS entry point: window.KG(name, a, b) -> JSON string.
 js.global.KG = function(_, name, a, b)
     local fn = api[name]
@@ -2748,16 +2919,73 @@ end
       "</div></div>";
   }
 
+  let tab = "loot", lab = null;
+  function labCall(name, a, b) {
+    lab = call(name, a, b);
+    renderLab();
+  }
+  function renderLab() {
+    if (!lab || tab !== "lab") return;
+    const cls = { "in sync": "good", behind: "warn", diverged: "bad" };
+    const peers = lab.peers.map((p) =>
+      '<div class="card peer ' + cls[p.status] + '"><div class="row spread"><b>' + esc(p.name) + '</b><span class="pill ' + cls[p.status] + '">' + p.status + "</span></div>" +
+      '<div class="small muted">' + p.count + " events · head <code>" + esc(p.head) + "</code></div>" +
+      '<ul class="mini">' + p.order.map((n, i) => "<li>" + (i + 1) + ". " + esc(n) + "</li>").join("") + (p.members > p.order.length ? "<li>&hellip; " + p.members + " on the list</li>" : "") + "</ul>" +
+      (p.pending ? '<div class="small" style="color:var(--warn)">' + p.pending + " messages waiting to send" + (p.blocked ? " (" + esc(p.blocked) + ")" : "") + "</div>" : "") +
+      (p.orphans ? '<div class="small" style="color:var(--warn)">' + p.orphans + " of this player's events were set aside after a fork</div>" : "") +
+      (p.rejected ? '<div class="small" style="color:var(--bad)">' + p.rejected + " bad events rejected</div>" : "") +
+      '<div class="row" style="margin-top:8px"><button data-act="lab-write" data-a="' + p.index + '" data-b="member">+ member</button><button data-act="lab-write" data-a="' + p.index + '" data-b="award">+ award</button>' +
+      '<button data-act="lab-restrict" data-a="' + p.index + '" data-b="' + (p.restricted ? 0 : 1) + '" class="' + (p.restricted ? "sel" : "") + '">' + (p.restricted ? "Restricted" : "Restrict") + "</button></div></div>").join("");
+    const pct = (v) => Math.round(v * 100);
+    const netBtn = (label, drop, dup) => '<button data-act="lab-net" data-a="' + drop + '" data-b="' + dup + '" class="' + (pct(lab.drop) === pct(drop) && pct(lab.dup) === pct(dup) ? "sel" : "") + '">' + label + "</button>";
+    $("#lab").innerHTML =
+      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. The green/amber/red colour compares each player to what most of the group agrees on.</p>' +
+      '<div class="card"><h2>Network</h2><div class="row">' +
+        '<button data-act="lab-split" data-a="1|234">Split: Aldric alone</button><button data-act="lab-split" data-a="12|34">Split: Aldric+Brann | Cass+Dara</button><button class="primary" data-act="lab-heal">Heal</button>' +
+        '<span class="muted small">Lost:</span>' + netBtn("0%", 0, lab.dup) + netBtn("20%", 0.2, lab.dup) + netBtn("40%", 0.4, lab.dup) +
+        '<span class="muted small">Duplicated:</span>' + netBtn("0%", lab.drop, 0) + netBtn("50%", lab.drop, 0.5) +
+        '<button data-act="lab-join"' + (lab.canAdd ? "" : " disabled") + '>A late player logs in</button><button data-act="lab-reset">Reset</button></div>' +
+        '<div class="row small muted" style="margin-top:8px"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
+        [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") +
+        "<span>Clock " + lab.time.toFixed(0) + "s · " + lab.inFlight + " messages in flight · " + lab.stats.sent + " sent, " + lab.stats.dropped + " lost, " + lab.stats.blocked + " blocked by the split" +
+        (lab.split ? " · <b>split: " + esc(lab.split) + "</b>" : "") + "</span></div></div>" +
+      '<div class="peers">' + peers + "</div>" +
+      '<div class="layout" style="grid-template-columns: 1fr 1fr"><div class="card"><h2>What happened</h2><div class="log">' +
+        (lab.log.length ? lab.log.slice().reverse().map((l) => "<div><span class=\"muted small\">" + l.t.toFixed(0) + "s</span> " + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing yet.</span>') + "</div></div>" +
+      '<div class="card"><h2>Try this</h2>' +
+        '<p class="hint"><b>Fork.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Both sides disagree, so the shorter history is set aside (nothing is erased: the loser keeps their events for review).</p>' +
+        '<p class="hint"><b>Late joiner.</b> Write a few events, then let a late player log in. Watch them catch up from nothing.</p>' +
+        '<p class="hint"><b>Lost messages.</b> Set 40% lost, write several events, and watch the group repair itself from the heartbeats.</p>' +
+        '<p class="hint"><b>Boss fight.</b> Restrict Aldric, write at Aldric, and see the messages wait. Lift the restriction and they go out.</p></div></div>';
+  }
+
+  function showTab(t) {
+    tab = t;
+    $("#app").hidden = t !== "loot";
+    $("#lab").hidden = t !== "lab";
+    $("#tab-loot").classList.toggle("on", t === "loot");
+    $("#tab-lab").classList.toggle("on", t === "lab");
+    if (t === "lab") labCall("lab_state");
+  }
+
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-act]");
     if (!el || !st) return;
     const a = el.dataset.a, b = el.dataset.b;
     switch (el.dataset.act) {
+      case "tab": showTab(a); return;
+      case "lab-write": labCall("lab_write", a, b); return;
+      case "lab-split": labCall("lab_partition", a); return;
+      case "lab-heal": labCall("lab_heal"); return;
+      case "lab-net": labCall("lab_net", a, b); return;
+      case "lab-restrict": labCall("lab_restrict", a, b); return;
+      case "lab-join": labCall("lab_join"); return;
+      case "lab-reset": labCall("lab_reset"); return;
       case "scenario": seed = 1; start(a); break;
       case "again": seed += 1; start(current); break;
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
-      case "toggle": running = !running; render(); break;
-      case "speed": speed = Number(a); render(); break;
+      case "toggle": running = !running; render(); renderLab(); break;
+      case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid": act("bid", a, b === "gift" ? giftTo : ""); break;
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
@@ -2767,6 +2995,7 @@ end
   document.addEventListener("change", (e) => { if (e.target.id === "giftTo") giftTo = e.target.value; });
 
   setInterval(() => {
+    if (tab === "lab") { if (running && lab) labCall("lab_advance", speed * 0.25); return; }
     if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
     st = call("advance", speed * 0.25);
     updateMoved();

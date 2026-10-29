@@ -51,6 +51,13 @@
   select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
   .loading { padding: 40px; text-align: center; color: var(--muted); }
   code { background: var(--panel2); padding: 0 4px; border-radius: 3px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tabs button.on { border-color: var(--gold); color: var(--gold); }
+  .pill.good { color: var(--good); border-color: var(--good); } .pill.warn { color: var(--warn); border-color: var(--warn); } .pill.bad { color: var(--bad); border-color: var(--bad); }
+  .peers { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-bottom: 16px; }
+  .peer.good { border-color: var(--good); } .peer.warn { border-color: var(--warn); } .peer.bad { border-color: var(--bad); }
+  .mini { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
+  .hint { font-size: 13px; margin: 0 0 6px; }
 </style>
 </head>
 <body>
@@ -58,7 +65,9 @@
 <div class="wrap">
   <h1>King's Gambit simulator</h1>
   <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You"), at the bottom of the list.</p>
+  <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button></div>
   <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
+  <div id="lab" hidden></div>
 </div>
 
 <!--KG_FENGARI-->
@@ -221,16 +230,73 @@
       "</div></div>";
   }
 
+  let tab = "loot", lab = null;
+  function labCall(name, a, b) {
+    lab = call(name, a, b);
+    renderLab();
+  }
+  function renderLab() {
+    if (!lab || tab !== "lab") return;
+    const cls = { "in sync": "good", behind: "warn", diverged: "bad" };
+    const peers = lab.peers.map((p) =>
+      '<div class="card peer ' + cls[p.status] + '"><div class="row spread"><b>' + esc(p.name) + '</b><span class="pill ' + cls[p.status] + '">' + p.status + "</span></div>" +
+      '<div class="small muted">' + p.count + " events · head <code>" + esc(p.head) + "</code></div>" +
+      '<ul class="mini">' + p.order.map((n, i) => "<li>" + (i + 1) + ". " + esc(n) + "</li>").join("") + (p.members > p.order.length ? "<li>&hellip; " + p.members + " on the list</li>" : "") + "</ul>" +
+      (p.pending ? '<div class="small" style="color:var(--warn)">' + p.pending + " messages waiting to send" + (p.blocked ? " (" + esc(p.blocked) + ")" : "") + "</div>" : "") +
+      (p.orphans ? '<div class="small" style="color:var(--warn)">' + p.orphans + " of this player's events were set aside after a fork</div>" : "") +
+      (p.rejected ? '<div class="small" style="color:var(--bad)">' + p.rejected + " bad events rejected</div>" : "") +
+      '<div class="row" style="margin-top:8px"><button data-act="lab-write" data-a="' + p.index + '" data-b="member">+ member</button><button data-act="lab-write" data-a="' + p.index + '" data-b="award">+ award</button>' +
+      '<button data-act="lab-restrict" data-a="' + p.index + '" data-b="' + (p.restricted ? 0 : 1) + '" class="' + (p.restricted ? "sel" : "") + '">' + (p.restricted ? "Restricted" : "Restrict") + "</button></div></div>").join("");
+    const pct = (v) => Math.round(v * 100);
+    const netBtn = (label, drop, dup) => '<button data-act="lab-net" data-a="' + drop + '" data-b="' + dup + '" class="' + (pct(lab.drop) === pct(drop) && pct(lab.dup) === pct(dup) ? "sel" : "") + '">' + label + "</button>";
+    $("#lab").innerHTML =
+      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. The green/amber/red colour compares each player to what most of the group agrees on.</p>' +
+      '<div class="card"><h2>Network</h2><div class="row">' +
+        '<button data-act="lab-split" data-a="1|234">Split: Aldric alone</button><button data-act="lab-split" data-a="12|34">Split: Aldric+Brann | Cass+Dara</button><button class="primary" data-act="lab-heal">Heal</button>' +
+        '<span class="muted small">Lost:</span>' + netBtn("0%", 0, lab.dup) + netBtn("20%", 0.2, lab.dup) + netBtn("40%", 0.4, lab.dup) +
+        '<span class="muted small">Duplicated:</span>' + netBtn("0%", lab.drop, 0) + netBtn("50%", lab.drop, 0.5) +
+        '<button data-act="lab-join"' + (lab.canAdd ? "" : " disabled") + '>A late player logs in</button><button data-act="lab-reset">Reset</button></div>' +
+        '<div class="row small muted" style="margin-top:8px"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
+        [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") +
+        "<span>Clock " + lab.time.toFixed(0) + "s · " + lab.inFlight + " messages in flight · " + lab.stats.sent + " sent, " + lab.stats.dropped + " lost, " + lab.stats.blocked + " blocked by the split" +
+        (lab.split ? " · <b>split: " + esc(lab.split) + "</b>" : "") + "</span></div></div>" +
+      '<div class="peers">' + peers + "</div>" +
+      '<div class="layout" style="grid-template-columns: 1fr 1fr"><div class="card"><h2>What happened</h2><div class="log">' +
+        (lab.log.length ? lab.log.slice().reverse().map((l) => "<div><span class=\"muted small\">" + l.t.toFixed(0) + "s</span> " + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing yet.</span>') + "</div></div>" +
+      '<div class="card"><h2>Try this</h2>' +
+        '<p class="hint"><b>Fork.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Both sides disagree, so the shorter history is set aside (nothing is erased: the loser keeps their events for review).</p>' +
+        '<p class="hint"><b>Late joiner.</b> Write a few events, then let a late player log in. Watch them catch up from nothing.</p>' +
+        '<p class="hint"><b>Lost messages.</b> Set 40% lost, write several events, and watch the group repair itself from the heartbeats.</p>' +
+        '<p class="hint"><b>Boss fight.</b> Restrict Aldric, write at Aldric, and see the messages wait. Lift the restriction and they go out.</p></div></div>';
+  }
+
+  function showTab(t) {
+    tab = t;
+    $("#app").hidden = t !== "loot";
+    $("#lab").hidden = t !== "lab";
+    $("#tab-loot").classList.toggle("on", t === "loot");
+    $("#tab-lab").classList.toggle("on", t === "lab");
+    if (t === "lab") labCall("lab_state");
+  }
+
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-act]");
     if (!el || !st) return;
     const a = el.dataset.a, b = el.dataset.b;
     switch (el.dataset.act) {
+      case "tab": showTab(a); return;
+      case "lab-write": labCall("lab_write", a, b); return;
+      case "lab-split": labCall("lab_partition", a); return;
+      case "lab-heal": labCall("lab_heal"); return;
+      case "lab-net": labCall("lab_net", a, b); return;
+      case "lab-restrict": labCall("lab_restrict", a, b); return;
+      case "lab-join": labCall("lab_join"); return;
+      case "lab-reset": labCall("lab_reset"); return;
       case "scenario": seed = 1; start(a); break;
       case "again": seed += 1; start(current); break;
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
-      case "toggle": running = !running; render(); break;
-      case "speed": speed = Number(a); render(); break;
+      case "toggle": running = !running; render(); renderLab(); break;
+      case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid": act("bid", a, b === "gift" ? giftTo : ""); break;
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
@@ -240,6 +306,7 @@
   document.addEventListener("change", (e) => { if (e.target.id === "giftTo") giftTo = e.target.value; });
 
   setInterval(() => {
+    if (tab === "lab") { if (running && lab) labCall("lab_advance", speed * 0.25); return; }
     if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
     st = call("advance", speed * 0.25);
     updateMoved();
