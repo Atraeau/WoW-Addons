@@ -15,7 +15,7 @@ function M.New(client)
     acct.schema = acct.schema or 1
     acct.lists = acct.lists or {}
     acct.config = acct.config or {}
-    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {} }, Engine)
+    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {} }, Engine)
     for listId, rec in pairs(acct.lists) do
         local chain, err, idx = Ledger.Load(listId, rec.events or {})
         if chain then
@@ -31,6 +31,23 @@ end
 
 function Engine:Get(listId) return self.chains[listId] end
 
+-- Subscribe to changes: fn(kind, listId, event). kind is "local" (this engine wrote it),
+-- "remote" (accepted from a peer) or "replaced" (a fork was resolved; event is nil).
+-- Returns an unsubscribe function.
+function Engine:OnChange(fn)
+    local entry = { fn = fn, active = true }
+    self.hooks[#self.hooks + 1] = entry
+    return function() entry.active = false end
+end
+
+function Engine:fire(kind, listId, ev)
+    local snapshot = {}
+    for i, h in ipairs(self.hooks) do snapshot[i] = h end
+    for _, h in ipairs(snapshot) do
+        if h.active then h.fn(kind, listId, ev) end
+    end
+end
+
 -- Create a list (writes its CreateList genesis event) and persist it.
 function Engine:CreateList(listId, name)
     if self.chains[listId] or self.problems[listId] then return nil, "exists" end
@@ -39,6 +56,7 @@ function Engine:CreateList(listId, name)
     if not ev then return nil, err end
     self.chains[listId] = chain
     self.db.lists[listId] = { events = chain.events }
+    self:fire("local", listId, ev)
     return chain
 end
 
@@ -46,5 +64,41 @@ end
 function Engine:Append(listId, type_, data)
     local chain = self.chains[listId]
     if not chain then return nil, "nolist" end
-    return Ledger.Append(chain, type_, data, self.client:me(), self.client:serverTime())
+    local ev, err = Ledger.Append(chain, type_, data, self.client:me(), self.client:serverTime())
+    if ev then self:fire("local", listId, ev) end
+    return ev, err
+end
+
+-- Accept an event authored elsewhere. Returns "appended" | "duplicate", or nil + reason
+-- (see Ledger.Receive; also "unknownlist" for a list we have never seen that does not start
+-- with its CreateList). A list is adopted when its genesis event arrives.
+function Engine:Receive(listId, ev)
+    if self.problems[listId] then return nil, "corrupt" end
+    local chain = self.chains[listId]
+    local adopt = false
+    if not chain then
+        if type(ev) ~= "table" or ev.seq ~= 1 or ev.type ~= "CreateList" then return nil, "unknownlist" end
+        chain, adopt = Ledger.NewChain(listId), true
+    end
+    local status, err = Ledger.Receive(chain, ev)
+    if status == "appended" then
+        if adopt then
+            self.chains[listId] = chain
+            self.db.lists[listId] = { events = chain.events }
+        end
+        self:fire("remote", listId, ev)
+    end
+    return status, err
+end
+
+-- Fork resolution: swap in a verified replacement chain. The events this engine had on the
+-- losing branch are kept in db.orphans so an officer can review and re-enter them.
+function Engine:ReplaceChain(listId, newChain, orphans)
+    self.chains[listId] = newChain
+    self.db.lists[listId] = { events = newChain.events }
+    if orphans and #orphans > 0 then
+        self.db.orphans = self.db.orphans or {}
+        self.db.orphans[#self.db.orphans + 1] = { list = listId, at = self.client:serverTime(), events = orphans }
+    end
+    self:fire("replaced", listId, nil)
 end

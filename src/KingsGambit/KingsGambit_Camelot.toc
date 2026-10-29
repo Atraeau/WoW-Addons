@@ -14,7 +14,8 @@ Client.lua
 MockClient.lua
 RealClient.lua
 Engine.lua
-SelfCheck.lua
+SimNetwork.lua
 Sync.lua
+SelfCheck.lua
 Loot.lua
 UI.lua

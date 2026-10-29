@@ -288,6 +288,40 @@ Not built yet: parsing whispered bids from players without the addon, a per-play
 "pass on everything in the backstop" shortcut, and the upgrade heuristic that would label
 passes automatically.
 
+### Sync layer: choices made while building it (2026-10-28)
+
+`Sync.lua` and `SimNetwork.lua` implement the gossip, catch-up and fork handling from the
+Sync section above, tested with several simulated players over a network that drops,
+duplicates, reorders and partitions messages.
+
+- **Protocol:** live events are pushed as they are written (RAID while in a raid, otherwise
+  GUILD); a small heartbeat (list sizes and head hashes) goes out every 30 seconds; range
+  requests fetch what is missing; a probe (checkpoints at positions 1, 2, 4, 8, ...) finds
+  where two histories split. Messages are split into frames under 255 bytes, and replies are
+  capped near five frames so one lost frame costs little. A restricted or throttled send stays
+  queued and retries when the restriction lifts.
+- **Fork rule, changed from the plan: the longer chain wins.** The plan said to order by
+  timestamp, then author priority, then hash. Two problems: author rank depends on the live
+  roster, so peers could disagree; and "earliest wins" lets an officer who was offline for an
+  hour overwrite everything the live group did since. The implemented rule uses only
+  information inside the ledger, so every peer reaches the same answer: **the longer chain
+  wins; on a tie, the earlier fork event wins, then the lower event id.**
+- **The loser's events are not lost:** the losing branch is kept in `db.orphans` (list, time,
+  events) for an officer to review and re-enter. Nothing is silently discarded.
+- **Decision for you (merge vs. winner-takes-branch).** The alternative is an automatic
+  merge: take both branches' events, order them canonically, and re-chain them so nothing is
+  orphaned. It loses less, but it rewrites event ids, needs duplicate detection by content,
+  and drops events that no longer make sense after reordering (for example an award to
+  someone removed on the other branch). Winner-takes-branch is simpler and easier to explain
+  and audit. Forks should be rare, since normally one Master Looter writes at a time. Current
+  choice: winner-takes-branch with orphan review. Say if you would rather have the merge.
+- **Decision for you (who may write).** Sync currently accepts any well-formed chain: the
+  trusted-officer model, with authorization enforced where events are written. It does not yet
+  check at receive time that an author was a raid leader or assistant, because that depends on
+  the roster at the time and can't be checked later when catching up. A clean fix is for the
+  ledger itself to carry an officers list (an `SetOfficers` event written by the guild leader),
+  which every peer can verify from the chain. That is a real design choice, so it is left open.
+
 ## Still open (non-blocking)
 
 - A crisp definition of **"eligible"** for early-resolve (on the relevant
