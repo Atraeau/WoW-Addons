@@ -336,7 +336,7 @@ best cases). One event is about 280 bytes serialized.
 
 | Ledger size | Append all | Full hash verification | Replay only | Saved size |
 |---|---|---|---|---|
-| 1,000 events | 0.12 s | 0.07 s | under 1 ms | 270 KB |
+| 1,000 events | 0.13 s | 0.07 s | under 1 ms | 270 KB |
 | 5,000 events | 0.65 s | 0.34 s | under 1 ms | 1.4 MB |
 | 20,000 events | 2.7 s | 1.35 s | 40 ms | 5.6 MB |
 
