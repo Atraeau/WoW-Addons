@@ -446,7 +446,7 @@ guild leader:
   - **a list per raid** (a new list starts when a new raid is added).
   Which list a raid's loot goes to is recorded in the ledger (an officer sets it while no raid is active), so every
   peer and the audit tool agree, and a change of policy is itself visible.
-  **Open:** how a new raid's list is seeded (random order, a copy of the current list's order, or by attendance).
+  **Seeding (decided):** a new raid's list starts as a copy of the current list's order, so "who has waited longest" carries across raids.
 
 ### Scaling: measured, not guessed (2026-10-28)
 
