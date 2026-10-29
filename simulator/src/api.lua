@@ -87,6 +87,17 @@ local function state()
     snap.scenario = scenario and scenario.id or "free"
     snap.you = "You"
     snap.log = logLines()
+    if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
+    if sim.mc then
+        local nextBoss = sim.mc.bosses[sim.bossIndex + 1]
+        snap.mc = { next = nextBoss and nextBoss.name or nil, held = {}, killed = sim.bossIndex }
+        for i, h in ipairs(sim.held) do snap.mc.held[i] = h.item.name .. " (" .. h.boss .. ")" end
+    end
+    if not s then
+        snap.phase, snap.items, snap.players, snap.pending, snap.now = "idle", {}, {}, {}, sim.client:now()
+        snap.cfg = { bidSeconds = 30, pickSeconds = 20, claimSeconds = 10 }
+        return snap
+    end
     local off = sim.engine:Get("off")
     if off then
         snap.offOrder = {}
@@ -159,13 +170,21 @@ end
 local api = {}
 
 function api.scenarios()
-    local out = { { id = "free", title = "Free play", lesson = "A random raid and a random drop." } }
+    local out = { { id = "mc", title = "Molten Core night", lesson = MC_LESSON } }
     for _, sc in ipairs(Scenarios.list) do out[#out + 1] = { id = sc.id, title = sc.title, lesson = sc.lesson } end
     return out
 end
 
+local MC_LESSON = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest."
+
 function api.start(id, seed)
     seed = tonumber(seed) or 1
+    if id == "mc" then
+        scenario = { id = "mc", title = "Molten Core night", lesson = MC_LESSON }
+        sim = Sim.NewMoltenCore({ seed = seed })
+        startCount = #sim.engine:View().applied
+        return state()
+    end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
     sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You" })
@@ -177,6 +196,24 @@ function api.start(id, seed)
 end
 
 function api.state() return state() end
+
+-- Molten Core: kill the next boss; hold = "1" keeps the loot for a later hand-out.
+function api.mc_kill(hold)
+    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+    if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
+        return result(false, "finish handing out the current loot first")
+    end
+    local boss, why = sim:killBoss(nil, hold == "1")
+    return result(boss ~= nil, why)
+end
+
+function api.mc_handout()
+    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+    if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
+        return result(false, "finish handing out the current loot first")
+    end
+    return result(sim:handOut())
+end
 function api.advance(sec) if sim then sim:advance(tonumber(sec) or 0) end return state() end
 
 local function result(ok, why)

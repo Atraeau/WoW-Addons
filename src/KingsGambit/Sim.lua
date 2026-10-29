@@ -19,8 +19,9 @@ Sim.__index = Sim
 
 local function short(name) return (name:gsub("%-.*$", "")) end
 
--- opts: seed, learner (default "You"), members (array of names, top of the list first),
---       learnerPosition ("last" default, or "first"), shuffle (random order from the seed).
+-- opts: seed, learner (default "You"), members (array of names, or of { name, class, role }; top of the
+--       list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
+--       shuffle (random order from the seed).
 function M.NewRaid(opts)
     opts = opts or {}
     local learner = opts.learner or "You"
@@ -38,17 +39,22 @@ function M.NewRaid(opts)
     end
     if opts.learnerPosition == "first" then table.insert(names, 1, learner) else names[#names + 1] = learner end
 
-    local roster = {}
-    for i, n in ipairs(names) do
-        local class = CLASSES[((i - 1) % #CLASSES) + 1]
+    local roster, info = {}, {}
+    for i, m in ipairs(names) do
+        local n, class, role
+        if type(m) == "table" then n, class, role = m.name, m.class, m.role
+        else n, class = m, (m == learner and opts.learnerClass) or CLASSES[((i - 1) % #CLASSES) + 1] end
+        if n == learner then role = opts.learnerRole or role end
+        names[i] = n
         roster[i] = { name = n, class = class }
+        info[n] = { class = class, role = role }
         engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
     end
     client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
 
     return setmetatable({
         client = client, engine = engine, names = names, learner = learner .. "-Realm",
-        policies = {}, autoLearner = false, session = nil, log = {},
+        policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
 
@@ -183,4 +189,125 @@ function M.RunScenario(sc, opts)
     if sc.after then sc.after(sim) end
     local passed, message = sc.expect(sim)
     return sim, passed and true or false, message
+end
+
+---------------------------------------------------------------- Molten Core
+-- A realistic 40-person Alliance raid: class and role for every bot. The learner fills one healer slot.
+local MC_ROSTER = {
+    { "WARRIOR", "tank", 3 }, { "WARRIOR", "melee", 5 }, { "ROGUE", "melee", 5 }, { "HUNTER", "hunter", 4 },
+    { "MAGE", "caster", 6 }, { "WARLOCK", "caster", 4 }, { "PRIEST", "healer", 6 }, { "DRUID", "healer", 2 },
+    { "DRUID", "tank", 1 }, { "PALADIN", "healer", 3 }, { "PALADIN", "melee", 1 },
+}
+local MC_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory", "Kest", "Lio",
+    "Mirel", "Nyx", "Orsa", "Pell", "Quill", "Rhea", "Soren", "Tavi", "Ulf", "Vera", "Wren", "Xan", "Yara", "Zed",
+    "Ansel", "Bryn", "Corin", "Delia", "Emrys", "Fia", "Gideon", "Halia", "Ivo", "Jessa", "Kael", "Lysa", "Moro" }
+local ARMOR = { WARRIOR = "plate", PALADIN = "plate", HUNTER = "mail", SHAMAN = "mail", ROGUE = "leather",
+    DRUID = "leather", PRIEST = "cloth", MAGE = "cloth", WARLOCK = "cloth" }
+-- Hybrids can also use the other role's gear as off-spec.
+local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { healer = "melee", melee = "healer" },
+    WARRIOR = { tank = "melee", melee = "tank" }, PRIEST = { healer = "caster" } }
+
+local function hasBit(mask, bit) return math.floor(mask / bit) % 2 == 1 end
+
+-- Would a raider of this class and role want the item, and as main or off-spec?
+-- Returns "need", "off" or nil. Deliberately simple: tier pieces by class, other items by role and armor type.
+function M.Wants(MC, item, class, role)
+    if item.classes ~= 0 then
+        local bit = MC.CLASS_BITS[class]
+        return (bit and hasBit(item.classes, bit)) and "need" or nil
+    end
+    if item.armor and item.armor ~= ARMOR[class] then return nil end
+    if item.role == role then return "need" end
+    local off = OFFSPEC[class] and OFFSPEC[class][role]
+    if off and item.role == off then return "off" end
+end
+
+-- opts: seed, learner ("You"), learnerClass ("PRIEST"), learnerRole ("healer"), shuffle (default true),
+--       chance (probability a raider who could use an item still needs it; default 0.7).
+function M.NewMoltenCore(opts)
+    opts = opts or {}
+    local members, k = {}, 0
+    for _, row in ipairs(MC_ROSTER) do
+        for _ = 1, row[3] do
+            k = k + 1
+            members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = row[2] }
+        end
+    end
+    members[#members] = nil -- the learner takes the 40th slot (a healer)
+    local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
+        learnerClass = opts.learnerClass or "PRIEST", learnerRole = opts.learnerRole or "healer",
+        shuffle = opts.shuffle ~= false })
+    sim.mc = SK.modules.MoltenCore
+    sim.chance = opts.chance or 0.7
+    sim.bossIndex = 0
+    return sim
+end
+
+-- The next boss (or a named one) dies and rolls its loot from the real table. Returns the boss and the
+-- dropped items ({ id, name, ... }). With hold = true the loot is set aside for a later hand-out.
+function Sim:killBoss(name, hold)
+    local MC = assert(self.mc, "not a Molten Core raid")
+    local boss
+    if name then
+        for i, b in ipairs(MC.bosses) do if b.name == name then boss, self.bossIndex = b, i end end
+    else
+        self.bossIndex = self.bossIndex + 1
+        boss = MC.bosses[self.bossIndex]
+    end
+    if not boss then return nil, "noboss" end
+    local pool = {}
+    for i, entry in ipairs(boss.loot) do pool[i] = { id = entry[1], w = entry[2] } end
+    local dropped = {}
+    for _ = 1, boss.drops do
+        local total = 0
+        for _, e in ipairs(pool) do total = total + e.w end
+        if total <= 0 then break end
+        local r, acc = self.client:random() * total, 0
+        for i, e in ipairs(pool) do
+            acc = acc + e.w
+            if r < acc or i == #pool then
+                dropped[#dropped + 1] = MC.items[e.id]
+                table.remove(pool, i)
+                break
+            end
+        end
+    end
+    for _, item in ipairs(dropped) do
+        self.held[#self.held + 1] = { item = item, boss = boss.name, seen = self.client:serverTime() }
+    end
+    self:note(boss.name .. " died and dropped " .. #dropped .. " item(s)")
+    if not hold then self:handOut() end
+    return boss, dropped
+end
+
+-- Put every held item up for loot in one session. The bots answer from their class and role.
+function Sim:handOut(cfg)
+    if #self.held == 0 then return false, "nothing" end
+    local held = self.held
+    self.held = {}
+    local links = {}
+    for i, h in ipairs(held) do links[i] = h.item.name end
+    self.policies = {}
+    for name, info in pairs(self.info) do
+        local p = { bid = {}, claim = self.client:random() < 0.3 }
+        local wanted = {}
+        for _, h in ipairs(held) do
+            local kind = M.Wants(self.mc, h.item, info.class, info.role)
+            if kind and self.client:random() < self.chance then
+                wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 }
+            elseif kind then
+                p.bid[h.item.name] = { "pass", passKind = "upgrade" } -- could use it, chose not to spend the spot
+            end
+        end
+        -- ranked choice: tier pieces first, then main-spec, then off-spec
+        table.sort(wanted, function(a, b)
+            if a.kind ~= b.kind then return a.kind == "need" end
+            if a.tier ~= b.tier then return a.tier end
+            return a.link < b.link
+        end)
+        for rank, w in ipairs(wanted) do p.bid[w.link] = { w.kind, rank = rank } end
+        self.policies[name] = p
+    end
+    self.handedOut = held
+    return self:drop(links, cfg)
 end

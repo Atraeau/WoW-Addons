@@ -20,6 +20,7 @@ SelfCheck.lua
 Loot.lua
 LootNet.lua
 Commands.lua
+MoltenCore.lua
 Sim.lua
 Scenarios.lua
 UI.lua

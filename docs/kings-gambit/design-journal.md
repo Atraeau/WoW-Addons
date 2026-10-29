@@ -394,6 +394,33 @@ Requirements and rules:
 Model note: this is a subtle correctness change, so the rework is done on Opus 5.5 (medium effort), with the
 existing randomized convergence tests as the safety net.
 
+### Batching, ranked choice, loot-visible ordering, and Molten Core for training (2026-10-29)
+
+Decided by the guild leader:
+
+- **Same rules whether loot is handed out per boss or at a break.** A session can hold any number of items, so
+  a single boss and a whole evening's accumulated loot go through the identical draft.
+- **Answers stay up front** (it's what makes a 20-item hand-out quick), **with ranked choice:** a player who
+  wants several items ranks them, and on their turn the draft takes their highest-ranked item still available,
+  with no prompt. If anything is unranked they are asked live, as before. A whispered answer is ranked in the
+  order written ("need 3, need 1" means item 3 first). *Built.*
+- **Merge by when the loot became visible, not when it was handed out.** Loot can't be handed out faster than it
+  dropped, so ordering by drop time is the fair comparison between two raids, one handing out per boss and one
+  batching at a break. Each award will carry `seen` (the loot window's time); the merge sorts by it, never
+  earlier than the writer's previous event (so a writer's own events keep their order), and authority is
+  checked at the real write time in a two-pass replay. *Agreed; not built yet.*
+- **Still to confirm:** batching means the Master Looter takes the loot first and trades it out at the break,
+  inside the 2-hour window for trading bound items (to verify in the game).
+
+**Training uses Molten Core.** The simulator and scenarios now use the real raid: ten bosses in kill order, their
+real epic drops (item ids, slots, armor and class restrictions, observed drop rates from Wowhead Classic,
+collected 2026-10-29 into `simulator/data/mc-raw.json`), and a realistic 40-person Alliance roster whose bots want
+what their class and role would want (tier by class; other items by role and armor type; hybrids take the other
+role's gear as off-spec). The "who wants what" rules and role tags are deliberate simplifications, kept in one
+place (`scripts/build-mc-data.ps1`, `Sim.Wants`) so they are easy to correct. Two numbers are estimates: drops per
+kill for Majordomo's cache (Wowhead's cache figures are not per kill) and Ragnaros (3 from observed rates, which
+looks low).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

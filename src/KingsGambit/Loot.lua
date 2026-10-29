@@ -123,7 +123,8 @@ function Session:start(items)
     return true
 end
 
--- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass) }.
+-- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
+-- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most) }.
 function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
@@ -137,7 +138,9 @@ function Session:bid(player, itemId, kind, extra)
         if not to or to == player then return false, "badtarget" end
     end
     self.bids[player] = self.bids[player] or {}
-    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind }
+    local rank = tonumber(extra.rank)
+    if rank and (rank < 1 or rank ~= math.floor(rank)) then return false, "badrank" end
+    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank }
     self:emit("bid", { player = player, item = itemId, kind = kind })
     if self:allAnswered() then self:closeBidding() end
     return true
@@ -200,11 +203,14 @@ function Session:handleWhisper(sender, text)
         return nil, why
     end
     local applied, lines = {}, {}
+    local nextRank = 1 -- items wanted are ranked in the order they were written
     for _, a in ipairs(answers) do
         local ids = {}
         if a.item then ids[1] = a.item else for _, it in ipairs(self.items) do ids[#ids + 1] = it.id end end
         for _, id in ipairs(ids) do
-            local ok, err = self:bid(sender, id, a.kind, { to = a.to })
+            local rank
+            if a.kind ~= "pass" then rank, nextRank = nextRank, nextRank + 1 end
+            local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank })
             if ok then
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
@@ -342,8 +348,11 @@ function Session:continueDraft(tier)
     while true do
         local who, opts = self:topCandidate(tier)
         if not who then break end
+        local ranked = self:rankedChoice(who, opts)
         if #opts == 1 then
             self:award(tier, who, opts[1])
+        elseif ranked then
+            self:award(tier, who, ranked) -- ranked choice: their most-wanted item still available
         else
             self:setTurn({ type = "pick", tier = tier, player = who, options = opts },
                 self.cfg.pickSeconds, function() self:skip(who) end)
@@ -353,6 +362,18 @@ function Session:continueDraft(tier)
     self.turn = nil
     self:clearTimer()
     if tier == "main" then self:runDraft("off") else self:runBackstop() end
+end
+
+-- Ranked choice: if the player ranked every option, the one they ranked highest (lowest number; ties go
+-- to the lower item number). Otherwise nil, and they pick live.
+function Session:rankedChoice(who, opts)
+    local best, bestRank
+    for _, id in ipairs(opts) do
+        local b = self.bids[who] and self.bids[who][id]
+        if not (b and b.rank) then return nil end
+        if not bestRank or b.rank < bestRank or (b.rank == bestRank and id < best) then best, bestRank = id, b.rank end
+    end
+    return best
 end
 
 -- The player whose turn it is picks one of the items they bid on.

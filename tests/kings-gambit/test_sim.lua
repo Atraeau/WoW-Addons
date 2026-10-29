@@ -77,3 +77,60 @@ test("snapshot is plain data (no functions or cycles) ready for a UI", function(
     local snap = sim:snapshot(); check(snap, 0)
     eq(snap.phase, "review"); eq(#snap.items, 1); eq(snap.items[1].status, "de", "nobody wanted it")
 end)
+
+H.section("Sim: Molten Core")
+local MC = SK.modules.MoltenCore
+test("the Molten Core data is complete and consistent", function()
+    eq(#MC.bosses, 10); eq(MC.bosses[1].name, "Lucifron"); eq(MC.bosses[10].name, "Ragnaros")
+    for _, b in ipairs(MC.bosses) do
+        assert(b.drops >= 1 and #b.loot > b.drops, b.name)
+        for _, entry in ipairs(b.loot) do
+            local item = MC.items[entry[1]]
+            assert(item, b.name .. " drops an unknown item " .. entry[1])
+            assert(item.classes ~= 0 or item.role, item.name .. " has neither a class nor a role")
+        end
+    end
+    eq(MC.items[17076].name, "Bonereaver's Edge"); eq(MC.items[16863].name, "Gauntlets of Might")
+end)
+test("who wants what follows class, armor and role", function()
+    local function wants(id, class, role) return Sim.Wants(MC, MC.items[id], class, role) end
+    eq(wants(16863, "WARRIOR", "tank"), "need", "tier gloves for a warrior"); eq(wants(16863, "PALADIN", "healer"), nil)
+    eq(wants(17109, "PRIEST", "healer"), "need", "healer neck"); eq(wants(17109, "MAGE", "caster"), nil)
+    eq(wants(18875, "PRIEST", "healer"), nil, "leather healer legs are not for a priest")
+    eq(wants(18875, "DRUID", "tank"), "off", "but a tank druid takes them as off-spec")
+    eq(wants(17066, "WARRIOR", "melee"), "off", "a dps warrior wants the tank shield as off-spec")
+end)
+test("a full Molten Core night, one boss at a time, ends cleanly", function()
+    local sim = Sim.NewMoltenCore({ seed = 3 })
+    sim.autoLearner = true
+    local items = 0
+    for _ = 1, 10 do
+        local boss, dropped = sim:killBoss()
+        assert(boss); items = items + #dropped
+        assert(sim:runUntil("review", 600), boss.name .. " stuck in " .. sim.session.phase)
+        local ok, failures = sim.session:confirm(); assert(ok); eq(#failures, 0)
+    end
+    assert(items >= 20)
+    eq(#sim.engine:Get("main").state.order, 40); eq(#sim.engine:Conflicts(), 0)
+end)
+test("loot held until a break is handed out in one batch under the same rules", function()
+    local sim = Sim.NewMoltenCore({ seed = 5 })
+    sim.autoLearner = true
+    for _ = 1, 4 do assert(sim:killBoss(nil, true)) end
+    assert(#sim.held >= 8)
+    assert(sim:handOut())
+    assert(sim:runUntil("review", 900))
+    assert(sim.session:confirm())
+    local done = 0
+    for _, it in ipairs(sim.session.items) do if it.status == "awarded" or it.status == "de" then done = done + 1 end end
+    eq(done, #sim.session.items)
+end)
+test("the same seed gives the same night", function()
+    local function night()
+        local sim = Sim.NewMoltenCore({ seed = 9 })
+        sim.autoLearner = true
+        for _ = 1, 3 do sim:killBoss(); sim:runUntil("review", 600); sim.session:confirm() end
+        return sim.engine:Fingerprint()
+    end
+    eq(night(), night())
+end)

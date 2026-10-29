@@ -7,7 +7,7 @@
 -- implementation of the rules to drift. Inlined so it works from file:// and GitHub Pages alike.
 local SRC = "src/KingsGambit/"
 local DIR = "simulator/"
-local MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "Engine", "Loot", "SimNetwork", "Sync", "Sim", "Scenarios" }
+local MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "Engine", "Loot", "SimNetwork", "Sync", "MoltenCore", "Sim", "Scenarios" }
 
 -- Pinned Lua-in-JS runtime, with a Subresource Integrity hash so a changed file is refused.
 local FENGARI = '<script src="https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari-web.js"' ..

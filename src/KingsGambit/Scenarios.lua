@@ -21,12 +21,12 @@ M.list = {
     {
         id = "first-drop",
         title = "The first drop",
-        lesson = "Two players want the item. The one higher on the list wins, and drops to the bottom. Everyone else keeps their place.",
+        lesson = "Lucifron drops the warrior Tier 1 gloves. Two players want them. The one higher on the list wins, and drops to the bottom. Everyone else keeps their place.",
         members = RAID,
-        items = { "Gauntlets of the Ashen Vow" },
+        items = { "Gauntlets of Might" },
         policies = {
-            Brann = { bid = { ["Gauntlets of the Ashen Vow"] = "need" } },
-            Dara = { bid = { ["Gauntlets of the Ashen Vow"] = "need" } },
+            Brann = { bid = { ["Gauntlets of Might"] = "need" } },
+            Dara = { bid = { ["Gauntlets of Might"] = "need" } },
         },
         expect = function(sim)
             local order = sim:orderString()
@@ -36,26 +36,26 @@ M.list = {
     {
         id = "pick-a-priority",
         title = "Two items, one player who wants both",
-        lesson = "When several items drop, the top player picks first, then the next. Aldric wants both items, so he chooses one; Brann, next in line, gets the other.",
+        lesson = "Garr drops two items Aldric wants. When you want several, you rank them up front: Aldric ranked Brutality Blade first, so on his turn he gets it with no prompt and drops to the bottom. Brann, next in line, gets the helm.",
         members = RAID,
-        items = { "Helm of Tides", "Cloak of Embers" },
+        items = { "Helm of Might", "Brutality Blade" },
         policies = {
-            Aldric = { bid = { ["Helm of Tides"] = "need", ["Cloak of Embers"] = "need" }, pick = { "Cloak of Embers" } },
-            Brann = { bid = { ["Helm of Tides"] = "need" } },
+            Aldric = { bid = { ["Helm of Might"] = { "need", rank = 2 }, ["Brutality Blade"] = { "need", rank = 1 } } },
+            Brann = { bid = { ["Helm of Might"] = "need" } },
         },
         expect = function(sim)
             local items = sim.session.items
             if not (items[1].winner and items[2].winner) then return false, "an item was not awarded" end
             local ok = short(items[2].winner) == "Aldric" and short(items[1].winner) == "Brann"
-            return ok, ("Cloak went to %s, Helm to %s"):format(short(items[2].winner), short(items[1].winner))
+            return ok, ("Blade went to %s, Helm to %s"):format(short(items[2].winner), short(items[1].winner))
         end,
     },
     {
         id = "minor-upgrade-proxy",
         title = "A small upgrade nobody will spend a turn on",
-        lesson = "Aldric would use this, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to Aldric. Nothing is wasted, and nobody paid for scraps.",
+        lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to Aldric. Nothing is wasted, and nobody paid for scraps.",
         members = RAID,
-        items = { "Band of Small Mercies" },
+        items = { "Quick Strike Ring" },
         policies = {},
         you = { claim = true, claimTo = "Aldric" },
         expect = function(sim)
@@ -68,11 +68,11 @@ M.list = {
     {
         id = "gift-up",
         title = "Gifting an item to a friend",
-        lesson = "Fenn does not need this, but Aldric would love it. Fenn bids to gift it: Fenn wins at Fenn's own place on the list, pays for it by dropping to the bottom, and hands the item to Aldric.",
+        lesson = "Geddon drops a healer ring. Fenn does not need it, but Aldric would love it. Fenn bids to gift it: Fenn wins at Fenn's own place on the list, pays for it by dropping to the bottom, and hands the item to Aldric.",
         members = RAID,
-        items = { "Ring of the Quiet Hour" },
+        items = { "Seal of the Archmagus" },
         policies = {
-            Fenn = { bid = { ["Ring of the Quiet Hour"] = { "gift", to = "Aldric" } } },
+            Fenn = { bid = { ["Seal of the Archmagus"] = { "gift", to = "Aldric" } } },
         },
         expect = function(sim)
             local award = lastEvent(sim, "main", "Award")
@@ -85,12 +85,12 @@ M.list = {
     {
         id = "off-spec",
         title = "Off-spec rolls",
-        lesson = "Nobody needs this for their main, but Cass and Eira want it for an off-spec. Off-spec has its own list, so winning costs Cass a place there, not on the main list. The first time someone bids off-spec they join the bottom of that list.",
+        lesson = "Gehennas drops leather healer legs. Nobody needs them for their main, but two druids, Cass and Eira, want them for an off-spec. Off-spec has its own list, so winning costs Cass a place there, not on the main list. The first time someone bids off-spec they join the bottom of that list.",
         members = RAID,
-        items = { "Mantle of Second Chances" },
+        items = { "Salamander Scale Pants" },
         policies = {
-            Cass = { bid = { ["Mantle of Second Chances"] = "off" } },
-            Eira = { bid = { ["Mantle of Second Chances"] = "off" } },
+            Cass = { bid = { ["Salamander Scale Pants"] = "off" } },
+            Eira = { bid = { ["Salamander Scale Pants"] = "off" } },
         },
         expect = function(sim)
             local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ","):gsub("%-Realm", "")
@@ -100,9 +100,9 @@ M.list = {
     {
         id = "nobody-wants-it",
         title = "Nobody wants it",
-        lesson = "Everyone passes, and everyone passes again when it is offered from the bottom up. Only then is it disenchanted, and the shards go to the guild bank. Usable loot gets every chance first.",
+        lesson = "Shazzrah drops a wand the raid has already outgrown. Everyone passes, and everyone passes again when it is offered from the bottom up. Only then is it disenchanted, and the shards go to the guild bank. Usable loot gets every chance first.",
         members = RAID,
-        items = { "Cracked Training Mace" },
+        items = { "Crimson Shocker" },
         policies = {},
         expect = function(sim)
             local de = lastEvent(sim, "main", "Disenchant")
@@ -113,10 +113,10 @@ M.list = {
     {
         id = "fix-a-mistake",
         title = "Fixing a mistake",
-        lesson = "Brann wins an item, but you handed it out by mistake. Mistakes are fixed forward: the undo is itself a recorded event, so the history shows what happened and who fixed it. Nothing is erased.",
+        lesson = "Golemagg drops Staff of Dominance. Brann wins it, but you handed it out by mistake. Mistakes are fixed forward: the undo is itself a recorded event, so the history shows what happened and who fixed it. Nothing is erased.",
         members = RAID,
-        items = { "Staff of Lesser Tides" },
-        policies = { Brann = { bid = { ["Staff of Lesser Tides"] = "need" } } },
+        items = { "Staff of Dominance" },
+        policies = { Brann = { bid = { ["Staff of Dominance"] = "need" } } },
         after = function(sim)
             local award = lastEvent(sim, "main", "Award")
             assert(sim.engine:Append("main", "Revert", { target = award.id }))
