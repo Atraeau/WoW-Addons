@@ -19,6 +19,7 @@ Sync.lua
 SelfCheck.lua
 Loot.lua
 LootNet.lua
+Commands.lua
 Sim.lua
 Scenarios.lua
 UI.lua

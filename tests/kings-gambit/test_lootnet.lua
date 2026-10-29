@@ -149,6 +149,25 @@ test("a bid for a session that is not running is refused", function()
     eq(#acks, 0, "the host's refusal carries a different session id, so the player ignores it")
     eq(w.host.session.bids["Aldric-Realm"], nil)
 end)
+test("a player who joins late, or missed the start, catches up from the host's repeats", function()
+    local w = build()
+    local items = drop(w, 1)
+    assert(w.host:start(items)); w.net:advance(1)
+    w.players.Aldric.net:bid(1, "need"); w.net:advance(2)
+    -- Cass never heard the announcement (as if she had just reloaded)
+    w.players.Cass.net.session = nil
+    w.net:advance(11)
+    local s = w.players.Cass.net.session
+    assert(s, "Cass picked the session up from the repeat"); eq(#s.items, 1)
+    eq(s.answers["Aldric-Realm"][1].kind, "need", "and sees the answers so far")
+    -- a repeat does not reset a player who already has the session
+    local aldric = w.players.Aldric.net.session
+    w.net:advance(11)
+    eq(w.players.Aldric.net.session, aldric, "same session object, not replaced")
+    -- the repeats stop when the session ends
+    w.host.session:cancel(); w.net:advance(11)
+    eq(w.host.beaconTimer, nil)
+end)
 test("a second session cannot start while one is running", function()
     local w = build()
     assert(w.host:start(drop(w, 1)))

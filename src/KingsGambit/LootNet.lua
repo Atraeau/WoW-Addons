@@ -13,6 +13,10 @@
 --   LY  public answers  host -> RAID     { sid, a = { { player, item, kind, to? } } }  (batched)
 --   LR  results         host -> RAID     { sid, awards = { {item, winner, to, tier} }, de = { {item, to} }, failed }
 --
+-- While a session runs the host repeats its state every few seconds (LS, LP, LT and all LY answers), so
+-- a player who joined late, reloaded, or missed the start catches up; repeats change nothing for
+-- players who already have the session.
+--
 -- Only the Master Looter's messages are believed (players check the sender against the client's
 -- masterLooter()); the host only accepts bids and actions through the Loot session's own rules.
 local _, SK = ...
@@ -49,7 +53,7 @@ end
 function M.NewHost(sync, engine)
     local client = engine.client
     local h = { sync = sync, engine = engine, client = client, session = nil, sid = nil, counter = 0,
-        answers = {}, flushing = false, ev = newEmitter() }
+        answers = {}, flushing = false, ev = newEmitter(), beaconSeconds = 10 }
     h.on = h.ev.on
 
     local function send(msg, channel, target) sync:send(msg, channel or "RAID", target) end
@@ -77,6 +81,34 @@ function M.NewHost(sync, engine)
             end
         end
         return out
+    end
+
+    local function running()
+        local s = h.session
+        return s and s.phase ~= "done" and s.phase ~= "cancelled"
+    end
+
+    local function stateBeacon()
+        if not running() then
+            if h.beaconTimer then client:cancel(h.beaconTimer); h.beaconTimer = nil end
+            return
+        end
+        local s = h.session
+        local list, who = {}, {}
+        for i, it in ipairs(s.items) do list[i] = { id = it.id, link = it.link } end
+        for _, name in ipairs(s.eligibleList) do who[#who + 1] = name end
+        send({ t = "LS", sid = h.sid, items = list, bid = s.cfg.bidSeconds, left = remaining(client, s.deadline), who = who })
+        send({ t = "LP", sid = h.sid, phase = s.phase })
+        if s.turn then
+            send({ t = "LT", sid = h.sid, left = remaining(client, s.deadline),
+                turn = { type = s.turn.type, player = s.turn.player, options = s.turn.options, item = s.turn.item, tier = s.turn.tier } })
+        end
+        local all = {}
+        for player, row in pairs(s.bids) do
+            for item, b in pairs(row) do all[#all + 1] = { player = player, item = item, kind = b.kind, to = b.to } end
+        end
+        table.sort(all, function(a, b) if a.player ~= b.player then return a.player < b.player end return a.item < b.item end)
+        if #all > 0 then send({ t = "LY", sid = h.sid, a = all }) end
     end
 
     function h:start(items, cfg)
@@ -120,6 +152,8 @@ function M.NewHost(sync, engine)
         for i, it in ipairs(session.items) do list[i] = { id = it.id, link = it.link } end
         for _, name in ipairs(session.eligibleList) do who[#who + 1] = name end
         send({ t = "LS", sid = self.sid, items = list, bid = session.cfg.bidSeconds, left = remaining(client, session.deadline), who = who })
+        if self.beaconTimer then client:cancel(self.beaconTimer) end
+        self.beaconTimer = client:every(h.beaconSeconds, stateBeacon)
         return true
     end
 
@@ -165,6 +199,7 @@ function M.NewPlayer(sync)
         local ml = client:masterLooter()
         if not ml or sender ~= ml then return end -- only the Master Looter can open a session
         if type(msg.sid) ~= "string" or type(msg.items) ~= "table" then return end
+        if p.session and p.session.sid == msg.sid then return end -- a repeat of the announcement
         p.session = { sid = msg.sid, host = sender, items = msg.items, phase = "bidding", turn = nil, results = nil,
             answers = {}, mine = {}, who = msg.who or {}, deadline = msg.left and (client:now() + msg.left) or nil }
         p.ev.emit("session", p.session)

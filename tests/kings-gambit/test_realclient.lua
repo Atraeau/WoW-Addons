@@ -72,6 +72,8 @@ local function newEnv(over)
     return E
 end
 
+H.newWowEnv = newEnv -- shared with the addon boot test
+
 local function newClient(over)
     local E = newEnv(over)
     return RealClient.New({ env = E }), E

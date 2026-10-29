@@ -1,0 +1,145 @@
+-- The text interface: list admin, running a session as Master Looter, and answering as a player.
+local H = ...
+local SK, test, eq = H.SK, H.test, H.eq
+local MockClient, Engine, Sync, SimNetwork = SK.modules.MockClient, SK.modules.Engine, SK.modules.Sync, SK.modules.SimNetwork
+local LootNet, Commands = SK.modules.LootNet, SK.modules.Commands
+
+local function text(client) return table.concat(client.printed, "\n") end
+local function clear(client) client.printed = {} end
+
+-- A solo officer (not in a group), for list administration.
+local function solo()
+    local client = MockClient.New({ name = "Raidlead", realm = "Realm" })
+    local engine = Engine.New(client)
+    return Commands.New({ client = client, engine = engine }), client, engine
+end
+
+H.section("Commands: lists")
+test("help and unknown commands", function()
+    local cmd, client = solo()
+    cmd.handle("help"); assert(text(client):find("standings")); clear(client)
+    cmd.handle("frobnicate"); assert(text(client):find("Unknown command 'frobnicate'"))
+end)
+test("create, add and standings", function()
+    local cmd, client, engine = solo()
+    cmd.handle("standings"); assert(text(client):find("No list called 'main'")); clear(client)
+    cmd.handle("create main The Main List"); assert(text(client):find("Created list 'main'"))
+    cmd.handle("add Aldric"); cmd.handle("add Brann"); cmd.handle("add Cass top")
+    clear(client); cmd.handle("standings")
+    local t = text(client)
+    assert(t:find("main: 3 on the list"), t); assert(t:find(" 1%. Cass")); assert(t:find(" 3%. Brann"))
+    eq(table.concat(engine:Get("main").state.order, ","), "Cass-Realm,Aldric-Realm,Brann-Realm")
+end)
+test("move needs a reason and is recorded; undo reverses the last award", function()
+    local cmd, client, engine = solo()
+    cmd.handle("create main"); for _, n in ipairs { "A", "B", "C" } do cmd.handle("add " .. n) end
+    clear(client); cmd.handle("move C top"); assert(text(client):find("a reason is required"))
+    cmd.handle("move C top fixing a mistake"); eq(engine:Get("main").state.order[1], "C-Realm")
+    clear(client); cmd.handle("undo"); assert(text(client):find("Nothing can be undone"))
+    engine:Append("main", "Award", { member = "C-Realm", item = "X" }); eq(engine:Get("main").state.order[3], "C-Realm")
+    cmd.handle("undo"); eq(engine:Get("main").state.order[1], "C-Realm")
+    local last = engine:Get("main").events[#engine:Get("main").events]; eq(last.type, "Revert")
+end)
+test("only the raid leader or an assistant can change a list when in a group", function()
+    local client = MockClient.New({ name = "Aldric", realm = "Realm" })
+    client:setRaid({ "Raidlead", "Aldric" }, { leader = "Raidlead" })
+    local engine = Engine.New(client)
+    local cmd = Commands.New({ client = client, engine = engine })
+    cmd.handle("create main"); assert(text(client):find("Only the raid leader or an assistant"), text(client))
+    eq(engine:Get("main"), nil)
+end)
+
+-- A Master Looter, one addon user and one raider without the addon, over the simulated network.
+local function raid()
+    local net = SimNetwork.New({ latency = 0.1, seed = 2 })
+    local w = { net = net }
+    local function node(name, isML)
+        local client = MockClient.New({ name = name, realm = "Realm", seed = #name * 13 })
+        client:setRaid({ "ML", "Aldric", "Brann" }, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
+        local engine = Engine.New(client)
+        local sync = Sync.New(engine, { heartbeat = 30, firstHeartbeat = 5, firstJitter = 1 })
+        net:attach(client); sync:start()
+        local ctx = { client = client, engine = engine, sync = sync }
+        if isML then ctx.host = LootNet.NewHost(sync, engine) else ctx.player = LootNet.NewPlayer(sync) end
+        ctx.cmd = Commands.New(ctx)
+        ctx.selfcheck = nil
+        return ctx
+    end
+    w.ml, w.aldric = node("ML", true), node("Aldric", false)
+    w.ml.cmd.handle("create main")
+    for _, n in ipairs { "Aldric", "Brann", "ML" } do w.ml.cmd.handle("add " .. n) end
+    net:advance(1)
+    return w
+end
+
+H.section("Commands: a loot session by text")
+test("start, answer, confirm: the whole flow through slash commands", function()
+    local w = raid()
+    w.ml.client:dropLoot({ { link = "Gauntlets of the Ashen Vow" } })
+    clear(w.ml.client); clear(w.aldric.client)
+    w.ml.cmd.handle("loot")
+    assert(text(w.ml.client):find("Loot session started for 1 item"), text(w.ml.client))
+    w.net:advance(1)
+    assert(text(w.aldric.client):find("Loot! 1 item%(s%) from ML"), text(w.aldric.client))
+    assert(text(w.aldric.client):find("Gauntlets of the Ashen Vow"))
+
+    w.aldric.cmd.handle("need 1")             -- a player, over the network
+    w.ml.cmd.handle("pass")                   -- the Master Looter's own answer (only one item: no number needed)
+    w.ml.client:whisperFrom("Brann", "pass")  -- a raider without the addon
+    w.net:advance(2)
+    eq(w.ml.host.session.phase, "review")
+    assert(text(w.ml.client):find("Review, then 'confirm'") or text(w.ml.client):find("confirm"), text(w.ml.client))
+    clear(w.aldric.client); clear(w.ml.client)
+    w.ml.cmd.handle("confirm"); assert(text(w.ml.client):find("Confirmed and recorded"))
+    w.net:advance(3)
+    assert(text(w.aldric.client):find("Item 1: Aldric won it"), text(w.aldric.client))
+    eq(table.concat(w.ml.engine:Get("main").state.order, ","):gsub("%-Realm", ""), "Brann,ML,Aldric")
+end)
+test("a draft turn prompts the right player, who answers with pick", function()
+    local w = raid()
+    w.ml.client:dropLoot({ { link = "Helm" }, { link = "Cloak" } })
+    w.ml.cmd.handle("loot"); w.net:advance(1)
+    w.aldric.cmd.handle("need 1"); w.aldric.cmd.handle("need 2")
+    w.ml.cmd.handle("pass 1"); w.ml.cmd.handle("pass 2")
+    w.ml.client:whisperFrom("Brann", "pass")
+    clear(w.aldric.client)
+    w.net:advance(2)
+    assert(text(w.aldric.client):find("It's your pick"), text(w.aldric.client))
+    w.aldric.cmd.handle("pick 2"); w.net:advance(2)
+    eq(w.ml.host.session.phase, "review")
+    eq(w.ml.host.session.items[2].winner, "Aldric-Realm")
+end)
+test("mistakes get a plain-language reply", function()
+    local w = raid()
+    w.ml.client:dropLoot({ { link = "Helm" } })
+    clear(w.ml.client); w.ml.cmd.handle("need 1"); assert(text(w.ml.client):find("no loot session"), text(w.ml.client))
+    w.ml.cmd.handle("loot"); w.net:advance(1)
+    clear(w.ml.client); w.ml.cmd.handle("need 5"); assert(text(w.ml.client):find("there is no such item"), text(w.ml.client))
+    clear(w.ml.client); w.ml.cmd.handle("pick 1"); assert(text(w.ml.client):find("nothing is waiting for you"), text(w.ml.client))
+    clear(w.aldric.client); w.aldric.cmd.handle("gift 1"); assert(text(w.aldric.client):find("gift <item#> <name>"))
+    w.aldric.cmd.handle("gift 1 Aldric"); w.net:advance(2); assert(text(w.aldric.client):find("name who should get the gift"), text(w.aldric.client))
+end)
+test("loot needs an open loot window, announce and cancel work", function()
+    local w = raid()
+    clear(w.ml.client); w.ml.cmd.handle("loot"); assert(text(w.ml.client):find("Open the loot window"))
+    w.ml.client:dropLoot({ { link = "Helm" } })
+    w.ml.cmd.handle("loot"); clear(w.ml.client); w.ml.cmd.handle("announce")
+    assert(text(w.ml.client):find("Announced")); assert(#w.ml.client.sent > 0)
+    w.ml.cmd.handle("cancel"); assert(text(w.ml.client):find("Session cancelled")); eq(w.ml.host.session.phase, "cancelled")
+end)
+test("only the Master Looter can start a session", function()
+    local w = raid()
+    w.aldric.client:dropLoot({ { link = "Helm" } })
+    clear(w.aldric.client)
+    -- Aldric has no host object in this test, so give him one to prove the check is the Master Looter test
+    w.aldric.cmd = Commands.New({ client = w.aldric.client, engine = w.aldric.engine, sync = w.aldric.sync,
+        host = LootNet.NewHost(w.aldric.sync, w.aldric.engine), player = w.aldric.player })
+    w.aldric.cmd.handle("loot")
+    assert(text(w.aldric.client):find("Only the Master Looter"), text(w.aldric.client))
+end)
+test("sync status reports heads and pending messages", function()
+    local w = raid()
+    clear(w.ml.client); w.ml.cmd.handle("sync")
+    local t = text(w.ml.client)
+    assert(t:find("Sync: 0 message"), t); assert(t:find("main: 4 events, head"), t)
+end)

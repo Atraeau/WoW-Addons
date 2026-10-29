@@ -329,6 +329,42 @@ duplicates, reorders and partitions messages.
   ledger itself to carry an officers list (an `SetOfficers` event written by the guild leader),
   which every peer can verify from the chain. That is a real design choice, so it is left open.
 
+### The live loot protocol and the text interface (2026-10-28)
+
+`LootNet.lua` carries a loot session between the Master Looter's addon and everyone else's, and
+`Commands.lua` is a complete text interface over slash commands, so the whole system can be used (and
+field-tested in the game) before any frames exist.
+
+- **Who is believed.** Players only accept a session from the client's reported Master Looter. The host
+  applies every bid and draft action through the session's own rules **by the sender's name**, so a
+  player can never answer or pick for someone else, and a forged start message from anyone else is
+  ignored.
+- **Public by design.** Everyone's answers are published to the raid (batched once a second), because
+  transparency is how this system is enforced. Whispered answers from players without the addon work
+  alongside, and get a plain reply.
+- **Acknowledged.** Every bid and action gets a reply saying whether it was recorded and, if not, why
+  ("bidding is closed", "it is not your turn", ...).
+- **Catching up.** While a session runs, the host repeats its state every 10 seconds (the announcement,
+  phase, whose turn it is, and every answer so far). A player who joined late, reloaded or missed the start
+  picks it up; a repeat changes nothing for players who already have it. The repeats stop when the
+  session ends.
+- **Commands.** `standings`, `create`, `add`, `remove`, `move` (a reason is required), `undo`, `loot`,
+  `announce`, `resolve`, `extend`, `confirm`, `cancel`, `need|off|pass|gift <n>`, `pick`, `skip`,
+  `claim [name]`, `decline`, `sync`, `check`. Only the raid leader or an assistant can change a list when
+  in a group, and only the Master Looter can start a session.
+- **Verified without the game:** a boot test loads every file in TOC order into a stub WoW environment,
+  fires the login event and runs slash commands; protocol tests run a Master Looter, addon users and a
+  whisper-only raider over the simulated network.
+
+Known gaps, for later or for you to decide:
+
+- If the Master Looter's game crashes mid-session, the session's progress is lost (it lives in memory). The
+  ledger is safe, since nothing is recorded until confirm.
+- A session can only be started by the Master Looter. A manual put-up for items that are not in a loot
+  window (a BoE, say, or a group with no Master Looter) needs a rule for who may run it.
+- The start announcement is repeated rather than retried per player, so on a very lossy connection a player
+  may see the session up to ten seconds late.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

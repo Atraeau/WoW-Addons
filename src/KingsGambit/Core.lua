@@ -15,46 +15,47 @@ function SK:NewModule(name)
 end
 
 -- SavedVariables (created by RealClient:storage(), read by the Engine):
--- KingsGambitDB (account-wide): schema, lists = { [listId] = { events = {...} } }, config, selfcheck
+-- KingsGambitDB (account-wide): schema, lists = { [listId] = { events = {...} } }, config, orphans, selfcheck
 -- KingsGambitCharDB (per character): ui = { frame positions, scale, opacity, hints }
 
 function SK:Print(...)
     print("|cff66ccffGambit|r", ...)
 end
 
+-- Everything is built at PLAYER_LOGIN, when the player's name, realm and group are all known.
 local function Start()
-    local client = SK.modules.RealClient.New()
-    SK.client = client
-    SK.engine = SK.modules.Engine.New(client)
+    local M = SK.modules
+    local client = M.RealClient.New()
+    local engine = M.Engine.New(client)
+    local sync = M.Sync.New(engine)
+    sync:start()
+    local host = M.LootNet.NewHost(sync, engine)
+    local player = M.LootNet.NewPlayer(sync)
+    SK.client, SK.engine, SK.sync, SK.host, SK.player = client, engine, sync, host, player
     SK.db, SK.char = client:storage().account, client:storage().char
-    for _, m in pairs(SK.modules) do
+    SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player, selfcheck = M.SelfCheck })
+    for _, m in pairs(M) do
         if m.OnInit then m:OnInit() end
     end
+    local lists = 0
+    for _ in pairs(engine.chains) do lists = lists + 1 end
+    SK:Print(("ready: %d list(s). Type /gambit help."):format(lists))
 end
 
 local frame = CreateFrame("Frame")
-frame:RegisterEvent("ADDON_LOADED")
-frame:SetScript("OnEvent", function(_, event, name)
-    if event == "ADDON_LOADED" and name == ADDON then
-        frame:UnregisterEvent("ADDON_LOADED")
+frame:RegisterEvent("PLAYER_LOGIN")
+frame:SetScript("OnEvent", function(_, event)
+    if event == "PLAYER_LOGIN" then
+        frame:UnregisterEvent("PLAYER_LOGIN")
         local ok, err = pcall(Start)
         if not ok then SK:Print("failed to start: " .. tostring(err)) end
     end
 end)
 
 SLASH_KINGSGAMBIT1 = "/gambit"
-SlashCmdList["KINGSGAMBIT"] = function(msg)
-    local cmd = (msg or ""):match("^(%S*)"):lower()
-    if not SK.client then SK:Print("not started (see earlier error)"); return end
-    if cmd == "" or cmd == "show" then
-        local ui = SK.modules.UI
-        if ui and ui.Toggle then ui:Toggle() else SK:Print("v0.0.1 scaffold, no UI yet. Try /gambit check") end
-    elseif cmd == "check" then
-        SK.modules.SelfCheck.Run(SK.client)
-    else
-        SK:Print("commands: /gambit [show] | check")
-    end
-end
-
--- Short alias.
 SLASH_KINGSGAMBIT2 = "/kg"
+SlashCmdList["KINGSGAMBIT"] = function(msg)
+    if not SK.commands then SK:Print("not started yet (or it failed to start; see the earlier message)"); return end
+    local ok, err = pcall(SK.commands.handle, msg)
+    if not ok then SK:Print("error: " .. tostring(err)) end
+end
