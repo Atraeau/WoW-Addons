@@ -8,6 +8,7 @@ A raid loot system for WoW: Forever, derived from Suicide Kings, with a shared l
 | [rationale.md](rationale.md) | The player guide: how loot works, every rule and why, and a walkthrough for the Master Looter. |
 | [design-journal.md](design-journal.md) | Every design decision, the alternatives we weighed, and the open questions. The audit trail. |
 | [ledger-format.md](ledger-format.md) | The exact record format, precise enough to verify a ledger with your own code. |
+| [ledger-v2-design.md](ledger-v2-design.md) | Proposed: one chain per writer, so two raids can run at once. Under review. |
 | [client-interface.md](client-interface.md) | How the engine talks to the game (and how we fake the game for tests and training). |
 | [ui-sketch.html](ui-sketch.html) | A rough sketch of the planned screens. Open it in a browser. |
 
