@@ -115,6 +115,29 @@ else's.
 
 ---
 
+## Running a loot session (for the Master Looter)
+
+This is what happens, in order, when a boss drops loot. Practice it in the
+[simulator](../../simulator/README.md) before the real thing.
+
+1. **Put the items up.** The addon picks up what the Master Looter sees in the loot window (or you can
+   add an item by link). Raiders without the addon get a short announcement in raid chat and answer
+   by whisper ("1 need", "2 off", "1 pass", "1 gift Name").
+2. **Bidding.** Everyone answers each item: Need, Off-spec, Gift or Pass. Answers are public. The timer
+   ends early the moment every eligible player has answered; anyone who hasn't answered when it runs
+   out counts as a pass. You can add time, or close it yourself.
+3. **The draft.** The highest player who wants something goes first. If they want only one item it is
+   theirs automatically; if they want several, they pick one (a pick that times out counts as a skip).
+   Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
+   play for items no main-spec player wanted.
+4. **The backstop.** Anything left is offered one item at a time, lowest on the list first, to everyone,
+   whether or not they could use it. If everyone declines, the item goes to the disenchanter.
+5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
+   and nothing is handed out until you confirm. If handing an item over fails, that award is not
+   recorded and you are told, so the record never claims something that didn't happen.
+6. **Fix mistakes in the open.** The most recent awards can be undone exactly. Anything older is fixed
+   by an officer's correction, which is itself a visible entry in the history.
+
 ## What this system does *not* do
 
 - **It is not an optimizer.** It won't guarantee that the "best" item reaches the

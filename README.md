@@ -34,6 +34,19 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | BTPCompatCheck | [`src/BTPCompatCheck`](src/BTPCompatCheck) | Dev tool — probes which APIs exist on the client (`/btpcheck`) |
 | BlizzThreatPlates | [`vendor/BlizzThreatPlates`](vendor/BlizzThreatPlates) | Patched third-party addon (MIT) — see [PATCHES.md](vendor/BlizzThreatPlates/PATCHES.md) |
 
+### King's Gambit
+
+A full-featured raid loot system (Suicide Kings–derived) with a tamper-evident shared ledger. The
+engine is plain Lua with no game dependency, so it is fully tested outside WoW.
+
+- Design: [`docs/kings-gambit/`](docs/kings-gambit/): [manifesto](docs/kings-gambit/manifesto.md),
+  [player guide](docs/kings-gambit/rationale.md), [design journal](docs/kings-gambit/design-journal.md) (every decision and why),
+  [client interface](docs/kings-gambit/client-interface.md), [UI sketch](docs/kings-gambit/ui-sketch.html)
+- Try it: open [`simulator/index.html`](simulator/README.md) in a browser: the real engine over a simulated raid,
+  with training scenarios and a sync lab
+- Tests: `lua tests/kings-gambit/run.lua` (Lua 5.4); CI runs them on every push
+- In game: `/gambit check` probes the live client and saves the results for review
+
 ## API reference
 
 The client documents its own API (the `/api` system). [`docs/api/`](docs/api/README.md)
