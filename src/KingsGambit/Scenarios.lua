@@ -1,0 +1,136 @@
+-- King's Gambit: training scenarios (Phase 4.5). Data, not code paths: each scenario sets up a
+-- raid, a drop and how the bots behave, says what the learner should notice, and states what
+-- must be true afterward. The test suite runs every scenario against the real engine, so the
+-- lessons can never drift from the rules. Keep this file Lua 5.1-safe.
+local _, SK = ...
+local M = SK:NewModule("Scenarios")
+
+local RAID = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn" } -- top of the list first; You are last
+
+local function lastEvent(sim, listId, type_)
+    local found
+    for _, ev in ipairs(sim.engine:Get(listId).events) do
+        if ev.type == type_ then found = ev end
+    end
+    return found
+end
+
+local function short(name) return name and (name:gsub("%-.*$", "")) end
+
+M.list = {
+    {
+        id = "first-drop",
+        title = "The first drop",
+        lesson = "Two players want the item. The one higher on the list wins, and drops to the bottom. Everyone else keeps their place.",
+        members = RAID,
+        items = { "Gauntlets of the Ashen Vow" },
+        policies = {
+            Brann = { bid = { ["Gauntlets of the Ashen Vow"] = "need" } },
+            Dara = { bid = { ["Gauntlets of the Ashen Vow"] = "need" } },
+        },
+        expect = function(sim)
+            local order = sim:orderString()
+            return order == "Aldric,Cass,Dara,Eira,Fenn,You,Brann", "order is " .. order
+        end,
+    },
+    {
+        id = "pick-a-priority",
+        title = "Two items, one player who wants both",
+        lesson = "When several items drop, the top player picks first, then the next. Aldric wants both items, so he chooses one; Brann, next in line, gets the other.",
+        members = RAID,
+        items = { "Helm of Tides", "Cloak of Embers" },
+        policies = {
+            Aldric = { bid = { ["Helm of Tides"] = "need", ["Cloak of Embers"] = "need" }, pick = { "Cloak of Embers" } },
+            Brann = { bid = { ["Helm of Tides"] = "need" } },
+        },
+        expect = function(sim)
+            local items = sim.session.items
+            if not (items[1].winner and items[2].winner) then return false, "an item was not awarded" end
+            local ok = short(items[2].winner) == "Aldric" and short(items[1].winner) == "Brann"
+            return ok, ("Cloak went to %s, Helm to %s"):format(short(items[2].winner), short(items[1].winner))
+        end,
+    },
+    {
+        id = "minor-upgrade-proxy",
+        title = "A small upgrade nobody will spend a turn on",
+        lesson = "Aldric would use this, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to Aldric. Nothing is wasted, and nobody paid for scraps.",
+        members = RAID,
+        items = { "Band of Small Mercies" },
+        policies = {},
+        you = { claim = true, claimTo = "Aldric" },
+        expect = function(sim)
+            local award = lastEvent(sim, "main", "Award")
+            if not award then return false, "no award was recorded" end
+            local ok = short(award.data.member) == "You" and short(award.data.to) == "Aldric" and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
+            return ok, ("claimed by %s for %s; order %s"):format(short(award.data.member), short(award.data.to), sim:orderString())
+        end,
+    },
+    {
+        id = "gift-up",
+        title = "Gifting an item to a friend",
+        lesson = "Fenn does not need this, but Aldric would love it. Fenn bids to gift it: Fenn wins at Fenn's own place on the list, pays for it by dropping to the bottom, and hands the item to Aldric.",
+        members = RAID,
+        items = { "Ring of the Quiet Hour" },
+        policies = {
+            Fenn = { bid = { ["Ring of the Quiet Hour"] = { "gift", to = "Aldric" } } },
+        },
+        expect = function(sim)
+            local award = lastEvent(sim, "main", "Award")
+            if not award then return false, "no award" end
+            local ok = short(award.data.member) == "Fenn" and short(award.data.to) == "Aldric"
+                and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,You,Fenn"
+            return ok, ("won by %s for %s; order %s"):format(short(award.data.member), short(award.data.to), sim:orderString())
+        end,
+    },
+    {
+        id = "off-spec",
+        title = "Off-spec rolls",
+        lesson = "Nobody needs this for their main, but Cass and Eira want it for an off-spec. Off-spec has its own list, so winning costs Cass a place there, not on the main list. The first time someone bids off-spec they join the bottom of that list.",
+        members = RAID,
+        items = { "Mantle of Second Chances" },
+        policies = {
+            Cass = { bid = { ["Mantle of Second Chances"] = "off" } },
+            Eira = { bid = { ["Mantle of Second Chances"] = "off" } },
+        },
+        expect = function(sim)
+            local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ","):gsub("%-Realm", "")
+            return main == "Aldric,Brann,Cass,Dara,Eira,Fenn,You" and off == "Eira,Cass", ("main %s; off %s"):format(main, off)
+        end,
+    },
+    {
+        id = "nobody-wants-it",
+        title = "Nobody wants it",
+        lesson = "Everyone passes, and everyone passes again when it is offered from the bottom up. Only then is it disenchanted, and the shards go to the guild bank. Usable loot gets every chance first.",
+        members = RAID,
+        items = { "Cracked Training Mace" },
+        policies = {},
+        expect = function(sim)
+            local de = lastEvent(sim, "main", "Disenchant")
+            local ok = de ~= nil and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
+            return ok, de and ("disenchanted by " .. short(de.data.to)) or "no Disenchant event"
+        end,
+    },
+    {
+        id = "fix-a-mistake",
+        title = "Fixing a mistake",
+        lesson = "Brann wins an item, but you handed it out by mistake. Mistakes are fixed forward: the undo is itself a recorded event, so the history shows what happened and who fixed it. Nothing is erased.",
+        members = RAID,
+        items = { "Staff of Lesser Tides" },
+        policies = { Brann = { bid = { ["Staff of Lesser Tides"] = "need" } } },
+        after = function(sim)
+            local award = lastEvent(sim, "main", "Award")
+            assert(sim.engine:Append("main", "Revert", { target = award.id }))
+        end,
+        expect = function(sim)
+            local reverted = lastEvent(sim, "main", "Revert") ~= nil
+            return reverted and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You",
+                "order is " .. sim:orderString() .. (reverted and ", with the undo recorded" or ", no undo recorded")
+        end,
+    },
+}
+
+function M.find(id)
+    for _, sc in ipairs(M.list) do
+        if sc.id == id then return sc end
+    end
+end

@@ -229,10 +229,10 @@ function Session:buildOffOrder()
     self.order.off = order
 end
 
-function Session:award(tier, who, itemId)
+function Session:award(tier, who, itemId, toOverride)
     local it = self.items[itemId]
     local bid = self.bids[who] and self.bids[who][itemId]
-    local to = (bid and bid.kind == "gift" and tier == "main") and bid.to or who
+    local to = toOverride or ((bid and bid.kind == "gift" and tier == "main") and bid.to or who)
     it.status, it.winner, it.to, it.tier = "awarded", who, to, tier
     local list = (tier == "off") and self.cfg.offListId or self.cfg.listId
     moveToBottom(self.order[tier == "off" and "off" or "main"], who)
@@ -335,13 +335,20 @@ function Session:offerNext()
         self.cfg.claimSeconds, function() self:decline(player) end)
 end
 
-function Session:claimItem(player)
+-- extra.to (optional): hand the item to someone else, e.g. a bottom player proxying a
+-- minor upgrade up to the player who can use it.
+function Session:claimItem(player, extra)
     local t = self.turn
     if not (t and t.type == "claim") then return false, "noturn" end
     player = norm(self, player)
     if player ~= t.player then return false, "notyourturn" end
+    local to
+    if extra and extra.to then
+        to = norm(self, extra.to)
+        if not to or to == player then return false, "badtarget" end
+    end
     self.turn = nil
-    self:award("backstop", player, t.item)
+    self:award("backstop", player, t.item, to)
     self:nextBackstopItem()
     return true
 end

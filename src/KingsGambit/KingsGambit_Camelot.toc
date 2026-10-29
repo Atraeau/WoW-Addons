@@ -18,4 +18,6 @@ SimNetwork.lua
 Sync.lua
 SelfCheck.lua
 Loot.lua
+Sim.lua
+Scenarios.lua
 UI.lua
