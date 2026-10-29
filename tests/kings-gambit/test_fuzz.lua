@@ -76,7 +76,9 @@ local function run(seed)
             p.engine:Append("main", "AddMember", { member = "X" .. counter .. "-Realm" })
         elseif roll < 0.55 and #order > 0 then
             counter = counter + 1
-            p.engine:Append("main", "Award", { member = order[r(#order)], item = "Item" .. counter })
+            local data = { member = order[r(#order)], item = "Item" .. counter }
+            if r() < 0.5 then data.seen = p.client:serverTime() - r(1800) end -- loot held since it dropped
+            p.engine:Append("main", "Award", data)
         elseif roll < 0.60 and #order > 1 then
             counter = counter + 1
             p.engine:Append("main", "MovePlayer", { member = order[r(#order)], above = order[r(#order)], reason = "fuzz" .. counter })
@@ -121,7 +123,7 @@ local function run(seed)
 end
 
 H.fuzzRun = run
-H.section("Fuzz: convergence under random faults (officers, parallel raids, expiry)")
+H.section("Fuzz: convergence under random faults (officers, parallel raids, expiry, batched hand-outs)")
 local SEEDS = 40
 for seed = 1, SEEDS do
     test("seed " .. seed .. ": everyone converges to one valid ledger", function() run(seed) end)

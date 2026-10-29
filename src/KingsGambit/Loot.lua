@@ -97,12 +97,20 @@ function Session:start(items)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end
 
+    -- When the loot became visible: each item may say (loot held for a later hand-out); default now. Events
+    -- the session writes carry it as `seen`, so the ledger orders them by drop time, not hand-out time.
+    local now = self.client:serverTime()
+    self.seen = now
+    for _, it in ipairs(items) do
+        local s = tonumber(it.seen)
+        if s and s <= now and s < self.seen then self.seen = s end
+    end
     for _, m in ipairs(self.client:roster()) do
         if m.online then
             self.class[m.name] = m.class
             local mem = main.state.members[m.name]
             if not (mem and mem.active) and cfg.autoEnroll then
-                self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class })
+                self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class, seen = self.seen })
                 mem = main.state.members[m.name]
             end
             if mem and mem.active then
@@ -114,7 +122,9 @@ function Session:start(items)
 
     for i, it in ipairs(items) do
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
-        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open" }
+        local s = tonumber(it.seen)
+        if not (s and s <= now) then s = now end
+        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s }
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
@@ -507,15 +517,15 @@ function Session:confirm()
 
     for _, a in ipairs(self.pending) do
         if a.type == "enroll" then
-            if not engine:Get(a.list) then engine:CreateList(a.list, "Off-spec") end
-            local ev, err = engine:Append(a.list, "AddMember", { member = a.member, class = self.class[a.member] })
+            if not engine:Get(a.list) then engine:Write("CreateList", { name = "Off-spec", seen = self.seen }, a.list) end
+            local ev, err = engine:Append(a.list, "AddMember", { member = a.member, class = self.class[a.member], seen = self.seen })
             if not ev then fail(a, "ledger", err) end
         elseif a.type == "award" then
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end
             if ok then
                 local ev, err = engine:Append(a.list, "Award",
-                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil })
+                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil, seen = a.item.seen })
                 if not ev then fail(a, "ledger", err) end
             else
                 fail(a, "give", why)
@@ -524,13 +534,13 @@ function Session:confirm()
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end
             if ok then
-                local ev, err = engine:Append(a.list, "Disenchant", { item = a.item.link, to = a.to })
+                local ev, err = engine:Append(a.list, "Disenchant", { item = a.item.link, to = a.to, seen = a.item.seen })
                 if not ev then fail(a, "ledger", err) end
             else
                 fail(a, "give", why)
             end
         elseif a.type == "pass" then
-            engine:Append(a.list, "Pass", { member = a.member, item = a.item.link, kind = a.kind })
+            engine:Append(a.list, "Pass", { member = a.member, item = a.item.link, kind = a.kind, seen = a.item.seen })
         end
     end
     self.phase = "done"

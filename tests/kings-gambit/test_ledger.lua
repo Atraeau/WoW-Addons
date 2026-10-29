@@ -227,7 +227,7 @@ test("an officer can extend a raid; closing or revoking ends it early", function
     w:write("Off", "Elevate", { raid = "r2", ml = "MLB", minutes = 60 }, 6000)
     w:write("Off", "Revoke", { raid = "r2" }, 6100)
     w:write("MLB", "Pass", { member = "A", item = "X" }, 6101, "main")
-    eq(reasons(w:view()), "Pass:expired Elevate:raidended Pass:expired")
+    eq(reasons(w:view()), "Elevate:raidended Pass:expired Pass:expired", "authority conflicts are listed first (pass 1)")
 end)
 test("only officers elevate, only the guild master sets officers, and anyone can be elevated", function()
     local w = guild()
@@ -282,4 +282,53 @@ test("the worked example in docs/kings-gambit/ledger-format.md is real", functio
     eq(Hash.Canon({ v = 2, ledger = "", chain = "Guildmaster-Realm#1a2b3c4d", seq = 1, ts = 1760000000, author = "Guildmaster-Realm",
         type = "Genesis", data = { name = "Guild ledger" } }),
         "{s6:author=s17:Guildmaster-Realm,s5:chain=s26:Guildmaster-Realm#1a2b3c4d,s4:data={s4:name=s12:Guild ledger,},s6:ledger=s0:,s3:seq=n1,s2:ts=n1760000000,s4:type=s7:Genesis,s1:v=n2,}")
+end)
+
+H.section("Ledger: ordered by when the loot became visible")
+local function twoRaids()
+    local w = guild()
+    w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 360 }, 1000)
+    w:write("Off", "Elevate", { raid = "r2", ml = "MLB", minutes = 360 }, 1000)
+    return w
+end
+test("a raid that hands out at a break is ordered by when its loot dropped", function()
+    local w = twoRaids()
+    -- raid 1 holds A's loot (dropped at 1100) and hands it out at 3000; raid 2 awards C per boss at 2000
+    w:write("MLB", "Award", { member = "C", item = "Y", seen = 2000 }, 2000, "main")
+    w:write("MLA", "Award", { member = "A", item = "X", seen = 1100 }, 3000, "main")
+    eq(order(w:view()), "B,D,E,A,C", "A's loot dropped first, so A sorts first even though it was handed out last")
+end)
+test("without seen, the same events order by hand-out time", function()
+    local w = twoRaids()
+    w:write("MLB", "Award", { member = "C", item = "Y" }, 2000, "main")
+    w:write("MLA", "Award", { member = "A", item = "X" }, 3000, "main")
+    eq(order(w:view()), "B,D,E,C,A")
+end)
+test("a writer's own events never swap places, whatever their seen times", function()
+    local w = twoRaids()
+    w:write("MLA", "Award", { member = "A", item = "X", seen = 2500 }, 3000, "main")
+    w:write("MLA", "Award", { member = "B", item = "Y", seen = 1200 }, 3001, "main") -- earlier drop, handed out second
+    eq(order(w:view()), "C,D,E,A,B", "B is still after A: the key never goes below the writer's previous key")
+end)
+test("loot can't be handed out before it was visible, or a day after", function()
+    local w = twoRaids()
+    w:write("MLA", "Award", { member = "A", item = "X", seen = 3500 }, 3000, "main")
+    w:write("MLA", "Award", { member = "B", item = "X", seen = 3000 - 86401 }, 3000, "main")
+    eq(reasons(w:view()), "Award:badseen Award:badseen")
+end)
+test("authority is checked when an event was written, not where it sorts", function()
+    local w = guild()
+    w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 60 }, 1000)       -- until 4600
+    w:write("Off", "AddMember", { member = "F" }, 1050, "main")                      -- officer, during the raid
+    w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 120 }, 4000)      -- extended to 11200
+    w:write("MLA", "Award", { member = "A", item = "X", seen = 1100 }, 5000, "main") -- sorts at 1100, written at 5000
+    local v = w:view()
+    eq(reasons(v), "AddMember:duringraid"); eq(order(v), "B,C,D,E,A")
+end)
+test("events in the same second are ordered exactly, the same way everywhere", function()
+    local w = guild()
+    w:write("Off", "AddMember", { member = "F" }, 500, "main")                      -- before the raid opened (same second)
+    w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 60 }, 500)
+    w:write("Off", "AddMember", { member = "G" }, 500, "main")                      -- after it opened
+    eq(reasons(w:view()), "AddMember:duringraid")
 end)

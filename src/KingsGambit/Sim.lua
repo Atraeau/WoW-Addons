@@ -76,11 +76,12 @@ end
 
 -- Start a loot session for these item links and wire the bots to it.
 -- cfg overrides Loot defaults (bidSeconds, pickSeconds, ...).
-function Sim:drop(links, cfg)
+-- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
+function Sim:drop(links, cfg, seen)
     local drops, items = {}, {}
     for i, link in ipairs(links) do
         drops[i] = { link = link }
-        items[i] = { link = link, slot = i }
+        items[i] = { link = link, slot = i, seen = seen and seen[i] or nil }
     end
     self.client:dropLoot(drops)
     local session = Loot.NewSession(self.engine, cfg)
@@ -285,8 +286,8 @@ function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
     local held = self.held
     self.held = {}
-    local links = {}
-    for i, h in ipairs(held) do links[i] = h.item.name end
+    local links, seen = {}, {}
+    for i, h in ipairs(held) do links[i], seen[i] = h.item.name, h.seen end
     self.policies = {}
     for name, info in pairs(self.info) do
         local p = { bid = {}, claim = self.client:random() < 0.3 }
@@ -309,5 +310,5 @@ function Sim:handOut(cfg)
         self.policies[name] = p
     end
     self.handedOut = held
-    return self:drop(links, cfg)
+    return self:drop(links, cfg, seen)
 end

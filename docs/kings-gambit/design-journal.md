@@ -411,6 +411,7 @@ Decided by the guild leader:
   checked at the real write time in a two-pass replay. *Agreed; not built yet.*
 - **Still to confirm:** batching means the Master Looter takes the loot first and trades it out at the break,
   inside the 2-hour window for trading bound items (to verify in the game).
+- **Built 2026-10-29:** merge by loot-visible time (`seen`, sort keys, two-pass replay with authority checked in exact write order). A same-second ordering bug was caught by the sync tests while building it: authority must compare exact write order, not whole seconds.
 
 **Training uses Molten Core.** The simulator and scenarios now use the real raid: ten bosses in kill order, their
 real epic drops (item ids, slots, armor and class restrictions, observed drop rates from Wowhead Classic,

@@ -134,3 +134,19 @@ test("the same seed gives the same night", function()
     end
     eq(night(), night())
 end)
+test("held loot is recorded with the time it dropped, not the time it was handed out", function()
+    local sim = Sim.NewMoltenCore({ seed = 5 })
+    sim.autoLearner = true
+    local dropAt = sim.client:serverTime()
+    sim:killBoss(nil, true)
+    sim.client:advance(3600) -- an hour later, at the break
+    assert(sim:handOut()); assert(sim:runUntil("review", 900)); assert(sim.session:confirm())
+    local awards = 0
+    for _, ev in ipairs(sim.engine:View().applied) do
+        if ev.type == "Award" then
+            awards = awards + 1
+            eq(ev.data.seen, dropAt); assert(ev.ts >= dropAt + 3600)
+        end
+    end
+    assert(awards > 0)
+end)

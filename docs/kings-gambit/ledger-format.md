@@ -10,12 +10,16 @@ drift from the code. Why it is shaped this way: [ledger-v2-design.md](ledger-v2-
 A ledger is a set of **chains, one per writer**. Each chain is append-only and only its writer adds to it. Each event
 includes the hash of the previous event in its chain, so changing or removing a past event breaks every hash after it.
 
-Standings are never stored. They are what you get by **merging every chain's events into one order** and replaying
-them:
+Standings are never stored. They are what you get by replaying every chain's events in **two passes** (section 5):
 
-> sort by `ts`, then by `chain` (as text), then by `seq`
+1. **Authority events** in **write order**: by `ts`, then `chain` (as text), then `seq`.
+2. **List events** (and `Declined`) in **sort-key order**: by key, then `chain`, then `seq`.
 
-Within one chain `ts` never goes down, so the merge never reorders a writer's own events.
+An event's **key** is when its loot became visible: `data.seen` if the event has a valid one, otherwise `ts`, but
+never less than the key of the previous event in the same chain. So a raid that hands loot out at a break is
+ordered by when the loot dropped, not when it was handed out, and a writer's own events never swap places.
+`seen` is valid when it is a number no later than `ts` and no more than 24 hours (86,400 s) before it; an event
+whose `seen` is invalid is skipped (`badseen`), and its key falls back to `ts`.
 
 ## 2. An event
 
@@ -66,18 +70,21 @@ chain, sorted by chain id. Equal fingerprints mean identical histories.
 
 ## 5. Replay: event types, rules and authority
 
-Replay applies the merged events in order. An event that breaks a rule is **skipped** and reported as a *conflict*; it
+Pass 1 applies the authority events in write order and records every change. Pass 2 applies the list events in key
+order; each is checked against the authority **in effect when it was written** (every authority change earlier in
+write order), whatever its key. A raid's window is its final one (after any extensions). An event that breaks a rule is **skipped** and reported as a *conflict*; it
 stays in its chain. Every verifier skips exactly the same events, so everyone gets the same standings.
 
 ### Who may write
 
-The ledger-wide state is: the guild master, the set of officers, and raids (`{ id, ml, start, expires, ended }`).
-A raid is **active** at time *t* when `start <= t < expires` and it hasn't ended at or before *t*.
+The ledger-wide state is: the guild master, the set of officers, and raids (`{ id, ml, opened by, expires,
+ended by }`). A raid is **active for an event** when the event comes after the `Elevate` that opened it in write order,
+its `ts` is before `expires`, and it comes before the `RaidClose` or `Revoke` that ended it (if any).
 
-A list event or `Declined` by `author` at time `ts` is allowed when:
+A list event or `Declined` is allowed when:
 
-- `author` is the Master Looter of a raid active at `ts`, or
-- `author` is an officer (or the guild master) and **no** raid is active at `ts`.
+- its author is the Master Looter of a raid active for it, or
+- its author was an officer (or the guild master) when it was written and **no** raid is active for it.
 
 Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
 

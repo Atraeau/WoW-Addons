@@ -104,16 +104,24 @@ function Engine:MyChain()
     return cid
 end
 
--- A timestamp that sorts a new event after everything already in the view, so it can be applied
--- incrementally (and so a Master Looter's first event never sorts before the Elevate that allows it).
+-- A write time that never goes backwards in this chain and, for an event without `seen`, sorts after
+-- everything already applied (so it can be applied in place). Events with an earlier `seen` (loot handed out
+-- after it dropped) sort earlier on purpose and are checked with a full replay instead.
 function Engine:nextTs(cid)
     local ts = self.client:serverTime()
     local mine = self.store.chains[cid]
     if mine and mine.lastTs and mine.lastTs > ts then ts = mine.lastTs end
-    local last = self.view.last
+    local last, lastKey = self.view.last, self.view.lastKey
     if last then
-        if last.ts > ts then ts = last.ts end
-        if last.ts == ts and last.chain > cid then ts = ts + 1 end
+        if lastKey > ts then ts = lastKey end
+        if lastKey == ts and last.chain > cid then ts = ts + 1 end
+    end
+    -- and after the latest authority event in write order, so e.g. a Master Looter's first award is
+    -- always written after the Elevate that allows it
+    local la = self.view.lastAuth
+    if la then
+        if la.ts > ts then ts = la.ts end
+        if la.ts == ts and la.chain > cid then ts = ts + 1 end
     end
     return ts
 end
@@ -131,18 +139,27 @@ function Engine:Write(type_, data, list)
     local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list)
     if not ev then return nil, err end
     local view = self.view
-    local lastBefore, nConf = view.last, #view.conflicts
-    local ok, why = Ledger.ApplyToView(view, ev)
-    if not ok then
-        view.conflicts[nConf + 1] = nil
-        view.last = lastBefore
-        return nil, why
+    local fresh
+    if Ledger.Appendable(view, self.store, ev) then
+        local lastBefore, lastKeyBefore, nConf = view.last, view.lastKey, #view.conflicts
+        local ok, why = Ledger.ApplyToView(view, ev, Ledger.KeyFor(self.store, ev))
+        if not ok then
+            view.conflicts[nConf + 1] = nil
+            view.last, view.lastKey = lastBefore, lastKeyBefore
+            return nil, why
+        end
+    else
+        -- sorts before events already applied, or changes authority: check it with a full replay
+        fresh = Ledger.View(self.store, ev)
+        local ok, why = Ledger.Accepted(fresh, ev.id)
+        if not ok then return nil, why end
     end
     local status, rerr = Ledger.Receive(self.store, ev)
     if status ~= "appended" then
         self:rebuild() -- should not happen: undo the optimistic apply
         return nil, rerr
     end
+    if fresh then self.view = fresh end
     self:persist(cid)
     self.fingerprint = Ledger.Fingerprint(self.store)
     self:fire("local", cid, ev)
@@ -181,13 +198,12 @@ function Engine:Receive(ev)
     local status, err = Ledger.Receive(self.store, ev)
     if status ~= "appended" then return status, err end
     self:persist(ev.chain)
-    if ev.type == "Genesis" then
-        self:rebuild()
-    elseif not self.view.last or Ledger.Before(self.view.last, ev) then
-        Ledger.ApplyToView(self.view, ev)
+    local key, view = self.store.keyOf[ev.id], self.view
+    if not Ledger.AUTHORITY[ev.type] and (not view.last or Ledger.ByKey(view.lastKey, view.last, key, ev)) then
+        Ledger.ApplyToView(view, ev, key)
         self.fingerprint = Ledger.Fingerprint(self.store)
     else
-        self:rebuild() -- a late event: it slots into its place, and the view is replayed
+        self:rebuild() -- a late event, or a change of authority: replay
     end
     self:fire("remote", ev.chain, ev)
     return status
