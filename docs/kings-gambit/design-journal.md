@@ -244,6 +244,50 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
   SimNetwork tests land with Phase 3 (sync), and the multi-player training sessions with
   Phase 4.5.
 
+### Loot session engine: choices made while building it (2026-10-28)
+
+The rules in the sections above left some details open. These are the choices the first
+implementation (`Loot.lua`) makes, each one easy to change. Please review them.
+
+- **A session is a state machine:** bidding, main draft, off-spec draft, backstop,
+  review, done. It runs on any Client (real, mock or simulated), so it is fully testable.
+- **Nothing is written to the ledger until the Master Looter confirms.** The draft runs
+  on scratch copies of the standings (winners drop to the bottom of the copy), so live
+  picks work while the real standings stay untouched. Confirm then writes the awards in
+  order, which replays to exactly the same standings.
+- **Hand out first, record second.** For items from a loot window the session calls
+  `give` first and writes the `Award` only if that succeeded, so a failed hand-out never
+  leaves a phantom win. Failures are reported to the Master Looter.
+- **Early close:** bidding ends the moment every eligible player has answered every item.
+  Eligible means online in the raid and on the main list. Unanswered at the timer's end
+  counts as pass. A timer of 0 means open-ended (the Master Looter ends it).
+- **Draft turns:** the top remaining player with a live bid goes next. If they bid on only
+  one remaining item it is awarded automatically (no prompt); with a choice they pick.
+  A **skip** (or a pick timeout) forfeits the rest of that tier for that player only, so
+  the draft always finishes. There is no cap: a winner can win again from the bottom if
+  nobody above wants what is left.
+- **Gift bids** compete in the main tier at the gifter's own position. The gifter pays the
+  position and `give` hands the item to the target.
+- **Off-spec enrollment:** off-spec bidders not yet on the off list join its bottom (in
+  main-list order among the newcomers) the first time they bid off. The enrollment is
+  recorded at confirm. If the off list does not exist yet, it is created.
+- **Backstop:** leftover items are offered one at a time, lowest position first, to every
+  eligible player, whether or not they could use it. A claimer drops to the bottom like
+  any winner. An offer that times out counts as a decline.
+- **Disenchant floor:** if everyone declines, the item goes to the designated disenchanter
+  (default: whoever runs the session), and a `Disenchant` event records it.
+- **Recording passes:** only passes that carry a kind (for example `upgrade`) are written
+  to the ledger, for the transparency stats. Plain passes are not, to keep the ledger small
+  (a raid would otherwise write dozens of events per boss).
+- **New ledger events:** `Disenchant` (item, recipient) and `Salvage` (which award, what the
+  claimer did: keep, gift, sell, disenchant, bank), both for transparency only.
+- **Unlisted raiders** are added to the bottom of the main list when a session starts
+  (`autoEnroll`, on by default), so a newcomer can bid.
+
+Not built yet: parsing whispered bids from players without the addon, a per-player
+"pass on everything in the backstop" shortcut, and the upgrade heuristic that would label
+passes automatically.
+
 ## Still open (non-blocking)
 
 - A crisp definition of **"eligible"** for early-resolve (on the relevant
