@@ -7,8 +7,9 @@
 ## SavedVariablesPerCharacter: KingsGambitCharDB
 
 Core.lua
-Ledger.lua
+Hash.lua
 Standings.lua
+Ledger.lua
 Sync.lua
 Loot.lua
 UI.lua
