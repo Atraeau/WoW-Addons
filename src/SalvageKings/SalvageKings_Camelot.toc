@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: Salvage Kings
+## Notes: Transparent, tamper-evident Salvage Kings raid loot ledger
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.0.1
+## SavedVariables: SalvageKingsDB
+## SavedVariablesPerCharacter: SalvageKingsCharDB
+
+Core.lua
+Ledger.lua
+Standings.lua
+Sync.lua
+Loot.lua
+UI.lua

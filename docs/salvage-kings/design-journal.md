@@ -1,4 +1,5 @@
-# Suicide Kings — Design Journal
+# Salvage Kings — Design Journal
+n*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
 
 *A compressed record of the design conversation behind the SK loot addon: the
 decisions we made, the alternatives we weighed, and why we landed where we did.

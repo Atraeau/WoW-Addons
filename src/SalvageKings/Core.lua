@@ -1,7 +1,7 @@
--- Suicide Kings: namespace, saved-variable schema, module registry, /sk entry point.
--- Design: docs/suicide-kings/ (manifesto, rationale, design-journal).
+-- Salvage Kings: namespace, saved-variable schema, module registry, /sk entry point.
+-- Design: docs/salvage-kings/ (manifesto, rationale, design-journal).
 local ADDON, SK = ...
-_G.SuicideKings = SK
+_G.SalvageKings = SK
 
 SK.name = ADDON
 SK.SCHEMA = 1
@@ -14,19 +14,19 @@ function SK:NewModule(name)
     return m
 end
 
--- SuicideKingsDB (account-wide, the shared ledger):
+-- SalvageKingsDB (account-wide, the shared ledger):
 --   schema   number
 --   lists    { [listId] = { name, events = {}, head = "" } }   -- append-only per-list chain
 --   config   { officerDE = nil, guildBankMode = false, bidTimer = 30, ... }
--- SuicideKingsCharDB (per character): ui = { frame positions, scale, opacity, hints }
+-- SalvageKingsCharDB (per character): ui = { frame positions, scale, opacity, hints }
 local function InitDB()
-    SuicideKingsDB = SuicideKingsDB or {}
-    local db = SuicideKingsDB
+    SalvageKingsDB = SalvageKingsDB or {}
+    local db = SalvageKingsDB
     db.schema = db.schema or SK.SCHEMA
     db.lists = db.lists or {}
     db.config = db.config or {}
-    SuicideKingsCharDB = SuicideKingsCharDB or { ui = {} }
-    SK.db, SK.char = db, SuicideKingsCharDB
+    SalvageKingsCharDB = SalvageKingsCharDB or { ui = {} }
+    SK.db, SK.char = db, SalvageKingsCharDB
 end
 
 function SK:Print(...)
@@ -45,8 +45,8 @@ frame:SetScript("OnEvent", function(_, event, name)
     end
 end)
 
-SLASH_SUICIDEKINGS1 = "/sk"
-SlashCmdList["SUICIDEKINGS"] = function(msg)
+SLASH_SALVAGEKINGS1 = "/sk"
+SlashCmdList["SALVAGEKINGS"] = function(msg)
     local cmd = (msg or ""):match("^(%S*)"):lower()
     local ui = SK.modules.UI
     if cmd == "" or cmd == "show" then
@@ -55,3 +55,6 @@ SlashCmdList["SUICIDEKINGS"] = function(msg)
         SK:Print("commands: /sk [show]")
     end
 end
+
+-- Long-form alias; /sk kept as the short command (lineage: Suicide Kings).
+SLASH_SALVAGEKINGS2 = "/salvage"

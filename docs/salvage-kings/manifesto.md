@@ -1,4 +1,5 @@
-# The Suicide Kings Loot Manifesto
+# The Salvage Kings Loot Manifesto
+n*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
 
 *We are uncovering better ways of sharing raid loot by doing it together.*
 Through this work we have come to value:
