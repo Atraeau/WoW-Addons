@@ -126,6 +126,23 @@ test("lootMethod maps the enum to a lowercase name; isMasterLooter follows the c
     E.lootMethodId = 4; eq(c:lootMethod(), "needbeforegreed"); assert(not c:isMasterLooter())
 end)
 
+test("masterLooter names the looter from the raid index, and is nil when not master looter", function()
+    local c, E = newClient()
+    eq(c:masterLooter(), "Raidlead-Realm", "stub: raid index 1 is Raidlead")
+    E.lootMethodId = 3; eq(c:masterLooter(), nil)
+    local party = newClient(function(X)
+        X.IsInRaid = function() return false end
+        X.C_PartyInfo = { GetLootMethod = function() return 2, 2, nil end }
+        X.UnitFullName = function(u) if u == "party2" then return "Mirel", "Other" end; return "Raidlead", "" end
+    end)
+    eq(party:masterLooter(), "Mirel-Other")
+    local me = newClient(function(X)
+        X.IsInRaid = function() return false end
+        X.C_PartyInfo = { GetLootMethod = function() return 2, 0, nil end }
+    end)
+    eq(me:masterLooter(), "Raidlead-Realm", "party id 0 is the player")
+end)
+
 H.section("RealClient: loot")
 test("loot window: only item slots, parsed item ids, candidates normalized", function()
     local c, E = newClient()

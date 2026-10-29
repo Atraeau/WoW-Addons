@@ -159,6 +159,26 @@ function M.New(opts)
         return partyId == 0
     end
 
+    -- The Master Looter's name: C_PartyInfo.GetLootMethod gives a raid index or a party slot.
+    -- FIELD: confirm the id semantics (0 = the player in party; raid index into the roster).
+    function c:masterLooter()
+        if self:lootMethod() ~= "master" then return nil end
+        if not (E.C_PartyInfo and E.C_PartyInfo.GetLootMethod) then return nil end
+        local _, partyId, raidId = E.C_PartyInfo.GetLootMethod()
+        if E.IsInRaid() and raidId then
+            local name = E.GetRaidRosterInfo(raidId)
+            return normalize(name)
+        elseif partyId == 0 then
+            return self:me()
+        elseif partyId then
+            local name, server = E.UnitFullName("party" .. partyId)
+            name = safe(name)
+            if not name then return nil end
+            if server and server ~= "" then return name .. "-" .. server end
+            return normalize(name)
+        end
+    end
+
     local lootOpen = false
 
     local function readSlots()

@@ -43,7 +43,7 @@ function M.New(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg,
-        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {},
+        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {},
         handlers = {}, unsub = {}, timers = {}, blocked = nil, running = false,
         stats = { rejected = 0, droppedFrames = 0, forksResolved = 0 },
     }, Sync)
@@ -240,12 +240,23 @@ function Sync:onComms(p)
     if not ok then self.client:log("error", "sync handler: " .. tostring(err)) end
 end
 
+-- Other modules (the loot session protocol) plug their own message types in here: fn(msg, sender).
+-- Built-in types are the single letters H, R, D and E; plugins should use longer names.
+function Sync:register(t, fn)
+    assert(#t > 1, "plugin message types must be longer than one character")
+    self.custom[t] = fn
+end
+
+-- Send a message through the same chunking and queue as the ledger traffic.
+function Sync:send(msg, channel, target) self:post(msg, channel, target) end
+
 function Sync:handle(msg, sender)
     local t = msg.t
     if t == "H" then self:onHeartbeat(msg, sender)
     elseif t == "R" then self:sendEvents(msg.list, msg.from, sender)
     elseif t == "D" then self:onProbe(msg, sender)
-    elseif t == "E" then self:onEvents(msg, sender) end
+    elseif t == "E" then self:onEvents(msg, sender)
+    elseif self.custom[t] then self.custom[t](msg, sender) end
 end
 
 function Sync:onHeartbeat(msg, sender)

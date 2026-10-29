@@ -177,6 +177,8 @@ function M.New(opts)
     ---------------------------------------------------------------- loot
     function h:lootMethod() return S.lootMethod end
     function h:isMasterLooter() return S.lootMethod == "master" and S.masterLooter == S.me end
+    -- Who the Master Looter is (Name-Realm), or nil when the loot method is not master looter.
+    function h:masterLooter() return S.lootMethod == "master" and S.masterLooter or nil end
 
     local function openSlots()
         local out = {}
