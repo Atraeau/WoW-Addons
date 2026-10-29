@@ -1,6 +1,6 @@
 -- King's Gambit tests. Run from the repo root:  lua tests/kings-gambit/run.lua
 local H = dofile("tests/kings-gambit/harness.lua")
-for _, f in ipairs { "test_ledger", "test_client", "test_realclient", "test_engine", "test_loot", "test_sync", "test_sim", "test_fuzz", "test_fuzz_loot" } do
+for _, f in ipairs { "test_ledger", "test_client", "test_realclient", "test_engine", "test_loot", "test_sync", "test_sim", "test_fuzz", "test_fuzz_loot", "test_fuzz_rules" } do
     assert(loadfile("tests/kings-gambit/" .. f .. ".lua"))(H)
 end
 print(("\n%d passed, %d failed"):format(H.passed, H.failed))
