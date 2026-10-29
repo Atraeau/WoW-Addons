@@ -163,6 +163,43 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
 
 ---
 
+### Testability, simulation & training (added 2026-10-28)
+
+- **The WoW *API* is abstracted behind a `Host` interface; the UI is not.** The ledger,
+  standings, draft engine and every other rule reach the game only through the Host:
+  clock, RNG, timers, raid roster and ranks (leader/assistant), loot (Master Looter
+  candidates, loot slots, `GiveMasterLoot`), addon comms, whispers, trades, and
+  persistence. They never call WoW globals directly. Why: this is the only way to test
+  the rules headlessly, and it makes simulation nearly free.
+- **The UI is real, always.** We build the actual frames and use them for real raids,
+  tests and training alike. We don't build a parallel mock UI. The UI talks to the
+  engine, and the engine talks to a Host, so swapping the Host swaps where the data
+  comes from without touching the UI.
+- **Three Host implementations, one engine, one UI.**
+  - **RealHost** talks to the WoW client.
+  - **MockHost** is headless, with a scriptable clock, seeded RNG, fake roster and fake
+    loot. It runs the rule tests under plain Lua 5.4 (CI) and inside the game.
+  - **SimHost** is MockHost made interactive: a fake raid with bot raiders, driven live
+    by the learner through the real UI. This is training mode.
+- **In-game self-tests.** `/gambit test` runs the same suites inside the client (the
+  test files load on demand so they cost nothing in normal play). This catches
+  differences between Lua 5.4 and the client's Lua, such as the `bit` library. The real
+  UI is checked here too, by driving it over a MockHost (open the popup, click Need,
+  assert the resulting event), since UI code can't run outside the client.
+- **Training / simulation mode, with the Master Looter as the first audience.**
+  - A sandboxed list that is clearly labeled and **never synced or gossiped**; its
+    events can't mix with the guild ledger.
+  - **Scripted scenarios as data**, replayed deterministically: the minor-upgrade proxy,
+    the backstop and salvager, everyone passes (DE person and guild bank), a mistaken
+    award and its correction, a regret trade, a tie in the draft, a late bid.
+  - **Coach mode** can explain why the system did what it did in plain language, drawing
+    on the rationale doc, and can check what the learner chose against what the rules allow.
+  - Because the ledger is event-sourced, a **real past session can be replayed** as a
+    training scenario.
+- **Phasing change:** a new Phase 1.5 (Host abstraction, MockHost, shared test harness,
+  CI) comes before the UI work, so the real UI is built against the Host from the start.
+  Training mode (SimHost, scenarios, coach) follows the loot session.
+
 ## Still open (non-blocking)
 
 - A crisp definition of **"eligible"** for early-resolve (on the relevant
@@ -177,8 +214,9 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
 - We deliberately **planned extensively before writing code** — the manifesto
   and this journal are the "thinking on paper" that precedes Phase 0.
 - The plan is phased MVP → full: (0) rationale doc + scaffold, (1) ledger core,
-  (2) standings UI + manual ops, (3) sync, (4) loot session + draft, (5)
-  transparency + corrections/trades, (6) external sync, (7) polish.
+  **(1.5) Host API abstraction + MockHost + test harness + CI**, (2) standings UI +
+  manual ops, (3) sync, (4) loot session + draft, **(4.5) training / simulation mode**,
+  (5) transparency + corrections/trades, (6) external sync, (7) polish.
 - Verification leans on **deterministic replay unit checks** (replay a crafted
   event log, assert the standings), multi-client convergence tests, and
   validating every WoW API call against the exported `docs/api.json`.
