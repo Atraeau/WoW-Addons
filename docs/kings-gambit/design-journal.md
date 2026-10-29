@@ -422,6 +422,32 @@ place (`scripts/build-mc-data.ps1`, `Sim.Wants`) so they are easy to correct. Tw
 kill for Majordomo's cache (Wowhead's cache figures are not per kill) and Ragnaros (3 from observed rates, which
 looks low).
 
+### Tokens, readiness, materials, and list scope (2026-10-29)
+
+Prompted by Ahn'Qiraj, whose tier pieces come from **tokens**: class-group restricted, bind on pickup, and
+redeemed only with materials and reputation (verified example: Qiraji Bindings of Command plus 2 Idols of Night,
+5 Stone Scarabs, 5 Clay Scarabs and Neutral with the Brood of Nozdormu gives the warrior shoulders). Decided by the
+guild leader:
+
+- **Tokens are distributed like gear,** under the same rules.
+- **Readiness is shown, never enforced.** A token shows what it needs, and the addon checks the player's own bags
+  and reputation. Taking a token you can't redeem yet is your call; if it was a mistake, it is fixed like any other
+  (a correction, or a gift by trade while the item is still tradeable).
+- **Readiness is shared with the raid, as a hint.** Others see each bidder's readiness, but it can't be certain:
+  materials kept in the bank aren't visible during a raid. So it shows as "ready", "not ready (from bags)" or
+  "says ready" (the player's own declaration), never as a verdict.
+- **Materials (idols, scarabs) stay outside the list.** They go to the guild bank; a player holding a token
+  requests the materials from it, and an officer or the guild master decides who gets what, in what order. Not
+  critical; dedicated players usually buy their own on the auction house.
+- **List scope is a guild setting, decided as late as possible.** One list for everything keeps it simple to see
+  where you stand, but raids have an intrinsic quality ceiling: once Naxxramas is out, spending your place on Molten
+  Core loot is a poor trade, because every Naxx item beats every MC item. So the guild chooses, and can change, between:
+  - **one list for all raids** (the default), or
+  - **a list per raid** (a new list starts when a new raid is added).
+  Which list a raid's loot goes to is recorded in the ledger (an officer sets it while no raid is active), so every
+  peer and the audit tool agree, and a change of policy is itself visible.
+  **Open:** how a new raid's list is seeded (random order, a copy of the current list's order, or by attendance).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
