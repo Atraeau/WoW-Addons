@@ -3,6 +3,7 @@
 --   lua tools/kg.lua verify    <KingsGambit.lua>             check every hash and rule
 --   lua tools/kg.lua standings <KingsGambit.lua> [list]      standings as a Markdown table
 --   lua tools/kg.lua history   <KingsGambit.lua> [list] [N]  the last N events (default 20)
+--   lua tools/kg.lua conflicts <KingsGambit.lua>             events skipped in replay, and why
 --
 -- <KingsGambit.lua> is the SavedVariables file, for example
 --   World of Warcraft/_forever_/WTF/Account/<ACCOUNT>/SavedVariables/KingsGambit.lua
@@ -13,7 +14,7 @@ local root = here .. "/.."
 
 local cmd, path, a, b = arg[1], arg[2], arg[3], arg[4]
 if not (cmd and path) then
-    io.stderr:write("usage: lua tools/kg.lua verify|standings|history <KingsGambit.lua> [list] [N]\n")
+    io.stderr:write("usage: lua tools/kg.lua verify|standings|history|conflicts <KingsGambit.lua> [list] [N]\n")
     os.exit(2)
 end
 local mods = audit.loadEngine(root)
@@ -24,25 +25,29 @@ if not db then
 end
 
 if cmd == "verify" then
-    local results, orphans = audit.verify(db, mods)
+    local results, view, fingerprint, orphans = audit.verify(db, mods)
     local failed = false
     for _, r in ipairs(results) do
         if r.ok then
-            print(("OK      %-10s %6d events  head %s"):format(r.list, r.events, r.head))
+            print(("OK      %-32s %6d events  head %s"):format(r.chain, r.events, r.head))
         else
             failed = true
-            print(("FAILED  %-10s %6d events  %s at event %s"):format(r.list, r.events, tostring(r.reason), tostring(r.index)))
+            print(("FAILED  %-32s %6d events  %s at event %s"):format(r.chain, r.events, tostring(r.reason), tostring(r.index)))
         end
     end
-    if #results == 0 then print("no lists found") end
-    if orphans > 0 then print(("note: %d events from resolved forks are set aside for review (db.orphans)"):format(orphans)) end
+    if #results == 0 then print("no chains found") end
+    print("fingerprint " .. fingerprint)
+    if #view.conflicts > 0 then print(("note: %d events were skipped in replay (see: conflicts)"):format(#view.conflicts)) end
+    if orphans > 0 then print(("note: %d events from a resolved chain fork are kept aside for review (db.orphans)"):format(orphans)) end
     os.exit(failed and 1 or 0)
+elseif cmd == "conflicts" then
+    for _, l in ipairs(audit.conflicts(db, mods)) do print(l) end
 elseif cmd == "standings" then
     local rows, e = audit.standings(db, mods, a or "main")
     if not rows then io.stderr:write(e .. "\n"); os.exit(1) end
     print(audit.markdown(rows, "Standings: " .. (a or "main")))
 elseif cmd == "history" then
-    local lines, e = audit.history(db, a or "main", tonumber(b))
+    local lines, e = audit.history(db, a or "main", tonumber(b), mods)
     if not lines then io.stderr:write(e .. "\n"); os.exit(1) end
     for _, l in ipairs(lines) do print(l) end
 else

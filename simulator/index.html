@@ -232,8 +232,13 @@ end
 end; chunk("KingsGambit", SK) end
 -- ===== Standings.lua =====
 do local chunk = function(...)
--- King's Gambit: deterministic replay of ledger events into standings (Phase 1).
--- Pure Lua. order[1] is the TOP of the list (first to win); winners drop to the bottom.
+-- King's Gambit: the rules of one list (ledger v2). Pure Lua.
+-- order[1] is the TOP of the list (first to win); winners drop to the bottom.
+--
+-- Every operation either moves one player to an end of the list, inserts one, or removes one. None of
+-- them changes the relative order of the OTHER players, which is what lets events from parallel raids
+-- (disjoint players) be merged in any order. Positions are therefore never stored as numbers: a move
+-- names an anchor ("above Name") or an end ("top", "bottom").
 --
 -- Apply validates BEFORE it mutates, so a rejected event never changes state.
 local _, SK = ...
@@ -245,9 +250,9 @@ function M.New()
         created = false,
         name = nil,
         order = {},   -- member names, top first
-        members = {}, -- [name] = { class, active, wins, passes, upgradePasses, lastWinSeq, lastWinTs, joinedSeq }
-        awards = {},  -- [eventId] = { member, to, item, reverted }
-        undo = {},    -- stack of reversible Awards (cleared by anything that shifts positions)
+        members = {}, -- [name] = { class, active, wins, passes, upgradePasses, lastWinId, lastWinTs }
+        awards = {},  -- [eventId] = { member, to, item, ts, reverted, salvage }
+        undo = {},    -- [chainId] = stack of that writer's undoable awards
         count = 0,    -- events applied
     }
 end
@@ -259,46 +264,56 @@ local function indexOf(order, name)
         if order[i] == name then return i end
     end
 end
+M.IndexOf = indexOf
 
--- Resolve a position spec to a final 1-based index in 1..maxPos (nil = bottom).
-local function resolvePos(pos, maxPos)
-    if pos == nil or pos == "bottom" then return maxPos end
-    if pos == "top" then return 1 end
-    if type(pos) == "number" and pos == math.floor(pos) and pos >= 1 and pos <= maxPos then return pos end
+-- Where to put a player: d.to = "top" | "bottom" (default bottom), or d.above = an active member.
+-- Returns the insertion index in `order` (which must not contain the player), or nil + reason.
+local function placement(s, order, d, default)
+    if d.above ~= nil then
+        if not isName(d.above) then return nil, "badanchor" end
+        local i = indexOf(order, d.above)
+        if not i then return nil, "badanchor" end
+        return i
+    end
+    local to = d.to or default
+    if to == "top" then return 1 end
+    if to == "bottom" then return #order + 1 end
+    return nil, "badpos"
 end
 
 local handlers = {}
 
 function handlers.CreateList(s, ev, d)
+    if s.created then return nil, "alreadycreated" end
     if not isName(d.name) then return nil, "badname" end
-    s.created, s.name = true, d.name
-    return true
+    return function() s.created, s.name = true, d.name end
 end
 
 function handlers.AddMember(s, ev, d)
     if not isName(d.member) then return nil, "badmember" end
     local m = s.members[d.member]
     if m and m.active then return nil, "alreadymember" end
-    local idx = resolvePos(d.pos, #s.order + 1)
-    if not idx then return nil, "badpos" end
-    if idx <= #s.order then s.undo = {} end -- inserting above others shifts their positions
-    table.insert(s.order, idx, d.member)
-    if m then
-        m.active = true
-        m.class = d.class or m.class
-    else
-        s.members[d.member] = { class = d.class, active = true, wins = 0, passes = 0, upgradePasses = 0, joinedSeq = ev.seq }
+    local idx, why = placement(s, s.order, d, "bottom")
+    if not idx then return nil, why end
+    return function()
+        table.insert(s.order, idx, d.member)
+        if m then
+            m.active = true
+            m.class = d.class or m.class
+        else
+            s.members[d.member] = { class = d.class, active = true, wins = 0, passes = 0, upgradePasses = 0 }
+        end
     end
-    return true
 end
 
 function handlers.RemoveMember(s, ev, d)
     local m = s.members[d.member]
     if not (isName(d.member) and m and m.active) then return nil, "notmember" end
-    table.remove(s.order, indexOf(s.order, d.member))
-    m.active = false
-    s.undo = {}
-    return true
+    return function()
+        table.remove(s.order, indexOf(s.order, d.member))
+        m.active = false
+        s.undo[ev.chain] = nil
+    end
 end
 
 -- A win: the winner drops to the bottom. `to` (optional) is who actually receives the item (gifting).
@@ -307,14 +322,19 @@ function handlers.Award(s, ev, d)
     if not (isName(d.member) and m and m.active) then return nil, "notmember" end
     if not isName(d.item) then return nil, "baditem" end
     if d.to ~= nil and not isName(d.to) then return nil, "badrecipient" end
-    local idx = indexOf(s.order, d.member)
-    table.remove(s.order, idx)
-    s.order[#s.order + 1] = d.member
-    s.undo[#s.undo + 1] = { id = ev.id, member = d.member, idx = idx,
-        wins = m.wins, lastWinSeq = m.lastWinSeq, lastWinTs = m.lastWinTs }
-    m.wins, m.lastWinSeq, m.lastWinTs = m.wins + 1, ev.seq, ev.ts
-    s.awards[ev.id] = { member = d.member, to = d.to or d.member, item = d.item }
-    return true
+    return function()
+        local idx = indexOf(s.order, d.member)
+        local below = {}
+        for i = idx + 1, #s.order do below[#below + 1] = s.order[i] end
+        table.remove(s.order, idx)
+        s.order[#s.order + 1] = d.member
+        local stack = s.undo[ev.chain]
+        if not stack then stack = {}; s.undo[ev.chain] = stack end
+        stack[#stack + 1] = { id = ev.id, member = d.member, below = below,
+            wins = m.wins, lastWinId = m.lastWinId, lastWinTs = m.lastWinTs }
+        m.wins, m.lastWinId, m.lastWinTs = m.wins + 1, ev.id, ev.ts
+        s.awards[ev.id] = { member = d.member, to = d.to or d.member, item = d.item, ts = ev.ts }
+    end
 end
 
 -- A pass changes no position; it only feeds the transparency stats.
@@ -322,9 +342,10 @@ function handlers.Pass(s, ev, d)
     local m = s.members[d.member]
     if not (isName(d.member) and m and m.active) then return nil, "notmember" end
     if not isName(d.item) then return nil, "baditem" end
-    m.passes = m.passes + 1
-    if d.kind == "upgrade" then m.upgradePasses = m.upgradePasses + 1 end
-    return true
+    return function()
+        m.passes = m.passes + 1
+        if d.kind == "upgrade" then m.upgradePasses = m.upgradePasses + 1 end
+    end
 end
 
 -- Re-route where an awarded item went (post-award gift target correction). No position change.
@@ -332,15 +353,14 @@ function handlers.Transfer(s, ev, d)
     local a = s.awards[d.award]
     if not a or a.reverted then return nil, "noaward" end
     if not isName(d.to) then return nil, "badrecipient" end
-    a.to = d.to
-    return true
+    return function() a.to = d.to end
 end
 
--- Nobody wanted the item: it went to the disenchanter (and from there to the guild bank). No position change.
+-- Nobody wanted the item: it went to the disenchanter (and from there to the guild bank).
 function handlers.Disenchant(s, ev, d)
     if not isName(d.item) then return nil, "baditem" end
     if not isName(d.to) then return nil, "badrecipient" end
-    return true
+    return function() end
 end
 
 local SALVAGE_ACTIONS = { keep = true, gift = true, sell = true, disenchant = true, bank = true }
@@ -350,63 +370,65 @@ function handlers.Salvage(s, ev, d)
     local a = s.awards[d.award]
     if not a or a.reverted then return nil, "noaward" end
     if not SALVAGE_ACTIONS[d.action] then return nil, "badaction" end
-    a.salvage = d.action
-    return true
+    return function() a.salvage = d.action end
 end
 
--- Officer correction: place a member at an explicit position. A reason is mandatory.
+-- A correction: move a member to the top, the bottom, or just above another member. A reason is required.
 function handlers.MovePlayer(s, ev, d)
     local m = s.members[d.member]
     if not (isName(d.member) and m and m.active) then return nil, "notmember" end
     if not isName(d.reason) then return nil, "noreason" end
-    local idx = resolvePos(d.pos, #s.order)
-    if not idx then return nil, "badpos" end
-    table.remove(s.order, indexOf(s.order, d.member))
-    table.insert(s.order, idx, d.member)
-    s.undo = {}
-    return true
+    if d.above == d.member then return nil, "badanchor" end
+    local rest = {}
+    for _, n in ipairs(s.order) do
+        if n ~= d.member then rest[#rest + 1] = n end
+    end
+    local idx, why = placement(s, rest, d, nil)
+    if not idx then return nil, why end
+    return function()
+        table.insert(rest, idx, d.member)
+        s.order = rest
+        s.undo[ev.chain] = nil
+    end
 end
 
--- Exact undo of the most recent Award (only while nothing has shifted positions since).
+-- Undo this writer's most recent award: the winner goes back directly above the highest-placed of the
+-- players who were below them when they won. That restores the winner's order relative to everyone,
+-- whatever other writers did in between (their moves never change anyone else's relative order).
 function handlers.Revert(s, ev, d)
-    local top = s.undo[#s.undo]
+    local stack = s.undo[ev.chain]
+    local top = stack and stack[#stack]
     if not top or top.id ~= d.target then return nil, "notrevertible" end
     local m = s.members[top.member]
-    table.remove(s.order, indexOf(s.order, top.member))
-    table.insert(s.order, top.idx, top.member)
-    m.wins, m.lastWinSeq, m.lastWinTs = top.wins, top.lastWinSeq, top.lastWinTs
-    s.awards[top.id].reverted = true
-    s.undo[#s.undo] = nil
-    return true
+    if not (m and m.active) then return nil, "notmember" end
+    return function()
+        table.remove(s.order, indexOf(s.order, top.member))
+        local at = #s.order + 1
+        for _, name in ipairs(top.below) do
+            local i = indexOf(s.order, name)
+            if i and i < at then at = i end
+        end
+        table.insert(s.order, at, top.member)
+        m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
+        s.awards[top.id].reverted = true
+        stack[#stack] = nil
+    end
 end
 
--- Validate and apply one event. Returns true, or nil + reason (state untouched).
+M.TYPES = {}
+for k in pairs(handlers) do M.TYPES[k] = true end
+
+-- Validate and apply one list event. Returns true, or nil + reason (state untouched).
 function M.Apply(s, ev)
-    if ev.seq ~= s.count + 1 then return nil, "badseq" end
-    if type(ev.ts) ~= "number" then return nil, "badts" end
-    if not isName(ev.author) then return nil, "badauthor" end
     if type(ev.data) ~= "table" then return nil, "baddata" end
     local h = handlers[ev.type]
     if not h then return nil, "unknowntype" end
-    if ev.type == "CreateList" then
-        if s.created then return nil, "alreadycreated" end
-    elseif not s.created then
-        return nil, "nolist"
-    end
-    local ok, err = h(s, ev, ev.data)
-    if not ok then return nil, err end
+    if ev.type ~= "CreateList" and not s.created then return nil, "nolist" end
+    local commit, err = h(s, ev, ev.data)
+    if not commit then return nil, err end
+    commit()
     s.count = s.count + 1
     return true
-end
-
--- Rebuild standings from an event array. On failure: nil, reason, index of the bad event.
-function M.Replay(events)
-    local s = M.New()
-    for i, ev in ipairs(events) do
-        local ok, err = M.Apply(s, ev)
-        if not ok then return nil, err, i end
-    end
-    return s
 end
 
 function M.Position(s, name) return indexOf(s.order, name) end
@@ -417,103 +439,152 @@ function M.Digest(s) return Hash.Sum(Hash.Canon(s.order)) end
 end; chunk("KingsGambit", SK) end
 -- ===== Ledger.lua =====
 do local chunk = function(...)
--- King's Gambit: append-only, hash-chained event log per list (Phase 1).
+-- King's Gambit: the ledger, v2 (docs/kings-gambit/ledger-v2-design.md). Pure Lua.
 --
--- Event: { v, list, seq, prev, ts, author, type, data, id }
---   id = Hash(prev .. "|" .. Canon{v,list,seq,ts,author,type,data})
--- Each event commits to its predecessor, so the head id fingerprints the whole history.
--- Receive() is the only way events enter a chain (local Append builds then Receives),
--- so local and remote events pass identical validation. Idempotent by event id.
+-- A ledger is a STORE of chains, one per writer. Each chain is append-only and hash-chained, and only its
+-- writer appends to it, so it can't fork. The VIEW (standings, authority, conflicts) is the replay of every
+-- chain's events merged in one deterministic order: time, then chain id, then position in the chain.
+--
+-- Event: { v, ledger, chain, seq, prev, ts, author, type, list?, data, id }
+--   chain  = author .. "#" .. epoch (8 hex, chosen when the chain starts)
+--   ledger = id of the ledger's Genesis event ("" on the Genesis event itself)
+--   id     = Hash(prev .. "|" .. Canon{v, ledger, chain, seq, ts, author, type, list, data})
+-- Keep this file Lua 5.1-safe and 32-bit-integer safe.
 local _, SK = ...
 local M = SK:NewModule("Ledger")
 local Hash = SK.modules.Hash
 local Standings = SK.modules.Standings
 
 M.GENESIS = "0000000000000000"
-M.VERSION = 1
+M.VERSION = 2
+
+-- Event types that are not about one list.
+local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
+    RaidClose = true, Declined = true }
+M.GLOBAL = GLOBAL
 
 local function eventId(ev)
     return Hash.Sum(ev.prev .. "|" .. Hash.Canon({
-        v = ev.v, list = ev.list, seq = ev.seq, ts = ev.ts,
-        author = ev.author, type = ev.type, data = ev.data,
+        v = ev.v, ledger = ev.ledger, chain = ev.chain, seq = ev.seq, ts = ev.ts,
+        author = ev.author, type = ev.type, list = ev.list, data = ev.data,
     }))
 end
 M.EventId = eventId
 
-function M.NewChain(listId)
-    return { list = listId, events = {}, byId = {}, head = M.GENESIS, state = Standings.New() }
+-- Merge order: true if event a comes before event b.
+local function before(a, b)
+    if a.ts ~= b.ts then return a.ts < b.ts end
+    if a.chain ~= b.chain then return a.chain < b.chain end
+    return a.seq < b.seq
+end
+M.Before = before
+
+---------------------------------------------------------------- the store
+function M.NewStore()
+    return { id = nil, genesisChain = nil, chains = {}, byId = {} }
 end
 
--- Validate and add an event. Returns "appended" | "duplicate", or nil + reason:
---   malformed, wronglist, badversion, badhash, gap (missing earlier events),
---   fork (same slot, different history), or a Standings rejection reason.
-function M.Receive(chain, ev)
-    if type(ev) ~= "table" or type(ev.id) ~= "string" or type(ev.seq) ~= "number"
-        or type(ev.prev) ~= "string" or type(ev.data) ~= "table" then
+-- Validate and add an event to its chain. Returns "appended" | "duplicate", or nil + reason:
+--   malformed, badversion, badchain, badhash, wrongledger, noledger, badgenesis, gap, fork, timetravel
+-- trustHash skips recomputing the hash (lazy loading of large saved chains; see VerifyStep).
+function M.Receive(store, ev, trustHash)
+    if type(ev) ~= "table" or type(ev.id) ~= "string" or type(ev.seq) ~= "number" or type(ev.prev) ~= "string"
+        or type(ev.data) ~= "table" or type(ev.chain) ~= "string" or type(ev.author) ~= "string"
+        or type(ev.ts) ~= "number" or type(ev.type) ~= "string" or type(ev.ledger) ~= "string" then
         return nil, "malformed"
     end
-    if chain.byId[ev.id] then return "duplicate" end
-    if ev.list ~= chain.list then return nil, "wronglist" end
+    if store.byId[ev.id] then return "duplicate" end
     if ev.v ~= M.VERSION then return nil, "badversion" end
-    local okHash, id = pcall(eventId, ev)
-    if not okHash or id ~= ev.id then return nil, "badhash" end
-    local n = #chain.events
+    if ev.chain:sub(1, #ev.author + 1) ~= ev.author .. "#" or #ev.chain ~= #ev.author + 9 then return nil, "badchain" end
+    if not trustHash then
+        local okHash, id = pcall(eventId, ev)
+        if not okHash or id ~= ev.id then return nil, "badhash" end
+    end
+
+    if ev.type == "Genesis" then
+        if ev.seq ~= 1 or ev.ledger ~= "" then return nil, "badgenesis" end
+        if store.id and store.id ~= ev.id then return nil, "wrongledger" end
+    else
+        if not store.id then return nil, "noledger" end
+        if ev.ledger ~= store.id then return nil, "wrongledger" end
+    end
+
+    local chain = store.chains[ev.chain]
+    local n = chain and #chain.events or 0
     if ev.seq > n + 1 then return nil, "gap" end
-    if ev.seq <= n or ev.prev ~= chain.head then return nil, "fork" end
-    local ok, err = Standings.Apply(chain.state, ev)
-    if not ok then return nil, err end
+    if ev.seq <= n or ev.prev ~= (chain and chain.head or M.GENESIS) then return nil, "fork" end
+    if chain and chain.lastTs and ev.ts < chain.lastTs then return nil, "timetravel" end
+
+    if not chain then
+        chain = { id = ev.chain, author = ev.author, events = {}, head = M.GENESIS }
+        store.chains[ev.chain] = chain
+    end
     chain.events[ev.seq] = ev
-    chain.byId[ev.id] = ev
-    chain.head = ev.id
+    chain.head, chain.lastTs = ev.id, ev.ts
+    store.byId[ev.id] = ev
+    if ev.type == "Genesis" then store.id, store.genesisChain = ev.id, ev.chain end
     return "appended"
 end
 
--- Author a new event on top of the chain head.
-function M.Append(chain, type_, data, author, ts)
-    local ev = { v = M.VERSION, list = chain.list, seq = #chain.events + 1, prev = chain.head,
-        ts = ts, author = author, type = type_, data = data or {} }
+-- Build an event at the tip of `chainId` (not yet received).
+function M.Build(store, chainId, author, type_, data, ts, list)
+    local chain = store.chains[chainId]
+    local ev = { v = M.VERSION, ledger = (type_ == "Genesis") and "" or (store.id or ""), chain = chainId,
+        seq = chain and (#chain.events + 1) or 1, prev = chain and chain.head or M.GENESIS,
+        ts = ts, author = author, type = type_, list = list, data = data or {} }
     local okHash, id = pcall(eventId, ev)
     if not okHash then return nil, "malformed" end
     ev.id = id
-    local status, err = M.Receive(chain, ev)
-    if status ~= "appended" then return nil, err end
     return ev
 end
 
--- Rebuild a chain from stored events, verifying every hash and rule.
--- Returns chain, or nil + reason + index of the first bad event.
-function M.Load(listId, events)
-    local chain = M.NewChain(listId)
-    for i, ev in ipairs(events) do
-        local status, err = M.Receive(chain, ev)
-        if status ~= "appended" then return nil, err or status, i end
-    end
-    return chain
+function M.DropChain(store, cid)
+    local chain = store.chains[cid]
+    if not chain then return end
+    for _, ev in ipairs(chain.events) do store.byId[ev.id] = nil end
+    store.chains[cid] = nil
+    if store.genesisChain == cid then store.id, store.genesisChain = nil, nil end
 end
 
-
--- Fast load for large stored ledgers: structure, linkage (seq and prev) and rules are checked
--- and the standings are rebuilt, but event hashes are NOT recomputed. Call VerifyStep until it
--- reports "done" to verify them in slices. Returns chain, or nil + reason + index.
-function M.LoadFast(listId, events)
-    local chain = M.NewChain(listId)
-    for i, ev in ipairs(events) do
-        if type(ev) ~= "table" or type(ev.id) ~= "string" or type(ev.prev) ~= "string" or type(ev.data) ~= "table"
-            or ev.seq ~= i or ev.prev ~= chain.head or ev.list ~= listId or ev.v ~= M.VERSION then
-            return nil, "malformed", i
+-- Load saved chains, verifying links, times and (for chains up to verifyLimit events) hashes. The Genesis
+-- chain goes first. saved = { chains = { [chainId] = { events = {...} } } }.
+-- Returns store, problems ({ [chainId] = {reason, index} }), lazy ({ [chainId] = chain } still to hash-check).
+function M.LoadStore(saved, verifyLimit)
+    local store, problems, lazy = M.NewStore(), {}, {}
+    local chains = (saved and saved.chains) or {}
+    local function isGenesis(cid)
+        local e = chains[cid].events and chains[cid].events[1]
+        return type(e) == "table" and e.type == "Genesis"
+    end
+    local ids = {}
+    for cid in pairs(chains) do ids[#ids + 1] = cid end
+    table.sort(ids, function(a, b)
+        local ga, gb = isGenesis(a), isGenesis(b)
+        if ga ~= gb then return ga end
+        return a < b
+    end)
+    for _, cid in ipairs(ids) do
+        local events = chains[cid].events or {}
+        local fast = verifyLimit ~= nil and #events > verifyLimit
+        for i, ev in ipairs(events) do
+            local status, err = M.Receive(store, ev, fast)
+            if status == "appended" and ev.chain ~= cid then status, err = nil, "badchain" end
+            if status ~= "appended" then
+                problems[cid] = { reason = err or status, index = i }
+                M.DropChain(store, cid)
+                break
+            end
         end
-        local ok, err = Standings.Apply(chain.state, ev)
-        if not ok then return nil, err, i end
-        chain.events[i] = ev
-        chain.byId[ev.id] = ev
-        chain.head = ev.id
+        if fast and not problems[cid] and store.chains[cid] then
+            store.chains[cid].verified = 0
+            lazy[cid] = store.chains[cid]
+        end
     end
-    chain.verified = 0
-    return chain
+    return store, problems, lazy
 end
 
--- Recompute the hashes of the next `count` unverified events. Returns "more", "done", or
--- "bad" plus the index of the first event whose hash does not match.
+-- Recompute the hashes of the next `count` unverified events of a lazily loaded chain.
+-- Returns "more", "done", or "bad" plus the index of the first bad event.
 function M.VerifyStep(chain, count)
     local from = (chain.verified or #chain.events) + 1
     local to = math.min(from + count - 1, #chain.events)
@@ -524,6 +595,195 @@ function M.VerifyStep(chain, count)
     end
     chain.verified = to
     return (to >= #chain.events) and "done" or "more"
+end
+
+-- One fingerprint for the whole ledger: equal fingerprints mean identical histories.
+function M.Fingerprint(store)
+    local ids = {}
+    for cid in pairs(store.chains) do ids[#ids + 1] = cid end
+    table.sort(ids)
+    local list = {}
+    for i, cid in ipairs(ids) do list[i] = { cid, #store.chains[cid].events, store.chains[cid].head } end
+    return Hash.Sum(Hash.Canon(list))
+end
+
+-- Every event of every chain, in merge order.
+function M.Merged(store)
+    local all = {}
+    for _, chain in pairs(store.chains) do
+        for _, ev in ipairs(chain.events) do all[#all + 1] = ev end
+    end
+    table.sort(all, before)
+    return all
+end
+
+---------------------------------------------------------------- the view (replay + authority)
+function M.NewView()
+    return {
+        lists = {},      -- [listId] = Standings state
+        auth = { gm = nil, officers = {}, raids = {} },
+        conflicts = {},  -- { id, chain, author, type, list, reason, ts }
+        applied = {},    -- events applied, in merge order
+        declined = {},   -- recorded declined adjustment requests
+        last = nil,      -- the last event considered (applied or skipped)
+    }
+end
+
+local function isName(v) return type(v) == "string" and v ~= "" end
+local function isOfficer(a, name) return name ~= nil and (name == a.gm or a.officers[name] == true) end
+
+-- Raids active at time t. raid = { id, ml, start, expires, ended, by }
+local function activeRaids(a, t)
+    local out = {}
+    for _, r in pairs(a.raids) do
+        if r.start <= t and t < r.expires and (not r.ended or t < r.ended) then out[#out + 1] = r end
+    end
+    table.sort(out, function(x, y) return x.id < y.id end)
+    return out
+end
+
+-- May `author` write an ordinary (list or Declined) event at time t?
+local function mayWrite(a, author, t)
+    local active = activeRaids(a, t)
+    for _, r in ipairs(active) do
+        if r.ml == author then return true end
+    end
+    if isOfficer(a, author) then
+        if #active == 0 then return true end
+        return nil, "duringraid"
+    end
+    for _, r in pairs(a.raids) do
+        if r.ml == author then return nil, "expired" end
+    end
+    return nil, "notauthorized"
+end
+
+M.ActiveRaids = function(view, t) return activeRaids(view.auth, t) end
+M.IsOfficer = function(view, name) return isOfficer(view.auth, name) end
+M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, t) end
+
+local function raidOver(r, t) return (r.ended and r.ended <= t) or t >= r.expires end
+
+-- Authority events: each returns a commit function, or nil + reason.
+local auth = {}
+
+function auth.Genesis(a, ev, d)
+    if a.gm then return nil, "alreadygenesis" end
+    if not isName(d.name) then return nil, "badname" end
+    return function() a.gm = ev.author end
+end
+
+function auth.SetGuildMaster(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if not isName(d.name) then return nil, "badname" end
+    return function() a.gm = d.name end
+end
+
+function auth.SetOfficers(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if type(d.names) ~= "table" then return nil, "badnames" end
+    for _, n in ipairs(d.names) do
+        if not isName(n) then return nil, "badnames" end
+    end
+    return function()
+        a.officers = {}
+        for _, n in ipairs(d.names) do a.officers[n] = true end
+    end
+end
+
+function auth.Elevate(a, ev, d)
+    if not isOfficer(a, ev.author) then return nil, "notofficer" end
+    if not (isName(d.raid) and isName(d.ml)) then return nil, "badraid" end
+    if type(d.minutes) ~= "number" or d.minutes <= 0 or d.minutes > 24 * 60 then return nil, "badminutes" end
+    local untilT = ev.ts + math.floor(d.minutes * 60)
+    local r = a.raids[d.raid]
+    if r then
+        if raidOver(r, ev.ts) then return nil, "raidended" end
+        if r.ml ~= d.ml then return nil, "raidbusy" end
+        return function() if untilT > r.expires then r.expires = untilT end end
+    end
+    return function() a.raids[d.raid] = { id = d.raid, ml = d.ml, start = ev.ts, expires = untilT, by = ev.author } end
+end
+
+function auth.Revoke(a, ev, d)
+    if not isOfficer(a, ev.author) then return nil, "notofficer" end
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev.ts) then return nil, "notactive" end
+    return function() r.ended = ev.ts end
+end
+
+function auth.RaidClose(a, ev, d)
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev.ts) then return nil, "notactive" end
+    if ev.author ~= r.ml then return nil, "notml" end
+    return function() r.ended = ev.ts end
+end
+
+-- A declined adjustment request: no effect on standings; recorded for transparency.
+function auth.Declined(a, ev, d)
+    local ok, why = mayWrite(a, ev.author, ev.ts)
+    if not ok then return nil, why end
+    if not (isName(d.requestedBy) and isName(d.request) and isName(d.declineReason)) then return nil, "baddecline" end
+    return function() end
+end
+
+-- Apply one event to a view. Events must arrive in merge order. Returns true, or nil + reason, in which
+-- case the event is recorded as a conflict and skipped (it stays in its chain).
+function M.ApplyToView(view, ev)
+    view.last = ev
+    local ok, why
+    if GLOBAL[ev.type] then
+        local commit
+        if ev.type ~= "Genesis" and not view.auth.gm then
+            why = "noledger"
+        else
+            commit, why = auth[ev.type](view.auth, ev, ev.data)
+        end
+        if commit then
+            commit()
+            if ev.type == "Declined" then view.declined[#view.declined + 1] = ev end
+            ok = true
+        end
+    elseif not view.auth.gm then
+        why = "noledger"
+    elseif not isName(ev.list) then
+        why = "nolist"
+    else
+        ok, why = mayWrite(view.auth, ev.author, ev.ts)
+        if ok then
+            local s = view.lists[ev.list]
+            local fresh = false
+            if not s then
+                if ev.type == "CreateList" then s, fresh = Standings.New(), true else ok, why = nil, "nolist" end
+            end
+            if ok then
+                ok, why = Standings.Apply(s, ev)
+                if ok and fresh then view.lists[ev.list] = s end
+            end
+        end
+    end
+    if ok then
+        view.applied[#view.applied + 1] = ev
+        return true
+    end
+    view.conflicts[#view.conflicts + 1] = { id = ev.id, chain = ev.chain, author = ev.author, type = ev.type,
+        list = ev.list, reason = why, ts = ev.ts }
+    return nil, why
+end
+
+-- Replay the whole store into a fresh view.
+function M.View(store)
+    local view = M.NewView()
+    for _, ev in ipairs(M.Merged(store)) do M.ApplyToView(view, ev) end
+    return view
+end
+
+-- Would `ev` be accepted if appended after everything in the store? Uses a throwaway replay, so nothing
+-- changes. Returns true, or nil + reason.
+function M.Check(store, ev)
+    local probe = M.View(store)
+    if probe.last and not before(probe.last, ev) then return nil, "outoforder" end
+    return M.ApplyToView(probe, ev)
 end
 
 end; chunk("KingsGambit", SK) end
@@ -980,8 +1240,9 @@ end
 end; chunk("KingsGambit", SK) end
 -- ===== Engine.lua =====
 do local chunk = function(...)
--- King's Gambit: an engine owns its ledger state and talks to the WoW client only through a Client.
--- No module-level state: tests and training can run many engines in one process.
+-- King's Gambit: an engine owns the ledger (a store of per-writer chains plus its replayed view) and talks
+-- to the WoW client only through a Client. No module-level state: tests and training can run many engines
+-- in one process. Design: docs/kings-gambit/ledger-v2-design.md
 local _, SK = ...
 local M = SK:NewModule("Engine")
 local Ledger = SK.modules.Ledger
@@ -989,135 +1250,243 @@ local Ledger = SK.modules.Ledger
 local Engine = {}
 Engine.__index = Engine
 
--- Build an engine over a Client. Persisted lists are loaded and fully verified; a list that
--- fails verification is reported in engine.problems and left untouched in storage
--- (never silently repaired or discarded).
--- opts.syncVerifyLimit (default 2000): lists up to this many events are fully hash-verified right
--- away; longer ones are loaded fast and verified in the background (see Engine:verifyTick).
+local HEX = "0123456789abcdef"
+
+-- opts.syncVerifyLimit (default 2000): chains up to this many events are hash-verified at load; longer
+-- ones are verified in the background (see verifyTick). opts.verifyBatch: events per background tick.
 function M.New(client, opts)
     local acct = client:storage().account
-    acct.schema = acct.schema or 1
-    acct.lists = acct.lists or {}
+    acct.schema = 2
+    acct.ledger = acct.ledger or { chains = {} }
+    acct.ledger.chains = acct.ledger.chains or {}
+    acct.mine = acct.mine or {}
     acct.config = acct.config or {}
-    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {}, verifying = {},
-        verifyLimit = (opts and opts.syncVerifyLimit) or 2000, verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
-    for listId, rec in pairs(acct.lists) do
-        local events = rec.events or {}
-        local lazy = #events > c.verifyLimit
-        local chain, err, idx
-        if lazy then chain, err, idx = Ledger.LoadFast(listId, events) else chain, err, idx = Ledger.Load(listId, events) end
-        if chain then
-            rec.events = chain.events -- keep the saved table and the live chain in step
-            c.chains[listId] = chain
-            if lazy then c.verifying[listId] = chain end
-        else
-            c.problems[listId] = { reason = err, index = idx }
-            client:print(("list '%s' failed verification at event %s: %s"):format(listId, tostring(idx), tostring(err)))
-        end
+    local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {},
+        verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
+    local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000)
+    e.store, e.problems, e.verifying = store, problems, lazy
+    for cid, chain in pairs(store.chains) do acct.ledger.chains[cid] = { events = chain.events } end
+    for cid, p in pairs(problems) do
+        client:print(("chain '%s' failed verification at event %s: %s (left untouched in saved data)"):format(cid, tostring(p.index), tostring(p.reason)))
     end
-    if next(c.verifying) then
-        c.verifyTimer = client:every(0.05, function() c:verifyTick() end)
-    end
-    return c
+    e:rebuild()
+    if next(lazy) then e.verifyTimer = client:every(0.05, function() e:verifyTick() end) end
+    return e
 end
 
--- Background hash verification of large lists, a slice per tick so login never stalls. A list that
--- fails is reported and taken out of use (its saved data is left untouched).
-function Engine:verifyTick()
-    for listId, chain in pairs(self.verifying) do
-        local status, idx = Ledger.VerifyStep(chain, self.verifyBatch)
-        if status == "done" then
-            self.verifying[listId] = nil
-            self:fire("verified", listId, nil)
-        elseif status == "bad" then
-            self.verifying[listId] = nil
-            self.chains[listId] = nil
-            self.problems[listId] = { reason = "badhash", index = idx }
-            self.client:print(("list '%s' failed verification at event %d: badhash"):format(listId, idx))
-            self:fire("corrupt", listId, nil)
-        end
-        break -- one list per tick keeps each tick small
-    end
-    if not next(self.verifying) and self.verifyTimer then
-        self.client:cancel(self.verifyTimer)
-        self.verifyTimer = nil
-    end
-end
-
-function Engine:IsVerified(listId) return self.chains[listId] ~= nil and self.verifying[listId] == nil end
-
-function Engine:Get(listId) return self.chains[listId] end
-
--- Subscribe to changes: fn(kind, listId, event). kind is "local" (this engine wrote it),
--- "remote" (accepted from a peer) or "replaced" (a fork was resolved; event is nil).
--- Returns an unsubscribe function.
+---------------------------------------------------------------- hooks
+-- fn(kind, chainId, event). kind: "local" (we wrote it), "remote" (accepted from a peer), "replaced" (a
+-- chain was repaired after a fork), "verified", "corrupt". Returns an unsubscribe function.
 function Engine:OnChange(fn)
     local entry = { fn = fn, active = true }
     self.hooks[#self.hooks + 1] = entry
     return function() entry.active = false end
 end
 
-function Engine:fire(kind, listId, ev)
+function Engine:fire(kind, cid, ev)
     local snapshot = {}
     for i, h in ipairs(self.hooks) do snapshot[i] = h end
     for _, h in ipairs(snapshot) do
-        if h.active then h.fn(kind, listId, ev) end
+        if h.active then h.fn(kind, cid, ev) end
     end
 end
 
--- Create a list (writes its CreateList genesis event) and persist it.
-function Engine:CreateList(listId, name)
-    if self.chains[listId] or self.problems[listId] then return nil, "exists" end
-    local chain = Ledger.NewChain(listId)
-    local ev, err = Ledger.Append(chain, "CreateList", { name = name }, self.client:me(), self.client:serverTime())
-    if not ev then return nil, err end
-    self.chains[listId] = chain
-    self.db.lists[listId] = { events = chain.events }
-    self:fire("local", listId, ev)
-    return chain
+---------------------------------------------------------------- reading
+function Engine:rebuild()
+    self.view = Ledger.View(self.store)
+    self.fingerprint = Ledger.Fingerprint(self.store)
 end
 
--- Author an event on a list as this engine, stamped with the Client's clock.
-function Engine:Append(listId, type_, data)
-    local chain = self.chains[listId]
-    if not chain then return nil, "nolist" end
-    local ev, err = Ledger.Append(chain, type_, data, self.client:me(), self.client:serverTime())
-    if ev then self:fire("local", listId, ev) end
-    return ev, err
-end
+function Engine:Fingerprint() return self.fingerprint end
+function Engine:LedgerId() return self.store.id end
+function Engine:View() return self.view end
+function Engine:Conflicts() return self.view.conflicts end
 
--- Accept an event authored elsewhere. Returns "appended" | "duplicate", or nil + reason
--- (see Ledger.Receive; also "unknownlist" for a list we have never seen that does not start
--- with its CreateList). A list is adopted when its genesis event arrives.
-function Engine:Receive(listId, ev)
-    if self.problems[listId] then return nil, "corrupt" end
-    local chain = self.chains[listId]
-    local adopt = false
-    if not chain then
-        if type(ev) ~= "table" or ev.seq ~= 1 or ev.type ~= "CreateList" then return nil, "unknownlist" end
-        chain, adopt = Ledger.NewChain(listId), true
+-- A list as callers see it: { name, state (Standings), events (applied, merge order), head (fingerprint) }.
+function Engine:Get(listId)
+    local s = self.view.lists[listId]
+    if not s then return nil end
+    local events = {}
+    for _, ev in ipairs(self.view.applied) do
+        if ev.list == listId then events[#events + 1] = ev end
     end
-    local status, err = Ledger.Receive(chain, ev)
-    if status == "appended" then
-        if adopt then
-            self.chains[listId] = chain
-            self.db.lists[listId] = { events = chain.events }
+    return { id = listId, name = s.name, state = s, events = events, head = self.fingerprint }
+end
+
+-- All list ids, sorted.
+function Engine:Lists()
+    local out = {}
+    for id in pairs(self.view.lists) do out[#out + 1] = id end
+    table.sort(out)
+    return out
+end
+
+function Engine:IsVerified() return next(self.verifying) == nil end
+
+function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.client:serverTime()) end
+function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
+function Engine:MayWrite(name, t)
+    return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())
+end
+
+---------------------------------------------------------------- writing
+-- This character's chain id (created on first use, with a random epoch).
+function Engine:MyChain()
+    local me = self.client:me()
+    local cid = self.db.mine[me]
+    if not cid then
+        local epoch = {}
+        for i = 1, 8 do
+            local d = self.client:random(16)
+            epoch[i] = HEX:sub(d, d)
         end
-        self:fire("remote", listId, ev)
+        cid = me .. "#" .. table.concat(epoch)
+        self.db.mine[me] = cid
     end
-    return status, err
+    return cid
 end
 
--- Fork resolution: swap in a verified replacement chain. The events this engine had on the
--- losing branch are kept in db.orphans so an officer can review and re-enter them.
-function Engine:ReplaceChain(listId, newChain, orphans)
-    self.chains[listId] = newChain
-    self.db.lists[listId] = { events = newChain.events }
-    if orphans and #orphans > 0 then
-        self.db.orphans = self.db.orphans or {}
-        self.db.orphans[#self.db.orphans + 1] = { list = listId, at = self.client:serverTime(), events = orphans }
+-- A timestamp that sorts a new event after everything already in the view, so it can be applied
+-- incrementally (and so a Master Looter's first event never sorts before the Elevate that allows it).
+function Engine:nextTs(cid)
+    local ts = self.client:serverTime()
+    local mine = self.store.chains[cid]
+    if mine and mine.lastTs and mine.lastTs > ts then ts = mine.lastTs end
+    local last = self.view.last
+    if last then
+        if last.ts > ts then ts = last.ts end
+        if last.ts == ts and last.chain > cid then ts = ts + 1 end
     end
-    self:fire("replaced", listId, nil)
+    return ts
+end
+
+function Engine:persist(cid)
+    local chain = self.store.chains[cid]
+    if chain then self.db.ledger.chains[cid] = { events = chain.events } end
+end
+
+-- Write one event on this character's chain. It is checked against the current view first and only
+-- written if it would be accepted. Returns the event, or nil + reason.
+function Engine:Write(type_, data, list)
+    if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
+    local cid = self:MyChain()
+    local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list)
+    if not ev then return nil, err end
+    local view = self.view
+    local lastBefore, nConf = view.last, #view.conflicts
+    local ok, why = Ledger.ApplyToView(view, ev)
+    if not ok then
+        view.conflicts[nConf + 1] = nil
+        view.last = lastBefore
+        return nil, why
+    end
+    local status, rerr = Ledger.Receive(self.store, ev)
+    if status ~= "appended" then
+        self:rebuild() -- should not happen: undo the optimistic apply
+        return nil, rerr
+    end
+    self:persist(cid)
+    self.fingerprint = Ledger.Fingerprint(self.store)
+    self:fire("local", cid, ev)
+    return ev
+end
+
+-- Start a new ledger (the guild master does this once). Returns the Genesis event.
+function Engine:Genesis(name)
+    if self.store.id then return nil, "exists" end
+    return self:Write("Genesis", { name = name })
+end
+
+-- List helpers.
+-- The first list created on a machine with no ledger founds the ledger (Genesis) first: in the game
+-- that is the guild master, who is the only one allowed to (see Commands).
+function Engine:CreateList(listId, name)
+    if not self.store.id then
+        local g, gerr = self:Genesis("Guild ledger")
+        if not g then return nil, gerr end
+    end
+    if self.view.lists[listId] then return nil, "exists" end
+    local ev, err = self:Write("CreateList", { name = name or listId }, listId)
+    if not ev then return nil, err end
+    return self:Get(listId)
+end
+
+function Engine:Append(listId, type_, data)
+    if not self.view.lists[listId] and type_ ~= "CreateList" then return nil, "nolist" end
+    return self:Write(type_, data, listId)
+end
+
+---------------------------------------------------------------- receiving
+-- Accept an event written elsewhere. Returns "appended" | "duplicate", or nil + reason (see Ledger.Receive).
+function Engine:Receive(ev)
+    if type(ev) == "table" and type(ev.chain) == "string" and self.problems[ev.chain] then return nil, "corrupt" end
+    local status, err = Ledger.Receive(self.store, ev)
+    if status ~= "appended" then return status, err end
+    self:persist(ev.chain)
+    if ev.type == "Genesis" then
+        self:rebuild()
+    elseif not self.view.last or Ledger.Before(self.view.last, ev) then
+        Ledger.ApplyToView(self.view, ev)
+        self.fingerprint = Ledger.Fingerprint(self.store)
+    else
+        self:rebuild() -- a late event: it slots into its place, and the view is replayed
+    end
+    self:fire("remote", ev.chain, ev)
+    return status
+end
+
+-- Repair a chain that forked (its writer wrote two different events at the same position, e.g. from two
+-- machines): keep events 1..k-1, then `branch`. The replaced events are kept in db.orphans for review.
+-- Returns true, or nil + reason (nothing changes).
+function Engine:ReplaceChainSuffix(cid, k, branch)
+    local old = self.store.chains[cid]
+    if not old then return nil, "nochain" end
+    local oldEvents = {}
+    for i, ev in ipairs(old.events) do oldEvents[i] = ev end
+    Ledger.DropChain(self.store, cid)
+    local function restore()
+        Ledger.DropChain(self.store, cid)
+        for _, ev in ipairs(oldEvents) do Ledger.Receive(self.store, ev) end
+        self:persist(cid)
+    end
+    for i = 1, k - 1 do Ledger.Receive(self.store, oldEvents[i]) end
+    for _, ev in ipairs(branch) do
+        local status, err = Ledger.Receive(self.store, ev)
+        if status ~= "appended" then restore(); return nil, err end
+    end
+    local orphans = {}
+    for i = k, #oldEvents do orphans[#orphans + 1] = oldEvents[i] end
+    if #orphans > 0 then
+        self.db.orphans = self.db.orphans or {}
+        self.db.orphans[#self.db.orphans + 1] = { chain = cid, at = self.client:serverTime(), events = orphans }
+    end
+    self:persist(cid)
+    self:rebuild()
+    self:fire("replaced", cid, nil)
+    return true
+end
+
+---------------------------------------------------------------- background verification
+function Engine:verifyTick()
+    for cid, chain in pairs(self.verifying) do
+        local status, idx = Ledger.VerifyStep(chain, self.verifyBatch)
+        if status == "done" then
+            self.verifying[cid] = nil
+            self:fire("verified", cid, nil)
+        elseif status == "bad" then
+            self.verifying[cid] = nil
+            Ledger.DropChain(self.store, cid)
+            self.problems[cid] = { reason = "badhash", index = idx }
+            self.client:print(("chain '%s' failed verification at event %d: badhash"):format(cid, idx))
+            self:rebuild()
+            self:fire("corrupt", cid, nil)
+        end
+        break -- one chain per tick keeps each tick small
+    end
+    if not next(self.verifying) and self.verifyTimer then
+        self.client:cancel(self.verifyTimer)
+        self.verifyTimer = nil
+    end
 end
 
 end; chunk("KingsGambit", SK) end
@@ -1794,26 +2163,21 @@ end
 end; chunk("KingsGambit", SK) end
 -- ===== Sync.lua =====
 do local chunk = function(...)
--- King's Gambit: guild-wide ledger sync (Phase 3).
--- Gossip over addon messages: live events are pushed as they are written, a small heartbeat
--- (list sizes and head hashes) lets anyone notice they are behind or diverged, and range
--- requests fetch what is missing. Everything is idempotent (events are content-addressed by
--- their hash), so duplicates, reordering and lost messages are all safe.
+-- King's Gambit: ledger sync over addon messages (ledger v2: one chain per writer).
+-- Live events are pushed as they are written (guild channel, and raid channel when in a raid). A heartbeat
+-- lists every chain a peer has (count and head) so anyone can notice what they are missing and ask for it.
+-- Everything is idempotent (events are content-addressed), so duplicates, reordering and lost messages are
+-- safe. A chain only forks if its writer wrote from two machines with stale data; that rare case is resolved
+-- deterministically (longer branch wins, ties to the lower id) and the losing events are kept for review.
 --
 -- Messages (serialized tables, split into <=255-byte frames):
---   H  heartbeat   { t="H", lists = { [id] = { n = count, h = headId } } }
---   R  request     { t="R", list, from }                 -> reply E starting at seq `from`
---   D  probe       { t="D", list, cp = { {seq,id}... } } -> reply E from the last shared checkpoint
---   E  events      { t="E", list, n = sender's total, events = { ... } }
---
--- Forks (two histories that diverge) are resolved by one deterministic rule everyone applies
--- the same way: the LONGER chain wins; on a tie the earlier fork event wins, then the lower
--- id. The loser's events are kept in db.orphans for an officer to review and re-enter.
--- Phase 3 trusts any well-formed chain (the trusted-officer model); who may WRITE is enforced
--- where events are authored.
+--   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } } }
+--   R  request    { t="R", c = chain, from = seq }      -> reply E starting at `from`
+--   E  events     { t="E", c = chain, n = sender's count, events = { ... } }
+-- Other modules plug in their own message types with Sync:register (two or more letters).
 local _, SK = ...
 local M = SK:NewModule("Sync")
-local Ledger = SK.modules.Ledger
+local Hash = SK.modules.Hash
 
 M.PREFIX = "KGAMBIT"
 
@@ -1828,6 +2192,8 @@ local DEFAULTS = {
     requestCooldown = 8,     -- do not repeat the same request sooner than this
     partialTimeout = 30,     -- drop half-received messages after this long
     forkTimeout = 60,
+    retryAfter = 3,          -- re-send a request that made no progress after this long
+    maxRetries = 8,
 }
 
 local Sync = {}
@@ -1839,14 +2205,14 @@ function M.New(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg,
-        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {},
+        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {}, waiting = {},
         handlers = {}, unsub = {}, timers = {}, blocked = nil, running = false,
-        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0 },
+        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0, otherLedger = 0 },
     }, Sync)
 end
 
 ---------------------------------------------------------------- events
--- Events: forkResolved { list, at, winner = "ours"|"theirs", orphaned }
+-- Events: forkResolved { chain, at, winner = "ours"|"theirs", orphaned }
 function Sync:on(event, fn)
     local list = self.handlers[event]
     if not list then list = {}; self.handlers[event] = list end
@@ -1873,7 +2239,7 @@ function Sync:start()
     self.unsub[#self.unsub + 1] = c:on("comms.restrictionChanged", function(p)
         if not p.restricted then self.blocked = nil; self:pump() end
     end)
-    self.unsub[#self.unsub + 1] = self.engine:OnChange(function(kind, listId, ev) self:onChange(kind, listId, ev) end)
+    self.unsub[#self.unsub + 1] = self.engine:OnChange(function(kind, cid, ev) self:onChange(kind, cid, ev) end)
     self.timers[#self.timers + 1] = c:every(cfg.pumpEvery, function() self:pump() end)
     self.timers[#self.timers + 1] = c:every(cfg.heartbeat, function() self:heartbeat() end)
     self.timers[#self.timers + 1] = c:after(cfg.firstHeartbeat + c:random() * cfg.firstJitter, function() self:heartbeat() end)
@@ -1891,13 +2257,22 @@ function Sync:status()
         forksResolved = self.stats.forksResolved, resolvingForks = next(self.forkBuf) ~= nil }
 end
 
+function Sync:register(t, fn)
+    assert(#t > 1, "plugin message types must be longer than one character")
+    self.custom[t] = fn
+end
+
+function Sync:send(msg, channel, target) self:post(msg, channel, target) end
+
 ---------------------------------------------------------------- sending
 -- Serialize, split into frames, queue, and try to send right away.
 -- Frame = 4 hex message id + 3-digit part + 3-digit part count + data.
+-- The message id is derived from the content, so when the same reply is sent again (a retried request)
+-- its frames carry the same id and the receiver combines them with frames kept from earlier attempts:
+-- on a lossy link every retry makes progress instead of starting over.
 function Sync:post(msg, channel, target)
     local payload = self.client:serialize(msg)
-    local id = ("%04x"):format(self.nextMsgId % 65536)
-    self.nextMsgId = self.nextMsgId + 1
+    local id = Hash.Sum(payload):sub(1, 4)
     local room = self.client.maxMessage - 10
     local n = math.max(1, math.ceil(#payload / room))
     if n > 999 then self.stats.droppedFrames = self.stats.droppedFrames + n; return end
@@ -1908,8 +2283,29 @@ function Sync:post(msg, channel, target)
     self:pump()
 end
 
+-- Re-send requests that have made no progress (their reply was probably lost). Because message ids are
+-- content-derived, each retry's reply adds to the frames already received.
+function Sync:retryRequests()
+    local now = self.client:now()
+    for cid, w in pairs(self.waiting) do
+        local chain = self.engine.store.chains[cid]
+        local have = chain and #chain.events or 0
+        if have >= w.from then
+            self.waiting[cid] = nil
+        elseif now - w.at >= self.cfg.retryAfter then
+            if w.tries >= self.cfg.maxRetries then
+                self.waiting[cid] = nil -- give up; the next heartbeat starts over
+            else
+                w.tries, w.at = w.tries + 1, now
+                self:post({ t = "R", c = cid, from = w.from }, "WHISPER", w.sender)
+            end
+        end
+    end
+end
+
 -- Send queued frames, a few at a time. Restricted or throttled sends stay queued and retry.
 function Sync:pump()
+    self:retryRequests()
     local sent = 0
     while #self.outbox > 0 and sent < self.cfg.burst do
         local m = self.outbox[1]
@@ -1929,89 +2325,56 @@ function Sync:pump()
     end
 end
 
-local function liveChannels(self)
-    return { self.client:inRaid() and "RAID" or "GUILD" }
+local function broadcast(self, msg)
+    self:post(msg, "GUILD")
+    if self.client:inRaid() then self:post(msg, "RAID") end
 end
 
 function Sync:heartbeat()
-    local lists = {}
-    for id, chain in pairs(self.engine.chains) do
-        lists[id] = { n = #chain.events, h = chain.head }
-    end
-    self:post({ t = "H", lists = lists }, "GUILD")
-    if self.client:inRaid() then self:post({ t = "H", lists = lists }, "RAID") end
-    -- housekeeping
+    local store = self.engine.store
+    local c = {}
+    for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
+    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c })
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
     end
-    for id, fb in pairs(self.forkBuf) do
-        if now - fb.at > self.cfg.forkTimeout then self.forkBuf[id] = nil end
+    for cid, fb in pairs(self.forkBuf) do
+        if now - fb.at > self.cfg.forkTimeout then self.forkBuf[cid] = nil end
     end
 end
 
--- Push our own new events to everyone; after a fork swap, tell the group our new head.
-function Sync:onChange(kind, listId, ev)
+-- Push our own new events to everyone at once (guild and raid), so a parallel raid sees them right away.
+function Sync:onChange(kind, cid, ev)
     if kind == "local" then
-        local chain = self.engine:Get(listId)
-        for _, ch in ipairs(liveChannels(self)) do
-            self:post({ t = "E", list = listId, n = #chain.events, events = { ev } }, ch)
-        end
+        broadcast(self, { t = "E", c = cid, n = #self.engine.store.chains[cid].events, events = { ev } })
     elseif kind == "replaced" then
         self:heartbeat()
     end
 end
 
-function Sync:request(listId, from, sender, force)
-    local key = sender .. "|" .. listId .. "|" .. from
+function Sync:request(cid, from, sender, force)
+    local key = sender .. "|" .. cid .. "|" .. from
     local now = self.client:now()
     if not force and self.lastRequest[key] and now - self.lastRequest[key] < self.cfg.requestCooldown then return end
     self.lastRequest[key] = now
-    self:post({ t = "R", list = listId, from = from }, "WHISPER", sender)
+    self.waiting[cid] = { from = from, sender = sender, at = now, tries = 0 }
+    self:post({ t = "R", c = cid, from = from }, "WHISPER", sender)
 end
 
--- Checkpoints to find where two histories split: positions 1, 2, 4, 8, ... from the start and
--- n, n-1, n-2, n-4, ... from the tip (forks are usually recent). Matching is prefix-closed, so
--- the responder just takes the highest checkpoint that matches.
-local function skeleton(chain)
-    local n, seen, seqs = #chain.events, {}, {}
-    local function add(s)
-        if s >= 1 and s <= n and not seen[s] then seen[s] = true; seqs[#seqs + 1] = s end
-    end
-    local s = 1
-    while s <= n do add(s); s = s * 2 end
-    add(n)
-    s = 1
-    while s < n do add(n - s); s = s * 2 end
-    table.sort(seqs)
-    local cp = {}
-    for i, q in ipairs(seqs) do cp[i] = { q, chain.events[q].id } end
-    return cp
-end
-
-function Sync:probe(listId, sender)
-    local chain = self.engine:Get(listId)
-    if not chain then return end
-    local key = sender .. "|" .. listId .. "|probe"
-    local now = self.client:now()
-    if self.lastRequest[key] and now - self.lastRequest[key] < self.cfg.requestCooldown then return end
-    self.lastRequest[key] = now
-    self:post({ t = "D", list = listId, cp = skeleton(chain) }, "WHISPER", sender)
-end
-
-function Sync:sendEvents(listId, from, sender)
-    local chain = self.engine:Get(listId)
+function Sync:sendEvents(cid, from, sender)
+    local chain = type(cid) == "string" and self.engine.store.chains[cid]
     if not chain or type(from) ~= "number" or from < 1 then return end
     local evs, last = {}, math.min(#chain.events, from + self.cfg.maxBatch - 1)
     for seq = from, last do
         evs[#evs + 1] = chain.events[seq]
         if #evs > 1 and #self.client:serialize(evs) > self.cfg.maxBytes then
-            evs[#evs] = nil -- always send at least one event; stop before the message gets too big
+            evs[#evs] = nil
             break
         end
     end
     if #evs == 0 then return end
-    self:post({ t = "E", list = listId, n = #chain.events, events = evs }, "WHISPER", sender)
+    self:post({ t = "E", c = cid, n = #chain.events, events = evs }, "WHISPER", sender)
 end
 
 ---------------------------------------------------------------- receiving
@@ -2036,90 +2399,75 @@ function Sync:onComms(p)
     if not ok then self.client:log("error", "sync handler: " .. tostring(err)) end
 end
 
--- Other modules (the loot session protocol) plug their own message types in here: fn(msg, sender).
--- Built-in types are the single letters H, R, D and E; plugins should use longer names.
-function Sync:register(t, fn)
-    assert(#t > 1, "plugin message types must be longer than one character")
-    self.custom[t] = fn
-end
-
--- Send a message through the same chunking and queue as the ledger traffic.
-function Sync:send(msg, channel, target) self:post(msg, channel, target) end
-
 function Sync:handle(msg, sender)
     local t = msg.t
     if t == "H" then self:onHeartbeat(msg, sender)
-    elseif t == "R" then self:sendEvents(msg.list, msg.from, sender)
-    elseif t == "D" then self:onProbe(msg, sender)
+    elseif t == "R" then self:sendEvents(msg.c, msg.from, sender)
     elseif t == "E" then self:onEvents(msg, sender)
     elseif self.custom[t] then self.custom[t](msg, sender) end
 end
 
 function Sync:onHeartbeat(msg, sender)
-    if type(msg.lists) ~= "table" then return end
-    for listId, peer in pairs(msg.lists) do
-        if type(listId) == "string" and type(peer) == "table" and type(peer.n) == "number" and type(peer.h) == "string"
-            and not self.engine.problems[listId] then
-            local chain = self.engine:Get(listId)
+    if type(msg.c) ~= "table" then return end
+    local store = self.engine.store
+    if type(msg.l) == "string" and msg.l ~= "" and store.id and msg.l ~= store.id then
+        self.stats.otherLedger = self.stats.otherLedger + 1 -- a different ledger (another guild, training)
+        return
+    end
+    if not store.id then
+        if type(msg.g) == "string" and msg.g ~= "" then self:request(msg.g, 1, sender) end -- learn the ledger first
+        return
+    end
+    for cid, peer in pairs(msg.c) do
+        if type(cid) == "string" and type(peer) == "table" and type(peer.n) == "number" and type(peer.h) == "string"
+            and not self.engine.problems[cid] then
+            local chain = store.chains[cid]
             local n = chain and #chain.events or 0
             if peer.n > n then
-                self:request(listId, n + 1, sender)
+                self:request(cid, n + 1, sender)
             elseif peer.n > 0 and chain.events[peer.n].id ~= peer.h then
-                self:probe(listId, sender) -- same or longer than theirs, but a different history
+                self:request(cid, 1, sender) -- the same chain with two histories: fetch theirs to compare
             end
         end
     end
 end
 
-function Sync:onProbe(msg, sender)
-    local chain = self.engine:Get(msg.list)
-    if not chain or type(msg.cp) ~= "table" then return end
-    local shared = 0
-    for _, pair in ipairs(msg.cp) do
-        local seq, id = pair[1], pair[2]
-        local mine = type(seq) == "number" and chain.events[seq]
-        if mine and mine.id == id and seq > shared then shared = seq end
-    end
-    self:sendEvents(msg.list, shared + 1, sender)
-end
-
 function Sync:onEvents(msg, sender)
-    local listId, evs = msg.list, msg.events
-    if type(listId) ~= "string" or type(evs) ~= "table" then return end
-    local fb = self.forkBuf[listId]
-    if fb and fb.sender == sender then return self:forkAppend(listId, evs, msg.n) end
+    local cid, evs = msg.c, msg.events
+    if type(cid) ~= "string" or type(evs) ~= "table" then return end
+    local fb = self.forkBuf[cid]
+    if fb and fb.sender == sender then return self:forkAppend(cid, evs, msg.n) end
 
     for idx, ev in ipairs(evs) do
-        local status, err = self.engine:Receive(listId, ev)
+        local status, err = self.engine:Receive(ev)
         if not status then
-            if err == "gap" or err == "unknownlist" then
-                local chain = self.engine:Get(listId)
-                self:request(listId, (chain and #chain.events or 0) + 1, sender)
+            if err == "gap" then
+                local chain = self.engine.store.chains[cid]
+                self:request(cid, (chain and #chain.events or 0) + 1, sender)
             elseif err == "fork" then
-                self:beginFork(listId, evs, idx, msg.n, sender)
-            else
+                self:beginFork(cid, evs, idx, msg.n, sender)
+            elseif err ~= "noledger" then -- noledger: the heartbeat names the genesis chain to fetch first
                 self.stats.rejected = self.stats.rejected + 1
-                self.client:log("warn", ("sync rejected an event on '%s': %s"):format(listId, tostring(err)))
+                self.client:log("warn", ("sync rejected an event on '%s': %s"):format(cid, tostring(err)))
             end
             return
         end
     end
-    -- Keep walking forward from the last event we were sent (not from our own tip: after a
-    -- probe the batch may be all events we already have, and we must reach the split point).
     local last = evs[#evs]
     if type(msg.n) == "number" and type(last) == "table" and type(last.seq) == "number" and last.seq < msg.n then
-        self:request(listId, last.seq + 1, sender, true)
+        self:request(cid, last.seq + 1, sender, true)
     end
 end
 
----------------------------------------------------------------- forks
-function Sync:beginFork(listId, evs, idx, total, sender)
-    local chain = self.engine:Get(listId)
+---------------------------------------------------------------- the rare chain fork
+function Sync:beginFork(cid, evs, idx, total, sender)
+    local chain = self.engine.store.chains[cid]
     local first = evs[idx]
-    local k, n = first.seq, #chain.events
-    local prevId = (k == 1) and Ledger.GENESIS or (chain.events[k - 1] and chain.events[k - 1].id)
-    if k > n + 1 or first.prev ~= prevId then
-        return self:probe(listId, sender) -- the histories split earlier than this batch shows
+    if not chain or type(first) ~= "table" or type(first.seq) ~= "number" then return end
+    local k = first.seq
+    local prevId = (k == 1) and "0000000000000000" or (chain.events[k - 1] and chain.events[k - 1].id)
+    if k > #chain.events + 1 or first.prev ~= prevId then
+        return self:request(cid, 1, sender, true) -- split earlier than this batch shows: start from the top
     end
     local seg = {}
     for i = idx, #evs do
@@ -2127,66 +2475,56 @@ function Sync:beginFork(listId, evs, idx, total, sender)
         if ev.seq ~= k + #seg or (#seg > 0 and ev.prev ~= seg[#seg].id) then break end
         seg[#seg + 1] = ev
     end
-    self.forkBuf[listId] = { sender = sender, k = k, events = seg, total = total or seg[#seg].seq, at = self.client:now() }
-    self:forkProgress(listId)
+    self.forkBuf[cid] = { sender = sender, k = k, events = seg, total = total or seg[#seg].seq, at = self.client:now() }
+    self:forkProgress(cid)
 end
 
-function Sync:forkAppend(listId, evs, total)
-    local fb = self.forkBuf[listId]
+function Sync:forkAppend(cid, evs, total)
+    local fb = self.forkBuf[cid]
     if type(total) == "number" then fb.total = total end
     for _, ev in ipairs(evs) do
         local last = fb.events[#fb.events]
         if ev.seq == last.seq + 1 and ev.prev == last.id then
             fb.events[#fb.events + 1] = ev
         elseif ev.seq > last.seq + 1 or (ev.seq == last.seq + 1 and ev.prev ~= last.id) then
-            self.forkBuf[listId] = nil -- their branch changed under us; start over from a probe
-            return self:probe(listId, fb.sender)
+            self.forkBuf[cid] = nil
+            return self:request(cid, 1, fb.sender, true)
         end
     end
-    self:forkProgress(listId)
+    self:forkProgress(cid)
 end
 
-function Sync:forkProgress(listId)
-    local fb = self.forkBuf[listId]
+function Sync:forkProgress(cid)
+    local fb = self.forkBuf[cid]
     local last = fb.events[#fb.events].seq
-    if last < fb.total then
-        return self:request(listId, last + 1, fb.sender, true)
-    end
-    self:decideFork(listId)
+    if last < fb.total then return self:request(cid, last + 1, fb.sender, true) end
+    self:decideFork(cid)
 end
 
-function Sync:decideFork(listId)
-    local fb = self.forkBuf[listId]
-    self.forkBuf[listId] = nil
-    local chain = self.engine:Get(listId)
+function Sync:decideFork(cid)
+    local fb = self.forkBuf[cid]
+    self.forkBuf[cid] = nil
+    local chain = self.engine.store.chains[cid]
+    if not chain then return end
     local n, k = #chain.events, fb.k
     local mine, theirs = chain.events[k], fb.events[1]
     local theirsWins
-    if fb.total ~= n then
-        theirsWins = fb.total > n
-    elseif mine then
-        theirsWins = theirs.ts < mine.ts or (theirs.ts == mine.ts and theirs.id < mine.id)
-    else
-        theirsWins = true
-    end
+    if fb.total ~= n then theirsWins = fb.total > n
+    elseif mine then theirsWins = theirs.id < mine.id
+    else theirsWins = true end
     if not theirsWins then
-        self:emit("forkResolved", { list = listId, at = k, winner = "ours", orphaned = 0 })
+        self:emit("forkResolved", { chain = cid, at = k, winner = "ours", orphaned = 0 })
         return
     end
-    local merged = {}
-    for seq = 1, k - 1 do merged[seq] = chain.events[seq] end
-    for _, ev in ipairs(fb.events) do merged[#merged + 1] = ev end
-    local newChain, err = Ledger.Load(listId, merged)
-    if not newChain then
+    local orphaned = n - k + 1
+    local ok, err = self.engine:ReplaceChainSuffix(cid, k, fb.events)
+    if not ok then
         self.stats.rejected = self.stats.rejected + 1
-        self.client:log("warn", ("sync refused a fork on '%s': %s"):format(listId, tostring(err)))
+        self.client:log("warn", ("sync refused a fork on '%s': %s"):format(cid, tostring(err)))
         return
     end
-    local orphans = {}
-    for seq = k, n do orphans[#orphans + 1] = chain.events[seq] end
-    self.engine:ReplaceChain(listId, newChain, orphans)
     self.stats.forksResolved = self.stats.forksResolved + 1
-    self:emit("forkResolved", { list = listId, at = k, winner = "theirs", orphaned = #orphans })
+    self:emit("forkResolved", { chain = cid, at = k, winner = "theirs", orphaned = orphaned })
 end
 
 end; chunk("KingsGambit", SK) end
@@ -2570,7 +2908,7 @@ end
 local function short(name) return name and (name:gsub("%-.*$", "")) end
 
 ---------------------------------------------------------------- state
-local sim, scenario, startSeq = nil, nil, {}
+local sim, scenario, startCount = nil, nil, 0
 local FREE_ITEMS = { "Gauntlets of the Ashen Vow", "Cloak of Quiet Embers", "Band of Hollow Oaths", "Helm of Tides", "Mantle of Second Chances", "Staff of Lesser Tides" }
 local FREE_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory" }
 
@@ -2596,20 +2934,11 @@ end
 
 local function logLines()
     local out = {}
-    for _, listId in ipairs({ "main", "off" }) do
-        local chain = sim.engine:Get(listId)
-        if chain then
-            for seq = (startSeq[listId] or 0) + 1, #chain.events do
-                local ev = chain.events[seq]
-                out[#out + 1] = { list = listId, seq = seq, ts = ev.ts, text = describe(ev) }
-            end
-        end
+    local applied = sim.engine:View().applied
+    for i = startCount + 1, #applied do
+        local ev = applied[i]
+        if ev.list then out[#out + 1] = { list = ev.list, ts = ev.ts, text = describe(ev) } end
     end
-    table.sort(out, function(a, b)
-        if a.ts ~= b.ts then return a.ts < b.ts end
-        if a.list ~= b.list then return a.list < b.list end
-        return a.seq < b.seq
-    end)
     return out
 end
 
@@ -2703,7 +3032,7 @@ function api.start(id, seed)
     if not scenario then return { error = "unknown scenario" } end
     sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You" })
     sim.policies = scenario.policies or {}
-    startSeq = { main = #sim.engine:Get("main").events, off = 0 }
+    startCount = #sim.engine:View().applied
     local ok, why = sim:drop(scenario.items, scenario.config)
     if not ok then return { error = tostring(why) } end
     return state()
@@ -2748,7 +3077,8 @@ end
 -- Undo the most recent award by writing a Revert event (fix-forward).
 function api.undo()
     local chain = sim.engine:Get("main")
-    local top = chain.state.undo[#chain.state.undo]
+    local stack = chain.state.undo[sim.engine:MyChain()]
+    local top = stack and stack[#stack]
     if not top then return result(false, "nothing to undo") end
     local ev, err = sim.engine:Append("main", "Revert", { target = top.id })
     return result(ev ~= nil, err)
@@ -2807,6 +3137,9 @@ local function labReset()
     for _ = 1, 4 do labAddPeer() end
     local a = lab.peers[1]
     a.engine:CreateList("main", "Main")
+    local officers = {}
+    for _, n in ipairs(lab.names) do officers[#officers + 1] = n .. "-Realm" end
+    a.engine:Write("SetOfficers", { names = officers })
     for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
     lab.counter = 5
     lab.net:advance(4)
@@ -2816,43 +3149,43 @@ end
 
 local function labState()
     if not lab then labReset() end
-    -- the "majority" head: what most peers agree on (ties go to the longer chain)
+    -- what most peers agree on (ties go to the peer with more events)
     local tally = {}
     for _, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        local h = c and c.head or "none"
-        local t = tally[h] or { head = h, n = 0, len = c and #c.events or 0 }
-        t.n = t.n + 1
-        tally[h] = t
+        local fp = p.engine:Fingerprint() or "none"
+        local n = 0
+        for _, c in pairs(p.engine.store.chains) do n = n + #c.events end
+        local t = tally[fp] or { fp = fp, votes = 0, n = n, peer = p }
+        t.votes = t.votes + 1
+        tally[fp] = t
     end
     local best
     for _, t in pairs(tally) do
-        if not best or t.n > best.n or (t.n == best.n and t.len > best.len) then best = t end
+        if not best or t.votes > best.votes or (t.votes == best.votes and t.n > best.n) then best = t end
     end
-    local majorityChain
-    for _, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        if c and c.head == best.head then majorityChain = c; break end
-    end
+    local majority = best.peer.engine.store
     local out = { time = lab.net.time, inFlight = lab.net:inFlight(), stats = lab.net.stats, peers = {}, log = lab.log,
         drop = lab.net.dropRate, dup = lab.net.duplicateRate, split = lab.groups, canAdd = #lab.peers < #lab.names }
     for i, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        local n = c and #c.events or 0
-        local head = c and c.head or "none"
-        local status = "in sync"
-        if head ~= best.head then
-            -- behind = our whole history is a prefix of the majority's; diverged = it split off
-            status = (c == nil or (majorityChain and majorityChain.byId[head])) and "behind" or "diverged"
+        local e = p.engine
+        local n, subset = 0, true
+        for _, c in pairs(e.store.chains) do
+            n = n + #c.events
+            for _, ev in ipairs(c.events) do
+                if not majority.byId[ev.id] then subset = false end
+            end
         end
+        local status = "in sync"
+        if (e:Fingerprint() or "none") ~= best.fp then status = subset and "behind" or "diverged" end
+        local list = e:Get("main")
         local order = {}
-        if c then for j, m in ipairs(c.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
+        if list then for j, m in ipairs(list.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
         local orphans = 0
-        for _, o in ipairs(p.engine.db.orphans or {}) do orphans = orphans + #o.events end
+        for _, o in ipairs(e.db.orphans or {}) do orphans = orphans + #o.events end
         local st = p.sync:status()
-        out.peers[i] = { index = i, name = p.name, count = n, head = head:sub(1, 8), status = status, order = order,
-            members = c and #c.state.order or 0, pending = st.pending, blocked = st.blocked, rejected = st.rejected,
-            orphans = orphans, restricted = p.restricted }
+        out.peers[i] = { index = i, name = p.name, count = n, head = (e:Fingerprint() or "none"):sub(1, 8), status = status,
+            order = order, members = list and #list.state.order or 0, pending = st.pending, blocked = st.blocked,
+            rejected = st.rejected, orphans = orphans, restricted = p.restricted }
     end
     return out
 end
@@ -3119,7 +3452,7 @@ end
     const pct = (v) => Math.round(v * 100);
     const netBtn = (label, drop, dup) => '<button data-act="lab-net" data-a="' + drop + '" data-b="' + dup + '" class="' + (pct(lab.drop) === pct(drop) && pct(lab.dup) === pct(dup) ? "sel" : "") + '">' + label + "</button>";
     $("#lab").innerHTML =
-      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. The green/amber/red colour compares each player to what most of the group agrees on.</p>' +
+      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. Each player writes on their own chain, and everyone merges all chains in the same order. Green = matches what most of the group has; amber = only missing events; red = has events the others have not seen yet.</p>' +
       '<div class="card"><h2>Network</h2><div class="row">' +
         '<button data-act="lab-split" data-a="1|234">Split: Aldric alone</button><button data-act="lab-split" data-a="12|34">Split: Aldric+Brann | Cass+Dara</button><button class="primary" data-act="lab-heal">Heal</button>' +
         '<span class="muted small">Lost:</span>' + netBtn("0%", 0, lab.dup) + netBtn("20%", 0.2, lab.dup) + netBtn("40%", 0.4, lab.dup) +
@@ -3133,7 +3466,7 @@ end
       '<div class="layout" style="grid-template-columns: 1fr 1fr"><div class="card"><h2>What happened</h2><div class="log">' +
         (lab.log.length ? lab.log.slice().reverse().map((l) => "<div><span class=\"muted small\">" + l.t.toFixed(0) + "s</span> " + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing yet.</span>') + "</div></div>" +
       '<div class="card"><h2>Try this</h2>' +
-        '<p class="hint"><b>Fork.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Both sides disagree, so the shorter history is set aside (nothing is erased: the loser keeps their events for review).</p>' +
+        '<p class="hint"><b>Split, then heal.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Each player writes on their own chain, so after healing the changes from both sides are merged in time order and nothing is set aside.</p>' +
         '<p class="hint"><b>Late joiner.</b> Write a few events, then let a late player log in. Watch them catch up from nothing.</p>' +
         '<p class="hint"><b>Lost messages.</b> Set 40% lost, write several events, and watch the group repair itself from the heartbeats.</p>' +
         '<p class="hint"><b>Boss fight.</b> Restrict Aldric, write at Aldric, and see the messages wait. Lift the restriction and they go out.</p></div></div>';

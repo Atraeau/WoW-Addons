@@ -120,7 +120,7 @@ local function run(seed)
 
     -- 6. replaying the stored events gives the live standings
     for _, chain in ipairs(off and { main, off } or { main }) do
-        local replayed = assert(Standings.Replay(chain.events))
+        local replayed = SK.modules.Ledger.View(sim.engine.store).lists[chain.id]
         eq(Standings.Digest(replayed), Standings.Digest(chain.state), "replay matches live state")
     end
     return sim.engine:Get("main").head

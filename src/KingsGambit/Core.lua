@@ -38,7 +38,7 @@ local function Start()
         if m.OnInit then m:OnInit() end
     end
     local lists = 0
-    for _ in pairs(engine.chains) do lists = lists + 1 end
+    for _ in pairs(engine.view.lists) do lists = lists + 1 end
     SK:Print(("ready: %d list(s). Type /gambit help."):format(lists))
 end
 

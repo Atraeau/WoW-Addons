@@ -75,7 +75,7 @@ test("the addon loads in TOC order, starts at login, and answers slash commands"
         env.SlashCmdList.KINGSGAMBIT("standings")
         local all = table.concat(printed, "\n")
         assert(all:find("Created list 'main'"), all); assert(all:find("main: 1 on the list"), all); assert(all:find("Aldric"), all)
-        eq(#_G.KingsGambitDB.lists.main.events, 2, "the ledger is in SavedVariables")
+        local _, c = next(_G.KingsGambitDB.ledger.chains); eq(#c.events, 3, "the ledger (Genesis, CreateList, AddMember) is in SavedVariables")
     end)
     for k in pairs(env) do _G[k] = saved[k] end
     for _, k in ipairs { "KingsGambit", "KingsGambitDB", "KingsGambitCharDB", "SLASH_KINGSGAMBIT1", "SLASH_KINGSGAMBIT2" } do _G[k] = nil end

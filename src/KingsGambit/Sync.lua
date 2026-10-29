@@ -1,23 +1,18 @@
--- King's Gambit: guild-wide ledger sync (Phase 3).
--- Gossip over addon messages: live events are pushed as they are written, a small heartbeat
--- (list sizes and head hashes) lets anyone notice they are behind or diverged, and range
--- requests fetch what is missing. Everything is idempotent (events are content-addressed by
--- their hash), so duplicates, reordering and lost messages are all safe.
+-- King's Gambit: ledger sync over addon messages (ledger v2: one chain per writer).
+-- Live events are pushed as they are written (guild channel, and raid channel when in a raid). A heartbeat
+-- lists every chain a peer has (count and head) so anyone can notice what they are missing and ask for it.
+-- Everything is idempotent (events are content-addressed), so duplicates, reordering and lost messages are
+-- safe. A chain only forks if its writer wrote from two machines with stale data; that rare case is resolved
+-- deterministically (longer branch wins, ties to the lower id) and the losing events are kept for review.
 --
 -- Messages (serialized tables, split into <=255-byte frames):
---   H  heartbeat   { t="H", lists = { [id] = { n = count, h = headId } } }
---   R  request     { t="R", list, from }                 -> reply E starting at seq `from`
---   D  probe       { t="D", list, cp = { {seq,id}... } } -> reply E from the last shared checkpoint
---   E  events      { t="E", list, n = sender's total, events = { ... } }
---
--- Forks (two histories that diverge) are resolved by one deterministic rule everyone applies
--- the same way: the LONGER chain wins; on a tie the earlier fork event wins, then the lower
--- id. The loser's events are kept in db.orphans for an officer to review and re-enter.
--- Phase 3 trusts any well-formed chain (the trusted-officer model); who may WRITE is enforced
--- where events are authored.
+--   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } } }
+--   R  request    { t="R", c = chain, from = seq }      -> reply E starting at `from`
+--   E  events     { t="E", c = chain, n = sender's count, events = { ... } }
+-- Other modules plug in their own message types with Sync:register (two or more letters).
 local _, SK = ...
 local M = SK:NewModule("Sync")
-local Ledger = SK.modules.Ledger
+local Hash = SK.modules.Hash
 
 M.PREFIX = "KGAMBIT"
 
@@ -32,6 +27,8 @@ local DEFAULTS = {
     requestCooldown = 8,     -- do not repeat the same request sooner than this
     partialTimeout = 30,     -- drop half-received messages after this long
     forkTimeout = 60,
+    retryAfter = 3,          -- re-send a request that made no progress after this long
+    maxRetries = 8,
 }
 
 local Sync = {}
@@ -43,14 +40,14 @@ function M.New(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg,
-        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {},
+        outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {}, waiting = {},
         handlers = {}, unsub = {}, timers = {}, blocked = nil, running = false,
-        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0 },
+        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0, otherLedger = 0 },
     }, Sync)
 end
 
 ---------------------------------------------------------------- events
--- Events: forkResolved { list, at, winner = "ours"|"theirs", orphaned }
+-- Events: forkResolved { chain, at, winner = "ours"|"theirs", orphaned }
 function Sync:on(event, fn)
     local list = self.handlers[event]
     if not list then list = {}; self.handlers[event] = list end
@@ -77,7 +74,7 @@ function Sync:start()
     self.unsub[#self.unsub + 1] = c:on("comms.restrictionChanged", function(p)
         if not p.restricted then self.blocked = nil; self:pump() end
     end)
-    self.unsub[#self.unsub + 1] = self.engine:OnChange(function(kind, listId, ev) self:onChange(kind, listId, ev) end)
+    self.unsub[#self.unsub + 1] = self.engine:OnChange(function(kind, cid, ev) self:onChange(kind, cid, ev) end)
     self.timers[#self.timers + 1] = c:every(cfg.pumpEvery, function() self:pump() end)
     self.timers[#self.timers + 1] = c:every(cfg.heartbeat, function() self:heartbeat() end)
     self.timers[#self.timers + 1] = c:after(cfg.firstHeartbeat + c:random() * cfg.firstJitter, function() self:heartbeat() end)
@@ -95,13 +92,22 @@ function Sync:status()
         forksResolved = self.stats.forksResolved, resolvingForks = next(self.forkBuf) ~= nil }
 end
 
+function Sync:register(t, fn)
+    assert(#t > 1, "plugin message types must be longer than one character")
+    self.custom[t] = fn
+end
+
+function Sync:send(msg, channel, target) self:post(msg, channel, target) end
+
 ---------------------------------------------------------------- sending
 -- Serialize, split into frames, queue, and try to send right away.
 -- Frame = 4 hex message id + 3-digit part + 3-digit part count + data.
+-- The message id is derived from the content, so when the same reply is sent again (a retried request)
+-- its frames carry the same id and the receiver combines them with frames kept from earlier attempts:
+-- on a lossy link every retry makes progress instead of starting over.
 function Sync:post(msg, channel, target)
     local payload = self.client:serialize(msg)
-    local id = ("%04x"):format(self.nextMsgId % 65536)
-    self.nextMsgId = self.nextMsgId + 1
+    local id = Hash.Sum(payload):sub(1, 4)
     local room = self.client.maxMessage - 10
     local n = math.max(1, math.ceil(#payload / room))
     if n > 999 then self.stats.droppedFrames = self.stats.droppedFrames + n; return end
@@ -112,8 +118,29 @@ function Sync:post(msg, channel, target)
     self:pump()
 end
 
+-- Re-send requests that have made no progress (their reply was probably lost). Because message ids are
+-- content-derived, each retry's reply adds to the frames already received.
+function Sync:retryRequests()
+    local now = self.client:now()
+    for cid, w in pairs(self.waiting) do
+        local chain = self.engine.store.chains[cid]
+        local have = chain and #chain.events or 0
+        if have >= w.from then
+            self.waiting[cid] = nil
+        elseif now - w.at >= self.cfg.retryAfter then
+            if w.tries >= self.cfg.maxRetries then
+                self.waiting[cid] = nil -- give up; the next heartbeat starts over
+            else
+                w.tries, w.at = w.tries + 1, now
+                self:post({ t = "R", c = cid, from = w.from }, "WHISPER", w.sender)
+            end
+        end
+    end
+end
+
 -- Send queued frames, a few at a time. Restricted or throttled sends stay queued and retry.
 function Sync:pump()
+    self:retryRequests()
     local sent = 0
     while #self.outbox > 0 and sent < self.cfg.burst do
         local m = self.outbox[1]
@@ -133,89 +160,56 @@ function Sync:pump()
     end
 end
 
-local function liveChannels(self)
-    return { self.client:inRaid() and "RAID" or "GUILD" }
+local function broadcast(self, msg)
+    self:post(msg, "GUILD")
+    if self.client:inRaid() then self:post(msg, "RAID") end
 end
 
 function Sync:heartbeat()
-    local lists = {}
-    for id, chain in pairs(self.engine.chains) do
-        lists[id] = { n = #chain.events, h = chain.head }
-    end
-    self:post({ t = "H", lists = lists }, "GUILD")
-    if self.client:inRaid() then self:post({ t = "H", lists = lists }, "RAID") end
-    -- housekeeping
+    local store = self.engine.store
+    local c = {}
+    for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
+    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c })
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
     end
-    for id, fb in pairs(self.forkBuf) do
-        if now - fb.at > self.cfg.forkTimeout then self.forkBuf[id] = nil end
+    for cid, fb in pairs(self.forkBuf) do
+        if now - fb.at > self.cfg.forkTimeout then self.forkBuf[cid] = nil end
     end
 end
 
--- Push our own new events to everyone; after a fork swap, tell the group our new head.
-function Sync:onChange(kind, listId, ev)
+-- Push our own new events to everyone at once (guild and raid), so a parallel raid sees them right away.
+function Sync:onChange(kind, cid, ev)
     if kind == "local" then
-        local chain = self.engine:Get(listId)
-        for _, ch in ipairs(liveChannels(self)) do
-            self:post({ t = "E", list = listId, n = #chain.events, events = { ev } }, ch)
-        end
+        broadcast(self, { t = "E", c = cid, n = #self.engine.store.chains[cid].events, events = { ev } })
     elseif kind == "replaced" then
         self:heartbeat()
     end
 end
 
-function Sync:request(listId, from, sender, force)
-    local key = sender .. "|" .. listId .. "|" .. from
+function Sync:request(cid, from, sender, force)
+    local key = sender .. "|" .. cid .. "|" .. from
     local now = self.client:now()
     if not force and self.lastRequest[key] and now - self.lastRequest[key] < self.cfg.requestCooldown then return end
     self.lastRequest[key] = now
-    self:post({ t = "R", list = listId, from = from }, "WHISPER", sender)
+    self.waiting[cid] = { from = from, sender = sender, at = now, tries = 0 }
+    self:post({ t = "R", c = cid, from = from }, "WHISPER", sender)
 end
 
--- Checkpoints to find where two histories split: positions 1, 2, 4, 8, ... from the start and
--- n, n-1, n-2, n-4, ... from the tip (forks are usually recent). Matching is prefix-closed, so
--- the responder just takes the highest checkpoint that matches.
-local function skeleton(chain)
-    local n, seen, seqs = #chain.events, {}, {}
-    local function add(s)
-        if s >= 1 and s <= n and not seen[s] then seen[s] = true; seqs[#seqs + 1] = s end
-    end
-    local s = 1
-    while s <= n do add(s); s = s * 2 end
-    add(n)
-    s = 1
-    while s < n do add(n - s); s = s * 2 end
-    table.sort(seqs)
-    local cp = {}
-    for i, q in ipairs(seqs) do cp[i] = { q, chain.events[q].id } end
-    return cp
-end
-
-function Sync:probe(listId, sender)
-    local chain = self.engine:Get(listId)
-    if not chain then return end
-    local key = sender .. "|" .. listId .. "|probe"
-    local now = self.client:now()
-    if self.lastRequest[key] and now - self.lastRequest[key] < self.cfg.requestCooldown then return end
-    self.lastRequest[key] = now
-    self:post({ t = "D", list = listId, cp = skeleton(chain) }, "WHISPER", sender)
-end
-
-function Sync:sendEvents(listId, from, sender)
-    local chain = self.engine:Get(listId)
+function Sync:sendEvents(cid, from, sender)
+    local chain = type(cid) == "string" and self.engine.store.chains[cid]
     if not chain or type(from) ~= "number" or from < 1 then return end
     local evs, last = {}, math.min(#chain.events, from + self.cfg.maxBatch - 1)
     for seq = from, last do
         evs[#evs + 1] = chain.events[seq]
         if #evs > 1 and #self.client:serialize(evs) > self.cfg.maxBytes then
-            evs[#evs] = nil -- always send at least one event; stop before the message gets too big
+            evs[#evs] = nil
             break
         end
     end
     if #evs == 0 then return end
-    self:post({ t = "E", list = listId, n = #chain.events, events = evs }, "WHISPER", sender)
+    self:post({ t = "E", c = cid, n = #chain.events, events = evs }, "WHISPER", sender)
 end
 
 ---------------------------------------------------------------- receiving
@@ -240,90 +234,75 @@ function Sync:onComms(p)
     if not ok then self.client:log("error", "sync handler: " .. tostring(err)) end
 end
 
--- Other modules (the loot session protocol) plug their own message types in here: fn(msg, sender).
--- Built-in types are the single letters H, R, D and E; plugins should use longer names.
-function Sync:register(t, fn)
-    assert(#t > 1, "plugin message types must be longer than one character")
-    self.custom[t] = fn
-end
-
--- Send a message through the same chunking and queue as the ledger traffic.
-function Sync:send(msg, channel, target) self:post(msg, channel, target) end
-
 function Sync:handle(msg, sender)
     local t = msg.t
     if t == "H" then self:onHeartbeat(msg, sender)
-    elseif t == "R" then self:sendEvents(msg.list, msg.from, sender)
-    elseif t == "D" then self:onProbe(msg, sender)
+    elseif t == "R" then self:sendEvents(msg.c, msg.from, sender)
     elseif t == "E" then self:onEvents(msg, sender)
     elseif self.custom[t] then self.custom[t](msg, sender) end
 end
 
 function Sync:onHeartbeat(msg, sender)
-    if type(msg.lists) ~= "table" then return end
-    for listId, peer in pairs(msg.lists) do
-        if type(listId) == "string" and type(peer) == "table" and type(peer.n) == "number" and type(peer.h) == "string"
-            and not self.engine.problems[listId] then
-            local chain = self.engine:Get(listId)
+    if type(msg.c) ~= "table" then return end
+    local store = self.engine.store
+    if type(msg.l) == "string" and msg.l ~= "" and store.id and msg.l ~= store.id then
+        self.stats.otherLedger = self.stats.otherLedger + 1 -- a different ledger (another guild, training)
+        return
+    end
+    if not store.id then
+        if type(msg.g) == "string" and msg.g ~= "" then self:request(msg.g, 1, sender) end -- learn the ledger first
+        return
+    end
+    for cid, peer in pairs(msg.c) do
+        if type(cid) == "string" and type(peer) == "table" and type(peer.n) == "number" and type(peer.h) == "string"
+            and not self.engine.problems[cid] then
+            local chain = store.chains[cid]
             local n = chain and #chain.events or 0
             if peer.n > n then
-                self:request(listId, n + 1, sender)
+                self:request(cid, n + 1, sender)
             elseif peer.n > 0 and chain.events[peer.n].id ~= peer.h then
-                self:probe(listId, sender) -- same or longer than theirs, but a different history
+                self:request(cid, 1, sender) -- the same chain with two histories: fetch theirs to compare
             end
         end
     end
 end
 
-function Sync:onProbe(msg, sender)
-    local chain = self.engine:Get(msg.list)
-    if not chain or type(msg.cp) ~= "table" then return end
-    local shared = 0
-    for _, pair in ipairs(msg.cp) do
-        local seq, id = pair[1], pair[2]
-        local mine = type(seq) == "number" and chain.events[seq]
-        if mine and mine.id == id and seq > shared then shared = seq end
-    end
-    self:sendEvents(msg.list, shared + 1, sender)
-end
-
 function Sync:onEvents(msg, sender)
-    local listId, evs = msg.list, msg.events
-    if type(listId) ~= "string" or type(evs) ~= "table" then return end
-    local fb = self.forkBuf[listId]
-    if fb and fb.sender == sender then return self:forkAppend(listId, evs, msg.n) end
+    local cid, evs = msg.c, msg.events
+    if type(cid) ~= "string" or type(evs) ~= "table" then return end
+    local fb = self.forkBuf[cid]
+    if fb and fb.sender == sender then return self:forkAppend(cid, evs, msg.n) end
 
     for idx, ev in ipairs(evs) do
-        local status, err = self.engine:Receive(listId, ev)
+        local status, err = self.engine:Receive(ev)
         if not status then
-            if err == "gap" or err == "unknownlist" then
-                local chain = self.engine:Get(listId)
-                self:request(listId, (chain and #chain.events or 0) + 1, sender)
+            if err == "gap" then
+                local chain = self.engine.store.chains[cid]
+                self:request(cid, (chain and #chain.events or 0) + 1, sender)
             elseif err == "fork" then
-                self:beginFork(listId, evs, idx, msg.n, sender)
-            else
+                self:beginFork(cid, evs, idx, msg.n, sender)
+            elseif err ~= "noledger" then -- noledger: the heartbeat names the genesis chain to fetch first
                 self.stats.rejected = self.stats.rejected + 1
-                self.client:log("warn", ("sync rejected an event on '%s': %s"):format(listId, tostring(err)))
+                self.client:log("warn", ("sync rejected an event on '%s': %s"):format(cid, tostring(err)))
             end
             return
         end
     end
-    -- Keep walking forward from the last event we were sent (not from our own tip: after a
-    -- probe the batch may be all events we already have, and we must reach the split point).
     local last = evs[#evs]
     if type(msg.n) == "number" and type(last) == "table" and type(last.seq) == "number" and last.seq < msg.n then
-        self:request(listId, last.seq + 1, sender, true)
+        self:request(cid, last.seq + 1, sender, true)
     end
 end
 
----------------------------------------------------------------- forks
-function Sync:beginFork(listId, evs, idx, total, sender)
-    local chain = self.engine:Get(listId)
+---------------------------------------------------------------- the rare chain fork
+function Sync:beginFork(cid, evs, idx, total, sender)
+    local chain = self.engine.store.chains[cid]
     local first = evs[idx]
-    local k, n = first.seq, #chain.events
-    local prevId = (k == 1) and Ledger.GENESIS or (chain.events[k - 1] and chain.events[k - 1].id)
-    if k > n + 1 or first.prev ~= prevId then
-        return self:probe(listId, sender) -- the histories split earlier than this batch shows
+    if not chain or type(first) ~= "table" or type(first.seq) ~= "number" then return end
+    local k = first.seq
+    local prevId = (k == 1) and "0000000000000000" or (chain.events[k - 1] and chain.events[k - 1].id)
+    if k > #chain.events + 1 or first.prev ~= prevId then
+        return self:request(cid, 1, sender, true) -- split earlier than this batch shows: start from the top
     end
     local seg = {}
     for i = idx, #evs do
@@ -331,64 +310,54 @@ function Sync:beginFork(listId, evs, idx, total, sender)
         if ev.seq ~= k + #seg or (#seg > 0 and ev.prev ~= seg[#seg].id) then break end
         seg[#seg + 1] = ev
     end
-    self.forkBuf[listId] = { sender = sender, k = k, events = seg, total = total or seg[#seg].seq, at = self.client:now() }
-    self:forkProgress(listId)
+    self.forkBuf[cid] = { sender = sender, k = k, events = seg, total = total or seg[#seg].seq, at = self.client:now() }
+    self:forkProgress(cid)
 end
 
-function Sync:forkAppend(listId, evs, total)
-    local fb = self.forkBuf[listId]
+function Sync:forkAppend(cid, evs, total)
+    local fb = self.forkBuf[cid]
     if type(total) == "number" then fb.total = total end
     for _, ev in ipairs(evs) do
         local last = fb.events[#fb.events]
         if ev.seq == last.seq + 1 and ev.prev == last.id then
             fb.events[#fb.events + 1] = ev
         elseif ev.seq > last.seq + 1 or (ev.seq == last.seq + 1 and ev.prev ~= last.id) then
-            self.forkBuf[listId] = nil -- their branch changed under us; start over from a probe
-            return self:probe(listId, fb.sender)
+            self.forkBuf[cid] = nil
+            return self:request(cid, 1, fb.sender, true)
         end
     end
-    self:forkProgress(listId)
+    self:forkProgress(cid)
 end
 
-function Sync:forkProgress(listId)
-    local fb = self.forkBuf[listId]
+function Sync:forkProgress(cid)
+    local fb = self.forkBuf[cid]
     local last = fb.events[#fb.events].seq
-    if last < fb.total then
-        return self:request(listId, last + 1, fb.sender, true)
-    end
-    self:decideFork(listId)
+    if last < fb.total then return self:request(cid, last + 1, fb.sender, true) end
+    self:decideFork(cid)
 end
 
-function Sync:decideFork(listId)
-    local fb = self.forkBuf[listId]
-    self.forkBuf[listId] = nil
-    local chain = self.engine:Get(listId)
+function Sync:decideFork(cid)
+    local fb = self.forkBuf[cid]
+    self.forkBuf[cid] = nil
+    local chain = self.engine.store.chains[cid]
+    if not chain then return end
     local n, k = #chain.events, fb.k
     local mine, theirs = chain.events[k], fb.events[1]
     local theirsWins
-    if fb.total ~= n then
-        theirsWins = fb.total > n
-    elseif mine then
-        theirsWins = theirs.ts < mine.ts or (theirs.ts == mine.ts and theirs.id < mine.id)
-    else
-        theirsWins = true
-    end
+    if fb.total ~= n then theirsWins = fb.total > n
+    elseif mine then theirsWins = theirs.id < mine.id
+    else theirsWins = true end
     if not theirsWins then
-        self:emit("forkResolved", { list = listId, at = k, winner = "ours", orphaned = 0 })
+        self:emit("forkResolved", { chain = cid, at = k, winner = "ours", orphaned = 0 })
         return
     end
-    local merged = {}
-    for seq = 1, k - 1 do merged[seq] = chain.events[seq] end
-    for _, ev in ipairs(fb.events) do merged[#merged + 1] = ev end
-    local newChain, err = Ledger.Load(listId, merged)
-    if not newChain then
+    local orphaned = n - k + 1
+    local ok, err = self.engine:ReplaceChainSuffix(cid, k, fb.events)
+    if not ok then
         self.stats.rejected = self.stats.rejected + 1
-        self.client:log("warn", ("sync refused a fork on '%s': %s"):format(listId, tostring(err)))
+        self.client:log("warn", ("sync refused a fork on '%s': %s"):format(cid, tostring(err)))
         return
     end
-    local orphans = {}
-    for seq = k, n do orphans[#orphans + 1] = chain.events[seq] end
-    self.engine:ReplaceChain(listId, newChain, orphans)
     self.stats.forksResolved = self.stats.forksResolved + 1
-    self:emit("forkResolved", { list = listId, at = k, winner = "theirs", orphaned = #orphans })
+    self:emit("forkResolved", { chain = cid, at = k, winner = "theirs", orphaned = orphaned })
 end

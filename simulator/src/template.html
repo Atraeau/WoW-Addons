@@ -250,7 +250,7 @@
     const pct = (v) => Math.round(v * 100);
     const netBtn = (label, drop, dup) => '<button data-act="lab-net" data-a="' + drop + '" data-b="' + dup + '" class="' + (pct(lab.drop) === pct(drop) && pct(lab.dup) === pct(dup) ? "sel" : "") + '">' + label + "</button>";
     $("#lab").innerHTML =
-      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. The green/amber/red colour compares each player to what most of the group agrees on.</p>' +
+      '<p class="sub">Several real engines, each with its own copy of the ledger, joined by a simulated network. Write at any player, break the network, and watch them find each other again. Each player writes on their own chain, and everyone merges all chains in the same order. Green = matches what most of the group has; amber = only missing events; red = has events the others have not seen yet.</p>' +
       '<div class="card"><h2>Network</h2><div class="row">' +
         '<button data-act="lab-split" data-a="1|234">Split: Aldric alone</button><button data-act="lab-split" data-a="12|34">Split: Aldric+Brann | Cass+Dara</button><button class="primary" data-act="lab-heal">Heal</button>' +
         '<span class="muted small">Lost:</span>' + netBtn("0%", 0, lab.dup) + netBtn("20%", 0.2, lab.dup) + netBtn("40%", 0.4, lab.dup) +
@@ -264,7 +264,7 @@
       '<div class="layout" style="grid-template-columns: 1fr 1fr"><div class="card"><h2>What happened</h2><div class="log">' +
         (lab.log.length ? lab.log.slice().reverse().map((l) => "<div><span class=\"muted small\">" + l.t.toFixed(0) + "s</span> " + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing yet.</span>') + "</div></div>" +
       '<div class="card"><h2>Try this</h2>' +
-        '<p class="hint"><b>Fork.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Both sides disagree, so the shorter history is set aside (nothing is erased: the loser keeps their events for review).</p>' +
+        '<p class="hint"><b>Split, then heal.</b> Split Aldric alone, add two awards at Aldric and three members at Cass, then Heal. Each player writes on their own chain, so after healing the changes from both sides are merged in time order and nothing is set aside.</p>' +
         '<p class="hint"><b>Late joiner.</b> Write a few events, then let a late player log in. Watch them catch up from nothing.</p>' +
         '<p class="hint"><b>Lost messages.</b> Set 40% lost, write several events, and watch the group repair itself from the heartbeats.</p>' +
         '<p class="hint"><b>Boss fight.</b> Restrict Aldric, write at Aldric, and see the messages wait. Lift the restriction and they go out.</p></div></div>';

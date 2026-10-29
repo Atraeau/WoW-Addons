@@ -53,6 +53,21 @@ function M.New(ctx)
         if s and s.phase ~= "done" and s.phase ~= "cancelled" then return s end
     end
 
+    -- A position as typed ("top", "bottom" or a number) becomes an anchor: "above whoever is there now".
+    -- Numbers are never stored, because their meaning would shift as other raids' events arrive.
+    function c.where(listId, pos, moving)
+        if pos == "top" or pos == "bottom" then return { to = pos } end
+        local n = tonumber(pos)
+        local chain = list(listId)
+        if not (n and chain) or n < 1 or n ~= math.floor(n) then return nil, "Position must be top, bottom or a number." end
+        local others = {}
+        for _, member in ipairs(chain.state.order) do
+            if member ~= moving then others[#others + 1] = member end
+        end
+        if n > #others then return { to = "bottom" } end
+        return { above = others[n] }
+    end
+
     local cmds = {}
 
     function cmds.help() for _, l in ipairs(HELP) do out(l) end end
@@ -82,7 +97,11 @@ function M.New(ctx)
         local who, pos = args:match("^(%S+)%s*(%S*)$")
         if not who then return out("add <name> [top|bottom|N]") end
         local data = { member = name(who) }
-        if pos ~= "" then data.pos = tonumber(pos) or pos end
+        if pos ~= "" then
+            local where, err = c.where("main", pos, nil)
+            if not where then return out(err) end
+            for k, v in pairs(where) do data[k] = v end
+        end
         local ev = append("main", "AddMember", data)
         if ev then out(short(data.member) .. " added.") end
     end
@@ -96,13 +115,18 @@ function M.New(ctx)
     function cmds.move(args)
         local who, pos, reason = args:match("^(%S+)%s+(%S+)%s+(.+)$")
         if not who then return out("move <name> <top|bottom|N> <reason>  (a reason is required and is part of the record)") end
-        local ev = append("main", "MovePlayer", { member = name(who), pos = tonumber(pos) or pos, reason = reason })
+        local where, err = c.where("main", pos, name(who))
+        if not where then return out(err) end
+        local data = { member = name(who), reason = reason }
+        for k, v in pairs(where) do data[k] = v end
+        local ev = append("main", "MovePlayer", data)
         if ev then out(short(name(who)) .. " moved. " .. ("This correction is recorded with your reason.")) end
     end
 
     function cmds.undo()
         local chain = list("main")
-        local top = chain and chain.state.undo[#chain.state.undo]
+        local stack = chain and chain.state.undo[engine:MyChain()]
+        local top = stack and stack[#stack]
         if not top then return out("Nothing can be undone (only the most recent awards, and only until something else moves the list).") end
         local ev = append("main", "Revert", { target = top.id })
         if ev then out("The last award was undone. The undo is recorded in the history.") end
@@ -221,8 +245,17 @@ function M.New(ctx)
         local st = ctx.sync:status()
         out(("Sync: %d message(s) waiting%s, %d rejected, %d fork(s) resolved%s."):format(st.pending,
             st.blocked and (" (" .. st.blocked .. ")") or "", st.rejected, st.forksResolved, st.resolvingForks and ", resolving a fork now" or ""))
-        for id, chain in pairs(engine.chains) do out(("  %s: %d events, head %s%s"):format(id, #chain.events, chain.head:sub(1, 8), engine:IsVerified(id) and "" or " (still verifying)")) end
+        out(("Ledger fingerprint %s%s"):format((engine:Fingerprint() or ""):sub(1, 8), engine:IsVerified() and "" or " (still verifying)"))
+        local ids = {}
+        for cid in pairs(engine.store.chains) do ids[#ids + 1] = cid end
+        table.sort(ids)
+        for _, cid in ipairs(ids) do
+            local chain = engine.store.chains[cid]
+            out(("  %s: %d events, head %s"):format(short(cid), #chain.events, chain.head:sub(1, 8)))
+        end
         for id, p in pairs(engine.problems) do out(("  %s: FAILED verification at event %s (%s)"):format(id, tostring(p.index), tostring(p.reason))) end
+        local conflicts = engine:Conflicts()
+        if #conflicts > 0 then out(("%d event(s) were skipped as conflicts (see: conflicts)"):format(#conflicts)) end
     end
 
     function cmds.check()

@@ -46,7 +46,7 @@ end
 local function short(name) return name and (name:gsub("%-.*$", "")) end
 
 ---------------------------------------------------------------- state
-local sim, scenario, startSeq = nil, nil, {}
+local sim, scenario, startCount = nil, nil, 0
 local FREE_ITEMS = { "Gauntlets of the Ashen Vow", "Cloak of Quiet Embers", "Band of Hollow Oaths", "Helm of Tides", "Mantle of Second Chances", "Staff of Lesser Tides" }
 local FREE_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory" }
 
@@ -72,20 +72,11 @@ end
 
 local function logLines()
     local out = {}
-    for _, listId in ipairs({ "main", "off" }) do
-        local chain = sim.engine:Get(listId)
-        if chain then
-            for seq = (startSeq[listId] or 0) + 1, #chain.events do
-                local ev = chain.events[seq]
-                out[#out + 1] = { list = listId, seq = seq, ts = ev.ts, text = describe(ev) }
-            end
-        end
+    local applied = sim.engine:View().applied
+    for i = startCount + 1, #applied do
+        local ev = applied[i]
+        if ev.list then out[#out + 1] = { list = ev.list, ts = ev.ts, text = describe(ev) } end
     end
-    table.sort(out, function(a, b)
-        if a.ts ~= b.ts then return a.ts < b.ts end
-        if a.list ~= b.list then return a.list < b.list end
-        return a.seq < b.seq
-    end)
     return out
 end
 
@@ -179,7 +170,7 @@ function api.start(id, seed)
     if not scenario then return { error = "unknown scenario" } end
     sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You" })
     sim.policies = scenario.policies or {}
-    startSeq = { main = #sim.engine:Get("main").events, off = 0 }
+    startCount = #sim.engine:View().applied
     local ok, why = sim:drop(scenario.items, scenario.config)
     if not ok then return { error = tostring(why) } end
     return state()
@@ -224,7 +215,8 @@ end
 -- Undo the most recent award by writing a Revert event (fix-forward).
 function api.undo()
     local chain = sim.engine:Get("main")
-    local top = chain.state.undo[#chain.state.undo]
+    local stack = chain.state.undo[sim.engine:MyChain()]
+    local top = stack and stack[#stack]
     if not top then return result(false, "nothing to undo") end
     local ev, err = sim.engine:Append("main", "Revert", { target = top.id })
     return result(ev ~= nil, err)
@@ -283,6 +275,9 @@ local function labReset()
     for _ = 1, 4 do labAddPeer() end
     local a = lab.peers[1]
     a.engine:CreateList("main", "Main")
+    local officers = {}
+    for _, n in ipairs(lab.names) do officers[#officers + 1] = n .. "-Realm" end
+    a.engine:Write("SetOfficers", { names = officers })
     for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
     lab.counter = 5
     lab.net:advance(4)
@@ -292,43 +287,43 @@ end
 
 local function labState()
     if not lab then labReset() end
-    -- the "majority" head: what most peers agree on (ties go to the longer chain)
+    -- what most peers agree on (ties go to the peer with more events)
     local tally = {}
     for _, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        local h = c and c.head or "none"
-        local t = tally[h] or { head = h, n = 0, len = c and #c.events or 0 }
-        t.n = t.n + 1
-        tally[h] = t
+        local fp = p.engine:Fingerprint() or "none"
+        local n = 0
+        for _, c in pairs(p.engine.store.chains) do n = n + #c.events end
+        local t = tally[fp] or { fp = fp, votes = 0, n = n, peer = p }
+        t.votes = t.votes + 1
+        tally[fp] = t
     end
     local best
     for _, t in pairs(tally) do
-        if not best or t.n > best.n or (t.n == best.n and t.len > best.len) then best = t end
+        if not best or t.votes > best.votes or (t.votes == best.votes and t.n > best.n) then best = t end
     end
-    local majorityChain
-    for _, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        if c and c.head == best.head then majorityChain = c; break end
-    end
+    local majority = best.peer.engine.store
     local out = { time = lab.net.time, inFlight = lab.net:inFlight(), stats = lab.net.stats, peers = {}, log = lab.log,
         drop = lab.net.dropRate, dup = lab.net.duplicateRate, split = lab.groups, canAdd = #lab.peers < #lab.names }
     for i, p in ipairs(lab.peers) do
-        local c = p.engine:Get("main")
-        local n = c and #c.events or 0
-        local head = c and c.head or "none"
-        local status = "in sync"
-        if head ~= best.head then
-            -- behind = our whole history is a prefix of the majority's; diverged = it split off
-            status = (c == nil or (majorityChain and majorityChain.byId[head])) and "behind" or "diverged"
+        local e = p.engine
+        local n, subset = 0, true
+        for _, c in pairs(e.store.chains) do
+            n = n + #c.events
+            for _, ev in ipairs(c.events) do
+                if not majority.byId[ev.id] then subset = false end
+            end
         end
+        local status = "in sync"
+        if (e:Fingerprint() or "none") ~= best.fp then status = subset and "behind" or "diverged" end
+        local list = e:Get("main")
         local order = {}
-        if c then for j, m in ipairs(c.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
+        if list then for j, m in ipairs(list.state.order) do if j <= 6 then order[#order + 1] = short(m) end end end
         local orphans = 0
-        for _, o in ipairs(p.engine.db.orphans or {}) do orphans = orphans + #o.events end
+        for _, o in ipairs(e.db.orphans or {}) do orphans = orphans + #o.events end
         local st = p.sync:status()
-        out.peers[i] = { index = i, name = p.name, count = n, head = head:sub(1, 8), status = status, order = order,
-            members = c and #c.state.order or 0, pending = st.pending, blocked = st.blocked, rejected = st.rejected,
-            orphans = orphans, restricted = p.restricted }
+        out.peers[i] = { index = i, name = p.name, count = n, head = (e:Fingerprint() or "none"):sub(1, 8), status = status,
+            order = order, members = list and #list.state.order or 0, pending = st.pending, blocked = st.blocked,
+            rejected = st.rejected, orphans = orphans, restricted = p.restricted }
     end
     return out
 end

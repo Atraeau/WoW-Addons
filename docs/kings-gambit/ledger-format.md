@@ -1,112 +1,152 @@
-# King's Gambit — Ledger format
+# King's Gambit — Ledger format (v2)
 
 *A specification precise enough to verify a ledger with your own code, without ours. The reference
 implementation is `src/KingsGambit/` (`Hash.lua`, `Ledger.lua`, `Standings.lua`); the audit tool is
 [`tools/`](../../tools/README.md). The worked example below is checked by the test suite, so it cannot
-drift from the code.*
+drift from the code. Why it is shaped this way: [ledger-v2-design.md](ledger-v2-design.md).*
 
 ## 1. What a ledger is
 
-Each **list** (for example `main`, `off`) is an **append-only chain of events**. Standings are never
-stored on their own: they are what you get by replaying the events in order. Each event includes the
-hash of the event before it, so changing or removing any past event changes every hash after it.
+A ledger is a set of **chains, one per writer**. Each chain is append-only and only its writer adds to it. Each event
+includes the hash of the previous event in its chain, so changing or removing a past event breaks every hash after it.
+
+Standings are never stored. They are what you get by **merging every chain's events into one order** and replaying
+them:
+
+> sort by `ts`, then by `chain` (as text), then by `seq`
+
+Within one chain `ts` never goes down, so the merge never reorders a writer's own events.
 
 ## 2. An event
 
 | Field | Type | Meaning |
 |---|---|---|
-| `v` | number | Format version. Currently `1`. |
-| `list` | string | The list id this event belongs to. |
-| `seq` | number | Position in the chain, starting at `1`. |
-| `prev` | string | The previous event's `id`; the first event uses `0000000000000000`. |
-| `ts` | number | Server time in whole seconds when it was written. |
-| `author` | string | `Name-Realm` of whoever wrote it. |
+| `v` | number | Format version. Currently `2`. |
+| `ledger` | string | The `id` of the ledger's Genesis event; `""` on the Genesis event itself. |
+| `chain` | string | `author .. "#" .. epoch`, where `epoch` is 8 hex characters chosen when the chain starts. |
+| `seq` | number | Position in its chain, starting at `1`. |
+| `prev` | string | The previous event's `id` in the same chain; `0000000000000000` for the first. |
+| `ts` | number | Server time in whole seconds. Never lower than the previous event in the chain. |
+| `author` | string | `Name-Realm` of the writer. |
 | `type` | string | One of the event types in section 5. |
+| `list` | string, optional | The list a list event belongs to (`main`, `off`, ...). Absent on ledger-wide events. |
 | `data` | table | The fields for that type. |
 | `id` | string | The event's hash (section 4). |
 
 ## 3. Canonical text
 
-To hash an event we need one exact text for it, whatever order its fields were created in.
-`Canon(value)`:
+To hash an event we need one exact text for it. `Canon(value)`:
 
 - string: `s` + byte length + `:` + the bytes, e.g. `s4:Main`
-- number: `n` + the number written as an integer if it is whole (no exponent, no decimal point), otherwise 17 significant digits; `0` is `n0`
-- `true` / `false`: `T` / `F`;  nil: `~`
-- table: `{`, then for each key in sorted order (numbers before strings, each group ascending): `Canon(key)` `=` `Canon(value)` `,`, then `}`
+- number: `n` + the number written as an integer if it is whole (no exponent, no decimal point), otherwise 17 significant
+  digits; `0` is `n0`
+- `true` / `false`: `T` / `F`;  nil: `~` (a key whose value is nil is simply absent)
+- table: `{`, then for each key in sorted order (numbers before strings, each group ascending): `Canon(key)` `=`
+  `Canon(value)` `,`, then `}`
 
 ## 4. The hash
 
-`id = Sum( prev .. "|" .. Canon{ v, list, seq, ts, author, type, data } )`, where the table has exactly
-the seven keys `v`, `list`, `seq`, `ts`, `author`, `type` and `data`. (`prev` is joined in front as text,
-and `id` is never part of what is hashed.)
+`id = Sum( prev .. "|" .. Canon{ v, ledger, chain, seq, ts, author, type, list, data } )`
 
-`Sum(text)` is two passes of 32-bit **FNV-1a** over the bytes, written as 8 lowercase hex digits each:
+(`prev` is joined in front as text; `id` is never part of what is hashed.)
 
-- pass 1: start at `2166136261` (`0x811C9DC5`); pass 2: start at `2654435761` (`0x9E3779B1`)
+`Sum(text)` is two passes of 32-bit **FNV-1a** over the bytes, each written as 8 lowercase hex digits:
+
+- pass 1 starts at `2166136261` (`0x811C9DC5`); pass 2 starts at `2654435761` (`0x9E3779B1`)
 - for each byte: `h = ((h XOR byte) * 16777619) mod 2^32`
 - `id` = pass 1 hex, then pass 2 hex (16 characters)
 
-This is **not cryptographic**. The trust model is trusted officers; the chain exists to catch mistakes,
-lost messages and tampering by accident, not to stop a determined bad-faith officer (see the
-[manifesto](manifesto.md)).
+This is **not cryptographic**. The chains catch mistakes, lost messages and accidental damage; they do not stop a
+determined bad-faith officer (see the [manifesto](manifesto.md)).
 
 Test vectors: `Sum("")` = `811c9dc59e3779b1`, `Sum("abc")` = `1a47e90bdf63f96f`.
 
-## 5. Event types and their rules
+The **fingerprint** of a whole ledger is `Sum(Canon(list))`, where `list` holds `{ chain, count, head }` for every
+chain, sorted by chain id. Equal fingerprints mean identical histories.
 
-An event is **rejected** (never added) if it breaks its rules or the standings it would apply to. Rules
-are checked against the standings built from all earlier events. Order below is the top of the list
-first; "bottom" means the last position.
+## 5. Replay: event types, rules and authority
+
+Replay applies the merged events in order. An event that breaks a rule is **skipped** and reported as a *conflict*; it
+stays in its chain. Every verifier skips exactly the same events, so everyone gets the same standings.
+
+### Who may write
+
+The ledger-wide state is: the guild master, the set of officers, and raids (`{ id, ml, start, expires, ended }`).
+A raid is **active** at time *t* when `start <= t < expires` and it hasn't ended at or before *t*.
+
+A list event or `Declined` by `author` at time `ts` is allowed when:
+
+- `author` is the Master Looter of a raid active at `ts`, or
+- `author` is an officer (or the guild master) and **no** raid is active at `ts`.
+
+Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
+
+### Ledger-wide events (no `list`)
+
+| Type | `data` | Rule and effect |
+|---|---|---|
+| `Genesis` | `name` | First event of the ledger, `seq` 1 of its chain, `ledger = ""`. Its author is the guild master. Only one. |
+| `SetGuildMaster` | `name` | By the guild master only. Hands the role on. |
+| `SetOfficers` | `names` (list) | By the guild master only. Replaces the officer list (mirrored from the game's guild ranks). |
+| `Elevate` | `raid`, `ml`, `minutes` (1 to 1440) | By an officer. Opens raid `raid` with Master Looter `ml` until `ts + minutes*60`. For a running raid with the same `ml`, extends it (never shortens). Skipped for an ended raid or a different `ml`. |
+| `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
+| `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
+| `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
+
+### List events (with `list`)
+
+Order is top of the list first. Positions are never numbers: they are an end (`to = "top"` or `"bottom"`) or an anchor
+(`above = Name`, an active member).
 
 | Type | `data` | Effect and rules |
 |---|---|---|
-| `CreateList` | `name` | Must be the first event of the list, and only once. |
-| `AddMember` | `member`, `class?`, `pos?` | Adds the player (default bottom; `pos` is `"top"`, `"bottom"` or a whole number from 1 to the new size). Rejected if already an active member. |
+| `CreateList` | `name` | Creates the list. Only once per list. |
+| `AddMember` | `member`, `class?`, `to?` / `above?` | Adds the player (default bottom). Skipped if already an active member. |
 | `RemoveMember` | `member` | Removes an active member. |
-| `Award` | `member`, `item`, `to?` | The member wins and moves to the bottom. `to` is who actually received the item (a gift); default the member. |
-| `Pass` | `member`, `item`, `kind?` | No position change; counts toward the member's pass statistics (`kind = "upgrade"` counts as an upgrade pass). |
-| `Transfer` | `award`, `to` | Re-routes where an earlier award went. No position change. The award must exist and not be reverted. |
-| `MovePlayer` | `member`, `pos`, `reason` | An officer's correction. `reason` is required. |
-| `Revert` | `target` | Exactly undoes the most recent `Award`, and the ones before it in order, as long as nothing has shifted positions since. |
-| `Disenchant` | `item`, `to` | Nobody wanted the item. No position change. |
+| `Award` | `member`, `item`, `to?` | The member wins and moves to the bottom. `to` is who actually received the item (a gift). |
+| `Pass` | `member`, `item`, `kind?` | Counts toward pass statistics (`kind = "upgrade"` counts as an upgrade pass). |
+| `Transfer` | `award`, `to` | Re-routes where an earlier award went. |
+| `MovePlayer` | `member`, `reason`, `to` / `above` | A correction. `reason` is required. |
+| `Revert` | `target` | Undoes this writer's most recent `Award` (and, one by one, the ones before it), as long as this writer has made no `MovePlayer` or `RemoveMember` since. The winner goes back directly above the highest-placed of the players who were below them when they won. |
+| `Disenchant` | `item`, `to` | Nobody wanted the item. |
 | `Salvage` | `award`, `action` | What the claimer of a backstop item did: `keep`, `gift`, `sell`, `disenchant` or `bank`. |
 
-Every event also needs a numeric `ts`, a non-empty `author`, a `data` table and the right `seq`.
+## 6. Verifying
 
-## 6. Verifying a chain
-
-For each event in order: `seq` is one more than the last (starting at 1); `prev` equals the last `id`
-(or the zero value); `v` is 1; the recomputed `id` matches; and the event passes its type's rules against
-the standings so far. The first event that fails is where the chain is broken. The last event's `id` is
-the chain's **head**: two ledgers with the same head have the same history.
+For each chain: `seq` counts up from 1; `prev` is the previous `id` (or the zero value); `ts` never goes down; `chain`
+starts with `author .. "#"` followed by 8 characters; `v` is 2; `ledger` is the Genesis `id` (or `""` on the Genesis);
+and the recomputed `id` matches. Then merge all chains and replay (section 5).
 
 ## 7. Worked example
 
-Four events by `Raidlead-Realm`, list `main`:
+The guild master starts the ledger, creates `main`, adds two players and elevates a Master Looter, who awards an item.
 
-| seq | ts | type | data | `id` |
-|---|---|---|---|---|
-| 1 | 1760000000 | `CreateList` | `name = "Main"` | `afd137672323aec3` |
-| 2 | 1760000010 | `AddMember` | `member = "Aldric-Realm"`, `class = "MAGE"` | `9290606d89d766d1` |
-| 3 | 1760000020 | `AddMember` | `member = "Brann-Realm"` | `2e846a527f771216` |
-| 4 | 1760000100 | `Award` | `member = "Aldric-Realm"`, `item = "Gauntlets of the Ashen Vow"` | `1364c5f42bad9da8` |
+| Chain | seq | ts | type | data | `id` |
+|---|---|---|---|---|---|
+| `Guildmaster-Realm#1a2b3c4d` | 1 | 1760000000 | `Genesis` | `name = "Guild ledger"` | `89cf69b1d9689705` |
+| `Guildmaster-Realm#1a2b3c4d` | 2 | 1760000010 | `CreateList` (list `main`) | `name = "Main"` | `2e3878a6c2111092` |
+| `Guildmaster-Realm#1a2b3c4d` | 3 | 1760000020 | `AddMember` (list `main`) | `member = "Aldric-Realm"` | `46c60894660959a8` |
+| `Guildmaster-Realm#1a2b3c4d` | 4 | 1760000030 | `AddMember` (list `main`) | `member = "Brann-Realm"` | `f4594a4cd28c07e0` |
+| `Guildmaster-Realm#1a2b3c4d` | 5 | 1760000100 | `Elevate` | `raid = "thu-1"`, `ml = "Looter-Realm"`, `minutes = 360` | `dc646491b3a302e5` |
+| `Looter-Realm#5e6f7a8b` | 1 | 1760000200 | `Award` (list `main`) | `member = "Aldric-Realm"`, `item = "Gauntlets of the Ashen Vow"` | `07c2ae4df2d4dc39` |
 
-The text hashed for event 1 is `0000000000000000|` followed by:
+Every event except the Genesis has `ledger = "89cf69b1d9689705"`. The text hashed for the Genesis is
+`0000000000000000|` followed by:
 
 ```
-{s6:author=s14:Raidlead-Realm,s4:data={s4:name=s4:Main,},s4:list=s4:main,s3:seq=n1,s2:ts=n1760000000,s4:type=s10:CreateList,s1:v=n1,}
+{s6:author=s17:Guildmaster-Realm,s5:chain=s26:Guildmaster-Realm#1a2b3c4d,s4:data={s4:name=s12:Guild ledger,},s6:ledger=s0:,s3:seq=n1,s2:ts=n1760000000,s4:type=s7:Genesis,s1:v=n2,}
 ```
 
-After event 4 the order is `Brann-Realm`, `Aldric-Realm` (Aldric won, so he dropped to the bottom).
+After replay the order is `Brann-Realm`, `Aldric-Realm`, and the fingerprint is `2cc0444c8382fd78`.
 
 ## 8. How peers stay in step
 
-Peers exchange events over addon messages and compare chain heads; see the sync section of the
-[design journal](design-journal.md). If two histories split, the **longer chain wins** (ties: the earlier
-fork event, then the lower id), and the losing branch is kept for review. Nothing is silently discarded.
+Peers exchange chains over addon messages: each heartbeat lists every chain's count and head, and a peer asks for what
+it is missing. A chain can only fork if its writer wrote from two machines with stale saved data; then the longer branch
+is kept (ties: the lower `id` at the split) and the other events are kept aside for review.
 
 ## 9. Saved data
 
-`KingsGambitDB` (account-wide): `schema`, `lists = { [listId] = { events = { ... } } }`, `config`,
-`orphans = { { list, at, events } }` (events set aside by a fork).
+`KingsGambitDB` (account-wide): `schema = 2`, `ledger = { chains = { [chainId] = { events = { ... } } } }`,
+`mine = { [Name-Realm] = chainId }` (each character's own chain), `config`, and `orphans` (events kept aside by a chain
+fork).

@@ -29,49 +29,56 @@ function M.loadSaved(path)
     return env.KingsGambitDB
 end
 
-local function sortedListIds(db)
-    local ids = {}
-    for id in pairs(db.lists or {}) do ids[#ids + 1] = id end
-    table.sort(ids)
-    return ids
+-- Load and fully verify every writer's chain (hashes, links, times), then replay them merged.
+-- Returns the store, the view and the problems ({ [chainId] = { reason, index } }).
+function M.load(db, mods)
+    local store, problems = mods.Ledger.LoadStore(db.ledger or { chains = {} })
+    return store, mods.Ledger.View(store), problems
 end
 
--- Fully verify every list. Returns an array of
---   { list, ok, events, head, reason, index }
--- and the number of events set aside by resolved forks.
+-- Returns an array of { chain, ok, events, head, reason, index } (one per saved chain), the ledger view,
+-- the fingerprint, and the number of events kept aside after a resolved chain fork.
 function M.verify(db, mods)
+    local store, view, problems = M.load(db, mods)
+    local ids = {}
+    for cid in pairs((db.ledger and db.ledger.chains) or {}) do ids[#ids + 1] = cid end
+    table.sort(ids)
     local out = {}
-    for _, id in ipairs(sortedListIds(db)) do
-        local rec = db.lists[id]
-        local chain, reason, index = mods.Ledger.Load(id, rec.events or {})
-        local r = { list = id, ok = chain ~= nil, events = #(rec.events or {}) }
-        if chain then r.head = chain.head else r.reason, r.index = reason, index end
+    for _, cid in ipairs(ids) do
+        local saved = db.ledger.chains[cid].events or {}
+        local r = { chain = cid, ok = problems[cid] == nil, events = #saved }
+        if r.ok then
+            r.head = store.chains[cid] and store.chains[cid].head or "-"
+        else
+            r.reason, r.index = problems[cid].reason, problems[cid].index
+        end
         out[#out + 1] = r
     end
     local orphans = 0
     for _, o in ipairs(db.orphans or {}) do orphans = orphans + #o.events end
-    return out, orphans
+    return out, view, mods.Ledger.Fingerprint(store), orphans
 end
 
 local function short(name) return (tostring(name):gsub("%-.*$", "")) end
 local function date(ts) return os.date("!%Y-%m-%d %H:%M", ts) end
 
--- Rebuild a list and return its standings rows, top first (or nil + reason).
+-- The standings of one list, top first (or nil + reason if any chain fails to verify).
 function M.standings(db, mods, listId)
-    local rec = db.lists and db.lists[listId]
-    if not rec then return nil, "no such list: " .. tostring(listId) end
-    local chain, reason, index = mods.Ledger.Load(listId, rec.events or {})
-    if not chain then
-        return nil, ("list '%s' does not verify (%s at event %s)"):format(listId, tostring(reason), tostring(index))
+    local _, view, problems = M.load(db, mods)
+    local bad = next(problems)
+    if bad then
+        return nil, ("the ledger does not verify (chain %s: %s at event %s)"):format(bad, tostring(problems[bad].reason), tostring(problems[bad].index))
     end
+    local st = view.lists[listId]
+    if not st then return nil, "no such list: " .. tostring(listId) end
     local rows = {}
-    for pos, name in ipairs(chain.state.order) do
-        local m = chain.state.members[name]
-        local last = m.lastWinSeq and chain.events[m.lastWinSeq]
+    for pos, name in ipairs(st.order) do
+        local m = st.members[name]
+        local last = m.lastWinId and st.awards[m.lastWinId]
         rows[#rows + 1] = { position = pos, name = short(name), class = m.class, wins = m.wins, passes = m.passes,
-            upgradePasses = m.upgradePasses, lastWinItem = last and last.data.item, lastWinAt = last and last.ts }
+            upgradePasses = m.upgradePasses, lastWinItem = last and last.item, lastWinAt = last and last.ts }
     end
-    return rows, chain
+    return rows, st
 end
 
 function M.markdown(rows, title)
@@ -96,18 +103,33 @@ local function describe(ev)
     elseif t == "Revert" then return "an award was undone"
     elseif t == "Disenchant" then return tostring(d.item) .. " disenchanted by " .. short(d.to)
     elseif t == "Salvage" then return "an award was " .. tostring(d.action)
+    elseif t == "Elevate" then return short(d.ml) .. " became Master Looter for raid " .. tostring(d.raid) .. " (" .. tostring(d.minutes) .. " min)"
     end
     return t
 end
 
--- The last `limit` events as readable lines (default 20).
-function M.history(db, listId, limit)
-    local rec = db.lists and db.lists[listId]
-    if not rec then return nil, "no such list: " .. tostring(listId) end
-    local events, lines = rec.events or {}, {}
+-- The last `limit` applied events of a list as readable lines (default 20), in merge order.
+function M.history(db, listId, limit, mods)
+    local _, view = M.load(db, mods)
+    if not view.lists[listId] then return nil, "no such list: " .. tostring(listId) end
+    local events, lines = {}, {}
+    for _, ev in ipairs(view.applied) do
+        if ev.list == listId then events[#events + 1] = ev end
+    end
     for i = math.max(1, #events - (limit or 20) + 1), #events do
         local ev = events[i]
-        lines[#lines + 1] = ("#%d  %s  %s  %s"):format(ev.seq, date(ev.ts), short(ev.author), describe(ev))
+        lines[#lines + 1] = ("%s  %s  %s"):format(date(ev.ts), short(ev.author), describe(ev))
+    end
+    return lines
+end
+
+-- Events that were skipped in replay, with the reason (e.g. written during a raid by someone else).
+function M.conflicts(db, mods)
+    local _, view = M.load(db, mods)
+    local lines = {}
+    for _, c in ipairs(view.conflicts) do
+        lines[#lines + 1] = ("%s  %s  %s%s skipped: %s"):format(date(c.ts), short(c.author), c.type,
+            c.list and (" on " .. c.list) or "", c.reason)
     end
     return lines
 end
