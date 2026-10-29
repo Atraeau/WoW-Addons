@@ -29,7 +29,7 @@ M.EVENTS = {
     "comms.received", "whisper.received",
     "trade.changed", "trade.closed",
     "encounter.ended", "world.entered",
-    "item.info",
+    "item.info", "comms.restrictionChanged",
 }
 
 local eventSet = {}
@@ -46,4 +46,31 @@ function M.Missing(client)
     if type(client.caps) ~= "table" then missing[#missing + 1] = "caps" end
     if type(client.maxMessage) ~= "number" then missing[#missing + 1] = "maxMessage" end
     return missing
+end
+
+-- Shared event dispatch for every Client implementation (Mock, Real, Sim).
+-- on() returns an unsubscribe function; unknown event names are errors.
+function M.NewBus()
+    local handlers = {}
+    local bus = {}
+    function bus.on(event, fn)
+        assert(M.IsEvent(event), "unknown client event: " .. tostring(event))
+        local list = handlers[event]
+        if not list then list = {}; handlers[event] = list end
+        local entry = { fn = fn, active = true }
+        list[#list + 1] = entry
+        return function() entry.active = false end
+    end
+    function bus.emit(event, payload)
+        assert(M.IsEvent(event), "unknown client event: " .. tostring(event))
+        local list = handlers[event]
+        if not list then return end
+        local snapshot = {}
+        for i, e in ipairs(list) do snapshot[i] = e end
+        for _, e in ipairs(snapshot) do
+            if e.active then e.fn(payload) end
+        end
+    end
+    function bus.clear() handlers = {} end
+    return bus
 end

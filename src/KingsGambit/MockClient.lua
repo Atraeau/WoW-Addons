@@ -42,13 +42,15 @@ function M.New(opts)
 
     local S = {
         me = normalize(opts.name or "Tester"),
-        timers = {}, nextTimer = 1,
-        handlers = {}, prefixes = {},
+        timers = {}, nextTimer = 1, restricted = false,
+        prefixes = {},
         roster = {}, guild = {}, inRaid = false, lootMethod = "group", masterLooter = nil,
         loot = { open = false, slots = {} },
         items = {}, pendingInfo = {}, tradeable = {}, trade = nil,
         storage = { account = {}, char = {} },
     }
+
+    local bus = Client.NewBus()
 
     local h = {
         caps = { masterLoot = true, trade = true, comms = true, guild = true },
@@ -115,25 +117,8 @@ function M.New(opts)
     end
 
     ---------------------------------------------------------------- events
-    function h:on(event, fn)
-        assert(Client.IsEvent(event), "unknown client event: " .. tostring(event))
-        local list = S.handlers[event]
-        if not list then list = {}; S.handlers[event] = list end
-        local entry = { fn = fn, active = true }
-        list[#list + 1] = entry
-        return function() entry.active = false end
-    end
-
-    function h:emit(event, payload)
-        assert(Client.IsEvent(event), "unknown client event: " .. tostring(event))
-        local list = S.handlers[event]
-        if not list then return end
-        local snapshot = {}
-        for i, e in ipairs(list) do snapshot[i] = e end
-        for _, e in ipairs(snapshot) do
-            if e.active then e.fn(payload) end
-        end
-    end
+    function h:on(event, fn) return bus.on(event, fn) end
+    function h:emit(event, payload) bus.emit(event, payload) end
 
     ---------------------------------------------------------------- identity, roster
     function h:me() return S.me end
@@ -270,7 +255,7 @@ function M.New(opts)
 
     function h:cacheItem(link)
         S.pendingInfo[link] = nil
-        self:emit("item.info", { link = link })
+        self:emit("item.info", { link = link, itemId = tonumber(tostring(link):match("item:(%d+)")) })
     end
 
     ---------------------------------------------------------------- communication
@@ -281,6 +266,7 @@ function M.New(opts)
 
     function h:send(prefix, payload, channel, target)
         if not self.caps.comms then return false, "nocomms" end
+        if S.restricted then return false, "restricted" end
         if not S.prefixes[prefix] then return false, "noprefix" end
         if type(payload) ~= "string" then return false, "badpayload" end
         if #payload > self.maxMessage then return false, "toolong" end
@@ -294,6 +280,12 @@ function M.New(opts)
     end
 
     function h:pending() return self.pendingCount end
+
+    -- Simulate the client restricting outgoing addon messages (e.g. during a boss encounter).
+    function h:setRestricted(flag)
+        S.restricted = flag and true or false
+        self:emit("comms.restrictionChanged", { restricted = S.restricted })
+    end
 
     function h:whisper(name, text)
         self.sent[#self.sent + 1] = { kind = "whisper", target = normalize(name), text = text, from = S.me, t = clock }
@@ -364,7 +356,8 @@ function M.New(opts)
     -- Simulate /reload: timers, handlers and prefix registrations vanish; storage, clock and
     -- the simulated world survive. The caller builds a fresh client over the same client.
     function h:reload()
-        S.timers, S.handlers, S.prefixes = {}, {}, {}
+        S.timers, S.prefixes = {}, {}
+        bus.clear()
         return self
     end
 

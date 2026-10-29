@@ -12,7 +12,9 @@ Standings.lua
 Ledger.lua
 Client.lua
 MockClient.lua
+RealClient.lua
 Engine.lua
+SelfCheck.lua
 Sync.lua
 Loot.lua
 UI.lua

@@ -2,7 +2,7 @@
 local H = { passed = 0, failed = 0 }
 local SK = { modules = {} }
 function SK:NewModule(n) local m = { name = n }; self.modules[n] = m; return m end
-for _, f in ipairs { "Hash", "Standings", "Ledger", "Client", "MockClient", "Engine" } do
+for _, f in ipairs { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine" } do
     assert(loadfile("src/KingsGambit/" .. f .. ".lua"))("KingsGambit", SK)
 end
 H.SK = SK

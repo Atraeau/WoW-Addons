@@ -2,7 +2,7 @@
 
 *The seam between the engine and the WoW API. **"Client" means the WoW game client** (the Win32 app
 that hosts the addon), not our own code; our own state-owning object is the **Engine**.
-Status: draft, MockClient built, RealClient not yet.*
+Status: MockClient and RealClient built; RealClient is verified against the documented signatures but not yet against the live client (see the field-test items below).*
 *Rationale for the approach: [design journal](design-journal.md#testability-simulation--training-added-2026-10-28).*
 
 ## Principles
@@ -149,3 +149,35 @@ training scenarios use them to play the part of the world:
   contract tests check, and RealClient will be checked against them in game.
 - Code that runs on both MockClient and the real client stays Lua 5.1-safe (no `//`, no bitwise
   operators), since the client's Lua is 5.1-based.
+
+## RealClient: what the real API taught us
+
+Checked against `docs/api.json` while writing `RealClient.lua`:
+
+- `C_ChatInfo.SendAddonMessage` returns a **`SendAddonMessageResult` enum**, not a boolean.
+  RealClient maps it to `true` or `false, <lowercased enum name>` (e.g. `addonmessagethrottle`).
+  `RegisterAddonMessagePrefix` likewise returns an enum. The enum *values* are not in the
+  export, so RealClient looks them up by name at runtime, and `/gambit check` records them.
+- Loot method comes from **`C_PartyInfo.GetLootMethod()`** (returns an enum plus the master
+  looter's party/raid id), not the old global.
+- Item info is **`C_Item.GetItemInfo`** (a long return list); the old global is untyped.
+- Serialization uses **`C_EncodingUtil`**: `SerializeCBOR`, `EncodeBase64(source, variant)`.
+  Payloads are tagged `c` (CBOR + base64) or `k` (canonical text fallback).
+- **Secret Values:** names, links and message senders are checked with `issecretvalue` and the
+  item is skipped, never read.
+- **Restrictions:** `send` checks `C_ChatInfo.AreOutgoingAddonChatMessagesRestricted()` first and
+  returns `false, "restricted"`; `ADDON_RESTRICTION_STATE_CHANGED` becomes the
+  `comms.restrictionChanged` event. Whispers and announcements honor
+  `C_ChatInfo.InChatMessagingLockdown()`.
+- `GET_ITEM_INFO_RECEIVED` gives an item **id**, so `item.info` carries `itemId` (and `link`
+  when cached).
+
+### Still to verify in the field test (marked `FIELD` in the code)
+
+1. `IsMasterLooter()` semantics, and the `GiveMasterLoot` candidate-index mapping.
+2. Trade flow: event order, whether items are still readable at `TRADE_CLOSED`, and whether
+   `UI_INFO_MESSAGE` reports "Trade complete".
+3. `tradeableUntil` is not implemented (needs a tooltip scan of the bound-tradeable line).
+4. Which of the raw events RealClient registers this client rejects (`client.unregistered`).
+5. Whether addon messages to yourself loop back (the `/gambit check` loopback probe).
+6. Real enum names and values (recorded by `/gambit check`).
