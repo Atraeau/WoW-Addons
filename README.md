@@ -67,6 +67,15 @@ Regenerate it (and the LSP definitions) any time — see [`docs/README.md`](docs
 Edit any `.lua`, then `/reload` in game to pick up changes — no redeploy needed, the
 folders are linked.
 
+On macOS or Linux, `scripts/deploy.sh` does the same job with symlinks and takes the
+same options (`--name X`, `--copy`, `--clean`). Point it at the game with a local
+override, which is gitignored:
+
+```bash
+echo '{ "gamePath": "/Applications/World of Warcraft" }' > wow-dev.config.local.json
+scripts/deploy.sh
+```
+
 ## Scripts
 
 | Command | What it does |
@@ -75,9 +84,11 @@ folders are linked.
 | `deploy.ps1 -Name X` | Link only addon `X` |
 | `deploy.ps1 -Copy` | Hard-copy instead of link (packaging / other drives) |
 | `deploy.ps1 -Clean` | Remove the deployed links (source untouched) |
+| [`deploy.sh`](scripts/deploy.sh) | macOS/Linux counterpart: symlinks, same options as `deploy.ps1` |
 | [`new-addon.ps1 -Name X`](scripts/new-addon.ps1) | Scaffold `src/X/` with TOCs + `Core.lua` |
 | [`generate-api-docs.ps1`](scripts/generate-api-docs.ps1) | Build the Markdown API reference from a dump |
 | [`generate-lua-definitions.ps1`](scripts/generate-lua-definitions.ps1) | Build `types/` LSP definitions from a dump |
+| [`generate-luacheck-globals.ps1`](scripts/generate-luacheck-globals.ps1) | Build `types/luacheck-globals.lua` (every client global, for luacheck) from `docs/api.json` |
 
 Grouping rules for the docs live in [`scripts/api-categories.psd1`](scripts/api-categories.psd1);
 curated examples in [`scripts/api-examples.psd1`](scripts/api-examples.psd1).
@@ -107,5 +118,10 @@ re-scaffold) and re-run the export + generators. Confirm the live number in game
 
 ## Linting
 
-Install [luacheck](https://github.com/lunarmodules/luacheck) and run `luacheck src`.
-Config: [`.luacheckrc`](.luacheckrc).
+Install [luacheck](https://github.com/lunarmodules/luacheck) and run `luacheck src` from
+the repo root. Config: [`.luacheckrc`](.luacheckrc). It merges
+[`types/luacheck-globals.lua`](types/luacheck-globals.lua), generated from this client's
+`docs/api.json`, into `read_globals`, so an "undefined variable" warning means either a
+typo or a function this client no longer has (`GetContainerItemInfo`, `UnitAura`, ...),
+which is the signal a port needs. Regenerate it with
+`generate-luacheck-globals.ps1` after a client update; CI does the same on push.

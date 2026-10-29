@@ -52,3 +52,14 @@ read_globals = {
 	"NORMAL_FONT_COLOR", "RED_FONT_COLOR", "GREEN_FONT_COLOR",
 	"RAID_CLASS_COLORS", "WrapTextInColorCode",
 }
+
+-- The full client API, generated from docs/api.json by
+-- scripts/generate-luacheck-globals.ps1 (types/luacheck-globals.lua). Merged
+-- here so the curated list above stays readable while the lint knows every
+-- global the client exports. Run luacheck from the repo root.
+local ok, generated = pcall(dofile, "types/luacheck-globals.lua")
+if ok and type(generated) == "table" then
+	for _, name in ipairs(generated) do
+		read_globals[#read_globals + 1] = name
+	end
+end

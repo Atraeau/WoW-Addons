@@ -10,6 +10,7 @@ on:
       - docs/api.json
       - scripts/generate-api-docs.ps1
       - scripts/generate-lua-definitions.ps1
+      - scripts/generate-luacheck-globals.ps1
       - scripts/api-categories.psd1
       - scripts/api-examples.psd1
       - .github/workflows/regenerate-api-docs.yml
@@ -33,6 +34,7 @@ jobs:
         run: |
           ./scripts/generate-api-docs.ps1 -ApiJson docs/api.json
           ./scripts/generate-lua-definitions.ps1 -ApiJson docs/api.json
+          ./scripts/generate-luacheck-globals.ps1 -ApiJson docs/api.json
 
       - name: Commit regenerated artifacts if changed
         shell: bash
