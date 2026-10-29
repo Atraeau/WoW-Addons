@@ -1,6 +1,6 @@
 # King's Gambit — Ledger v2: one chain per writer
 
-*Design for review. Status: **proposed, not built.** Replaces the single shared chain and its
+*Design for review. Status: **agreed 2026-10-29, being built.** Replaces the single shared chain and its
 "longer chain wins" fork rule. Background: the decision of 2026-10-29 in the
 [design journal](design-journal.md).*
 
@@ -70,34 +70,45 @@ already have the property.
 ## 4. Who may write, checked by every peer
 
 Authority is recorded in the ledger itself, so any peer (and the audit tool) can check it from the chains alone, without
-knowing who was in which raid.
+knowing who was in which raid or what the guild roster looked like at the time.
 
-- **Genesis.** The first event of the ledger is written by the **owner** (the guild leader): it names the ledger and its
-  owner. The owner can **set the officers** (`SetOfficers { names }`) and **hand ownership on** (`SetOwner`). The owner
-  counts as an officer.
-- **Raids.** An officer opens a raid with `RaidOpen { raid, ml }`, naming its Master Looter (themselves or anyone else),
-  and the Master Looter closes it with `RaidClose { raid }`. A raid that is never closed closes itself **8 hours** after
-  it opened, so a crashed Master Looter can't lock the ledger.
+- **Officers come from the game.** Only the guild master can appoint officers in WoW, so we don't invent a second
+  system. The **guild master's addon mirrors the guild's officer ranks into the ledger** (`SetOfficers { names }`)
+  whenever it sees them change. That makes the officer list part of the record, so it can be checked later. Which ranks
+  count as officers is read from the rank permissions (`C_GuildInfo.GuildControlGetRankFlags`); the exact flag is
+  confirmed in the game. A `SetOfficers` event counts only if its writer was the guild master; the genesis event, written
+  by the guild master's addon when the ledger is created, records who that is, and a later `SetGuildMaster` (written by the
+  current guild master) hands it on.
+- **Master Looters get just-in-time elevation.** Being Master Looter is a temporary privilege, not a rank:
+  1. The would-be Master Looter asks for it (a message to the online officers, not a ledger event).
+  2. An officer approves, by writing `Elevate { raid, ml, minutes }` on their own chain. That opens the raid and names its
+     Master Looter. The Master Looter can be anyone the officer chooses.
+  3. The privilege **expires on its own** at `Elevate.time + minutes`, or earlier when the Master Looter writes
+     `RaidClose { raid }` or an officer writes `Revoke { raid }`. An officer can extend a running raid by writing another
+     `Elevate` for the same raid.
+  4. The duration is **recorded in the event itself**, so every peer computes the same expiry. The default is **6 hours**,
+     set per guild in the addon's settings, and an officer can choose another value when approving. Changing the default
+     later never changes past raids.
 - **The rule**, applied in replay to every event at its time *t*:
 
   | Who wrote it | Allowed at time *t* if |
   |---|---|
-  | A raid's Master Looter | that raid is open at *t* (they write for their raid) |
-  | An officer | **no** raid is open at *t* |
+  | A raid's Master Looter | their elevation for that raid is active at *t* |
+  | An officer | **no** raid is active at *t* (they can always write `Elevate`, `Revoke` and `SetOfficers`-related events) |
   | Anyone else | never |
 
-  Events that break the rule are skipped as conflicts ("written during a raid by someone other than its Master Looter").
+  Events that break the rule are skipped as conflicts ("written during a raid by someone other than its Master Looter",
+  "Master Looter privilege had expired", ...).
 - **Officers during a raid** send the Master Looter an **adjustment request** (move a player, undo an award, add or remove
-  someone, with a reason). It is a message, not a ledger event. The Master Looter sees it and accepts or declines; an
-  accepted request is written by the Master Looter with `requestedBy` in the event, so the history shows who asked and who
-  approved.
-- **Reconciled.** A raid is reconciled when its close is in the ledger and the peers' fingerprints agree. The interface only
-  offers officers direct editing when no raid is open and the ledger is reconciled. (The replay rule above is the real
-  enforcement; this just keeps officers from writing events that would be skipped.)
+  someone, with a reason). The Master Looter accepts or declines, and **both outcomes are recorded**:
+  - accepted: the change is written by the Master Looter with `requestedBy` and the reason;
+  - declined: a `Declined { request, requestedBy, reason, declineReason }` event, with no effect on standings.
+- **Reconciled.** A raid is reconciled when it has ended (closed, revoked or expired) and the peers' fingerprints agree. The
+  interface only offers officers direct editing when no raid is active and the ledger is reconciled. (The replay rule above
+  is the real enforcement; this keeps officers from writing events that would only be skipped.)
 
-This also settles two questions left open earlier: who may write (now recorded and verifiable), and who runs a loot
-session when there is no Master Looter (only a raid's Master Looter runs sessions; outside a raid, officers can record a
-manual award).
+This also settles two questions left open earlier: who may write (recorded and verifiable), and who runs a loot session when
+there is no Master Looter (only an elevated Master Looter runs sessions; outside a raid, officers can record a manual award).
 
 ## 5. Sync
 
@@ -136,11 +147,13 @@ parallel play. To make it rarer still, a client catches up on its own chain from
 - Authority: events by the wrong writer at the wrong time are skipped identically everywhere, and listed as conflicts.
 - Undo by anchor: an award, other raid's awards in between, then the undo, restores the original relative order.
 
-## Questions for you
+## Decisions (guild leader, 2026-10-29)
 
-1. **Can the Master Looter be someone who isn't an officer?** The design allows it (an officer opens the raid and names the
-   Master Looter). Or should only officers be Master Looters?
-2. **Is 8 hours right** for a raid that is never closed to close itself?
-3. **Is the guild leader the right owner** (the one who appoints officers)? Or should any officer be able to change the
-   officer list?
-4. **Declined adjustment requests:** should they be recorded in the ledger too (more transparency), or only accepted ones?
+1. **Master Looter:** officer-approved just-in-time elevation that expires on its own (section 4).
+2. **Expiry:** default **6 hours**, adjustable per guild and per approval, recorded in each `Elevate` event.
+3. **Officers:** taken from the game's guild ranks (only the guild master can appoint them), mirrored into the ledger by the
+   guild master's addon.
+4. **Adjustment requests:** both accepted and declined requests are recorded, with reasons.
+
+Still to confirm in the game (Nov 4): which rank-permission flag means "officer", and that the guild master's addon can read
+every rank's permissions.
