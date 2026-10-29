@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: Suicide Kings
+## Notes: Suicide Kings Addon for Grey Parse
+## Version: 0.1
+## SavedVariables: SuicideKingsList
+
+SuicideKings.xml

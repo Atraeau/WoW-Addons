@@ -1,8 +1,14 @@
-# Run /run print((select(4, GetBuildInfo()))) to get the latest interface number
-# Get the latest FrameXML for TBC classic from https://github.com/Gethe/wow-ui-source/tree/classic/Interface_TBC/AddOns
-## Interface: 20502
+## Interface: 16001
 ## Title: Suicide Kings
-## Notes: Suicide Kings Addon for Grey Parse
-## Version: 0.1
-## SavedVariables: SuicideKingsList
-SuicideKings.xml
+## Notes: Transparent, tamper-evident Suicide Kings raid loot ledger
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.0.1
+## SavedVariables: SuicideKingsDB
+## SavedVariablesPerCharacter: SuicideKingsCharDB
+
+Core.lua
+Ledger.lua
+Standings.lua
+Sync.lua
+Loot.lua
+UI.lua

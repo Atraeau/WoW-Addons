@@ -1,7 +1,14 @@
 ## Interface: 16001
 ## Title: Suicide Kings
-## Notes: Suicide Kings Addon for Grey Parse
-## Version: 0.1
-## SavedVariables: SuicideKingsList
+## Notes: Transparent, tamper-evident Suicide Kings raid loot ledger
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.0.1
+## SavedVariables: SuicideKingsDB
+## SavedVariablesPerCharacter: SuicideKingsCharDB
 
-SuicideKings.xml
+Core.lua
+Ledger.lua
+Standings.lua
+Sync.lua
+Loot.lua
+UI.lua
