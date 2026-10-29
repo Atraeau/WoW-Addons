@@ -7,3 +7,11 @@ sacrifice of position for advantage. Status: **Phase 0 scaffold** (module stubs 
 [`docs/kings-gambit/`](../../docs/kings-gambit/): manifesto, rationale, design journal.
 
 The previous prototype is kept in `archive/SuicideKings-legacy/` for reference.
+
+## Tests
+
+The ledger modules are pure Lua. From the repo root, with Lua 5.4 installed:
+
+```
+lua tests/kings-gambit/run.lua
+```
