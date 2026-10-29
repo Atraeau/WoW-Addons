@@ -308,6 +308,13 @@ duplicates, reorders and partitions messages.
   wins; on a tie, the earlier fork event wins, then the lower event id.**
 - **The loser's events are not lost:** the losing branch is kept in `db.orphans` (list, time,
   events) for an officer to review and re-enter. Nothing is silently discarded.
+- **A bug found by randomized testing.** The hand-written scenarios all passed, but a
+  randomized test (random writes, splits, heals, loss, duplication and restrictions across 3 to 4
+  peers, then everyone must agree on one valid ledger) failed in about half its seeds. Cause: after a
+  probe, a peer replied with events from the last shared checkpoint, but the requester asked for more
+  starting from its own tip, so it kept receiving the same events and never reached the point where the
+  histories split. Fixed by continuing from the last event received and by anchoring probe checkpoints
+  at the tip as well as the start. 600 seeds now converge; 40 run in CI on every push.
 - **Decision for you (merge vs. winner-takes-branch).** The alternative is an automatic
   merge: take both branches' events, order them canonically, and re-chain them so nothing is
   orphaned. It loses less, but it rewrites event ids, needs duplicate detection by content,

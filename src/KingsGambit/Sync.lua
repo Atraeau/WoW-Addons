@@ -174,14 +174,22 @@ function Sync:request(listId, from, sender, force)
     self:post({ t = "R", list = listId, from = from }, "WHISPER", sender)
 end
 
--- Checkpoints at seq 1, 2, 4, 8, ... and the last event: enough to find where histories split.
+-- Checkpoints to find where two histories split: positions 1, 2, 4, 8, ... from the start and
+-- n, n-1, n-2, n-4, ... from the tip (forks are usually recent). Matching is prefix-closed, so
+-- the responder just takes the highest checkpoint that matches.
 local function skeleton(chain)
-    local cp, n, seq = {}, #chain.events, 1
-    while seq <= n do
-        cp[#cp + 1] = { seq, chain.events[seq].id }
-        seq = seq * 2
+    local n, seen, seqs = #chain.events, {}, {}
+    local function add(s)
+        if s >= 1 and s <= n and not seen[s] then seen[s] = true; seqs[#seqs + 1] = s end
     end
-    if n > 0 and cp[#cp][1] ~= n then cp[#cp + 1] = { n, chain.events[n].id } end
+    local s = 1
+    while s <= n do add(s); s = s * 2 end
+    add(n)
+    s = 1
+    while s < n do add(n - s); s = s * 2 end
+    table.sort(seqs)
+    local cp = {}
+    for i, q in ipairs(seqs) do cp[i] = { q, chain.events[q].id } end
     return cp
 end
 
@@ -263,7 +271,7 @@ function Sync:onProbe(msg, sender)
     for _, pair in ipairs(msg.cp) do
         local seq, id = pair[1], pair[2]
         local mine = type(seq) == "number" and chain.events[seq]
-        if mine and mine.id == id then shared = seq else break end
+        if mine and mine.id == id and seq > shared then shared = seq end
     end
     self:sendEvents(msg.list, shared + 1, sender)
 end
@@ -289,9 +297,11 @@ function Sync:onEvents(msg, sender)
             return
         end
     end
-    local chain = self.engine:Get(listId)
-    if chain and type(msg.n) == "number" and #chain.events < msg.n then
-        self:request(listId, #chain.events + 1, sender, true) -- keep catching up
+    -- Keep walking forward from the last event we were sent (not from our own tip: after a
+    -- probe the batch may be all events we already have, and we must reach the split point).
+    local last = evs[#evs]
+    if type(msg.n) == "number" and type(last) == "table" and type(last.seq) == "number" and last.seq < msg.n then
+        self:request(listId, last.seq + 1, sender, true)
     end
 end
 
