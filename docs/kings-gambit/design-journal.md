@@ -196,9 +196,29 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
     on the rationale doc, and can check what the learner chose against what the rules allow.
   - Because the ledger is event-sourced, a **real past session can be replayed** as a
     training scenario.
+- **Synchronization is testable and teachable too.** Comms go through the Host, so we can
+  simulate several clients at once, in two ways:
+  - **Virtual clients in one process (automated tests).** Each virtual client has its own
+    engine instance and its own MockHost, joined by a **SimNetwork** that can add latency,
+    drop, duplicate and reorder messages, and partition the group. The tests assert that
+    every client converges to the same head hash and standings. Cases: a late joiner, an
+    officer who was offline and returns, two officers writing at once (a fork), a lost
+    message, a corrupted event.
+  - **Real people practicing together (training).** Several players each run the addon in
+    training mode and sync over the real addon channel, but on a **separate training
+    prefix and session code**, so they exercise the real RealHost comms path without
+    touching the guild ledger. Training lists can't merge with guild lists.
+  - **Confidence cues.** The UI shows a clear sync status (in sync / catching up / diverged),
+    compares head hashes between participants, and training scenarios end with a check
+    ("do all of you show the same head?"), so learners can see they did it right.
+  - **Consequence for the code:** the engine must be instantiable (no module-level
+    singletons such as `Ledger.chains`). Each client, real or simulated, owns its own
+    state and Host.
 - **Phasing change:** a new Phase 1.5 (Host abstraction, MockHost, shared test harness,
   CI) comes before the UI work, so the real UI is built against the Host from the start.
-  Training mode (SimHost, scenarios, coach) follows the loot session.
+  Training mode (SimHost, scenarios, coach) follows the loot session. The multi-client
+  SimNetwork tests land with Phase 3 (sync), and the multi-player training sessions with
+  Phase 4.5.
 
 ## Still open (non-blocking)
 
