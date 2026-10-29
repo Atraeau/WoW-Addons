@@ -365,6 +365,35 @@ Known gaps, for later or for you to decide:
 - The start announcement is repeated rather than retried per player, so on a very lossy connection a player
   may see the session up to ten seconds late.
 
+### Decision: one chain per writer, merged deterministically (2026-10-29)
+
+**Decided by the guild leader.** Parallel raids are a real case: they used to run two raids at once, once a
+week, to earn more loot per week. The same character can never be in both raids at the same time (the game
+makes that impossible). So awards from the two raids always concern different players, and their effects
+commute. Replaces the single-chain "longer chain wins" fork policy, which would fork routinely here.
+
+Requirements and rules:
+
+- **Each writer has their own append-only, hash-chained log.** A single-writer chain can't fork. Standings
+  are the replay of all writers' events merged in one deterministic order that every peer computes the
+  same way (timestamp, then writer, then position in that writer's chain). The fingerprint of the ledger
+  becomes one head per writer.
+- **Who may write.** During a raid, **only that raid's Master Looter writes to the ledger.** Officers do not
+  write during a raid; they send the Master Looter an **adjustment request** (move a player, undo an
+  award, add or remove a member), which the Master Looter accepts or declines. Once the raid is
+  **reconciled** (every writer's events from it have been merged and agreed), officers may edit directly.
+- **No orphans.** Nothing is set aside or thrown away. An event that arrives late slots into its place and
+  the standings are recomputed (replay takes milliseconds).
+- **Open details for the design pass:** how a raid is opened and closed, and what "reconciled" means precisely;
+  how a writer's right to write is recorded so every peer can verify it (the question previously left
+  open as the officers list); what happens to an undo (`Revert`) whose target is displaced by a late event
+  from another writer; how the ledger-format spec, audit tool, simulator and Sync lab change.
+- **Meanwhile:** live events should also go to the guild channel, not only the raid channel, so the other
+  Master Looter sees each award almost at once.
+
+Model note: this is a subtle correctness change, so the rework is done on Opus 5.5 (medium effort), with the
+existing randomized convergence tests as the safety net.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
