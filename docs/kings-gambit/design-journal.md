@@ -214,6 +214,30 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
   - **Consequence for the code:** the engine must be instantiable (no module-level
     singletons such as `Ledger.chains`). Each client, real or simulated, owns its own
     state and Host.
+- **Field testing in a real dungeon (low stakes).** The mock can only be as right as our
+  understanding of the client, so we validate against the real thing early and cheaply:
+  - **RealHost first, then a field test.** RealHost is written right after MockHost, and
+    the same contract suite runs against it in the game (`/gambit test`), starting solo in
+    town. That catches wrong signatures and Secret Values surprises before anyone else is involved.
+  - **A sandboxed field list**, never synced to the guild ledger, so a dungeon run can't
+    pollute real standings.
+  - **Dry-run and live modes.** Dry-run logs what the addon *would* hand out
+    (`GiveMasterLoot` is not called). Live actually gives the items, fine in a normal dungeon.
+  - **Record and replay.** Field mode records every Host call and event with timestamps
+    into SavedVariables. We read the trace after the run, fix whatever differs from the mock,
+    and turn each discovery into a permanent MockHost test, so real-world surprises become
+    regression tests.
+  - **What a run is for:** Master Looter setup in a dungeon group, the real order of
+    `LOOT_OPENED` and `LOOT_SLOT_CLEARED`, `GiveMasterLoot` candidate indexing, async
+    `GetItemInfo`, addon-message size and throttling, trade events and the bound-tradeable
+    window, `C_EncodingUtil` and the `bit` library, and SavedVariables across a real logout.
+  - **Known real-world constraint:** the client can restrict outgoing addon chat messages
+    (`AreOutgoingAddonChatMessagesRestricted`, `AddonRestrictionStateChanged`), for example
+    during boss encounters. The Host will report this (`send` returns `false, "restricted"`
+    and a `comms.restrictionChanged` event), and sync must queue and retry afterward. A boss
+    fight is a good field test for exactly this.
+  - **Needs other players** for sync: a few people running the addon in the same party
+    (a guildie or alts), with at least one player *without* it to exercise the whisper fallback.
 - **Phasing change:** a new Phase 1.5 (Host abstraction, MockHost, shared test harness,
   CI) comes before the UI work, so the real UI is built against the Host from the start.
   Training mode (SimHost, scenarios, coach) follows the loot session. The multi-client
@@ -234,7 +258,8 @@ Each entry: **Decision** — the alternatives considered — **why** we chose it
 - We deliberately **planned extensively before writing code** — the manifesto
   and this journal are the "thinking on paper" that precedes Phase 0.
 - The plan is phased MVP → full: (0) rationale doc + scaffold, (1) ledger core,
-  **(1.5) Host API abstraction + MockHost + test harness + CI**, (2) standings UI +
+  **(1.5) Host API abstraction + MockHost + test harness + CI**, **(1.6) RealHost + in-game
+  contract tests + dungeon field test**, (2) standings UI +
   manual ops, (3) sync, (4) loot session + draft, **(4.5) training / simulation mode**,
   (5) transparency + corrections/trades, (6) external sync, (7) polish.
 - Verification leans on **deterministic replay unit checks** (replay a crafted
