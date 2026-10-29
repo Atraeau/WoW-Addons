@@ -3,7 +3,7 @@
 *The seam between the engine and the WoW API. **"Client" means the WoW game client** (the Win32 app
 that hosts the addon), not our own code; our own state-owning object is the **Engine**.
 Status: draft, MockClient built, RealClient not yet.*
-Rationale for the approach is in the [design journal](design-journal.md#testability-simulation--training-added-2026-10-28).*
+*Rationale for the approach: [design journal](design-journal.md#testability-simulation--training-added-2026-10-28).*
 
 ## Principles
 
