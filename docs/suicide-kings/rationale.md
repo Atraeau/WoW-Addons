@@ -27,33 +27,33 @@ reasoning.
 ## The rules, and why
 
 ### Your position is your currency
-**Rule:** Your position changes only when you win an item. No decay for being
+Your position changes only when you win an item. No decay for being
 absent, no bonus for attendance, no penalty for passing.
 **Why:** It keeps the system predictable and drama-free. Anyone can look at the
 list and know exactly why it looks the way it does.
 
 ### Needing an item
-**Rule:** Among everyone who bid *Need*, the highest position wins and drops to
+Among everyone who bid *Need*, the highest position wins and drops to
 the bottom.
 **Why:** One rule, applied the same way every time, is easy to follow and hard to
 game. Nobody has to argue about who "deserves" it.
 
 ### Several items at once (the draft)
-**Rule:** When a boss drops multiple items, the top remaining needer picks any
+When a boss drops multiple items, the top remaining needer picks any
 available item, claims it, and drops to the bottom; then the next player up picks.
 There's no cap, so if the room passes you can win again from the bottom.
 **Why:** The first pick is an *earned* choice, and there is no arbitrary
 item order for anyone to benefit from.
 
 ### Off-spec
-**Rule:** Off-spec bids use a separate, persistent off-spec list. Winning off-spec
+Off-spec bids use a separate, persistent off-spec list. Winning off-spec
 moves you down *that* list only. A main-spec bid always beats an off-spec bid.
 **Why:** Off-spec has a real cost (your off-list position), but it can never
 jump ahead of someone who needs the item for their main. Otherwise it would be a
 free way to dodge spending your main position.
 
 ### Gifting
-**Rule:** Gifting is *winning and then handing the item to someone else*, in any
+Gifting is *winning and then handing the item to someone else*, in any
 direction, including upward. You pay the position cost; the recipient gets the
 item. You can change the target before the item resolves, or re-route it
 afterward.
@@ -63,7 +63,7 @@ and pass it up. Because the cost is real, it can't be gamed, and generosity is
 recognized in the record.
 
 ### When nobody bids (the backstop)
-**Rule:** Items with no Need or Off-spec bids are offered in *reverse* order
+Items with no Need or Off-spec bids are offered in *reverse* order
 (lowest position first) to everyone, whether or not they can use the item. The
 claimer drops to the bottom (nearly free for someone already there) and can keep it,
 gift it up, sell it, disenchant it, or donate it to the guild bank. If everybody
@@ -74,19 +74,19 @@ high-position players from farming scraps. We rejected a free roll because a
 costless roll can be gamed by collusion.
 
 ### Item value
-**Rule:** We don't assign items a score or rank.
+We don't assign items a score or rank.
 **Why:** An item is worth whatever someone will spend on it. Minor items clear
 cheap, best-in-slot clears dear, and the standings reveal the difference.
 
 ### Hoarding
-**Rule:** We don't penalize it. We make it visible: last win, passes on upgrades,
+We don't penalize it. We make it visible: last win, passes on upgrades,
 raids since last win, time at position, and an officer "camp-watch" flag.
 **Why:** Penalties punish legitimate passes (an item that doesn't fit your
 playstyle, or one you're leaving for a friend). Visibility lets the guild hold
 itself accountable without a mechanic that punishes the wrong thing.
 
 ### Mistakes and regret-trades
-**Rule:** Mistakes are fixed forward. A recent award can be undone exactly; older
+Mistakes are fixed forward. A recent award can be undone exactly; older
 ones are corrected by an officer with a visible correction event. If someone
 trades an item away after winning it, the addon detects it: if the recipient had
 bid, it's treated as a *mistake correction* (the giver is restored, the recipient
@@ -96,7 +96,7 @@ overridden.
 the original decisions, and the default matches what usually happened.
 
 ### The record and the officers
-**Rule:** Every decision is an entry in an append-only, hash-chained log, synced
+Every decision is an entry in an append-only, hash-chained log, synced
 across the guild. Officers run the process; they don't decide who deserves loot.
 **Why:** Trust comes first. Anyone can verify that their copy matches everyone
 else's.
