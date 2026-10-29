@@ -329,6 +329,29 @@ duplicates, reorders and partitions messages.
   ledger itself to carry an officers list (an `SetOfficers` event written by the guild leader),
   which every peer can verify from the chain. That is a real design choice, so it is left open.
 
+### Scaling: measured, not guessed (2026-10-28)
+
+Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
+best cases). One event is about 280 bytes serialized.
+
+| Ledger size | Append all | Full hash verification | Replay only | Saved size |
+|---|---|---|---|---|
+| 1,000 events | 0.12 s | 0.07 s | under 1 ms | 270 KB |
+| 5,000 events | 0.65 s | 0.34 s | under 1 ms | 1.4 MB |
+| 20,000 events | 2.7 s | 1.35 s | 40 ms | 5.6 MB |
+
+- A guild writing about 30 events per raid night, twice a week, produces roughly 3,000 events a year.
+  So even years of history stays in the range where verification is quick.
+- **At login:** lists up to 2,000 events are fully verified immediately. Larger lists load at once (about
+  20 ms for 20,000 events: the rules and linkage are checked and standings rebuilt) and the hashes are
+  verified in the background, 100 events per 50 ms tick, so the game never stalls. A list that fails is
+  reported and taken out of use; its saved data is left untouched.
+- **Hash speed:** byte XOR is table-driven everywhere, 2.4x faster than the first version, and the
+  algorithm is locked by golden-value tests so stored ledgers keep verifying.
+- **Not solved yet:** SavedVariables size for very long histories (millions of bytes load at game start).
+  If a guild ever gets there, the answer is a signed checkpoint that compacts old events into a snapshot.
+  That is a design decision for later, not needed now.
+
 ## Still open (non-blocking)
 
 - A crisp definition of **"eligible"** for early-resolve (on the relevant

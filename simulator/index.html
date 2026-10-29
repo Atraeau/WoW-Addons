@@ -89,23 +89,28 @@ local M = SK:NewModule("Hash")
 local TWO32 = 4294967296
 local PRIME = 16777619 -- FNV-1a 32-bit prime
 
-local bxor = (bit and bit.bxor) or (bit32 and bit32.bxor)
+-- XOR of two 4-bit values, tabulated once. Byte XOR is then two lookups. This is used on every
+-- runtime instead of a bit library, so hashes are identical everywhere (game, tests, browser)
+-- and there is no per-byte function call.
+local XOR4 = {}
+for a = 0, 15 do
+    for b = 0, 15 do
+        local r, p, x, y = 0, 1, a, b
+        for _ = 1, 4 do
+            local xa, yb = x % 2, y % 2
+            if xa ~= yb then r = r + p end
+            x, y, p = (x - xa) / 2, (y - yb) / 2, p * 2
+        end
+        XOR4[a * 16 + b] = r
+    end
+end
 
--- h XOR b for a 32-bit h and a byte b.
+-- h XOR b for a 32-bit h and a byte b (only the low byte of h changes).
 local function xorByte(h, b)
-    if bxor then
-        local r = bxor(h, b)
-        if r < 0 then r = r + TWO32 end
-        return r
-    end
     local lo = h % 256
-    local r, p, a, c = 0, 1, lo, b
-    for _ = 1, 8 do
-        local x, y = a % 2, c % 2
-        if x ~= y then r = r + p end
-        a, c, p = (a - x) / 2, (c - y) / 2, p * 2
-    end
-    return h - lo + r
+    local al = lo % 16
+    local bl = b % 16
+    return h - lo + XOR4[(lo - al) / 16 * 16 + (b - bl) / 16] * 16 + XOR4[al * 16 + bl]
 end
 
 -- h * PRIME mod 2^32 without exceeding double precision (split into 16-bit halves).
@@ -486,6 +491,40 @@ function M.Load(listId, events)
     return chain
 end
 
+
+-- Fast load for large stored ledgers: structure, linkage (seq and prev) and rules are checked
+-- and the standings are rebuilt, but event hashes are NOT recomputed. Call VerifyStep until it
+-- reports "done" to verify them in slices. Returns chain, or nil + reason + index.
+function M.LoadFast(listId, events)
+    local chain = M.NewChain(listId)
+    for i, ev in ipairs(events) do
+        if type(ev) ~= "table" or type(ev.id) ~= "string" or type(ev.prev) ~= "string" or type(ev.data) ~= "table"
+            or ev.seq ~= i or ev.prev ~= chain.head or ev.list ~= listId or ev.v ~= M.VERSION then
+            return nil, "malformed", i
+        end
+        local ok, err = Standings.Apply(chain.state, ev)
+        if not ok then return nil, err, i end
+        chain.events[i] = ev
+        chain.byId[ev.id] = ev
+        chain.head = ev.id
+    end
+    chain.verified = 0
+    return chain
+end
+
+-- Recompute the hashes of the next `count` unverified events. Returns "more", "done", or
+-- "bad" plus the index of the first event whose hash does not match.
+function M.VerifyStep(chain, count)
+    local from = (chain.verified or #chain.events) + 1
+    local to = math.min(from + count - 1, #chain.events)
+    for i = from, to do
+        local ev = chain.events[i]
+        local ok, id = pcall(eventId, ev)
+        if not ok or id ~= ev.id then return "bad", i end
+    end
+    chain.verified = to
+    return (to >= #chain.events) and "done" or "more"
+end
 
 end; chunk("KingsGambit", SK) end
 -- ===== Client.lua =====
@@ -951,24 +990,59 @@ Engine.__index = Engine
 -- Build an engine over a Client. Persisted lists are loaded and fully verified; a list that
 -- fails verification is reported in engine.problems and left untouched in storage
 -- (never silently repaired or discarded).
-function M.New(client)
+-- opts.syncVerifyLimit (default 2000): lists up to this many events are fully hash-verified right
+-- away; longer ones are loaded fast and verified in the background (see Engine:verifyTick).
+function M.New(client, opts)
     local acct = client:storage().account
     acct.schema = acct.schema or 1
     acct.lists = acct.lists or {}
     acct.config = acct.config or {}
-    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {} }, Engine)
+    local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {}, verifying = {},
+        verifyLimit = (opts and opts.syncVerifyLimit) or 2000, verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
     for listId, rec in pairs(acct.lists) do
-        local chain, err, idx = Ledger.Load(listId, rec.events or {})
+        local events = rec.events or {}
+        local lazy = #events > c.verifyLimit
+        local chain, err, idx
+        if lazy then chain, err, idx = Ledger.LoadFast(listId, events) else chain, err, idx = Ledger.Load(listId, events) end
         if chain then
             rec.events = chain.events -- keep the saved table and the live chain in step
             c.chains[listId] = chain
+            if lazy then c.verifying[listId] = chain end
         else
             c.problems[listId] = { reason = err, index = idx }
             client:print(("list '%s' failed verification at event %s: %s"):format(listId, tostring(idx), tostring(err)))
         end
     end
+    if next(c.verifying) then
+        c.verifyTimer = client:every(0.05, function() c:verifyTick() end)
+    end
     return c
 end
+
+-- Background hash verification of large lists, a slice per tick so login never stalls. A list that
+-- fails is reported and taken out of use (its saved data is left untouched).
+function Engine:verifyTick()
+    for listId, chain in pairs(self.verifying) do
+        local status, idx = Ledger.VerifyStep(chain, self.verifyBatch)
+        if status == "done" then
+            self.verifying[listId] = nil
+            self:fire("verified", listId, nil)
+        elseif status == "bad" then
+            self.verifying[listId] = nil
+            self.chains[listId] = nil
+            self.problems[listId] = { reason = "badhash", index = idx }
+            self.client:print(("list '%s' failed verification at event %d: badhash"):format(listId, idx))
+            self:fire("corrupt", listId, nil)
+        end
+        break -- one list per tick keeps each tick small
+    end
+    if not next(self.verifying) and self.verifyTimer then
+        self.client:cancel(self.verifyTimer)
+        self.verifyTimer = nil
+    end
+end
+
+function Engine:IsVerified(listId) return self.chains[listId] ~= nil and self.verifying[listId] == nil end
 
 function Engine:Get(listId) return self.chains[listId] end
 

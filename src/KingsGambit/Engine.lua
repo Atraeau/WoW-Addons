@@ -18,7 +18,7 @@ function M.New(client, opts)
     acct.lists = acct.lists or {}
     acct.config = acct.config or {}
     local c = setmetatable({ client = client, db = acct, chains = {}, problems = {}, hooks = {}, verifying = {},
-        verifyLimit = (opts and opts.syncVerifyLimit) or 2000, verifyBatch = (opts and opts.verifyBatch) or 250 }, Engine)
+        verifyLimit = (opts and opts.syncVerifyLimit) or 2000, verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
     for listId, rec in pairs(acct.lists) do
         local events = rec.events or {}
         local lazy = #events > c.verifyLimit
