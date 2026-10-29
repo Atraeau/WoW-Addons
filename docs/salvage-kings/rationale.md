@@ -1,5 +1,6 @@
 # Salvage Kings — Rationale & Player Guide
-n*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
+
+*Salvage Kings is derived from the classic Suicide Kings strategy and named for the bottom-of-the-list "salvager" role. "Suicide" below still means dropping to the bottom after a win.*
 
 *How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the
 values behind it and the [design journal](design-journal.md) for how each rule
