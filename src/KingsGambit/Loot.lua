@@ -143,6 +143,89 @@ function Session:bid(player, itemId, kind, extra)
     return true
 end
 
+---------------------------------------------------------------- whisper fallback
+-- Players without the addon answer by whispering the Master Looter. Accepted forms (case does
+-- not matter; several answers can be joined with commas or semicolons):
+--   "need"  "off"  "pass"  "gift Name"            (when there is only one item)
+--   "1 need"  "need 1"  "#2 pass"  "2: off"  "1 gift Name"   (item number, either side)
+--   "pass"                                         (several items: passes on all of them)
+local WORDS = { need = "need", n = "need", greed = "off", off = "off", os = "off", offspec = "off",
+    ["off-spec"] = "off", pass = "pass", p = "pass", gift = "gift", g = "gift" }
+
+-- Returns an array of { item, kind, to } (item may be nil = "all items", only for pass), or
+-- nil + a reason ("empty", "unclear", "needitem", "needtarget").
+function M.ParseWhisper(text, itemCount)
+    if type(text) ~= "string" then return nil, "empty" end
+    local answers = {}
+    for part in text:lower():gmatch("[^,;]+") do
+        local words = {}
+        for w in part:gmatch("[^%s]+") do words[#words + 1] = w end
+        if #words > 0 then
+            local item, kind, to
+            for _, w in ipairs(words) do
+                local num = w:match("^#?(%d+):?$")
+                if num and not item then item = tonumber(num)
+                elseif WORDS[w] and not kind then kind = WORDS[w]
+                elseif kind == "gift" and not to and w:match("^[%a%-']+$") then to = w
+                else return nil, "unclear" end
+            end
+            if not kind then return nil, "unclear" end
+            if kind == "gift" and not to then return nil, "needtarget" end
+            if not item then
+                if itemCount == 1 then item = 1
+                elseif kind == "pass" then item = nil -- all items
+                else return nil, "needitem" end
+            end
+            answers[#answers + 1] = { item = item, kind = kind, to = to }
+        end
+    end
+    if #answers == 0 then return nil, "empty" end
+    return answers
+end
+
+local WHISPER_HELP = "Whisper me one answer per item, e.g. '1 need', '2 off', '1 pass', '1 gift Name'. 'pass' alone passes on everything."
+
+local function whisperProblem(reason)
+    if reason == "needitem" then return "Which item? Put its number first, e.g. '1 need'." end
+    if reason == "needtarget" then return "Who should get it? e.g. '1 gift Name'." end
+    return "I didn't understand that. " .. WHISPER_HELP
+end
+
+-- Handle a whispered answer from `sender`. Replies by whisper. Returns the applied answers
+-- or nil + reason.
+function Session:handleWhisper(sender, text)
+    local answers, why = M.ParseWhisper(text, #self.items)
+    if not answers then
+        self.client:whisper(sender, whisperProblem(why))
+        return nil, why
+    end
+    local applied, lines = {}, {}
+    for _, a in ipairs(answers) do
+        local ids = {}
+        if a.item then ids[1] = a.item else for _, it in ipairs(self.items) do ids[#ids + 1] = it.id end end
+        for _, id in ipairs(ids) do
+            local ok, err = self:bid(sender, id, a.kind, { to = a.to })
+            if ok then
+                applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
+                lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
+            else
+                lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+            end
+        end
+    end
+    self.client:whisper(sender, "Got it: " .. table.concat(lines, "; ") .. ".")
+    return applied
+end
+
+-- Tell the raid what is up for grabs and how to answer without the addon. One announcement
+-- per item keeps each line under the chat limit. Returns the lines sent.
+function Session:announce(channel)
+    local lines = { "Loot: whisper me to answer (for example '1 need', '1 off', '1 pass')." }
+    for _, it in ipairs(self.items) do lines[#lines + 1] = ("%d) %s"):format(it.id, it.link) end
+    for _, line in ipairs(lines) do self.client:announce(line, channel or "RAID") end
+    return lines
+end
+
 function Session:allAnswered()
     for _, p in ipairs(self.eligibleList) do
         for _, it in ipairs(self.items) do
