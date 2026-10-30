@@ -5645,7 +5645,7 @@ end
           // a way to ask.
           const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
           const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
-          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="As Master Looter you decide; it is recorded with your reason, like an accepted eligibility request">Make ' + CLS + " eligible&hellip;</button>" : "";
+          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason, like an accepted request.">Request eligibility&hellip;</button>" : "";
           ans = '<td><div class="row">' + b("gift", "Gift") + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
@@ -5847,7 +5847,7 @@ end
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
-      case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
+      case "eligible": { const reason = window.prompt("Why are you asking to be eligible for this item? (Your reason goes in the record.)"); if (reason) act("eligible", a, reason); break; }
       case "giveTo": act("recipient", giftTo); break;
       case "keep": act("keep"); break;
       case "override":

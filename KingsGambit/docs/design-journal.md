@@ -1121,6 +1121,20 @@ salvagers rotate as the leftovers are handed out. "A big hand-out: ranked choice
 - The scenario's check reads the ledger (who won what, and how) and runs under five other seeds in a test, since the
   lesson is about the rules, not luck. `RunScenario` also accepts a learner class now.
 
+### Simulator wording: "Request eligibility", and what happens after a salvage claim (2026-10-30)
+
+**Asked by the guild leader:** the button for an item your class can't bid on said "Make Warlocks eligible", which reads
+as a demand. It now says **"Request eligibility"** (and the prompt asks why you are asking), since it is an ask to the
+Master Looter, as `request eligible` already is in the text interface. In the simulator the learner is the Master
+Looter, so the request is granted at once and recorded with their reason, like an accepted request; the button's hover
+text says so.
+- **After a salvage claim:** the item is yours. It is handed to you when the Master Looter confirms, and recorded as
+  your win (it moves you to the bottom, where the salvager already is). Nothing new pops up: no follow-up asks what you
+  did with it.
+- **Gap found:** the ledger has a `Salvage` event (keep, gift, sell, disenchant or bank: what the claimer did with it,
+  for transparency only), but nothing in the commands or the simulator writes it. **Open:** whether to offer an optional
+  "what did you do with it?" note after a salvage claim.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
