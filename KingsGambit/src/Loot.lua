@@ -587,6 +587,9 @@ function Session:claimItem(player, extra)
     if extra and extra.to then
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
+        -- anyone may gift, but the one who receives it must be eligible for the item
+        local ok, why = M.MayHave(self:fitOf(t.item), self.class[to])
+        if not ok then return false, why .. "to" end
     end
     self.turn = nil
     self:award("salvage", player, t.item, to)

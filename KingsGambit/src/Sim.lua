@@ -218,6 +218,12 @@ function Sim:snapshot()
             local may, why = Loot.MayHave(fit, me and me.class)
             snap.items[i].youMay, snap.items[i].youWhy = may, why
             snap.items[i].classes = ItemFit.ClassList(fit or {})
+            -- who the learner may gift it to: raiders who are eligible for it themselves
+            local targets = {}
+            for _, n in ipairs(self.names) do
+                if n ~= short(self.learner) and Loot.MayHave(fit, self.info[n] and self.info[n].class) then targets[#targets + 1] = n end
+            end
+            snap.items[i].giftTargets = targets
             local rows = s:readiness(it.id)
             if rows then
                 local wanted = {}

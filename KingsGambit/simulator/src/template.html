@@ -25,7 +25,7 @@
   button { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
   button:hover:not(:disabled) { border-color: var(--muted); } button:disabled { opacity: .45; cursor: default; }
   button.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
-  button.sel { outline: 2px solid currentColor; }
+  button.sel { outline: 2px solid currentColor; background: rgba(255,255,255,.14); font-weight: 700; }
   .b-need { color: var(--need); } .b-off { color: var(--off); } .b-gift { color: var(--gift); } .b-pass { color: var(--pass); }
   .scen { display: block; width: 100%; text-align: left; margin-bottom: 6px; }
   .scen.on { border-color: var(--gold); color: var(--gold); }
@@ -97,7 +97,7 @@
     const r = call(name, a, b, c);
     const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
-      cantequip: "your class can't wear or wield it" };
+      cantequip: "your class can't wear or wield it", badtarget: "choose who to gift it to" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -153,9 +153,9 @@
         '<button data-act="skip">Skip my turn</button></div>' + timerHtml() + "</div>";
     }
     return '<div class="turn"><b>Salvage round, offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
-      "As a salvager, claiming costs you almost nothing at the bottom. You can keep it, or gift it up to someone who can use it." +
+      "As a salvager, claiming costs you almost nothing at the bottom. Keep it with the Claim it button, or choose who gets it in the Gift to list and press Claim and gift." +
       '<div class="row" style="margin-top:8px"><button class="primary" data-act="claim" data-a="">Claim it</button>' +
-      '<button data-act="claimGift">Claim and gift to</button>' + giftSelect() + '<button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
+      '<span class="muted">Gift to:</span>' + giftSelect(t.item) + '<button data-act="claimGift">Claim and gift</button><button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
   }
 
   // Who runs the loot and who disenchants: the Master Looter chooses the disenchanter for the raid (it is recorded),
@@ -172,10 +172,12 @@
       (busy ? '<div class="small muted" style="margin-top:6px">Locked while loot is being handed out.</div>' : "") + "</div>";
   }
 
-  function giftSelect() {
-    const names = (st.players || []).map((p) => p.name).filter((n) => n !== "You");
-    if (!giftTo || names.indexOf(giftTo) < 0) giftTo = names[0] || "";
-    return '<select id="giftTo">' + names.map((n) => '<option' + (n === giftTo ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>";
+  function giftSelect(itemId) {
+    const item = itemId != null && (st.items || []).filter((x) => x.id === itemId)[0];
+    const names = item && item.giftTargets ? item.giftTargets : (st.players || []).map((p) => p.name).filter((n) => n !== "You");
+    if (names.indexOf(giftTo) < 0) giftTo = ""; // nobody until you choose
+    return '<select id="giftTo"><option value=""' + (giftTo === "" ? " selected" : "") + ">&mdash; nobody &mdash;</option>" +
+      names.map((n) => '<option value="' + esc(n) + '"' + (n === giftTo ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>";
   }
 
   function itemsHtml() {
@@ -189,7 +191,7 @@
       let ans = "";
       if (bidding) {
         const a = mine && mine.answers[i];
-        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
+        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
@@ -201,6 +203,11 @@
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
         }
+      }
+      if (bidding && mine && mine.answers[i]) {
+        const a = mine.answers[i];
+        const WORD = { need: "Need", off: "Off-spec", gift: "Gift" + (a.to ? " to " + a.to : ""), pass: "Pass" };
+        ans = ans.replace(/<\/td>$/, '<div class="small" style="margin-top:4px">Your answer: <b>' + esc(WORD[a.kind] || a.kind) + "</b> (you can change it until bidding closes)</div></td>");
       }
       h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
     });
@@ -364,21 +371,32 @@
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
-      case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
+      case "bid":
+        if (b === "gift" && !giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Gift."; render(); break; }
+        act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
-      case "claimGift": act("claim", giftTo); break;
+      case "claimGift":
+        if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }
+        act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);
     }
   });
-  document.addEventListener("change", (e) => { if (e.target.id === "giftTo") giftTo = e.target.value; });
+  // The page redraws as the clock runs, but not while a drop-down has focus (that would close it). Once you have
+  // chosen, let go of it so the clock keeps drawing.
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "giftTo") { giftTo = e.target.value; e.target.blur(); render(); }
+    if (e.target.id === "deSel") e.target.blur();
+  });
 
   setInterval(() => {
     if (tab === "lab") { if (running && lab) labCall("lab_advance", speed * 0.25); return; }
     if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
     st = call("advance", speed * 0.25);
     updateMoved();
+    const a = document.activeElement;
+    if (a && a.tagName === "SELECT") return; // an open drop-down would close, and the choice with it
     render();
   }, 250);
 

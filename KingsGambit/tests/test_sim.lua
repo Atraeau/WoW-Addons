@@ -398,3 +398,17 @@ test("if the learner lets the ring go unclaimed, the lesson says what happened",
     local _, ok, message = Sim.RunScenario(sc)
     assert(not ok and message:find("nobody claimed the ring"), tostring(message))
 end)
+test("a salvager can gift only to someone eligible for the item; the page is told who", function()
+    local MC = SK.modules.MoltenCore
+    local sim = Sim.NewRaid({ members = { { name = "Wara", class = "WARRIOR" }, { name = "Pria", class = "PRIEST" } },
+        learnerClass = "MAGE" })
+    sim.autoLearner = false
+    assert(sim:drop({ "Gauntlets of Might" })) -- warrior tier
+    local item = sim:snapshot().items[1]
+    eq(table.concat(item.giftTargets, ","), "Wara", "only the warrior may have warrior gloves")
+    sim.session:bid("Wara", 1, "pass"); sim.session:bid("Pria", 1, "pass"); sim.session:bid("You", 1, "pass")
+    eq(sim.session.turn.type, "claim"); eq(sim.session.turn.player, "You-Realm")
+    eq(select(2, sim.session:claimItem("You", { to = "Pria" })), "wrongclassto", "a priest can't have them")
+    assert(sim.session:claimItem("You", { to = "Wara" }))
+    assert(MC)
+end)

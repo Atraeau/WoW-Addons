@@ -891,6 +891,25 @@ ring is disenchanted. Changed:
   award was recorded". A test covers it.
 - If it recurs with a claim made in time, we have a real bug and need the steps.
 
+### Simulator: choosing who to gift to is a picker, and it works (2026-10-30)
+
+**Asked by the guild leader:** should naming the recipient of a gift be verbal or a UI choice? **A UI choice**: the
+learner picks from a list, "nobody" by default, and the text interface keeps `claim <name>` for people who type.
+Reports from the page (a pass that wasn't acknowledged; a "Gift to" list that closed as soon as it opened) found real
+faults:
+- **The page redrew itself four times a second,** which closed an open drop-down and lost the choice. It no longer
+  redraws while a list has focus, and releases it once a recipient is chosen, so the clock keeps drawing.
+- **The picker starts at "nobody".** Gifting with nobody chosen says to choose someone first, instead of silently
+  picking the first raider. It sits before its button ("Gift to: [..] Claim and gift") and lists only raiders who are
+  eligible for the item.
+- **A chosen answer is unmistakable:** a tick, a filled button, and "Your answer: Pass (you can change it until
+  bidding closes)".
+- **Engine rule closed:** a salvager's gift is checked like a gift bid. The recipient must be eligible for the item
+  (`wrongclassto` / `cantequipto`), whoever the giver is.
+- Found while checking in a browser: a string I added broke the page's script. The simulator page can't be checked by
+  the test suite, so it was loaded and played in the browser pane (pass, wait for the offer, choose a recipient,
+  confirm: "Matches the lesson").
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
