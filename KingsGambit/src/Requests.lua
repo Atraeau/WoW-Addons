@@ -18,7 +18,10 @@
 --   add      member, pos?         add a player (default: bottom)
 --   remove   member               take a player off the list
 --   award    member, item, to?    record a win that wasn't recorded (e.g. a hand-over that failed)
---   gift     member, to           the item that player last won actually went to someone else (no position change)
+--   trade    member, to           the item that player last won actually went to someone else, and it was not a gift:
+--                                 a regret-trade. The winner is restored and the recipient pays (one atomic Award that
+--                                 replaces the earlier one). The default reading of "it went to someone else".
+--   gift     member, to           the same, but a deliberate gift by the winner (no position change)
 --   eligible item, class, spec?   let this class bid on an item restricted to other classes, from now on: accepted, it
 --                                 adds the class to the guild's rule for the item (ItemClasses); declined, it is
 --                                 recorded with the reason. Eligibility is by class (what the game can check); the
@@ -46,6 +49,7 @@ local NEEDS = {
     remove = function(r) return isName(r.member) end,
     award = function(r) return isName(r.member) and isName(r.item) and (r.to == nil or isName(r.to)) end,
     gift = function(r) return isName(r.member) and isName(r.to) end,
+    trade = function(r) return isName(r.member) and isName(r.to) end,
     eligible = function(r) return isName(r.item) and ItemFit.ItemId(r.item) ~= nil and ItemFit.CLASS_BITS[r.class] ~= nil end,
 }
 M.KINDS = {}
@@ -68,7 +72,8 @@ function M.Describe(r)
     elseif r.kind == "add" then return ("add %s%s"):format(who, where and (" at " .. where) or "")
     elseif r.kind == "remove" then return ("remove %s from the list"):format(who)
     elseif r.kind == "award" then return ("record that %s won %s%s"):format(who, r.item, r.to and (" for " .. short(r.to)) or "")
-    elseif r.kind == "gift" then return ("%s's last item went to %s"):format(who, short(r.to))
+    elseif r.kind == "gift" then return ("%s's last item went to %s (a gift: nobody moves)"):format(who, short(r.to))
+    elseif r.kind == "trade" then return ("%s's last item went to %s (restore %s, %s moves to the bottom)"):format(who, short(r.to), who, short(r.to))
     elseif r.kind == "eligible" then
         return ("let %s%s bid on %s"):format(r.spec and (r.spec .. " ") or "", (ItemFit.CLASS_NAMES[r.class] or r.class or "?") .. "s",
             r.item:match("%[(.-)%]") or ("item " .. tostring(ItemFit.ItemId(r.item))))
@@ -132,9 +137,18 @@ function M.EventFor(state, r, chainId)
     elseif r.kind == "award" then
         d.item, d.to = r.item, r.to
         return "Award", d
-    elseif r.kind == "undo" or r.kind == "gift" then
+    elseif r.kind == "undo" or r.kind == "gift" or r.kind == "trade" then
         local a = lastAward(state, r.member)
         if not a then return nil, "noaward" end
+        if r.kind == "trade" then
+            local to = state.members[r.to]
+            if not (to and to.active) then return nil, "notmember" end
+            if r.to == r.member then return nil, "samewinner" end
+            local found
+            for _, e in ipairs(state.undo[chainId] or {}) do if e.id == a.id then found = true end end
+            if not found then return nil, "notrevertible" end
+            return "Award", { member = r.to, item = a.item, replaces = a.id, requestedBy = r.by, rid = r.rid, reason = r.reason }
+        end
         if r.kind == "gift" then
             return "Transfer", { award = a.id, to = r.to, member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
         end

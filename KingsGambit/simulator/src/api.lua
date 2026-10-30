@@ -64,6 +64,11 @@ local function describe(ev, byId)
     elseif t == "Award" then
         local text = short(d.member) .. " won " .. tostring(d.item) .. " on the " .. listName(ev.list) .. " and dropped to the bottom"
         if d.to and d.to ~= d.member then text = text .. "; the item went to " .. short(d.to) end
+        if d.replaces then
+            local old = byId[d.replaces]
+            text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. ((old and old.data and short(old.data.member)) or "someone else")
+                .. ": they are back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
+        end
         return text
     elseif t == "Pass" then
         return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")

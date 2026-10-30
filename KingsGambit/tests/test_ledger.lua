@@ -415,3 +415,25 @@ test("an override persists indefinitely, attributed to whoever set it, until som
     w:write("Off", "ItemSuits", { item = 17082, roles = {}, reason = "back to the heuristic" }, 300 + 365 * 86400)
     eq(w:view().itemSuits[17082], nil)
 end)
+
+H.section("Ledger: a regret-trade is one entry that replaces an award")
+test("Award with `replaces`: the first winner is restored and the real recipient drops to the bottom, atomically", function()
+    local w = guild()
+    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")  -- A,C,D,E,B
+    w:write("GM", "Award", { member = "A", item = "Y" }, 121, "main")             -- C,D,E,B,A
+    w:write("GM", "Award", { member = "D", item = "X", replaces = a1.id, reason = "traded" }, 122, "main")
+    local v = w:view()
+    eq(reasons(v), ""); eq(order(v), "B,C,E,A,D", "the same as A winning Y and D winning X, with B never having won")
+    eq(v.lists.main.members.B.wins, 0); eq(v.lists.main.members.D.wins, 1); assert(v.lists.main.awards[a1.id].reverted)
+end)
+test("a trade that can't be done changes nothing at all (no half correction)", function()
+    local w = guild()
+    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")
+    w:write("GM", "Award", { member = "B", item = "Y" }, 121, "main")             -- B won again: a1 can't go first
+    w:write("GM", "Award", { member = "D", item = "X", replaces = a1.id }, 122, "main")
+    w:write("GM", "Award", { member = "B", item = "X", replaces = a1.id }, 123, "main")
+    w:write("GM", "Award", { member = "Zed", item = "X", replaces = a1.id }, 124, "main")
+    local v = w:view()
+    eq(reasons(v), "Award:laterwin Award:samewinner Award:notmember", "refused as a whole")
+    eq(order(v), "A,C,D,E,B"); eq(v.lists.main.members.D.wins, 0)
+end)

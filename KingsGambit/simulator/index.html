@@ -411,13 +411,27 @@ function handlers.RemoveMember(s, ev, d)
     end
 end
 
+local planRevert
+
 -- A win: the winner drops to the bottom. `to` (optional) is who actually receives the item (gifting).
+-- `replaces` (optional) is a regret-trade: the item was recorded as won by someone else (that award, one of this writer's
+-- own, is undone and they go back up) and `member` is who really has it, who pays as if they had won the bid. Both
+-- happen or neither does.
 function handlers.Award(s, ev, d)
     local m = s.members[d.member]
     if not (isName(d.member) and m and m.active) then return nil, "notmember" end
     if not isName(d.item) then return nil, "baditem" end
     if d.to ~= nil and not isName(d.to) then return nil, "badrecipient" end
+    local undo
+    if d.replaces ~= nil then
+        local old = s.awards[d.replaces]
+        if old and old.member == d.member then return nil, "samewinner" end
+        local why
+        undo, why = planRevert(s, ev, d.replaces)
+        if not undo then return nil, why end
+    end
     return function()
+        if undo then undo() end
         local idx = indexOf(s.order, d.member)
         local below = {}
         for i = idx + 1, #s.order do below[#below + 1] = s.order[i] end
@@ -497,11 +511,11 @@ end
 -- sit at the bottom now and would be below them anyway). Awards made after this one remember "who was below me", so
 -- they forget this winner where the winner was above them to begin with. If the same player won something later, that
 -- later win has to be undone first, or their place would be wrong ("laterwin").
-function handlers.Revert(s, ev, d)
+function planRevert(s, ev, target)
     local stack = s.undo[ev.chain]
     local k
     for i = #(stack or {}), 1, -1 do
-        if stack[i].id == d.target then k = i; break end
+        if stack[i].id == target then k = i; break end
     end
     if not k then return nil, "notrevertible" end
     local top = stack[k]
@@ -544,6 +558,8 @@ function handlers.Revert(s, ev, d)
         table.remove(stack, k)
     end
 end
+
+function handlers.Revert(s, ev, d) return planRevert(s, ev, d.target) end
 
 M.TYPES = {}
 for k in pairs(handlers) do M.TYPES[k] = true end
@@ -5325,6 +5341,11 @@ local function describe(ev, byId)
     elseif t == "Award" then
         local text = short(d.member) .. " won " .. tostring(d.item) .. " on the " .. listName(ev.list) .. " and dropped to the bottom"
         if d.to and d.to ~= d.member then text = text .. "; the item went to " .. short(d.to) end
+        if d.replaces then
+            local old = byId[d.replaces]
+            text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. ((old and old.data and short(old.data.member)) or "someone else")
+                .. ": they are back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
+        end
         return text
     elseif t == "Pass" then
         return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")

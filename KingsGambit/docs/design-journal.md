@@ -1430,6 +1430,24 @@ first (their place would otherwise be wrong); the reply says so. Tested against 
 already paid). Whether a regret-trade to someone who had bid should instead send the recipient to the bottom is the
 earlier "bid-test" idea; it needs a decision from the guild leader before it is built.
 
+### Decision: a trade after the fact is a regret-trade by default; a gift is explicit (2026-10-30)
+
+**Decided by the guild leader:** a *gift* must be explicit (the session already has the UI for it: gift, then name the
+recipient). When an item turns out to have gone to someone else after the award, the default reading is a **regret-trade**:
+the original winner's position is **restored** and the **recipient moves to the bottom**, as if the recipient had won the
+bid. This closes the "bid-test" question left open above (it is no longer about whether the recipient had bid).
+- **Trade** (the default correction): `trade <name> <to> <reason>` for the Master Looter, `request trade ...` for
+  everyone else. It undoes the named award (the same rule as `undo`) and records the same item as won by the recipient.
+  It is refused as a whole, changing nothing, if either half would fail (the recipient is not on the list, or the
+  award can no longer be undone), so it never leaves the list half-corrected.
+- **Built:** one ledger entry, not two: `Award` carries `replaces = <earlier award>`, so it is atomic on every peer
+  and reads as a single line in the history ("Cass took Gauntlets, which had been recorded for Brann (Brann restored)").
+  The undo rule is the same as `undo`'s (so a later win by the first winner blocks it until undone). Tests: the ledger
+  rule and its refusals, the `trade` command and its explanations, and `request trade` against `request gift`
+  (gift moves nobody).
+- **Gift** stays what it was: `request gift` records that the item went elsewhere *by the winner's choice* and moves
+  nobody. It is the explicit, deliberate case.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

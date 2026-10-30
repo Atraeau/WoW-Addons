@@ -96,7 +96,7 @@ local function describe(ev)
     elseif t == "AddMember" then return short(d.member) .. " joined"
     elseif t == "RemoveMember" then return short(d.member) .. " left"
     elseif t == "Award" then
-        return short(d.member) .. " won " .. tostring(d.item) .. (d.to and (" (given to " .. short(d.to) .. ")") or "")
+        return short(d.member) .. " won " .. tostring(d.item) .. (d.to and (" (given to " .. short(d.to) .. ")") or "") .. (d.replaces and " (a regret-trade: the earlier award was undone)" or "")
     elseif t == "Pass" then return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")
     elseif t == "Transfer" then return "an award was re-routed to " .. short(d.to)
     elseif t == "MovePlayer" then return short(d.member) .. " moved to " .. tostring(d.pos) .. " (" .. tostring(d.reason) .. ")"

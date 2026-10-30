@@ -71,7 +71,9 @@ local HELP = {
     "  officers [set <names...>]       who are officers (the guild master sets them)",
     "  request move <name> <top|bottom|N> <reason>     ask the Master Looter to change the list during a raid;",
     "  request undo|remove <name> <reason>             also: add <name> [pos] <reason>, award <name> <item> <reason>,",
-    "  request gift <name> <to> <reason>               (the item they won went to someone else)",
+    "  request trade <name> <to> <reason>              (the item they won went to someone else: restore them, <to> pays)",
+    "  request gift <name> <to> <reason>               (the same, but a deliberate gift: nobody moves)",
+    "  trade <name> <to> <reason>      Master Looter: the item went to someone else; restore the winner, <to> moves to the bottom",
     "  request eligible <item> <reason>                ask for your class to be allowed to bid on an item, from now on",
     "  requests                        waiting requests and recent decisions",
     "  accept <n> | decline <n> <reason>                answer a request (Master Looter)",
@@ -266,6 +268,34 @@ function M.New(ctx)
         local ev = append("main", "Award", { member = member, item = link, reason = reason }, ("award %s %s %s"):format(who, link, reason))
         if ev then
             out(("Recorded: %s won %s and moves to the bottom. The reason is in the history."):format(short(member), link))
+        end
+    end
+
+    -- A regret-trade: the item recorded as won by <name> really went to <to>. The winner is restored to their place and <to>
+    -- moves to the bottom, as if they had won the bid; one atomic entry (see Standings, Award.replaces). A deliberate gift
+    -- is different and explicit: nobody moves (request gift).
+    function cmds.trade(args)
+        local usage = "trade <name> <to> <reason>  (the item <name> last won went to <to>: <name> is restored, <to> moves to the bottom)"
+        local who, to, reason = args:match("^(%S+)%s+(%S+)%s+(.+)$")
+        if not who then return out(usage) end
+        local chain = list("main")
+        local st = chain and chain.state
+        local mine = {}
+        for _, e in ipairs(st and st.undo[engine:MyChain()] or {}) do mine[#mine + 1] = e end
+        local winner
+        for i = #mine, 1, -1 do if mine[i].member == name(who) then winner = mine[i]; break end end
+        if not winner then
+            return out(("%s has no award of yours that can be traded. Awards you can change: use undo for the list."):format(short(name(who))))
+        end
+        local a = st.awards[winner.id]
+        local toName = name(to)
+        if not (st.members[toName] and st.members[toName].active) then
+            return out(("%s is not on the list. Add them first: add %s"):format(short(toName), short(toName)))
+        end
+        local ev = append("main", "Award", { member = toName, item = a.item, replaces = winner.id, reason = reason },
+            ("trade %s %s %s"):format(who, to, reason))
+        if ev then
+            out(("Recorded: %s's %s went to %s. %s is back in their place and %s moves to the bottom."):format(short(name(who)), tostring(a.item), short(toName), short(name(who)), short(toName)))
         end
     end
 
@@ -681,6 +711,7 @@ function M.New(ctx)
         move = "request move <name> <top|bottom|N> <reason>", undo = "request undo <name> <reason>",
         add = "request add <name> [top|bottom|N] <reason>", remove = "request remove <name> <reason>",
         award = "request award <name> <item> <reason>", gift = "request gift <name> <to> <reason>",
+        trade = "request trade <name> <to> <reason>",
         eligible = "request eligible <item or item#> <reason>",
     }
     local function isPos(p) return p == "top" or p == "bottom" or (tonumber(p) ~= nil) end
@@ -691,7 +722,7 @@ function M.New(ctx)
         args = rest or args
         local kind, body = args:match("^(%a+)%s*(.-)$")
         kind = kind and kind:lower()
-        if not (kind and Requests.KINDS[kind]) then return nil, nil, "request <move|undo|add|remove|award|gift|eligible> ...  (see help)" end
+        if not (kind and Requests.KINDS[kind]) then return nil, nil, "request <move|undo|add|remove|award|trade|gift|eligible> ...  (see help)" end
         local r = { kind = kind }
         if kind == "eligible" then
             -- the item: a link, an item id, or an item's number in the running loot session
@@ -716,7 +747,7 @@ function M.New(ctx)
             local link, reason = (more or ""):match("^(|c.-|r)%s+(.+)$")
             if not link then link, reason = (more or ""):match("^(%S+)%s+(.+)$") end
             r.item, r.reason = link, reason
-        elseif kind == "gift" then
+        elseif kind == "gift" or kind == "trade" then
             local to, reason = (more or ""):match("^(%S+)%s+(.+)$")
             r.to, r.reason = to and name(to), reason
         else
@@ -790,7 +821,13 @@ function M.New(ctx)
         local d = ev.data
         local who, by = short(d.member), short(ev.author)
         local text
-        if ev.type == "Award" then text = ("%s won %s%s"):format(who, tostring(d.item), d.to and d.to ~= d.member and (" (for " .. short(d.to) .. ")") or "")
+        if ev.type == "Award" then
+            text = ("%s won %s%s"):format(who, tostring(d.item), d.to and d.to ~= d.member and (" (for " .. short(d.to) .. ")") or "")
+            if d.replaces then
+                local old
+                for _, e in ipairs(engine:View().applied) do if e.id == d.replaces then old = e.data and e.data.member end end
+                text = ("%s took %s, which had been recorded for %s (%s restored)"):format(who, tostring(d.item), old and short(old) or "someone else", old and short(old) or "they")
+            end
         elseif ev.type == "MovePlayer" then text = ("%s moved %s to %s"):format(by, who, d.to or ("just above " .. short(d.above)))
         elseif ev.type == "AddMember" then text = ("%s added %s"):format(by, who)
         elseif ev.type == "RemoveMember" then text = ("%s removed %s"):format(by, who)

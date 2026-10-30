@@ -113,7 +113,7 @@ Order is top of the list first. Positions are never numbers: they are an end (`t
 | `CreateList` | `name` | Creates the list. Only once per list. |
 | `AddMember` | `member`, `class?`, `to?` / `above?` | Adds the player (default bottom). Skipped if already an active member. |
 | `RemoveMember` | `member` | Removes an active member. |
-| `Award` | `member`, `item`, `to?` | The member wins and moves to the bottom. `to` is who actually received the item (a gift). |
+| `Award` | `member`, `item`, `to?`, `replaces?` | The member wins and moves to the bottom. `to` is who actually received the item (a gift). `replaces` is the id of one of this writer's earlier awards: a regret-trade, where that award is undone (same rule as `Revert`) and `member`, who really has the item, pays as if they had won it. One entry, atomic: if either half is refused, nothing changes (`laterwin`, `notmember`, `samewinner`, `notrevertible`). |
 | `Pass` | `member`, `item`, `kind?` | Counts toward pass statistics (`kind = "upgrade"` counts as an upgrade pass). |
 | `Transfer` | `award`, `to` | Re-routes where an earlier award went. |
 | `MovePlayer` | `member`, `reason`, `to` / `above` | A correction. `reason` is required. |
