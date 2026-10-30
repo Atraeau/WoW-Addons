@@ -280,7 +280,7 @@
     let h = '<div class="row" style="margin-top:10px">';
     if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "done") h += '<button data-act="undo">Undo last award</button>';
+    if (p === "done" && st.canUndo) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -297,7 +297,10 @@
 
   function resultHtml() {
     if (st.phase !== "done" || st.night) return "";
-    result = result || call("check");
+    result = call("check"); // asked every time: what is left to do can change (e.g. after an undo)
+    if (result.pending) {
+      return '<div class="card"><h2>Your turn to fix it</h2><div>' + esc(result.message || "") + "</div></div>";
+    }
     return '<div class="card ' + (result.ok ? "good" : "bad") + '"><h2>' + (result.ok ? "Matches the lesson" : "Different from the lesson") + "</h2><div>" + esc(result.message || "") +
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
   }

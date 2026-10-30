@@ -94,6 +94,9 @@ local function state()
     -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
     snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
         disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()) }
+    -- is there an award of yours that can be undone? (the Undo button is only offered then)
+    local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
+    snap.canUndo = stack ~= nil and #stack > 0
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
@@ -310,6 +313,9 @@ end
 
 function api.check()
     if not scenario then return { ok = false, message = "no scenario" } end
+    -- A lesson with a step still to do (e.g. undoing a mistake) is not judged yet: say what is left.
+    local hint = scenario.todo and scenario.todo(sim)
+    if hint then return { ok = false, pending = true, message = hint } end
     local ok, message = scenario.expect(sim)
     return { ok = ok and true or false, message = message }
 end

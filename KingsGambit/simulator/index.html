@@ -4881,6 +4881,12 @@ M.list = {
         members = raid({ Brann = "MAGE" }),
         items = { "Staff of Dominance" },
         policies = { Brann = { bid = { ["Staff of Dominance"] = "need" } } },
+        -- What the learner still has to do before the lesson can be judged: the page shows this instead of a verdict.
+        todo = function(sim)
+            if not lastEvent(sim, "main", "Revert") then
+                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: press \"Undo last award\" above. The undo is written as its own event, so the history shows what happened."
+            end
+        end,
         after = function(sim)
             local award = lastEvent(sim, "main", "Award")
             assert(sim.engine:Append("main", "Revert", { target = award.id }))
@@ -4999,6 +5005,9 @@ local function state()
     -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
     snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
         disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()) }
+    -- is there an award of yours that can be undone? (the Undo button is only offered then)
+    local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
+    snap.canUndo = stack ~= nil and #stack > 0
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
@@ -5215,6 +5224,9 @@ end
 
 function api.check()
     if not scenario then return { ok = false, message = "no scenario" } end
+    -- A lesson with a step still to do (e.g. undoing a mistake) is not judged yet: say what is left.
+    local hint = scenario.todo and scenario.todo(sim)
+    if hint then return { ok = false, pending = true, message = hint } end
     local ok, message = scenario.expect(sim)
     return { ok = ok and true or false, message = message }
 end
@@ -5599,7 +5611,7 @@ end
     let h = '<div class="row" style="margin-top:10px">';
     if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "done") h += '<button data-act="undo">Undo last award</button>';
+    if (p === "done" && st.canUndo) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -5616,7 +5628,10 @@ end
 
   function resultHtml() {
     if (st.phase !== "done" || st.night) return "";
-    result = result || call("check");
+    result = call("check"); // asked every time: what is left to do can change (e.g. after an undo)
+    if (result.pending) {
+      return '<div class="card"><h2>Your turn to fix it</h2><div>' + esc(result.message || "") + "</div></div>";
+    }
     return '<div class="card ' + (result.ok ? "good" : "bad") + '"><h2>' + (result.ok ? "Matches the lesson" : "Different from the lesson") + "</h2><div>" + esc(result.message || "") +
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
   }

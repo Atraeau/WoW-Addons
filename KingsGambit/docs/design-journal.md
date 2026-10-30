@@ -979,6 +979,17 @@ made earlier leaked into the next prompt):
     believed) rather than chosen again in the ledger.
 - Nothing here is built yet. The role cards already show the Master Looter and the disenchanter; the leader is not shown.
 
+### Simulator: a lesson isn't judged before its last step; undo is offered only when there is something to undo (2026-10-30)
+
+**Reported:** in "Fixing a mistake", "Different from the lesson" appeared the moment the staff was handed out, before the
+learner could undo it (the check ran at the end of the hand-out, but the lesson's point is the undo that follows).
+- A scenario can now say what is still to do (`todo`). Until it is done the page shows "Your turn to fix it" with the
+  instruction, and only then judges. The page asks again each time, so the verdict follows the undo.
+- **Undo last award** is a Master Looter ability in every scenario and raid night (you can undo your own most recent
+  award; the undo is recorded, never erased). It is now offered only when there is an award of yours to undo
+  (`canUndo`), not after a hand-out that awarded nothing.
+- Tests: the lesson reports its pending step, clears it after the undo, and no finished scenario is left waiting.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

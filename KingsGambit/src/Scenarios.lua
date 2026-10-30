@@ -137,6 +137,12 @@ M.list = {
         members = raid({ Brann = "MAGE" }),
         items = { "Staff of Dominance" },
         policies = { Brann = { bid = { ["Staff of Dominance"] = "need" } } },
+        -- What the learner still has to do before the lesson can be judged: the page shows this instead of a verdict.
+        todo = function(sim)
+            if not lastEvent(sim, "main", "Revert") then
+                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: press \"Undo last award\" above. The undo is written as its own event, so the history shows what happened."
+            end
+        end,
         after = function(sim)
             local award = lastEvent(sim, "main", "Award")
             assert(sim.engine:Append("main", "Revert", { target = award.id }))

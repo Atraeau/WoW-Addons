@@ -427,3 +427,22 @@ test("the proxy lesson accepts a gift to any raider who can use the ring, not on
     local _, ok, message = Sim.RunScenario(keep)
     assert(not ok and message:find("kept it"), tostring(message))
 end)
+test("a lesson with a step still to do is not judged early: 'fix a mistake' waits for the undo", function()
+    local sc = {}
+    for k, v in pairs(SK.modules.Scenarios.find("fix-a-mistake")) do sc[k] = v end
+    sc.after = nil -- the learner has handed the staff out but not undone it yet
+    local sim = Sim.RunScenario(sc)
+    local hint = sc.todo(sim)
+    assert(hint and hint:find("Undo last award"), tostring(hint))
+    local last
+    for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Award" then last = ev end end
+    assert(sim.engine:Append("main", "Revert", { target = last.id }))
+    eq(sc.todo(sim), nil, "once undone, nothing is left")
+    assert(sc.expect(sim))
+    for _, other in ipairs(SK.modules.Scenarios.list) do
+        if other.todo then
+            local done = Sim.RunScenario(other)
+            eq(other.todo(done), nil, other.id .. ": a finished run has nothing left to do")
+        end
+    end
+end)
