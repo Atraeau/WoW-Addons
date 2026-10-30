@@ -1135,6 +1135,29 @@ text says so.
   for transparency only), but nothing in the commands or the simulator writes it. **Open:** whether to offer an optional
   "what did you do with it?" note after a salvage claim.
 
+### Decision: unwanted items are salvaged as the draft executes, one per pick (2026-10-30)
+
+**Clarified by the guild leader**, from the big hand-out scenario, where Garo (the *last* winner) got the first unwanted item.
+The expectation: **Aldric** (the first pick) gets the Heavy Dark Iron Ring as the first salvager, **Brann** (the second
+pick) the Quick Strike Ring as the second, and so on: *salvagers rotate in the order of the draft.*
+- **Why my first build was wrong:** it ran the whole salvage round after the draft ended, so the lowest player was the
+  last winner, and the queue went last-winner-first. The intended model is **interleaved**: every pick drops its winner to
+  the bottom, which makes them the lowest player *at that moment*, so the next unwanted item is offered to them first
+  (lowest-first is unchanged; it is just applied while the draft runs, as in the guild leader's 10-item example).
+- **The rule:** during the main draft, after each pick (and after a gift's recipient is settled), the next unwanted item
+  (no bids of any kind, taken in item order) is offered lowest-first on the live list: normally the player who just
+  picked. If they decline it goes up the list; if everyone declines it is disenchanted. Unwanted items left after the
+  draft ends (more unwanted items than picks) go through the end-of-draft salvage round, where a claimer still goes to
+  the back of the queue, as already built.
+- **Unchanged:** the priority draft, ranked choice, and no dependence on how the loot was batched.
+- **Built:** a pick sets `owedSalvage`; the draft loop settles it first (`offerLeftover`), pausing the draft on a claim
+  offer and resuming when it is settled (`afterSalvageItem`). Whoever salvaged during the draft goes to the back of the
+  end-of-draft queue, so nobody takes an unwanted item twice in a row. The big hand-out now gives Aldric, Brann, Cass
+  and Dara the four unwanted items, as expected. Tests: the pick-by-pick offer, a decline going up the list and a
+  full decline disenchanting while the draft carries on, more unwanted items than picks, and a pending gift delaying
+  the offer until its recipient is settled.
+- **Supersedes** the earlier "rotate the leftovers" build, whose queue started from the last winner.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

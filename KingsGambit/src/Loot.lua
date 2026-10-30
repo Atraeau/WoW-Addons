@@ -61,7 +61,7 @@ function M.NewSession(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
-        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {},
+        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {}, salvagers = {},
         bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
@@ -502,6 +502,9 @@ function Session:award(tier, who, itemId, toOverride)
         fromIndex = from }
     self.pending[#self.pending + 1] = action
     self:emit("pending", action)
+    -- Each pick in the main draft drops its winner to the bottom, which makes them the lowest player right now: the next
+    -- unwanted item is offered to them (see offerLeftover). A gift still waiting for its recipient owes it once settled.
+    if tier == "main" and not undecided then self.owedSalvage = true end
     if undecided then
         -- They won it as a gift but haven't said who gets it. Nothing is guessed and nothing times out: the draft
         -- waits for them. The turn is published, so the raid sees "X won it as a gift and is choosing who gets it".
@@ -532,6 +535,7 @@ local function resolveRecipient(self, t, to)
     self.items[t.item].to = to
     self.undecided, self.turn = nil, nil
     self:clearTimer()
+    if t.tier == "main" then self.owedSalvage = true end
     self:emit("recipient", { player = t.player, item = t.item, to = to })
     self:continueDraft(t.tier)
     return true
@@ -607,9 +611,45 @@ function Session:runDraft(tier)
     self:continueDraft(tier)
 end
 
+-- An item nobody bid on in any way (need, off-spec or gift), not yet offered.
+function Session:nextLeftover()
+    for _, it in ipairs(self.items) do
+        if it.status == "open" and not it.offered then
+            local wanted = false
+            for _, row in pairs(self.bids) do
+                local b = row[it.id]
+                if b and (b.kind == "need" or b.kind == "off" or b.kind == "gift") then wanted = true end
+            end
+            if not wanted then return it end
+        end
+    end
+end
+
+-- As the draft executes, each pick owes the raid one unwanted item: it is offered lowest-first on the live list, which
+-- is normally the player who just picked (winning drops you to the bottom). So the salvagers rotate in the order of
+-- the draft. If they decline it goes up the list; if everyone declines it is disenchanted. Returns true if an offer is
+-- now waiting on someone (the draft resumes when it is settled).
+function Session:offerLeftover()
+    local it = self:nextLeftover()
+    if not it then return false end
+    it.offered = true
+    local players = {}
+    for i = #self.order.main, 1, -1 do
+        local p = self.order.main[i]
+        if self.eligible[p] and self:canReceive(p, it) then players[#players + 1] = p end
+    end
+    self.claim = { item = it.id, players = players, idx = 0, resume = true }
+    self:offerNext()
+    return self.turn ~= nil
+end
+
 function Session:continueDraft(tier)
-    if self.turn and self.turn.type == "recipient" then return end
+    if self.turn and (self.turn.type == "recipient" or self.turn.type == "claim") then return end
     while true do
+        if self.owedSalvage then
+            self.owedSalvage = false
+            if tier == "main" and self:offerLeftover() then return end
+        end
         local who, opts = self:topCandidate(tier)
         if not who then break end
         local ranked = self:rankedChoice(who, opts)
@@ -680,6 +720,8 @@ function Session:runSalvage()
     -- for the rest of the round, so the salvager rotates through a batch (it never depends on how loot was batched).
     self.offerQueue = {}
     for i = #self.order.main, 1, -1 do self.offerQueue[#self.offerQueue + 1] = self.order.main[i] end
+    -- anyone who already salvaged an item during the draft goes to the back, in the order they did
+    for _, name in ipairs(self.salvagers) do moveToBottom(self.offerQueue, name) end
     self:emit("phase", { phase = "salvage" })
     self:nextSalvageItem()
 end
@@ -696,6 +738,17 @@ function Session:nextSalvageItem()
     self:offerNext()
 end
 
+-- An offer is settled (claimed, or everyone declined): back to the draft if it was offered during it, else the next
+-- item of the end-of-draft salvage round.
+function Session:afterSalvageItem()
+    local c = self.claim
+    if c and c.resume then
+        self.claim = nil
+        return self:continueDraft("main")
+    end
+    return self:nextSalvageItem()
+end
+
 function Session:offerNext()
     local c = self.claim
     c.idx = c.idx + 1
@@ -703,7 +756,7 @@ function Session:offerNext()
     if not player then
         self.items[c.item].status, self.items[c.item].tier = "de", "de"
         self.turn = nil
-        return self:nextSalvageItem()
+        return self:afterSalvageItem()
     end
     self:setTurn({ type = "claim", item = c.item, player = player },
         self.cfg.claimSeconds, function() self:decline(player) end)
@@ -726,8 +779,9 @@ function Session:claimItem(player, extra)
     end
     self.turn = nil
     self:award("salvage", player, t.item, to)
-    moveToBottom(self.offerQueue, player) -- to the back of the queue for the rest of this round
-    self:nextSalvageItem()
+    self.salvagers[#self.salvagers + 1] = player
+    if self.offerQueue then moveToBottom(self.offerQueue, player) end -- back of the queue for the rest of the end-of-draft round
+    self:afterSalvageItem()
     return true
 end
 

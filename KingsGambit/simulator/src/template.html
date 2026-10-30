@@ -167,7 +167,7 @@
         '<div class="row" style="margin-top:8px">' + t.options.map((id) => '<button class="primary" data-act="pick" data-a="' + id + '">Claim ' + itemName(id) + "</button>").join("") +
         '<button data-act="skip">Skip my turn</button></div>' + timerHtml() + "</div>";
     }
-    return '<div class="turn"><b>Salvage round, offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
+    return '<div class="turn"><b>Salvage: nobody wanted this, and you are the lowest on the list right now:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
       "As a salvager, claiming costs you almost nothing at the bottom. Keep it with the Claim it button, or choose who gets it in the Gift to list and press Claim and gift." +
       '<div class="row" style="margin-top:8px"><button class="primary" data-act="claim" data-a="">Claim it</button>' +
       '<span class="muted">Gift to:</span>' + giftSelect(t.item) + '<button data-act="claimGift"' + (giftTo ? "" : ' disabled title="Choose who to gift it to first"') + '>Claim and gift</button><button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";

@@ -876,7 +876,7 @@ function M.New(ctx)
             if t.type == "pick" then
                 out("It's your pick! Items you bid on: " .. table.concat(t.options, ", ") .. ".  Use: pick <n>, or skip.")
             else
-                out(("Salvage round: item %d is offered to you from the bottom up. claim [name to gift it to], or decline."):format(t.item))
+                out(("Salvage: nobody wanted item %d, and you are the lowest on the list right now. claim [name to gift it to], or decline."):format(t.item))
             end
         end)
         ctx.player.on("result", function(r)
