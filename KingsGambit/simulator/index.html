@@ -5178,36 +5178,87 @@ local function short(name) return name and (name:gsub("%-.*$", "")) end
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
 
-local function describe(ev)
-    local d, t = ev.data, ev.type
-    if t == "Award" then
-        return short(d.member) .. " won " .. d.item .. (d.to and (" and gave it to " .. short(d.to)) or "")
+-- The history is the ledger itself, one row per event (consecutive "added to the list" events are grouped):
+-- when, who wrote it, which kind of event, what it says, and its id.
+local LISTS = { main = "main list", off = "off-spec list" }
+local function listName(id) return LISTS[id] or ((id or "?") .. " list") end
+
+local function describe(ev, byId)
+    local d, t = ev.data or {}, ev.type
+    if t == "Genesis" then return "The ledger was founded: " .. tostring(d.name)
+    elseif t == "CreateList" then return "The " .. listName(ev.list) .. " was created"
+    elseif t == "AddMember" then return short(d.member) .. " was added to the bottom of the " .. listName(ev.list)
+    elseif t == "RemoveMember" then return short(d.member) .. " was removed from the " .. listName(ev.list)
+    elseif t == "Award" then
+        local text = short(d.member) .. " won " .. tostring(d.item) .. " on the " .. listName(ev.list) .. " and dropped to the bottom"
+        if d.to and d.to ~= d.member then text = text .. "; the item went to " .. short(d.to) end
+        return text
     elseif t == "Pass" then
-        return short(d.member) .. " passed on " .. d.item .. (d.kind and (" (" .. d.kind .. ")") or "")
-    elseif t == "Disenchant" then
-        return d.item .. " was disenchanted by " .. short(d.to)
+        return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")
+    elseif t == "Disenchant" then return tostring(d.item) .. " was disenchanted by " .. short(d.to) .. " (nobody wanted it)"
+    elseif t == "Salvage" then return "What the salvager did with an item: " .. tostring(d.action)
     elseif t == "Revert" then
-        return "The last award was undone"
-    elseif t == "CreateList" then
-        return "The " .. tostring(d.name) .. " list was started"
-    elseif t == "AddMember" then
-        return short(d.member) .. " joined the list"
-    elseif t == "Transfer" then
-        return "An item was re-routed to " .. short(d.to)
+        local target = byId[d.target]
+        if target and target.data then
+            return "The award of " .. tostring(target.data.item) .. " to " .. short(target.data.member) .. " was undone, and they went back up the list"
+        end
+        return "An earlier award was undone"
+    elseif t == "Transfer" then return "The item of an earlier award was re-routed to " .. short(d.to)
     elseif t == "MovePlayer" then
-        return short(d.member) .. " was moved (" .. tostring(d.reason) .. ")"
+        return short(d.member) .. " was moved on the " .. listName(ev.list) .. " to " .. (d.to or ("just above " .. short(d.above))) .. ": " .. tostring(d.reason)
+    elseif t == "Elevate" then
+        return short(d.ml) .. " was made Master Looter of raid " .. tostring(d.raid) .. " for " .. tostring(d.minutes) .. " minutes"
+    elseif t == "SetDisenchanter" then return short(d.name) .. " was chosen to disenchant for raid " .. tostring(d.raid)
+    elseif t == "RaidClose" then return "Raid " .. tostring(d.raid) .. " was closed"
+    elseif t == "Revoke" then return "Raid " .. tostring(d.raid) .. " was revoked"
+    elseif t == "SetOfficers" then return "The officers are now: " .. table.concat(d.names or {}, ", ")
+    elseif t == "ItemClasses" then
+        return "Who may bid on " .. tostring(d.name or d.item) .. " was set to " .. ((d.classes and #d.classes > 0) and table.concat(d.classes, ", ") or "any class")
+            .. (d.reason and (": " .. d.reason) or "")
+    elseif t == "ItemSuits" then
+        return "Who " .. tostring(d.name or d.item) .. " suits was set to " .. ((d.roles and #d.roles > 0) and table.concat(d.roles, ", ") or "the addon's own judgment")
+            .. (d.reason and (": " .. d.reason) or "")
+    elseif t == "Declined" then return "A request was declined: " .. tostring(d.declineReason)
     end
     return t
 end
 
 local function logLines()
+    local view = sim.engine:View()
+    local all, byId = {}, {}
+    for _, ev in ipairs(view.applied) do all[#all + 1] = ev; byId[ev.id] = ev end
+    for _, ev in ipairs(view.authApplied) do all[#all + 1] = ev; byId[ev.id] = ev end
+    local pos = {}
+    for i, ev in ipairs(all) do pos[ev] = i end
+    -- time, then each writer's own sequence (the true write order within a second), then merge position
+    table.sort(all, function(x, y)
+        if x.ts ~= y.ts then return x.ts < y.ts end
+        if x.chain == y.chain and x.seq ~= y.seq then return x.seq < y.seq end
+        return pos[x] < pos[y]
+    end)
+    local base = all[1] and all[1].ts or 0
     local out = {}
-    local applied = sim.engine:View().applied
-    for i = startCount + 1, #applied do
-        local ev = applied[i]
-        if ev.list then out[#out + 1] = { list = ev.list, ts = ev.ts, text = describe(ev) } end
+    for _, ev in ipairs(all) do
+        local row = out[#out]
+        if ev.type == "AddMember" and row and row.type == "AddMember" and row.list == ev.list and row.writer == short(ev.author) then
+            row.count = row.count + 1
+            row.names[#row.names + 1] = short(ev.data.member)
+        else
+            out[#out + 1] = { ts = ev.ts - base, type = ev.type, list = ev.list, writer = short(ev.author), id = (ev.id or ""):sub(1, 8),
+                text = describe(ev, byId), count = 1, names = { ev.type == "AddMember" and short(ev.data.member) or nil } }
+        end
     end
-    return out
+    for _, row in ipairs(out) do
+        if row.type == "AddMember" and row.count > 1 then
+            row.text = row.count .. " raiders were added to the " .. listName(row.list) .. ", in this order: " .. table.concat(row.names, ", ")
+        end
+        row.names = nil
+    end
+    -- the latest 40 (a night writes a great many)
+    local first = math.max(1, #out - 39)
+    local shown = {}
+    for i = first, #out do shown[#shown + 1] = out[i] end
+    return shown, #out - #shown
 end
 
 local function state()
@@ -5227,7 +5278,7 @@ local function state()
     -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
     snap.canUndo = stack ~= nil and #stack > 0
-    snap.log = logLines()
+    snap.log, snap.logHidden = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
         local bosses = sim.raid.bosses
@@ -5817,6 +5868,17 @@ end
   const verb = (who, you, other) => (who === "You" ? "You " + you : esc(who) + " " + other);
   const TIER = { main: "main draft", off: "off-spec draft", salvage: "salvage round" };
 
+  // The history is the ledger: one row per event, with when (since the ledger began), who wrote it, the kind of
+  // event, what it says, and its id. Consecutive "added to the list" events arrive grouped.
+  function historyHtml() {
+    const clock = (t) => Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0");
+    const rows = (st.log || []).map((l) =>
+      '<div><span class="tag">' + esc(l.type) + "</span> " + esc(l.text) +
+      '<div class="small muted">+' + clock(l.ts) + " &middot; written by " + esc(l.writer) + " &middot; #" + esc(l.id) + "</div></div>").join("");
+    const hidden = st.logHidden ? '<div class="small muted">(' + st.logHidden + " earlier entries not shown)</div>" : "";
+    return '<div class="card"><h2>History (the ledger)</h2><div class="log">' + hidden + (rows || '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>";
+  }
+
   function pendingHtml() {
     const enr = st.enrollments || [];
     if ((!st.pending || !st.pending.length) && !enr.length) return "";
@@ -5882,7 +5944,7 @@ end
         resultHtml() + pendingHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
-        '<div class="card"><h2>History</h2><div class="log">' + (st.log.length ? st.log.map((l) => "<div>" + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>" +
+        historyHtml() +
       "</div></div>";
   }
 

@@ -1291,6 +1291,20 @@ is no further round of bidding.**
   give up a place for an item nobody wanted.
 - The "Nobody wants it" lesson, the page's decline button, the text prompts and the rationale were reworded to match.
 
+### Simulator: the History is the ledger, in full (2026-10-30)
+
+**Asked by the guild leader:** the history should be a more verbose representation of the ledger. It used to show only list events since
+the scenario began, one terse line each ("Brann joined the list"). It now shows **every event in the ledger**, in write order, each with
+its kind, what it says in plain words, when (since the ledger began), **who wrote it**, and its **id**:
+- Founding and setup (Genesis, the lists created, who was added in what order, the Master Looter's raid, the disenchanter chosen), the
+  awards ("won X on the main list and dropped to the bottom"; "the item went to Y" for a gift), passes, disenchants, and rules
+  and overrides set on items.
+- An undo says what it undid ("The award of X to Brann was undone, and they went back up the list"), found from the event it targets.
+- Consecutive "added to the list" events are grouped into one row listing the order, since a 40-raider night would otherwise
+  bury everything. Only the latest 40 rows show, with a count of earlier ones, because the page redraws as the clock runs.
+- Ties within a second are ordered by each writer's own sequence number (the true write order), so the ledger is founded
+  before its lists are created.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

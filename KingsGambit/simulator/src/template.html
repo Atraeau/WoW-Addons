@@ -265,6 +265,17 @@
   const verb = (who, you, other) => (who === "You" ? "You " + you : esc(who) + " " + other);
   const TIER = { main: "main draft", off: "off-spec draft", salvage: "salvage round" };
 
+  // The history is the ledger: one row per event, with when (since the ledger began), who wrote it, the kind of
+  // event, what it says, and its id. Consecutive "added to the list" events arrive grouped.
+  function historyHtml() {
+    const clock = (t) => Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0");
+    const rows = (st.log || []).map((l) =>
+      '<div><span class="tag">' + esc(l.type) + "</span> " + esc(l.text) +
+      '<div class="small muted">+' + clock(l.ts) + " &middot; written by " + esc(l.writer) + " &middot; #" + esc(l.id) + "</div></div>").join("");
+    const hidden = st.logHidden ? '<div class="small muted">(' + st.logHidden + " earlier entries not shown)</div>" : "";
+    return '<div class="card"><h2>History (the ledger)</h2><div class="log">' + hidden + (rows || '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>";
+  }
+
   function pendingHtml() {
     const enr = st.enrollments || [];
     if ((!st.pending || !st.pending.length) && !enr.length) return "";
@@ -330,7 +341,7 @@
         resultHtml() + pendingHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
-        '<div class="card"><h2>History</h2><div class="log">' + (st.log.length ? st.log.map((l) => "<div>" + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>" +
+        historyHtml() +
       "</div></div>";
   }
 
