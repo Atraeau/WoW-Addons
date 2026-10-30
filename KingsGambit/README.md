@@ -26,6 +26,13 @@ lua tests/run.lua
 lua scripts/build-simulator.lua
 ```
 
+To run the simulator, open the page it builds (it needs an internet connection, to load Lua in the browser).
+After changing the engine, rebuild it with the command above first:
+
+```bash
+start simulator/index.html
+```
+
 To play it in the game, deploy from the repository root with `scripts/deploy.ps1` (or `deploy.sh`), which links
 `src` into the game's AddOns folder. The WoW API reference it was written against is the parent
 repository's `docs/api.json`.
