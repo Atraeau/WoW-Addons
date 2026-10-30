@@ -91,6 +91,9 @@ local function state()
     for n, info in pairs(sim.info) do
         snap.who[n] = { class = info.class, spec = info.spec, off = info.offSpec, role = info.role }
     end
+    -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
+    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
+        disenchanter = short((s and s.cfg.deHandler) or sim.disenchanter or sim.client:me()) }
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then

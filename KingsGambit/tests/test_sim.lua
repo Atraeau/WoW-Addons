@@ -361,3 +361,18 @@ test("free play is repeatable from its seed", function()
     eq(table.concat(a.items, ","), table.concat(b.items, ","))
     assert(table.concat(a.items, ",") ~= table.concat(Sim.FreePlay(6).items, ","))
 end)
+
+H.section("Sim: the disenchanter is a raider, not the Master Looter")
+test("each simulated raid names a disenchanter who is not the Master Looter, and unwanted loot goes to them", function()
+    local night = Sim.NewMoltenCore({ seed = 1 })
+    assert(night.disenchanter and night.disenchanter ~= night.learner, "a raider, not the learner")
+    local cl = night.info[(night.disenchanter:gsub("%-.*$", ""))].class
+    assert(cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST", "a cloth-wearer, the usual enchanter: " .. cl)
+    local sc = SK.modules.Scenarios.find("nobody-wants-it")
+    local sim, ok = Sim.RunScenario(sc)
+    assert(ok)
+    local de
+    for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Disenchant" then de = ev end end
+    assert(de and de.data.to ~= "You-Realm" and de.data.to == sim.disenchanter, "the disenchanter, not You")
+    eq(Sim.NewRaid({ members = { "Solo" }, disenchanter = "Solo" }).disenchanter, "Solo-Realm")
+end)

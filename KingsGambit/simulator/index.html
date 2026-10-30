@@ -4151,9 +4151,21 @@ function M.NewRaid(opts)
     end
     client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
 
+    -- The disenchanter is usually not the Master Looter: a raider (an enchanter) volunteers. Default: the first
+    -- raider whose class has the profession in mind (mage, warlock, priest), else the first other raider.
+    local de = opts.disenchanter
+    if not de then
+        for pass = 1, 2 do
+            for _, n in ipairs(names) do
+                local cl = info[n].class
+                if n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
+            end
+        end
+    end
+
     return setmetatable({
         client = client, engine = engine, names = names, learner = learner .. "-Realm",
-        policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
+        disenchanter = de and (de .. "-Realm") or nil, policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
 
@@ -4192,6 +4204,8 @@ function Sim:drop(links, cfg, seen, ids)
         items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
     self.client:dropLoot(drops)
+    cfg = cfg or {}
+    cfg.deHandler = cfg.deHandler or self.disenchanter -- nil (no other raider): the Master Looter
     local session = Loot.NewSession(self.engine, cfg)
     self.session = session
     local ok, why = session:start(items)
@@ -4811,6 +4825,9 @@ local function state()
     for n, info in pairs(sim.info) do
         snap.who[n] = { class = info.class, spec = info.spec, off = info.offSpec, role = info.role }
     end
+    -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
+    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
+        disenchanter = short((s and s.cfg.deHandler) or sim.disenchanter or sim.client:me()) }
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
@@ -5316,10 +5333,16 @@ end
     SHAMAN: "#0070de", MAGE: "#69ccf0", WARLOCK: "#9482c9", DRUID: "#ff7d0a" };
   const CLASS_NAME = { WARRIOR: "Warrior", PALADIN: "Paladin", HUNTER: "Hunter", ROGUE: "Rogue", PRIEST: "Priest",
     SHAMAN: "Shaman", MAGE: "Mage", WARLOCK: "Warlock", DRUID: "Druid" };
+  // Master Looter and disenchanter tags, wherever a name appears
+  function roleTags(n) {
+    const r = st.roles || {};
+    return (n === r.masterLooter ? ' <span class="tag" title="Runs the loot session and hands the items out">Master Looter</span>' : "") +
+      (n === r.disenchanter ? ' <span class="tag" title="Receives items nobody wants, to disenchant">disenchanter</span>' : "");
+  }
   function nameHtml(n) {
     const w = st.who && st.who[n];
-    if (!w || !w.class) return esc(n);
-    return '<span style="color:' + (CLASS_COLOR[w.class] || "inherit") + '">' + esc(n) + "</span>" +
+    if (!w || !w.class) return esc(n) + roleTags(n);
+    return '<span style="color:' + (CLASS_COLOR[w.class] || "inherit") + '">' + esc(n) + "</span>" + roleTags(n) +
       '<span class="spec">' + esc((w.spec || "") + " " + CLASS_NAME[w.class]) + (w.off ? " · off: " + esc(w.off) : "") + "</span>";
   }
 
@@ -5334,7 +5357,7 @@ end
     if (!st.pending || !st.pending.length) return "";
     return '<div class="card"><h2>Will be recorded</h2>' + st.pending.map((a) => {
       if (a.type === "award") return "<div class=\"small\">" + esc(a.member) + " wins <span class=\"iname\">" + esc(a.item) + "</span> (" + a.tier + ")" + (a.to !== a.member ? " &rarr; " + esc(a.to) : "") + "</div>";
-      if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to " + esc(a.to) + " to disenchant</div>";
+      if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to the disenchanter, " + esc(a.to) + ", to disenchant</div>";
       return "<div class=\"small muted\">" + esc(a.member) + " joins the " + esc(a.list) + " list</div>";
     }).join("") + (st.phase === "review" ? '<div class="small muted" style="margin-top:6px">Nothing is written to the ledger until you confirm.</div>' : "") + "</div>";
   }

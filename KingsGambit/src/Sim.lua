@@ -59,9 +59,21 @@ function M.NewRaid(opts)
     end
     client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
 
+    -- The disenchanter is usually not the Master Looter: a raider (an enchanter) volunteers. Default: the first
+    -- raider whose class has the profession in mind (mage, warlock, priest), else the first other raider.
+    local de = opts.disenchanter
+    if not de then
+        for pass = 1, 2 do
+            for _, n in ipairs(names) do
+                local cl = info[n].class
+                if n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
+            end
+        end
+    end
+
     return setmetatable({
         client = client, engine = engine, names = names, learner = learner .. "-Realm",
-        policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
+        disenchanter = de and (de .. "-Realm") or nil, policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
 
@@ -100,6 +112,8 @@ function Sim:drop(links, cfg, seen, ids)
         items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
     self.client:dropLoot(drops)
+    cfg = cfg or {}
+    cfg.deHandler = cfg.deHandler or self.disenchanter -- nil (no other raider): the Master Looter
     local session = Loot.NewSession(self.engine, cfg)
     self.session = session
     local ok, why = session:start(items)

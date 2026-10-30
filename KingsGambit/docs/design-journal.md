@@ -845,6 +845,20 @@ have class restrictions, and needn't have stats, though nearly all do. Sampled f
   and 60 seeds of free play run with no refused bid.
 - The mechanics tests still use placeholder names ("X"); they exercise the engine, not the training content.
 
+### Simulator: the Master Looter and the disenchanter are labeled, and are different people (2026-10-30)
+
+**Asked by the guild leader:** label who the disenchanter and the Master Looter are in the simulator. **Added:**
+they need not be the same person, and often aren't.
+- The page tags both wherever a name appears (standings, answers): "Master Looter" on the learner, "disenchanter"
+  on whoever holds that role, and a pending disenchant reads "goes to the disenchanter, <name>".
+- Every simulated raid now has a disenchanter who is a **raider, not the Master Looter**: by default the first
+  mage, warlock or priest (cloth-wearers, the usual enchanters), otherwise another raider. `Sim.NewRaid` takes
+  `disenchanter` to choose. Unwanted loot goes to them, and a test pins that it does.
+- The engine already allowed this (`deHandler` in the session config); only the simulator defaulted it to the
+  Master Looter, which hid the case.
+- Not decided: how a real guild names its disenchanter (an officer setting or a per-raid choice by the Master Looter).
+  Today it is session configuration.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
