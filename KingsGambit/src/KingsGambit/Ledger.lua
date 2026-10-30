@@ -1,4 +1,4 @@
--- King's Gambit: the ledger, v2 (docs/kings-gambit/ledger-v2-design.md). Pure Lua.
+-- King's Gambit: the ledger, v2 (docs/ledger-v2-design.md). Pure Lua.
 --
 -- A ledger is a STORE of chains, one per writer. Each chain is append-only and hash-chained, and only its
 -- writer appends to it, so it can't fork. The VIEW (standings, authority, conflicts) is a replay of every

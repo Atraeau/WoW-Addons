@@ -2,7 +2,7 @@
 -- Pure Lua (no WoW API) so the ledger can be tested outside the game.
 --
 -- Not cryptographic: the trust model is trusted officers + a hash chain that
--- catches mistakes, dropped messages and desync (see docs/kings-gambit/).
+-- catches mistakes, dropped messages and desync (see docs/).
 local _, SK = ...
 local M = SK:NewModule("Hash")
 

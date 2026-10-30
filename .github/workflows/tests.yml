@@ -1,24 +1,16 @@
 name: tests
 
-# Runs the King's Gambit test suite (pure Lua, no game needed) and checks that the committed
+# Runs the King's Gambit test suite (pure Lua, no game needed, from KingsGambit/) and checks that the committed
 # browser simulator matches its sources. Read-only: it never commits anything.
 on:
   push:
     branches: [main]
     paths:
-      - 'src/KingsGambit/**'
-      - 'tests/**'
-      - 'simulator/**'
-      - 'tools/**'
-      - 'scripts/build-simulator.lua'
+      - 'KingsGambit/**'
       - '.github/workflows/tests.yml'
   pull_request:
     paths:
-      - 'src/KingsGambit/**'
-      - 'tests/**'
-      - 'simulator/**'
-      - 'tools/**'
-      - 'scripts/build-simulator.lua'
+      - 'KingsGambit/**'
       - '.github/workflows/tests.yml'
 
 permissions:
@@ -27,6 +19,9 @@ permissions:
 jobs:
   lua:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: KingsGambit
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +29,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lua5.4
 
       - name: Run the test suite
-        run: lua5.4 tests/kings-gambit/run.lua
+        run: lua5.4 tests/run.lua
 
       - name: Simulator page is up to date
         run: |

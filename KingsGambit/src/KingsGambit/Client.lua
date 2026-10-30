@@ -1,7 +1,7 @@
 -- King's Gambit: the Client contract (Phase 1.5).
 -- The Client is the only way the engine touches the WoW API. This file lists what a Client
 -- must provide so RealClient, MockClient and SimClient can be checked against the same contract.
--- Design: docs/kings-gambit/client-interface.md
+-- Design: docs/client-interface.md
 local _, SK = ...
 local M = SK:NewModule("Client")
 

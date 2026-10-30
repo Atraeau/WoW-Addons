@@ -142,7 +142,7 @@ do local chunk = function(...)
 -- Pure Lua (no WoW API) so the ledger can be tested outside the game.
 --
 -- Not cryptographic: the trust model is trusted officers + a hash chain that
--- catches mistakes, dropped messages and desync (see docs/kings-gambit/).
+-- catches mistakes, dropped messages and desync (see docs/).
 local _, SK = ...
 local M = SK:NewModule("Hash")
 
@@ -514,7 +514,7 @@ function M.Digest(s) return Hash.Sum(Hash.Canon(s.order)) end
 end; chunk("KingsGambit", SK) end
 -- ===== Ledger.lua =====
 do local chunk = function(...)
--- King's Gambit: the ledger, v2 (docs/kings-gambit/ledger-v2-design.md). Pure Lua.
+-- King's Gambit: the ledger, v2 (docs/ledger-v2-design.md). Pure Lua.
 --
 -- A ledger is a STORE of chains, one per writer. Each chain is append-only and hash-chained, and only its
 -- writer appends to it, so it can't fork. The VIEW (standings, authority, conflicts) is a replay of every
@@ -1021,7 +1021,7 @@ do local chunk = function(...)
 -- King's Gambit: the Client contract (Phase 1.5).
 -- The Client is the only way the engine touches the WoW API. This file lists what a Client
 -- must provide so RealClient, MockClient and SimClient can be checked against the same contract.
--- Design: docs/kings-gambit/client-interface.md
+-- Design: docs/client-interface.md
 local _, SK = ...
 local M = SK:NewModule("Client")
 
@@ -1104,7 +1104,7 @@ do local chunk = function(...)
 -- Runs under plain Lua and inside the game. Time, randomness, raid, loot, comms and
 -- trades are all scripted by the test (or training scenario) through the control
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
--- Design: docs/kings-gambit/client-interface.md
+-- Design: docs/client-interface.md
 local _, SK = ...
 local Hash, Client
 local M = SK:NewModule("MockClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
@@ -1485,7 +1485,7 @@ end; chunk("KingsGambit", SK) end
 do local chunk = function(...)
 -- King's Gambit: an engine owns the ledger (a store of per-writer chains plus its replayed view) and talks
 -- to the WoW client only through a Client. No module-level state: tests and training can run many engines
--- in one process. Design: docs/kings-gambit/ledger-v2-design.md
+-- in one process. Design: docs/ledger-v2-design.md
 local _, SK = ...
 local Ledger
 local M = SK:NewModule("Engine", { "Ledger" }, function(d) Ledger = d.Ledger end)
@@ -2023,7 +2023,7 @@ do local chunk = function(...)
 -- Pure logic over an Engine and its Client: no WoW calls, no frames. A Session takes a
 -- batch of items through bidding, the tiered priority draft, the backstop and the
 -- disenchant floor, then (after confirmation) hands the items out and records the results
--- in the ledger. Rules: docs/kings-gambit/rationale.md.
+-- in the ledger. Rules: docs/rationale.md.
 --
 --   bidding  -> main draft -> off-spec draft -> backstop -> disenchant -> review -> done
 --
@@ -3777,7 +3777,7 @@ do local chunk = function(...)
 --   "says"      the bidder says they are ready (e.g. materials in the bank, or no addon: "1 need ready")
 --   "notready"  the bidder's addon looked and something is missing
 --   nil         unknown (not a token, or its requirements aren't in our data yet)
--- Design: docs/kings-gambit/design-journal.md ("Tokens, readiness, materials, and list scope").
+-- Design: docs/design-journal.md ("Tokens, readiness, materials, and list scope").
 local _, SK = ...
 -- Raid data modules that may hold tokens (items with a `token` field). Optional dependencies: without them a
 -- token's readiness is the player's own word.

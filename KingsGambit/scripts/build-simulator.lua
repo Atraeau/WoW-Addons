@@ -1,9 +1,9 @@
 -- Build the King's Gambit browser simulator: one self-contained HTML page.
--- Usage (from the repo root):  lua scripts/build-simulator.lua
+-- Usage (from the KingsGambit folder):  lua scripts/build-simulator.lua
 --
 -- It inlines the REAL engine modules (no RealClient, SelfCheck, Core or UI) with the module registry, which
 -- then injects their dependencies (see src/KingsGambit/Registry.lua), a small JSON API
--- layer, and the page template into docs/kings-gambit/simulator/index.html. The page runs the
+-- layer, and the page template into simulator/index.html. The page runs the
 -- engine over a MockClient in the browser with fengari (Lua in JavaScript), so there is no second
 -- implementation of the rules to drift. Inlined so it works from file:// and GitHub Pages alike.
 local SRC = "src/KingsGambit/"

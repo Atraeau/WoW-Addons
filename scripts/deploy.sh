@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Link (or copy) every addon under src/ into the WoW: Forever AddOns folder.
+# Link (or copy) every addon under src/ into the WoW: Forever AddOns folder. Self-contained projects (a
+# top-level folder with its own src/, e.g. KingsGambit/) are found too: each folder there holding a .toc.
 # macOS and Linux counterpart of deploy.ps1: same config file, same modes.
 #
 #   scripts/deploy.sh                 symlink all addons under src/
@@ -92,7 +93,12 @@ fi
 # --- Select addons ------------------------------------------------------------
 [ -d "$srcDir" ] || { echo "No src/ folder at $srcDir" >&2; exit 1; }
 selected=()
-for d in "$srcDir"/*/; do
+candidates=("$srcDir"/*/)
+for p in "$repoRoot"/*/src/*/; do
+	case "$p" in "$srcDir"/*) continue ;; esac
+	ls "$p"*.toc >/dev/null 2>&1 && candidates+=("$p")
+done
+for d in "${candidates[@]}"; do
 	[ -d "$d" ] || continue
 	n="$(basename "$d")"
 	if [ ${#names[@]} -gt 0 ]; then
@@ -100,12 +106,12 @@ for d in "$srcDir"/*/; do
 		for want in "${names[@]}"; do [ "$want" = "$n" ] && keep=1; done
 		[ $keep -eq 1 ] || continue
 	fi
-	selected+=("$n")
+	selected+=("${d%/}")
 done
 [ ${#selected[@]} -gt 0 ] || { echo "No matching addons found under src/." >&2; exit 1; }
 
-for n in "${selected[@]}"; do
-	target="$srcDir/$n"
+for target in "${selected[@]}"; do
+	n="$(basename "$target")"
 	link="$addonsDir/$n"
 	# Always remove any existing deployment first (link or copied folder).
 	if [ -L "$link" ]; then

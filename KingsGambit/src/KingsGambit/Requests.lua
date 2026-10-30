@@ -1,4 +1,4 @@
--- King's Gambit: adjustment requests, the dispute path (design: docs/kings-gambit/ledger-v2-design.md, section 4).
+-- King's Gambit: adjustment requests, the dispute path (design: docs/ledger-v2-design.md, section 4).
 -- During a raid only that raid's Master Looter writes to the ledger. Anyone else who thinks the list should change
 -- (an officer fixing a mistake, a raider disputing a result) sends the Master Looter a REQUEST, with a reason. The
 -- Master Looter accepts or declines it, and both outcomes go in the ledger:

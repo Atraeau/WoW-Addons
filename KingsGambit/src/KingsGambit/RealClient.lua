@@ -1,6 +1,6 @@
 -- King's Gambit: RealClient, the Client backed by the actual WoW API (Phase 1.6).
 -- Translates WoW's quirks into our contract (see Client.lua and
--- docs/kings-gambit/client-interface.md). All game access goes through `E` (default _G),
+-- docs/client-interface.md). All game access goes through `E` (default _G),
 -- so the translation logic can be tested outside the game with a stub environment.
 --
 -- Signatures were checked against docs/api.json. Items marked FIELD in comments are

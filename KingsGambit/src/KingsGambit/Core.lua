@@ -1,6 +1,6 @@
 -- King's Gambit: namespace, startup wiring (the composition root), /gambit entry point.
 -- The module registry is Registry.lua, loaded first.
--- Design: docs/kings-gambit/ (manifesto, rationale, design-journal).
+-- Design: docs/ (manifesto, rationale, design-journal).
 local ADDON, SK = ...
 _G.KingsGambit = SK
 

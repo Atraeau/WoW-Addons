@@ -625,6 +625,22 @@ mid-function, which hid what they depended on.
   - Simulated raiders with a class, main spec and off-spec, deciding from real item stats. The raid data needs
     stats from the CMaNGOS extract for that.
 
+### Decision: King's Gambit is one self-contained folder (2026-10-30)
+
+**Decided by the guild leader:** everything about King's Gambit lives in one folder of the WoW-Addons repository,
+with no separate docs folder elsewhere, so it can move to its own repository later.
+- `KingsGambit/` now holds the addon (`src/KingsGambit`), `docs/`, `tests/`, `tools/`, `simulator/`, the data and
+  build `scripts/`, and the earlier SuicideKings prototype (`archive/`). Every command runs from that folder
+  (`lua tests/run.lua`, `lua scripts/build-simulator.lua`).
+- The files were moved with `git mv`, so their history follows them. Splitting it out later:
+  `git subtree split --prefix=KingsGambit`.
+- What stays at the repository root, because it serves every addon:
+  - the deploy scripts, which now also find addons in a project's own `src/` folder;
+  - the GitHub workflow (GitHub only reads workflows at the root; it now runs inside `KingsGambit/`);
+  - the WoW API reference (`docs/api.json`), which the client code was checked against.
+- After pulling this, **re-run the deploy script**: the game's link to the old `src/KingsGambit` no longer points
+  anywhere.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

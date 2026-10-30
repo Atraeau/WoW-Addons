@@ -1,5 +1,5 @@
 -- Luacheck config for World of Warcraft addon development.
--- Install luacheck (via LuaRocks) to lint: `luacheck src`
+-- Install luacheck (via LuaRocks) to lint: `luacheck src KingsGambit/src`
 -- The WoW client uses Lua 5.1 semantics.
 
 std = "lua51"

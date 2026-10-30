@@ -2,7 +2,7 @@
 -- Runs under plain Lua and inside the game. Time, randomness, raid, loot, comms and
 -- trades are all scripted by the test (or training scenario) through the control
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
--- Design: docs/kings-gambit/client-interface.md
+-- Design: docs/client-interface.md
 local _, SK = ...
 local Hash, Client
 local M = SK:NewModule("MockClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)

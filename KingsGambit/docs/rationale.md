@@ -118,7 +118,7 @@ else's.
 ## Running a loot session (for the Master Looter)
 
 This is what happens, in order, when a boss drops loot. Practice it in the
-[simulator](../../simulator/README.md) before the real thing.
+[simulator](../simulator/README.md) before the real thing.
 
 1. **Put the items up.** The addon picks up what the Master Looter sees in the loot window (or you can
    add an item by link). Raiders without the addon get a short announcement in raid chat and answer

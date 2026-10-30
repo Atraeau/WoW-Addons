@@ -10,7 +10,7 @@
 --   "says"      the bidder says they are ready (e.g. materials in the bank, or no addon: "1 need ready")
 --   "notready"  the bidder's addon looked and something is missing
 --   nil         unknown (not a token, or its requirements aren't in our data yet)
--- Design: docs/kings-gambit/design-journal.md ("Tokens, readiness, materials, and list scope").
+-- Design: docs/design-journal.md ("Tokens, readiness, materials, and list scope").
 local _, SK = ...
 -- Raid data modules that may hold tokens (items with a `token` field). Optional dependencies: without them a
 -- token's readiness is the player's own word.

@@ -15,6 +15,7 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | Path | What's there |
 | --- | --- |
 | [`src/`](src) | Your addons — one folder each (source of truth) |
+| [`KingsGambit/`](KingsGambit/README.md) | A self-contained addon project (its addon is in `KingsGambit/src/`) |
 | [`vendor/`](vendor) | Tracked third-party addons (patched for this client) |
 | [`docs/api/`](docs/api/README.md) | **Generated API reference** — 405 namespaces in 19 category folders |
 | [`docs/README.md`](docs/README.md) | How the API docs + LSP definitions are generated |
@@ -29,7 +30,7 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | --- | --- | --- |
 | HelloForever | [`src/HelloForever`](src/HelloForever) | Example addon produced by the scaffolder (`/hf`) |
 | WowBagSorter | [`src/WowBagSorter`](src/WowBagSorter) | Bag/bank sorter (originally Classic 1.13; may need 12.0 fixes) |
-| KingsGambit | [`src/KingsGambit`](src/KingsGambit) | King's Gambit raid loot ledger (derived from Suicide Kings) |
+| KingsGambit | [`KingsGambit/`](KingsGambit/README.md) | King's Gambit raid loot ledger (derived from Suicide Kings): a self-contained project folder |
 | WowApiExport | [`src/WowApiExport`](src/WowApiExport) | Dev tool — dumps the client's own API docs (`/apiexport`) |
 | BTPCompatCheck | [`src/BTPCompatCheck`](src/BTPCompatCheck) | Dev tool — probes which APIs exist on the client (`/btpcheck`) |
 | BlizzThreatPlates | [`vendor/BlizzThreatPlates`](vendor/BlizzThreatPlates) | Patched third-party addon (MIT) — see [PATCHES.md](vendor/BlizzThreatPlates/PATCHES.md) |
@@ -39,13 +40,18 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 A full-featured raid loot system (Suicide Kings–derived) with a tamper-evident shared ledger. The
 engine is plain Lua with no game dependency, so it is fully tested outside WoW.
 
-- Design: [`docs/kings-gambit/`](docs/kings-gambit/): [manifesto](docs/kings-gambit/manifesto.md),
-  [player guide](docs/kings-gambit/rationale.md), [design journal](docs/kings-gambit/design-journal.md) (every decision and why),
-  [client interface](docs/kings-gambit/client-interface.md), [ledger format](docs/kings-gambit/ledger-format.md), [UI sketch](docs/kings-gambit/ui-sketch.html)
-- Try it: open [`simulator/index.html`](simulator/README.md) in a browser: the real engine over a simulated raid,
-  with training scenarios and a sync lab
-- Audit: [`tools/`](tools/README.md): verify a saved ledger and print standings/history without the game
-- Tests: `lua tests/kings-gambit/run.lua` (Lua 5.4); CI runs them on every push
+Everything about it lives in [`KingsGambit/`](KingsGambit/README.md): the addon (`KingsGambit/src/KingsGambit`, which
+the deploy scripts find like any addon under `src/`), its docs, tests, simulator, tools and data scripts, so it can
+move to its own repository unchanged.
+
+- Design: [manifesto](KingsGambit/docs/manifesto.md), [player guide](KingsGambit/docs/rationale.md),
+  [design journal](KingsGambit/docs/design-journal.md) (every decision and why),
+  [client interface](KingsGambit/docs/client-interface.md), [ledger format](KingsGambit/docs/ledger-format.md),
+  [UI sketch](KingsGambit/docs/ui-sketch.html)
+- Try it: open [`KingsGambit/simulator/index.html`](KingsGambit/simulator/README.md) in a browser: the real engine over
+  a simulated raid, with training scenarios and a sync lab
+- Audit: [`KingsGambit/tools/`](KingsGambit/tools/README.md): verify a saved ledger and print standings/history without the game
+- Tests: `cd KingsGambit && lua tests/run.lua` (Lua 5.4); CI runs them on every push
 - In game: `/gambit check` probes the live client and saves the results for review
 
 ## API reference
@@ -94,7 +100,7 @@ scripts/deploy.sh
 
 | Command | What it does |
 | --- | --- |
-| [`deploy.ps1`](scripts/deploy.ps1) | Junction-link every addon under `src/` into the game |
+| [`deploy.ps1`](scripts/deploy.ps1) | Junction-link every addon under `src/` (and `<project>/src/`) into the game |
 | `deploy.ps1 -Name X` | Link only addon `X` |
 | `deploy.ps1 -Copy` | Hard-copy instead of link (packaging / other drives) |
 | `deploy.ps1 -Clean` | Remove the deployed links (source untouched) |

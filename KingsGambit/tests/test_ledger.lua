@@ -262,7 +262,7 @@ test("replaying the store is deterministic", function()
 end)
 
 H.section("Ledger: the format spec")
-test("the worked example in docs/kings-gambit/ledger-format.md is real", function()
+test("the worked example in docs/ledger-format.md is real", function()
     local store = Ledger.NewStore()
     local function w(author, epoch, t, d, ts, list)
         local ev = assert(Ledger.Build(store, author .. "#" .. epoch, author, t, d, ts, list))

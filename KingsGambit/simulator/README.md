@@ -19,7 +19,7 @@ the only outside resource is a pinned, integrity-checked copy of
 
 ## Rebuilding
 
-The page is generated; edit the sources, then rebuild from the repo root (needs Lua 5.4):
+The page is generated; edit the sources, then rebuild from the KingsGambit folder (needs Lua 5.4):
 
 ```
 lua scripts/build-simulator.lua

@@ -2,7 +2,7 @@
 -- Pure logic over an Engine and its Client: no WoW calls, no frames. A Session takes a
 -- batch of items through bidding, the tiered priority draft, the backstop and the
 -- disenchant floor, then (after confirmation) hands the items out and records the results
--- in the ledger. Rules: docs/kings-gambit/rationale.md.
+-- in the ledger. Rules: docs/rationale.md.
 --
 --   bidding  -> main draft -> off-spec draft -> backstop -> disenchant -> review -> done
 --

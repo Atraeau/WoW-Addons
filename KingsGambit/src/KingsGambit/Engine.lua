@@ -1,6 +1,6 @@
 -- King's Gambit: an engine owns the ledger (a store of per-writer chains plus its replayed view) and talks
 -- to the WoW client only through a Client. No module-level state: tests and training can run many engines
--- in one process. Design: docs/kings-gambit/ledger-v2-design.md
+-- in one process. Design: docs/ledger-v2-design.md
 local _, SK = ...
 local Ledger
 local M = SK:NewModule("Engine", { "Ledger" }, function(d) Ledger = d.Ledger end)

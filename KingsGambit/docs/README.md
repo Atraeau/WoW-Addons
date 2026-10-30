@@ -14,7 +14,7 @@ A raid loot system for WoW: Forever, derived from Suicide Kings, with a shared l
 
 Also in the repository:
 
-- [`simulator/`](../../simulator/README.md): the real engine over a simulated raid, in a browser, with training scenarios and a sync lab.
-- [`tools/`](../../tools/README.md): verify a saved ledger and print standings and history, without the game.
-- [`tests/kings-gambit/`](../../tests/kings-gambit/): the test suite (`lua tests/kings-gambit/run.lua`).
-- [`src/KingsGambit/`](../../src/KingsGambit/): the addon.
+- [`simulator/`](../simulator/README.md): the real engine over a simulated raid, in a browser, with training scenarios and a sync lab.
+- [`tools/`](../tools/README.md): verify a saved ledger and print standings and history, without the game.
+- [`tests/`](../tests/): the test suite (`lua tests/run.lua`).
+- [`src/KingsGambit/`](../src/KingsGambit/): the addon.

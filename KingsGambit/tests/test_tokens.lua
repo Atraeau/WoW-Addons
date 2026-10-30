@@ -253,7 +253,7 @@ test("a seed gives the same night in a different process too (no dependence on t
     local script = os.tmpname()
     local f = assert(io.open(script, "w"))
     f:write([==[
-        local H = dofile("tests/kings-gambit/harness.lua")
+        local H = dofile("tests/harness.lua")
         local Sim = H.SK.modules.Sim
         for _, new in ipairs { Sim.NewMoltenCore, Sim.NewAQ40 } do
             local sim = new({ seed = 3 })

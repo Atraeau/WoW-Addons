@@ -6,7 +6,7 @@ local M = {}
 
 local MODULES = { "Hash", "Standings", "Ledger" }
 
--- Load the engine modules from a repo checkout. root = repo root (default ".").
+-- Load the engine modules from a repo checkout. root = the KingsGambit folder (default ".").
 function M.loadEngine(root)
     root = root or "."
     local SK = {}
