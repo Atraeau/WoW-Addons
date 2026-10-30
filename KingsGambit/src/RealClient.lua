@@ -123,6 +123,13 @@ function M.New(opts)
         end
     end
 
+    -- The raid (or dungeon group) leader: there is always one in a group. nil when not in a group.
+    function c:leader()
+        for _, m in ipairs(self:roster()) do
+            if m.rank == 2 then return m.name end
+        end
+    end
+
     function c:guildRoster()
         local out = {}
         if not (E.IsInGuild and E.IsInGuild()) then return out end
@@ -147,6 +154,34 @@ function M.New(opts)
             if type(method) == "string" then return method:lower() end
         end
         return "group"
+    end
+
+    -- Change the loot method (only the leader can: the game refuses anyone else). For "master", `looter` names the Master
+    -- Looter (default: this player). Returns true, or false + a reason: notleader, badmethod, unavailable, failed.
+    -- FIELD: confirm the lootMaster argument takes a plain name for a same-realm player and Name-Realm otherwise.
+    function c:setLootMethod(method, looter)
+        if self:leader() ~= self:me() then return false, "notleader" end
+        local enumValue
+        if E.Enum and E.Enum.LootMethod then
+            for k, v in pairs(E.Enum.LootMethod) do
+                if k:lower() == method then enumValue = v end
+            end
+        end
+        if enumValue == nil then return false, "badmethod" end
+        local api = E.C_PartyInfo
+        if not (api and api.SetLootMethod) then return false, "unavailable" end
+        if api.IsLootMethodAvailable and not api.IsLootMethodAvailable(enumValue) then return false, "unavailable" end
+        local ok
+        if method == "master" then
+            local who = normalize(looter or self:me())
+            local name, realm = who:match("^(.-)%-(.+)$")
+            local mine = self:me():match("%-(.+)$")
+            ok = api.SetLootMethod(enumValue, (realm and realm == mine) and name or who)
+        else
+            ok = api.SetLootMethod(enumValue)
+        end
+        if not ok then return false, "failed" end
+        return true
     end
 
     -- FIELD: confirm IsMasterLooter() semantics; fall back to C_PartyInfo ids.

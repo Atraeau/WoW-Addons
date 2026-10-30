@@ -285,9 +285,9 @@ test("a failed hand-out is reported and never written to the ledger", function()
     local s, engine, client = setup()
     answerAll(s, 1, { A = "pass", B = "need", C = "pass", D = "pass", E = "pass" })
     eq(s.items[1].winner, "B-Realm")
-    client:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "group" }) -- the Master Looter lost the role
+    assert(client:give(1, "C-Realm")) -- someone else already took the slot from the window
     local ok, failures = s:confirm()
-    assert(ok); eq(#failures, 1); eq(failures[1].stage, "give"); eq(failures[1].reason, "notml")
+    assert(ok); eq(#failures, 1); eq(failures[1].stage, "give"); eq(failures[1].reason, "gone")
     eq(#events(engine, "main", "Award"), 0); eq(order(engine), "A,B,C,D,E")
 end)
 test("someone out of loot range can't win the item: the draft passes over them", function()
@@ -671,4 +671,62 @@ test("a gift waiting for its recipient delays the offer until it is settled", fu
     assert(s2:chooseRecipient("A", "D"))
     eq(s2.turn.type, "claim"); eq(s2.turn.item, 2); eq(s2.turn.player, "A-Realm", "now the offer: A paid for the pick")
     assert(s)
+end)
+
+H.section("Loot: the Master Looter requirement")
+local function lootWorld(o)
+    local client = MockClient.New({ name = "Raidlead", realm = "Realm" })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, n in ipairs { "A", "B", "Raidlead" } do engine:Append("main", "AddMember", { member = n .. "-Realm", class = "WARRIOR" }) end
+    client:setRaid({ "Raidlead", "A", "B" }, o)
+    client:dropLoot({ { link = "item:1" } })
+    return Loot.NewSession(engine, { deHandler = "A-Realm" }), client
+end
+test("loot is not handed out until the loot method is Master Looter", function()
+    for _, method in ipairs { "group", "needbeforegreed", "freeforall", "personal" } do
+        local s = lootWorld({ leader = "A", lootMethod = method })
+        local ok, why = s:start({ { link = "item:1", slot = 1 } })
+        assert(not ok and why == "notmasterloot", method .. ": " .. tostring(why))
+    end
+end)
+test("only the named Master Looter runs a session", function()
+    local s = lootWorld({ leader = "A", lootMethod = "master", masterLooter = "A" }) -- A is the Master Looter, not this client
+    local ok, why = s:start({ { link = "item:1", slot = 1 } })
+    assert(not ok and why == "notml", tostring(why))
+    local mine = lootWorld({ leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+    assert(mine:start({ { link = "item:1", slot = 1 } }))
+end)
+test("the leader sets it, then loot can be handed out: the requirement is met by the raid's own setting", function()
+    local s, client = lootWorld({ leader = "Raidlead", lootMethod = "group" })
+    assert(not s:start({ { link = "item:1", slot = 1 } }))
+    assert(client:setLootMethod("master", "Raidlead"))
+    local s2 = Loot.NewSession(s.engine, { deHandler = "A-Realm" })
+    assert(s2:start({ { link = "item:1", slot = 1 } }))
+end)
+
+test("if the loot method or the Master Looter changes during a session, it is cancelled and nothing is recorded", function()
+    local function run(change)
+        local s, engine, client = setup()
+        local reasons = {}
+        s:on("phase", function(p) if p.phase == "cancelled" then reasons[#reasons + 1] = p.reason end end)
+        assert(s:bid("A", 1, "need"))
+        change(client)
+        eq(s.phase, "cancelled"); eq(reasons[1], "lootmethod")
+        eq(#events(engine, "main", "Award"), 0, "nothing was written")
+        local ok = s:confirm(); assert(not ok)
+        return s
+    end
+    run(function(c) c:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "group" }) end)          -- the method
+    run(function(c) c:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "master", masterLooter = "A" }) end) -- the looter
+    -- and it also holds in the review step, before confirm
+    local s, _, client = setup()
+    answerAll(s, 1, { A = "need", B = "pass", C = "pass", D = "pass", E = "pass" })
+    eq(s.phase, "review")
+    client:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "needbeforegreed" })
+    eq(s.phase, "cancelled")
+    -- an unrelated roster change does not cancel it
+    local s2, _, c2 = setup()
+    c2:setRaid({ "A", "B", "C", "D", "E", "F" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+    assert(s2.phase ~= "cancelled")
 end)

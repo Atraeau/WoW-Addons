@@ -84,12 +84,12 @@
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
-  let running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
     current = id; result = null; lastMsg = ""; giftTo = "";
     running = false; started = false; // every scenario begins paused: read it, then press Start
-    st = call("start", id, seed);
+    st = call("start", id, seed, mlChoice);
     prevOrder = st.order || []; moved = {};
     render();
   }
@@ -100,7 +100,12 @@
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
       cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
       cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
-      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it" };
+      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it",
+      notml: "only the Master Looter can do that: another raider holds the role in this run (choose yourself as Master Looter and restart to take the controls)",
+      notleader: "only the raid leader can change the loot method: ask them with the button",
+      notmasterloot: "the loot method is not Master Looter, so loot cannot be handed out: the raid leader has to set it (any loot waiting is kept)",
+      otherlooter: "the Master Looter is chosen when a run starts: pick them in the Master Looter list and restart",
+      notinraid: "that player is not in the raid" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -178,12 +183,25 @@
     const r = st.roles || {};
     const names = Object.keys(st.who || {}).sort();
     const busy = st.phase && ["idle", "done", "cancelled", "none"].indexOf(st.phase) < 0;
-    return '<div class="card"><h2>Roles</h2><div class="small">Master Looter: <b>' + esc(r.masterLooter || "") + "</b></div>" +
-      '<div class="small" style="margin:6px 0 4px">Disenchanter (you choose, per raid):</div>' +
-      '<div class="row"><select id="deSel"' + (busy ? " disabled" : "") + ">" + names.map((n) =>
-        "<option" + (n === r.disenchanter ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>" +
-      '<button data-act="setDe"' + (busy ? " disabled" : "") + ">Set</button></div>" +
-      (busy ? '<div class="small muted" style="margin-top:6px">Locked while loot is being handed out.</div>' : "") + "</div>";
+    const opts = (list, cur) => list.map((n) => "<option" + (n === cur ? " selected" : "") + ">" + esc(n) + "</option>").join("");
+    const METHODS = [["master", "Master Looter"], ["group", "Group Loot"], ["needbeforegreed", "Need Before Greed"], ["freeforall", "Free For All"]];
+    const methodOpts = METHODS.map((m) => '<option value="' + m[0] + '"' + (m[0] === r.lootMethod ? " selected" : "") + ">" + m[1] + "</option>").join("");
+    const row = (label, inner) => '<div class="small" style="margin:8px 0 3px">' + label + '</div><div class="row">' + inner + "</div>";
+    const deLocked = busy || !r.youAreML;
+    const setLabel = r.youAreLeader ? "Set" : "Ask " + esc(r.leader || "the leader");
+    let warn = "";
+    if (r.lootMethod !== "master") {
+      warn = '<div class="small" style="color: var(--warn); margin-top:8px">Loot cannot be handed out: the loot method is not Master Looter. Only the raid leader (' +
+        esc(r.leader) + (r.youAreLeader ? ", you" : "") + ") can set it.</div>";
+    }
+    return '<div class="card"><h2>Roles</h2>' +
+      row("Raid leader (there is always one):", '<select id="leaderSel">' + opts(names, r.leader) + '</select><button data-act="setLeader">Set</button>') +
+      row("Loot method (set by the raid leader):", '<select id="methodSel">' + methodOpts + '</select><button data-act="setMethod" title="Only the raid leader can change the loot method. If you are not the leader, you ask them.">' + setLabel + "</button>") +
+      row("Master Looter (their addon runs the loot; changing it restarts this run):", '<select id="mlSel">' + opts(names, r.masterLooter) + '</select><button data-act="setMl">Restart</button>') +
+      row("Disenchanter (the Master Looter chooses, per raid):", '<select id="deSel"' + (deLocked ? " disabled" : "") + ">" + opts(names, r.disenchanter) + '</select><button data-act="setDe"' + (deLocked ? " disabled" : "") + ">Set</button>") +
+      warn +
+      (!r.youAreML ? '<div class="small muted" style="margin-top:8px"><b>' + esc(r.masterLooter) + "</b> is the Master Looter and runs the loot. You play a raider: answer, pick and claim as usual.</div>" : "") +
+      (busy ? '<div class="small muted" style="margin-top:6px">The disenchanter is locked while loot is being handed out.</div>' : "") + "</div>";
   }
 
   function giftSelect(itemId) {
@@ -293,9 +311,11 @@
   function controlsHtml() {
     const p = st.phase;
     let h = '<div class="row" style="margin-top:10px">';
-    if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
-    if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "done" && st.canUndo) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
+    const isML = !st.roles || st.roles.youAreML;
+    if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
+    if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
+    if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
+    if (p === "done" && st.canUndo && isML) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -421,9 +441,9 @@
       case "lab-restrict": labCall("lab_restrict", a, b); return;
       case "lab-join": labCall("lab_join"); return;
       case "lab-reset": labCall("lab_reset"); return;
-      case "scenario": seed = 1; start(a); break;
+      case "scenario": seed = 1; mlChoice = "You"; start(a); break;
       case "again": seed += 1; start(current); break;
-      case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
+      case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; mlChoice = "You"; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": started = true; running = !running; render(); renderLab(); break;
       case "labToggle": labRunning = !labRunning; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
@@ -442,6 +462,9 @@
         if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
         break;
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
+      case "setLeader": act("setLeader", $("#leaderSel").value); break;
+      case "setMethod": act(st.roles && st.roles.youAreLeader ? "setLootMethod" : "askLeader", $("#methodSel").value); break;
+      case "setMl": mlChoice = $("#mlSel").value; start(current); break;
       case "claimGift":
         if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }
         act("claim", giftTo); break;
@@ -453,7 +476,7 @@
   // chosen, let go of it so the clock keeps drawing.
   document.addEventListener("change", (e) => {
     if (e.target.id === "giftTo") { giftTo = e.target.value; e.target.blur(); render(); }
-    if (e.target.id === "deSel") e.target.blur();
+    if (["deSel", "leaderSel", "methodSel", "mlSel"].indexOf(e.target.id) >= 0) e.target.blur();
   });
 
   setInterval(() => {

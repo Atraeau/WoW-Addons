@@ -123,7 +123,7 @@ function M.NewHost(sync, engine)
         self.answers = {}
 
         session:on("phase", function(p)
-            send({ t = "LP", sid = h.sid, phase = p.phase })
+            send({ t = "LP", sid = h.sid, phase = p.phase, reason = p.reason })
             h.ev.emit("phase", p)
         end)
         session:on("turn", function(turn)
@@ -214,7 +214,7 @@ function M.NewPlayer(sync)
         if not fromHost(msg, sender) then return end
         p.session.phase = msg.phase
         if msg.phase ~= "main" and msg.phase ~= "off" and msg.phase ~= "salvage" then p.session.turn = nil end
-        p.ev.emit("phase", msg.phase)
+        p.ev.emit("phase", msg.phase, msg.reason)
     end)
 
     sync:register("LT", function(msg, sender)

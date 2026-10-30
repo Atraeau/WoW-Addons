@@ -94,6 +94,19 @@ function Session:unwatchRoster()
     if self.unwatch then self.unwatch(); self.unwatch = nil end
 end
 
+function Session:unwatchMethod()
+    if self.unwatchLoot then self.unwatchLoot(); self.unwatchLoot = nil end
+end
+
+-- The raid leader changed the loot method, or the Master Looter, while a session was running: it can no longer hand
+-- anything out, so it is cancelled. Nothing was written to the ledger before confirm, so only the answers are lost.
+function Session:lootMethodChanged()
+    if self.phase == "idle" or self.phase == "done" or self.phase == "cancelled" then return end
+    if self.client:lootMethod() ~= "master" or self.client:masterLooter() ~= self.client:me() then
+        self:cancel("lootmethod")
+    end
+end
+
 function Session:armTimer(sec, fn)
     self:clearTimer()
     if sec and sec > 0 then
@@ -112,6 +125,10 @@ function Session:start(items)
     local main = self.engine:Get(cfg.listId)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end
+    -- Loot is not handed out until the raid leader has set the loot method to Master Looter and named a Master Looter,
+    -- and only that Master Looter runs a session. (The game decides who may change the loot method: the leader.)
+    if self.client:lootMethod() ~= "master" then return false, "notmasterloot" end
+    if self.client:masterLooter() ~= self.client:me() then return false, "notml" end
     -- Loot is not distributed until the Master Looter has said who disenchants what nobody wants.
     self.deHandler = cfg.deHandler or self.engine:RaidDisenchanter()
     if not self.deHandler then return false, "nodisenchanter" end
@@ -139,6 +156,7 @@ function Session:start(items)
     self.phase = "bidding"
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
     self.unwatch = self.client:on("roster.changed", function() self:rosterChanged() end)
+    self.unwatchLoot = self.client:on("lootMethod.changed", function() self:lootMethodChanged() end)
     self:emit("phase", { phase = "bidding" })
     return true
 end
@@ -865,17 +883,19 @@ function Session:confirm()
         end
     end
     self.phase = "done"
+    self:unwatchMethod()
     self:emit("done", { failures = failures })
     return true, failures
 end
 
-function Session:cancel()
+function Session:cancel(reason)
     if self.phase == "done" or self.phase == "cancelled" then return false end
     self:clearTimer()
     self.turn, self.pending = nil, {}
     self:unwatchRoster()
+    self:unwatchMethod()
     self.phase = "cancelled"
-    self:emit("phase", { phase = "cancelled" })
+    self:emit("phase", { phase = "cancelled", reason = reason })
     return true
 end
 

@@ -47,6 +47,8 @@ local function short(name) return name and (name:gsub("%-.*$", "")) end
 
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
+local mlChoice = "You" -- who is the Master Looter when a run starts (their addon runs the loot); "You" or a raider's name
+local lastStart = { id = nil, seed = 1 }
 
 -- The history is the ledger itself, one row per event (consecutive "added to the list" events are grouped):
 -- when, who wrote it, which kind of event, what it says, and its id.
@@ -143,8 +145,11 @@ local function state()
         snap.who[n] = { class = info.class, spec = info.spec, off = info.offSpec, role = info.role }
     end
     -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
-    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
-        disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()) }
+    local leader = sim:leaderName()
+    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.ml),
+        disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()),
+        leader = short(leader), lootMethod = sim.client:lootMethod(),
+        youAreML = (sim.ml == sim.learner), youAreLeader = (leader == sim.learner), mlChoice = mlChoice }
     -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
     snap.canUndo = stack ~= nil and #stack > 0
@@ -229,19 +234,32 @@ local function result(ok, why)
     return s
 end
 
-function api.start(id, seed)
+-- ml (optional): who is the Master Looter for this run ("You", or a raider's name: then their addon runs the loot and
+-- you play a raider). Remembered until another is chosen.
+function api.start(id, seed, ml)
     seed = tonumber(seed) or 1
+    if ml and ml ~= "" then mlChoice = ml end
+    lastStart = { id = id, seed = seed }
+    local function looter(names) -- the choice, if that raider is in this raid
+        if mlChoice == "You" then return nil end
+        for _, n in ipairs(names) do if n == mlChoice then return mlChoice end end
+        mlChoice = "You"
+        return nil
+    end
     for _, n in ipairs(NIGHTS) do
         if n.id == id then
             scenario = { id = n.id, title = n.title, lesson = n.lesson }
             sim = n.new({ seed = seed })
+            if mlChoice ~= "You" and looter(sim.names) then sim = n.new({ seed = seed, masterLooter = mlChoice }) end
             startCount = #sim.engine:View().applied
             return state()
         end
     end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
-    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You",
+    local names = {}
+    for _, m in ipairs(scenario.members or {}) do names[#names + 1] = type(m) == "table" and m.name or m end
+    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You", masterLooter = looter(names),
         learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
     startCount = #sim.engine:View().applied
@@ -261,8 +279,9 @@ function api.kill(hold)
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
-    local boss, why = sim:killBoss(nil, hold == "1")
-    return result(boss ~= nil, why)
+    local boss, dropped, why = sim:killBoss(nil, hold == "1")
+    if boss and why then return result(false, why) end -- the boss died; the loot is held because it can't be handed out yet
+    return result(boss ~= nil, dropped)
 end
 
 function api.handout()
@@ -272,7 +291,37 @@ function api.handout()
     end
     return result(sim:handOut())
 end
-function api.advance(sec) if sim then sim:advance(tonumber(sec) or 0) end return state() end
+function api.advance(sec)
+    if sim then
+        sim:advance(tonumber(sec) or 0)
+        -- When another raider is the Master Looter, their addon reviews and confirms the loot once the draft is done.
+        local s = sim.session
+        if sim.ml ~= sim.learner and s and s.phase == "review" then s:confirm() end
+    end
+    return state()
+end
+
+-- Master Looter actions are the Master Looter's alone: when another raider holds the role, you can't take them.
+local function notML() return result(false, "notml") end
+
+---------------------------------------------------------------- the raid leader, the loot method, the Master Looter
+-- The raid leader sets the loot method (only they can, as in the game). If you are the leader it is you; otherwise you ask
+-- them and they do it. Loot is handed out only with Master Looter.
+function api.setLootMethod(method)
+    local leader = sim:leaderName()
+    if leader ~= sim.learner then return result(false, "notleader") end
+    local ok, why = sim:setLootMethod(sim.learner, method)
+    return result(ok, why)
+end
+function api.askLeader(method)
+    local leader = sim:leaderName()
+    if leader == sim.learner then return api.setLootMethod(method) end
+    local ok, why = sim:setLootMethod(leader, method)
+    return result(ok, why)
+end
+function api.setLeader(name) return result(sim:setLeader(name)) end
+-- Who is the Master Looter is chosen when a run starts (it decides whose addon runs the loot): the page restarts after this.
+function api.chooseMasterLooter(name) mlChoice = (name and name ~= "") and name or "You"; return { ok = true, mlChoice = mlChoice } end
 
 -- kind "needready": need, and you say you can turn the token in.
 function api.bid(itemId, kind, to)
@@ -315,7 +364,10 @@ end
 function api.recipient(to) return result(sim.session:chooseRecipient("You", to)) end
 function api.keep() return result(sim.session:keepGift("You")) end
 -- You are the Master Looter: the winner of a gift won't say who gets it, so count it as their pass.
-function api.override() return result(sim.session:overrideGift()) end
+function api.override()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:overrideGift())
+end
 function api.withdraw() return result(sim.session:withdrawGift("You")) end
 
 function api.pick(itemId) return result(sim.session:pick("You", tonumber(itemId))) end
@@ -328,16 +380,24 @@ function api.decline() return result(sim.session:decline("You")) end
 -- The Master Looter (you) designates who disenchants what nobody wants, for this raid. It is a record in the ledger,
 -- and loot is not handed out until there is one (the simulator starts with one chosen).
 function api.setDisenchanter(name)
+    if sim.ml ~= sim.learner then return notML() end
     local phase = sim.session and sim.session.phase
     if phase and phase ~= "done" and phase ~= "cancelled" then return result(false, "choose before the loot is handed out, or after") end
     local ok, why = sim:setDisenchanter(name)
     return result(ok, why)
 end
 
-function api.extend(sec) return result(sim.session:extend(tonumber(sec) or 30)) end
-function api.resolveNow() return result(sim.session:resolveNow()) end
+function api.extend(sec)
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:extend(tonumber(sec) or 30))
+end
+function api.resolveNow()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:resolveNow())
+end
 
 function api.confirm()
+    if sim.ml ~= sim.learner then return notML() end
     local ok, failures = sim.session:confirm()
     local s = result(ok, ok and nil or failures)
     if ok then s.failures = failures end
@@ -346,6 +406,7 @@ end
 
 -- Undo the most recent award by writing a Revert event (fix-forward).
 function api.undo()
+    if sim.ml ~= sim.learner then return notML() end
     local chain = sim.engine:Get("main")
     local stack = chain.state.undo[sim.engine:MyChain()]
     local top = stack and stack[#stack]

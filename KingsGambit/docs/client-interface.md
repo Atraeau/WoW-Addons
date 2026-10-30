@@ -51,6 +51,9 @@ so a Sim can disable a capability and the engine can degrade gracefully.
 |---|---|---|
 | `lootMethod()` | `"master"`, `"group"`, … | `GetLootMethod` |
 | `isMasterLooter()` | boolean | `IsMasterLooter` |
+| `masterLooter()` | `Name-Realm` or nil | `C_PartyInfo.GetLootMethod` (a raid index or party slot, turned into a name) |
+| `leader()` | `Name-Realm` or nil | the raid's rank-2 member (`GetRaidRosterInfo`, or `UnitIsGroupLeader` in a party). There is always one in a group |
+| `setLootMethod(method, looter?)` | `true`, or `false, reason` (`nogroup`, `notleader`, `badmethod`, `badlooter`, `unavailable`, `failed`) | `C_PartyInfo.SetLootMethod(method, lootMaster)` after `IsLootMethodAvailable`. Only the leader can; the addon calls it only on the `masterloot` command |
 | `lootSlots()` | array of `{slot, link, itemId, quality, quantity}` | `GetNumLootItems`, `GetLootSlotInfo`, `GetLootSlotLink`; only while a loot window is open |
 | `candidates(slot)` | array of names | `GetMasterLootCandidate` over the candidate indexes; the Client hides the index mapping |
 | `give(slot, name)` | `true` or `false, reason` | `GiveMasterLoot`; reasons: `notml`, `gone`, `notcandidate`, `full` |

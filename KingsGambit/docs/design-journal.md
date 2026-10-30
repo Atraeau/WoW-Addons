@@ -1305,6 +1305,27 @@ its kind, what it says in plain words, when (since the ledger began), **who wrot
 - Ties within a second are ordered by each writer's own sequence number (the true write order), so the ledger is founded
   before its lists are created.
 
+### Built: the raid leader and the Master Looter requirement (2026-10-30)
+
+Following the decisions logged above (these supersede the "not built yet" notes in the earlier entry):
+- **Client:** `leader()` (the raid's rank-2 member) and `setLootMethod(method, looter)` (the game's `C_PartyInfo.SetLootMethod`, after
+  `IsLootMethodAvailable`; refused unless this player is the leader). The mock models the same refusals.
+- **The requirement, in `Session:start`:** `notmasterloot` unless the loot method is Master Looter, and `notml` unless the starter is the
+  named Master Looter. Enforced at the session level, so every front end is covered. If either changes during a session (even in the review
+  step) the session is **cancelled** with reason `lootmethod` and nothing is recorded; an unrelated roster change does not cancel it.
+- **Addon assist (text):** `loot` says what is missing and who can fix it (naming the raid leader); `masterloot [name]` lets the leader set it
+  through the game's API (never on its own); `raid` shows the leader, the loot method and Master Looter, and warns when the game's
+  Master Looter differs from the ledger's open raid; a change of loot method is announced. The ledger's authority is unchanged.
+- **Simulator:** the Roles card now has **Raid leader**, **Loot method**, **Master Looter** and the disenchanter. A bot is the leader by
+  default; if you are not the leader the loot-method button reads "Ask <leader>" and they do it. The Master Looter is **a setup
+  choice** because their addon runs the session: pick a raider and restart, and that bot's client hosts the loot (the ledger shows entries
+  written by them), confirms it itself, and you play a raider, with the Master Looter's controls hidden. With the method not Master Looter,
+  a boss still dies but the loot is **held, not lost**, and is handed out once the leader sets it again.
+- Found while building: restructuring the page's script once deleted six functions between two edit points (caught at once by loading
+  the page and reading the console); the committed copy was used to restore them.
+- **Not done:** lessons that expect you as Master Looter (for example the salvager scenarios) will say "different from the lesson" when
+  another raider is the Master Looter; the request-eligibility button is auto-granted by the bot Master Looter.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

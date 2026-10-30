@@ -15,6 +15,8 @@ local WHY = {
     nolist = "no such list", notreview = "the session is not ready to confirm",
     cantkeep = "you can't keep it: it isn't for your class. Name who gets it, or withdraw", unreachable = "they are out of loot range",
     norecipient = "no one was named to receive it",
+    notmasterloot = "the loot method is not Master Looter (the raid leader sets it: masterloot)",
+    notml = "you are not the raid's Master Looter",
     nodisenchanter = "no disenchanter is designated for this raid yet. Choose who disenchants what nobody wants: disenchanter <name>",
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
@@ -61,6 +63,7 @@ local HELP = {
     "  raid                            who is Master Looter of the raids that are open",
     "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
+    "  masterloot [name]               raid leader: set the loot method to Master Looter, naming the looter (default: you)",
     "  disenchanter [name]             choose who disenchants what nobody wants, for your raid (its Master Looter);",
     "                                  required before loot can be handed out. Without a name: who it is.",
     "  officers [set <names...>]       who are officers (the guild master sets them)",
@@ -210,11 +213,58 @@ function M.New(ctx)
     end
 
     ---------------------------------------------------------------- Master Looter
+    ---------------------------------------------------------------- the raid leader and the loot method
+    local METHOD_NAMES = { master = "Master Looter", group = "Group Loot", needbeforegreed = "Need Before Greed",
+        freeforall = "Free For All", personal = "Personal Loot", roundrobin = "Round Robin" }
+    local function methodName(m) return METHOD_NAMES[m] or tostring(m) end
+
+    -- Loot is handed out only with the loot method set to Master Looter (by the raid leader, in the game's raid setup)
+    -- and only by the Master Looter named there. Say what is missing and who can fix it; true when ready.
+    function c.explainLootSetup()
+        if not client:inGroup() then
+            out("You are not in a group. Loot is handed out in a raid or dungeon group, with the loot method set to Master Looter.")
+            return false
+        end
+        local leader = client:leader()
+        local leaderText = leader and (short(leader) .. (leader == client:me() and " (you)" or "")) or "the raid leader"
+        if client:lootMethod() ~= "master" then
+            out(("The loot method is %s. Loot is only handed out with Master Looter, and the raid leader (%s) sets that."):format(
+                methodName(client:lootMethod()), leaderText))
+            if leader == client:me() then
+                out("You are the raid leader: masterloot <name> sets it (the name is who will be Master Looter; leave it out for yourself).")
+            else
+                out(("Ask %s to set it (Master Looter, naming the looter), or %s can do it with: masterloot <name>."):format(leaderText, leaderText))
+            end
+            return false
+        end
+        local ml = client:masterLooter()
+        if ml ~= client:me() then
+            out(("%s is the Master Looter, so only they start a loot session."):format(ml and short(ml) or "No one"))
+            out(("If it should be you, the raid leader (%s) changes it."):format(leaderText))
+            return false
+        end
+        return true
+    end
+
+    function cmds.masterloot(args)
+        if not client:inGroup() then return out("You are not in a group.") end
+        local leader = client:leader()
+        if leader ~= client:me() then
+            return out(("Only the raid leader can change the loot method. %s is the raid leader: ask them."):format(leader and short(leader) or "Someone"))
+        end
+        local who = args ~= "" and name(args) or client:me()
+        local ok, reason = client:setLootMethod("master", who)
+        if ok then
+            return out(("Loot method set to Master Looter, with %s as Master Looter. (This is the game's own setting.)"):format(short(who)))
+        end
+        local WHYNOT = { badlooter = "that player is not in the raid", unavailable = "the game says Master Looter is not available here",
+            failed = "the game refused the change", notleader = "only the raid leader can", badmethod = "unknown loot method", nogroup = "you are not in a group" }
+        out("Could not set it: " .. (WHYNOT[reason] or tostring(reason)) .. ".")
+    end
+
     function cmds.loot()
         if not ctx.host then return out("Loot sessions are not available here.") end
-        if not client:isMasterLooter() then
-            return out("Only the Master Looter can start a loot session. Set the loot method to Master Looter first.")
-        end
+        if not c.explainLootSetup() then return end
         if engine:LedgerId() then
             local ok, reason = engine:MayWrite()
             if not ok then
@@ -452,7 +502,20 @@ function M.New(ctx)
 
     local raid = {}
     function raid.show()
+        if client:inGroup() then
+            local leader = client:leader()
+            local ml = client:masterLooter()
+            out(("Raid leader: %s. Loot method: %s%s."):format(leader and short(leader) or "(none)", methodName(client:lootMethod()),
+                (client:lootMethod() == "master" and ml) and (", Master Looter " .. short(ml)) or ""))
+            if client:lootMethod() ~= "master" then out("Loot cannot be handed out until the raid leader sets Master Looter (masterloot).") end
+        end
         local raids = engine:ActiveRaids()
+        for _, r in ipairs(raids) do
+            local ml = client:masterLooter()
+            if client:lootMethod() == "master" and ml and ml ~= r.ml then
+                out(("Note: the game's Master Looter is %s, but the open raid names %s, and only they may write to the list."):format(short(ml), short(r.ml)))
+            end
+        end
         if #raids == 0 then
             out("No raid is open. Officers write to the list directly; an officer opens a raid with: raid open <Master Looter>")
             return
@@ -894,9 +957,16 @@ function M.New(ctx)
             if a.ok == false then out("Not recorded: " .. why(a.why)) end
         end)
     end
+    client:on("lootMethod.changed", function(p)
+        local ml = client:masterLooter()
+        out(("The loot method is now %s%s."):format(methodName(client:lootMethod()), (client:lootMethod() == "master" and ml) and (" (Master Looter: " .. short(ml) .. ")") or ""))
+    end)
     if ctx.host then
         ctx.host.on("phase", function(p)
             if p.phase == "review" then out("Everyone has been through the draft. Review, then 'confirm' to hand the items out and record them.") end
+            if p.phase == "cancelled" and p.reason == "lootmethod" then
+                out("The loot method (or the Master Looter) changed, so the session was cancelled. Nothing was recorded. Once the raid leader has set Master Looter again, start it with: loot")
+            end
         end)
         ctx.host.on("turn", function(t)
             if t.type == "recipient" then

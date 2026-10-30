@@ -1300,11 +1300,11 @@ function M.New(opts)
             }
         end
         S.inRaid = true
-        local oldMethod = S.lootMethod
+        local oldMethod, oldLooter = S.lootMethod, S.masterLooter
         if o.lootMethod then S.lootMethod = o.lootMethod end
         if o.masterLooter then S.masterLooter = normalize(o.masterLooter) end
         self:emit("roster.changed")
-        if S.lootMethod ~= oldMethod then self:emit("lootMethod.changed", { method = S.lootMethod }) end
+        if S.lootMethod ~= oldMethod or S.masterLooter ~= oldLooter then self:emit("lootMethod.changed", { method = S.lootMethod }) end
     end
 
     function h:setGuild(members)
@@ -1323,19 +1323,35 @@ function M.New(opts)
     local METHODS = { master = true, group = true, freeforall = true, needbeforegreed = true, personal = true, roundrobin = true }
     -- Only the leader can change the loot method, as in the game. For "master", `looter` names the Master Looter (default:
     -- the leader). Returns true, or false + a reason: nogroup, notleader, badmethod, badlooter.
-    function h:setLootMethod(method, looter)
+    function h:setLootMethodAs(actor, method, looter)
+        actor = normalize(actor)
         if #S.roster == 0 then return false, "nogroup" end
-        if self:leader() ~= S.me then return false, "notleader" end
+        if self:leader() ~= actor then return false, "notleader" end
         if not METHODS[method] then return false, "badmethod" end
         local ml
         if method == "master" then
-            ml = normalize(looter or S.me)
+            ml = normalize(looter or actor)
             local inRaid = false
             for _, m in ipairs(S.roster) do if m.name == ml then inRaid = true end end
             if not inRaid then return false, "badlooter" end
         end
         S.lootMethod, S.masterLooter = method, ml
         self:emit("lootMethod.changed", { method = method })
+        return true
+    end
+    -- (the simulator drives the raid leader, who is another player, through setLootMethodAs)
+    function h:setLootMethod(method, looter) return self:setLootMethodAs(S.me, method, looter) end
+
+    -- Hand the raid leadership to another member (the game's "promote to leader").
+    function h:setLeader(name)
+        name = normalize(name)
+        local found = false
+        for _, m in ipairs(S.roster) do if m.name == name then found = true end end
+        if not found then return false, "notinraid" end
+        for _, m in ipairs(S.roster) do
+            if m.name == name then m.rank = 2 elseif m.rank == 2 then m.rank = 0 end
+        end
+        self:emit("roster.changed")
         return true
     end
 
@@ -2267,6 +2283,19 @@ function Session:unwatchRoster()
     if self.unwatch then self.unwatch(); self.unwatch = nil end
 end
 
+function Session:unwatchMethod()
+    if self.unwatchLoot then self.unwatchLoot(); self.unwatchLoot = nil end
+end
+
+-- The raid leader changed the loot method, or the Master Looter, while a session was running: it can no longer hand
+-- anything out, so it is cancelled. Nothing was written to the ledger before confirm, so only the answers are lost.
+function Session:lootMethodChanged()
+    if self.phase == "idle" or self.phase == "done" or self.phase == "cancelled" then return end
+    if self.client:lootMethod() ~= "master" or self.client:masterLooter() ~= self.client:me() then
+        self:cancel("lootmethod")
+    end
+end
+
 function Session:armTimer(sec, fn)
     self:clearTimer()
     if sec and sec > 0 then
@@ -2285,6 +2314,10 @@ function Session:start(items)
     local main = self.engine:Get(cfg.listId)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end
+    -- Loot is not handed out until the raid leader has set the loot method to Master Looter and named a Master Looter,
+    -- and only that Master Looter runs a session. (The game decides who may change the loot method: the leader.)
+    if self.client:lootMethod() ~= "master" then return false, "notmasterloot" end
+    if self.client:masterLooter() ~= self.client:me() then return false, "notml" end
     -- Loot is not distributed until the Master Looter has said who disenchants what nobody wants.
     self.deHandler = cfg.deHandler or self.engine:RaidDisenchanter()
     if not self.deHandler then return false, "nodisenchanter" end
@@ -2312,6 +2345,7 @@ function Session:start(items)
     self.phase = "bidding"
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
     self.unwatch = self.client:on("roster.changed", function() self:rosterChanged() end)
+    self.unwatchLoot = self.client:on("lootMethod.changed", function() self:lootMethodChanged() end)
     self:emit("phase", { phase = "bidding" })
     return true
 end
@@ -3038,17 +3072,19 @@ function Session:confirm()
         end
     end
     self.phase = "done"
+    self:unwatchMethod()
     self:emit("done", { failures = failures })
     return true, failures
 end
 
-function Session:cancel()
+function Session:cancel(reason)
     if self.phase == "done" or self.phase == "cancelled" then return false end
     self:clearTimer()
     self.turn, self.pending = nil, {}
     self:unwatchRoster()
+    self:unwatchMethod()
     self.phase = "cancelled"
-    self:emit("phase", { phase = "cancelled" })
+    self:emit("phase", { phase = "cancelled", reason = reason })
     return true
 end
 
@@ -4360,7 +4396,10 @@ local function short(name) return (name:gsub("%-.*$", "")) end
 function M.NewRaid(opts)
     opts = opts or {}
     local learner = opts.learner or "You"
-    local client = MockClient.New({ name = learner, realm = "Realm", seed = opts.seed or 1 })
+    -- The Master Looter's addon is the one that runs the session, so the simulated client is theirs: the learner by
+    -- default, or another raider (a bot runs the loot, and the learner plays a raider).
+    local ml = opts.masterLooter or learner
+    local client = MockClient.New({ name = ml, realm = "Realm", seed = opts.seed or 1 })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
 
@@ -4389,7 +4428,14 @@ function M.NewRaid(opts)
         info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
         engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
     end
-    client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
+    -- There is always a raid leader, who is not necessarily the Master Looter: by default the first raider who is
+    -- neither the learner nor the Master Looter (a person can't be both unless nobody else is there).
+    local leader = opts.leader
+    if not leader then
+        for _, n in ipairs(names) do if n ~= learner and n ~= ml and not leader then leader = n end end
+        leader = leader or ml
+    end
+    client:setRaid(roster, { leader = leader, lootMethod = "master", masterLooter = ml })
 
     -- The disenchanter is usually not the Master Looter: a raider (an enchanter) volunteers. Default: the first
     -- raider whose class has the profession in mind (mage, warlock, priest), else the first other raider.
@@ -4398,18 +4444,18 @@ function M.NewRaid(opts)
         for pass = 1, 2 do
             for _, n in ipairs(names) do
                 local cl = info[n].class
-                if n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
+                if n ~= ml and n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
             end
         end
     end
 
     -- The learner is the Master Looter of this raid, and designates who disenchants (a record in the ledger, as in
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
-    assert(engine:Write("Elevate", { raid = "sim", ml = learner .. "-Realm", minutes = 24 * 60 }))
-    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or learner) .. "-Realm" }))
+    assert(engine:Write("Elevate", { raid = "sim", ml = ml .. "-Realm", minutes = 24 * 60 }))
+    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) .. "-Realm" }))
 
     return setmetatable({
-        client = client, engine = engine, names = names, learner = learner .. "-Realm",
+        client = client, engine = engine, names = names, learner = learner .. "-Realm", ml = ml .. "-Realm",
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
@@ -4464,9 +4510,9 @@ function Sim:drop(links, cfg, seen, ids)
     end
     self.client:dropLoot(drops)
     local session = Loot.NewSession(self.engine, cfg)
-    self.session = session
     local ok, why = session:start(items)
-    if not ok then return false, why end
+    if not ok then return false, why end -- (e.g. the loot method is not Master Looter: nothing is started)
+    self.session = session
     self:wireBots()
     return true
 end
@@ -4746,7 +4792,8 @@ function M.NewRaidNight(data, opts)
         learnerClass = learnerClass, learnerSpec = learnerSpec,
         learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
         learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
-        shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random" })
+        shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random",
+        masterLooter = opts.masterLooter, leader = opts.leader })
     sim.raid = data
     -- The guild's officers have already judged the items the heuristic can't (the learner founded this ledger,
     -- so they write them), through the same ItemSuits events a real officer's 'suits' command writes.
@@ -4800,8 +4847,12 @@ function Sim:killBoss(name, hold)
         self.held[#self.held + 1] = { item = item, boss = boss.name, seen = self.client:serverTime() }
     end
     self:note(boss.name .. " died and dropped " .. #dropped .. " item(s)")
-    if not hold then self:handOut() end
-    return boss, dropped
+    local why
+    if not hold then
+        local ok, reason = self:handOut()
+        if not ok then why = reason end -- the loot is kept: nothing can be handed out yet (e.g. no Master Looter set)
+    end
+    return boss, dropped, why
 end
 
 -- A bot's readiness for a token: most dedicated raiders bought their materials; some say so (bank); some
@@ -4817,7 +4868,6 @@ end
 function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
     local held = self.held
-    self.held = {}
     local links, seen, ids = {}, {}, {}
     for i, h in ipairs(held) do
         links[i], seen[i], ids[i] = h.item.name, h.seen, h.item.id
@@ -4848,8 +4898,24 @@ function Sim:handOut(cfg)
         self.policies[name] = p
     end
     self.handedOut = held
-    return self:drop(links, cfg, seen, ids)
+    local ok, why = self:drop(links, cfg, seen, ids)
+    if ok then self.held = {} end -- (a refused session, e.g. no Master Looter set, keeps the loot to hand out later)
+    return ok, why
 end
+
+---------------------------------------------------------------- the raid leader, the loot method
+-- Who the raid leader is (always someone, in a group).
+function Sim:leaderName() return self.client:leader() end
+
+-- Someone changes the loot method. Only the raid leader may; for Master Looter, the looter is named. In the simulator the
+-- Master Looter is chosen when a run starts (it decides whose addon runs the loot), so a different looter is refused here.
+function Sim:setLootMethod(by, method, looter)
+    by = self.client:normalize(by)
+    if method == "master" and looter and self.client:normalize(looter) ~= self.ml then return false, "otherlooter" end
+    return self.client:setLootMethodAs(by, method, looter or self.ml)
+end
+
+function Sim:setLeader(name) return self.client:setLeader(name) end
 
 end; chunk("KingsGambit", SK) end
 -- ===== Scenarios.lua =====
@@ -5177,6 +5243,8 @@ local function short(name) return name and (name:gsub("%-.*$", "")) end
 
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
+local mlChoice = "You" -- who is the Master Looter when a run starts (their addon runs the loot); "You" or a raider's name
+local lastStart = { id = nil, seed = 1 }
 
 -- The history is the ledger itself, one row per event (consecutive "added to the list" events are grouped):
 -- when, who wrote it, which kind of event, what it says, and its id.
@@ -5273,8 +5341,11 @@ local function state()
         snap.who[n] = { class = info.class, spec = info.spec, off = info.offSpec, role = info.role }
     end
     -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
-    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
-        disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()) }
+    local leader = sim:leaderName()
+    snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.ml),
+        disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()),
+        leader = short(leader), lootMethod = sim.client:lootMethod(),
+        youAreML = (sim.ml == sim.learner), youAreLeader = (leader == sim.learner), mlChoice = mlChoice }
     -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
     snap.canUndo = stack ~= nil and #stack > 0
@@ -5359,19 +5430,32 @@ local function result(ok, why)
     return s
 end
 
-function api.start(id, seed)
+-- ml (optional): who is the Master Looter for this run ("You", or a raider's name: then their addon runs the loot and
+-- you play a raider). Remembered until another is chosen.
+function api.start(id, seed, ml)
     seed = tonumber(seed) or 1
+    if ml and ml ~= "" then mlChoice = ml end
+    lastStart = { id = id, seed = seed }
+    local function looter(names) -- the choice, if that raider is in this raid
+        if mlChoice == "You" then return nil end
+        for _, n in ipairs(names) do if n == mlChoice then return mlChoice end end
+        mlChoice = "You"
+        return nil
+    end
     for _, n in ipairs(NIGHTS) do
         if n.id == id then
             scenario = { id = n.id, title = n.title, lesson = n.lesson }
             sim = n.new({ seed = seed })
+            if mlChoice ~= "You" and looter(sim.names) then sim = n.new({ seed = seed, masterLooter = mlChoice }) end
             startCount = #sim.engine:View().applied
             return state()
         end
     end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
-    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You",
+    local names = {}
+    for _, m in ipairs(scenario.members or {}) do names[#names + 1] = type(m) == "table" and m.name or m end
+    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You", masterLooter = looter(names),
         learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
     startCount = #sim.engine:View().applied
@@ -5391,8 +5475,9 @@ function api.kill(hold)
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
-    local boss, why = sim:killBoss(nil, hold == "1")
-    return result(boss ~= nil, why)
+    local boss, dropped, why = sim:killBoss(nil, hold == "1")
+    if boss and why then return result(false, why) end -- the boss died; the loot is held because it can't be handed out yet
+    return result(boss ~= nil, dropped)
 end
 
 function api.handout()
@@ -5402,7 +5487,37 @@ function api.handout()
     end
     return result(sim:handOut())
 end
-function api.advance(sec) if sim then sim:advance(tonumber(sec) or 0) end return state() end
+function api.advance(sec)
+    if sim then
+        sim:advance(tonumber(sec) or 0)
+        -- When another raider is the Master Looter, their addon reviews and confirms the loot once the draft is done.
+        local s = sim.session
+        if sim.ml ~= sim.learner and s and s.phase == "review" then s:confirm() end
+    end
+    return state()
+end
+
+-- Master Looter actions are the Master Looter's alone: when another raider holds the role, you can't take them.
+local function notML() return result(false, "notml") end
+
+---------------------------------------------------------------- the raid leader, the loot method, the Master Looter
+-- The raid leader sets the loot method (only they can, as in the game). If you are the leader it is you; otherwise you ask
+-- them and they do it. Loot is handed out only with Master Looter.
+function api.setLootMethod(method)
+    local leader = sim:leaderName()
+    if leader ~= sim.learner then return result(false, "notleader") end
+    local ok, why = sim:setLootMethod(sim.learner, method)
+    return result(ok, why)
+end
+function api.askLeader(method)
+    local leader = sim:leaderName()
+    if leader == sim.learner then return api.setLootMethod(method) end
+    local ok, why = sim:setLootMethod(leader, method)
+    return result(ok, why)
+end
+function api.setLeader(name) return result(sim:setLeader(name)) end
+-- Who is the Master Looter is chosen when a run starts (it decides whose addon runs the loot): the page restarts after this.
+function api.chooseMasterLooter(name) mlChoice = (name and name ~= "") and name or "You"; return { ok = true, mlChoice = mlChoice } end
 
 -- kind "needready": need, and you say you can turn the token in.
 function api.bid(itemId, kind, to)
@@ -5445,7 +5560,10 @@ end
 function api.recipient(to) return result(sim.session:chooseRecipient("You", to)) end
 function api.keep() return result(sim.session:keepGift("You")) end
 -- You are the Master Looter: the winner of a gift won't say who gets it, so count it as their pass.
-function api.override() return result(sim.session:overrideGift()) end
+function api.override()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:overrideGift())
+end
 function api.withdraw() return result(sim.session:withdrawGift("You")) end
 
 function api.pick(itemId) return result(sim.session:pick("You", tonumber(itemId))) end
@@ -5458,16 +5576,24 @@ function api.decline() return result(sim.session:decline("You")) end
 -- The Master Looter (you) designates who disenchants what nobody wants, for this raid. It is a record in the ledger,
 -- and loot is not handed out until there is one (the simulator starts with one chosen).
 function api.setDisenchanter(name)
+    if sim.ml ~= sim.learner then return notML() end
     local phase = sim.session and sim.session.phase
     if phase and phase ~= "done" and phase ~= "cancelled" then return result(false, "choose before the loot is handed out, or after") end
     local ok, why = sim:setDisenchanter(name)
     return result(ok, why)
 end
 
-function api.extend(sec) return result(sim.session:extend(tonumber(sec) or 30)) end
-function api.resolveNow() return result(sim.session:resolveNow()) end
+function api.extend(sec)
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:extend(tonumber(sec) or 30))
+end
+function api.resolveNow()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:resolveNow())
+end
 
 function api.confirm()
+    if sim.ml ~= sim.learner then return notML() end
     local ok, failures = sim.session:confirm()
     local s = result(ok, ok and nil or failures)
     if ok then s.failures = failures end
@@ -5476,6 +5602,7 @@ end
 
 -- Undo the most recent award by writing a Revert event (fix-forward).
 function api.undo()
+    if sim.ml ~= sim.learner then return notML() end
     local chain = sim.engine:Get("main")
     local stack = chain.state.undo[sim.engine:MyChain()]
     local top = stack and stack[#stack]
@@ -5687,12 +5814,12 @@ end
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
-  let running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
     current = id; result = null; lastMsg = ""; giftTo = "";
     running = false; started = false; // every scenario begins paused: read it, then press Start
-    st = call("start", id, seed);
+    st = call("start", id, seed, mlChoice);
     prevOrder = st.order || []; moved = {};
     render();
   }
@@ -5703,7 +5830,12 @@ end
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
       cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
       cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
-      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it" };
+      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it",
+      notml: "only the Master Looter can do that: another raider holds the role in this run (choose yourself as Master Looter and restart to take the controls)",
+      notleader: "only the raid leader can change the loot method: ask them with the button",
+      notmasterloot: "the loot method is not Master Looter, so loot cannot be handed out: the raid leader has to set it (any loot waiting is kept)",
+      otherlooter: "the Master Looter is chosen when a run starts: pick them in the Master Looter list and restart",
+      notinraid: "that player is not in the raid" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -5781,12 +5913,25 @@ end
     const r = st.roles || {};
     const names = Object.keys(st.who || {}).sort();
     const busy = st.phase && ["idle", "done", "cancelled", "none"].indexOf(st.phase) < 0;
-    return '<div class="card"><h2>Roles</h2><div class="small">Master Looter: <b>' + esc(r.masterLooter || "") + "</b></div>" +
-      '<div class="small" style="margin:6px 0 4px">Disenchanter (you choose, per raid):</div>' +
-      '<div class="row"><select id="deSel"' + (busy ? " disabled" : "") + ">" + names.map((n) =>
-        "<option" + (n === r.disenchanter ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>" +
-      '<button data-act="setDe"' + (busy ? " disabled" : "") + ">Set</button></div>" +
-      (busy ? '<div class="small muted" style="margin-top:6px">Locked while loot is being handed out.</div>' : "") + "</div>";
+    const opts = (list, cur) => list.map((n) => "<option" + (n === cur ? " selected" : "") + ">" + esc(n) + "</option>").join("");
+    const METHODS = [["master", "Master Looter"], ["group", "Group Loot"], ["needbeforegreed", "Need Before Greed"], ["freeforall", "Free For All"]];
+    const methodOpts = METHODS.map((m) => '<option value="' + m[0] + '"' + (m[0] === r.lootMethod ? " selected" : "") + ">" + m[1] + "</option>").join("");
+    const row = (label, inner) => '<div class="small" style="margin:8px 0 3px">' + label + '</div><div class="row">' + inner + "</div>";
+    const deLocked = busy || !r.youAreML;
+    const setLabel = r.youAreLeader ? "Set" : "Ask " + esc(r.leader || "the leader");
+    let warn = "";
+    if (r.lootMethod !== "master") {
+      warn = '<div class="small" style="color: var(--warn); margin-top:8px">Loot cannot be handed out: the loot method is not Master Looter. Only the raid leader (' +
+        esc(r.leader) + (r.youAreLeader ? ", you" : "") + ") can set it.</div>";
+    }
+    return '<div class="card"><h2>Roles</h2>' +
+      row("Raid leader (there is always one):", '<select id="leaderSel">' + opts(names, r.leader) + '</select><button data-act="setLeader">Set</button>') +
+      row("Loot method (set by the raid leader):", '<select id="methodSel">' + methodOpts + '</select><button data-act="setMethod" title="Only the raid leader can change the loot method. If you are not the leader, you ask them.">' + setLabel + "</button>") +
+      row("Master Looter (their addon runs the loot; changing it restarts this run):", '<select id="mlSel">' + opts(names, r.masterLooter) + '</select><button data-act="setMl">Restart</button>') +
+      row("Disenchanter (the Master Looter chooses, per raid):", '<select id="deSel"' + (deLocked ? " disabled" : "") + ">" + opts(names, r.disenchanter) + '</select><button data-act="setDe"' + (deLocked ? " disabled" : "") + ">Set</button>") +
+      warn +
+      (!r.youAreML ? '<div class="small muted" style="margin-top:8px"><b>' + esc(r.masterLooter) + "</b> is the Master Looter and runs the loot. You play a raider: answer, pick and claim as usual.</div>" : "") +
+      (busy ? '<div class="small muted" style="margin-top:6px">The disenchanter is locked while loot is being handed out.</div>' : "") + "</div>";
   }
 
   function giftSelect(itemId) {
@@ -5896,9 +6041,11 @@ end
   function controlsHtml() {
     const p = st.phase;
     let h = '<div class="row" style="margin-top:10px">';
-    if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
-    if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "done" && st.canUndo) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
+    const isML = !st.roles || st.roles.youAreML;
+    if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
+    if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
+    if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
+    if (p === "done" && st.canUndo && isML) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -6024,9 +6171,9 @@ end
       case "lab-restrict": labCall("lab_restrict", a, b); return;
       case "lab-join": labCall("lab_join"); return;
       case "lab-reset": labCall("lab_reset"); return;
-      case "scenario": seed = 1; start(a); break;
+      case "scenario": seed = 1; mlChoice = "You"; start(a); break;
       case "again": seed += 1; start(current); break;
-      case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
+      case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; mlChoice = "You"; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": started = true; running = !running; render(); renderLab(); break;
       case "labToggle": labRunning = !labRunning; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
@@ -6045,6 +6192,9 @@ end
         if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
         break;
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
+      case "setLeader": act("setLeader", $("#leaderSel").value); break;
+      case "setMethod": act(st.roles && st.roles.youAreLeader ? "setLootMethod" : "askLeader", $("#methodSel").value); break;
+      case "setMl": mlChoice = $("#mlSel").value; start(current); break;
       case "claimGift":
         if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }
         act("claim", giftTo); break;
@@ -6056,7 +6206,7 @@ end
   // chosen, let go of it so the clock keeps drawing.
   document.addEventListener("change", (e) => {
     if (e.target.id === "giftTo") { giftTo = e.target.value; e.target.blur(); render(); }
-    if (e.target.id === "deSel") e.target.blur();
+    if (["deSel", "leaderSel", "methodSel", "mlSel"].indexOf(e.target.id) >= 0) e.target.blur();
   });
 
   setInterval(() => {

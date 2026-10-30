@@ -283,3 +283,30 @@ test("storage hands back the SavedVariables tables", function()
     local s = c:storage(); s.account.x = 1
     eq(E.KingsGambitDB.x, 1); assert(E.KingsGambitCharDB.ui)
 end)
+
+H.section("RealClient: the raid leader and setting the loot method")
+test("leader() is the raid's rank-2 member", function()
+    local c = newClient()
+    eq(c:leader(), "Raidlead-Realm")
+end)
+test("setLootMethod calls C_PartyInfo.SetLootMethod with the enum, naming a same-realm Master Looter plainly", function()
+    local c, E = newClient()
+    local calls = {}
+    E.C_PartyInfo.IsLootMethodAvailable = function() return true end
+    E.C_PartyInfo.SetLootMethod = function(method, who) calls[#calls + 1] = { method, who }; return true end
+    assert(c:setLootMethod("master", "Mirel-Realm")); eq(calls[1][1], 2); eq(calls[1][2], "Mirel", "same realm: a plain name")
+    assert(c:setLootMethod("master", "Brann-Other")); eq(calls[2][2], "Brann-Other", "another realm: Name-Realm")
+    assert(c:setLootMethod("master")); eq(calls[3][2], "Raidlead", "no name: this player")
+    assert(c:setLootMethod("group")); eq(calls[4][1], 3); eq(calls[4][2], nil)
+    local ok, why = c:setLootMethod("frobnicate"); assert(not ok); eq(why, "badmethod")
+end)
+test("setLootMethod refuses when not the leader, when the method is unavailable, and when the game says no", function()
+    local c, E = newClient()
+    E.C_PartyInfo.SetLootMethod = function() return false end
+    E.C_PartyInfo.IsLootMethodAvailable = function() return false end
+    local ok, why = c:setLootMethod("master"); assert(not ok); eq(why, "unavailable")
+    E.C_PartyInfo.IsLootMethodAvailable = function() return true end
+    ok, why = c:setLootMethod("master"); assert(not ok); eq(why, "failed")
+    local notLeader = newClient(function(X) X.UnitFullName = function(u) if u == "player" then return "Mirel", "Realm" end end end)
+    ok, why = notLeader:setLootMethod("master"); assert(not ok); eq(why, "notleader")
+end)

@@ -398,6 +398,6 @@ test("a session started with nobody designated is refused by the engine itself",
     assert(s2:start({ { link = "item:1" } }))
     eq(s2.deHandler, "Cass-Realm")
     -- an explicit choice in the session's own settings also counts (tests, the simulator)
-    assert(H.rawNewSession(w.Brann.engine, { deHandler = "Brann-Realm" }):start({ { link = "item:1" } }))
+    assert(H.rawNewSession(w.Looter.engine, { deHandler = "Brann-Realm" }):start({ { link = "item:1" } }))
     assert(Loot)
 end)

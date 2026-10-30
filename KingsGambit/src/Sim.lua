@@ -28,7 +28,10 @@ local function short(name) return (name:gsub("%-.*$", "")) end
 function M.NewRaid(opts)
     opts = opts or {}
     local learner = opts.learner or "You"
-    local client = MockClient.New({ name = learner, realm = "Realm", seed = opts.seed or 1 })
+    -- The Master Looter's addon is the one that runs the session, so the simulated client is theirs: the learner by
+    -- default, or another raider (a bot runs the loot, and the learner plays a raider).
+    local ml = opts.masterLooter or learner
+    local client = MockClient.New({ name = ml, realm = "Realm", seed = opts.seed or 1 })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
 
@@ -57,7 +60,14 @@ function M.NewRaid(opts)
         info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
         engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
     end
-    client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
+    -- There is always a raid leader, who is not necessarily the Master Looter: by default the first raider who is
+    -- neither the learner nor the Master Looter (a person can't be both unless nobody else is there).
+    local leader = opts.leader
+    if not leader then
+        for _, n in ipairs(names) do if n ~= learner and n ~= ml and not leader then leader = n end end
+        leader = leader or ml
+    end
+    client:setRaid(roster, { leader = leader, lootMethod = "master", masterLooter = ml })
 
     -- The disenchanter is usually not the Master Looter: a raider (an enchanter) volunteers. Default: the first
     -- raider whose class has the profession in mind (mage, warlock, priest), else the first other raider.
@@ -66,18 +76,18 @@ function M.NewRaid(opts)
         for pass = 1, 2 do
             for _, n in ipairs(names) do
                 local cl = info[n].class
-                if n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
+                if n ~= ml and n ~= learner and (pass == 2 or cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST") and not de then de = n end
             end
         end
     end
 
     -- The learner is the Master Looter of this raid, and designates who disenchants (a record in the ledger, as in
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
-    assert(engine:Write("Elevate", { raid = "sim", ml = learner .. "-Realm", minutes = 24 * 60 }))
-    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or learner) .. "-Realm" }))
+    assert(engine:Write("Elevate", { raid = "sim", ml = ml .. "-Realm", minutes = 24 * 60 }))
+    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) .. "-Realm" }))
 
     return setmetatable({
-        client = client, engine = engine, names = names, learner = learner .. "-Realm",
+        client = client, engine = engine, names = names, learner = learner .. "-Realm", ml = ml .. "-Realm",
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
@@ -132,9 +142,9 @@ function Sim:drop(links, cfg, seen, ids)
     end
     self.client:dropLoot(drops)
     local session = Loot.NewSession(self.engine, cfg)
-    self.session = session
     local ok, why = session:start(items)
-    if not ok then return false, why end
+    if not ok then return false, why end -- (e.g. the loot method is not Master Looter: nothing is started)
+    self.session = session
     self:wireBots()
     return true
 end
@@ -414,7 +424,8 @@ function M.NewRaidNight(data, opts)
         learnerClass = learnerClass, learnerSpec = learnerSpec,
         learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
         learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
-        shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random" })
+        shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random",
+        masterLooter = opts.masterLooter, leader = opts.leader })
     sim.raid = data
     -- The guild's officers have already judged the items the heuristic can't (the learner founded this ledger,
     -- so they write them), through the same ItemSuits events a real officer's 'suits' command writes.
@@ -468,8 +479,12 @@ function Sim:killBoss(name, hold)
         self.held[#self.held + 1] = { item = item, boss = boss.name, seen = self.client:serverTime() }
     end
     self:note(boss.name .. " died and dropped " .. #dropped .. " item(s)")
-    if not hold then self:handOut() end
-    return boss, dropped
+    local why
+    if not hold then
+        local ok, reason = self:handOut()
+        if not ok then why = reason end -- the loot is kept: nothing can be handed out yet (e.g. no Master Looter set)
+    end
+    return boss, dropped, why
 end
 
 -- A bot's readiness for a token: most dedicated raiders bought their materials; some say so (bank); some
@@ -485,7 +500,6 @@ end
 function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
     local held = self.held
-    self.held = {}
     local links, seen, ids = {}, {}, {}
     for i, h in ipairs(held) do
         links[i], seen[i], ids[i] = h.item.name, h.seen, h.item.id
@@ -516,5 +530,21 @@ function Sim:handOut(cfg)
         self.policies[name] = p
     end
     self.handedOut = held
-    return self:drop(links, cfg, seen, ids)
+    local ok, why = self:drop(links, cfg, seen, ids)
+    if ok then self.held = {} end -- (a refused session, e.g. no Master Looter set, keeps the loot to hand out later)
+    return ok, why
 end
+
+---------------------------------------------------------------- the raid leader, the loot method
+-- Who the raid leader is (always someone, in a group).
+function Sim:leaderName() return self.client:leader() end
+
+-- Someone changes the loot method. Only the raid leader may; for Master Looter, the looter is named. In the simulator the
+-- Master Looter is chosen when a run starts (it decides whose addon runs the loot), so a different looter is refused here.
+function Sim:setLootMethod(by, method, looter)
+    by = self.client:normalize(by)
+    if method == "master" and looter and self.client:normalize(looter) ~= self.ml then return false, "otherlooter" end
+    return self.client:setLootMethodAs(by, method, looter or self.ml)
+end
+
+function Sim:setLeader(name) return self.client:setLeader(name) end

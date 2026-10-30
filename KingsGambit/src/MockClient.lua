@@ -133,6 +133,13 @@ function M.New(opts)
         end
     end
 
+    -- The raid (or dungeon group) leader: there is always one in a group. nil when not in a group.
+    function h:leader()
+        for _, m in ipairs(S.roster) do
+            if m.rank == 2 then return m.name end
+        end
+    end
+
     function h:guildRoster() return copyList(S.guild) end
 
     -- members: array of "Name" or { name, class, online }; o: leader, assistants, lootMethod, masterLooter.
@@ -154,11 +161,11 @@ function M.New(opts)
             }
         end
         S.inRaid = true
-        local oldMethod = S.lootMethod
+        local oldMethod, oldLooter = S.lootMethod, S.masterLooter
         if o.lootMethod then S.lootMethod = o.lootMethod end
         if o.masterLooter then S.masterLooter = normalize(o.masterLooter) end
         self:emit("roster.changed")
-        if S.lootMethod ~= oldMethod then self:emit("lootMethod.changed", { method = S.lootMethod }) end
+        if S.lootMethod ~= oldMethod or S.masterLooter ~= oldLooter then self:emit("lootMethod.changed", { method = S.lootMethod }) end
     end
 
     function h:setGuild(members)
@@ -174,6 +181,41 @@ function M.New(opts)
     end
 
     ---------------------------------------------------------------- loot
+    local METHODS = { master = true, group = true, freeforall = true, needbeforegreed = true, personal = true, roundrobin = true }
+    -- Only the leader can change the loot method, as in the game. For "master", `looter` names the Master Looter (default:
+    -- the leader). Returns true, or false + a reason: nogroup, notleader, badmethod, badlooter.
+    function h:setLootMethodAs(actor, method, looter)
+        actor = normalize(actor)
+        if #S.roster == 0 then return false, "nogroup" end
+        if self:leader() ~= actor then return false, "notleader" end
+        if not METHODS[method] then return false, "badmethod" end
+        local ml
+        if method == "master" then
+            ml = normalize(looter or actor)
+            local inRaid = false
+            for _, m in ipairs(S.roster) do if m.name == ml then inRaid = true end end
+            if not inRaid then return false, "badlooter" end
+        end
+        S.lootMethod, S.masterLooter = method, ml
+        self:emit("lootMethod.changed", { method = method })
+        return true
+    end
+    -- (the simulator drives the raid leader, who is another player, through setLootMethodAs)
+    function h:setLootMethod(method, looter) return self:setLootMethodAs(S.me, method, looter) end
+
+    -- Hand the raid leadership to another member (the game's "promote to leader").
+    function h:setLeader(name)
+        name = normalize(name)
+        local found = false
+        for _, m in ipairs(S.roster) do if m.name == name then found = true end end
+        if not found then return false, "notinraid" end
+        for _, m in ipairs(S.roster) do
+            if m.name == name then m.rank = 2 elseif m.rank == 2 then m.rank = 0 end
+        end
+        self:emit("roster.changed")
+        return true
+    end
+
     function h:lootMethod() return S.lootMethod end
     function h:isMasterLooter() return S.lootMethod == "master" and S.masterLooter == S.me end
     -- Who the Master Looter is (Name-Realm), or nil when the loot method is not master looter.
