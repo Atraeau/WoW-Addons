@@ -19,6 +19,16 @@
      "items": [[20928, 1], ["Idol of Night", 2], ["Stone Scarab", 5], ["Clay Scarab", 5]],
      "reputation": ["Brood of Nozdormu", "Neutral"] }
   ],
+  "quests": {
+   "source": "Wowhead Classic item pages, 'Objective of' (quest id, quest name, required-class mask, reward item ids), collected 2026-10-29. Materials and reputation per quest are not collected yet (only quest 8544 is verified, above). Not collected yet: Carapace of the Old God (20929), Imperial Qiraji Armaments (21232) and Regalia (21237), Eye of C'Thun (21221).",
+   "20928": [[8544,"Conqueror's Spaulders",1,[21330]],[8559,"Conqueror's Greaves",1,[21333]],[8594,"Mantle of the Oracle",16,[21350]],[8596,"Footwraps of the Oracle",16,[21349]],[8626,"Striker's Footguards",4,[21365]],[8637,"Deathdealer's Boots",8,[21359]],[8641,"Deathdealer's Spaulders",8,[21361]],[8659,"Striker's Pauldrons",4,[21367]]],
+   "20932": [[8602,"Stormcaller's Pauldrons",64,[21376]],[8621,"Stormcaller's Footguards",64,[21373]],[8625,"Enigma Shoulderpads",128,[21345]],[8630,"Avenger's Pauldrons",2,[21391]],[8634,"Enigma Boots",128,[21344]],[8655,"Avenger's Greaves",2,[21388]],[8660,"Doomcaller's Footwraps",256,[21338]],[8664,"Doomcaller's Mantle",256,[21335]],[8665,"Genesis Boots",1024,[21355]],[8669,"Genesis Shoulderpads",1024,[21354]]],
+   "20930": [[8623,"Stormcaller's Diadem",64,[21372]],[8628,"Avenger's Crown",2,[21387]],[8639,"Deathdealer's Helm",8,[21360]],[8657,"Striker's Diadem",4,[21366]],[8667,"Genesis Helm",1024,[21353]]],
+   "20926": [[8561,"Conqueror's Crown",1,[21329]],[8592,"Tiara of the Oracle",16,[21348]],[8632,"Enigma Circlet",128,[21347]],[8662,"Doomcaller's Circlet",256,[21337]]],
+   "20931": [[8624,"Stormcaller's Leggings",64,[21375]],[8629,"Avenger's Legguards",2,[21390]],[8658,"Striker's Leggings",4,[21368]],[8663,"Doomcaller's Trousers",256,[21336]],[8668,"Genesis Trousers",1024,[21356]]],
+   "20927": [[8560,"Conqueror's Legguards",1,[21332]],[8593,"Trousers of the Oracle",16,[21352]],[8631,"Enigma Leggings",128,[21346]],[8640,"Deathdealer's Leggings",8,[21362]]],
+   "20933": [[8603,"Vestments of the Oracle",16,[21351]],[8633,"Enigma Robes",128,[21343]],[8661,"Doomcaller's Robes",256,[21334]],[8666,"Genesis Vest",1024,[21357]]]
+  },
   "note": "Only this turn-in was verified so far; the others still need to be read from Wowhead's quest pages."
  }
 }
