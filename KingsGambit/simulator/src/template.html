@@ -87,7 +87,7 @@
   let running = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
-    current = id; result = null; lastMsg = "";
+    current = id; result = null; lastMsg = ""; giftTo = "";
     st = call("start", id, seed);
     prevOrder = st.order || []; moved = {};
     render();
@@ -97,10 +97,13 @@
     const r = call(name, a, b, c);
     const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
-      cantequip: "your class can't wear or wield it", badtarget: "choose who to gift it to" };
+      cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
+      cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
+      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
+    giftTo = ""; // a choice is used once; the next list starts blank
     updateMoved();
     render();
   }
@@ -144,8 +147,18 @@
   function turnHtml() {
     const t = st.turn;
     if (!t) return "";
+    if (t.type === "recipient" && t.player !== "You") {
+      return '<div class="turn muted"><b>' + esc(t.player) + "</b> won " + itemName(t.item) + " as a gift and is choosing who gets it. The draft waits for them.</div>";
+    }
     if (t.player !== "You") {
       return '<div class="turn muted">Waiting for <b>' + esc(t.player) + "</b> to " + (t.type === "pick" ? "pick" : "claim or decline") + "&hellip;" + timerHtml() + "</div>";
+    }
+    if (t.type === "recipient") {
+      return '<div class="turn"><b>You won ' + itemName(t.item) + " as a gift.</b> Who gets it? Nothing is decided for you, and there is no timer: the draft waits." +
+        '<div class="row" style="margin-top:8px"><span class="muted">Gift to:</span>' + giftSelect(t.item) +
+        '<button class="primary" data-act="giveTo"' + (giftTo ? "" : ' disabled title="Choose who gets it first"') + ">Give it to them</button>" +
+        '<button data-act="keep"' + (t.canKeep ? "" : ' disabled title="It isn\'t for your class, and you aren\'t the salvager"') + ">Keep it myself</button>" +
+        '<button data-act="giveUp">Give it up (a pass)&hellip;</button></div></div>';
     }
     if (t.type === "pick") {
       return '<div class="turn"><b>It\'s your pick.</b> You\'re next in line. Choose one item (you\'ll drop to the bottom), or skip, which is always free.' +
@@ -191,7 +204,7 @@
       let ans = "";
       if (bidding) {
         const a = mine && mine.answers[i];
-        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '"' + (k === "gift" && !giftTo ? ' disabled title="Choose who to gift it to first (the Gift to list)"' : "") + ' data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
+        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '"' + (k === "gift" ? ' title="Gift it: choose who gets it in the Gift to list now, or leave it blank and choose if you win"' : "") + ' data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
@@ -206,7 +219,7 @@
       }
       if (bidding && mine && mine.answers[i]) {
         const a = mine.answers[i];
-        const WORD = { need: "Need", off: "Off-spec", gift: "Gift" + (a.to ? " to " + a.to : ""), pass: "Pass" };
+        const WORD = { need: "Need", off: "Off-spec", gift: "Gift" + (a.to ? " to " + a.to : " (you'll choose who gets it if you win)"), pass: "Pass" };
         ans = ans.replace(/<\/td>$/, '<div class="small" style="margin-top:4px">Your answer: <b>' + esc(WORD[a.kind] || a.kind) + "</b> (you can change it until bidding closes)</div></td>");
       }
       h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
@@ -255,7 +268,7 @@
     if (!st.pending || !st.pending.length) return "";
     return '<div class="card"><h2>Will be recorded</h2>' + st.pending.map((a) => {
       if (a.type === "award") return "<div class=\"small\">" + verb(a.member, "win", "wins") + ' <span class="iname">' + esc(a.item) + "</span> (" + (TIER[a.tier] || a.tier) + ")" +
-        (a.to !== a.member ? " and " + (a.member === "You" ? "give" : "gives") + " it to " + esc(a.to) : "") + "</div>";
+        (a.undecided ? " as a gift, and " + (a.member === "You" ? "have" : "has") + " not chosen who gets it yet" : (a.to !== a.member ? " and " + (a.member === "You" ? "give" : "gives") + " it to " + esc(a.to) : "")) + "</div>";
       if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to the disenchanter, " + esc(a.to) + ", to disenchant</div>";
       return '<div class="small muted">' + verb(a.member, "join", "joins") + " the " + esc(a.list) + " list</div>";
     }).join("") + (st.phase === "review" ? '<div class="small muted" style="margin-top:6px">Nothing is written to the ledger until you confirm.</div>' : "") + "</div>";
@@ -377,9 +390,13 @@
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid":
-        if (b === "gift" && !giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Gift."; render(); break; }
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
+      case "giveTo": act("recipient", giftTo); break;
+      case "keep": act("keep"); break;
+      case "giveUp":
+        if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
+        break;
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
       case "claimGift":
         if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }

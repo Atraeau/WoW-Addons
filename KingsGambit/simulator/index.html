@@ -2339,7 +2339,9 @@ function Session:rosterChanged()
     end
     local t = self.turn
     if t and self.away[t.player] then
-        if t.type == "pick" then self:skip(t.player) else self:decline(t.player) end
+        if t.type == "pick" then self:skip(t.player)
+        elseif t.type == "recipient" then self:withdrawGift(t.player) -- gone before deciding: counts as a pass
+        else self:decline(t.player) end
     end
 end
 
@@ -2380,8 +2382,10 @@ function Session:bid(player, itemId, kind, extra)
     if not self.eligible[player] or self.away[player] then return false, "ineligible" end
     if not self.items[itemId] then return false, "noitem" end
     if not (kind == "need" or kind == "off" or kind == "gift" or kind == "pass") then return false, "badkind" end
+    -- A gift names who gets it, or leaves that open: if the bidder wins and still hasn't said, the draft waits for them
+    -- (see the "recipient" turn) rather than guessing.
     local to
-    if kind == "gift" then
+    if kind == "gift" and extra.to and extra.to ~= "" then
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
     end
@@ -2392,7 +2396,7 @@ function Session:bid(player, itemId, kind, extra)
     if kind == "need" or kind == "off" then
         local ok, why = M.MayHave(self:fitOf(itemId), self.class[player])
         if not ok then return false, why end
-    elseif kind == "gift" then
+    elseif kind == "gift" and to then
         local ok, why = M.MayHave(self:fitOf(itemId), self.class[to])
         if not ok then return false, why .. "to" end
     end
@@ -2604,13 +2608,95 @@ end
 function Session:award(tier, who, itemId, toOverride)
     local it = self.items[itemId]
     local bid = self.bids[who] and self.bids[who][itemId]
-    local to = toOverride or ((bid and bid.kind == "gift" and tier == "main") and bid.to or who)
+    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "main"
+    local undecided = isGift and not bid.to
+    local to = toOverride or (isGift and bid.to or who)
+    if undecided then to = nil end
     it.status, it.winner, it.to, it.tier = "awarded", who, to, tier
     local list = (tier == "off") and self.cfg.offListId or self.cfg.listId
-    moveToBottom(self.order[tier == "off" and "off" or "main"], who)
-    local action = { type = "award", list = list, member = who, to = to, item = it, tier = tier }
+    local order = self.order[tier == "off" and "off" or "main"]
+    local from = indexOf(order, who)
+    local wasBottom = from == #order
+    moveToBottom(order, who)
+    local action = { type = "award", list = list, member = who, to = to, item = it, tier = tier, undecided = undecided or nil,
+        fromIndex = from }
     self.pending[#self.pending + 1] = action
     self:emit("pending", action)
+    if undecided then
+        -- They won it as a gift but haven't said who gets it. Nothing is guessed and nothing times out: the draft
+        -- waits for them. The turn is published, so the raid sees "X won it as a gift and is choosing who gets it".
+        self:setTurn({ type = "recipient", tier = tier, player = who, item = itemId, wasBottom = wasBottom }, nil)
+        self.undecided = action
+    end
+end
+
+-- The player who won a gift without naming who gets it. Returns the turn, or nil + a reason.
+local function recipientTurn(self, player)
+    local t = self.turn
+    if not (t and t.type == "recipient") then return nil, "noturn" end
+    if norm(self, player) ~= t.player then return nil, "notyourturn" end
+    return t
+end
+
+-- May `player` keep the gift they won? They must be eligible for the item, or be the salvager (the lowest on the
+-- list when they won, who may take anything).
+function Session:mayKeep(player, itemId)
+    local t = self.turn
+    if t and t.type == "recipient" and t.item == itemId and t.wasBottom then return true end
+    return (M.MayHave(self:fitOf(itemId), self.class[norm(self, player)]))
+end
+
+local function resolveRecipient(self, t, to)
+    local action = self.undecided
+    action.to, action.undecided = to, nil
+    self.items[t.item].to = to
+    self.undecided, self.turn = nil, nil
+    self:clearTimer()
+    self:emit("recipient", { player = t.player, item = t.item, to = to })
+    self:continueDraft(t.tier)
+    return true
+end
+
+-- Choose who gets the gift they won. The recipient must be in the raid and eligible for the item.
+function Session:chooseRecipient(player, to)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    to = norm(self, to)
+    if not to or not self.eligible[to] or self.away[to] then return false, "badtarget" end
+    if to == t.player then return self:keepGift(player) end
+    local ok, why2 = M.MayHave(self:fitOf(t.item), self.class[to])
+    if not ok then return false, why2 .. "to" end
+    if not self:canReceive(to, self.items[t.item]) then return false, "unreachable" end
+    return resolveRecipient(self, t, to)
+end
+
+-- Keep it after all (only if eligible for it, or the salvager).
+function Session:keepGift(player)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    if not self:mayKeep(t.player, t.item) then return false, "cantkeep" end
+    return resolveRecipient(self, t, t.player)
+end
+
+-- Decide not to gift after all: it counts as a pass. The win is withdrawn, the winner keeps their place on the list,
+-- and the draft goes on without them for this item. (The page and commands ask for a confirmation first.)
+function Session:withdrawGift(player)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    local action, it = self.undecided, self.items[t.item]
+    for i, a in ipairs(self.pending) do
+        if a == action then table.remove(self.pending, i); break end
+    end
+    local order = self.order[t.tier == "off" and "off" or "main"]
+    local at = indexOf(order, t.player)
+    if at then table.remove(order, at); table.insert(order, math.min(action.fromIndex or #order + 1, #order + 1), t.player) end
+    it.status, it.winner, it.to, it.tier = "open", nil, nil, nil
+    self.bids[t.player][t.item] = { kind = "pass" }
+    self.undecided, self.turn = nil, nil
+    self:clearTimer()
+    self:emit("recipient", { player = t.player, item = t.item, withdrawn = true })
+    self:continueDraft(t.tier)
+    return true
 end
 
 function Session:setTurn(turn, sec, onTimeout)
@@ -2628,14 +2714,17 @@ function Session:runDraft(tier)
 end
 
 function Session:continueDraft(tier)
+    if self.turn and self.turn.type == "recipient" then return end
     while true do
         local who, opts = self:topCandidate(tier)
         if not who then break end
         local ranked = self:rankedChoice(who, opts)
         if #opts == 1 then
             self:award(tier, who, opts[1])
+            if self.turn then return end -- a gift waiting for its recipient
         elseif ranked then
             self:award(tier, who, ranked) -- ranked choice: their most-wanted item still available
+            if self.turn then return end
         else
             self:setTurn({ type = "pick", tier = tier, player = who, options = opts },
                 self.cfg.pickSeconds, function() self:skip(who) end)
@@ -2668,7 +2757,7 @@ function Session:pick(player, itemId)
     if not indexOf(t.options, itemId) then return false, "badpick" end
     self.turn = nil
     self:award(t.tier, player, itemId)
-    self:continueDraft(t.tier)
+    self:continueDraft(t.tier) -- (paused if the win was a gift still awaiting its recipient)
     return true
 end
 
@@ -2798,6 +2887,8 @@ function Session:confirm()
             if not engine:Get(a.list) then engine:Write("CreateList", { name = "Off-spec", seen = self.seen }, a.list) end
             local ev, err = engine:Append(a.list, "AddMember", { member = a.member, class = self.class[a.member], seen = self.seen })
             if not ev then fail(a, "ledger", err) end
+        elseif a.type == "award" and not a.to then
+            fail(a, "recipient", "norecipient") -- a gift nobody has said who gets (cannot happen: the draft waits)
         elseif a.type == "award" then
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end
@@ -4276,7 +4367,14 @@ function Sim:wireBots()
         local policy = self:policyFor(turn.player)
         client:after(1 + client:random() * 3, function()
             if s.turn ~= turn then return end
-            if turn.type == "pick" then
+            if turn.type == "recipient" then
+                -- a bot that bid to gift without saying who: it names someone who may have the item, else withdraws
+                local named
+                for _, n in ipairs(s.eligibleList) do
+                    if not named and n ~= turn.player and not s.away[n] and select(1, Loot.MayHave(s:fitOf(turn.item), s.class[n])) then named = n end
+                end
+                if named then s:chooseRecipient(turn.player, named) else s:withdrawGift(turn.player) end
+            elseif turn.type == "pick" then
                 local pick
                 if not policy.skip then
                     local prefs = type(policy.pick) == "table" and policy.pick or nil
@@ -4349,6 +4447,7 @@ function Sim:snapshot()
         end
         if s.turn then
             snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
+            if s.turn.type == "recipient" then snap.turn.canKeep = s:mayKeep(s.turn.player, s.turn.item) end
         end
     end
     return snap
@@ -4692,7 +4791,7 @@ M.list = {
     },
     {
         id = "minor-upgrade-proxy",
-        title = "A small upgrade nobody will spend a turn on",
+        title = "A small upgrade nobody will spend their rank on",
         lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to someone who can use it: Aldric, or any raider who would. Nothing is wasted, and nobody paid for scraps.",
         members = RAID,
         items = { "Quick Strike Ring" },
@@ -4919,7 +5018,8 @@ local function state()
     snap.pending = {}
     for _, a in ipairs(s.pending) do
         if a.type == "award" then
-            snap.pending[#snap.pending + 1] = { type = "award", tier = a.tier, member = short(a.member), to = short(a.to), item = a.item.link }
+            snap.pending[#snap.pending + 1] = { type = "award", tier = a.tier, member = short(a.member), to = short(a.to), item = a.item.link,
+                undecided = a.undecided or nil }
         elseif a.type == "disenchant" then
             snap.pending[#snap.pending + 1] = { type = "disenchant", to = short(a.to), item = a.item.link }
         elseif a.type == "enroll" then
@@ -5044,6 +5144,12 @@ function api.passAll()
     for _, it in ipairs(sim.session.items) do sim.session:bid("You", it.id, "pass") end
     return state()
 end
+
+-- A gift you won without naming who gets it: name them, keep it (if it suits you, or you are the salvager), or
+-- give it up (a pass). The draft waits for you.
+function api.recipient(to) return result(sim.session:chooseRecipient("You", to)) end
+function api.keep() return result(sim.session:keepGift("You")) end
+function api.withdraw() return result(sim.session:withdrawGift("You")) end
 
 function api.pick(itemId) return result(sim.session:pick("You", tonumber(itemId))) end
 function api.skip() return result(sim.session:skip("You")) end
@@ -5284,7 +5390,7 @@ end
   let running = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
-    current = id; result = null; lastMsg = "";
+    current = id; result = null; lastMsg = ""; giftTo = "";
     st = call("start", id, seed);
     prevOrder = st.order || []; moved = {};
     render();
@@ -5294,10 +5400,13 @@ end
     const r = call(name, a, b, c);
     const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
-      cantequip: "your class can't wear or wield it", badtarget: "choose who to gift it to" };
+      cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
+      cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
+      wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
+    giftTo = ""; // a choice is used once; the next list starts blank
     updateMoved();
     render();
   }
@@ -5341,8 +5450,18 @@ end
   function turnHtml() {
     const t = st.turn;
     if (!t) return "";
+    if (t.type === "recipient" && t.player !== "You") {
+      return '<div class="turn muted"><b>' + esc(t.player) + "</b> won " + itemName(t.item) + " as a gift and is choosing who gets it. The draft waits for them.</div>";
+    }
     if (t.player !== "You") {
       return '<div class="turn muted">Waiting for <b>' + esc(t.player) + "</b> to " + (t.type === "pick" ? "pick" : "claim or decline") + "&hellip;" + timerHtml() + "</div>";
+    }
+    if (t.type === "recipient") {
+      return '<div class="turn"><b>You won ' + itemName(t.item) + " as a gift.</b> Who gets it? Nothing is decided for you, and there is no timer: the draft waits." +
+        '<div class="row" style="margin-top:8px"><span class="muted">Gift to:</span>' + giftSelect(t.item) +
+        '<button class="primary" data-act="giveTo"' + (giftTo ? "" : ' disabled title="Choose who gets it first"') + ">Give it to them</button>" +
+        '<button data-act="keep"' + (t.canKeep ? "" : ' disabled title="It isn\'t for your class, and you aren\'t the salvager"') + ">Keep it myself</button>" +
+        '<button data-act="giveUp">Give it up (a pass)&hellip;</button></div></div>';
     }
     if (t.type === "pick") {
       return '<div class="turn"><b>It\'s your pick.</b> You\'re next in line. Choose one item (you\'ll drop to the bottom), or skip, which is always free.' +
@@ -5388,7 +5507,7 @@ end
       let ans = "";
       if (bidding) {
         const a = mine && mine.answers[i];
-        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '"' + (k === "gift" && !giftTo ? ' disabled title="Choose who to gift it to first (the Gift to list)"' : "") + ' data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
+        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '"' + (k === "gift" ? ' title="Gift it: choose who gets it in the Gift to list now, or leave it blank and choose if you win"' : "") + ' data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
@@ -5403,7 +5522,7 @@ end
       }
       if (bidding && mine && mine.answers[i]) {
         const a = mine.answers[i];
-        const WORD = { need: "Need", off: "Off-spec", gift: "Gift" + (a.to ? " to " + a.to : ""), pass: "Pass" };
+        const WORD = { need: "Need", off: "Off-spec", gift: "Gift" + (a.to ? " to " + a.to : " (you'll choose who gets it if you win)"), pass: "Pass" };
         ans = ans.replace(/<\/td>$/, '<div class="small" style="margin-top:4px">Your answer: <b>' + esc(WORD[a.kind] || a.kind) + "</b> (you can change it until bidding closes)</div></td>");
       }
       h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
@@ -5452,7 +5571,7 @@ end
     if (!st.pending || !st.pending.length) return "";
     return '<div class="card"><h2>Will be recorded</h2>' + st.pending.map((a) => {
       if (a.type === "award") return "<div class=\"small\">" + verb(a.member, "win", "wins") + ' <span class="iname">' + esc(a.item) + "</span> (" + (TIER[a.tier] || a.tier) + ")" +
-        (a.to !== a.member ? " and " + (a.member === "You" ? "give" : "gives") + " it to " + esc(a.to) : "") + "</div>";
+        (a.undecided ? " as a gift, and " + (a.member === "You" ? "have" : "has") + " not chosen who gets it yet" : (a.to !== a.member ? " and " + (a.member === "You" ? "give" : "gives") + " it to " + esc(a.to) : "")) + "</div>";
       if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to the disenchanter, " + esc(a.to) + ", to disenchant</div>";
       return '<div class="small muted">' + verb(a.member, "join", "joins") + " the " + esc(a.list) + " list</div>";
     }).join("") + (st.phase === "review" ? '<div class="small muted" style="margin-top:6px">Nothing is written to the ledger until you confirm.</div>' : "") + "</div>";
@@ -5574,9 +5693,13 @@ end
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid":
-        if (b === "gift" && !giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Gift."; render(); break; }
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
+      case "giveTo": act("recipient", giftTo); break;
+      case "keep": act("keep"); break;
+      case "giveUp":
+        if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
+        break;
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
       case "claimGift":
         if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }

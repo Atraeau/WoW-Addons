@@ -127,7 +127,8 @@ local function state()
     snap.pending = {}
     for _, a in ipairs(s.pending) do
         if a.type == "award" then
-            snap.pending[#snap.pending + 1] = { type = "award", tier = a.tier, member = short(a.member), to = short(a.to), item = a.item.link }
+            snap.pending[#snap.pending + 1] = { type = "award", tier = a.tier, member = short(a.member), to = short(a.to), item = a.item.link,
+                undecided = a.undecided or nil }
         elseif a.type == "disenchant" then
             snap.pending[#snap.pending + 1] = { type = "disenchant", to = short(a.to), item = a.item.link }
         elseif a.type == "enroll" then
@@ -252,6 +253,12 @@ function api.passAll()
     for _, it in ipairs(sim.session.items) do sim.session:bid("You", it.id, "pass") end
     return state()
 end
+
+-- A gift you won without naming who gets it: name them, keep it (if it suits you, or you are the salvager), or
+-- give it up (a pass). The draft waits for you.
+function api.recipient(to) return result(sim.session:chooseRecipient("You", to)) end
+function api.keep() return result(sim.session:keepGift("You")) end
+function api.withdraw() return result(sim.session:withdrawGift("You")) end
 
 function api.pick(itemId) return result(sim.session:pick("You", tonumber(itemId))) end
 function api.skip() return result(sim.session:skip("You")) end

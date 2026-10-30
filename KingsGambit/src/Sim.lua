@@ -160,7 +160,14 @@ function Sim:wireBots()
         local policy = self:policyFor(turn.player)
         client:after(1 + client:random() * 3, function()
             if s.turn ~= turn then return end
-            if turn.type == "pick" then
+            if turn.type == "recipient" then
+                -- a bot that bid to gift without saying who: it names someone who may have the item, else withdraws
+                local named
+                for _, n in ipairs(s.eligibleList) do
+                    if not named and n ~= turn.player and not s.away[n] and select(1, Loot.MayHave(s:fitOf(turn.item), s.class[n])) then named = n end
+                end
+                if named then s:chooseRecipient(turn.player, named) else s:withdrawGift(turn.player) end
+            elseif turn.type == "pick" then
                 local pick
                 if not policy.skip then
                     local prefs = type(policy.pick) == "table" and policy.pick or nil
@@ -233,6 +240,7 @@ function Sim:snapshot()
         end
         if s.turn then
             snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
+            if s.turn.type == "recipient" then snap.turn.canKeep = s:mayKeep(s.turn.player, s.turn.item) end
         end
     end
     return snap

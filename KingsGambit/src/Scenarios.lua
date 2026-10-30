@@ -61,7 +61,7 @@ M.list = {
     },
     {
         id = "minor-upgrade-proxy",
-        title = "A small upgrade nobody will spend a turn on",
+        title = "A small upgrade nobody will spend their rank on",
         lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to someone who can use it: Aldric, or any raider who would. Nothing is wasted, and nobody paid for scraps.",
         members = RAID,
         items = { "Quick Strike Ring" },

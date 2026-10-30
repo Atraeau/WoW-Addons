@@ -926,6 +926,51 @@ The "Will be recorded" panel said "You wins" and "You joins". The page now makes
 wins", "You join"), names the stage in plain words ("salvage round", "main draft") and says "and give it to Dara"
 for a gift. Checked in the browser pane with a gift by the learner and a bot's win. No design change.
 
+### Decision: a gift's recipient is always an explicit choice, and the draft waits for it (2026-10-30)
+
+**Decided by the guild leader**, after the "Gift to" list in the simulator appeared to default to a raider (and a choice
+made earlier leaked into the next prompt):
+- **A recipient is never defaulted.** Every "Gift to" choice starts blank and is set only by the player. A chosen
+  value is used once and cleared.
+- **A gift bid may leave the recipient open.** If the bidder wins and still hasn't said, the draft **pauses and waits
+  for them**, with no timer. It publishes a note to the raid: "X won item N as a gift and is choosing who gets it."
+  Nothing is guessed, and the Master Looter can still cancel the session.
+- **When they decide:** they name a recipient (who must be in the raid and eligible for the item), or they **keep it**
+  (allowed only if they are eligible for it, or are the salvager: the lowest on the list, who may take anything), or
+  they **withdraw**, which counts as a **pass** after a confirmation: the win is undone, they keep their place, and the
+  draft goes on without them for that item. A winner who leaves the raid while we wait counts as withdrawn.
+- **Built:** `Session:chooseRecipient`, `keepGift`, `withdrawGift` and a `recipient` turn; text commands `gift <n> [name]`,
+  `recipient <name>`, `keep`, `withdraw yes`; the simulator's turn card. The ledger is unchanged: an `Award`
+  is written only once its recipient is known.
+- **Also decided:** in the salvage round the gift is explicit already ("Claim it" or "Claim and gift", disabled until
+  someone is chosen).
+- **Open:** a winner who goes quiet blocks the draft until they answer or leave; the Master Looter's only lever today is
+  cancelling. A way for the Master Looter to withdraw on their behalf is probably wanted.
+
+### Decisions logged, not yet built: the raid leader, and the loot method (2026-10-30)
+
+**Raised by the guild leader**, to be logged before any design change:
+1. **The simulator should let you choose the Master Looter.** The Master Looter is a role like any other (it is an
+   official role in the game's raid UI), so the simulation should let you pick who holds it among the raiders
+   instead of always making the learner the Master Looter.
+2. **Loot must not be distributed until the loot method is set to Master Looter in the raid configuration.** That is
+   done by the **raid leader**, a separate role the system must recognise and acknowledge. The game decides who may
+   change the loot method; the addon should refuse to run a session until it has been set (the Client already reports
+   the loot method and who the Master Looter is).
+3. **There is always a raid leader** in every raid, and a **leader in every dungeon group**. The raid leader is not the
+   Master Looter, not necessarily an officer and not the guild master. The model should treat the leader as a role that
+   always exists (as opposed to the Master Looter and the disenchanter, which have to be chosen).
+- **Open design questions, for the design pass:**
+  - how the raid leader relates to the ledger's authority (who may open a raid today: officers. May the raid leader,
+    if they aren't one?);
+  - what the addon does when the loot method is not Master Looter (refuse, or explain how to set it), and when it
+    changes mid-session;
+  - how the simulator models the leader, the Master Looter and the disenchanter as three roles that may be one,
+    two or three people, and lets the learner take any of them or none;
+  - whether the Master Looter should be derived from the game's setting (as the loot protocol already does for who is
+    believed) rather than chosen again in the ledger.
+- Nothing here is built yet. The role cards already show the Master Looter and the disenchanter; the leader is not shown.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

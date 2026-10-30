@@ -82,7 +82,7 @@ test("a bid is acknowledged, and a refused bid says why", function()
     w.net:advance(1)
     local acks = {}
     w.players.Aldric.net.on("ack", function(a) acks[#acks + 1] = a end)
-    w.players.Aldric.net:bid(1, "need"); w.players.Aldric.net:bid(7, "need"); w.players.Aldric.net:bid(1, "gift")
+    w.players.Aldric.net:bid(1, "need"); w.players.Aldric.net:bid(7, "need"); w.players.Aldric.net:bid(1, "gift", "Aldric")
     w.net:advance(2)
     eq(#acks, 3); assert(acks[1].ok); eq(acks[2].why, "noitem"); eq(acks[3].why, "badtarget")
 end)

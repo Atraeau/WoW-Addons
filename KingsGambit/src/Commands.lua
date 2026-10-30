@@ -13,6 +13,8 @@ local WHY = {
     notyourturn = "it is not your turn", noturn = "nothing is waiting for you", badpick = "you didn't bid on that item",
     nosession = "no loot session is running", busy = "a session is already running", notml = "you are not the Master Looter",
     nolist = "no such list", notreview = "the session is not ready to confirm",
+    cantkeep = "you can't keep it: it isn't for your class. Name who gets it, or withdraw", unreachable = "they are out of loot range",
+    norecipient = "no one was named to receive it",
     nodisenchanter = "no disenchanter is designated for this raid yet. Choose who disenchants what nobody wants: disenchanter <name>",
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
@@ -52,6 +54,9 @@ local HELP = {
     "  need <item#> ready              a token: you can turn it in (e.g. materials in your bank)",
     "  ready <item#>                   who wants a token, and how ready each one is (a hint, never enforced)",
     "  pick <item#> | skip | claim [name] | decline     your turn in the draft or the salvage round",
+    "  gift <item#> [name]             you may leave the name out and choose later, if you win it",
+    "  recipient <name> | keep | withdraw yes           after winning a gift with no name: who gets it, keep it, or",
+    "                                  give it up (counts as a pass)",
     "  raid                            who is Master Looter of the raids that are open",
     "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
@@ -359,9 +364,9 @@ function M.New(ctx)
         end
     end
     function cmds.gift(args)
-        local item, to = args:match("^(%d+)%s+(%S+)$")
-        if not item then return out("gift <item#> <name>") end
-        bid(item, "gift", to)
+        local item, to = args:match("^(%d+)%s*(%S*)$")
+        if not item then return out("gift <item#> [name]   (leave the name out to choose later, if you win)") end
+        bid(item, "gift", to ~= "" and to or nil)
     end
 
     function cmds.ready(args)
@@ -392,6 +397,17 @@ function M.New(ctx)
         act(function(s) return s:pick(client:me(), item) end, function(p) return p:pick(item) end)
     end
     function cmds.skip() act(function(s) return s:skip(client:me()) end, function(p) return p:skip() end) end
+    function cmds.recipient(args)
+        if args == "" then return out("recipient <name>   (who gets the gift you won)") end
+        act(function(s) return s:chooseRecipient(client:me(), args) end, function(p) return p:recipient(args) end)
+    end
+    function cmds.keep() act(function(s) return s:keepGift(client:me()) end, function(p) return p:keep() end) end
+    function cmds.withdraw(args)
+        if args:lower() ~= "yes" then
+            return out("This gives up your win and counts as a pass; you keep your place on the list. To go ahead: withdraw yes")
+        end
+        act(function(s) return s:withdrawGift(client:me()) end, function(p) return p:withdraw() end)
+    end
     function cmds.claim(args)
         local to = args ~= "" and args or nil
         act(function(s) return s:claimItem(client:me(), to and { to = to } or nil) end, function(p) return p:claim(to) end)
@@ -836,7 +852,13 @@ function M.New(ctx)
             if tokens then out("For a token, add 'ready' if you can turn it in but the addon can't see it (e.g. bank): need <n> ready.") end
         end)
         ctx.player.on("turn", function(t)
+            if t.type == "recipient" and t.player ~= client:me() then
+                return out(("%s won item %d as a gift and is choosing who gets it."):format(short(t.player), t.item))
+            end
             if not ctx.player:myTurn() then return end
+            if t.type == "recipient" then
+                return out(("You won item %d as a gift. Who gets it? recipient <name>, or keep (if it suits you), or withdraw yes (a pass)."):format(t.item))
+            end
             if t.type == "pick" then
                 out("It's your pick! Items you bid on: " .. table.concat(t.options, ", ") .. ".  Use: pick <n>, or skip.")
             else
@@ -856,6 +878,12 @@ function M.New(ctx)
             if p.phase == "review" then out("Everyone has been through the draft. Review, then 'confirm' to hand the items out and record them.") end
         end)
         ctx.host.on("turn", function(t)
+            if t.type == "recipient" then
+                if t.player == client:me() then
+                    return out(("You won item %d as a gift. Who gets it? recipient <name>, or keep (if it suits you), or withdraw yes (a pass)."):format(t.item))
+                end
+                return out(("%s won item %d as a gift and is choosing who gets it. The draft waits for them."):format(short(t.player), t.item))
+            end
             if t.player == client:me() then
                 out(t.type == "pick" and ("Your pick! Items you bid on: " .. table.concat(t.options, ", ") .. ". pick <n> or skip.")
                     or ("Item " .. t.item .. " is offered to you. claim [name] or decline."))

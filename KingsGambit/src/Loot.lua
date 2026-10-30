@@ -192,7 +192,9 @@ function Session:rosterChanged()
     end
     local t = self.turn
     if t and self.away[t.player] then
-        if t.type == "pick" then self:skip(t.player) else self:decline(t.player) end
+        if t.type == "pick" then self:skip(t.player)
+        elseif t.type == "recipient" then self:withdrawGift(t.player) -- gone before deciding: counts as a pass
+        else self:decline(t.player) end
     end
 end
 
@@ -233,8 +235,10 @@ function Session:bid(player, itemId, kind, extra)
     if not self.eligible[player] or self.away[player] then return false, "ineligible" end
     if not self.items[itemId] then return false, "noitem" end
     if not (kind == "need" or kind == "off" or kind == "gift" or kind == "pass") then return false, "badkind" end
+    -- A gift names who gets it, or leaves that open: if the bidder wins and still hasn't said, the draft waits for them
+    -- (see the "recipient" turn) rather than guessing.
     local to
-    if kind == "gift" then
+    if kind == "gift" and extra.to and extra.to ~= "" then
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
     end
@@ -245,7 +249,7 @@ function Session:bid(player, itemId, kind, extra)
     if kind == "need" or kind == "off" then
         local ok, why = M.MayHave(self:fitOf(itemId), self.class[player])
         if not ok then return false, why end
-    elseif kind == "gift" then
+    elseif kind == "gift" and to then
         local ok, why = M.MayHave(self:fitOf(itemId), self.class[to])
         if not ok then return false, why .. "to" end
     end
@@ -457,13 +461,95 @@ end
 function Session:award(tier, who, itemId, toOverride)
     local it = self.items[itemId]
     local bid = self.bids[who] and self.bids[who][itemId]
-    local to = toOverride or ((bid and bid.kind == "gift" and tier == "main") and bid.to or who)
+    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "main"
+    local undecided = isGift and not bid.to
+    local to = toOverride or (isGift and bid.to or who)
+    if undecided then to = nil end
     it.status, it.winner, it.to, it.tier = "awarded", who, to, tier
     local list = (tier == "off") and self.cfg.offListId or self.cfg.listId
-    moveToBottom(self.order[tier == "off" and "off" or "main"], who)
-    local action = { type = "award", list = list, member = who, to = to, item = it, tier = tier }
+    local order = self.order[tier == "off" and "off" or "main"]
+    local from = indexOf(order, who)
+    local wasBottom = from == #order
+    moveToBottom(order, who)
+    local action = { type = "award", list = list, member = who, to = to, item = it, tier = tier, undecided = undecided or nil,
+        fromIndex = from }
     self.pending[#self.pending + 1] = action
     self:emit("pending", action)
+    if undecided then
+        -- They won it as a gift but haven't said who gets it. Nothing is guessed and nothing times out: the draft
+        -- waits for them. The turn is published, so the raid sees "X won it as a gift and is choosing who gets it".
+        self:setTurn({ type = "recipient", tier = tier, player = who, item = itemId, wasBottom = wasBottom }, nil)
+        self.undecided = action
+    end
+end
+
+-- The player who won a gift without naming who gets it. Returns the turn, or nil + a reason.
+local function recipientTurn(self, player)
+    local t = self.turn
+    if not (t and t.type == "recipient") then return nil, "noturn" end
+    if norm(self, player) ~= t.player then return nil, "notyourturn" end
+    return t
+end
+
+-- May `player` keep the gift they won? They must be eligible for the item, or be the salvager (the lowest on the
+-- list when they won, who may take anything).
+function Session:mayKeep(player, itemId)
+    local t = self.turn
+    if t and t.type == "recipient" and t.item == itemId and t.wasBottom then return true end
+    return (M.MayHave(self:fitOf(itemId), self.class[norm(self, player)]))
+end
+
+local function resolveRecipient(self, t, to)
+    local action = self.undecided
+    action.to, action.undecided = to, nil
+    self.items[t.item].to = to
+    self.undecided, self.turn = nil, nil
+    self:clearTimer()
+    self:emit("recipient", { player = t.player, item = t.item, to = to })
+    self:continueDraft(t.tier)
+    return true
+end
+
+-- Choose who gets the gift they won. The recipient must be in the raid and eligible for the item.
+function Session:chooseRecipient(player, to)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    to = norm(self, to)
+    if not to or not self.eligible[to] or self.away[to] then return false, "badtarget" end
+    if to == t.player then return self:keepGift(player) end
+    local ok, why2 = M.MayHave(self:fitOf(t.item), self.class[to])
+    if not ok then return false, why2 .. "to" end
+    if not self:canReceive(to, self.items[t.item]) then return false, "unreachable" end
+    return resolveRecipient(self, t, to)
+end
+
+-- Keep it after all (only if eligible for it, or the salvager).
+function Session:keepGift(player)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    if not self:mayKeep(t.player, t.item) then return false, "cantkeep" end
+    return resolveRecipient(self, t, t.player)
+end
+
+-- Decide not to gift after all: it counts as a pass. The win is withdrawn, the winner keeps their place on the list,
+-- and the draft goes on without them for this item. (The page and commands ask for a confirmation first.)
+function Session:withdrawGift(player)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    local action, it = self.undecided, self.items[t.item]
+    for i, a in ipairs(self.pending) do
+        if a == action then table.remove(self.pending, i); break end
+    end
+    local order = self.order[t.tier == "off" and "off" or "main"]
+    local at = indexOf(order, t.player)
+    if at then table.remove(order, at); table.insert(order, math.min(action.fromIndex or #order + 1, #order + 1), t.player) end
+    it.status, it.winner, it.to, it.tier = "open", nil, nil, nil
+    self.bids[t.player][t.item] = { kind = "pass" }
+    self.undecided, self.turn = nil, nil
+    self:clearTimer()
+    self:emit("recipient", { player = t.player, item = t.item, withdrawn = true })
+    self:continueDraft(t.tier)
+    return true
 end
 
 function Session:setTurn(turn, sec, onTimeout)
@@ -481,14 +567,17 @@ function Session:runDraft(tier)
 end
 
 function Session:continueDraft(tier)
+    if self.turn and self.turn.type == "recipient" then return end
     while true do
         local who, opts = self:topCandidate(tier)
         if not who then break end
         local ranked = self:rankedChoice(who, opts)
         if #opts == 1 then
             self:award(tier, who, opts[1])
+            if self.turn then return end -- a gift waiting for its recipient
         elseif ranked then
             self:award(tier, who, ranked) -- ranked choice: their most-wanted item still available
+            if self.turn then return end
         else
             self:setTurn({ type = "pick", tier = tier, player = who, options = opts },
                 self.cfg.pickSeconds, function() self:skip(who) end)
@@ -521,7 +610,7 @@ function Session:pick(player, itemId)
     if not indexOf(t.options, itemId) then return false, "badpick" end
     self.turn = nil
     self:award(t.tier, player, itemId)
-    self:continueDraft(t.tier)
+    self:continueDraft(t.tier) -- (paused if the win was a gift still awaiting its recipient)
     return true
 end
 
@@ -651,6 +740,8 @@ function Session:confirm()
             if not engine:Get(a.list) then engine:Write("CreateList", { name = "Off-spec", seen = self.seen }, a.list) end
             local ev, err = engine:Append(a.list, "AddMember", { member = a.member, class = self.class[a.member], seen = self.seen })
             if not ev then fail(a, "ledger", err) end
+        elseif a.type == "award" and not a.to then
+            fail(a, "recipient", "norecipient") -- a gift nobody has said who gets (cannot happen: the draft waits)
         elseif a.type == "award" then
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end

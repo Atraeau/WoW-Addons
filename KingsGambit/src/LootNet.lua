@@ -9,7 +9,7 @@
 --   LK  acknowledgement host -> player   { sid, ok, why?, item?, action? }
 --   LP  phase           host -> RAID     { sid, phase }
 --   LT  turn            host -> RAID     { sid, turn = { type, player, options?, item?, tier? }, left }
---   LX  action          player -> host   { sid, action = pick|skip|claim|decline, item?, to? }
+--   LX  action          player -> host   { sid, action = pick|skip|claim|decline|recipient|keep|withdraw, item?, to? }
 --   LY  public answers  host -> RAID     { sid, a = { { player, item, kind, to?, ready? } } }  (batched)
 --   LR  results         host -> RAID     { sid, awards = { {item, winner, to, tier} }, de = { {item, to} }, failed }
 --
@@ -172,6 +172,10 @@ function M.NewHost(sync, engine)
         elseif msg.action == "skip" then ok, why = s:skip(sender)
         elseif msg.action == "claim" then ok, why = s:claimItem(sender, msg.to and { to = msg.to } or nil)
         elseif msg.action == "decline" then ok, why = s:decline(sender)
+        -- a gift won without a recipient: name one, keep it, or withdraw (counts as a pass)
+        elseif msg.action == "recipient" then ok, why = s:chooseRecipient(sender, msg.to)
+        elseif msg.action == "keep" then ok, why = s:keepGift(sender)
+        elseif msg.action == "withdraw" then ok, why = s:withdrawGift(sender)
         else ok, why = false, "badaction" end
         ack(sender, { ok = ok and true or false, why = why, action = msg.action })
     end)
@@ -267,6 +271,9 @@ function M.NewPlayer(sync)
     function p:skip() return toHost({ t = "LX", action = "skip" }) end
     function p:claim(to) return toHost({ t = "LX", action = "claim", to = to }) end
     function p:decline() return toHost({ t = "LX", action = "decline" }) end
+    function p:recipient(to) return toHost({ t = "LX", action = "recipient", to = to }) end
+    function p:keep() return toHost({ t = "LX", action = "keep" }) end
+    function p:withdraw() return toHost({ t = "LX", action = "withdraw" }) end
 
     -- Is it this player's turn, and for what?
     function p:myTurn()
