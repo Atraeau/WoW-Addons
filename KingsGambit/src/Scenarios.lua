@@ -69,7 +69,12 @@ M.list = {
         you = { claim = true, claimTo = "Aldric" },
         expect = function(sim)
             local award = lastEvent(sim, "main", "Award")
-            if not award then return false, "no award was recorded" end
+            if not award then
+                if lastEvent(sim, "main", "Disenchant") then
+                    return false, "nobody claimed the ring, so it was disenchanted. When it is offered to you, choose \"Claim and gift to\" Aldric before the offer's timer runs out."
+                end
+                return false, "no award was recorded"
+            end
             local ok = short(award.data.member) == "You" and short(award.data.to) == "Aldric" and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
             return ok, ("claimed by %s for %s; order %s"):format(short(award.data.member), short(award.data.to), sim:orderString())
         end,

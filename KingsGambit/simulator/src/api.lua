@@ -188,7 +188,10 @@ function api.start(id, seed)
         learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
     startCount = #sim.engine:View().applied
-    local ok, why = sim:drop(scenario.items, scenario.config)
+    -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
+    local cfg = { pickSeconds = 60, claimSeconds = 60 }
+    for k, v in pairs(scenario.config or {}) do cfg[k] = v end
+    local ok, why = sim:drop(scenario.items, cfg)
     if not ok then return { error = tostring(why) } end
     return state()
 end

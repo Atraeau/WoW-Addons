@@ -391,3 +391,10 @@ test("the Master Looter chooses the disenchanter for the raid; the choice is rec
     assert(sim:drop({ "Crimson Shocker" })); assert(sim:runUntil("review", 100)); assert(sim.session:confirm())
     eq(sim.session.deHandler, "Brann-Realm")
 end)
+test("if the learner lets the ring go unclaimed, the lesson says what happened", function()
+    local sc = {}
+    for k, v in pairs(SK.modules.Scenarios.find("minor-upgrade-proxy")) do sc[k] = v end
+    sc.you = { claim = false }
+    local _, ok, message = Sim.RunScenario(sc)
+    assert(not ok and message:find("nobody claimed the ring"), tostring(message))
+end)

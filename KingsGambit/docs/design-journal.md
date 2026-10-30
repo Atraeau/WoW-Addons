@@ -879,6 +879,18 @@ before loot can be distributed**. (It need not be the Master Looter, and often i
 - **Still open:** what happens if the designated disenchanter leaves the raid before the hand-out (today the give
   fails and is reported, like any failed hand-out); requiring the disenchanter to be in the raid when chosen.
 
+### Simulator: a lesson that ran out of time says so (2026-10-30)
+
+**Reported:** "Different from the lesson: no award was recorded" in the simulator. Played through the page's own calls,
+the scenario ("A small upgrade nobody will spend a turn on") passes, so the cause is most likely the learner's offer
+timing out: the salvage offer lasts 10 seconds (the engine default, suited to a raid), nobody else claims, and the
+ring is disenchanted. Changed:
+- Training scenarios on the page give the learner's turns 60 seconds (pick and claim), since a person is reading and
+  learning. The engine defaults are unchanged.
+- That lesson's check now says when the ring went unclaimed and was disenchanted, and what to do, instead of "no
+  award was recorded". A test covers it.
+- If it recurs with a claim made in time, we have a real bug and need the steps.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
