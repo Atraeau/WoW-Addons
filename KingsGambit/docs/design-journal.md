@@ -1326,6 +1326,18 @@ Following the decisions logged above (these supersede the "not built yet" notes 
 - **Not done:** lessons that expect you as Master Looter (for example the salvager scenarios) will say "different from the lesson" when
   another raider is the Master Looter; the request-eligibility button is auto-granted by the bot Master Looter.
 
+### Decision: the name stays King's Gambit (2026-10-30)
+
+**Raised by the guild leader:** a quest named "The King's Gambit" exists in the game; should the system be called "Queen's Gambit"?
+**Decided: no, it stays King's Gambit.**
+- A quest title is game content, not an addon identifier: it does not conflict with the addon's folder, slash command or
+  saved data. (The quest itself was not looked up.)
+- The name keeps the pun on **Suicide Kings**, which the system derives from, and the **meaning**: the King's Gambit is the
+  opening where a pawn is deliberately sacrificed for position, which is what dropping to the bottom to win loot is. The
+  Queen's Gambit is a gambit mostly in name, since the pawn is usually regained, and has no tie to Suicide Kings.
+- If findability ever matters, a subtitle (for example "King's Gambit: a transparent loot ledger") is cheaper than a rename,
+  which would touch the folder, TOC, saved variables, slash command, docs and tests.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
