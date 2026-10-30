@@ -302,7 +302,7 @@ function M.New(ctx)
         end
         if char.hints then
             local suits = ItemFit.SuitsText(fit)
-            if suits then parts[#parts + 1] = "suits: " .. suits .. (fit.suits and " (officer's call)" or "") end
+            if suits then parts[#parts + 1] = "suits: " .. suits .. (fit.suits and (" (%s's call: %s)"):format(short(fit.suits.by), fit.suits.reason or "no reason given") or "") end
             local class = myClass()
             if class then
                 local spec = char.spec and char.spec.main

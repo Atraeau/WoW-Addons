@@ -332,3 +332,29 @@ test("events in the same second are ordered exactly, the same way everywhere", f
     w:write("Off", "AddMember", { member = "G" }, 500, "main")                      -- after it opened
     eq(reasons(w:view()), "AddMember:duringraid")
 end)
+
+H.section("Ledger: an override of the item-fit heuristic lasts, with its author")
+test("an override persists indefinitely, attributed to whoever set it, until someone changes it", function()
+    local w = guild()
+    w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 60 }, 110)
+    w:write("MLA", "ItemSuits", { item = 17082, roles = { "tank" }, reason = "its use effect is a tank cooldown" }, 120)
+    w:write("Off", "ItemSuits", { item = 18000, roles = { "healer" }, reason = "officer's call" }, 5000)
+    w:write("GM", "ItemSuits", { item = 18001, roles = { "caster" }, reason = "guild master's call" }, 5001)
+    w:write("Rand", "ItemSuits", { item = 18002, roles = { "melee" }, reason = "nobody asked" }, 5002)
+    local v = w:view()
+    eq(reasons(v), "ItemSuits:notauthorized", "only the guild master, officers and the raid's Master Looter may set one")
+    for id, by in pairs { [17082] = "MLA", [18000] = "Off", [18001] = "GM" } do
+        local o = v.itemSuits[id]
+        eq(o.by, by); assert(o.ts and o.reason and o.id, "attribution: who, when, why and which event")
+    end
+    -- a year later, long after the raid's authority expired, the override still holds
+    w:write("GM", "AddMember", { member = "F" }, 100 + 365 * 86400, "main")
+    local later = w:view()
+    eq(later.itemSuits[17082].by, "MLA"); eq(later.itemSuits[17082].roles[1], "tank")
+    eq(reasons(later), "ItemSuits:notauthorized")
+    -- a later override replaces it and is attributed to its author; "auto" hands the item back to the heuristic
+    w:write("GM", "ItemSuits", { item = 17082, roles = { "melee" }, reason = "revisited" }, 200 + 365 * 86400)
+    eq(w:view().itemSuits[17082].by, "GM"); eq(w:view().itemSuits[17082].roles[1], "melee")
+    w:write("Off", "ItemSuits", { item = 17082, roles = {}, reason = "back to the heuristic" }, 300 + 365 * 86400)
+    eq(w:view().itemSuits[17082], nil)
+end)

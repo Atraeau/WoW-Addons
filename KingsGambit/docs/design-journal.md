@@ -789,6 +789,18 @@ found three real gaps, all in how a session treats the raid after it starts (it 
   else looted the slot). That is reported as before, and still writes nothing to the ledger.
 - **Still open:** after such a failure there is no "re-offer this item" step; the Master Looter fixes it by hand.
 
+### Confirmed: item-fit overrides last, with their author (2026-10-30)
+
+**Decided by the guild leader:** the default for who an item suits never depends on a list (it is the heuristic).
+When the guild master, an officer or the raid's Master Looter overrides it, the override persists indefinitely and
+is attributed to whoever set it.
+- This is how `ItemSuits` already worked, and is now pinned by a test: the ledger keeps who set it, when, why and
+  which event, with no expiry. A year on, long after a Master Looter's raid authority lapsed, their override still
+  holds. A later override replaces it (attributed to its new author); `auto` hands the item back to the heuristic.
+  Anyone else's attempt is refused.
+- **Changed:** the hint a raider sees now names the author and the reason ("suits: ... (Name's call: reason)"), not
+  just "officer's call", so the attribution is visible where the override is used.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
