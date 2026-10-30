@@ -1081,6 +1081,23 @@ create anything.
   closes the open question above about absent members, and the guild roster (and the Client's missing rank field) is not
   needed for list creation.
 
+### Decision: the salvage round offers from the bottom of the live list, as is (2026-10-30)
+
+**Raised by the guild leader** from the simulator: in an Ahn'Qiraj night, the winner of the Hammer (who had just dropped to the
+bottom) was also offered the Wristguards first in the salvage round, after everyone passed on them.
+- **Decided: leave it.** The salvage round stays lowest-first on the live list, including players who won earlier in
+  the same hand-out. Reasoning: if everyone passed, the item was legitimately of no interest to anyone, so who gets to
+  decide its fate hardly matters; and a rule that depended on a "session" would push guilds to hand out in tiny sessions
+  (one or two items) just to make the salvager rotate. Loot may be held until the end of the raid or a break and handed
+  out in one batch, so no rule may depend on how loot was batched.
+- **Finding (not a bug in the draft, but contrary to the premise):** the salvager does **not** rotate within a batch.
+  Claiming moves a player to the bottom, which is where the lowest player already is, so the same player is offered every
+  leftover first (checked: four leftover items, everyone willing, one player gets all four). Rotation only happens
+  across batches, as other players' wins push people below them. If the intent is that "whoever is salvager doesn't get
+  to be salvager for everything", that needs a rule: see the open question below.
+- **Open:** whether, within one salvage round, a player who has claimed an item goes to the back of the queue for the
+  remaining items (so the salvager rotates inside a batch, with no reference to sessions).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
