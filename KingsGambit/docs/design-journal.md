@@ -1059,8 +1059,7 @@ rules; **the main list and the off-spec list must be unique random orders on ini
 - **Tests:** seeding differs by seed and the ledger holds the order; a hand-built list is left alone and latecomers go to
   the bottom; the off list never equals the main order across 30 seeds of a 3-raider raid; the off-spec scenario checks
   the real seeded order (three seeds in the browser: different orders, ahead-of-the-other bidder wins).
-- **Open:** whether the seed should include main-list members who are absent at the first session (today: only raiders
-  present, and an absent member joins the bottom of the off-spec list when first present).
+- **Settled:** only raiders present at the first session are seeded (see the guild-roster proposal below, not adopted).
 
 ### Proposal: create both lists from the guild roster before the first raid (2026-10-30)
 
@@ -1076,7 +1075,11 @@ create anything.
   inactive members, who would sit at random places in the order); how an officer trims it (remove after, exclude at
   init, or choose by rank); and the Client's guild roster currently reports name, class and online status but **not
   rank**, so any rank filter needs a small Client extension.
-- Nothing built for this yet: current behaviour (seed at the first session, from raiders present) stands.
+- **Decided by the guild leader: not adopted.** Both lists are seeded from **whoever is present at the first raid**, as
+  built. It is the fairest rule: people who have never raided should not get priority over someone who has. Members
+  who were absent at the first raid join the bottom of each list when they first attend, like any newcomer. This also
+  closes the open question above about absent members, and the guild roster (and the Client's missing rank field) is not
+  needed for list creation.
 
 ### Scaling: measured, not guessed (2026-10-28)
 
