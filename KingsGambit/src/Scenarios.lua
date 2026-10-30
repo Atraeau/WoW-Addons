@@ -218,6 +218,36 @@ M.list = {
                 ("draft: %s | leftovers, each to a different salvager: %s"):format(won, rotated)
         end,
     },
+    {
+        id = "lucky-salvager",
+        title = "Nobody wants most of it: the lucky salvager",
+        lesson = "Six items drop. Only two are wanted: Aldric wants the gauntlets, Brann the blade. The other four interest nobody. Watch where they go.\n\n1. AS THE DRAFT GOES. Aldric picks first and drops to the bottom, so the first unwanted item (the Heavy Dark Iron Ring) is offered to him. Claiming at the bottom costs him nothing: he has no further to fall. Then Brann picks, drops to the bottom, and is offered the next unwanted item (the Quick Strike Ring).\n\n2. WHAT IS LEFT AFTER THE DRAFT. Two items remain (Wristguards of Stability and the Crimson Shocker) and there are no picks left to hand them out with. They are plain suicide: offered from the bottom up, and the lowest player is Brann. He claims them too, and he is still at the bottom afterward, because nothing he did cost him a place. He got lucky that so few people wanted so much.\n\nNobody else's place moved at all. You only have to pass on everything, press Start, then confirm.",
+        members = {
+            { name = "Aldric", class = "WARRIOR" }, { name = "Brann", class = "WARRIOR" }, { name = "Cass", class = "DRUID" },
+            { name = "Dara", class = "WARRIOR" }, { name = "Eira", class = "DRUID" }, { name = "Fenn", class = "PRIEST" },
+        },
+        learnerClass = "WARLOCK",
+        items = { "Gauntlets of Might", "Heavy Dark Iron Ring", "Brutality Blade", "Quick Strike Ring",
+            "Wristguards of Stability", "Crimson Shocker" },
+        policies = {
+            Aldric = { claim = true, bid = { ["Gauntlets of Might"] = "need" } },
+            Brann = { claim = true, bid = { ["Brutality Blade"] = "need" } },
+            Cass = { claim = true }, Dara = { claim = true }, Eira = { claim = true }, Fenn = { claim = true },
+        },
+        you = { claim = false },
+        expect = function(sim)
+            local rows = {}
+            for _, ev in ipairs(sim.engine:Get("main").events) do
+                if ev.type == "Award" then rows[#rows + 1] = short(ev.data.member) .. ": " .. ev.data.item end
+            end
+            local got = table.concat(rows, "; ")
+            local want = "Aldric: Gauntlets of Might; Aldric: Heavy Dark Iron Ring; Brann: Brutality Blade; Brann: Quick Strike Ring; "
+                .. "Brann: Wristguards of Stability; Brann: Crimson Shocker"
+            local order = sim:orderString()
+            return got == want and order == "Cass,Dara,Eira,Fenn,You,Aldric,Brann",
+                ("%s | list now %s"):format(got, order)
+        end,
+    },
 }
 
 function M.find(id)

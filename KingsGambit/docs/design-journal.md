@@ -1193,6 +1193,18 @@ salvager may persist over several items, and "they get lucky that nobody wants s
   and moves nobody; a decline lets the next player pay a place; and more unwanted items than picks all go to the player who
   just picked.
 
+### Simulator: a scenario for the lucky salvager (2026-10-30)
+
+**Asked by the guild leader**, so the overflow rule is clear: "Nobody wants most of it: the lucky salvager". Six real items, only two
+wanted (the gauntlets by Aldric, the blade by Brann), four unwanted.
+- **As the draft goes:** Aldric picks, drops to the bottom, and is offered the first unwanted item (the Heavy Dark Iron
+  Ring); Brann picks, drops, and is offered the next (the Quick Strike Ring). Claiming at the bottom costs nothing.
+- **After the draft:** two unwanted items remain with no picks left to hand them out with. They are plain suicide:
+  the lowest player, Brann, is offered them and takes both, still at the bottom afterward. Lucky, since nobody wanted
+  so much. Nobody else's place moves; the list ends ... Aldric, Brann.
+- The lesson is two numbered steps; a test runs it on five seeds and checks who took what. In the page, the pending list
+  reads Aldric twice and Brann four times, which is the point.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

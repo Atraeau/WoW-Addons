@@ -477,3 +477,16 @@ test("salvage is just another drop to the bottom: the list ends with the winners
         eq(s2:orderString(), "Eira,Hale,You,Aldric,Brann,Cass,Dara,Fenn,Garo", "seed " .. seed)
     end
 end)
+
+test("'lucky salvager': one unwanted item per pick as the draft goes, then the lowest player takes the rest and nobody moves", function()
+    local sc = SK.modules.Scenarios.find("lucky-salvager")
+    for seed = 1, 5 do
+        local sim, ok, message = Sim.RunScenario(sc, { seed = seed })
+        assert(ok, "seed " .. seed .. ": " .. tostring(message))
+        local by = {}
+        for _, it in ipairs(sim.session.items) do
+            if it.tier == "salvage" then by[#by + 1] = (it.winner:gsub("%-.*$", "")) end
+        end
+        eq(table.concat(by, ","), "Aldric,Brann,Brann,Brann", "the first two unwanted items to the two picks; the overflow to the lowest")
+    end
+end)
