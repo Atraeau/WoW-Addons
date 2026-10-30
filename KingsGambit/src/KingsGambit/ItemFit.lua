@@ -10,7 +10,10 @@
 --
 -- An item, as this module sees it (Describe builds it from the game):
 --   { link, slot = equipLoc, class = item class id, subclass = id, stats = { [key] = value }, classes = { "PRIEST", ... } | nil }
--- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap dps
+-- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap (in 1.12 "+X Attack Power"
+--            is both: ap and rap; "+X ranged Attack Power" is rap only) dps (a weapon's damage per
+--            second; a spec's weights value it as `dps` on a melee weapon and `rangedDps` on a bow, gun, crossbow,
+--            thrown weapon or wand)
 --            sp (damage and healing) heal (healing only) spellhit spellcrit mp5, and school damage:
 --            fire frost shadow arcane nature holy. Percent stats are in percent (hit = 1 means +1%).
 -- Keep this file Lua 5.1-safe (no bitwise operators).
@@ -24,56 +27,56 @@ M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, S
 -- as commonly valued by raiders. Suggestions, not truth: officers can override an item's fit (later), and
 -- players decide for themselves. role: tank, melee, hunter, caster, healer.
 local function w(t) return t end
-local MELEE = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 12, sta = 0.2, dps = 2.5 }
+local MELEE = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 12, sta = 0.2, dps = 2.5, rangedDps = 0.2 }
 M.SPECS = {
     WARRIOR = {
         { name = "Arms", role = "melee", weights = MELEE },
-        { name = "Fury", role = "melee", weights = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 15, sta = 0.2, dps = 2.5 } },
+        { name = "Fury", role = "melee", weights = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 15, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
         { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.3, dodge = 13, parry = 13, blockPct = 9, block = 0.4,
-            armor = 0.01, str = 0.3, agi = 0.5, hit = 6, dps = 0.5 } },
+            str = 0.3, agi = 0.5, hit = 6, dps = 0.5 } },
     },
     PALADIN = {
-        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.9, mp5 = 2.2, spellcrit = 9, spi = 0.2, sta = 0.1 } },
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.9, mp5 = 2.2, spellcrit = 9, spi = 0.2, sta = 0.1, rangedDps = 0.3 } },
         { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.2, sp = 0.5, int = 0.3, blockPct = 8, block = 0.5,
-            dodge = 10, parry = 10, armor = 0.01, str = 0.3 } },
+            dodge = 10, parry = 10, str = 0.3 } },
         { name = "Retribution", role = "melee", weights = w { str = 1, crit = 14, hit = 12, ap = 0.5, agi = 0.5, int = 0.2, sp = 0.3,
-            holy = 0.3, dps = 2.5 } },
+            holy = 0.3, dps = 2.5, rangedDps = 0.2 } },
     },
     HUNTER = {
-        { name = "Beast Mastery", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.2, dps = 1.5 } },
-        { name = "Marksmanship", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 15, int = 0.3, sta = 0.2, dps = 1.5 } },
-        { name = "Survival", role = "hunter", weights = w { agi = 1.2, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.3, dps = 1.5 } },
+        { name = "Beast Mastery", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.1, hit = 14, crit = 14, int = 0.3, sta = 0.2, dps = 0.3, rangedDps = 3 } },
+        { name = "Marksmanship", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.1, hit = 14, crit = 15, int = 0.3, sta = 0.2, dps = 0.3, rangedDps = 3 } },
+        { name = "Survival", role = "hunter", weights = w { agi = 1.2, rap = 0.5, ap = 0.1, hit = 14, crit = 14, int = 0.3, sta = 0.3, dps = 0.3, rangedDps = 3 } },
     },
     ROGUE = {
-        { name = "Assassination", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 15, sta = 0.2, dps = 2.5 } },
-        { name = "Combat", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 14, sta = 0.2, dps = 2.5 } },
-        { name = "Subtlety", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 14, crit = 14, sta = 0.2, dps = 2.5 } },
+        { name = "Assassination", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 15, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Combat", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 14, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Subtlety", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 14, crit = 14, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
     },
     PRIEST = {
-        { name = "Discipline", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.5, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
-        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.6, spi = 0.6, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
-        { name = "Shadow", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 5, sta = 0.3, int = 0.3, spi = 0.2 } },
+        { name = "Discipline", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.5, mp5 = 2.5, spellcrit = 6, sta = 0.1, rangedDps = 0.3 } },
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.6, spi = 0.6, mp5 = 2.5, spellcrit = 6, sta = 0.1, rangedDps = 0.3 } },
+        { name = "Shadow", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 5, sta = 0.3, int = 0.3, spi = 0.2, rangedDps = 0.5 } },
     },
     SHAMAN = {
-        { name = "Elemental", role = "caster", weights = w { sp = 1, nature = 1, fire = 0.4, spellhit = 12, spellcrit = 10, int = 0.4, mp5 = 1 } },
-        { name = "Enhancement", role = "melee", weights = w { str = 1, agi = 0.7, ap = 0.5, crit = 14, hit = 12, int = 0.2, dps = 2.5 } },
-        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, mp5 = 2.5, int = 0.8, spellcrit = 8, sta = 0.1 } },
+        { name = "Elemental", role = "caster", weights = w { sp = 1, nature = 1, fire = 0.4, spellhit = 12, spellcrit = 10, int = 0.4, mp5 = 1, rangedDps = 0.5 } },
+        { name = "Enhancement", role = "melee", weights = w { str = 1, agi = 0.7, ap = 0.5, crit = 14, hit = 12, int = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, mp5 = 2.5, int = 0.8, spellcrit = 8, sta = 0.1, rangedDps = 0.3 } },
     },
     MAGE = {
-        { name = "Arcane", role = "caster", weights = w { sp = 1, arcane = 1, frost = 0.5, spellhit = 12, spellcrit = 10, int = 0.5, sta = 0.2 } },
-        { name = "Fire", role = "caster", weights = w { sp = 1, fire = 1, spellhit = 12, spellcrit = 11, int = 0.4, sta = 0.2 } },
-        { name = "Frost", role = "caster", weights = w { sp = 1, frost = 1, spellhit = 12, spellcrit = 9, int = 0.4, sta = 0.2 } },
+        { name = "Arcane", role = "caster", weights = w { sp = 1, arcane = 1, frost = 0.5, spellhit = 12, spellcrit = 10, int = 0.5, sta = 0.2, rangedDps = 0.5 } },
+        { name = "Fire", role = "caster", weights = w { sp = 1, fire = 1, spellhit = 12, spellcrit = 11, int = 0.4, sta = 0.2, rangedDps = 0.5 } },
+        { name = "Frost", role = "caster", weights = w { sp = 1, frost = 1, spellhit = 12, spellcrit = 9, int = 0.4, sta = 0.2, rangedDps = 0.5 } },
     },
     WARLOCK = {
-        { name = "Affliction", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 4, sta = 0.4, int = 0.3 } },
-        { name = "Demonology", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.3, spellhit = 12, spellcrit = 6, sta = 0.5, int = 0.3 } },
-        { name = "Destruction", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.6, spellhit = 12, spellcrit = 10, sta = 0.4, int = 0.3 } },
+        { name = "Affliction", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 4, sta = 0.4, int = 0.3, rangedDps = 0.5 } },
+        { name = "Demonology", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.3, spellhit = 12, spellcrit = 6, sta = 0.5, int = 0.3, rangedDps = 0.5 } },
+        { name = "Destruction", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.6, spellhit = 12, spellcrit = 10, sta = 0.4, int = 0.3, rangedDps = 0.5 } },
     },
     DRUID = {
-        { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4 } },
+        { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4, rangedDps = 0.5 } },
         { name = "Feral (bear)", role = "tank", weights = w { sta = 1, armor = 0.05, agi = 0.8, defense = 1, dodge = 12, str = 0.4, hit = 6 } },
         { name = "Feral (cat)", role = "melee", weights = w { agi = 1, str = 1, ap = 0.5, crit = 14, hit = 12 } },
-        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1, rangedDps = 0.3 } },
     },
 }
 
@@ -172,9 +175,33 @@ M.SpecOf = specOf
 -- damage, armor of a lighter kind than the class wears in raids counts for less (a warrior can wear leather,
 -- but rarely wants to); casters and healers of hybrid classes wear lighter armor all the time.
 local ARMOR_MATTERS = { tank = true, melee = true, hunter = true }
+local RANGED = { [2] = true, [3] = true, [16] = true, [18] = true, [19] = true }
+local CASTER_STATS = { sp = true, heal = true, int = true, spi = true, mp5 = true, spellhit = true, spellcrit = true,
+    fire = true, frost = true, shadow = true, arcane = true, nature = true, holy = true }
+local PHYSICAL_STATS = { str = true, agi = true, ap = true, rap = true, hit = true, crit = true }
+-- A weapon whose stats are all for spellcasting (a caster's staff, sword or dagger) is not a melee weapon,
+-- whatever its damage: nobody counts its damage per second. Wands are always for casters.
+local function casterWeapon(item)
+    if item.subclass == 19 then return false end
+    local caster, physical = false, false
+    for k in pairs(item.stats or {}) do
+        if CASTER_STATS[k] then caster = true elseif PHYSICAL_STATS[k] then physical = true end
+    end
+    return caster and not physical
+end
 function M.Score(item, spec, class)
     local total = 0
-    for k, v in pairs(item.stats or {}) do total = total + v * (spec.weights[k] or 0) end
+    local weapon = item.class == WEAPON
+    local ranged, noDps = weapon and RANGED[item.subclass], weapon and casterWeapon(item)
+    for k, v in pairs(item.stats or {}) do
+        local wgt = spec.weights[k] or 0
+        if k == "dps" then
+            if noDps then wgt = 0
+            elseif ranged then wgt = spec.weights.rangedDps or 0
+            else wgt = spec.weights.dps or 0 end
+        end
+        total = total + v * wgt
+    end
     if class and ARMOR_MATTERS[spec.role] and item.class == ARMOR and not ANY_ARMOR_SLOT[item.slot] then
         local rank = ARMOR_RANK[item.subclass]
         if rank and rank < BEST_ARMOR[class] then total = total * 0.6 end

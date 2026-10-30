@@ -14,6 +14,18 @@ param()
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path -Parent $PSScriptRoot
 $raw = Get-Content (Join-Path $repo 'simulator/data/mc-raw.json') -Raw | ConvertFrom-Json
+# The item as ItemFit sees it (slot, item class and subclass, stats), from the CMaNGOS extract, as Lua; nil if absent.
+$cm = Get-Content (Join-Path $repo 'simulator/data/cmangos.json') -Raw | ConvertFrom-Json
+$cmItems = @{}
+foreach ($i in $cm.items) { $cmItems[[int]$i.id] = $i }
+function FitLua([int]$id) {
+    $it = $cmItems[$id]
+    if (-not $it -or -not $it.fit) { return 'nil' }
+    $f = $it.fit
+    $stats = if ($f.stats -is [array]) { "" } else { ($f.stats.PSObject.Properties | Sort-Object Name | ForEach-Object { "$($_.Name) = $([double]$_.Value)" }) -join ', ' }
+    $slot = if ($f.slot) { "`"$($f.slot)`"" } else { 'nil' }
+    "{ slot = $slot, class = $([int]$f.class), subclass = $([int]$f.subclass), stats = { $stats } }"
+}
 
 # Who wants each item that is not class-restricted. Roles: tank, melee, hunter, caster, healer.
 # Quest and crafting items are tagged by who uses them. These tags are judgment calls, easy to edit.
@@ -57,7 +69,9 @@ W 'local M = SK:NewModule("MoltenCore")'
 W ''
 W ('M.CLASS_BITS = { ' + (($classBits.GetEnumerator() | ForEach-Object { "$($_.Key) = $($_.Value)" }) -join ', ') + ' }')
 W ''
-W '-- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), role }'
+W '-- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), role, fit }'
+W '-- fit: the item as ItemFit sees it (slot, item class, subclass, stats), from the CMaNGOS world database'
+W '-- (simulator/data/cmangos.json). role: a hand-made tag, used where the stats say nothing (quest items, use effects).'
 W 'M.items = {'
 $seen = @{}
 $untagged = @()
@@ -71,7 +85,7 @@ foreach ($b in $raw.bosses) {
         $arm = if ($cls -eq 4 -and $armor.ContainsKey($sub)) { "`"$($armor[$sub])`"" } else { 'nil' }
         $role = if ($mask -ne 0 -and $mask -ne 15) { 'nil' } elseif ($roles.ContainsKey($name)) { Q $roles[$name] } else { $untagged += $name; 'nil' }
         if ($mask -eq 15) { $mask = 0 } # Bindings: listed as usable by several classes; treat as role-tagged
-        W ("    [$id] = { id = $id, name = $(Q $name), slot = $([int]$i[3]), armor = $arm, classes = $mask, role = $role },")
+        W ("    [$id] = { id = $id, name = $(Q $name), slot = $([int]$i[3]), armor = $arm, classes = $mask, role = $role, fit = $(FitLua $id) },")
     }
 }
 W '}'

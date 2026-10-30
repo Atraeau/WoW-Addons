@@ -3,9 +3,9 @@
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -21,9 +21,9 @@ Sim.__index = Sim
 
 local function short(name) return (name:gsub("%-.*$", "")) end
 
--- opts: seed, learner (default "You"), members (array of names, or of { name, class, role }; top of the
---       list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
---       shuffle (random order from the seed).
+-- opts: seed, learner (default "You"), members (array of names, or of { name, class, role, spec, offSpec };
+--       top of the list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
+--       learnerSpec, learnerOffSpec, shuffle (random order from the seed).
 function M.NewRaid(opts)
     opts = opts or {}
     local learner = opts.learner or "You"
@@ -43,13 +43,15 @@ function M.NewRaid(opts)
 
     local roster, info = {}, {}
     for i, m in ipairs(names) do
-        local n, class, role
-        if type(m) == "table" then n, class, role = m.name, m.class, m.role
+        local n, class, role, spec, offSpec
+        if type(m) == "table" then n, class, role, spec, offSpec = m.name, m.class, m.role, m.spec, m.offSpec
         else n, class = m, (m == learner and opts.learnerClass) or CLASSES[((i - 1) % #CLASSES) + 1] end
-        if n == learner then role = opts.learnerRole or role end
+        if n == learner then
+            role, spec, offSpec = opts.learnerRole or role, opts.learnerSpec or spec, opts.learnerOffSpec or offSpec
+        end
         names[i] = n
         roster[i] = { name = n, class = class }
-        info[n] = { class = class, role = role }
+        info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
         engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
     end
     client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
@@ -201,11 +203,15 @@ function M.RunScenario(sc, opts)
 end
 
 ---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
--- A realistic 40-person Alliance raid: class and role for every bot. The learner fills one healer slot.
-local MC_ROSTER = {
-    { "WARRIOR", "tank", 3 }, { "WARRIOR", "melee", 5 }, { "ROGUE", "melee", 5 }, { "HUNTER", "hunter", 4 },
-    { "MAGE", "caster", 6 }, { "WARLOCK", "caster", 4 }, { "PRIEST", "healer", 6 }, { "DRUID", "healer", 2 },
-    { "DRUID", "tank", 1 }, { "PALADIN", "healer", 3 }, { "PALADIN", "melee", 1 },
+-- A realistic 40-person Alliance raid: class, main spec and off-spec for every bot (the role follows the main
+-- spec). The learner is the 40th: a Holy priest with Shadow as off-spec. { class, spec, off-spec, count }.
+M.ROSTER_40 = {
+    { "WARRIOR", "Protection", "Fury", 3 }, { "WARRIOR", "Fury", "Protection", 5 },
+    { "ROGUE", "Combat", nil, 5 }, { "HUNTER", "Marksmanship", nil, 4 },
+    { "MAGE", "Frost", "Fire", 3 }, { "MAGE", "Fire", "Frost", 3 }, { "WARLOCK", "Destruction", "Affliction", 4 },
+    { "PRIEST", "Holy", "Shadow", 4 }, { "PRIEST", "Shadow", "Holy", 1 },
+    { "DRUID", "Restoration", "Balance", 2 }, { "DRUID", "Feral (bear)", "Feral (cat)", 1 },
+    { "PALADIN", "Holy", "Retribution", 3 }, { "PALADIN", "Retribution", "Holy", 1 },
 }
 local MC_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory", "Kest", "Lio",
     "Mirel", "Nyx", "Orsa", "Pell", "Quill", "Rhea", "Soren", "Tavi", "Ulf", "Vera", "Wren", "Xan", "Yara", "Zed",
@@ -225,18 +231,42 @@ local function forRole(item, role)
     return false
 end
 
--- Would a raider of this class and role want the item, and as main or off-spec?
--- Returns "need", "off" or nil. Deliberately simple: tier pieces and class tokens by class, other items
--- (and tokens open to everyone) by role and armor type.
-function M.Wants(data, item, class, role)
+-- Would a raider want the item, and as main or off-spec? Returns "need", "off" or nil.
+-- Tier pieces and class tokens go by class. With specs (spec, offSpec: ItemFit spec names), everything else
+-- goes by how the item's real stats fit them (ItemFit): need if it suits the main spec, off if it suits the
+-- off-spec. Items whose stats say nothing (quest items, use effects), and raiders without specs, fall back to
+-- the hand-made role tags and armor type.
+function M.Wants(data, item, class, role, spec, offSpec)
     if item.classes ~= 0 then
         local bit = data.CLASS_BITS[class]
         return (bit and hasBit(item.classes, bit)) and "need" or nil
+    end
+    if spec and item.fit then
+        local main = ItemFit.ForPlayer(item.fit, class, spec)
+        if not main.usable then return nil end
+        if main.rating == "good" then return "need" end
+        local off = offSpec and ItemFit.ForPlayer(item.fit, class, offSpec)
+        if off and off.rating == "good" then return "off" end
+        if main.rating then return nil end -- its stats say something, and it isn't for this raider
+        local o = offSpec and ItemFit.SpecOf(class, offSpec)
+        if forRole(item, role) then return "need" end
+        if o and forRole(item, o.role) then return "off" end
+        return nil
     end
     if item.armor and item.armor ~= ARMOR[class] then return nil end
     if forRole(item, role) then return "need" end
     local off = OFFSPEC[class] and OFFSPEC[class][role]
     if off and forRole(item, off) then return "off" end
+end
+
+-- Tell the simulated game client what an item is, as the real one would: its slot, type and stats, and the
+-- classes it names (tier pieces). The loot session reads it like any item, so the class rule applies.
+function Sim:teach(item)
+    local link = item.name
+    if self.client:itemInfo(link) then return end
+    local fit = item.fit or {}
+    self.client:setItemInfo(link, { name = item.name, equipLoc = fit.slot, class = fit.class, subclass = fit.subclass })
+    self.client:setItemStats(link, { stats = fit.stats or {}, classes = ItemFit.ClassesFromMask(item.classes) })
 end
 
 -- data: a raid data module (MoltenCore, AQ40). opts: seed, learner ("You"), learnerClass ("PRIEST"),
@@ -246,15 +276,19 @@ end
 function M.NewRaidNight(data, opts)
     opts = opts or {}
     local members, k = {}, 0
-    for _, row in ipairs(MC_ROSTER) do
-        for _ = 1, row[3] do
+    for _, row in ipairs(M.ROSTER_40) do
+        local spec = ItemFit.SpecOf(row[1], row[2])
+        for _ = 1, row[4] do
             k = k + 1
-            members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = row[2] }
+            members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = spec.role, spec = row[2], offSpec = row[3] }
         end
     end
-    members[#members] = nil -- the learner takes the 40th slot (a healer)
+    local learnerClass = opts.learnerClass or "PRIEST"
+    local learnerSpec = opts.learnerSpec or (not opts.learnerClass and "Holy") or ItemFit.SPECS[learnerClass][1].name
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
-        learnerClass = opts.learnerClass or "PRIEST", learnerRole = opts.learnerRole or "healer",
+        learnerClass = learnerClass, learnerSpec = learnerSpec,
+        learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
+        learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
         shuffle = opts.shuffle ~= false })
     sim.raid = data
     sim.chance = opts.chance or 0.7
@@ -319,7 +353,10 @@ function Sim:handOut(cfg)
     local held = self.held
     self.held = {}
     local links, seen = {}, {}
-    for i, h in ipairs(held) do links[i], seen[i] = h.item.name, h.seen end
+    for i, h in ipairs(held) do
+        links[i], seen[i] = h.item.name, h.seen
+        self:teach(h.item)
+    end
     self.policies = {}
     -- Roster order, never pairs(): random draws must happen in the same order in every process.
     for _, name in ipairs(self.names) do
@@ -327,7 +364,7 @@ function Sim:handOut(cfg)
         local p = { bid = {}, claim = self.client:random() < 0.3 }
         local wanted = {}
         for _, h in ipairs(held) do
-            local kind = M.Wants(self.raid, h.item, info.class, info.role)
+            local kind = M.Wants(self.raid, h.item, info.class, info.role, info.spec, info.offSpec)
             if kind and self.client:random() < self.chance then
                 wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 or h.item.token ~= nil,
                     ready = h.item.token and self:botReadiness() or nil }

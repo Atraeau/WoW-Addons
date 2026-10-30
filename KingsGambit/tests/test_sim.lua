@@ -150,3 +150,80 @@ test("held loot is recorded with the time it dropped, not the time it was handed
     end
     assert(awards > 0)
 end)
+
+H.section("Simulator: raiders with specs, deciding from real item stats")
+local ItemFit = SK.modules.ItemFit
+test("every raider has a class, a main spec and (hybrids) an off-spec; the learner is a Holy priest", function()
+    local sim = Sim.NewMoltenCore({ seed = 1 })
+    eq(#sim.names, 40)
+    local specs = {}
+    for _, n in ipairs(sim.names) do
+        local info = sim.info[n]
+        local spec = ItemFit.SpecOf(info.class, info.spec)
+        assert(spec, n .. " has a spec of their class"); eq(info.role, spec.role, n)
+        if info.offSpec then assert(ItemFit.SpecOf(info.class, info.offSpec), n .. "'s off-spec") end
+        specs[info.spec .. " " .. info.class] = (specs[info.spec .. " " .. info.class] or 0) + 1
+    end
+    eq(sim.info.You.spec, "Holy"); eq(sim.info.You.offSpec, "Shadow"); eq(specs["Holy PRIEST"], 5)
+    eq(specs["Protection WARRIOR"], 3); eq(specs["Feral (bear) DRUID"], 1)
+end)
+
+-- Run a whole night, checking every bid and every win against the raider who made it.
+local function night(sim, data)
+    sim.autoLearner = true
+    local refused, checked = 0, 0
+    for _ = 1, #data.bosses do
+        local boss = sim:killBoss()
+        assert(boss)
+        local s = sim.session
+        local bid = s.bid
+        s.bid = function(self, player, itemId, kind, extra)
+            local ok, why = bid(self, player, itemId, kind, extra)
+            if why == "wrongclass" or why == "wrongclassto" then refused = refused + 1 end
+            return ok, why
+        end
+        assert(sim:runUntil("review", 900), boss.name)
+        for i, it in ipairs(s.items) do
+            if it.tier == "main" or it.tier == "off" then
+                local item = sim.handedOut[i].item
+                local info = sim.info[(it.winner:gsub("%-.*$", ""))]
+                local want = Sim.Wants(data, item, info.class, info.role, info.spec, info.offSpec)
+                if it.winner ~= sim.learner then
+                    eq(want, it.tier == "main" and "need" or "off",
+                        ("%s (%s) won on %s by a %s %s"):format(item.name, it.tier, boss.name, info.spec, info.class))
+                    checked = checked + 1
+                end
+            end
+        end
+        assert(s:confirm())
+    end
+    return refused, checked
+end
+
+test("a Molten Core night: no bot bids for another class's item, and every win fits the winner's spec", function()
+    local refused, checked = night(Sim.NewMoltenCore({ seed = 7 }), SK.modules.MoltenCore)
+    eq(refused, 0, "bots know their class"); assert(checked >= 15, "wins checked: " .. checked)
+end)
+test("an Ahn'Qiraj night: the same, with tokens", function()
+    local refused, checked = night(Sim.NewAQ40({ seed = 7 }), SK.modules.AQ40)
+    eq(refused, 0); assert(checked >= 15, "wins checked: " .. checked)
+end)
+test("the session's class rule applies in the simulator: a mage can't need a warrior's tier piece", function()
+    local sim = Sim.NewMoltenCore({ seed = 2 })
+    local MC = SK.modules.MoltenCore
+    sim:teach(MC.items[16863]) -- Gauntlets of Might (warrior tier)
+    assert(sim:drop({ "Gauntlets of Might" }))
+    local mage, warrior
+    for _, n in ipairs(sim.names) do
+        if sim.info[n].class == "MAGE" then mage = mage or n end
+        if sim.info[n].class == "WARRIOR" then warrior = warrior or n end
+    end
+    eq(select(2, sim.session:bid(mage, 1, "need")), "wrongclass"); assert(sim.session:bid(warrior, 1, "need"))
+end)
+test("item stats come from the CMaNGOS database: every raid item can be judged", function()
+    for _, data in ipairs { SK.modules.MoltenCore, SK.modules.AQ40 } do
+        for _, it in pairs(data.items) do assert(it.fit and it.fit.stats, it.name .. " has no fit") end
+    end
+    local choker = SK.modules.MoltenCore.items[17109].fit.stats -- Choker of Enlightenment
+    eq(choker.int, 10); eq(choker.spi, 10); eq(choker.sta, 9); eq(choker.sp, 18)
+end)

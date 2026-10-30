@@ -1769,7 +1769,10 @@ do local chunk = function(...)
 --
 -- An item, as this module sees it (Describe builds it from the game):
 --   { link, slot = equipLoc, class = item class id, subclass = id, stats = { [key] = value }, classes = { "PRIEST", ... } | nil }
--- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap dps
+-- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap (in 1.12 "+X Attack Power"
+--            is both: ap and rap; "+X ranged Attack Power" is rap only) dps (a weapon's damage per
+--            second; a spec's weights value it as `dps` on a melee weapon and `rangedDps` on a bow, gun, crossbow,
+--            thrown weapon or wand)
 --            sp (damage and healing) heal (healing only) spellhit spellcrit mp5, and school damage:
 --            fire frost shadow arcane nature holy. Percent stats are in percent (hit = 1 means +1%).
 -- Keep this file Lua 5.1-safe (no bitwise operators).
@@ -1783,56 +1786,56 @@ M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, S
 -- as commonly valued by raiders. Suggestions, not truth: officers can override an item's fit (later), and
 -- players decide for themselves. role: tank, melee, hunter, caster, healer.
 local function w(t) return t end
-local MELEE = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 12, sta = 0.2, dps = 2.5 }
+local MELEE = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 12, sta = 0.2, dps = 2.5, rangedDps = 0.2 }
 M.SPECS = {
     WARRIOR = {
         { name = "Arms", role = "melee", weights = MELEE },
-        { name = "Fury", role = "melee", weights = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 15, sta = 0.2, dps = 2.5 } },
+        { name = "Fury", role = "melee", weights = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 15, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
         { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.3, dodge = 13, parry = 13, blockPct = 9, block = 0.4,
-            armor = 0.01, str = 0.3, agi = 0.5, hit = 6, dps = 0.5 } },
+            str = 0.3, agi = 0.5, hit = 6, dps = 0.5 } },
     },
     PALADIN = {
-        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.9, mp5 = 2.2, spellcrit = 9, spi = 0.2, sta = 0.1 } },
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.9, mp5 = 2.2, spellcrit = 9, spi = 0.2, sta = 0.1, rangedDps = 0.3 } },
         { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.2, sp = 0.5, int = 0.3, blockPct = 8, block = 0.5,
-            dodge = 10, parry = 10, armor = 0.01, str = 0.3 } },
+            dodge = 10, parry = 10, str = 0.3 } },
         { name = "Retribution", role = "melee", weights = w { str = 1, crit = 14, hit = 12, ap = 0.5, agi = 0.5, int = 0.2, sp = 0.3,
-            holy = 0.3, dps = 2.5 } },
+            holy = 0.3, dps = 2.5, rangedDps = 0.2 } },
     },
     HUNTER = {
-        { name = "Beast Mastery", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.2, dps = 1.5 } },
-        { name = "Marksmanship", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 15, int = 0.3, sta = 0.2, dps = 1.5 } },
-        { name = "Survival", role = "hunter", weights = w { agi = 1.2, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.3, dps = 1.5 } },
+        { name = "Beast Mastery", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.1, hit = 14, crit = 14, int = 0.3, sta = 0.2, dps = 0.3, rangedDps = 3 } },
+        { name = "Marksmanship", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.1, hit = 14, crit = 15, int = 0.3, sta = 0.2, dps = 0.3, rangedDps = 3 } },
+        { name = "Survival", role = "hunter", weights = w { agi = 1.2, rap = 0.5, ap = 0.1, hit = 14, crit = 14, int = 0.3, sta = 0.3, dps = 0.3, rangedDps = 3 } },
     },
     ROGUE = {
-        { name = "Assassination", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 15, sta = 0.2, dps = 2.5 } },
-        { name = "Combat", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 14, sta = 0.2, dps = 2.5 } },
-        { name = "Subtlety", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 14, crit = 14, sta = 0.2, dps = 2.5 } },
+        { name = "Assassination", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 15, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Combat", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 14, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Subtlety", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 14, crit = 14, sta = 0.2, dps = 2.5, rangedDps = 0.2 } },
     },
     PRIEST = {
-        { name = "Discipline", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.5, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
-        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.6, spi = 0.6, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
-        { name = "Shadow", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 5, sta = 0.3, int = 0.3, spi = 0.2 } },
+        { name = "Discipline", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.5, mp5 = 2.5, spellcrit = 6, sta = 0.1, rangedDps = 0.3 } },
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.6, spi = 0.6, mp5 = 2.5, spellcrit = 6, sta = 0.1, rangedDps = 0.3 } },
+        { name = "Shadow", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 5, sta = 0.3, int = 0.3, spi = 0.2, rangedDps = 0.5 } },
     },
     SHAMAN = {
-        { name = "Elemental", role = "caster", weights = w { sp = 1, nature = 1, fire = 0.4, spellhit = 12, spellcrit = 10, int = 0.4, mp5 = 1 } },
-        { name = "Enhancement", role = "melee", weights = w { str = 1, agi = 0.7, ap = 0.5, crit = 14, hit = 12, int = 0.2, dps = 2.5 } },
-        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, mp5 = 2.5, int = 0.8, spellcrit = 8, sta = 0.1 } },
+        { name = "Elemental", role = "caster", weights = w { sp = 1, nature = 1, fire = 0.4, spellhit = 12, spellcrit = 10, int = 0.4, mp5 = 1, rangedDps = 0.5 } },
+        { name = "Enhancement", role = "melee", weights = w { str = 1, agi = 0.7, ap = 0.5, crit = 14, hit = 12, int = 0.2, dps = 2.5, rangedDps = 0.2 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, mp5 = 2.5, int = 0.8, spellcrit = 8, sta = 0.1, rangedDps = 0.3 } },
     },
     MAGE = {
-        { name = "Arcane", role = "caster", weights = w { sp = 1, arcane = 1, frost = 0.5, spellhit = 12, spellcrit = 10, int = 0.5, sta = 0.2 } },
-        { name = "Fire", role = "caster", weights = w { sp = 1, fire = 1, spellhit = 12, spellcrit = 11, int = 0.4, sta = 0.2 } },
-        { name = "Frost", role = "caster", weights = w { sp = 1, frost = 1, spellhit = 12, spellcrit = 9, int = 0.4, sta = 0.2 } },
+        { name = "Arcane", role = "caster", weights = w { sp = 1, arcane = 1, frost = 0.5, spellhit = 12, spellcrit = 10, int = 0.5, sta = 0.2, rangedDps = 0.5 } },
+        { name = "Fire", role = "caster", weights = w { sp = 1, fire = 1, spellhit = 12, spellcrit = 11, int = 0.4, sta = 0.2, rangedDps = 0.5 } },
+        { name = "Frost", role = "caster", weights = w { sp = 1, frost = 1, spellhit = 12, spellcrit = 9, int = 0.4, sta = 0.2, rangedDps = 0.5 } },
     },
     WARLOCK = {
-        { name = "Affliction", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 4, sta = 0.4, int = 0.3 } },
-        { name = "Demonology", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.3, spellhit = 12, spellcrit = 6, sta = 0.5, int = 0.3 } },
-        { name = "Destruction", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.6, spellhit = 12, spellcrit = 10, sta = 0.4, int = 0.3 } },
+        { name = "Affliction", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 4, sta = 0.4, int = 0.3, rangedDps = 0.5 } },
+        { name = "Demonology", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.3, spellhit = 12, spellcrit = 6, sta = 0.5, int = 0.3, rangedDps = 0.5 } },
+        { name = "Destruction", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.6, spellhit = 12, spellcrit = 10, sta = 0.4, int = 0.3, rangedDps = 0.5 } },
     },
     DRUID = {
-        { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4 } },
+        { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4, rangedDps = 0.5 } },
         { name = "Feral (bear)", role = "tank", weights = w { sta = 1, armor = 0.05, agi = 0.8, defense = 1, dodge = 12, str = 0.4, hit = 6 } },
         { name = "Feral (cat)", role = "melee", weights = w { agi = 1, str = 1, ap = 0.5, crit = 14, hit = 12 } },
-        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1, rangedDps = 0.3 } },
     },
 }
 
@@ -1931,9 +1934,33 @@ M.SpecOf = specOf
 -- damage, armor of a lighter kind than the class wears in raids counts for less (a warrior can wear leather,
 -- but rarely wants to); casters and healers of hybrid classes wear lighter armor all the time.
 local ARMOR_MATTERS = { tank = true, melee = true, hunter = true }
+local RANGED = { [2] = true, [3] = true, [16] = true, [18] = true, [19] = true }
+local CASTER_STATS = { sp = true, heal = true, int = true, spi = true, mp5 = true, spellhit = true, spellcrit = true,
+    fire = true, frost = true, shadow = true, arcane = true, nature = true, holy = true }
+local PHYSICAL_STATS = { str = true, agi = true, ap = true, rap = true, hit = true, crit = true }
+-- A weapon whose stats are all for spellcasting (a caster's staff, sword or dagger) is not a melee weapon,
+-- whatever its damage: nobody counts its damage per second. Wands are always for casters.
+local function casterWeapon(item)
+    if item.subclass == 19 then return false end
+    local caster, physical = false, false
+    for k in pairs(item.stats or {}) do
+        if CASTER_STATS[k] then caster = true elseif PHYSICAL_STATS[k] then physical = true end
+    end
+    return caster and not physical
+end
 function M.Score(item, spec, class)
     local total = 0
-    for k, v in pairs(item.stats or {}) do total = total + v * (spec.weights[k] or 0) end
+    local weapon = item.class == WEAPON
+    local ranged, noDps = weapon and RANGED[item.subclass], weapon and casterWeapon(item)
+    for k, v in pairs(item.stats or {}) do
+        local wgt = spec.weights[k] or 0
+        if k == "dps" then
+            if noDps then wgt = 0
+            elseif ranged then wgt = spec.weights.rangedDps or 0
+            else wgt = spec.weights.dps or 0 end
+        end
+        total = total + v * wgt
+    end
     if class and ARMOR_MATTERS[spec.role] and item.class == ARMOR and not ANY_ARMOR_SLOT[item.slot] then
         local rank = ARMOR_RANK[item.subclass]
         if rank and rank < BEST_ARMOR[class] then total = total * 0.6 end
@@ -3140,135 +3167,137 @@ local M = SK:NewModule("MoltenCore")
 
 M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, SHAMAN = 64, MAGE = 128, WARLOCK = 256, DRUID = 1024 }
 
--- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), role }
+-- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), role, fit }
+-- fit: the item as ItemFit sees it (slot, item class, subclass, stats), from the CMaNGOS world database
+-- (simulator/data/cmangos.json). role: a hand-made tag, used where the stats say nothing (quest items, use effects).
 M.items = {
-    [16800] = { id = 16800, name = "Arcanist Boots", slot = 8, armor = "cloth", classes = 128, role = nil },
-    [16805] = { id = 16805, name = "Felheart Gloves", slot = 10, armor = "cloth", classes = 256, role = nil },
-    [16863] = { id = 16863, name = "Gauntlets of Might", slot = 10, armor = "plate", classes = 1, role = nil },
-    [17109] = { id = 17109, name = "Choker of Enlightenment", slot = 2, armor = nil, classes = 0, role = "healer" },
-    [16859] = { id = 16859, name = "Lawbringer Boots", slot = 8, armor = "plate", classes = 2, role = nil },
-    [19145] = { id = 19145, name = "Robe of Volatile Power", slot = 5, armor = "cloth", classes = 0, role = "healer" },
-    [16829] = { id = 16829, name = "Cenarion Boots", slot = 8, armor = "leather", classes = 1024, role = nil },
-    [18872] = { id = 18872, name = "Manastorm Leggings", slot = 7, armor = "cloth", classes = 0, role = "healer" },
-    [16837] = { id = 16837, name = "Earthfury Boots", slot = 8, armor = "mail", classes = 64, role = nil },
-    [18861] = { id = 18861, name = "Flamewaker Legplates", slot = 7, armor = "plate", classes = 0, role = "tank" },
-    [18878] = { id = 18878, name = "Sorcerous Dagger", slot = 21, armor = nil, classes = 0, role = "caster" },
-    [19146] = { id = 19146, name = "Wristguards of Stability", slot = 9, armor = "leather", classes = 0, role = "melee" },
-    [17077] = { id = 17077, name = "Crimson Shocker", slot = 15, armor = nil, classes = 0, role = "caster" },
-    [18879] = { id = 18879, name = "Heavy Dark Iron Ring", slot = 11, armor = nil, classes = 0, role = "tank" },
-    [19147] = { id = 19147, name = "Ring of Spell Power", slot = 11, armor = nil, classes = 0, role = "caster" },
-    [18875] = { id = 18875, name = "Salamander Scale Pants", slot = 7, armor = "leather", classes = 0, role = "healer" },
-    [18870] = { id = 18870, name = "Helm of the Lifegiver", slot = 1, armor = "mail", classes = 0, role = "healer" },
-    [16847] = { id = 16847, name = "Giantstalker's Leggings", slot = 7, armor = "mail", classes = 4, role = nil },
-    [17065] = { id = 17065, name = "Medallion of Steadfast Might", slot = 2, armor = nil, classes = 0, role = "tank" },
-    [16796] = { id = 16796, name = "Arcanist Leggings", slot = 7, armor = "cloth", classes = 128, role = nil },
-    [16810] = { id = 16810, name = "Felheart Pants", slot = 7, armor = "cloth", classes = 256, role = nil },
-    [18820] = { id = 18820, name = "Talisman of Ephemeral Power", slot = 12, armor = nil, classes = 0, role = "caster" },
-    [16814] = { id = 16814, name = "Pants of Prophecy", slot = 7, armor = "cloth", classes = 16, role = nil },
-    [16835] = { id = 16835, name = "Cenarion Leggings", slot = 7, armor = "leather", classes = 1024, role = nil },
-    [16843] = { id = 16843, name = "Earthfury Legguards", slot = 7, armor = "mail", classes = 64, role = nil },
-    [17073] = { id = 17073, name = "Earthshaker", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [16822] = { id = 16822, name = "Nightslayer Pants", slot = 7, armor = "leather", classes = 8, role = nil },
-    [18822] = { id = 18822, name = "Obsidian Edged Blade", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [17069] = { id = 17069, name = "Striker's Mark", slot = 15, armor = nil, classes = 0, role = "hunter" },
-    [19143] = { id = 19143, name = "Flameguard Gauntlets", slot = 10, armor = "plate", classes = 0, role = "melee" },
-    [16867] = { id = 16867, name = "Legplates of Might", slot = 7, armor = "plate", classes = 1, role = nil },
-    [19136] = { id = 19136, name = "Mana Igniting Cord", slot = 6, armor = "cloth", classes = 0, role = "caster" },
-    [16855] = { id = 16855, name = "Lawbringer Legplates", slot = 7, armor = "plate", classes = 2, role = nil },
-    [18823] = { id = 18823, name = "Aged Core Leather Gloves", slot = 10, armor = "leather", classes = 0, role = "melee" },
-    [18821] = { id = 18821, name = "Quick Strike Ring", slot = 11, armor = nil, classes = 0, role = "melee" },
-    [18829] = { id = 18829, name = "Deep Earth Spaulders", slot = 3, armor = "mail", classes = 0, role = "healer" },
-    [18203] = { id = 18203, name = "Eskhandar's Right Claw", slot = 21, armor = nil, classes = 0, role = "melee" },
-    [19142] = { id = 19142, name = "Fire Runed Grimoire", slot = 23, armor = nil, classes = 0, role = "caster" },
-    [18824] = { id = 18824, name = "Magma Tempered Boots", slot = 8, armor = "plate", classes = 0, role = "healer" },
-    [19144] = { id = 19144, name = "Sabatons of the Flamewalker", slot = 8, armor = "mail", classes = 0, role = "hunter" },
-    [16826] = { id = 16826, name = "Nightslayer Gloves", slot = 10, armor = "leather", classes = 8, role = nil },
-    [16849] = { id = 16849, name = "Giantstalker's Boots", slot = 8, armor = "mail", classes = 4, role = nil },
-    [16860] = { id = 16860, name = "Lawbringer Gauntlets", slot = 10, armor = "plate", classes = 2, role = nil },
-    [16862] = { id = 16862, name = "Sabatons of Might", slot = 8, armor = "plate", classes = 1, role = nil },
-    [16812] = { id = 16812, name = "Gloves of Prophecy", slot = 10, armor = "cloth", classes = 16, role = nil },
-    [16839] = { id = 16839, name = "Earthfury Gauntlets", slot = 10, armor = "mail", classes = 64, role = nil },
-    [16813] = { id = 16813, name = "Circlet of Prophecy", slot = 1, armor = "cloth", classes = 16, role = nil },
-    [16834] = { id = 16834, name = "Cenarion Helm", slot = 1, armor = "leather", classes = 1024, role = nil },
-    [17071] = { id = 17071, name = "Gutgore Ripper", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [16821] = { id = 16821, name = "Nightslayer Cover", slot = 1, armor = "leather", classes = 8, role = nil },
-    [17105] = { id = 17105, name = "Aurastone Hammer", slot = 13, armor = nil, classes = 0, role = "healer" },
-    [16846] = { id = 16846, name = "Giantstalker's Helmet", slot = 1, armor = "mail", classes = 4, role = nil },
-    [16866] = { id = 16866, name = "Helm of Might", slot = 1, armor = "plate", classes = 1, role = nil },
-    [16795] = { id = 16795, name = "Arcanist Crown", slot = 1, armor = "cloth", classes = 128, role = nil },
-    [18832] = { id = 18832, name = "Brutality Blade", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [17066] = { id = 17066, name = "Drillborer Disk", slot = 14, armor = nil, classes = 0, role = "tank" },
-    [16808] = { id = 16808, name = "Felheart Horns", slot = 1, armor = "cloth", classes = 256, role = nil },
-    [16854] = { id = 16854, name = "Lawbringer Helm", slot = 1, armor = "plate", classes = 2, role = nil },
-    [16842] = { id = 16842, name = "Earthfury Helmet", slot = 1, armor = "mail", classes = 64, role = nil },
-    [18564] = { id = 18564, name = "Bindings of the Windseeker", slot = 0, armor = nil, classes = 0, role = "melee" },
-    [16797] = { id = 16797, name = "Arcanist Mantle", slot = 3, armor = "cloth", classes = 128, role = nil },
-    [16807] = { id = 16807, name = "Felheart Shoulder Pads", slot = 3, armor = "cloth", classes = 256, role = nil },
-    [16836] = { id = 16836, name = "Cenarion Spaulders", slot = 3, armor = "leather", classes = 1024, role = nil },
-    [16856] = { id = 16856, name = "Lawbringer Spaulders", slot = 3, armor = "plate", classes = 2, role = nil },
-    [17110] = { id = 17110, name = "Seal of the Archmagus", slot = 11, armor = nil, classes = 0, role = "healer" },
-    [16844] = { id = 16844, name = "Earthfury Epaulets", slot = 3, armor = "mail", classes = 64, role = nil },
-    [18563] = { id = 18563, name = "Bindings of the Windseeker", slot = 0, armor = nil, classes = 0, role = "melee" },
-    [16801] = { id = 16801, name = "Arcanist Gloves", slot = 10, armor = "cloth", classes = 128, role = nil },
-    [16852] = { id = 16852, name = "Giantstalker's Gloves", slot = 10, armor = "mail", classes = 4, role = nil },
-    [16824] = { id = 16824, name = "Nightslayer Boots", slot = 8, armor = "leather", classes = 8, role = nil },
-    [16831] = { id = 16831, name = "Cenarion Gloves", slot = 10, armor = "leather", classes = 1024, role = nil },
-    [16803] = { id = 16803, name = "Felheart Slippers", slot = 8, armor = "cloth", classes = 256, role = nil },
-    [16811] = { id = 16811, name = "Boots of Prophecy", slot = 8, armor = "cloth", classes = 16, role = nil },
-    [16868] = { id = 16868, name = "Pauldrons of Might", slot = 3, armor = "plate", classes = 1, role = nil },
-    [16816] = { id = 16816, name = "Mantle of Prophecy", slot = 3, armor = "cloth", classes = 16, role = nil },
-    [16848] = { id = 16848, name = "Giantstalker's Epaulets", slot = 3, armor = "mail", classes = 4, role = nil },
-    [17074] = { id = 17074, name = "Shadowstrike", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [16823] = { id = 16823, name = "Nightslayer Shoulder Pads", slot = 3, armor = "leather", classes = 8, role = nil },
-    [16845] = { id = 16845, name = "Giantstalker's Breastplate", slot = 5, armor = "mail", classes = 4, role = nil },
-    [16820] = { id = 16820, name = "Nightslayer Chestpiece", slot = 5, armor = "leather", classes = 8, role = nil },
-    [17203] = { id = 17203, name = "Sulfuron Ingot", slot = 0, armor = nil, classes = 0, role = "crafter" },
-    [17072] = { id = 17072, name = "Blastershot Launcher", slot = 15, armor = nil, classes = 0, role = "hunter" },
-    [16865] = { id = 16865, name = "Breastplate of Might", slot = 5, armor = "plate", classes = 1, role = nil },
-    [16809] = { id = 16809, name = "Felheart Robes", slot = 5, armor = "cloth", classes = 256, role = nil },
-    [18842] = { id = 18842, name = "Staff of Dominance", slot = 17, armor = nil, classes = 0, role = "healer" },
-    [16833] = { id = 16833, name = "Cenarion Vestments", slot = 5, armor = "leather", classes = 1024, role = nil },
-    [16815] = { id = 16815, name = "Robes of Prophecy", slot = 5, armor = "cloth", classes = 16, role = nil },
-    [17103] = { id = 17103, name = "Azuresong Mageblade", slot = 21, armor = nil, classes = 0, role = "caster" },
-    [16798] = { id = 16798, name = "Arcanist Robes", slot = 5, armor = "cloth", classes = 128, role = nil },
-    [16853] = { id = 16853, name = "Lawbringer Chestguard", slot = 5, armor = "plate", classes = 2, role = nil },
-    [16841] = { id = 16841, name = "Earthfury Vestments", slot = 5, armor = "mail", classes = 64, role = nil },
-    [18646] = { id = 18646, name = "The Eye of Divinity", slot = 12, armor = nil, classes = 16, role = nil },
-    [18808] = { id = 18808, name = "Gloves of the Hypnotic Flame", slot = 10, armor = "cloth", classes = 0, role = "healer" },
-    [18703] = { id = 18703, name = "Ancient Petrified Leaf", slot = 0, armor = nil, classes = 4, role = nil },
-    [19140] = { id = 19140, name = "Cauterizing Band", slot = 11, armor = nil, classes = 0, role = "caster" },
-    [18806] = { id = 18806, name = "Core Forged Greaves", slot = 8, armor = "plate", classes = 0, role = "tank" },
-    [18805] = { id = 18805, name = "Core Hound Tooth", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [18811] = { id = 18811, name = "Fireproof Cloak", slot = 16, armor = nil, classes = 0, role = "healer" },
-    [18803] = { id = 18803, name = "Hyperthermically Insulated Lava Dredger", slot = 17, armor = nil, classes = 0, role = "healer" },
-    [18809] = { id = 18809, name = "Sash of Whispered Secrets", slot = 6, armor = "cloth", classes = 0, role = "healer" },
-    [18810] = { id = 18810, name = "Wild Growth Spaulders", slot = 3, armor = "leather", classes = 0, role = "healer" },
-    [19139] = { id = 19139, name = "Fireguard Shoulders", slot = 3, armor = "leather", classes = 0, role = "tank" },
-    [18812] = { id = 18812, name = "Wristguards of True Flight", slot = 9, armor = "mail", classes = 0, role = "hunter" },
-    [18815] = { id = 18815, name = "Essence of the Pure Flame", slot = 12, armor = nil, classes = 0, role = "tank" },
-    [16901] = { id = 16901, name = "Stormrage Legguards", slot = 7, armor = "leather", classes = 1024, role = nil },
-    [17102] = { id = 17102, name = "Cloak of the Shrouded Mists", slot = 16, armor = nil, classes = 0, role = "melee" },
-    [16915] = { id = 16915, name = "Netherwind Pants", slot = 7, armor = "cloth", classes = 128, role = nil },
-    [18814] = { id = 18814, name = "Choker of the Fire Lord", slot = 2, armor = nil, classes = 0, role = "caster" },
-    [16930] = { id = 16930, name = "Nemesis Leggings", slot = 7, armor = "cloth", classes = 256, role = nil },
-    [17107] = { id = 17107, name = "Dragon's Blood Cape", slot = 16, armor = nil, classes = 0, role = "tank" },
-    [19138] = { id = 19138, name = "Band of Sulfuras", slot = 11, armor = nil, classes = 0, role = "healer" },
-    [16922] = { id = 16922, name = "Leggings of Transcendence", slot = 7, armor = "cloth", classes = 16, role = nil },
-    [17063] = { id = 17063, name = "Band of Accuria", slot = 11, armor = nil, classes = 0, role = "melee" },
-    [16962] = { id = 16962, name = "Legplates of Wrath", slot = 7, armor = "plate", classes = 1, role = nil },
-    [16909] = { id = 16909, name = "Bloodfang Pants", slot = 7, armor = "leather", classes = 8, role = nil },
-    [17106] = { id = 17106, name = "Malistar's Defender", slot = 14, armor = nil, classes = 0, role = "healer" },
-    [19137] = { id = 19137, name = "Onslaught Girdle", slot = 6, armor = "plate", classes = 0, role = "melee" },
-    [18816] = { id = 18816, name = "Perdition's Blade", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [18817] = { id = 18817, name = "Crown of Destruction", slot = 1, armor = "mail", classes = 0, role = "hunter" },
-    [16954] = { id = 16954, name = "Judgement Legplates", slot = 7, armor = "plate", classes = 2, role = nil },
-    [16938] = { id = 16938, name = "Dragonstalker's Legguards", slot = 7, armor = "mail", classes = 4, role = nil },
-    [17204] = { id = 17204, name = "Eye of Sulfuras", slot = 0, armor = nil, classes = 0, role = "melee" },
-    [17076] = { id = 17076, name = "Bonereaver's Edge", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [16946] = { id = 16946, name = "Legplates of Ten Storms", slot = 7, armor = "mail", classes = 64, role = nil },
-    [19017] = { id = 19017, name = "Essence of the Firelord", slot = 0, armor = nil, classes = 0, role = "melee" },
-    [17082] = { id = 17082, name = "Shard of the Flame", slot = 12, armor = nil, classes = 0, role = "tank" },
-    [17104] = { id = 17104, name = "Spinal Reaper", slot = 17, armor = nil, classes = 0, role = "melee" },
+    [16800] = { id = 16800, name = "Arcanist Boots", slot = 8, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 1, stats = { armor = 70, int = 14, sp = 11, spellcrit = 1, spi = 11, sta = 13 } } },
+    [16805] = { id = 16805, name = "Felheart Gloves", slot = 10, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 63, int = 15, sp = 9, spellcrit = 1, spi = 8, sta = 18 } } },
+    [16863] = { id = 16863, name = "Gauntlets of Might", slot = 10, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { armor = 468, defense = 5, hit = 1, sta = 17, str = 22 } } },
+    [17109] = { id = 17109, name = "Choker of Enlightenment", slot = 2, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { int = 10, sp = 18, spi = 10, sta = 9 } } },
+    [16859] = { id = 16859, name = "Lawbringer Boots", slot = 8, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { armor = 515, heal = 18, int = 13, mp5 = 2, spi = 10, sta = 20, str = 7 } } },
+    [19145] = { id = 19145, name = "Robe of Volatile Power", slot = 5, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 102, int = 15, sp = 23, spellcrit = 2, spi = 10, sta = 10 } } },
+    [16829] = { id = 16829, name = "Cenarion Boots", slot = 8, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 2, stats = { armor = 138, heal = 18, int = 13, mp5 = 3, spi = 15, sta = 16 } } },
+    [18872] = { id = 18872, name = "Manastorm Leggings", slot = 7, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 85, int = 14, mp5 = 14, sta = 19 } } },
+    [16837] = { id = 16837, name = "Earthfury Boots", slot = 8, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 3, stats = { armor = 290, heal = 18, int = 10, spi = 22, sta = 15 } } },
+    [18861] = { id = 18861, name = "Flamewaker Legplates", slot = 7, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 748, dodge = 1, sta = 22, str = 18 } } },
+    [18878] = { id = 18878, name = "Sorcerous Dagger", slot = 21, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 15, stats = { dps = 42.1, int = 17, sp = 20, sta = 8 } } },
+    [19146] = { id = 19146, name = "Wristguards of Stability", slot = 9, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 2, stats = { armor = 86, sta = 8, str = 24 } } },
+    [17077] = { id = 17077, name = "Crimson Shocker", slot = 15, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_RANGEDRIGHT", class = 2, subclass = 19, stats = { dps = 73.3, int = 10 } } },
+    [18879] = { id = 18879, name = "Heavy Dark Iron Ring", slot = 11, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { armor = 110, defense = 5, sta = 20 } } },
+    [19147] = { id = 19147, name = "Ring of Spell Power", slot = 11, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { sp = 33 } } },
+    [18875] = { id = 18875, name = "Salamander Scale Pants", slot = 7, armor = "leather", classes = 0, role = "healer", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { armor = 171, heal = 51, int = 14, mp5 = 9, sta = 14 } } },
+    [18870] = { id = 18870, name = "Helm of the Lifegiver", slot = 1, armor = "mail", classes = 0, role = "healer", fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 3, stats = { armor = 324, heal = 42, int = 30, spi = 9, sta = 14 } } },
+    [16847] = { id = 16847, name = "Giantstalker's Leggings", slot = 7, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { agi = 32, armor = 369, crit = 1, int = 6, spi = 8, sta = 15 } } },
+    [17065] = { id = 17065, name = "Medallion of Steadfast Might", slot = 2, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { defense = 8, dodge = 1, sta = 13, str = 9 } } },
+    [16796] = { id = 16796, name = "Arcanist Leggings", slot = 7, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 89, int = 23, sp = 20, spellcrit = 1, spi = 10, sta = 18 } } },
+    [16810] = { id = 16810, name = "Felheart Pants", slot = 7, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 89, int = 19, sp = 30, spi = 10, sta = 20 } } },
+    [18820] = { id = 18820, name = "Talisman of Ephemeral Power", slot = 12, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [16814] = { id = 16814, name = "Pants of Prophecy", slot = 7, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 89, heal = 22, int = 24, mp5 = 6, spi = 20, sta = 18 } } },
+    [16835] = { id = 16835, name = "Cenarion Leggings", slot = 7, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { armor = 175, heal = 22, int = 19, mp5 = 4, spellcrit = 1, spi = 20, sta = 18 } } },
+    [16843] = { id = 16843, name = "Earthfury Legguards", slot = 7, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { armor = 369, int = 19, mp5 = 6, sp = 12, spi = 21, sta = 18 } } },
+    [17073] = { id = 17073, name = "Earthshaker", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 5, stats = { ap = 22, dps = 62.6, rap = 22 } } },
+    [16822] = { id = 16822, name = "Nightslayer Pants", slot = 7, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { agi = 33, armor = 175, crit = 1, sta = 15, str = 10 } } },
+    [18822] = { id = 18822, name = "Obsidian Edged Blade", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 8, stats = { dps = 64.7, str = 42 } } },
+    [17069] = { id = 17069, name = "Striker's Mark", slot = 15, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_RANGED", class = 2, subclass = 2, stats = { ap = 22, dps = 39.6, hit = 1, rap = 22 } } },
+    [19143] = { id = 19143, name = "Flameguard Gauntlets", slot = 10, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { ap = 54, armor = 488, crit = 1, rap = 54, sta = 13 } } },
+    [16867] = { id = 16867, name = "Legplates of Might", slot = 7, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 655, defense = 7, parry = 1, sta = 23, str = 24 } } },
+    [19136] = { id = 19136, name = "Mana Igniting Cord", slot = 6, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 1, stats = { armor = 61, int = 16, sp = 25, spellcrit = 1, sta = 12 } } },
+    [16855] = { id = 16855, name = "Lawbringer Legplates", slot = 7, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 655, heal = 22, int = 18, mp5 = 3, spi = 18, sta = 24, str = 7 } } },
+    [18823] = { id = 18823, name = "Aged Core Leather Gloves", slot = 10, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { armor = 130, crit = 1, sta = 15, str = 15 } } },
+    [18821] = { id = 18821, name = "Quick Strike Ring", slot = 11, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { ap = 30, crit = 1, rap = 30, sta = 8, str = 5 } } },
+    [18829] = { id = 18829, name = "Deep Earth Spaulders", slot = 3, armor = "mail", classes = 0, role = "healer", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 3, stats = { armor = 399, int = 12, nature = 40, spi = 7, sta = 11 } } },
+    [18203] = { id = 18203, name = "Eskhandar's Right Claw", slot = 21, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 13, stats = { agi = 4, dps = 48 } } },
+    [19142] = { id = 19142, name = "Fire Runed Grimoire", slot = 23, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_HOLDABLE", class = 4, subclass = 0, stats = { int = 21, sp = 11, sta = 12 } } },
+    [18824] = { id = 18824, name = "Magma Tempered Boots", slot = 8, armor = "plate", classes = 0, role = "healer", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { armor = 544, heal = 18, int = 18, spi = 12, sta = 19 } } },
+    [19144] = { id = 19144, name = "Sabatons of the Flamewalker", slot = 8, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 3, stats = { ap = 30, armor = 298, int = 11, rap = 30, sta = 27 } } },
+    [16826] = { id = 16826, name = "Nightslayer Gloves", slot = 10, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { agi = 18, armor = 125, hit = 1, sta = 17, str = 12 } } },
+    [16849] = { id = 16849, name = "Giantstalker's Boots", slot = 8, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 3, stats = { agi = 28, armor = 290, spi = 6, sta = 14 } } },
+    [16860] = { id = 16860, name = "Lawbringer Gauntlets", slot = 10, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { armor = 468, heal = 18, int = 15, spi = 14, sta = 15, str = 10 } } },
+    [16862] = { id = 16862, name = "Sabatons of Might", slot = 8, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { armor = 515, defense = 5, sta = 26, str = 15 } } },
+    [16812] = { id = 16812, name = "Gloves of Prophecy", slot = 10, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 63, heal = 18, int = 15, mp5 = 6, spi = 15, sta = 10 } } },
+    [16839] = { id = 16839, name = "Earthfury Gauntlets", slot = 10, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 3, stats = { armor = 264, int = 13, sp = 9, spellcrit = 1, spi = 15, sta = 14 } } },
+    [16813] = { id = 16813, name = "Circlet of Prophecy", slot = 1, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 1, stats = { armor = 83, int = 27, sp = 12, spi = 20, sta = 17 } } },
+    [16834] = { id = 16834, name = "Cenarion Helm", slot = 1, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 2, stats = { armor = 163, int = 28, sp = 12, spi = 13, sta = 26 } } },
+    [17071] = { id = 17071, name = "Gutgore Ripper", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 15, stats = { dps = 50.6 } } },
+    [16821] = { id = 16821, name = "Nightslayer Cover", slot = 1, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 2, stats = { agi = 20, armor = 163, crit = 2, sta = 19, str = 6 } } },
+    [17105] = { id = 17105, name = "Aurastone Hammer", slot = 13, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 4, stats = { dps = 44.6, int = 10, mp5 = 5, sp = 25, sta = 10 } } },
+    [16846] = { id = 16846, name = "Giantstalker's Helmet", slot = 1, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 3, stats = { agi = 23, armor = 343, crit = 1, int = 15, spi = 8, sta = 23 } } },
+    [16866] = { id = 16866, name = "Helm of Might", slot = 1, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 4, stats = { armor = 608, defense = 7, dodge = 1, sta = 35, str = 15 } } },
+    [16795] = { id = 16795, name = "Arcanist Crown", slot = 1, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 1, stats = { armor = 83, int = 27, sp = 20, spellhit = 1, spi = 10, sta = 16 } } },
+    [18832] = { id = 18832, name = "Brutality Blade", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 7, stats = { agi = 9, crit = 1, dps = 51.6, str = 9 } } },
+    [17066] = { id = 17066, name = "Drillborer Disk", slot = 14, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_SHIELD", class = 4, subclass = 6, stats = { armor = 2539, block = 69, blockPct = 2, sta = 10 } } },
+    [16808] = { id = 16808, name = "Felheart Horns", slot = 1, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 1, stats = { armor = 83, int = 20, sp = 20, spi = 10, sta = 27 } } },
+    [16854] = { id = 16854, name = "Lawbringer Helm", slot = 1, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 4, stats = { armor = 608, heal = 22, int = 24, mp5 = 4, spi = 10, sta = 20, str = 9 } } },
+    [16842] = { id = 16842, name = "Earthfury Helmet", slot = 1, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 3, stats = { armor = 343, heal = 22, int = 23, mp5 = 6, spi = 13, sta = 24 } } },
+    [18564] = { id = 18564, name = "Bindings of the Windseeker", slot = 0, armor = nil, classes = 0, role = "melee", fit = { slot = nil, class = 15, subclass = 0, stats = {  } } },
+    [16797] = { id = 16797, name = "Arcanist Mantle", slot = 3, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 1, stats = { armor = 76, int = 21, mp5 = 4, sp = 14, spi = 5, sta = 10 } } },
+    [16807] = { id = 16807, name = "Felheart Shoulder Pads", slot = 3, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 1, stats = { armor = 76, int = 17, sp = 9, spi = 7, sta = 25 } } },
+    [16836] = { id = 16836, name = "Cenarion Spaulders", slot = 3, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 2, stats = { armor = 150, heal = 18, int = 20, mp5 = 4, spi = 10, sta = 13 } } },
+    [16856] = { id = 16856, name = "Lawbringer Spaulders", slot = 3, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 4, stats = { armor = 562, heal = 18, int = 15, spi = 8, sta = 22, str = 10 } } },
+    [17110] = { id = 17110, name = "Seal of the Archmagus", slot = 11, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { int = 11, mp5 = 3, spi = 11, sta = 11 } } },
+    [16844] = { id = 16844, name = "Earthfury Epaulets", slot = 3, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 3, stats = { armor = 317, heal = 18, int = 18, mp5 = 4, spi = 10, sta = 17 } } },
+    [18563] = { id = 18563, name = "Bindings of the Windseeker", slot = 0, armor = nil, classes = 0, role = "melee", fit = { slot = nil, class = 15, subclass = 0, stats = {  } } },
+    [16801] = { id = 16801, name = "Arcanist Gloves", slot = 10, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 63, int = 15, mp5 = 4, sp = 14, spi = 10, sta = 14 } } },
+    [16852] = { id = 16852, name = "Giantstalker's Gloves", slot = 10, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 3, stats = { agi = 18, armor = 264, hit = 2, sta = 12 } } },
+    [16824] = { id = 16824, name = "Nightslayer Boots", slot = 8, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 2, stats = { agi = 26, armor = 138, sta = 18 } } },
+    [16831] = { id = 16831, name = "Cenarion Gloves", slot = 10, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { armor = 125, heal = 18, int = 18, spi = 15, sta = 17 } } },
+    [16803] = { id = 16803, name = "Felheart Slippers", slot = 8, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 1, stats = { armor = 70, int = 11, sp = 18, sta = 23 } } },
+    [16811] = { id = 16811, name = "Boots of Prophecy", slot = 8, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_FEET", class = 4, subclass = 1, stats = { armor = 70, heal = 18, int = 18, spi = 15, sta = 17 } } },
+    [16868] = { id = 16868, name = "Pauldrons of Might", slot = 3, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 4, stats = { armor = 562, blockPct = 2, defense = 5, sta = 22, str = 15 } } },
+    [16816] = { id = 16816, name = "Mantle of Prophecy", slot = 3, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 1, stats = { armor = 76, int = 23, sp = 9, spi = 10, sta = 13 } } },
+    [16848] = { id = 16848, name = "Giantstalker's Epaulets", slot = 3, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 3, stats = { agi = 24, armor = 317, hit = 1, int = 5, spi = 9, sta = 14 } } },
+    [17074] = { id = 17074, name = "Shadowstrike", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 6, stats = { dps = 59.4 } } },
+    [16823] = { id = 16823, name = "Nightslayer Shoulder Pads", slot = 3, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 2, stats = { agi = 26, armor = 150, hit = 1, sta = 12, str = 3 } } },
+    [16845] = { id = 16845, name = "Giantstalker's Breastplate", slot = 5, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 3, stats = { agi = 26, armor = 422, crit = 1, int = 11, sta = 23 } } },
+    [16820] = { id = 16820, name = "Nightslayer Chestpiece", slot = 5, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 2, stats = { agi = 29, armor = 200, crit = 1, sta = 20, str = 10 } } },
+    [17203] = { id = 17203, name = "Sulfuron Ingot", slot = 0, armor = nil, classes = 0, role = "crafter", fit = { slot = nil, class = 7, subclass = 0, stats = {  } } },
+    [17072] = { id = 17072, name = "Blastershot Launcher", slot = 15, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_RANGEDRIGHT", class = 2, subclass = 3, stats = { crit = 1, dps = 40.2, sta = 6 } } },
+    [16865] = { id = 16865, name = "Breastplate of Might", slot = 5, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 4, stats = { armor = 749, blockPct = 3, defense = 7, sta = 28, str = 20 } } },
+    [16809] = { id = 16809, name = "Felheart Robes", slot = 5, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 102, int = 20, sp = 13, spellhit = 1, sta = 31 } } },
+    [18842] = { id = 18842, name = "Staff of Dominance", slot = 17, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 10, stats = { dps = 57.1, int = 37, sp = 40, spellcrit = 1, spi = 14, sta = 16 } } },
+    [16833] = { id = 16833, name = "Cenarion Vestments", slot = 5, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 2, stats = { armor = 200, heal = 22, int = 24, mp5 = 3, spi = 16, sta = 23 } } },
+    [16815] = { id = 16815, name = "Robes of Prophecy", slot = 5, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 102, heal = 22, int = 27, spi = 17, sta = 20 } } },
+    [17103] = { id = 17103, name = "Azuresong Mageblade", slot = 21, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 7, stats = { dps = 42.5, int = 12, sp = 40, spellcrit = 1, sta = 7 } } },
+    [16798] = { id = 16798, name = "Arcanist Robes", slot = 5, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 102, int = 25, sp = 23, spi = 10, sta = 19 } } },
+    [16853] = { id = 16853, name = "Lawbringer Chestguard", slot = 5, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 4, stats = { armor = 749, heal = 22, int = 21, spi = 13, sta = 26, str = 8 } } },
+    [16841] = { id = 16841, name = "Earthfury Vestments", slot = 5, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 3, stats = { armor = 422, heal = 22, int = 27, spellcrit = 1, spi = 13, sta = 17 } } },
+    [18646] = { id = 18646, name = "The Eye of Divinity", slot = 12, armor = nil, classes = 16, role = nil, fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [18808] = { id = 18808, name = "Gloves of the Hypnotic Flame", slot = 10, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 67, fire = 23, int = 19, sp = 9, spi = 8, sta = 18 } } },
+    [18703] = { id = 18703, name = "Ancient Petrified Leaf", slot = 0, armor = nil, classes = 4, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } } },
+    [19140] = { id = 19140, name = "Cauterizing Band", slot = 11, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { heal = 46, int = 12, sta = 9 } } },
+    [18806] = { id = 18806, name = "Core Forged Greaves", slot = 8, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { armor = 634, defense = 4, sta = 28 } } },
+    [18805] = { id = 18805, name = "Core Hound Tooth", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 15, stats = { ap = 20, crit = 1, dps = 51.3, rap = 20, sta = 9 } } },
+    [18811] = { id = 18811, name = "Fireproof Cloak", slot = 16, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 54, int = 9, spi = 8, sta = 12 } } },
+    [18803] = { id = 18803, name = "Hyperthermically Insulated Lava Dredger", slot = 17, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 5, stats = { dps = 67.1, int = 24, mp5 = 9, sta = 25 } } },
+    [18809] = { id = 18809, name = "Sash of Whispered Secrets", slot = 6, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 1, stats = { armor = 61, shadow = 33, sta = 20 } } },
+    [18810] = { id = 18810, name = "Wild Growth Spaulders", slot = 3, armor = "leather", classes = 0, role = "healer", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 2, stats = { armor = 159, heal = 62, int = 12, spi = 10, sta = 11 } } },
+    [19139] = { id = 19139, name = "Fireguard Shoulders", slot = 3, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 2, stats = { armor = 159, sta = 28 } } },
+    [18812] = { id = 18812, name = "Wristguards of True Flight", slot = 9, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 3, stats = { agi = 19, armor = 198, hit = 1, int = 6, sta = 11 } } },
+    [18815] = { id = 18815, name = "Essence of the Pure Flame", slot = 12, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [16901] = { id = 16901, name = "Stormrage Legguards", slot = 7, armor = "leather", classes = 1024, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { armor = 197, heal = 48, int = 26, mp5 = 6, spi = 16, sta = 17 } } },
+    [17102] = { id = 17102, name = "Cloak of the Shrouded Mists", slot = 16, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { agi = 22, armor = 57, sta = 12 } } },
+    [16915] = { id = 16915, name = "Netherwind Pants", slot = 7, armor = "cloth", classes = 128, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 101, int = 27, sp = 30, spellcrit = 1, spi = 5, sta = 16 } } },
+    [18814] = { id = 18814, name = "Choker of the Fire Lord", slot = 2, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { int = 7, sp = 34, sta = 7 } } },
+    [16930] = { id = 16930, name = "Nemesis Leggings", slot = 7, armor = "cloth", classes = 256, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 101, int = 16, sp = 39, spi = 4, sta = 23 } } },
+    [17107] = { id = 17107, name = "Dragon's Blood Cape", slot = 16, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 116, sta = 22, str = 9 } } },
+    [19138] = { id = 19138, name = "Band of Sulfuras", slot = 11, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { int = 23, spi = 10, sta = 13 } } },
+    [16922] = { id = 16922, name = "Leggings of Transcendence", slot = 7, armor = "cloth", classes = 16, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 101, heal = 46, int = 21, mp5 = 7, spi = 21, sta = 16 } } },
+    [17063] = { id = 17063, name = "Band of Accuria", slot = 11, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { agi = 16, hit = 2, sta = 10 } } },
+    [16962] = { id = 16962, name = "Legplates of Wrath", slot = 7, armor = "plate", classes = 1, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 749, defense = 11, dodge = 2, sta = 27, str = 19 } } },
+    [16909] = { id = 16909, name = "Bloodfang Pants", slot = 7, armor = "leather", classes = 8, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { agi = 37, armor = 197, crit = 1, sta = 17, str = 11 } } },
+    [17106] = { id = 17106, name = "Malistar's Defender", slot = 14, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_SHIELD", class = 4, subclass = 6, stats = { armor = 2822, block = 52, int = 12, mp5 = 9, sta = 9 } } },
+    [19137] = { id = 19137, name = "Onslaught Girdle", slot = 6, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 4, stats = { armor = 494, crit = 1, hit = 1, sta = 11, str = 31 } } },
+    [18816] = { id = 18816, name = "Perdition's Blade", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 15, stats = { dps = 58.3 } } },
+    [18817] = { id = 18817, name = "Crown of Destruction", slot = 1, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 3, stats = { ap = 44, armor = 392, crit = 2, int = 9, rap = 44, spi = 9, sta = 23 } } },
+    [16954] = { id = 16954, name = "Judgement Legplates", slot = 7, armor = "plate", classes = 2, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 749, int = 27, mp5 = 4, sp = 20, spi = 5, sta = 26, str = 10 } } },
+    [16938] = { id = 16938, name = "Dragonstalker's Legguards", slot = 7, armor = "mail", classes = 4, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { agi = 31, armor = 422, crit = 1, hit = 1, int = 15, spi = 8, sta = 16 } } },
+    [17204] = { id = 17204, name = "Eye of Sulfuras", slot = 0, armor = nil, classes = 0, role = "melee", fit = { slot = nil, class = 7, subclass = 0, stats = {  } } },
+    [17076] = { id = 17076, name = "Bonereaver's Edge", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 8, stats = { crit = 1, dps = 75.9, sta = 16 } } },
+    [16946] = { id = 16946, name = "Legplates of Ten Storms", slot = 7, armor = "mail", classes = 64, role = nil, fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { armor = 422, int = 18, sp = 29, spellcrit = 1, spi = 20, sta = 16 } } },
+    [19017] = { id = 19017, name = "Essence of the Firelord", slot = 0, armor = nil, classes = 0, role = "melee", fit = { slot = nil, class = 12, subclass = 0, stats = {  } } },
+    [17082] = { id = 17082, name = "Shard of the Flame", slot = 12, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [17104] = { id = 17104, name = "Spinal Reaper", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 1, stats = { ap = 34, dps = 74.7, rap = 34 } } },
 }
 
 -- Bosses in the usual kill order. drops = epics per kill (from observed rates); loot = { { id, weight } }.
@@ -3495,7 +3524,7 @@ end; chunk("KingsGambit", SK) end
 do local chunk = function(...)
 -- King's Gambit: Temple of Ahn'Qiraj (AQ40) training data (Phase 4.5). GENERATED by scripts/build-aq-data.ps1
 -- from simulator/data/aq40-raw.json (Wowhead Classic drop tables, epic+ items, collected 2026-10-29). Do not edit by hand.
--- Token turn-ins from the CMaNGOS world database (simulator/data/aq-cmangos.json), reputation from the wiki
+-- Token turn-ins from the CMaNGOS world database (simulator/data/cmangos.json), reputation from the wiki
 -- (simulator/data/aq-reputation.json). Role tags are provisional (judged from names; to be replaced from real item stats).
 local _, SK = ...
 local M = SK:NewModule("AQ40")
@@ -3503,115 +3532,116 @@ local M = SK:NewModule("AQ40")
 M.name = "Temple of Ahn'Qiraj"
 M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, SHAMAN = 64, MAGE = 128, WARLOCK = 256, DRUID = 1024 }
 
--- items[id] = { id, name, slot, armor, classes (bitmask, 0 = any), role, token? }
+-- items[id] = { id, name, slot, armor, classes (bitmask, 0 = any), role, fit, token? }
+-- fit: the item as ItemFit sees it (slot, item class, subclass, stats), from the CMaNGOS world database.
 -- token = { makes, turnIns = { [CLASS] = { { reward, quest, needs = { { item, count } }, reputation } } } }
 M.items = {
-    [21702] = { id = 21702, name = "Amulet of Foul Warding", slot = 2, armor = nil, classes = 0, role = "tank" },
-    [21699] = { id = 21699, name = "Barrage Shoulders", slot = 3, armor = "mail", classes = 0, role = "hunter" },
-    [21708] = { id = 21708, name = "Beetle Scaled Wristguards", slot = 9, armor = "leather", classes = 0, role = "tank" },
-    [21706] = { id = 21706, name = "Boots of the Unwavering Will", slot = 8, armor = "plate", classes = 0, role = "tank" },
-    [21814] = { id = 21814, name = "Breastplate of Annihilation", slot = 5, armor = "plate", classes = 0, role = "melee" },
-    [21701] = { id = 21701, name = "Cloak of Concentrated Hatred", slot = 16, armor = nil, classes = 0, role = "melee" },
-    [21698] = { id = 21698, name = "Leggings of Immersion", slot = 7, armor = "leather", classes = 0, role = "healer" },
-    [21700] = { id = 21700, name = "Pendant of the Qiraji Guardian", slot = 2, armor = nil, classes = 0, role = "tank" },
-    [21707] = { id = 21707, name = "Ring of Swarming Thought", slot = 11, armor = nil, classes = 0, role = "caster" },
-    [21704] = { id = 21704, name = "Boots of the Redeemed Prophecy", slot = 8, armor = "plate", classes = 0, role = "healer" },
-    [21703] = { id = 21703, name = "Hammer of Ji'zhi", slot = 17, armor = nil, classes = 0, role = "healer" },
-    [21128] = { id = 21128, name = "Staff of the Qiraji Prophets", slot = 17, armor = nil, classes = 0, role = "caster" },
-    [21705] = { id = 21705, name = "Boots of the Fallen Prophet", slot = 8, armor = "mail", classes = 0, role = "caster" },
-    [21686] = { id = 21686, name = "Mantle of Phrenic Power", slot = 3, armor = "cloth", classes = 0, role = "caster" },
-    [21682] = { id = 21682, name = "Bile-Covered Gauntlets", slot = 10, armor = "leather", classes = 0, role = "melee" },
-    [21687] = { id = 21687, name = "Ukko's Ring of Darkness", slot = 11, armor = nil, classes = 0, role = "tank" },
-    [21696] = { id = 21696, name = "Robes of the Triumvirate", slot = 5, armor = "cloth", classes = 0, role = "healer" },
-    [21695] = { id = 21695, name = "Angelista's Touch", slot = 11, armor = nil, classes = 0, role = "tank" },
-    [21697] = { id = 21697, name = "Cape of the Trinity", slot = 16, armor = nil, classes = 0, role = "caster" },
-    [21693] = { id = 21693, name = "Guise of the Devourer", slot = 1, armor = "leather", classes = 0, role = "tank" },
-    [21694] = { id = 21694, name = "Ternary Mantle", slot = 3, armor = "cloth", classes = 0, role = "healer" },
-    [21692] = { id = 21692, name = "Triad Girdle", slot = 6, armor = "plate", classes = 0, role = "melee" },
-    [21683] = { id = 21683, name = "Mantle of the Desert Crusade", slot = 3, armor = "plate", classes = 0, role = "healer" },
-    [21684] = { id = 21684, name = "Mantle of the Desert's Fury", slot = 3, armor = "mail", classes = 0, role = "caster" },
-    [21232] = { id = 21232, name = "Imperial Qiraji Armaments", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter", token = { makes = "Weapon or shield", turnIns = { WARRIOR = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, PALADIN = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, HUNTER = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, ROGUE = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, PRIEST = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, SHAMAN = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, MAGE = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, WARLOCK = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, DRUID = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } } } } },
-    [21237] = { id = 21237, name = "Imperial Qiraji Regalia", slot = 0, armor = nil, classes = 0, role = "caster|healer", token = { makes = "A weapon", turnIns = { WARRIOR = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, PALADIN = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, HUNTER = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, ROGUE = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, PRIEST = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, SHAMAN = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, MAGE = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, WARLOCK = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, DRUID = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } } } } },
-    [21674] = { id = 21674, name = "Gauntlets of Steadfast Determination", slot = 10, armor = "plate", classes = 0, role = "tank" },
-    [21672] = { id = 21672, name = "Gloves of Enforcement", slot = 10, armor = "leather", classes = 0, role = "melee" },
-    [21676] = { id = 21676, name = "Leggings of the Festering Swarm", slot = 7, armor = "cloth", classes = 0, role = "caster" },
-    [21678] = { id = 21678, name = "Necklace of Purity", slot = 2, armor = nil, classes = 0, role = "healer" },
-    [21648] = { id = 21648, name = "Recomposed Boots", slot = 8, armor = "cloth", classes = 0, role = "caster" },
-    [21671] = { id = 21671, name = "Robes of the Battleguard", slot = 5, armor = "cloth", classes = 0, role = "caster" },
-    [21675] = { id = 21675, name = "Thick Qirajihide Belt", slot = 6, armor = "leather", classes = 0, role = "tank" },
-    [21670] = { id = 21670, name = "Badge of the Swarmguard", slot = 12, armor = nil, classes = 0, role = "melee" },
-    [21669] = { id = 21669, name = "Creeping Vine Helm", slot = 1, armor = "leather", classes = 0, role = "healer" },
-    [21667] = { id = 21667, name = "Legplates of Blazing Light", slot = 7, armor = "plate", classes = 0, role = "healer" },
-    [21666] = { id = 21666, name = "Sartura's Might", slot = 23, armor = nil, classes = 0, role = "healer" },
-    [21673] = { id = 21673, name = "Silithid Claw", slot = 21, armor = nil, classes = 0, role = "melee" },
-    [21668] = { id = 21668, name = "Scaled Leggings of Qiraji Fury", slot = 7, armor = "mail", classes = 0, role = "caster" },
-    [21664] = { id = 21664, name = "Barbed Choker", slot = 2, armor = nil, classes = 0, role = "melee" },
-    [21627] = { id = 21627, name = "Cloak of Untold Secrets", slot = 16, armor = nil, classes = 0, role = "tank" },
-    [21647] = { id = 21647, name = "Fetish of the Sand Reaver", slot = 12, armor = nil, classes = 0, role = "melee" },
-    [21665] = { id = 21665, name = "Mantle of Wicked Revenge", slot = 3, armor = "leather", classes = 0, role = "melee" },
-    [21639] = { id = 21639, name = "Pauldrons of the Unrelenting", slot = 3, armor = "plate", classes = 0, role = "tank" },
-    [21663] = { id = 21663, name = "Robes of the Guardian Saint", slot = 5, armor = "cloth", classes = 0, role = "healer" },
-    [21651] = { id = 21651, name = "Scaled Sand Reaver Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter" },
-    [21652] = { id = 21652, name = "Silithid Carapace Chestguard", slot = 5, armor = "plate", classes = 0, role = "tank" },
-    [21645] = { id = 21645, name = "Hive Tunneler's Boots", slot = 8, armor = "leather", classes = 0, role = "melee" },
-    [21650] = { id = 21650, name = "Ancient Qiraji Ripper", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [21635] = { id = 21635, name = "Barb of the Sand Reaver", slot = 17, armor = nil, classes = 0, role = "hunter" },
-    [22402] = { id = 22402, name = "Libram of Grace", slot = 28, armor = nil, classes = 0, role = "healer" },
-    [22396] = { id = 22396, name = "Totem of Life", slot = 28, armor = nil, classes = 0, role = "healer" },
-    [20932] = { id = 20932, name = "Qiraji Bindings of Dominance", slot = 0, armor = nil, classes = 1474, role = nil, token = { makes = "Shoulders or feet", turnIns = { SHAMAN = { { reward = "Stormcaller's Pauldrons", quest = 8602, needs = { { 20932, 1 }, { 20879, 2 }, { 20859, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Stormcaller's Footguards", quest = 8621, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, MAGE = { { reward = "Enigma Shoulderpads", quest = 8625, needs = { { 20932, 1 }, { 20876, 2 }, { 20858, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Enigma Boots", quest = 8634, needs = { { 20932, 1 }, { 20874, 2 }, { 20860, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, PALADIN = { { reward = "Avenger's Pauldrons", quest = 8630, needs = { { 20932, 1 }, { 20879, 2 }, { 20859, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Avenger's Greaves", quest = 8655, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, WARLOCK = { { reward = "Doomcaller's Footwraps", quest = 8660, needs = { { 20932, 1 }, { 20875, 2 }, { 20863, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Doomcaller's Mantle", quest = 8664, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, DRUID = { { reward = "Genesis Boots", quest = 8665, needs = { { 20932, 1 }, { 20878, 2 }, { 20858, 5 }, { 20860, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Genesis Shoulderpads", quest = 8669, needs = { { 20932, 1 }, { 20881, 2 }, { 20859, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } } } } },
-    [20928] = { id = 20928, name = "Qiraji Bindings of Command", slot = 0, armor = nil, classes = 29, role = nil, token = { makes = "Shoulders or feet", turnIns = { WARRIOR = { { reward = "Conqueror's Spaulders", quest = 8544, needs = { { 20928, 1 }, { 20875, 2 }, { 20863, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Conqueror's Greaves", quest = 8559, needs = { { 20928, 1 }, { 20882, 2 }, { 20865, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, PRIEST = { { reward = "Mantle of the Oracle", quest = 8594, needs = { { 20928, 1 }, { 20878, 2 }, { 20860, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Footwraps of the Oracle", quest = 8596, needs = { { 20928, 1 }, { 20876, 2 }, { 20861, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, HUNTER = { { reward = "Striker's Footguards", quest = 8626, needs = { { 20928, 1 }, { 20879, 2 }, { 20858, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Striker's Pauldrons", quest = 8659, needs = { { 20928, 1 }, { 20882, 2 }, { 20862, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, ROGUE = { { reward = "Deathdealer's Boots", quest = 8637, needs = { { 20928, 1 }, { 20881, 2 }, { 20862, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Deathdealer's Spaulders", quest = 8641, needs = { { 20928, 1 }, { 20874, 2 }, { 20860, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } } } } },
-    [22399] = { id = 22399, name = "Idol of Health", slot = 28, armor = nil, classes = 0, role = "healer" },
-    [21677] = { id = 21677, name = "Ring of the Qiraji Fury", slot = 11, armor = nil, classes = 0, role = "melee" },
-    [21625] = { id = 21625, name = "Scarab Brooch", slot = 12, armor = nil, classes = 0, role = "healer" },
-    [21626] = { id = 21626, name = "Slime-coated Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter" },
-    [21622] = { id = 21622, name = "Sharpened Silithid Femur", slot = 21, armor = nil, classes = 0, role = "caster" },
-    [21624] = { id = 21624, name = "Gauntlets of Kalimdor", slot = 10, armor = "mail", classes = 0, role = "caster" },
-    [21623] = { id = 21623, name = "Gauntlets of the Righteous Champion", slot = 10, armor = "plate", classes = 0, role = "melee" },
-    [21619] = { id = 21619, name = "Gloves of the Messiah", slot = 10, armor = "cloth", classes = 0, role = "healer" },
-    [21618] = { id = 21618, name = "Hive Defiler Wristguards", slot = 9, armor = "plate", classes = 0, role = "melee" },
-    [21620] = { id = 21620, name = "Ring of the Martyr", slot = 11, armor = nil, classes = 0, role = "healer" },
-    [21617] = { id = 21617, name = "Wasphide Gauntlets", slot = 10, armor = "leather", classes = 0, role = "healer" },
-    [21621] = { id = 21621, name = "Cloak of the Golden Hive", slot = 16, armor = nil, classes = 0, role = "tank" },
-    [21616] = { id = 21616, name = "Huhuran's Stinger", slot = 15, armor = nil, classes = 0, role = "hunter" },
-    [20930] = { id = 20930, name = "Vek'lor's Diadem", slot = 0, armor = nil, classes = 1102, role = nil, token = { makes = "Head", turnIns = { SHAMAN = { { reward = "Stormcaller's Diadem", quest = 8623, needs = { { 20930, 1 }, { 20878, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PALADIN = { { reward = "Avenger's Crown", quest = 8628, needs = { { 20930, 1 }, { 20878, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, ROGUE = { { reward = "Deathdealer's Helm", quest = 8639, needs = { { 20930, 1 }, { 20882, 2 }, { 20863, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, HUNTER = { { reward = "Striker's Diadem", quest = 8657, needs = { { 20930, 1 }, { 20881, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, DRUID = { { reward = "Genesis Helm", quest = 8667, needs = { { 20930, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
-    [21598] = { id = 21598, name = "Royal Qiraji Belt", slot = 6, armor = "plate", classes = 0, role = "tank" },
-    [21600] = { id = 21600, name = "Boots of Epiphany", slot = 8, armor = "cloth", classes = 0, role = "caster" },
-    [21602] = { id = 21602, name = "Qiraji Execution Bracers", slot = 9, armor = "leather", classes = 0, role = "melee" },
-    [21601] = { id = 21601, name = "Ring of Emperor Vek'lor", slot = 11, armor = nil, classes = 0, role = "tank" },
-    [21599] = { id = 21599, name = "Vek'lor's Gloves of Devastation", slot = 10, armor = "mail", classes = 0, role = "hunter" },
-    [21597] = { id = 21597, name = "Royal Scepter of Vek'lor", slot = 23, armor = nil, classes = 0, role = "caster" },
-    [20926] = { id = 20926, name = "Vek'nilash's Circlet", slot = 0, armor = nil, classes = 401, role = nil, token = { makes = "Head", turnIns = { WARRIOR = { { reward = "Conqueror's Crown", quest = 8561, needs = { { 20926, 1 }, { 20874, 2 }, { 20862, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PRIEST = { { reward = "Tiara of the Oracle", quest = 8592, needs = { { 20926, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, MAGE = { { reward = "Enigma Circlet", quest = 8632, needs = { { 20926, 1 }, { 20875, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, WARLOCK = { { reward = "Doomcaller's Circlet", quest = 8662, needs = { { 20926, 1 }, { 20876, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
-    [21608] = { id = 21608, name = "Amulet of Vek'nilash", slot = 2, armor = nil, classes = 0, role = "caster" },
-    [21604] = { id = 21604, name = "Bracelets of Royal Redemption", slot = 9, armor = "cloth", classes = 0, role = "healer" },
-    [21605] = { id = 21605, name = "Gloves of the Hidden Temple", slot = 10, armor = "leather", classes = 0, role = "tank" },
-    [21609] = { id = 21609, name = "Regenerating Belt of Vek'nilash", slot = 6, armor = "leather", classes = 0, role = "tank" },
-    [21606] = { id = 21606, name = "Belt of the Fallen Emperor", slot = 6, armor = "plate", classes = 0, role = "melee" },
-    [21679] = { id = 21679, name = "Kalimdor's Revenge", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [21607] = { id = 21607, name = "Grasp of the Fallen Emperor", slot = 6, armor = "mail", classes = 0, role = "hunter" },
-    [20931] = { id = 20931, name = "Skin of the Great Sandworm", slot = 0, armor = nil, classes = 1350, role = nil, token = { makes = "Legs", turnIns = { SHAMAN = { { reward = "Stormcaller's Leggings", quest = 8624, needs = { { 20931, 1 }, { 20881, 2 }, { 20865, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PALADIN = { { reward = "Avenger's Legguards", quest = 8629, needs = { { 20931, 1 }, { 20881, 2 }, { 20865, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, HUNTER = { { reward = "Striker's Leggings", quest = 8658, needs = { { 20931, 1 }, { 20874, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, WARLOCK = { { reward = "Doomcaller's Trousers", quest = 8663, needs = { { 20931, 1 }, { 20878, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, DRUID = { { reward = "Genesis Trousers", quest = 8668, needs = { { 20931, 1 }, { 20882, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
-    [20927] = { id = 20927, name = "Ouro's Intact Hide", slot = 0, armor = nil, classes = 153, role = nil, token = { makes = "Legs", turnIns = { WARRIOR = { { reward = "Conqueror's Legguards", quest = 8560, needs = { { 20927, 1 }, { 20876, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PRIEST = { { reward = "Trousers of the Oracle", quest = 8593, needs = { { 20927, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, MAGE = { { reward = "Enigma Leggings", quest = 8631, needs = { { 20927, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, ROGUE = { { reward = "Deathdealer's Leggings", quest = 8640, needs = { { 20927, 1 }, { 20875, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
-    [21611] = { id = 21611, name = "Burrower Bracers", slot = 9, armor = "cloth", classes = 0, role = "caster" },
-    [23570] = { id = 23570, name = "Jom Gabbar", slot = 12, armor = nil, classes = 0, role = "melee" },
-    [23557] = { id = 23557, name = "Larvae of the Great Worm", slot = 15, armor = nil, classes = 0, role = "hunter" },
-    [23558] = { id = 23558, name = "The Burrower's Shell", slot = 12, armor = nil, classes = 0, role = "tank" },
-    [21610] = { id = 21610, name = "Wormscale Blocker", slot = 14, armor = nil, classes = 0, role = "healer" },
-    [21615] = { id = 21615, name = "Don Rigoberto's Lost Hat", slot = 1, armor = "cloth", classes = 0, role = "healer" },
-    [20933] = { id = 20933, name = "Husk of the Old God", slot = 0, armor = nil, classes = 1424, role = nil, token = { makes = "Chest", turnIns = { PRIEST = { { reward = "Vestments of the Oracle", quest = 8603, needs = { { 20933, 1 }, { 20876, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, MAGE = { { reward = "Enigma Robes", quest = 8633, needs = { { 20933, 1 }, { 20874, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, WARLOCK = { { reward = "Doomcaller's Robes", quest = 8661, needs = { { 20933, 1 }, { 20875, 2 }, { 20862, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, DRUID = { { reward = "Genesis Vest", quest = 8666, needs = { { 20933, 1 }, { 20878, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } } } } },
-    [21221] = { id = 21221, name = "Eye of C'Thun", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter|caster|healer", token = { makes = "Neck, back or finger", turnIns = { WARRIOR = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, PALADIN = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, HUNTER = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, ROGUE = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, PRIEST = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, SHAMAN = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, MAGE = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, WARLOCK = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, DRUID = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } } } } },
-    [20929] = { id = 20929, name = "Carapace of the Old God", slot = 0, armor = nil, classes = 79, role = nil, token = { makes = "Chest", turnIns = { WARRIOR = { { reward = "Conqueror's Breastplate", quest = 8562, needs = { { 20929, 1 }, { 20882, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, SHAMAN = { { reward = "Stormcaller's Hauberk", quest = 8622, needs = { { 20929, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, PALADIN = { { reward = "Avenger's Breastplate", quest = 8627, needs = { { 20929, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, ROGUE = { { reward = "Deathdealer's Vest", quest = 8638, needs = { { 20929, 1 }, { 20881, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, HUNTER = { { reward = "Striker's Hauberk", quest = 8656, needs = { { 20929, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } } } } },
-    [21583] = { id = 21583, name = "Cloak of Clarity", slot = 16, armor = nil, classes = 0, role = "healer" },
-    [21581] = { id = 21581, name = "Gauntlets of Annihilation", slot = 10, armor = "plate", classes = 0, role = "melee" },
-    [22732] = { id = 22732, name = "Mark of C'Thun", slot = 2, armor = nil, classes = 0, role = "tank" },
-    [21586] = { id = 21586, name = "Belt of Never-ending Agony", slot = 6, armor = "leather", classes = 0, role = "melee" },
-    [22731] = { id = 22731, name = "Cloak of the Devoured", slot = 16, armor = nil, classes = 0, role = "caster" },
-    [21585] = { id = 21585, name = "Dark Storm Gauntlets", slot = 10, armor = "cloth", classes = 0, role = "caster" },
-    [22730] = { id = 22730, name = "Eyestalk Waist Cord", slot = 6, armor = "cloth", classes = 0, role = "caster" },
-    [21582] = { id = 21582, name = "Grasp of the Old God", slot = 6, armor = "cloth", classes = 0, role = "healer" },
-    [21596] = { id = 21596, name = "Ring of the Godslayer", slot = 11, armor = nil, classes = 0, role = "hunter" },
-    [21579] = { id = 21579, name = "Vanquished Tentacle of C'Thun", slot = 12, armor = nil, classes = 0, role = "melee" },
-    [21126] = { id = 21126, name = "Death's Sting", slot = 13, armor = nil, classes = 0, role = "melee" },
-    [21134] = { id = 21134, name = "Dark Edge of Insanity", slot = 17, armor = nil, classes = 0, role = "melee" },
-    [21839] = { id = 21839, name = "Scepter of the False Prophet", slot = 21, armor = nil, classes = 0, role = "healer" },
+    [21702] = { id = 21702, name = "Amulet of Foul Warding", slot = 2, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { ap = 24, rap = 24, sta = 12 } } },
+    [21699] = { id = 21699, name = "Barrage Shoulders", slot = 3, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 3, stats = { agi = 29, armor = 348, sta = 22 } } },
+    [21708] = { id = 21708, name = "Beetle Scaled Wristguards", slot = 9, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 2, stats = { ap = 18, armor = 95, int = 12, rap = 18, sta = 14 } } },
+    [21706] = { id = 21706, name = "Boots of the Unwavering Will", slot = 8, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { agi = 8, armor = 647, defense = 5, sta = 29, str = 12 } } },
+    [21814] = { id = 21814, name = "Breastplate of Annihilation", slot = 5, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 4, stats = { armor = 824, crit = 1, hit = 1, sta = 13, str = 37 } } },
+    [21701] = { id = 21701, name = "Cloak of Concentrated Hatred", slot = 16, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { agi = 16, armor = 56, hit = 1, sta = 15, str = 11 } } },
+    [21698] = { id = 21698, name = "Leggings of Immersion", slot = 7, armor = "leather", classes = 0, role = "healer", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 2, stats = { armor = 190, int = 22, mp5 = 6, sp = 39, sta = 15 } } },
+    [21700] = { id = 21700, name = "Pendant of the Qiraji Guardian", slot = 2, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { agi = 11, defense = 6, sta = 17, str = 12 } } },
+    [21707] = { id = 21707, name = "Ring of Swarming Thought", slot = 11, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { sp = 26 } } },
+    [21704] = { id = 21704, name = "Boots of the Redeemed Prophecy", slot = 8, armor = "plate", classes = 0, role = "healer", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 4, stats = { agi = 12, armor = 567, heal = 33, int = 16, sta = 15, str = 15 } } },
+    [21703] = { id = 21703, name = "Hammer of Ji'zhi", slot = 17, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 5, stats = { dps = 70.7, int = 22, sp = 30, sta = 26, str = 16 } } },
+    [21128] = { id = 21128, name = "Staff of the Qiraji Prophets", slot = 17, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 10, stats = { dps = 59.3, int = 26, sp = 56, spi = 8, sta = 21 } } },
+    [21705] = { id = 21705, name = "Boots of the Fallen Prophet", slot = 8, armor = "mail", classes = 0, role = "caster", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 3, stats = { agi = 10, armor = 319, int = 15, sp = 20, sta = 15, str = 15 } } },
+    [21686] = { id = 21686, name = "Mantle of Phrenic Power", slot = 3, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 1, stats = { armor = 87, fire = 33, int = 20, sta = 20 } } },
+    [21682] = { id = 21682, name = "Bile-Covered Gauntlets", slot = 10, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { agi = 17, armor = 203, sta = 21, str = 10 } } },
+    [21687] = { id = 21687, name = "Ukko's Ring of Darkness", slot = 11, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { sta = 13 } } },
+    [21696] = { id = 21696, name = "Robes of the Triumvirate", slot = 5, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 114, int = 22, mp5 = 7, sta = 21 } } },
+    [21695] = { id = 21695, name = "Angelista's Touch", slot = 11, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { defense = 6, dodge = 1, sta = 17, str = 11 } } },
+    [21697] = { id = 21697, name = "Cape of the Trinity", slot = 16, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 57, int = 12, sp = 21, sta = 17 } } },
+    [21693] = { id = 21693, name = "Guise of the Devourer", slot = 1, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 2, stats = { agi = 19, armor = 250, dodge = 1, sta = 36, str = 17 } } },
+    [21694] = { id = 21694, name = "Ternary Mantle", slot = 3, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 1, stats = { armor = 86, heal = 44, int = 17, spi = 20, sta = 12 } } },
+    [21692] = { id = 21692, name = "Triad Girdle", slot = 6, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 4, stats = { agi = 19, armor = 476, sta = 17, str = 26 } } },
+    [21683] = { id = 21683, name = "Mantle of the Desert Crusade", slot = 3, armor = "plate", classes = 0, role = "healer", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 4, stats = { agi = 6, armor = 642, heal = 44, int = 20, sta = 17, str = 10 } } },
+    [21684] = { id = 21684, name = "Mantle of the Desert's Fury", slot = 3, armor = "mail", classes = 0, role = "caster", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 3, stats = { armor = 362, int = 20, sp = 28, sta = 17, str = 6 } } },
+    [21232] = { id = 21232, name = "Imperial Qiraji Armaments", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter", fit = { slot = nil, class = 15, subclass = 0, stats = {  } }, token = { makes = "Weapon or shield", turnIns = { WARRIOR = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, PALADIN = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, HUNTER = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, ROGUE = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, PRIEST = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, SHAMAN = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, MAGE = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, WARLOCK = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } }, DRUID = { { reward = "Blessed Qiraji War Axe / Blessed Qiraji Musket / Blessed Qiraji Pugio / Blessed Qiraji Bulwark", quest = 8789, needs = { { 21232, 1 }, { 18562, 3 } }, reputation = nil } } } } },
+    [21237] = { id = 21237, name = "Imperial Qiraji Regalia", slot = 0, armor = nil, classes = 0, role = "caster|healer", fit = { slot = nil, class = 15, subclass = 0, stats = {  } }, token = { makes = "A weapon", turnIns = { WARRIOR = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, PALADIN = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, HUNTER = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, ROGUE = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, PRIEST = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, SHAMAN = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, MAGE = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, WARLOCK = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } }, DRUID = { { reward = "Blessed Qiraji Acolyte Staff / Blessed Qiraji Augur Staff / Blessed Qiraji War Hammer", quest = 8790, needs = { { 21237, 1 }, { 18562, 3 } }, reputation = nil } } } } },
+    [21674] = { id = 21674, name = "Gauntlets of Steadfast Determination", slot = 10, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { agi = 18, armor = 535, defense = 9, sta = 20, str = 19 } } },
+    [21672] = { id = 21672, name = "Gloves of Enforcement", slot = 10, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { agi = 20, armor = 140, hit = 1, sta = 6, str = 28 } } },
+    [21676] = { id = 21676, name = "Leggings of the Festering Swarm", slot = 7, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 1, stats = { armor = 101, fire = 57, int = 23, sta = 17 } } },
+    [21678] = { id = 21678, name = "Necklace of Purity", slot = 2, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { int = 13, sp = 8, sta = 9 } } },
+    [21648] = { id = 21648, name = "Recomposed Boots", slot = 8, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 1, stats = { armor = 80, int = 13, sp = 20, sta = 21 } } },
+    [21671] = { id = 21671, name = "Robes of the Battleguard", slot = 5, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 116, int = 17, sp = 36, spi = 8, sta = 23 } } },
+    [21675] = { id = 21675, name = "Thick Qirajihide Belt", slot = 6, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 2, stats = { agi = 17, armor = 186, parry = 1, sta = 20, str = 10 } } },
+    [21670] = { id = 21670, name = "Badge of the Swarmguard", slot = 12, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [21669] = { id = 21669, name = "Creeping Vine Helm", slot = 1, armor = "leather", classes = 0, role = "healer", fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 2, stats = { armor = 183, heal = 59, int = 23, spi = 17, sta = 26 } } },
+    [21667] = { id = 21667, name = "Legplates of Blazing Light", slot = 7, armor = "plate", classes = 0, role = "healer", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 4, stats = { armor = 749, heal = 68, int = 23, spellcrit = 1, sta = 17, str = 9 } } },
+    [21666] = { id = 21666, name = "Sartura's Might", slot = 23, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_HOLDABLE", class = 4, subclass = 0, stats = { heal = 51, int = 6, mp5 = 5, sta = 6 } } },
+    [21673] = { id = 21673, name = "Silithid Claw", slot = 21, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 13, stats = { ap = 30, crit = 1, dps = 57.5, rap = 30 } } },
+    [21668] = { id = 21668, name = "Scaled Leggings of Qiraji Fury", slot = 7, armor = "mail", classes = 0, role = "caster", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { armor = 422, int = 23, sp = 36, spellcrit = 1, sta = 20 } } },
+    [21664] = { id = 21664, name = "Barbed Choker", slot = 2, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { ap = 44, crit = 1, rap = 44, sta = 10 } } },
+    [21627] = { id = 21627, name = "Cloak of Untold Secrets", slot = 16, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 59, sta = 21 } } },
+    [21647] = { id = 21647, name = "Fetish of the Sand Reaver", slot = 12, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [21665] = { id = 21665, name = "Mantle of Wicked Revenge", slot = 3, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 2, stats = { agi = 30, armor = 170, sta = 14, str = 16 } } },
+    [21639] = { id = 21639, name = "Pauldrons of the Unrelenting", slot = 3, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_SHOULDER", class = 4, subclass = 4, stats = { armor = 650, defense = 9, dodge = 1, sta = 30, str = 11 } } },
+    [21663] = { id = 21663, name = "Robes of the Guardian Saint", slot = 5, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_ROBE", class = 4, subclass = 1, stats = { armor = 117, heal = 70, int = 22, mp5 = 7, sta = 20 } } },
+    [21651] = { id = 21651, name = "Scaled Sand Reaver Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { ap = 62, armor = 427, crit = 2, int = 10, rap = 62, sta = 23 } } },
+    [21652] = { id = 21652, name = "Silithid Carapace Chestguard", slot = 5, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_CHEST", class = 4, subclass = 4, stats = { agi = 14, armor = 867, sta = 23, str = 17 } } },
+    [21645] = { id = 21645, name = "Hive Tunneler's Boots", slot = 8, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 2, stats = { agi = 17, armor = 216, sta = 30, str = 10 } } },
+    [21650] = { id = 21650, name = "Ancient Qiraji Ripper", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 7, stats = { ap = 20, crit = 1, dps = 58.4, rap = 20, sta = 11 } } },
+    [21635] = { id = 21635, name = "Barb of the Sand Reaver", slot = 17, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 6, stats = { agi = 41, dps = 76.1, sta = 31 } } },
+    [22402] = { id = 22402, name = "Libram of Grace", slot = 28, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_RELIC", class = 4, subclass = 7, stats = {  } } },
+    [22396] = { id = 22396, name = "Totem of Life", slot = 28, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_RELIC", class = 4, subclass = 9, stats = {  } } },
+    [20932] = { id = 20932, name = "Qiraji Bindings of Dominance", slot = 0, armor = nil, classes = 1474, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Shoulders or feet", turnIns = { SHAMAN = { { reward = "Stormcaller's Pauldrons", quest = 8602, needs = { { 20932, 1 }, { 20879, 2 }, { 20859, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Stormcaller's Footguards", quest = 8621, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, MAGE = { { reward = "Enigma Shoulderpads", quest = 8625, needs = { { 20932, 1 }, { 20876, 2 }, { 20858, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Enigma Boots", quest = 8634, needs = { { 20932, 1 }, { 20874, 2 }, { 20860, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, PALADIN = { { reward = "Avenger's Pauldrons", quest = 8630, needs = { { 20932, 1 }, { 20879, 2 }, { 20859, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Avenger's Greaves", quest = 8655, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, WARLOCK = { { reward = "Doomcaller's Footwraps", quest = 8660, needs = { { 20932, 1 }, { 20875, 2 }, { 20863, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Doomcaller's Mantle", quest = 8664, needs = { { 20932, 1 }, { 20877, 2 }, { 20861, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, DRUID = { { reward = "Genesis Boots", quest = 8665, needs = { { 20932, 1 }, { 20878, 2 }, { 20858, 5 }, { 20860, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Genesis Shoulderpads", quest = 8669, needs = { { 20932, 1 }, { 20881, 2 }, { 20859, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } } } } },
+    [20928] = { id = 20928, name = "Qiraji Bindings of Command", slot = 0, armor = nil, classes = 29, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Shoulders or feet", turnIns = { WARRIOR = { { reward = "Conqueror's Spaulders", quest = 8544, needs = { { 20928, 1 }, { 20875, 2 }, { 20863, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Conqueror's Greaves", quest = 8559, needs = { { 20928, 1 }, { 20882, 2 }, { 20865, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, PRIEST = { { reward = "Mantle of the Oracle", quest = 8594, needs = { { 20928, 1 }, { 20878, 2 }, { 20860, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Footwraps of the Oracle", quest = 8596, needs = { { 20928, 1 }, { 20876, 2 }, { 20861, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, HUNTER = { { reward = "Striker's Footguards", quest = 8626, needs = { { 20928, 1 }, { 20879, 2 }, { 20858, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Striker's Pauldrons", quest = 8659, needs = { { 20928, 1 }, { 20882, 2 }, { 20862, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } }, ROGUE = { { reward = "Deathdealer's Boots", quest = 8637, needs = { { 20928, 1 }, { 20881, 2 }, { 20862, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } }, { reward = "Deathdealer's Spaulders", quest = 8641, needs = { { 20928, 1 }, { 20874, 2 }, { 20860, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } } } } },
+    [22399] = { id = 22399, name = "Idol of Health", slot = 28, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_RELIC", class = 4, subclass = 8, stats = {  } } },
+    [21677] = { id = 21677, name = "Ring of the Qiraji Fury", slot = 11, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { ap = 40, crit = 1, rap = 40, sta = 12 } } },
+    [21625] = { id = 21625, name = "Scarab Brooch", slot = 12, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [21626] = { id = 21626, name = "Slime-coated Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_LEGS", class = 4, subclass = 3, stats = { ap = 40, armor = 432, int = 16, rap = 40, sp = 11, sta = 28 } } },
+    [21622] = { id = 21622, name = "Sharpened Silithid Femur", slot = 21, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 7, stats = { dps = 41.3, int = 7, sp = 72, spellcrit = 1, sta = 14 } } },
+    [21624] = { id = 21624, name = "Gauntlets of Kalimdor", slot = 10, armor = "mail", classes = 0, role = "caster", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 3, stats = { armor = 309, int = 13, sp = 20, spellcrit = 1, spi = 10, sta = 15, str = 14 } } },
+    [21623] = { id = 21623, name = "Gauntlets of the Righteous Champion", slot = 10, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { armor = 549, crit = 1, int = 13, sp = 16, sta = 17, str = 15 } } },
+    [21619] = { id = 21619, name = "Gloves of the Messiah", slot = 10, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 74, heal = 26, int = 17, mp5 = 10, sta = 13 } } },
+    [21618] = { id = 21618, name = "Hive Defiler Wristguards", slot = 9, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 4, stats = { agi = 18, armor = 384, str = 23 } } },
+    [21620] = { id = 21620, name = "Ring of the Martyr", slot = 11, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { heal = 51, mp5 = 5, sta = 10 } } },
+    [21617] = { id = 21617, name = "Wasphide Gauntlets", slot = 10, armor = "leather", classes = 0, role = "healer", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { armor = 143, heal = 53, int = 15, spi = 16, sta = 14 } } },
+    [21621] = { id = 21621, name = "Cloak of the Golden Hive", slot = 16, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { agi = 10, armor = 59, defense = 6, sta = 19, str = 13 } } },
+    [21616] = { id = 21616, name = "Huhuran's Stinger", slot = 15, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_RANGED", class = 2, subclass = 2, stats = { agi = 18, dps = 46.3 } } },
+    [20930] = { id = 20930, name = "Vek'lor's Diadem", slot = 0, armor = nil, classes = 1102, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Head", turnIns = { SHAMAN = { { reward = "Stormcaller's Diadem", quest = 8623, needs = { { 20930, 1 }, { 20878, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PALADIN = { { reward = "Avenger's Crown", quest = 8628, needs = { { 20930, 1 }, { 20878, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, ROGUE = { { reward = "Deathdealer's Helm", quest = 8639, needs = { { 20930, 1 }, { 20882, 2 }, { 20863, 5 }, { 20859, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, HUNTER = { { reward = "Striker's Diadem", quest = 8657, needs = { { 20930, 1 }, { 20881, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, DRUID = { { reward = "Genesis Helm", quest = 8667, needs = { { 20930, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
+    [21598] = { id = 21598, name = "Royal Qiraji Belt", slot = 6, armor = "plate", classes = 0, role = "tank", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 4, stats = { agi = 13, armor = 512, defense = 8, parry = 1, sta = 22, str = 13 } } },
+    [21600] = { id = 21600, name = "Boots of Epiphany", slot = 8, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_FEET", class = 4, subclass = 1, stats = { armor = 84, int = 19, sp = 34, sta = 18 } } },
+    [21602] = { id = 21602, name = "Qiraji Execution Bracers", slot = 9, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 2, stats = { agi = 16, armor = 103, hit = 1, sta = 14, str = 15 } } },
+    [21601] = { id = 21601, name = "Ring of Emperor Vek'lor", slot = 11, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { agi = 12, armor = 100, defense = 9, sta = 18 } } },
+    [21599] = { id = 21599, name = "Vek'lor's Gloves of Devastation", slot = 10, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 3, stats = { agi = 22, armor = 320, crit = 1, int = 17, sta = 21 } } },
+    [21597] = { id = 21597, name = "Royal Scepter of Vek'lor", slot = 23, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_HOLDABLE", class = 4, subclass = 0, stats = { int = 9, sp = 20, spellcrit = 1, spellhit = 1, sta = 10 } } },
+    [20926] = { id = 20926, name = "Vek'nilash's Circlet", slot = 0, armor = nil, classes = 401, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Head", turnIns = { WARRIOR = { { reward = "Conqueror's Crown", quest = 8561, needs = { { 20926, 1 }, { 20874, 2 }, { 20862, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PRIEST = { { reward = "Tiara of the Oracle", quest = 8592, needs = { { 20926, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, MAGE = { { reward = "Enigma Circlet", quest = 8632, needs = { { 20926, 1 }, { 20875, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, WARLOCK = { { reward = "Doomcaller's Circlet", quest = 8662, needs = { { 20926, 1 }, { 20876, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
+    [21608] = { id = 21608, name = "Amulet of Vek'nilash", slot = 2, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { int = 5, sp = 27, spellcrit = 1, sta = 9 } } },
+    [21604] = { id = 21604, name = "Bracelets of Royal Redemption", slot = 9, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 1, stats = { armor = 54, heal = 53, int = 10, spi = 9, sta = 8 } } },
+    [21605] = { id = 21605, name = "Gloves of the Hidden Temple", slot = 10, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 2, stats = { agi = 21, armor = 248, sta = 22, str = 18 } } },
+    [21609] = { id = 21609, name = "Regenerating Belt of Vek'nilash", slot = 6, armor = "leather", classes = 0, role = "tank", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 2, stats = { armor = 133, heal = 55, int = 18, spi = 13, sta = 16 } } },
+    [21606] = { id = 21606, name = "Belt of the Fallen Emperor", slot = 6, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 4, stats = { agi = 13, armor = 512, heal = 35, int = 18, sta = 17, str = 17 } } },
+    [21679] = { id = 21679, name = "Kalimdor's Revenge", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 8, stats = { dps = 81.9, sta = 18, str = 24 } } },
+    [21607] = { id = 21607, name = "Grasp of the Fallen Emperor", slot = 6, armor = "mail", classes = 0, role = "hunter", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 3, stats = { agi = 12, armor = 288, int = 17, mp5 = 5, sp = 19, sta = 17, str = 13 } } },
+    [20931] = { id = 20931, name = "Skin of the Great Sandworm", slot = 0, armor = nil, classes = 1350, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Legs", turnIns = { SHAMAN = { { reward = "Stormcaller's Leggings", quest = 8624, needs = { { 20931, 1 }, { 20881, 2 }, { 20865, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PALADIN = { { reward = "Avenger's Legguards", quest = 8629, needs = { { 20931, 1 }, { 20881, 2 }, { 20865, 5 }, { 20861, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, HUNTER = { { reward = "Striker's Leggings", quest = 8658, needs = { { 20931, 1 }, { 20874, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, WARLOCK = { { reward = "Doomcaller's Trousers", quest = 8663, needs = { { 20931, 1 }, { 20878, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, DRUID = { { reward = "Genesis Trousers", quest = 8668, needs = { { 20931, 1 }, { 20882, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
+    [20927] = { id = 20927, name = "Ouro's Intact Hide", slot = 0, armor = nil, classes = 153, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Legs", turnIns = { WARRIOR = { { reward = "Conqueror's Legguards", quest = 8560, needs = { { 20927, 1 }, { 20876, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, PRIEST = { { reward = "Trousers of the Oracle", quest = 8593, needs = { { 20927, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, MAGE = { { reward = "Enigma Leggings", quest = 8631, needs = { { 20927, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } }, ROGUE = { { reward = "Deathdealer's Leggings", quest = 8640, needs = { { 20927, 1 }, { 20875, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Friendly" } } } } } },
+    [21611] = { id = 21611, name = "Burrower Bracers", slot = 9, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_WRIST", class = 4, subclass = 1, stats = { armor = 54, int = 13, sp = 28, sta = 10 } } },
+    [23570] = { id = 23570, name = "Jom Gabbar", slot = 12, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [23557] = { id = 23557, name = "Larvae of the Great Worm", slot = 15, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_RANGEDRIGHT", class = 2, subclass = 3, stats = { ap = 18, crit = 1, dps = 49.2, rap = 18 } } },
+    [23558] = { id = 23558, name = "The Burrower's Shell", slot = 12, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [21610] = { id = 21610, name = "Wormscale Blocker", slot = 14, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_SHIELD", class = 4, subclass = 6, stats = { armor = 3035, block = 57, heal = 35, int = 13, mp5 = 6, sta = 10 } } },
+    [21615] = { id = 21615, name = "Don Rigoberto's Lost Hat", slot = 1, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_HEAD", class = 4, subclass = 1, stats = { armor = 100, heal = 64, int = 24, mp5 = 11, sta = 18 } } },
+    [20933] = { id = 20933, name = "Husk of the Old God", slot = 0, armor = nil, classes = 1424, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Chest", turnIns = { PRIEST = { { reward = "Vestments of the Oracle", quest = 8603, needs = { { 20933, 1 }, { 20876, 2 }, { 20858, 5 }, { 20862, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, MAGE = { { reward = "Enigma Robes", quest = 8633, needs = { { 20933, 1 }, { 20874, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, WARLOCK = { { reward = "Doomcaller's Robes", quest = 8661, needs = { { 20933, 1 }, { 20875, 2 }, { 20862, 5 }, { 20858, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, DRUID = { { reward = "Genesis Vest", quest = 8666, needs = { { 20933, 1 }, { 20878, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } } } } },
+    [21221] = { id = 21221, name = "Eye of C'Thun", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter|caster|healer", fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Neck, back or finger", turnIns = { WARRIOR = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, PALADIN = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, HUNTER = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, ROGUE = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, PRIEST = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, SHAMAN = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, MAGE = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, WARLOCK = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } }, DRUID = { { reward = "Amulet of the Fallen God / Cloak of the Fallen God / Ring of the Fallen God", quest = 8802, needs = { { 21221, 1 } }, reputation = nil } } } } },
+    [20929] = { id = 20929, name = "Carapace of the Old God", slot = 0, armor = nil, classes = 79, role = nil, fit = { slot = nil, class = 12, subclass = 0, stats = {  } }, token = { makes = "Chest", turnIns = { WARRIOR = { { reward = "Conqueror's Breastplate", quest = 8562, needs = { { 20929, 1 }, { 20882, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, SHAMAN = { { reward = "Stormcaller's Hauberk", quest = 8622, needs = { { 20929, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, PALADIN = { { reward = "Avenger's Breastplate", quest = 8627, needs = { { 20929, 1 }, { 20877, 2 }, { 20860, 5 }, { 20864, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, ROGUE = { { reward = "Deathdealer's Vest", quest = 8638, needs = { { 20929, 1 }, { 20881, 2 }, { 20861, 5 }, { 20865, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } }, HUNTER = { { reward = "Striker's Hauberk", quest = 8656, needs = { { 20929, 1 }, { 20879, 2 }, { 20859, 5 }, { 20863, 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Honored" } } } } } },
+    [21583] = { id = 21583, name = "Cloak of Clarity", slot = 16, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 66, heal = 40, int = 12, mp5 = 8, spi = 7, sta = 6 } } },
+    [21581] = { id = 21581, name = "Gauntlets of Annihilation", slot = 10, armor = "plate", classes = 0, role = "melee", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 4, stats = { armor = 615, crit = 1, hit = 1, sta = 15, str = 35 } } },
+    [22732] = { id = 22732, name = "Mark of C'Thun", slot = 2, armor = nil, classes = 0, role = "tank", fit = { slot = "INVTYPE_NECK", class = 4, subclass = 0, stats = { defense = 10, dodge = 1, hit = 1, sta = 24 } } },
+    [21586] = { id = 21586, name = "Belt of Never-ending Agony", slot = 6, armor = "leather", classes = 0, role = "melee", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 2, stats = { ap = 64, armor = 142, crit = 1, hit = 1, rap = 64, sta = 20 } } },
+    [22731] = { id = 22731, name = "Cloak of the Devoured", slot = 16, armor = nil, classes = 0, role = "caster", fit = { slot = "INVTYPE_CLOAK", class = 4, subclass = 1, stats = { armor = 66, int = 10, sp = 30, spellhit = 1, sta = 11 } } },
+    [21585] = { id = 21585, name = "Dark Storm Gauntlets", slot = 10, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_HAND", class = 4, subclass = 1, stats = { armor = 83, int = 15, sp = 37, spellhit = 1, sta = 19 } } },
+    [22730] = { id = 22730, name = "Eyestalk Waist Cord", slot = 6, armor = "cloth", classes = 0, role = "caster", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 1, stats = { armor = 75, int = 9, sp = 41, spellcrit = 1, sta = 10 } } },
+    [21582] = { id = 21582, name = "Grasp of the Old God", slot = 6, armor = "cloth", classes = 0, role = "healer", fit = { slot = "INVTYPE_WAIST", class = 4, subclass = 1, stats = { armor = 75, heal = 59, int = 19, mp5 = 7, sta = 15 } } },
+    [21596] = { id = 21596, name = "Ring of the Godslayer", slot = 11, armor = nil, classes = 0, role = "hunter", fit = { slot = "INVTYPE_FINGER", class = 4, subclass = 0, stats = { agi = 27, sta = 17 } } },
+    [21579] = { id = 21579, name = "Vanquished Tentacle of C'Thun", slot = 12, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_TRINKET", class = 4, subclass = 0, stats = {  } } },
+    [21126] = { id = 21126, name = "Death's Sting", slot = 13, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_WEAPON", class = 2, subclass = 15, stats = { ap = 38, dps = 66.4, rap = 38, sta = 10 } } },
+    [21134] = { id = 21134, name = "Dark Edge of Insanity", slot = 17, armor = nil, classes = 0, role = "melee", fit = { slot = "INVTYPE_2HWEAPON", class = 2, subclass = 1, stats = { agi = 19, dps = 86.6, sta = 25, str = 35 } } },
+    [21839] = { id = 21839, name = "Scepter of the False Prophet", slot = 21, armor = nil, classes = 0, role = "healer", fit = { slot = "INVTYPE_WEAPONMAINHAND", class = 2, subclass = 4, stats = { dps = 41.6, heal = 187, int = 19, mp5 = 3, sta = 10 } } },
 }
 
 -- Bosses in the usual kill order. drops = epics per kill (from observed rates); loot = { { id, weight } }.
@@ -3871,9 +3901,9 @@ do local chunk = function(...)
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -3889,9 +3919,9 @@ Sim.__index = Sim
 
 local function short(name) return (name:gsub("%-.*$", "")) end
 
--- opts: seed, learner (default "You"), members (array of names, or of { name, class, role }; top of the
---       list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
---       shuffle (random order from the seed).
+-- opts: seed, learner (default "You"), members (array of names, or of { name, class, role, spec, offSpec };
+--       top of the list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
+--       learnerSpec, learnerOffSpec, shuffle (random order from the seed).
 function M.NewRaid(opts)
     opts = opts or {}
     local learner = opts.learner or "You"
@@ -3911,13 +3941,15 @@ function M.NewRaid(opts)
 
     local roster, info = {}, {}
     for i, m in ipairs(names) do
-        local n, class, role
-        if type(m) == "table" then n, class, role = m.name, m.class, m.role
+        local n, class, role, spec, offSpec
+        if type(m) == "table" then n, class, role, spec, offSpec = m.name, m.class, m.role, m.spec, m.offSpec
         else n, class = m, (m == learner and opts.learnerClass) or CLASSES[((i - 1) % #CLASSES) + 1] end
-        if n == learner then role = opts.learnerRole or role end
+        if n == learner then
+            role, spec, offSpec = opts.learnerRole or role, opts.learnerSpec or spec, opts.learnerOffSpec or offSpec
+        end
         names[i] = n
         roster[i] = { name = n, class = class }
-        info[n] = { class = class, role = role }
+        info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
         engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
     end
     client:setRaid(roster, { leader = learner, lootMethod = "master", masterLooter = learner })
@@ -4069,11 +4101,15 @@ function M.RunScenario(sc, opts)
 end
 
 ---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
--- A realistic 40-person Alliance raid: class and role for every bot. The learner fills one healer slot.
-local MC_ROSTER = {
-    { "WARRIOR", "tank", 3 }, { "WARRIOR", "melee", 5 }, { "ROGUE", "melee", 5 }, { "HUNTER", "hunter", 4 },
-    { "MAGE", "caster", 6 }, { "WARLOCK", "caster", 4 }, { "PRIEST", "healer", 6 }, { "DRUID", "healer", 2 },
-    { "DRUID", "tank", 1 }, { "PALADIN", "healer", 3 }, { "PALADIN", "melee", 1 },
+-- A realistic 40-person Alliance raid: class, main spec and off-spec for every bot (the role follows the main
+-- spec). The learner is the 40th: a Holy priest with Shadow as off-spec. { class, spec, off-spec, count }.
+M.ROSTER_40 = {
+    { "WARRIOR", "Protection", "Fury", 3 }, { "WARRIOR", "Fury", "Protection", 5 },
+    { "ROGUE", "Combat", nil, 5 }, { "HUNTER", "Marksmanship", nil, 4 },
+    { "MAGE", "Frost", "Fire", 3 }, { "MAGE", "Fire", "Frost", 3 }, { "WARLOCK", "Destruction", "Affliction", 4 },
+    { "PRIEST", "Holy", "Shadow", 4 }, { "PRIEST", "Shadow", "Holy", 1 },
+    { "DRUID", "Restoration", "Balance", 2 }, { "DRUID", "Feral (bear)", "Feral (cat)", 1 },
+    { "PALADIN", "Holy", "Retribution", 3 }, { "PALADIN", "Retribution", "Holy", 1 },
 }
 local MC_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory", "Kest", "Lio",
     "Mirel", "Nyx", "Orsa", "Pell", "Quill", "Rhea", "Soren", "Tavi", "Ulf", "Vera", "Wren", "Xan", "Yara", "Zed",
@@ -4093,18 +4129,42 @@ local function forRole(item, role)
     return false
 end
 
--- Would a raider of this class and role want the item, and as main or off-spec?
--- Returns "need", "off" or nil. Deliberately simple: tier pieces and class tokens by class, other items
--- (and tokens open to everyone) by role and armor type.
-function M.Wants(data, item, class, role)
+-- Would a raider want the item, and as main or off-spec? Returns "need", "off" or nil.
+-- Tier pieces and class tokens go by class. With specs (spec, offSpec: ItemFit spec names), everything else
+-- goes by how the item's real stats fit them (ItemFit): need if it suits the main spec, off if it suits the
+-- off-spec. Items whose stats say nothing (quest items, use effects), and raiders without specs, fall back to
+-- the hand-made role tags and armor type.
+function M.Wants(data, item, class, role, spec, offSpec)
     if item.classes ~= 0 then
         local bit = data.CLASS_BITS[class]
         return (bit and hasBit(item.classes, bit)) and "need" or nil
+    end
+    if spec and item.fit then
+        local main = ItemFit.ForPlayer(item.fit, class, spec)
+        if not main.usable then return nil end
+        if main.rating == "good" then return "need" end
+        local off = offSpec and ItemFit.ForPlayer(item.fit, class, offSpec)
+        if off and off.rating == "good" then return "off" end
+        if main.rating then return nil end -- its stats say something, and it isn't for this raider
+        local o = offSpec and ItemFit.SpecOf(class, offSpec)
+        if forRole(item, role) then return "need" end
+        if o and forRole(item, o.role) then return "off" end
+        return nil
     end
     if item.armor and item.armor ~= ARMOR[class] then return nil end
     if forRole(item, role) then return "need" end
     local off = OFFSPEC[class] and OFFSPEC[class][role]
     if off and forRole(item, off) then return "off" end
+end
+
+-- Tell the simulated game client what an item is, as the real one would: its slot, type and stats, and the
+-- classes it names (tier pieces). The loot session reads it like any item, so the class rule applies.
+function Sim:teach(item)
+    local link = item.name
+    if self.client:itemInfo(link) then return end
+    local fit = item.fit or {}
+    self.client:setItemInfo(link, { name = item.name, equipLoc = fit.slot, class = fit.class, subclass = fit.subclass })
+    self.client:setItemStats(link, { stats = fit.stats or {}, classes = ItemFit.ClassesFromMask(item.classes) })
 end
 
 -- data: a raid data module (MoltenCore, AQ40). opts: seed, learner ("You"), learnerClass ("PRIEST"),
@@ -4114,15 +4174,19 @@ end
 function M.NewRaidNight(data, opts)
     opts = opts or {}
     local members, k = {}, 0
-    for _, row in ipairs(MC_ROSTER) do
-        for _ = 1, row[3] do
+    for _, row in ipairs(M.ROSTER_40) do
+        local spec = ItemFit.SpecOf(row[1], row[2])
+        for _ = 1, row[4] do
             k = k + 1
-            members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = row[2] }
+            members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = spec.role, spec = row[2], offSpec = row[3] }
         end
     end
-    members[#members] = nil -- the learner takes the 40th slot (a healer)
+    local learnerClass = opts.learnerClass or "PRIEST"
+    local learnerSpec = opts.learnerSpec or (not opts.learnerClass and "Holy") or ItemFit.SPECS[learnerClass][1].name
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
-        learnerClass = opts.learnerClass or "PRIEST", learnerRole = opts.learnerRole or "healer",
+        learnerClass = learnerClass, learnerSpec = learnerSpec,
+        learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
+        learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
         shuffle = opts.shuffle ~= false })
     sim.raid = data
     sim.chance = opts.chance or 0.7
@@ -4187,7 +4251,10 @@ function Sim:handOut(cfg)
     local held = self.held
     self.held = {}
     local links, seen = {}, {}
-    for i, h in ipairs(held) do links[i], seen[i] = h.item.name, h.seen end
+    for i, h in ipairs(held) do
+        links[i], seen[i] = h.item.name, h.seen
+        self:teach(h.item)
+    end
     self.policies = {}
     -- Roster order, never pairs(): random draws must happen in the same order in every process.
     for _, name in ipairs(self.names) do
@@ -4195,7 +4262,7 @@ function Sim:handOut(cfg)
         local p = { bid = {}, claim = self.client:random() < 0.3 }
         local wanted = {}
         for _, h in ipairs(held) do
-            local kind = M.Wants(self.raid, h.item, info.class, info.role)
+            local kind = M.Wants(self.raid, h.item, info.class, info.role, info.spec, info.offSpec)
             if kind and self.client:random() < self.chance then
                 wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 or h.item.token ~= nil,
                     ready = h.item.token and self:botReadiness() or nil }
@@ -4538,7 +4605,7 @@ local api = {}
 -- Raid nights: a whole raid with a 40-person roster and real loot from real bosses.
 local NIGHTS = {
     { id = "mc", title = "Molten Core night", new = Sim.NewMoltenCore,
-      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest." },
+      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. Every raider has a class, a main spec and an off-spec, and answers from how well each item's real stats fit them: need for the main spec, off for the off-spec. Items for other classes they leave alone (the session would refuse them anyway). You are the Master Looter and a Holy priest." },
     { id = "aq40", title = "Ahn'Qiraj night", new = Sim.NewAQ40,
       lesson = "The Temple of Ahn'Qiraj drops tokens beside gear: each is for a group of classes and is turned in, with materials and reputation, for a tier piece. Tokens are handed out like any item, under the same rules. Each bidder's readiness is shown (ready, says ready, not ready) so the raid can see it, but it is only a hint and never enforced: materials in the bank can't be seen, and taking a token you can't use yet is your own call." },
 }

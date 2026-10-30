@@ -625,6 +625,55 @@ mid-function, which hid what they depended on.
   - Simulated raiders with a class, main spec and off-spec, deciding from real item stats. The raid data needs
     stats from the CMaNGOS extract for that.
 
+### Built: simulated raiders with specs, deciding from real item stats (2026-10-30)
+
+**Asked by the guild leader:** every simulated character gets a class, a specialization and an off-specialization,
+so item affinity is really simulated and tested.
+- **The 40-person roster.** Every raider has a class, a main spec (which sets their role) and, for hybrids, an
+  off-spec. The learner is a Holy priest, with Shadow as off-spec.
+
+  | Class | Main spec (off-spec), count |
+  | --- | --- |
+  | Warrior | Protection (Fury) 3, Fury (Protection) 5 |
+  | Rogue | Combat 5 |
+  | Hunter | Marksmanship 4 |
+  | Mage | Frost (Fire) 3, Fire (Frost) 3 |
+  | Warlock | Destruction (Affliction) 4 |
+  | Priest | Holy (Shadow) 4 plus the learner, Shadow (Holy) 1 |
+  | Druid | Restoration (Balance) 2, Feral bear (cat) 1 |
+  | Paladin | Holy (Retribution) 3, Retribution (Holy) 1 |
+
+- **Real stats for every raid item.** `scripts/extract-cmangos.lua` now covers the Molten Core drops as well as
+  AQ, and converts each item into ItemFit's terms: slot, item class, stats, and equip effects read from their
+  spell auras (spell damage by school, healing, hit, crit, mana per 5, attack power, defense, dodge, parry, block).
+  - The generators embed this as `fit` in `MoltenCore.lua` and `AQ40.lua`. The extract is now
+    `simulator/data/cmangos.json`, no longer AQ-only.
+  - Spot checks match the items as players know them: Choker of Enlightenment, Band of Accuria, Onslaught
+    Girdle, Robe of Volatile Power.
+- **Bots decide from fit.** A raider needs an item that suits their main spec (ItemFit "good"), and takes as
+  off-spec one that suits their off-spec. They leave alone items their class can't use, or whose stats aren't for
+  them. Only items whose stats say nothing (quest items, use effects) fall back to the old hand-made role tags.
+- **The simulated game client is taught each item,** with its slot, stats and named classes, so the loot session
+  reads it exactly as it reads a real one, and the class rule applies in the simulator too.
+- **Tuning found by listing who wants every item** (a check worth repeating whenever the weights change):
+  - **Caster weapons went to melee,** because weapon damage dominated. A weapon whose stats are all for
+    spellcasting now counts no weapon damage for anyone.
+  - **Ranged weapons went to warriors and rogues.** Melee damage now counts only for melee specs, ranged damage
+    for hunters, and wands for casters.
+  - **Healer shields went to tanks,** through base armor. Base armor now counts only for bear druids: for
+    everyone else it is set by the slot and armor type, which proficiency already covers.
+  - **Hunters counted generic attack power twice.** In 1.12 "+X Attack Power" raises melee and ranged attack
+    power alike, and CMaNGOS stores it as both, so hunters now value melee attack power at a tenth. The real
+    client's tooltip reader treats "+X Attack Power" as both too, so the addon and the simulator agree.
+- **Tested:**
+  - the roster;
+  - two full nights (Molten Core and AQ40) with no wrong-class bids, and every main-spec and off-spec win fitting
+    the winner;
+  - the class rule refusing a mage on warrior tier;
+  - every raid item has stats.
+- **Not modeled:** resistance gear (fire resistance for Ragnaros, nature for Huhuran). Those items rank on their
+  other stats.
+
 ### Decision: King's Gambit is one self-contained folder (2026-10-30)
 
 **Decided by the guild leader:** everything about King's Gambit lives in one folder of the WoW-Addons repository,

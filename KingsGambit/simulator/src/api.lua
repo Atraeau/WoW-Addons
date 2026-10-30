@@ -176,7 +176,7 @@ local api = {}
 -- Raid nights: a whole raid with a 40-person roster and real loot from real bosses.
 local NIGHTS = {
     { id = "mc", title = "Molten Core night", new = Sim.NewMoltenCore,
-      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest." },
+      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. Every raider has a class, a main spec and an off-spec, and answers from how well each item's real stats fit them: need for the main spec, off for the off-spec. Items for other classes they leave alone (the session would refuse them anyway). You are the Master Looter and a Holy priest." },
     { id = "aq40", title = "Ahn'Qiraj night", new = Sim.NewAQ40,
       lesson = "The Temple of Ahn'Qiraj drops tokens beside gear: each is for a group of classes and is turned in, with materials and reputation, for a tier piece. Tokens are handed out like any item, under the same rules. Each bidder's readiness is shown (ready, says ready, not ready) so the raid can see it, but it is only a hint and never enforced: materials in the bank can't be seen, and taking a token you can't use yet is your own call." },
 }

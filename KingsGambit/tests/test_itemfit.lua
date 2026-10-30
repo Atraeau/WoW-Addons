@@ -100,12 +100,14 @@ test("RealClient reads stats, equip effects and the Classes line from the toolti
             { leftText = "Equip: Improves your chance to hit with spells by 1%." },
             { leftText = "Equip: Increases damage done by Shadow spells and effects by up to 14." },
             { leftText = "Equip: Restores 4 mana per 5 sec." },
+            { leftText = "Equip: +20 Attack Power." },
         } } end }
     end)
     local c = SK.modules.RealClient.New({ env = E })
     local st = c:itemStats("|Hitem:19000|h[Robe]|h")
     eq(st.stats.int, 18); eq(st.stats.sta, 12); eq(st.stats.armor, 80); eq(st.stats.sp, 33)
     eq(st.stats.spellhit, 1); eq(st.stats.shadow, 14); eq(st.stats.mp5, 4)
+    eq(st.stats.ap, 20); eq(st.stats.rap, 20, "+Attack Power counts for ranged attacks too")
     eq(table.concat(st.classes, ","), "PRIEST,MAGE,WARLOCK")
 end)
 test("an item the game hasn't cached yet restricts nobody, until it is known", function()

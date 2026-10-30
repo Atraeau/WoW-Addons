@@ -1,0 +1,3444 @@
+{"items":[
+  {"allowableClass":128,"armor":83,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":83,"int":27,"sp":20,"spellhit":1,"spi":10,"sta":16},"subclass":1},"id":16795,"inventoryType":1,"itemLevel":66,"name":"Arcanist Crown","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [14799,1],
+    [23727,1]
+   ],"stats":[
+    [7,16],
+    [5,27],
+    [6,10]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":89,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":89,"int":23,"sp":20,"spellcrit":1,"spi":10,"sta":18},"subclass":1},"id":16796,"inventoryType":7,"itemLevel":66,"name":"Arcanist Leggings","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [18384,1],
+    [14799,1]
+   ],"stats":[
+    [5,23],
+    [6,10],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":76,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":76,"int":21,"mp5":4,"sp":14,"spi":5,"sta":10},"subclass":1},"id":16797,"inventoryType":3,"itemLevel":66,"name":"Arcanist Mantle","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [21618,1],
+    [9343,1]
+   ],"stats":[
+    [5,21],
+    [6,5],
+    [7,10]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":102,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":102,"int":25,"sp":23,"spi":10,"sta":19},"subclass":1},"id":16798,"inventoryType":20,"itemLevel":66,"name":"Arcanist Robes","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [14047,1]
+   ],"stats":[
+    [5,25],
+    [6,10],
+    [7,19]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":70,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":70,"int":14,"sp":11,"spellcrit":1,"spi":11,"sta":13},"subclass":1},"id":16800,"inventoryType":8,"itemLevel":66,"name":"Arcanist Boots","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [18384,1],
+    [9416,1]
+   ],"stats":[
+    [7,13],
+    [5,14],
+    [6,11]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":63,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":63,"int":15,"mp5":4,"sp":14,"spi":10,"sta":14},"subclass":1},"id":16801,"inventoryType":10,"itemLevel":66,"name":"Arcanist Gloves","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [21618,1],
+    [9343,1]
+   ],"stats":[
+    [5,15],
+    [6,10],
+    [7,14]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":70,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":70,"int":11,"sp":18,"sta":23},"subclass":1},"id":16803,"inventoryType":8,"itemLevel":66,"name":"Felheart Slippers","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9346,1]
+   ],"stats":[
+    [5,11],
+    [7,23]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":63,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":63,"int":15,"sp":9,"spellcrit":1,"spi":8,"sta":18},"subclass":1},"id":16805,"inventoryType":10,"itemLevel":66,"name":"Felheart Gloves","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [18384,1],
+    [9415,1]
+   ],"stats":[
+    [5,15],
+    [6,8],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":76,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":76,"int":17,"sp":9,"spi":7,"sta":25},"subclass":1},"id":16807,"inventoryType":3,"itemLevel":66,"name":"Felheart Shoulder Pads","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9415,1]
+   ],"stats":[
+    [5,17],
+    [6,7],
+    [7,25]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":83,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":83,"int":20,"sp":20,"spi":10,"sta":27},"subclass":1},"id":16808,"inventoryType":1,"itemLevel":66,"name":"Felheart Horns","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [14799,1]
+   ],"stats":[
+    [5,20],
+    [6,10],
+    [7,27]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":102,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":102,"int":20,"sp":13,"spellhit":1,"sta":31},"subclass":1},"id":16809,"inventoryType":20,"itemLevel":66,"name":"Felheart Robes","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [9342,1],
+    [23727,1]
+   ],"stats":[
+    [5,20],
+    [7,31]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":89,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":89,"int":19,"sp":30,"spi":10,"sta":20},"subclass":1},"id":16810,"inventoryType":7,"itemLevel":66,"name":"Felheart Pants","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [14798,1]
+   ],"stats":[
+    [5,19],
+    [6,10],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":70,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":70,"heal":18,"int":18,"spi":15,"sta":17},"subclass":1},"id":16811,"inventoryType":8,"itemLevel":66,"name":"Boots of Prophecy","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9406,1]
+   ],"stats":[
+    [5,18],
+    [6,15],
+    [7,17]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":63,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":63,"heal":18,"int":15,"mp5":6,"spi":15,"sta":10},"subclass":1},"id":16812,"inventoryType":10,"itemLevel":66,"name":"Gloves of Prophecy","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [21626,1],
+    [9406,1]
+   ],"stats":[
+    [5,15],
+    [6,15],
+    [7,10]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":83,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":83,"int":27,"sp":12,"spi":20,"sta":17},"subclass":1},"id":16813,"inventoryType":1,"itemLevel":66,"name":"Circlet of Prophecy","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [9417,1]
+   ],"stats":[
+    [5,27],
+    [6,20],
+    [7,17]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":89,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":89,"heal":22,"int":24,"mp5":6,"spi":20,"sta":18},"subclass":1},"id":16814,"inventoryType":7,"itemLevel":66,"name":"Pants of Prophecy","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [21626,1],
+    [9408,1]
+   ],"stats":[
+    [5,24],
+    [6,20],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":102,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":102,"heal":22,"int":27,"spi":17,"sta":20},"subclass":1},"id":16815,"inventoryType":20,"itemLevel":66,"name":"Robes of Prophecy","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [9408,1]
+   ],"stats":[
+    [5,27],
+    [6,17],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":76,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":76,"int":23,"sp":9,"spi":10,"sta":13},"subclass":1},"id":16816,"inventoryType":3,"itemLevel":66,"name":"Mantle of Prophecy","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9415,1]
+   ],"stats":[
+    [5,23],
+    [6,10],
+    [7,13]
+   ],"subclass":1},
+  {"allowableClass":8,"armor":200,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":29,"armor":200,"crit":1,"sta":20,"str":10},"subclass":2},"id":16820,"inventoryType":5,"itemLevel":66,"name":"Nightslayer Chestpiece","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,29],
+    [7,20],
+    [4,10]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":163,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":20,"armor":163,"crit":2,"sta":19,"str":6},"subclass":2},"id":16821,"inventoryType":1,"itemLevel":66,"name":"Nightslayer Cover","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [7598,1]
+   ],"stats":[
+    [3,20],
+    [7,19],
+    [4,6]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":175,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":33,"armor":175,"crit":1,"sta":15,"str":10},"subclass":2},"id":16822,"inventoryType":7,"itemLevel":66,"name":"Nightslayer Pants","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,33],
+    [7,15],
+    [4,10]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":150,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":26,"armor":150,"hit":1,"sta":12,"str":3},"subclass":2},"id":16823,"inventoryType":3,"itemLevel":66,"name":"Nightslayer Shoulder Pads","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,26],
+    [7,12],
+    [4,3]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":138,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":26,"armor":138,"sta":18},"subclass":2},"id":16824,"inventoryType":8,"itemLevel":66,"name":"Nightslayer Boots","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[],"stats":[
+    [3,26],
+    [7,18]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":125,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":18,"armor":125,"hit":1,"sta":17,"str":12},"subclass":2},"id":16826,"inventoryType":10,"itemLevel":66,"name":"Nightslayer Gloves","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,18],
+    [7,17],
+    [4,12]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":138,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":138,"heal":18,"int":13,"mp5":3,"spi":15,"sta":16},"subclass":2},"id":16829,"inventoryType":8,"itemLevel":66,"name":"Cenarion Boots","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [21625,1],
+    [9406,1]
+   ],"stats":[
+    [5,13],
+    [6,15],
+    [7,16]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":125,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":125,"heal":18,"int":18,"spi":15,"sta":17},"subclass":2},"id":16831,"inventoryType":10,"itemLevel":66,"name":"Cenarion Gloves","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [9406,1]
+   ],"stats":[
+    [5,18],
+    [6,15],
+    [7,17]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":200,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":200,"heal":22,"int":24,"mp5":3,"spi":16,"sta":23},"subclass":2},"id":16833,"inventoryType":20,"itemLevel":66,"name":"Cenarion Vestments","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [21625,1],
+    [9408,1]
+   ],"stats":[
+    [5,24],
+    [6,16],
+    [7,23]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":163,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":163,"int":28,"sp":12,"spi":13,"sta":26},"subclass":2},"id":16834,"inventoryType":1,"itemLevel":66,"name":"Cenarion Helm","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [9417,1]
+   ],"stats":[
+    [5,28],
+    [6,13],
+    [7,26]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":175,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":175,"heal":22,"int":19,"mp5":4,"spellcrit":1,"spi":20,"sta":18},"subclass":2},"id":16835,"inventoryType":7,"itemLevel":66,"name":"Cenarion Leggings","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [18384,1],
+    [21362,1],
+    [9408,1]
+   ],"stats":[
+    [5,19],
+    [6,20],
+    [7,18]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":150,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":150,"heal":18,"int":20,"mp5":4,"spi":10,"sta":13},"subclass":2},"id":16836,"inventoryType":3,"itemLevel":66,"name":"Cenarion Spaulders","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [21618,1],
+    [9406,1]
+   ],"stats":[
+    [5,20],
+    [6,10],
+    [7,13]
+   ],"subclass":2},
+  {"allowableClass":64,"armor":290,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":290,"heal":18,"int":10,"spi":22,"sta":15},"subclass":3},"id":16837,"inventoryType":8,"itemLevel":66,"name":"Earthfury Boots","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9406,1]
+   ],"stats":[
+    [5,10],
+    [6,22],
+    [7,15]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":264,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":264,"int":13,"sp":9,"spellcrit":1,"spi":15,"sta":14},"subclass":3},"id":16839,"inventoryType":10,"itemLevel":66,"name":"Earthfury Gauntlets","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [18384,1],
+    [9415,1]
+   ],"stats":[
+    [5,13],
+    [6,15],
+    [7,14]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":422,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":422,"heal":22,"int":27,"spellcrit":1,"spi":13,"sta":17},"subclass":3},"id":16841,"inventoryType":20,"itemLevel":66,"name":"Earthfury Vestments","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [18384,1],
+    [9408,1]
+   ],"stats":[
+    [5,27],
+    [6,13],
+    [7,17]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":343,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":343,"heal":22,"int":23,"mp5":6,"spi":13,"sta":24},"subclass":3},"id":16842,"inventoryType":1,"itemLevel":66,"name":"Earthfury Helmet","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [21626,1],
+    [9408,1]
+   ],"stats":[
+    [5,23],
+    [6,13],
+    [7,24]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":369,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":369,"int":19,"mp5":6,"sp":12,"spi":21,"sta":18},"subclass":3},"id":16843,"inventoryType":7,"itemLevel":66,"name":"Earthfury Legguards","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [21627,1],
+    [9417,1]
+   ],"stats":[
+    [5,19],
+    [6,21],
+    [7,18]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":317,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":317,"heal":18,"int":18,"mp5":4,"spi":10,"sta":17},"subclass":3},"id":16844,"inventoryType":3,"itemLevel":66,"name":"Earthfury Epaulets","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [21618,1],
+    [9406,1]
+   ],"stats":[
+    [5,18],
+    [6,10],
+    [7,17]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":422,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":26,"armor":422,"crit":1,"int":11,"sta":23},"subclass":3},"id":16845,"inventoryType":5,"itemLevel":66,"name":"Giantstalker's Breastplate","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,26],
+    [5,11],
+    [7,23]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":343,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":23,"armor":343,"crit":1,"int":15,"spi":8,"sta":23},"subclass":3},"id":16846,"inventoryType":1,"itemLevel":66,"name":"Giantstalker's Helmet","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,23],
+    [5,15],
+    [6,8],
+    [7,23]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":369,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":32,"armor":369,"crit":1,"int":6,"spi":8,"sta":15},"subclass":3},"id":16847,"inventoryType":7,"itemLevel":66,"name":"Giantstalker's Leggings","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,32],
+    [5,6],
+    [6,8],
+    [7,15]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":317,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":24,"armor":317,"hit":1,"int":5,"spi":9,"sta":14},"subclass":3},"id":16848,"inventoryType":3,"itemLevel":66,"name":"Giantstalker's Epaulets","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,24],
+    [5,5],
+    [6,9],
+    [7,14]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":290,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":28,"armor":290,"spi":6,"sta":14},"subclass":3},"id":16849,"inventoryType":8,"itemLevel":66,"name":"Giantstalker's Boots","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[],"stats":[
+    [3,28],
+    [6,6],
+    [7,14]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":264,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":18,"armor":264,"hit":2,"sta":12},"subclass":3},"id":16852,"inventoryType":10,"itemLevel":66,"name":"Giantstalker's Gloves","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [15465,1]
+   ],"stats":[
+    [3,18],
+    [7,12]
+   ],"subclass":3},
+  {"allowableClass":2,"armor":749,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"armor":749,"heal":22,"int":21,"spi":13,"sta":26,"str":8},"subclass":4},"id":16853,"inventoryType":5,"itemLevel":66,"name":"Lawbringer Chestguard","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [9408,1]
+   ],"stats":[
+    [5,21],
+    [6,13],
+    [7,26],
+    [4,8]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":608,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":608,"heal":22,"int":24,"mp5":4,"spi":10,"sta":20,"str":9},"subclass":4},"id":16854,"inventoryType":1,"itemLevel":66,"name":"Lawbringer Helm","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [21619,1],
+    [9408,1]
+   ],"stats":[
+    [5,24],
+    [6,10],
+    [7,20],
+    [4,9]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":655,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":655,"heal":22,"int":18,"mp5":3,"spi":18,"sta":24,"str":7},"subclass":4},"id":16855,"inventoryType":7,"itemLevel":66,"name":"Lawbringer Legplates","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [21625,1],
+    [9408,1]
+   ],"stats":[
+    [5,18],
+    [6,18],
+    [7,24],
+    [4,7]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":562,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":562,"heal":18,"int":15,"spi":8,"sta":22,"str":10},"subclass":4},"id":16856,"inventoryType":3,"itemLevel":66,"name":"Lawbringer Spaulders","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [9406,1]
+   ],"stats":[
+    [5,15],
+    [6,8],
+    [7,22],
+    [4,10]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":515,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":515,"heal":18,"int":13,"mp5":2,"spi":10,"sta":20,"str":7},"subclass":4},"id":16859,"inventoryType":8,"itemLevel":66,"name":"Lawbringer Boots","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [21624,1],
+    [9406,1]
+   ],"stats":[
+    [5,13],
+    [6,10],
+    [7,20],
+    [4,7]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":468,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":468,"heal":18,"int":15,"spi":14,"sta":15,"str":10},"subclass":4},"id":16860,"inventoryType":10,"itemLevel":66,"name":"Lawbringer Gauntlets","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [9406,1]
+   ],"stats":[
+    [5,15],
+    [6,14],
+    [7,15],
+    [4,10]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":515,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":515,"defense":5,"sta":26,"str":15},"subclass":4},"id":16862,"inventoryType":8,"itemLevel":66,"name":"Sabatons of Might","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [13383,1]
+   ],"stats":[
+    [7,26],
+    [4,15]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":468,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":468,"defense":5,"hit":1,"sta":17,"str":22},"subclass":4},"id":16863,"inventoryType":10,"itemLevel":66,"name":"Gauntlets of Might","quality":4,"requiredLevel":60,"resist":{"fire":7},"spells":[
+    [15464,1],
+    [13383,1]
+   ],"stats":[
+    [7,17],
+    [4,22]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":749,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"armor":749,"blockPct":3,"defense":7,"sta":28,"str":20},"subclass":4},"id":16865,"inventoryType":5,"itemLevel":66,"name":"Breastplate of Might","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [13676,1],
+    [13385,1]
+   ],"stats":[
+    [7,28],
+    [4,20]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":608,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":608,"defense":7,"dodge":1,"sta":35,"str":15},"subclass":4},"id":16866,"inventoryType":1,"itemLevel":66,"name":"Helm of Might","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [13669,1],
+    [13385,1]
+   ],"stats":[
+    [7,35],
+    [4,15]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":655,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":655,"defense":7,"parry":1,"sta":23,"str":24},"subclass":4},"id":16867,"inventoryType":7,"itemLevel":66,"name":"Legplates of Might","quality":4,"requiredLevel":60,"resist":{"shadow":10},"spells":[
+    [13665,1],
+    [13385,1]
+   ],"stats":[
+    [7,23],
+    [4,24]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":562,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":562,"blockPct":2,"defense":5,"sta":22,"str":15},"subclass":4},"id":16868,"inventoryType":3,"itemLevel":66,"name":"Pauldrons of Might","quality":4,"requiredLevel":60,"resist":{"shadow":7},"spells":[
+    [13675,1],
+    [13383,1]
+   ],"stats":[
+    [7,22],
+    [4,15]
+   ],"subclass":4},
+  {"allowableClass":1024,"armor":197,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":197,"heal":48,"int":26,"mp5":6,"spi":16,"sta":17},"subclass":2},"id":16901,"inventoryType":7,"itemLevel":76,"name":"Stormrage Legguards","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [18034,1],
+    [18379,1]
+   ],"stats":[
+    [5,26],
+    [6,16],
+    [7,17]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":197,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":37,"armor":197,"crit":1,"sta":17,"str":11},"subclass":2},"id":16909,"inventoryType":7,"itemLevel":76,"name":"Bloodfang Pants","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,37],
+    [7,17],
+    [4,11]
+   ],"subclass":2},
+  {"allowableClass":128,"armor":101,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":101,"int":27,"sp":30,"spellcrit":1,"spi":5,"sta":16},"subclass":1},"id":16915,"inventoryType":7,"itemLevel":76,"name":"Netherwind Pants","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [14798,1],
+    [18384,1]
+   ],"stats":[
+    [5,27],
+    [6,5],
+    [7,16]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":101,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":101,"heal":46,"int":21,"mp5":7,"spi":21,"sta":16},"subclass":1},"id":16922,"inventoryType":7,"itemLevel":76,"name":"Leggings of Transcendence","quality":4,"requiredLevel":60,"resist":{"arcane":10,"shadow":10},"spells":[
+    [18033,1],
+    [21364,1]
+   ],"stats":[
+    [5,21],
+    [6,21],
+    [7,16]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":101,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":101,"int":16,"sp":39,"spi":4,"sta":23},"subclass":1},"id":16930,"inventoryType":7,"itemLevel":76,"name":"Nemesis Leggings","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [18055,1]
+   ],"stats":[
+    [5,16],
+    [6,4],
+    [7,23]
+   ],"subclass":1},
+  {"allowableClass":4,"armor":422,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":31,"armor":422,"crit":1,"hit":1,"int":15,"spi":8,"sta":16},"subclass":3},"id":16938,"inventoryType":7,"itemLevel":76,"name":"Dragonstalker's Legguards","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [15464,1],
+    [7597,1]
+   ],"stats":[
+    [3,31],
+    [5,15],
+    [6,8],
+    [7,16]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":422,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":422,"int":18,"sp":29,"spellcrit":1,"spi":20,"sta":16},"subclass":3},"id":16946,"inventoryType":7,"itemLevel":76,"name":"Legplates of Ten Storms","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [18384,1],
+    [13881,1]
+   ],"stats":[
+    [5,18],
+    [6,20],
+    [7,16]
+   ],"subclass":3},
+  {"allowableClass":2,"armor":749,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":749,"int":27,"mp5":4,"sp":20,"spi":5,"sta":26,"str":10},"subclass":4},"id":16954,"inventoryType":7,"itemLevel":76,"name":"Judgement Legplates","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [14799,1],
+    [21362,1]
+   ],"stats":[
+    [5,27],
+    [6,5],
+    [7,26],
+    [4,10]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":749,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":749,"defense":11,"dodge":2,"sta":27,"str":19},"subclass":4},"id":16962,"inventoryType":7,"itemLevel":76,"name":"Legplates of Wrath","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10},"spells":[
+    [13670,1],
+    [18185,1]
+   ],"stats":[
+    [7,27],
+    [4,19]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":16,"hit":2,"sta":10},"subclass":0},"id":17063,"inventoryType":11,"itemLevel":78,"name":"Band of Accuria","quality":4,"requiredLevel":60,"spells":[
+    [15465,1]
+   ],"stats":[
+    [7,10],
+    [3,16]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"defense":8,"dodge":1,"sta":13,"str":9},"subclass":0},"id":17065,"inventoryType":2,"itemLevel":68,"name":"Medallion of Steadfast Might","quality":4,"requiredLevel":60,"spells":[
+    [13669,1],
+    [13387,1]
+   ],"stats":[
+    [7,13],
+    [4,9]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":2539,"block":46,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHIELD","stats":{"armor":2539,"block":69,"blockPct":2,"sta":10},"subclass":6},"id":17066,"inventoryType":14,"itemLevel":67,"name":"Drillborer Disk","quality":4,"requiredLevel":60,"spells":[
+    [15438,1],
+    [13675,1],
+    [22852,1]
+   ],"stats":[
+    [7,10]
+   ],"subclass":6},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[69,129,2500],"fit":{"class":2,"slot":"INVTYPE_RANGED","stats":{"ap":22,"dps":39.6,"hit":1,"rap":22},"subclass":2},"id":17069,"inventoryType":15,"itemLevel":69,"name":"Striker's Mark","quality":4,"requiredLevel":60,"spells":[
+    [9332,1],
+    [15464,1]
+   ],"stats":[],"subclass":2},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[63,119,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"dps":50.6},"subclass":15},"id":17071,"inventoryType":13,"itemLevel":69,"name":"Gutgore Ripper","quality":4,"requiredLevel":60,"spells":[
+    [21151,2]
+   ],"stats":[],"subclass":15},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[73,136,2600],"fit":{"class":2,"slot":"INVTYPE_RANGEDRIGHT","stats":{"crit":1,"dps":40.2,"sta":6},"subclass":3},"id":17072,"inventoryType":26,"itemLevel":70,"name":"Blastershot Launcher","quality":4,"requiredLevel":60,"spells":[
+    [7597,1]
+   ],"stats":[
+    [7,6]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[175,263,3500],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"ap":22,"dps":62.6,"rap":22},"subclass":5},"id":17073,"inventoryType":17,"itemLevel":66,"name":"Earthshaker","quality":4,"requiredLevel":60,"spells":[
+    [21152,2],
+    [9332,1]
+   ],"stats":[],"subclass":5},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[147,221,3100],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":59.4},"subclass":6},"id":17074,"inventoryType":17,"itemLevel":63,"name":"Shadowstrike","quality":4,"requiredLevel":58,"spells":[
+    [21170,2],
+    [21180,0]
+   ],"stats":[],"subclass":6},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[206,310,3400],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"crit":1,"dps":75.9,"sta":16},"subclass":8},"id":17076,"inventoryType":17,"itemLevel":77,"name":"Bonereaver's Edge","quality":4,"requiredLevel":60,"spells":[
+    [21153,2],
+    [7597,1]
+   ],"stats":[
+    [7,16]
+   ],"subclass":8},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[102,191,2000],"fit":{"class":2,"slot":"INVTYPE_RANGEDRIGHT","stats":{"dps":73.3,"int":10},"subclass":19},"id":17077,"inventoryType":26,"itemLevel":63,"name":"Crimson Shocker","quality":4,"requiredLevel":58,"resist":{"fire":10},"spells":[],"stats":[
+    [5,10]
+   ],"subclass":19},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":17082,"inventoryType":12,"itemLevel":74,"name":"Shard of the Flame","quality":4,"requiredLevel":60,"spells":[
+    [23210,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":57,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":22,"armor":57,"sta":12},"subclass":1},"id":17102,"inventoryType":16,"itemLevel":74,"name":"Cloak of the Shrouded Mists","quality":4,"requiredLevel":60,"resist":{"fire":6,"nature":6},"spells":[],"stats":[
+    [3,22],
+    [7,12]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[64,140,2400],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":42.5,"int":12,"sp":40,"spellcrit":1,"sta":7},"subclass":7},"id":17103,"inventoryType":21,"itemLevel":71,"name":"Azuresong Mageblade","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [18056,1]
+   ],"stats":[
+    [5,12],
+    [7,7]
+   ],"subclass":7},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[203,305,3400],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"ap":34,"dps":74.7,"rap":34},"subclass":1},"id":17104,"inventoryType":17,"itemLevel":76,"name":"Spinal Reaper","quality":4,"requiredLevel":60,"spells":[
+    [21185,1],
+    [15806,1]
+   ],"stats":[],"subclass":1},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[78.8,161.8,2700],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"dps":44.6,"int":10,"mp5":5,"sp":25,"sta":10},"subclass":4},"id":17105,"inventoryType":13,"itemLevel":69,"name":"Aurastone Hammer","quality":4,"requiredLevel":60,"spells":[
+    [21363,1],
+    [15715,1]
+   ],"stats":[
+    [5,10],
+    [7,10]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":2822,"block":52,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHIELD","stats":{"armor":2822,"block":52,"int":12,"mp5":9,"sta":9},"subclass":6},"id":17106,"inventoryType":14,"itemLevel":75,"name":"Malistar's Defender","quality":4,"requiredLevel":60,"spells":[
+    [21365,1]
+   ],"stats":[
+    [5,12],
+    [7,9]
+   ],"subclass":6},
+  {"allowableClass":-1,"armor":116,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":116,"sta":22,"str":9},"subclass":1},"id":17107,"inventoryType":16,"itemLevel":73,"name":"Dragon's Blood Cape","quality":4,"requiredLevel":60,"resist":{"arcane":5,"fire":5,"shadow":5},"spells":[],"stats":[
+    [7,22],
+    [4,9]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"int":10,"sp":18,"spi":10,"sta":9},"subclass":0},"id":17109,"inventoryType":2,"itemLevel":65,"name":"Choker of Enlightenment","quality":4,"requiredLevel":60,"spells":[
+    [9346,1]
+   ],"stats":[
+    [5,10],
+    [6,10],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":11,"mp5":3,"spi":11,"sta":11},"subclass":0},"id":17110,"inventoryType":11,"itemLevel":70,"name":"Seal of the Archmagus","quality":4,"requiredLevel":60,"resist":{"arcane":6,"fire":6,"frost":6,"nature":6,"shadow":6},"spells":[
+    [21361,1]
+   ],"stats":[
+    [5,11],
+    [7,11],
+    [6,11]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17203,"inventoryType":0,"itemLevel":60,"name":"Sulfuron Ingot","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17204,"inventoryType":0,"itemLevel":60,"name":"Eye of Sulfuras","quality":5,"requiredLevel":0,"spells":[
+    [21160,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17771,"inventoryType":0,"itemLevel":60,"name":"Elementium Bar","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[50,94,1500],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"agi":4,"dps":48},"subclass":13},"id":18203,"inventoryType":21,"itemLevel":66,"name":"Eskhandar's Right Claw","quality":4,"requiredLevel":60,"spells":[
+    [22640,2]
+   ],"stats":[
+    [3,4]
+   ],"subclass":13},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":18562,"inventoryType":0,"itemLevel":60,"name":"Elementium Ore","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":18563,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":18564,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":2047,"armor":0,"block":0,"class":9,"fit":{"class":9,"stats":[],"subclass":4},"id":18592,"inventoryType":0,"itemLevel":63,"name":"Plans: Sulfuron Hammer","quality":4,"requiredLevel":0,"spells":[
+    [23007,0]
+   ],"stats":[],"subclass":4},
+  {"allowableClass":2047,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":18628,"inventoryType":0,"itemLevel":60,"name":"Thorium Brotherhood Contract","quality":4,"requiredLevel":60,"spells":[],"startQuest":7604,"stats":[],"subclass":0},
+  {"allowableClass":16,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18646,"inventoryType":12,"itemLevel":71,"name":"The Eye of Divinity","quality":4,"requiredLevel":60,"spells":[
+    [23101,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":4,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":18703,"inventoryType":0,"itemLevel":71,"name":"Ancient Petrified Leaf","quality":4,"requiredLevel":60,"spells":[],"startQuest":7632,"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[155,234,2900],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":67.1,"int":24,"mp5":9,"sta":25},"subclass":5},"id":18803,"inventoryType":17,"itemLevel":70,"name":"Finkle's Lava Dredger","quality":4,"requiredLevel":60,"resist":{"fire":15},"spells":[
+    [21365,1]
+   ],"stats":[
+    [7,25],
+    [5,24]
+   ],"subclass":5},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[57,107,1600],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":20,"crit":1,"dps":51.3,"rap":20,"sta":9},"subclass":15},"id":18805,"inventoryType":13,"itemLevel":70,"name":"Core Hound Tooth","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9331,1]
+   ],"stats":[
+    [7,9]
+   ],"subclass":15},
+  {"allowableClass":-1,"armor":634,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":634,"defense":4,"sta":28},"subclass":4},"id":18806,"inventoryType":8,"itemLevel":70,"name":"Core Forged Greaves","quality":4,"requiredLevel":60,"resist":{"fire":12,"shadow":8},"spells":[
+    [7517,1]
+   ],"stats":[
+    [7,28]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":67,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":67,"fire":23,"int":19,"sp":9,"spi":8,"sta":18},"subclass":1},"id":18808,"inventoryType":10,"itemLevel":70,"name":"Gloves of the Hypnotic Flame","quality":4,"requiredLevel":60,"spells":[
+    [17747,1],
+    [9415,1]
+   ],"stats":[
+    [5,19],
+    [7,18],
+    [6,8]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":61,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":61,"shadow":33,"sta":20},"subclass":1},"id":18809,"inventoryType":6,"itemLevel":71,"name":"Sash of Whispered Secrets","quality":4,"requiredLevel":60,"spells":[
+    [18013,1],
+    [21599,1]
+   ],"stats":[
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":159,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":159,"heal":62,"int":12,"spi":10,"sta":11},"subclass":2},"id":18810,"inventoryType":3,"itemLevel":71,"name":"Wild Growth Spaulders","quality":4,"requiredLevel":60,"spells":[
+    [18039,1]
+   ],"stats":[
+    [5,12],
+    [7,11],
+    [6,10]
+   ],"subclass":2},
+  {"allowableClass":-1,"armor":54,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":54,"int":9,"spi":8,"sta":12},"subclass":1},"id":18811,"inventoryType":16,"itemLevel":71,"name":"Fireproof Cloak","quality":4,"requiredLevel":60,"resist":{"fire":18},"spells":[],"stats":[
+    [7,12],
+    [5,9],
+    [6,8]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":198,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":19,"armor":198,"hit":1,"int":6,"sta":11},"subclass":3},"id":18812,"inventoryType":9,"itemLevel":71,"name":"Wristguards of True Flight","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,19],
+    [7,11],
+    [5,6]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"int":7,"sp":34,"sta":7},"subclass":0},"id":18814,"inventoryType":2,"itemLevel":78,"name":"Choker of the Fire Lord","quality":4,"requiredLevel":60,"spells":[
+    [18052,1]
+   ],"stats":[
+    [5,7],
+    [7,7]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18815,"inventoryType":12,"itemLevel":75,"name":"Essence of the Pure Flame","quality":4,"requiredLevel":60,"spells":[
+    [23266,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[73,137,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"dps":58.3},"subclass":15},"id":18816,"inventoryType":13,"itemLevel":77,"name":"Perdition's Blade","quality":4,"requiredLevel":60,"spells":[
+    [23267,2]
+   ],"stats":[],"subclass":15},
+  {"allowableClass":-1,"armor":392,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"ap":44,"armor":392,"crit":2,"int":9,"rap":44,"spi":9,"sta":23},"subclass":3},"id":18817,"inventoryType":1,"itemLevel":76,"name":"Crown of Destruction","quality":4,"requiredLevel":60,"resist":{"fire":10},"spells":[
+    [7598,1],
+    [15810,1]
+   ],"stats":[
+    [7,23],
+    [5,9],
+    [6,9]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18820,"inventoryType":12,"itemLevel":66,"name":"Talisman of Ephemeral Power","quality":4,"requiredLevel":60,"spells":[
+    [23271,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"ap":30,"crit":1,"rap":30,"sta":8,"str":5},"subclass":0},"id":18821,"inventoryType":11,"itemLevel":67,"name":"Quick Strike Ring","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9336,1]
+   ],"stats":[
+    [7,8],
+    [4,5]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[176,264,3400],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":64.7,"str":42},"subclass":8},"id":18822,"inventoryType":17,"itemLevel":68,"name":"Obsidian Edged Blade","quality":4,"requiredLevel":60,"spells":[
+    [15771,1]
+   ],"stats":[
+    [4,42]
+   ],"subclass":8},
+  {"allowableClass":-1,"armor":130,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":130,"crit":1,"sta":15,"str":15},"subclass":2},"id":18823,"inventoryType":10,"itemLevel":69,"name":"Aged Core Leather Gloves","quality":4,"requiredLevel":60,"resist":{"fire":8,"shadow":5},"spells":[
+    [7597,1],
+    [7576,1]
+   ],"stats":[
+    [4,15],
+    [7,15]
+   ],"subclass":2},
+  {"allowableClass":-1,"armor":544,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":544,"heal":18,"int":18,"spi":12,"sta":19},"subclass":4},"id":18824,"inventoryType":8,"itemLevel":70,"name":"Magma Tempered Boots","quality":4,"requiredLevel":60,"resist":{"fire":8},"spells":[
+    [9406,1]
+   ],"stats":[
+    [7,19],
+    [5,18],
+    [6,12]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":399,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":399,"int":12,"nature":40,"spi":7,"sta":11},"subclass":3},"id":18829,"inventoryType":3,"itemLevel":71,"name":"Deep Earth Spaulders","quality":4,"requiredLevel":60,"spells":[
+    [17997,1]
+   ],"stats":[
+    [5,12],
+    [7,11],
+    [6,7]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[90,168,2500],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"agi":9,"crit":1,"dps":51.6,"str":9},"subclass":7},"id":18832,"inventoryType":13,"itemLevel":70,"name":"Brutality Blade","quality":4,"requiredLevel":60,"spells":[
+    [7597,1]
+   ],"stats":[
+    [4,9],
+    [3,9]
+   ],"subclass":7},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[126,205,2900],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":57.1,"int":37,"sp":40,"spellcrit":1,"spi":14,"sta":16},"subclass":10},"id":18842,"inventoryType":17,"itemLevel":70,"name":"Staff of Dominance","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [18056,1]
+   ],"stats":[
+    [5,37],
+    [7,16],
+    [6,14]
+   ],"subclass":10},
+  {"allowableClass":-1,"armor":748,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":748,"dodge":1,"sta":22,"str":18},"subclass":4},"id":18861,"inventoryType":7,"itemLevel":61,"name":"Flamewaker Legplates","quality":4,"requiredLevel":56,"resist":{"fire":11,"shadow":11},"spells":[
+    [13669,1]
+   ],"stats":[
+    [7,22],
+    [4,18]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":324,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":324,"heal":42,"int":30,"spi":9,"sta":14},"subclass":3},"id":18870,"inventoryType":1,"itemLevel":62,"name":"Helm of the Lifegiver","quality":4,"requiredLevel":57,"spells":[
+    [18032,1]
+   ],"stats":[
+    [5,30],
+    [7,14],
+    [6,9]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":85,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":85,"int":14,"mp5":14,"sta":19},"subclass":1},"id":18872,"inventoryType":7,"itemLevel":63,"name":"Manastorm Leggings","quality":4,"requiredLevel":58,"spells":[
+    [21640,1]
+   ],"stats":[
+    [7,19],
+    [5,14]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":171,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":171,"heal":51,"int":14,"mp5":9,"sta":14},"subclass":2},"id":18875,"inventoryType":7,"itemLevel":64,"name":"Salamander Scale Pants","quality":4,"requiredLevel":59,"resist":{"fire":10},"spells":[
+    [18035,1],
+    [21365,1]
+   ],"stats":[
+    [5,14],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[39,79,1400],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":42.1,"int":17,"sp":20,"sta":8},"subclass":15},"id":18878,"inventoryType":21,"itemLevel":65,"name":"Sorcerous Dagger","quality":4,"requiredLevel":60,"spells":[
+    [14799,1]
+   ],"stats":[
+    [5,17],
+    [7,8]
+   ],"subclass":15},
+  {"allowableClass":-1,"armor":110,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"armor":110,"defense":5,"sta":20},"subclass":0},"id":18879,"inventoryType":11,"itemLevel":66,"name":"Heavy Dark Iron Ring","quality":4,"requiredLevel":60,"spells":[
+    [13383,1]
+   ],"stats":[
+    [7,20]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":19017,"inventoryType":0,"itemLevel":1,"name":"Essence of the Firelord","quality":1,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":61,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":61,"int":16,"sp":25,"spellcrit":1,"sta":12},"subclass":1},"id":19136,"inventoryType":6,"itemLevel":71,"name":"Mana Igniting Cord","quality":4,"requiredLevel":60,"spells":[
+    [15715,1],
+    [18384,1]
+   ],"stats":[
+    [5,16],
+    [7,12]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":494,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":494,"crit":1,"hit":1,"sta":11,"str":31},"subclass":4},"id":19137,"inventoryType":6,"itemLevel":78,"name":"Onslaught Girdle","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [4,31],
+    [7,11]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":23,"spi":10,"sta":13},"subclass":0},"id":19138,"inventoryType":11,"itemLevel":78,"name":"Band of Sulfuras","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [5,23],
+    [6,10],
+    [7,13]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":159,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":159,"sta":28},"subclass":2},"id":19139,"inventoryType":3,"itemLevel":71,"name":"Fireguard Shoulders","quality":4,"requiredLevel":60,"resist":{"fire":22},"spells":[],"stats":[
+    [7,28]
+   ],"subclass":2},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"heal":46,"int":12,"sta":9},"subclass":0},"id":19140,"inventoryType":11,"itemLevel":71,"name":"Cauterizing Band","quality":4,"requiredLevel":60,"spells":[
+    [18033,1]
+   ],"stats":[
+    [5,12],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HOLDABLE","stats":{"int":21,"sp":11,"sta":12},"subclass":0},"id":19142,"inventoryType":23,"itemLevel":70,"name":"Fire Runed Grimoire","quality":4,"requiredLevel":60,"spells":[
+    [9416,1]
+   ],"stats":[
+    [5,21],
+    [7,12]
+   ],"subclass":0},
+  {"allowableClass":-1,"armor":488,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"ap":54,"armor":488,"crit":1,"rap":54,"sta":13},"subclass":4},"id":19143,"inventoryType":10,"itemLevel":69,"name":"Flameguard Gauntlets","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15813,1]
+   ],"stats":[
+    [7,13]
+   ],"subclass":4},
+  {"allowableClass":-1,"armor":298,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"ap":30,"armor":298,"int":11,"rap":30,"sta":27},"subclass":3},"id":19144,"inventoryType":8,"itemLevel":68,"name":"Sabatons of the Flamewalker","quality":4,"requiredLevel":60,"spells":[
+    [9336,1]
+   ],"stats":[
+    [7,27],
+    [5,11]
+   ],"subclass":3},
+  {"allowableClass":-1,"armor":102,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":102,"int":15,"sp":23,"spellcrit":2,"spi":10,"sta":10},"subclass":1},"id":19145,"inventoryType":20,"itemLevel":66,"name":"Robe of Volatile Power","quality":4,"requiredLevel":60,"spells":[
+    [18382,1],
+    [14047,1]
+   ],"stats":[
+    [5,15],
+    [7,10],
+    [6,10]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":86,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"armor":86,"sta":8,"str":24},"subclass":2},"id":19146,"inventoryType":9,"itemLevel":65,"name":"Wristguards of Stability","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [4,24],
+    [7,8]
+   ],"subclass":2},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"sp":33},"subclass":0},"id":19147,"inventoryType":11,"itemLevel":66,"name":"Ring of Spell Power","quality":4,"requiredLevel":60,"spells":[
+    [18050,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20858,"inventoryType":0,"itemLevel":1,"name":"Stone Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20859,"inventoryType":0,"itemLevel":1,"name":"Gold Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20860,"inventoryType":0,"itemLevel":1,"name":"Silver Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20861,"inventoryType":0,"itemLevel":1,"name":"Bronze Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20862,"inventoryType":0,"itemLevel":1,"name":"Crystal Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20863,"inventoryType":0,"itemLevel":1,"name":"Clay Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20864,"inventoryType":0,"itemLevel":1,"name":"Bone Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20865,"inventoryType":0,"itemLevel":1,"name":"Ivory Scarab","quality":2,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":140,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20866,"inventoryType":0,"itemLevel":61,"name":"Azure Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":265,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20867,"inventoryType":0,"itemLevel":61,"name":"Onyx Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":21,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20868,"inventoryType":0,"itemLevel":61,"name":"Lambent Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":326,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20869,"inventoryType":0,"itemLevel":61,"name":"Amber Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1296,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20870,"inventoryType":0,"itemLevel":61,"name":"Jasper Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":210,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20871,"inventoryType":0,"itemLevel":61,"name":"Obsidian Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1098,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20872,"inventoryType":0,"itemLevel":61,"name":"Vermillion Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1153,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20873,"inventoryType":0,"itemLevel":61,"name":"Alabaster Idol","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":141,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20874,"inventoryType":0,"itemLevel":61,"name":"Idol of the Sun","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":393,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20875,"inventoryType":0,"itemLevel":61,"name":"Idol of Night","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":401,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20876,"inventoryType":0,"itemLevel":61,"name":"Idol of Death","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":466,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20877,"inventoryType":0,"itemLevel":61,"name":"Idol of the Sage","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1362,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20878,"inventoryType":0,"itemLevel":61,"name":"Idol of Rebirth","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1110,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20879,"inventoryType":0,"itemLevel":61,"name":"Idol of Life","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1102,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20881,"inventoryType":0,"itemLevel":61,"name":"Idol of Strife","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1037,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20882,"inventoryType":0,"itemLevel":61,"name":"Idol of War","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1219,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20884,"inventoryType":0,"itemLevel":1,"name":"Qiraji Magisterial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20885,"inventoryType":0,"itemLevel":1,"name":"Qiraji Martial Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20886,"inventoryType":0,"itemLevel":1,"name":"Qiraji Spiked Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":284,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20888,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ceremonial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20889,"inventoryType":0,"itemLevel":1,"name":"Qiraji Regal Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20890,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ornate Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":401,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20926,"inventoryType":0,"itemLevel":1,"name":"Vek'nilash's Circlet","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20927,"inventoryType":0,"itemLevel":1,"name":"Ouro's Intact Hide","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":29,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20928,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Command","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20929,"inventoryType":0,"itemLevel":1,"name":"Carapace of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1102,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20930,"inventoryType":0,"itemLevel":1,"name":"Vek'lor's Diadem","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20931,"inventoryType":0,"itemLevel":1,"name":"Skin of the Great Sandworm","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1474,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20932,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Dominance","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20933,"inventoryType":0,"itemLevel":1,"name":"Husk of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[95,144,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":38,"dps":66.4,"rap":38,"sta":10},"subclass":15},"id":21126,"inventoryType":13,"itemLevel":84,"name":"Death's Sting","quality":4,"requiredLevel":60,"spells":[
+    [15808,1],
+    [7574,1]
+   ],"stats":[
+    [7,10]
+   ],"subclass":15},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[129.4,214.4,2900],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":59.3,"int":26,"sp":56,"spi":8,"sta":21},"subclass":10},"id":21128,"inventoryType":17,"itemLevel":75,"name":"Staff of the Qiraji Prophets","quality":4,"requiredLevel":60,"resist":{"arcane":10,"fire":10,"frost":10,"nature":10,"shadow":10},"spells":[
+    [23732,1],
+    [25767,1]
+   ],"stats":[
+    [5,26],
+    [7,21],
+    [6,8]
+   ],"subclass":10},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[242,364,3500],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"agi":19,"dps":86.6,"sta":25,"str":35},"subclass":1},"id":21134,"inventoryType":17,"itemLevel":84,"name":"Dark Edge of Insanity","quality":4,"requiredLevel":60,"spells":[
+    [26108,2]
+   ],"stats":[
+    [4,35],
+    [3,19],
+    [7,25]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":21220,"inventoryType":0,"itemLevel":60,"name":"Head of Ossirian the Unscarred","quality":4,"requiredLevel":60,"spells":[],"startQuest":8791,"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":21221,"inventoryType":0,"itemLevel":60,"name":"Eye of C'Thun","quality":4,"requiredLevel":60,"spells":[],"startQuest":8801,"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":21232,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Armaments","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":21237,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Regalia","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[110,205,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":14,"crit":1,"dps":60.6,"int":10,"rap":14,"sta":9},"subclass":0},"id":21242,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji War Axe","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9142,1]
+   ],"stats":[
+    [5,10],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[72,134,1700],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":18,"crit":1,"dps":60.6,"hit":1,"rap":18,"sta":7},"subclass":15},"id":21244,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji Pugio","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1],
+    [9330,1]
+   ],"stats":[
+    [7,7]
+   ],"subclass":15},
+  {"allowableClass":32767,"armor":70,"block":0,"class":2,"dmg":[89,166,2100],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":280,"armor":70,"defense":8,"dps":60.7,"sta":12,"str":10},"subclass":4},"id":21268,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji War Hammer","quality":4,"requiredLevel":60,"spells":[
+    [24697,1],
+    [13387,1]
+   ],"stats":[
+    [7,12],
+    [4,10]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":2964,"block":55,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHIELD","stats":{"armor":2964,"block":70,"blockPct":3,"defense":8,"sta":20},"subclass":6},"id":21269,"inventoryType":14,"itemLevel":79,"name":"Blessed Qiraji Bulwark","quality":4,"requiredLevel":60,"spells":[
+    [21476,1],
+    [23203,1],
+    [13387,1]
+   ],"stats":[
+    [7,20]
+   ],"subclass":6},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[86,160,2600],"fit":{"class":2,"slot":"INVTYPE_RANGEDRIGHT","stats":{"dps":47.3,"rap":31,"sta":10},"subclass":3},"id":21272,"inventoryType":26,"itemLevel":79,"name":"Blessed Qiraji Musket","quality":4,"requiredLevel":60,"spells":[
+    [21438,1]
+   ],"stats":[
+    [7,10]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[132,227,3000],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":59.8,"int":33,"sp":76,"spellcrit":1,"spellhit":2,"sta":32},"subclass":10},"id":21273,"inventoryType":17,"itemLevel":79,"name":"Blessed Qiraji Acolyte Staff","quality":4,"requiredLevel":60,"spells":[
+    [26460,1],
+    [23729,1],
+    [18384,1]
+   ],"stats":[
+    [5,33],
+    [7,32]
+   ],"subclass":10},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[132,227,3000],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":59.8,"heal":143,"int":24,"mp5":15,"sta":23},"subclass":10},"id":21275,"inventoryType":17,"itemLevel":79,"name":"Blessed Qiraji Augur Staff","quality":4,"requiredLevel":60,"spells":[
+    [26461,1],
+    [21643,1]
+   ],"stats":[
+    [5,24],
+    [7,23]
+   ],"subclass":10},
+  {"allowableClass":1,"armor":739,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":18,"armor":739,"defense":6,"sta":34,"str":29},"subclass":4},"id":21329,"inventoryType":1,"itemLevel":81,"name":"Conqueror's Crown","quality":4,"requiredLevel":60,"spells":[
+    [13384,1]
+   ],"stats":[
+    [3,18],
+    [4,29],
+    [7,34]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":659,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":16,"armor":659,"defense":4,"hit":1,"sta":21,"str":20},"subclass":4},"id":21330,"inventoryType":3,"itemLevel":78,"name":"Conqueror's Spaulders","quality":4,"requiredLevel":60,"spells":[
+    [7517,1],
+    [15464,1]
+   ],"stats":[
+    [3,16],
+    [4,20],
+    [7,21]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":985,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":24,"armor":985,"defense":6,"sta":38,"str":34},"subclass":4},"id":21331,"inventoryType":5,"itemLevel":88,"name":"Conqueror's Breastplate","quality":4,"requiredLevel":60,"spells":[
+    [13384,1]
+   ],"stats":[
+    [3,24],
+    [4,34],
+    [7,38]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":796,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":21,"armor":796,"defense":6,"hit":1,"sta":24,"str":33},"subclass":4},"id":21332,"inventoryType":7,"itemLevel":81,"name":"Conqueror's Legguards","quality":4,"requiredLevel":60,"spells":[
+    [13384,1],
+    [15464,1]
+   ],"stats":[
+    [3,21],
+    [4,33],
+    [7,24]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":604,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":17,"armor":604,"defense":4,"sta":23,"str":21},"subclass":4},"id":21333,"inventoryType":8,"itemLevel":78,"name":"Conqueror's Greaves","quality":4,"requiredLevel":60,"spells":[
+    [7517,1]
+   ],"stats":[
+    [3,17],
+    [4,21],
+    [7,23]
+   ],"subclass":4},
+  {"allowableClass":256,"armor":133,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":133,"int":17,"sp":41,"spellcrit":1,"spi":7,"sta":23},"subclass":1},"id":21334,"inventoryType":20,"itemLevel":88,"name":"Doomcaller's Robes","quality":4,"requiredLevel":60,"spells":[
+    [18057,1],
+    [18384,1],
+    [26283,1]
+   ],"stats":[
+    [5,17],
+    [6,7],
+    [7,23]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":89,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":89,"int":11,"sp":28,"spellhit":1,"spi":4,"sta":20},"subclass":1},"id":21335,"inventoryType":3,"itemLevel":78,"name":"Doomcaller's Mantle","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [25975,1],
+    [23727,1]
+   ],"stats":[
+    [5,11],
+    [6,4],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":107,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":107,"int":24,"sp":34,"spellcrit":1,"spi":9,"sta":28},"subclass":1},"id":21336,"inventoryType":7,"itemLevel":81,"name":"Doomcaller's Trousers","quality":4,"requiredLevel":60,"spells":[
+    [18052,1],
+    [18384,1]
+   ],"stats":[
+    [5,24],
+    [6,9],
+    [7,28]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":100,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":100,"int":24,"sp":33,"spellcrit":1,"spellhit":1,"spi":6,"sta":27},"subclass":1},"id":21337,"inventoryType":1,"itemLevel":81,"name":"Doomcaller's Circlet","quality":4,"requiredLevel":60,"spells":[
+    [18050,1],
+    [18384,1],
+    [23727,1]
+   ],"stats":[
+    [5,24],
+    [6,6],
+    [7,27]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":82,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":82,"int":16,"sp":28,"spi":3,"sta":20},"subclass":1},"id":21338,"inventoryType":8,"itemLevel":78,"name":"Doomcaller's Footwraps","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [25975,1]
+   ],"stats":[
+    [5,16],
+    [6,3],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":133,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":133,"int":23,"sp":39,"spellcrit":1,"spi":7,"sta":19},"subclass":1},"id":21343,"inventoryType":20,"itemLevel":88,"name":"Enigma Robes","quality":4,"requiredLevel":60,"spells":[
+    [18055,1],
+    [18384,1],
+    [26283,1]
+   ],"stats":[
+    [5,23],
+    [6,7],
+    [7,19]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":82,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":82,"int":15,"mp5":4,"sp":28,"spellhit":1,"spi":6,"sta":15},"subclass":1},"id":21344,"inventoryType":8,"itemLevel":78,"name":"Enigma Boots","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [23727,1],
+    [21362,1]
+   ],"stats":[
+    [5,15],
+    [6,6],
+    [7,15]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":89,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":89,"int":12,"mp5":4,"sp":30,"spi":4,"sta":16},"subclass":1},"id":21345,"inventoryType":3,"itemLevel":78,"name":"Enigma Shoulderpads","quality":4,"requiredLevel":60,"spells":[
+    [14798,1],
+    [25975,1],
+    [21362,1]
+   ],"stats":[
+    [5,12],
+    [6,4],
+    [7,16]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":107,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":107,"int":26,"mp5":5,"sp":34,"spellcrit":1,"spi":8,"sta":21},"subclass":1},"id":21346,"inventoryType":7,"itemLevel":81,"name":"Enigma Leggings","quality":4,"requiredLevel":60,"spells":[
+    [18052,1],
+    [18384,1],
+    [21620,1]
+   ],"stats":[
+    [5,26],
+    [6,8],
+    [7,21]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":100,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":100,"int":24,"sp":33,"spellcrit":1,"spellhit":1,"spi":12,"sta":24},"subclass":1},"id":21347,"inventoryType":1,"itemLevel":81,"name":"Enigma Circlet","quality":4,"requiredLevel":60,"spells":[
+    [18050,1],
+    [18384,1],
+    [23727,1]
+   ],"stats":[
+    [5,24],
+    [6,12],
+    [7,24]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":150,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":150,"int":22,"mp5":7,"sp":28,"spellhit":1,"spi":16,"sta":22},"subclass":1},"id":21348,"inventoryType":1,"itemLevel":81,"name":"Tiara of the Oracle","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [21628,1],
+    [23727,1]
+   ],"stats":[
+    [5,22],
+    [6,16],
+    [7,22]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":112,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":112,"int":17,"mp5":3,"sp":21,"spi":12,"sta":20},"subclass":1},"id":21349,"inventoryType":8,"itemLevel":78,"name":"Footwraps of the Oracle","quality":4,"requiredLevel":60,"spells":[
+    [14248,1],
+    [21625,1]
+   ],"stats":[
+    [5,17],
+    [6,12],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":119,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":119,"int":20,"mp5":3,"sp":20,"spi":8,"sta":21},"subclass":1},"id":21350,"inventoryType":3,"itemLevel":78,"name":"Mantle of the Oracle","quality":4,"requiredLevel":60,"spells":[
+    [14799,1],
+    [21625,1],
+    [25975,1]
+   ],"stats":[
+    [5,20],
+    [6,8],
+    [7,21]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":183,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":183,"int":26,"sp":36,"spellcrit":1,"spi":15,"sta":23},"subclass":1},"id":21351,"inventoryType":20,"itemLevel":88,"name":"Vestments of the Oracle","quality":4,"requiredLevel":60,"spells":[
+    [18053,1],
+    [18384,1],
+    [25975,1]
+   ],"stats":[
+    [5,26],
+    [6,15],
+    [7,23]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":157,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":157,"int":24,"mp5":6,"sp":33,"spi":14,"sta":23},"subclass":1},"id":21352,"inventoryType":7,"itemLevel":81,"name":"Trousers of the Oracle","quality":4,"requiredLevel":60,"spells":[
+    [18050,1],
+    [21627,1]
+   ],"stats":[
+    [5,24],
+    [6,14],
+    [7,23]
+   ],"subclass":1},
+  {"allowableClass":1024,"armor":192,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":12,"armor":192,"crit":1,"int":22,"sp":27,"spi":12,"sta":22,"str":15},"subclass":2},"id":21353,"inventoryType":1,"itemLevel":81,"name":"Genesis Helm","quality":4,"requiredLevel":60,"spells":[
+    [14054,1],
+    [7597,1]
+   ],"stats":[
+    [3,12],
+    [4,15],
+    [5,22],
+    [6,12],
+    [7,22]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":172,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":14,"armor":172,"int":13,"mp5":3,"sp":20,"spi":6,"sta":15,"str":15},"subclass":2},"id":21354,"inventoryType":3,"itemLevel":78,"name":"Genesis Shoulderpads","quality":4,"requiredLevel":60,"spells":[
+    [14799,1],
+    [21625,1]
+   ],"stats":[
+    [3,14],
+    [4,15],
+    [5,13],
+    [6,6],
+    [7,15]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":158,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":13,"armor":158,"int":14,"mp5":4,"sp":20,"spi":6,"sta":14,"str":12},"subclass":2},"id":21355,"inventoryType":8,"itemLevel":78,"name":"Genesis Boots","quality":4,"requiredLevel":60,"spells":[
+    [14799,1],
+    [21362,1],
+    [25975,1]
+   ],"stats":[
+    [3,13],
+    [4,12],
+    [5,14],
+    [6,6],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":207,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":12,"armor":207,"crit":1,"int":22,"mp5":4,"sp":27,"spi":9,"sta":22,"str":12},"subclass":2},"id":21356,"inventoryType":7,"itemLevel":81,"name":"Genesis Trousers","quality":4,"requiredLevel":60,"spells":[
+    [14054,1],
+    [7597,1],
+    [21618,1]
+   ],"stats":[
+    [3,12],
+    [4,12],
+    [5,22],
+    [6,9],
+    [7,22]
+   ],"subclass":2},
+  {"allowableClass":1024,"armor":253,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":12,"armor":253,"crit":1,"int":24,"sp":28,"spellcrit":1,"spi":11,"sta":24,"str":13},"subclass":2},"id":21357,"inventoryType":5,"itemLevel":88,"name":"Genesis Vest","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [18384,1],
+    [7597,1]
+   ],"stats":[
+    [3,12],
+    [4,13],
+    [5,24],
+    [6,11],
+    [7,24]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":158,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":26,"armor":158,"hit":1,"sta":17,"str":14},"subclass":2},"id":21359,"inventoryType":8,"itemLevel":78,"name":"Deathdealer's Boots","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,26],
+    [4,14],
+    [7,17]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":192,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":29,"armor":192,"crit":1,"hit":1,"sta":27,"str":25},"subclass":2},"id":21360,"inventoryType":1,"itemLevel":81,"name":"Deathdealer's Helm","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [3,29],
+    [4,25],
+    [7,27]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":172,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":27,"armor":172,"hit":1,"sta":15,"str":18},"subclass":2},"id":21361,"inventoryType":3,"itemLevel":78,"name":"Deathdealer's Spaulders","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,27],
+    [4,18],
+    [7,15]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":207,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":38,"armor":207,"crit":1,"sta":25,"str":18},"subclass":2},"id":21362,"inventoryType":7,"itemLevel":81,"name":"Deathdealer's Leggings","quality":4,"requiredLevel":60,"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,38],
+    [4,18],
+    [7,25]
+   ],"subclass":2},
+  {"allowableClass":8,"armor":253,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":37,"armor":253,"crit":1,"hit":1,"sta":28,"str":19},"subclass":2},"id":21364,"inventoryType":5,"itemLevel":88,"name":"Deathdealer's Vest","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [3,37],
+    [4,19],
+    [7,28]
+   ],"subclass":2},
+  {"allowableClass":4,"armor":340,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":31,"armor":340,"int":8,"sp":6,"spi":6,"sta":16},"subclass":3},"id":21365,"inventoryType":8,"itemLevel":78,"name":"Striker's Footguards","quality":4,"requiredLevel":60,"spells":[
+    [9396,1]
+   ],"stats":[
+    [3,31],
+    [5,8],
+    [6,6],
+    [7,16]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":416,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":29,"armor":416,"crit":1,"int":18,"sp":12,"spi":10,"sta":26},"subclass":3},"id":21366,"inventoryType":1,"itemLevel":81,"name":"Striker's Diadem","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9417,1]
+   ],"stats":[
+    [3,29],
+    [5,18],
+    [6,10],
+    [7,26]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":384,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":26,"armor":384,"int":11,"sp":6,"spi":5,"sta":24},"subclass":3},"id":21367,"inventoryType":3,"itemLevel":81,"name":"Striker's Pauldrons","quality":4,"requiredLevel":60,"spells":[
+    [9396,1]
+   ],"stats":[
+    [3,26],
+    [5,11],
+    [6,5],
+    [7,24]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":448,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":36,"armor":448,"crit":1,"int":14,"sp":9,"spi":10,"sta":22},"subclass":3},"id":21368,"inventoryType":7,"itemLevel":81,"name":"Striker's Leggings","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9415,1]
+   ],"stats":[
+    [3,36],
+    [5,14],
+    [6,10],
+    [7,22]
+   ],"subclass":3},
+  {"allowableClass":4,"armor":553,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":39,"armor":553,"crit":1,"int":15,"sp":9,"spi":7,"sta":26},"subclass":3},"id":21370,"inventoryType":5,"itemLevel":88,"name":"Striker's Hauberk","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9415,1]
+   ],"stats":[
+    [3,39],
+    [5,15],
+    [6,7],
+    [7,26]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":416,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":8,"armor":416,"int":22,"sp":32,"spellcrit":1,"spi":12,"sta":22,"str":12},"subclass":3},"id":21372,"inventoryType":1,"itemLevel":81,"name":"Stormcaller's Diadem","quality":4,"requiredLevel":60,"spells":[
+    [17367,1],
+    [18384,1]
+   ],"stats":[
+    [3,8],
+    [4,12],
+    [5,22],
+    [6,12],
+    [7,22]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":340,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":9,"armor":340,"int":14,"mp5":4,"sp":22,"spi":6,"sta":14,"str":12},"subclass":3},"id":21373,"inventoryType":8,"itemLevel":78,"name":"Stormcaller's Footguards","quality":4,"requiredLevel":60,"spells":[
+    [15714,1],
+    [25975,1],
+    [21362,1]
+   ],"stats":[
+    [3,9],
+    [4,12],
+    [5,14],
+    [6,6],
+    [7,14]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":553,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":10,"armor":553,"crit":1,"int":24,"sp":32,"spellcrit":1,"spi":11,"sta":24,"str":11},"subclass":3},"id":21374,"inventoryType":5,"itemLevel":88,"name":"Stormcaller's Hauberk","quality":4,"requiredLevel":60,"spells":[
+    [17367,1],
+    [7597,1],
+    [18384,1]
+   ],"stats":[
+    [3,10],
+    [4,11],
+    [5,24],
+    [6,11],
+    [7,24]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":448,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":9,"armor":448,"int":22,"mp5":4,"sp":29,"spellcrit":1,"spi":12,"sta":22,"str":12},"subclass":3},"id":21375,"inventoryType":7,"itemLevel":81,"name":"Stormcaller's Leggings","quality":4,"requiredLevel":60,"spells":[
+    [13881,1],
+    [18384,1],
+    [21618,1]
+   ],"stats":[
+    [3,9],
+    [4,12],
+    [5,22],
+    [6,12],
+    [7,22]
+   ],"subclass":3},
+  {"allowableClass":64,"armor":371,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":10,"armor":371,"int":13,"mp5":3,"sp":28,"spi":6,"sta":15,"str":10},"subclass":3},"id":21376,"inventoryType":3,"itemLevel":78,"name":"Stormcaller's Pauldrons","quality":4,"requiredLevel":60,"spells":[
+    [14127,1],
+    [21625,1]
+   ],"stats":[
+    [3,10],
+    [4,10],
+    [5,13],
+    [6,6],
+    [7,15]
+   ],"subclass":3},
+  {"allowableClass":2,"armor":739,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":12,"armor":739,"crit":1,"int":22,"sp":23,"spi":12,"sta":22,"str":20},"subclass":4},"id":21387,"inventoryType":1,"itemLevel":81,"name":"Avenger's Crown","quality":4,"requiredLevel":60,"spells":[
+    [14047,1],
+    [7597,1]
+   ],"stats":[
+    [3,12],
+    [4,20],
+    [5,22],
+    [6,12],
+    [7,22]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":604,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":13,"armor":604,"int":14,"mp5":4,"sp":14,"spi":6,"sta":18,"str":18},"subclass":4},"id":21388,"inventoryType":8,"itemLevel":78,"name":"Avenger's Greaves","quality":4,"requiredLevel":60,"spells":[
+    [9343,1],
+    [21362,1]
+   ],"stats":[
+    [3,13],
+    [4,18],
+    [5,14],
+    [6,6],
+    [7,18]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":985,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":12,"armor":985,"crit":1,"int":24,"sp":18,"spellcrit":1,"spi":11,"sta":24,"str":23},"subclass":4},"id":21389,"inventoryType":5,"itemLevel":88,"name":"Avenger's Breastplate","quality":4,"requiredLevel":60,"spells":[
+    [9346,1],
+    [18384,1],
+    [7597,1]
+   ],"stats":[
+    [3,12],
+    [4,23],
+    [5,24],
+    [6,11],
+    [7,24]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":796,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":12,"armor":796,"crit":1,"int":22,"mp5":4,"sp":16,"spi":9,"sta":22,"str":21},"subclass":4},"id":21390,"inventoryType":7,"itemLevel":81,"name":"Avenger's Legguards","quality":4,"requiredLevel":60,"spells":[
+    [9345,1],
+    [7597,1],
+    [21618,1]
+   ],"stats":[
+    [3,12],
+    [4,21],
+    [5,22],
+    [6,9],
+    [7,22]
+   ],"subclass":4},
+  {"allowableClass":2,"armor":659,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":14,"armor":659,"int":13,"mp5":3,"sp":14,"spi":6,"sta":15,"str":18},"subclass":4},"id":21391,"inventoryType":3,"itemLevel":78,"name":"Avenger's Pauldrons","quality":4,"requiredLevel":60,"spells":[
+    [9343,1],
+    [21625,1]
+   ],"stats":[
+    [3,14],
+    [4,18],
+    [5,13],
+    [6,6],
+    [7,15]
+   ],"subclass":4},
+  {"allowableClass":1,"armor":0,"block":0,"class":2,"dmg":[75,141,2100],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"agi":6,"defense":4,"dps":51.4,"sta":9,"str":15},"subclass":0},"id":21392,"inventoryType":13,"itemLevel":70,"name":"Sickle of Unyielding Strength","quality":4,"requiredLevel":60,"spells":[
+    [7517,1]
+   ],"stats":[
+    [4,15],
+    [3,6],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"crit":1,"sta":14,"str":11},"subclass":0},"id":21393,"inventoryType":11,"itemLevel":65,"name":"Signet of Unyielding Strength","quality":4,"requiredLevel":60,"spells":[
+    [7597,1]
+   ],"stats":[
+    [4,11],
+    [7,14]
+   ],"subclass":0},
+  {"allowableClass":1,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":9,"armor":52,"hit":1,"sta":9,"str":15},"subclass":1},"id":21394,"inventoryType":16,"itemLevel":67,"name":"Drape of Unyielding Strength","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [4,15],
+    [3,9],
+    [7,9]
+   ],"subclass":1},
+  {"allowableClass":2,"armor":0,"block":0,"class":2,"dmg":[83,154,2300],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":51.5,"int":7,"mp5":4,"sta":11,"str":9},"subclass":7},"id":21395,"inventoryType":21,"itemLevel":70,"name":"Blade of Eternal Justice","quality":4,"requiredLevel":60,"spells":[
+    [21618,1]
+   ],"stats":[
+    [4,9],
+    [7,11],
+    [5,7]
+   ],"subclass":7},
+  {"allowableClass":2,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":12,"sp":13,"sta":11,"str":12},"subclass":0},"id":21396,"inventoryType":11,"itemLevel":65,"name":"Ring of Eternal Justice","quality":4,"requiredLevel":60,"spells":[
+    [9342,1]
+   ],"stats":[
+    [4,12],
+    [5,12],
+    [7,11]
+   ],"subclass":0},
+  {"allowableClass":2,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"int":12,"mp5":5,"sta":13,"str":11},"subclass":1},"id":21397,"inventoryType":16,"itemLevel":67,"name":"Cape of Eternal Justice","quality":4,"requiredLevel":60,"spells":[
+    [21363,1]
+   ],"stats":[
+    [4,11],
+    [7,13],
+    [5,12]
+   ],"subclass":1},
+  {"allowableClass":64,"armor":0,"block":0,"class":2,"dmg":[62,137,2400],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.5,"int":9,"sp":53,"sta":10,"str":7},"subclass":4},"id":21398,"inventoryType":21,"itemLevel":70,"name":"Hammer of the Gathering Storm","quality":4,"requiredLevel":60,"spells":[
+    [26142,1]
+   ],"stats":[
+    [7,10],
+    [5,9],
+    [4,7]
+   ],"subclass":4},
+  {"allowableClass":64,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":9,"int":11,"sp":12,"sta":10,"str":8},"subclass":0},"id":21399,"inventoryType":11,"itemLevel":65,"name":"Ring of the Gathering Storm","quality":4,"requiredLevel":60,"spells":[
+    [9417,1]
+   ],"stats":[
+    [4,8],
+    [3,9],
+    [5,11],
+    [7,10]
+   ],"subclass":0},
+  {"allowableClass":64,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"int":13,"sp":14,"sta":10,"str":11},"subclass":1},"id":21400,"inventoryType":16,"itemLevel":67,"name":"Cloak of the Gathering Storm","quality":4,"requiredLevel":60,"spells":[
+    [9343,1]
+   ],"stats":[
+    [5,13],
+    [7,10],
+    [4,11]
+   ],"subclass":1},
+  {"allowableClass":4,"armor":0,"block":0,"class":2,"dmg":[86,161,2400],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"agi":16,"dps":51.5,"mp5":3,"sta":9},"subclass":0},"id":21401,"inventoryType":13,"itemLevel":70,"name":"Scythe of the Unseen Path","quality":4,"requiredLevel":60,"spells":[
+    [21361,1]
+   ],"stats":[
+    [3,16],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":4,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":19,"int":8,"sta":11},"subclass":0},"id":21402,"inventoryType":11,"itemLevel":65,"name":"Signet of the Unseen Path","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,19],
+    [7,11],
+    [5,8]
+   ],"subclass":0},
+  {"allowableClass":4,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":17,"armor":52,"hit":1,"sta":13},"subclass":1},"id":21403,"inventoryType":16,"itemLevel":67,"name":"Cloak of the Unseen Path","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,17],
+    [7,13]
+   ],"subclass":1},
+  {"allowableClass":8,"armor":0,"block":0,"class":2,"dmg":[65,121,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"agi":15,"dps":51.7,"hit":1,"str":7},"subclass":15},"id":21404,"inventoryType":13,"itemLevel":70,"name":"Dagger of Veiled Shadows","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,15],
+    [4,7]
+   ],"subclass":15},
+  {"allowableClass":8,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":18,"sta":8,"str":11},"subclass":0},"id":21405,"inventoryType":11,"itemLevel":65,"name":"Band of Veiled Shadows","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,18],
+    [4,11],
+    [7,8]
+   ],"subclass":0},
+  {"allowableClass":8,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":18,"armor":52,"hit":1,"sta":11},"subclass":1},"id":21406,"inventoryType":16,"itemLevel":67,"name":"Cloak of Veiled Shadows","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [7,11],
+    [3,18]
+   ],"subclass":1},
+  {"allowableClass":1024,"armor":0,"block":0,"class":2,"dmg":[67,149,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"agi":7,"ap":140,"dps":41.5,"int":11,"sp":40,"sta":10,"str":9},"subclass":4},"id":21407,"inventoryType":21,"itemLevel":70,"name":"Mace of Unending Life","quality":4,"requiredLevel":60,"spells":[
+    [18056,1],
+    [26153,1]
+   ],"stats":[
+    [4,9],
+    [3,7],
+    [5,11],
+    [7,10]
+   ],"subclass":4},
+  {"allowableClass":1024,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":10,"int":8,"mp5":5,"spi":7,"sta":9,"str":10},"subclass":0},"id":21408,"inventoryType":11,"itemLevel":65,"name":"Band of Unending Life","quality":4,"requiredLevel":60,"spells":[
+    [21363,1]
+   ],"stats":[
+    [4,10],
+    [7,9],
+    [5,8],
+    [3,10],
+    [6,7]
+   ],"subclass":0},
+  {"allowableClass":1024,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":8,"armor":52,"int":10,"sp":11,"spi":7,"sta":10,"str":12},"subclass":1},"id":21409,"inventoryType":16,"itemLevel":67,"name":"Cloak of Unending Life","quality":4,"requiredLevel":60,"spells":[
+    [9416,1]
+   ],"stats":[
+    [5,10],
+    [7,10],
+    [4,12],
+    [3,8],
+    [6,7]
+   ],"subclass":1},
+  {"allowableClass":16,"armor":0,"block":0,"class":2,"dmg":[70,154,2700],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.5,"heal":90,"int":11,"mp5":4,"sta":10},"subclass":4},"id":21410,"inventoryType":21,"itemLevel":70,"name":"Gavel of Infinite Wisdom","quality":4,"requiredLevel":60,"spells":[
+    [21362,1],
+    [26154,1]
+   ],"stats":[
+    [5,11],
+    [7,10]
+   ],"subclass":4},
+  {"allowableClass":16,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":13,"mp5":5,"sta":10},"subclass":0},"id":21411,"inventoryType":11,"itemLevel":65,"name":"Ring of Infinite Wisdom","quality":4,"requiredLevel":60,"spells":[
+    [21363,1]
+   ],"stats":[
+    [5,13],
+    [7,10]
+   ],"subclass":0},
+  {"allowableClass":16,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"heal":24,"int":14,"spi":11,"sta":12},"subclass":1},"id":21412,"inventoryType":16,"itemLevel":67,"name":"Shroud of Infinite Wisdom","quality":4,"requiredLevel":60,"spells":[
+    [9314,1]
+   ],"stats":[
+    [5,14],
+    [7,12],
+    [6,11]
+   ],"subclass":1},
+  {"allowableClass":128,"armor":0,"block":0,"class":2,"dmg":[60,131,2300],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.5,"int":16,"sp":40,"spellhit":1,"sta":8},"subclass":7},"id":21413,"inventoryType":21,"itemLevel":70,"name":"Blade of Vaulted Secrets","quality":4,"requiredLevel":60,"spells":[
+    [23727,1],
+    [18056,1]
+   ],"stats":[
+    [5,16],
+    [7,8]
+   ],"subclass":7},
+  {"allowableClass":128,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"sp":18,"spellcrit":1,"sta":9},"subclass":0},"id":21414,"inventoryType":11,"itemLevel":65,"name":"Band of Vaulted Secrets","quality":4,"requiredLevel":60,"spells":[
+    [9346,1],
+    [18384,1]
+   ],"stats":[
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":128,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"int":9,"sp":18,"spi":6,"sta":14},"subclass":1},"id":21415,"inventoryType":16,"itemLevel":67,"name":"Drape of Vaulted Secrets","quality":4,"requiredLevel":60,"spells":[
+    [9346,1]
+   ],"stats":[
+    [5,9],
+    [7,14],
+    [6,6]
+   ],"subclass":1},
+  {"allowableClass":256,"armor":0,"block":0,"class":2,"dmg":[39,86,1500],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"dps":41.7,"int":7,"sp":59,"sta":9},"subclass":15},"id":21416,"inventoryType":13,"itemLevel":70,"name":"Kris of Unspoken Names","quality":4,"requiredLevel":60,"spells":[
+    [26155,1]
+   ],"stats":[
+    [7,9],
+    [5,7]
+   ],"subclass":15},
+  {"allowableClass":256,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"sp":14,"spellcrit":1,"spellhit":1,"sta":12},"subclass":0},"id":21417,"inventoryType":11,"itemLevel":65,"name":"Ring of Unspoken Names","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [9343,1],
+    [23727,1]
+   ],"stats":[
+    [7,12]
+   ],"subclass":0},
+  {"allowableClass":256,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"int":9,"sp":18,"sta":16},"subclass":1},"id":21418,"inventoryType":16,"itemLevel":67,"name":"Shroud of Unspoken Names","quality":4,"requiredLevel":60,"spells":[
+    [9346,1]
+   ],"stats":[
+    [7,16],
+    [5,9]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[151.6,246.6,3400],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":58.6,"int":23,"sp":60,"spellcrit":1,"spellhit":1,"spi":14,"sta":24},"subclass":10},"id":21452,"inventoryType":17,"itemLevel":72,"name":"Staff of the Ruins","quality":4,"requiredLevel":60,"spells":[
+    [26158,1],
+    [18384,1],
+    [23727,1]
+   ],"stats":[
+    [5,23],
+    [7,24],
+    [6,14]
+   ],"subclass":10},
+  {"allowableClass":32767,"armor":610,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":610,"int":20,"sp":14,"sta":19,"str":12},"subclass":4},"id":21453,"inventoryType":3,"itemLevel":72,"name":"Mantle of the Horusath","quality":4,"requiredLevel":60,"spells":[
+    [9343,1]
+   ],"stats":[
+    [5,20],
+    [7,19],
+    [4,12]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":344,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":344,"int":20,"sp":14,"sta":19,"str":12},"subclass":3},"id":21454,"inventoryType":3,"itemLevel":72,"name":"Runic Stone Shoulders","quality":4,"requiredLevel":60,"spells":[
+    [9343,1]
+   ],"stats":[
+    [5,20],
+    [7,19],
+    [4,12]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":164,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":24,"armor":164,"hit":1,"sta":14,"str":21},"subclass":2},"id":21455,"inventoryType":1,"itemLevel":74,"name":"Southwind Helm","quality":3,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [4,21],
+    [3,24],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":135,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":135,"defense":6,"dodge":1,"sta":12,"str":12},"subclass":1},"id":21456,"inventoryType":16,"itemLevel":72,"name":"Sandstorm Cloak","quality":4,"requiredLevel":60,"spells":[
+    [13669,1],
+    [13384,1]
+   ],"stats":[
+    [7,12],
+    [4,12]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":356,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":12,"armor":356,"sta":9,"str":21},"subclass":4},"id":21457,"inventoryType":9,"itemLevel":72,"name":"Bracers of Brutality","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [4,21],
+    [3,12],
+    [7,9]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":134,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":134,"heal":26,"int":20,"mp5":4,"sta":19,"str":11},"subclass":2},"id":21458,"inventoryType":10,"itemLevel":72,"name":"Gauntlets of New Life","quality":4,"requiredLevel":60,"spells":[
+    [9315,1],
+    [21618,1]
+   ],"stats":[
+    [5,20],
+    [7,19],
+    [4,11]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[103,155,3100],"fit":{"class":2,"slot":"INVTYPE_RANGEDRIGHT","stats":{"agi":7,"dps":41.6,"hit":1,"sta":5,"str":5},"subclass":18},"id":21459,"inventoryType":26,"itemLevel":72,"name":"Crossbow of Imminent Doom","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,7],
+    [7,5],
+    [4,5]
+   ],"subclass":18},
+  {"allowableClass":32767,"armor":661,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":11,"armor":661,"defense":7,"parry":1,"sta":28,"str":21},"subclass":4},"id":21460,"inventoryType":1,"itemLevel":72,"name":"Helm of Domination","quality":4,"requiredLevel":60,"spells":[
+    [13665,1],
+    [13385,1]
+   ],"stats":[
+    [7,28],
+    [4,21],
+    [3,11]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":97,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":97,"int":16,"sp":41,"spellcrit":1,"spi":8,"sta":14},"subclass":1},"id":21461,"inventoryType":7,"itemLevel":72,"name":"Leggings of the Black Blizzard","quality":4,"requiredLevel":60,"spells":[
+    [18057,1],
+    [18384,1]
+   ],"stats":[
+    [5,16],
+    [6,8],
+    [7,14]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":69,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":69,"heal":35,"int":20,"mp5":5,"sta":19},"subclass":1},"id":21462,"inventoryType":10,"itemLevel":72,"name":"Gloves of Dark Wisdom","quality":4,"requiredLevel":60,"spells":[
+    [18029,1],
+    [21363,1]
+   ],"stats":[
+    [5,20],
+    [7,19]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":258,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":20,"armor":258,"crit":1,"hit":1,"int":10,"sta":19},"subclass":3},"id":21463,"inventoryType":6,"itemLevel":72,"name":"Ossirian's Binding","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [3,20],
+    [7,19],
+    [5,10]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":48,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"armor":48,"int":12,"sp":21,"sta":9},"subclass":1},"id":21464,"inventoryType":9,"itemLevel":72,"name":"Shackles of the Unscarred","quality":4,"requiredLevel":60,"spells":[
+    [14248,1],
+    [25975,1]
+   ],"stats":[
+    [5,12],
+    [7,9]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[63.4,136.4,2400],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.6,"int":7,"sp":36,"spellcrit":1,"sta":9},"subclass":4},"id":21466,"inventoryType":21,"itemLevel":69,"name":"Stinger of Ayamiss","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [18053,1]
+   ],"stats":[
+    [5,7],
+    [7,9]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":258,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":21,"armor":258,"sta":30,"str":15},"subclass":2},"id":21467,"inventoryType":5,"itemLevel":69,"name":"Thick Silithid Chestguard","quality":4,"requiredLevel":60,"resist":{"arcane":5,"fire":5,"frost":5,"nature":5,"shadow":5},"spells":[],"stats":[
+    [7,30],
+    [3,21],
+    [4,15]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":78,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":78,"int":15,"sp":21,"spi":7,"sta":11},"subclass":1},"id":21468,"inventoryType":3,"itemLevel":74,"name":"Mantle of Maz'Nadir","quality":3,"requiredLevel":60,"spells":[
+    [14248,1]
+   ],"stats":[
+    [7,11],
+    [5,15],
+    [6,7]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":126,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":126,"int":13,"sp":25,"sta":11},"subclass":2},"id":21469,"inventoryType":10,"itemLevel":74,"name":"Gauntlets of Southwind","quality":3,"requiredLevel":60,"spells":[
+    [15715,1]
+   ],"stats":[
+    [5,13],
+    [7,11]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":52,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":52,"heal":22,"int":11,"spi":10,"sta":10},"subclass":1},"id":21470,"inventoryType":16,"itemLevel":74,"name":"Cloak of the Savior","quality":3,"requiredLevel":60,"spells":[
+    [9408,1]
+   ],"stats":[
+    [5,11],
+    [7,10],
+    [6,10]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HOLDABLE","stats":{"int":8,"sp":21,"spellcrit":1,"sta":8},"subclass":0},"id":21471,"inventoryType":23,"itemLevel":69,"name":"Talon of Furious Concentration","quality":4,"requiredLevel":60,"spells":[
+    [14248,1],
+    [18384,1]
+   ],"stats":[
+    [5,8],
+    [7,8]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":86,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":86,"heal":31,"int":29,"spellcrit":1,"spi":15,"sta":18},"subclass":1},"id":21472,"inventoryType":1,"itemLevel":69,"name":"Dustwind Turban","quality":4,"requiredLevel":60,"spells":[
+    [9317,1],
+    [18384,1]
+   ],"stats":[
+    [6,15],
+    [5,29],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21473,"inventoryType":12,"itemLevel":74,"name":"Eye of Moam","quality":3,"requiredLevel":60,"spells":[
+    [26166,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":151,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":25,"armor":151,"sta":7,"str":11},"subclass":2},"id":21474,"inventoryType":3,"itemLevel":74,"name":"Chitinous Shoulderguards","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [3,25],
+    [4,11],
+    [7,7]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":670,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":10,"armor":670,"int":18,"sp":12,"sta":18,"str":19},"subclass":4},"id":21475,"inventoryType":7,"itemLevel":74,"name":"Legplates of the Destroyer","quality":3,"requiredLevel":60,"spells":[
+    [9417,1]
+   ],"stats":[
+    [4,19],
+    [5,18],
+    [7,18],
+    [3,10]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":377,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"agi":10,"armor":377,"int":18,"sp":19,"sta":18,"str":16},"subclass":3},"id":21476,"inventoryType":7,"itemLevel":74,"name":"Obsidian Scaled Leggings","quality":3,"requiredLevel":60,"spells":[
+    [14254,1]
+   ],"stats":[
+    [4,16],
+    [5,18],
+    [7,18],
+    [3,10]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"ap":30,"hit":1,"rap":30,"sta":9},"subclass":0},"id":21477,"inventoryType":11,"itemLevel":74,"name":"Ring of Fury","quality":3,"requiredLevel":60,"spells":[
+    [15464,1],
+    [9336,1]
+   ],"stats":[
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[59,111,2200],"fit":{"class":2,"slot":"INVTYPE_RANGED","stats":{"ap":22,"dps":38.6,"rap":22},"subclass":2},"id":21478,"inventoryType":15,"itemLevel":68,"name":"Bow of Taut Sinew","quality":4,"requiredLevel":60,"resist":{"nature":8},"spells":[
+    [9332,1]
+   ],"stats":[],"subclass":2},
+  {"allowableClass":32767,"armor":482,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":482,"defense":5,"parry":1,"sta":18,"str":15},"subclass":4},"id":21479,"inventoryType":10,"itemLevel":68,"name":"Gauntlets of the Immovable","quality":4,"requiredLevel":60,"spells":[
+    [13665,1],
+    [7518,1]
+   ],"stats":[
+    [7,18],
+    [4,15]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":266,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":18,"armor":266,"int":8,"spi":7,"sta":18},"subclass":3},"id":21480,"inventoryType":10,"itemLevel":73,"name":"Scaled Silithid Gauntlets","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [3,18],
+    [7,18],
+    [5,8],
+    [6,7]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":519,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":519,"int":14,"mp5":4,"sta":14,"str":14},"subclass":4},"id":21481,"inventoryType":8,"itemLevel":73,"name":"Boots of the Desert Protector","quality":3,"requiredLevel":60,"spells":[
+    [21619,1]
+   ],"stats":[
+    [4,14],
+    [5,14],
+    [7,14]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":293,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":293,"int":14,"mp5":4,"sp":12,"sta":14,"str":9},"subclass":3},"id":21482,"inventoryType":8,"itemLevel":73,"name":"Boots of the Fiery Sands","quality":3,"requiredLevel":60,"spells":[
+    [21619,1],
+    [9417,1]
+   ],"stats":[
+    [4,9],
+    [5,14],
+    [7,14]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":9,"mp5":3,"sp":9,"spellcrit":1},"subclass":0},"id":21483,"inventoryType":11,"itemLevel":73,"name":"Ring of the Desert Winds","quality":3,"requiredLevel":60,"spells":[
+    [18384,1],
+    [21625,1],
+    [9415,1]
+   ],"stats":[
+    [5,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":162,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":162,"heal":22,"int":28,"spi":10,"sta":18},"subclass":2},"id":21484,"inventoryType":1,"itemLevel":73,"name":"Helm of Regrowth","quality":3,"requiredLevel":60,"spells":[
+    [9408,1]
+   ],"stats":[
+    [5,28],
+    [7,18],
+    [6,10]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":2575,"block":47,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHIELD","stats":{"armor":2575,"block":47,"defense":6,"sta":20,"str":11},"subclass":6},"id":21485,"inventoryType":14,"itemLevel":68,"name":"Buru's Skull Fragment","quality":4,"requiredLevel":60,"spells":[
+    [13384,1]
+   ],"stats":[
+    [7,20],
+    [4,11]
+   ],"subclass":6},
+  {"allowableClass":32767,"armor":482,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":10,"armor":482,"int":18,"sp":12,"sta":18,"str":11},"subclass":4},"id":21486,"inventoryType":10,"itemLevel":68,"name":"Gloves of the Swarm","quality":4,"requiredLevel":60,"spells":[
+    [9417,1]
+   ],"stats":[
+    [5,18],
+    [7,18],
+    [4,11],
+    [3,10]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":271,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":271,"int":18,"sp":12,"spellcrit":1,"sta":18,"str":6},"subclass":3},"id":21487,"inventoryType":10,"itemLevel":68,"name":"Slimy Scaled Gauntlets","quality":4,"requiredLevel":60,"spells":[
+    [9417,1],
+    [18384,1]
+   ],"stats":[
+    [5,18],
+    [7,18],
+    [4,6]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21488,"inventoryType":12,"itemLevel":73,"name":"Fetish of Chitinous Spikes","quality":3,"requiredLevel":60,"spells":[
+    [26168,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":70,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":70,"int":14,"sp":16,"spi":11,"sta":14},"subclass":1},"id":21489,"inventoryType":8,"itemLevel":73,"name":"Quicksand Waders","quality":3,"requiredLevel":60,"spells":[
+    [9345,1]
+   ],"stats":[
+    [5,14],
+    [7,14],
+    [6,11]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":519,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":12,"armor":519,"hit":1,"sta":12,"str":18},"subclass":4},"id":21490,"inventoryType":8,"itemLevel":73,"name":"Slime Kickers","quality":3,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [4,18],
+    [3,12],
+    [7,12]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":87,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":15,"armor":87,"sta":8,"str":10},"subclass":2},"id":21491,"inventoryType":9,"itemLevel":73,"name":"Scaled Bracers of the Gorger","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [3,15],
+    [4,10],
+    [7,8]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[180,270,3600],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"agi":15,"dps":62.5,"sta":20,"str":35},"subclass":8},"id":21492,"inventoryType":17,"itemLevel":66,"name":"Manslayer of the Qiraji","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [4,35],
+    [7,20],
+    [3,15]
+   ],"subclass":8},
+  {"allowableClass":32767,"armor":138,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":22,"armor":138,"sta":11,"str":22},"subclass":2},"id":21493,"inventoryType":8,"itemLevel":66,"name":"Boots of the Vanguard","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,22],
+    [7,11],
+    [4,22]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":110,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":110,"int":13,"sp":16,"spellcrit":1,"sta":11},"subclass":2},"id":21494,"inventoryType":6,"itemLevel":71,"name":"Southwind's Grasp","quality":3,"requiredLevel":60,"spells":[
+    [9345,1],
+    [18384,1]
+   ],"stats":[
+    [5,13],
+    [7,11]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":644,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":644,"crit":2,"sta":13,"str":20},"subclass":4},"id":21495,"inventoryType":7,"itemLevel":71,"name":"Legplates of the Qiraji Command","quality":3,"requiredLevel":60,"spells":[
+    [7598,1]
+   ],"stats":[
+    [4,20],
+    [7,13]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":44,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"armor":44,"int":13,"mp5":4,"sta":12},"subclass":1},"id":21496,"inventoryType":9,"itemLevel":71,"name":"Bracers of Qiraji Command","quality":3,"requiredLevel":60,"spells":[
+    [21362,1]
+   ],"stats":[
+    [5,13],
+    [7,12]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":285,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":26,"armor":285,"sta":11},"subclass":3},"id":21497,"inventoryType":8,"itemLevel":71,"name":"Boots of the Qiraji General","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [3,26],
+    [7,11]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[64,119,1900],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":20,"dps":48.2,"rap":20,"sta":15},"subclass":15},"id":21498,"inventoryType":13,"itemLevel":66,"name":"Qiraji Sacrificial Dagger","quality":4,"requiredLevel":60,"spells":[
+    [9331,1]
+   ],"stats":[
+    [7,15]
+   ],"subclass":15},
+  {"allowableClass":32767,"armor":102,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":102,"int":14,"sp":32,"spellcrit":1,"spi":8,"sta":20},"subclass":1},"id":21499,"inventoryType":20,"itemLevel":66,"name":"Vestments of the Shifting Sands","quality":4,"requiredLevel":60,"spells":[
+    [17367,1],
+    [18384,1]
+   ],"stats":[
+    [7,20],
+    [5,14],
+    [6,8]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":56,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":56,"heal":24,"int":15,"mp5":4,"sta":14},"subclass":1},"id":21500,"inventoryType":6,"itemLevel":71,"name":"Belt of the Inquisition","quality":3,"requiredLevel":60,"spells":[
+    [9314,1],
+    [21618,1]
+   ],"stats":[
+    [5,15],
+    [7,14]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":182,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":15,"armor":182,"sta":18,"str":11},"subclass":2},"id":21501,"inventoryType":10,"itemLevel":71,"name":"Toughened Silithid Hide Gloves","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [7,18],
+    [3,15],
+    [4,11]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":181,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":16,"armor":181,"int":7,"sta":11},"subclass":3},"id":21502,"inventoryType":9,"itemLevel":71,"name":"Sand Reaver Wristguards","quality":3,"requiredLevel":60,"spells":[],"stats":[
+    [3,16],
+    [7,11],
+    [5,7]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":494,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":494,"defense":5,"sta":18,"str":17},"subclass":4},"id":21503,"inventoryType":6,"itemLevel":71,"name":"Belt of the Sand Reaver","quality":3,"requiredLevel":60,"spells":[
+    [7518,1]
+   ],"stats":[
+    [7,18],
+    [4,17]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"int":12,"sp":25,"sta":9},"subclass":0},"id":21504,"inventoryType":2,"itemLevel":70,"name":"Charm of the Shifting Sands","quality":4,"requiredLevel":60,"spells":[
+    [15715,1]
+   ],"stats":[
+    [5,12],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"ap":42,"rap":42,"sta":16},"subclass":0},"id":21505,"inventoryType":2,"itemLevel":70,"name":"Choker of the Shifting Sands","quality":4,"requiredLevel":60,"spells":[
+    [15809,1]
+   ],"stats":[
+    [7,16]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"defense":4,"sta":21,"str":14},"subclass":0},"id":21506,"inventoryType":2,"itemLevel":70,"name":"Pendant of the Shifting Sands","quality":4,"requiredLevel":60,"spells":[
+    [7517,1]
+   ],"stats":[
+    [7,21],
+    [4,14]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"heal":46,"mp5":6},"subclass":0},"id":21507,"inventoryType":2,"itemLevel":70,"name":"Amulet of the Shifting Sands","quality":4,"requiredLevel":60,"spells":[
+    [18033,1],
+    [21627,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21579,"inventoryType":12,"itemLevel":88,"name":"Vanquished Tentacle of C'Thun","quality":4,"requiredLevel":60,"spells":[
+    [26391,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":615,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":615,"crit":1,"hit":1,"sta":15,"str":35},"subclass":4},"id":21581,"inventoryType":10,"itemLevel":88,"name":"Gauntlets of Annihilation","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [4,35],
+    [7,15]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":75,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":75,"heal":59,"int":19,"mp5":7,"sta":15},"subclass":1},"id":21582,"inventoryType":6,"itemLevel":88,"name":"Grasp of the Old God","quality":4,"requiredLevel":60,"spells":[
+    [18038,1],
+    [21364,1]
+   ],"stats":[
+    [5,19],
+    [7,15]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":66,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":66,"heal":40,"int":12,"mp5":8,"spi":7,"sta":6},"subclass":1},"id":21583,"inventoryType":16,"itemLevel":88,"name":"Cloak of Clarity","quality":4,"requiredLevel":60,"spells":[
+    [18031,1],
+    [18378,1]
+   ],"stats":[
+    [5,12],
+    [6,7],
+    [7,6]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":83,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":83,"int":15,"sp":37,"spellhit":1,"sta":19},"subclass":1},"id":21585,"inventoryType":10,"itemLevel":88,"name":"Dark Storm Gauntlets","quality":4,"requiredLevel":60,"spells":[
+    [18054,1],
+    [23727,1]
+   ],"stats":[
+    [5,15],
+    [7,19]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":142,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"ap":64,"armor":142,"crit":1,"hit":1,"rap":64,"sta":20},"subclass":2},"id":21586,"inventoryType":6,"itemLevel":88,"name":"Belt of Never-ending Agony","quality":4,"requiredLevel":60,"spells":[
+    [15817,1],
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [7,20]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":27,"sta":17},"subclass":0},"id":21596,"inventoryType":11,"itemLevel":88,"name":"Ring of the Godslayer","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,27],
+    [7,17]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HOLDABLE","stats":{"int":9,"sp":20,"spellcrit":1,"spellhit":1,"sta":10},"subclass":0},"id":21597,"inventoryType":23,"itemLevel":81,"name":"Royal Scepter of Vek'lor","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [23727,1],
+    [14799,1]
+   ],"stats":[
+    [5,9],
+    [7,10]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":512,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":13,"armor":512,"defense":8,"parry":1,"sta":22,"str":13},"subclass":4},"id":21598,"inventoryType":6,"itemLevel":81,"name":"Royal Qiraji Belt","quality":4,"requiredLevel":60,"spells":[
+    [13665,1],
+    [13387,1]
+   ],"stats":[
+    [7,22],
+    [4,13],
+    [3,13]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":320,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":22,"armor":320,"crit":1,"int":17,"sta":21},"subclass":3},"id":21599,"inventoryType":10,"itemLevel":81,"name":"Vek'lor's Gloves of Devastation","quality":4,"requiredLevel":60,"spells":[
+    [7597,1]
+   ],"stats":[
+    [3,22],
+    [7,21],
+    [5,17]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":84,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":84,"int":19,"sp":34,"sta":18},"subclass":1},"id":21600,"inventoryType":8,"itemLevel":81,"name":"Boots of Epiphany","quality":4,"requiredLevel":60,"spells":[
+    [18052,1]
+   ],"stats":[
+    [5,19],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":100,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"agi":12,"armor":100,"defense":9,"sta":18},"subclass":0},"id":21601,"inventoryType":11,"itemLevel":81,"name":"Ring of Emperor Vek'lor","quality":4,"requiredLevel":60,"spells":[
+    [13388,1]
+   ],"stats":[
+    [7,18],
+    [3,12]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":103,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":16,"armor":103,"hit":1,"sta":14,"str":15},"subclass":2},"id":21602,"inventoryType":9,"itemLevel":81,"name":"Qiraji Execution Bracers","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,16],
+    [4,15],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":54,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"armor":54,"heal":53,"int":10,"spi":9,"sta":8},"subclass":1},"id":21604,"inventoryType":9,"itemLevel":81,"name":"Bracelets of Royal Redemption","quality":4,"requiredLevel":60,"spells":[
+    [15696,1]
+   ],"stats":[
+    [5,10],
+    [6,9],
+    [7,8]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":248,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":21,"armor":248,"sta":22,"str":18},"subclass":2},"id":21605,"inventoryType":10,"itemLevel":81,"name":"Gloves of the Hidden Temple","quality":4,"requiredLevel":60,"resist":{"shadow":6},"spells":[],"stats":[
+    [7,22],
+    [3,21],
+    [4,18]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":512,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":13,"armor":512,"heal":35,"int":18,"sta":17,"str":17},"subclass":4},"id":21606,"inventoryType":6,"itemLevel":81,"name":"Belt of the Fallen Emperor","quality":4,"requiredLevel":60,"spells":[
+    [18029,1]
+   ],"stats":[
+    [4,17],
+    [7,17],
+    [5,18],
+    [3,13]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":288,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":12,"armor":288,"int":17,"mp5":5,"sp":19,"sta":17,"str":13},"subclass":3},"id":21607,"inventoryType":6,"itemLevel":81,"name":"Grasp of the Fallen Emperor","quality":4,"requiredLevel":60,"spells":[
+    [14254,1],
+    [21363,1]
+   ],"stats":[
+    [4,13],
+    [3,12],
+    [5,17],
+    [7,17]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"int":5,"sp":27,"spellcrit":1,"sta":9},"subclass":0},"id":21608,"inventoryType":2,"itemLevel":81,"name":"Amulet of Vek'nilash","quality":4,"requiredLevel":60,"spells":[
+    [14054,1],
+    [18384,1]
+   ],"stats":[
+    [5,5],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":133,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":133,"heal":55,"int":18,"spi":13,"sta":16},"subclass":2},"id":21609,"inventoryType":6,"itemLevel":81,"name":"Regenerating Belt of Vek'nilash","quality":4,"requiredLevel":60,"spells":[
+    [18036,1]
+   ],"stats":[
+    [5,18],
+    [6,13],
+    [7,16]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":3035,"block":57,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHIELD","stats":{"armor":3035,"block":57,"heal":35,"int":13,"mp5":6,"sta":10},"subclass":6},"id":21610,"inventoryType":14,"itemLevel":81,"name":"Wormscale Blocker","quality":4,"requiredLevel":60,"spells":[
+    [18029,1],
+    [21627,1]
+   ],"stats":[
+    [5,13],
+    [7,10]
+   ],"subclass":6},
+  {"allowableClass":32767,"armor":54,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"armor":54,"int":13,"sp":28,"sta":10},"subclass":1},"id":21611,"inventoryType":9,"itemLevel":81,"name":"Burrower Bracers","quality":4,"requiredLevel":60,"spells":[
+    [14127,1]
+   ],"stats":[
+    [5,13],
+    [7,10]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":100,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":100,"heal":64,"int":24,"mp5":11,"sta":18},"subclass":1},"id":21615,"inventoryType":1,"itemLevel":81,"name":"Don Rigoberto's Lost Hat","quality":4,"requiredLevel":60,"spells":[
+    [18040,1],
+    [21634,1]
+   ],"stats":[
+    [5,24],
+    [7,18]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[87,163,2700],"fit":{"class":2,"slot":"INVTYPE_RANGED","stats":{"agi":18,"dps":46.3},"subclass":2},"id":21616,"inventoryType":15,"itemLevel":78,"name":"Huhuran's Stinger","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,18]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":143,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":143,"heal":53,"int":15,"spi":16,"sta":14},"subclass":2},"id":21617,"inventoryType":10,"itemLevel":78,"name":"Wasphide Gauntlets","quality":4,"requiredLevel":60,"spells":[
+    [15696,1]
+   ],"stats":[
+    [6,16],
+    [5,15],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":384,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"agi":18,"armor":384,"str":23},"subclass":4},"id":21618,"inventoryType":9,"itemLevel":78,"name":"Hive Defiler Wristguards","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [4,23],
+    [3,18]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":74,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":74,"heal":26,"int":17,"mp5":10,"sta":13},"subclass":1},"id":21619,"inventoryType":10,"itemLevel":78,"name":"Gloves of the Messiah","quality":4,"requiredLevel":60,"spells":[
+    [9315,1],
+    [21633,1]
+   ],"stats":[
+    [5,17],
+    [7,13]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"heal":51,"mp5":5,"sta":10},"subclass":0},"id":21620,"inventoryType":11,"itemLevel":78,"name":"Ring of the Martyr","quality":4,"requiredLevel":60,"spells":[
+    [18035,1],
+    [21620,1]
+   ],"stats":[
+    [7,10]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":59,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":10,"armor":59,"defense":6,"sta":19,"str":13},"subclass":1},"id":21621,"inventoryType":16,"itemLevel":78,"name":"Cloak of the Golden Hive","quality":4,"requiredLevel":60,"spells":[
+    [13384,1]
+   ],"stats":[
+    [7,19],
+    [4,13],
+    [3,10]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[53.6,136.6,2300],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.3,"int":7,"sp":72,"spellcrit":1,"sta":14},"subclass":7},"id":21622,"inventoryType":21,"itemLevel":78,"name":"Sharpened Silithid Femur","quality":4,"requiredLevel":60,"spells":[
+    [26395,1],
+    [18384,1]
+   ],"stats":[
+    [5,7],
+    [7,14]
+   ],"subclass":7},
+  {"allowableClass":32767,"armor":549,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":549,"crit":1,"int":13,"sp":16,"sta":17,"str":15},"subclass":4},"id":21623,"inventoryType":10,"itemLevel":78,"name":"Gauntlets of the Righteous Champion","quality":4,"requiredLevel":60,"spells":[
+    [9345,1],
+    [7597,1]
+   ],"stats":[
+    [4,15],
+    [5,13],
+    [7,17]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":309,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"armor":309,"int":13,"sp":20,"spellcrit":1,"spi":10,"sta":15,"str":14},"subclass":3},"id":21624,"inventoryType":10,"itemLevel":78,"name":"Gauntlets of Kalimdor","quality":4,"requiredLevel":60,"spells":[
+    [14799,1],
+    [18384,1]
+   ],"stats":[
+    [4,14],
+    [5,13],
+    [6,10],
+    [7,15]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21625,"inventoryType":12,"itemLevel":78,"name":"Scarab Brooch","quality":4,"requiredLevel":60,"spells":[
+    [26467,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":432,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"ap":40,"armor":432,"int":16,"rap":40,"sp":11,"sta":28},"subclass":3},"id":21626,"inventoryType":7,"itemLevel":78,"name":"Slime-coated Leggings","quality":4,"requiredLevel":60,"resist":{"nature":28},"spells":[
+    [9416,1],
+    [14049,1]
+   ],"stats":[
+    [7,28],
+    [5,16]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":59,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":59,"sta":21},"subclass":1},"id":21627,"inventoryType":16,"itemLevel":77,"name":"Cloak of Untold Secrets","quality":4,"requiredLevel":60,"resist":{"shadow":20},"spells":[],"stats":[
+    [7,21]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[225,338,3700],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"agi":41,"dps":76.1,"sta":31},"subclass":6},"id":21635,"inventoryType":17,"itemLevel":77,"name":"Barb of the Sand Reaver","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,41],
+    [7,31]
+   ],"subclass":6},
+  {"allowableClass":32767,"armor":650,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":650,"defense":9,"dodge":1,"sta":30,"str":11},"subclass":4},"id":21639,"inventoryType":3,"itemLevel":77,"name":"Pauldrons of the Unrelenting","quality":4,"requiredLevel":60,"spells":[
+    [13388,1],
+    [13669,1]
+   ],"stats":[
+    [7,30],
+    [4,11]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":216,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":17,"armor":216,"sta":30,"str":10},"subclass":2},"id":21645,"inventoryType":8,"itemLevel":77,"name":"Hive Tunneler's Boots","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [7,30],
+    [3,17],
+    [4,10]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21647,"inventoryType":12,"itemLevel":77,"name":"Fetish of the Sand Reaver","quality":4,"requiredLevel":60,"spells":[
+    [26400,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":80,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"armor":80,"int":13,"sp":20,"sta":21},"subclass":1},"id":21648,"inventoryType":8,"itemLevel":76,"name":"Recomposed Boots","quality":4,"requiredLevel":60,"resist":{"nature":20},"spells":[
+    [14799,1]
+   ],"stats":[
+    [7,21],
+    [5,13]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[114,213,2800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":20,"crit":1,"dps":58.4,"rap":20,"sta":11},"subclass":7},"id":21650,"inventoryType":13,"itemLevel":77,"name":"Ancient Qiraji Ripper","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9331,1]
+   ],"stats":[
+    [7,11]
+   ],"subclass":7},
+  {"allowableClass":32767,"armor":427,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"ap":62,"armor":427,"crit":2,"int":10,"rap":62,"sta":23},"subclass":3},"id":21651,"inventoryType":7,"itemLevel":77,"name":"Scaled Sand Reaver Leggings","quality":4,"requiredLevel":60,"spells":[
+    [15816,1],
+    [7598,1]
+   ],"stats":[
+    [7,23],
+    [5,10]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":867,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"agi":14,"armor":867,"sta":23,"str":17},"subclass":4},"id":21652,"inventoryType":5,"itemLevel":77,"name":"Silithid Carapace Chestguard","quality":4,"requiredLevel":60,"resist":{"nature":35},"spells":[],"stats":[
+    [7,23],
+    [4,17],
+    [3,14]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":117,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":117,"heal":70,"int":22,"mp5":7,"sta":20},"subclass":1},"id":21663,"inventoryType":20,"itemLevel":77,"name":"Robes of the Guardian Saint","quality":4,"requiredLevel":60,"spells":[
+    [18043,1],
+    [21628,1]
+   ],"stats":[
+    [7,20],
+    [5,22]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"ap":44,"crit":1,"rap":44,"sta":10},"subclass":0},"id":21664,"inventoryType":2,"itemLevel":77,"name":"Barbed Choker","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15810,1]
+   ],"stats":[
+    [7,10]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":170,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":30,"armor":170,"sta":14,"str":16},"subclass":2},"id":21665,"inventoryType":3,"itemLevel":77,"name":"Mantle of Wicked Revenge","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,30],
+    [4,16],
+    [7,14]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HOLDABLE","stats":{"heal":51,"int":6,"mp5":5,"sta":6},"subclass":0},"id":21666,"inventoryType":23,"itemLevel":76,"name":"Sartura's Might","quality":4,"requiredLevel":60,"spells":[
+    [18035,1],
+    [21620,1]
+   ],"stats":[
+    [5,6],
+    [7,6]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":749,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":749,"heal":68,"int":23,"spellcrit":1,"sta":17,"str":9},"subclass":4},"id":21667,"inventoryType":7,"itemLevel":76,"name":"Legplates of Blazing Light","quality":4,"requiredLevel":60,"spells":[
+    [18042,1],
+    [18384,1]
+   ],"stats":[
+    [4,9],
+    [5,23],
+    [7,17]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":422,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":422,"int":23,"sp":36,"spellcrit":1,"sta":20},"subclass":3},"id":21668,"inventoryType":7,"itemLevel":76,"name":"Scaled Leggings of Qiraji Fury","quality":4,"requiredLevel":60,"spells":[
+    [18053,1],
+    [18384,1]
+   ],"stats":[
+    [5,23],
+    [7,20]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":183,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"armor":183,"heal":59,"int":23,"spi":17,"sta":26},"subclass":2},"id":21669,"inventoryType":1,"itemLevel":76,"name":"Creeping Vine Helm","quality":4,"requiredLevel":60,"spells":[
+    [18038,1]
+   ],"stats":[
+    [7,26],
+    [5,23],
+    [6,17]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21670,"inventoryType":12,"itemLevel":76,"name":"Badge of the Swarmguard","quality":4,"requiredLevel":60,"spells":[
+    [26480,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":116,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":116,"int":17,"sp":36,"spi":8,"sta":23},"subclass":1},"id":21671,"inventoryType":20,"itemLevel":76,"name":"Robes of the Battleguard","quality":4,"requiredLevel":60,"spells":[
+    [18053,1],
+    [26283,1]
+   ],"stats":[
+    [7,23],
+    [5,17],
+    [6,8]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":140,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":20,"armor":140,"hit":1,"sta":6,"str":28},"subclass":2},"id":21672,"inventoryType":10,"itemLevel":76,"name":"Gloves of Enforcement","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,20],
+    [4,28],
+    [7,6]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[64,120,1600],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"ap":30,"crit":1,"dps":57.5,"rap":30},"subclass":13},"id":21673,"inventoryType":21,"itemLevel":76,"name":"Silithid Claw","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9336,1]
+   ],"stats":[],"subclass":13},
+  {"allowableClass":32767,"armor":535,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":18,"armor":535,"defense":9,"sta":20,"str":19},"subclass":4},"id":21674,"inventoryType":10,"itemLevel":76,"name":"Gauntlets of Steadfast Determination","quality":4,"requiredLevel":60,"spells":[
+    [13388,1]
+   ],"stats":[
+    [7,20],
+    [4,19],
+    [3,18]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":186,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":17,"armor":186,"parry":1,"sta":20,"str":10},"subclass":2},"id":21675,"inventoryType":6,"itemLevel":76,"name":"Thick Qirajihide Belt","quality":4,"requiredLevel":60,"spells":[
+    [13665,1]
+   ],"stats":[
+    [7,20],
+    [3,17],
+    [4,10]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":101,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":101,"fire":57,"int":23,"sta":17},"subclass":1},"id":21676,"inventoryType":7,"itemLevel":76,"name":"Leggings of the Festering Swarm","quality":4,"requiredLevel":60,"spells":[
+    [26405,1]
+   ],"stats":[
+    [5,23],
+    [7,17]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"ap":40,"crit":1,"rap":40,"sta":12},"subclass":0},"id":21677,"inventoryType":11,"itemLevel":78,"name":"Ring of the Qiraji Fury","quality":4,"requiredLevel":60,"spells":[
+    [14049,1],
+    [7597,1]
+   ],"stats":[
+    [7,12]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"int":13,"sp":8,"sta":9},"subclass":0},"id":21678,"inventoryType":2,"itemLevel":76,"name":"Necklace of Purity","quality":4,"requiredLevel":60,"resist":{"nature":20},"spells":[
+    [9398,1]
+   ],"stats":[
+    [5,13],
+    [7,9]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[209,315,3200],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":81.9,"sta":18,"str":24},"subclass":8},"id":21679,"inventoryType":17,"itemLevel":81,"name":"Kalimdor's Revenge","quality":4,"requiredLevel":60,"spells":[
+    [26415,2]
+   ],"stats":[
+    [4,24],
+    [7,18]
+   ],"subclass":8},
+  {"allowableClass":32767,"armor":203,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HAND","stats":{"agi":17,"armor":203,"sta":21,"str":10},"subclass":2},"id":21682,"inventoryType":10,"itemLevel":78,"name":"Bile-Covered Gauntlets","quality":4,"requiredLevel":60,"resist":{"nature":20},"spells":[],"stats":[
+    [3,17],
+    [7,21],
+    [4,10]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":642,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":6,"armor":642,"heal":44,"int":20,"sta":17,"str":10},"subclass":4},"id":21683,"inventoryType":3,"itemLevel":76,"name":"Mantle of the Desert Crusade","quality":4,"requiredLevel":60,"spells":[
+    [17371,1]
+   ],"stats":[
+    [5,20],
+    [7,17],
+    [4,10],
+    [3,6]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":362,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":362,"int":20,"sp":28,"sta":17,"str":6},"subclass":3},"id":21684,"inventoryType":3,"itemLevel":76,"name":"Mantle of the Desert's Fury","quality":4,"requiredLevel":60,"spells":[
+    [14127,1]
+   ],"stats":[
+    [5,20],
+    [7,17],
+    [4,6]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":87,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":87,"fire":33,"int":20,"sta":20},"subclass":1},"id":21686,"inventoryType":3,"itemLevel":76,"name":"Mantle of Phrenic Power","quality":4,"requiredLevel":60,"spells":[
+    [17871,1]
+   ],"stats":[
+    [5,20],
+    [7,20]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"sta":13},"subclass":0},"id":21687,"inventoryType":11,"itemLevel":76,"name":"Ukko's Ring of Darkness","quality":4,"requiredLevel":60,"resist":{"shadow":20},"spells":[
+    [21596,1]
+   ],"stats":[
+    [7,13]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":476,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"agi":19,"armor":476,"sta":17,"str":26},"subclass":4},"id":21692,"inventoryType":6,"itemLevel":75,"name":"Triad Girdle","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [4,26],
+    [3,19],
+    [7,17]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":250,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_HEAD","stats":{"agi":19,"armor":250,"dodge":1,"sta":36,"str":17},"subclass":2},"id":21693,"inventoryType":1,"itemLevel":75,"name":"Guise of the Devourer","quality":4,"requiredLevel":60,"spells":[
+    [13669,1]
+   ],"stats":[
+    [7,36],
+    [3,19],
+    [4,17]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":86,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"armor":86,"heal":44,"int":17,"spi":20,"sta":12},"subclass":1},"id":21694,"inventoryType":3,"itemLevel":75,"name":"Ternary Mantle","quality":4,"requiredLevel":60,"spells":[
+    [17371,1]
+   ],"stats":[
+    [5,17],
+    [6,20],
+    [7,12]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"defense":6,"dodge":1,"sta":17,"str":11},"subclass":0},"id":21695,"inventoryType":11,"itemLevel":75,"name":"Angelista's Touch","quality":4,"requiredLevel":60,"spells":[
+    [13669,1],
+    [13384,1]
+   ],"stats":[
+    [7,17],
+    [4,11]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":114,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_ROBE","stats":{"armor":114,"int":22,"mp5":7,"sta":21},"subclass":1},"id":21696,"inventoryType":20,"itemLevel":75,"name":"Robes of the Triumvirate","quality":4,"requiredLevel":60,"resist":{"nature":30},"spells":[
+    [21364,1]
+   ],"stats":[
+    [5,22],
+    [7,21]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":57,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":57,"int":12,"sp":21,"sta":17},"subclass":1},"id":21697,"inventoryType":16,"itemLevel":75,"name":"Cape of the Trinity","quality":4,"requiredLevel":60,"spells":[
+    [14248,1]
+   ],"stats":[
+    [7,17],
+    [5,12]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":190,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_LEGS","stats":{"armor":190,"int":22,"mp5":6,"sp":39,"sta":15},"subclass":2},"id":21698,"inventoryType":7,"itemLevel":73,"name":"Leggings of Immersion","quality":4,"requiredLevel":60,"spells":[
+    [18055,1],
+    [21627,1]
+   ],"stats":[
+    [5,22],
+    [7,15]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":348,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":29,"armor":348,"sta":22},"subclass":3},"id":21699,"inventoryType":3,"itemLevel":73,"name":"Barrage Shoulders","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,29],
+    [7,22]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"agi":11,"defense":6,"sta":17,"str":12},"subclass":0},"id":21700,"inventoryType":2,"itemLevel":73,"name":"Pendant of the Qiraji Guardian","quality":4,"requiredLevel":60,"spells":[
+    [13384,1]
+   ],"stats":[
+    [7,17],
+    [4,12],
+    [3,11]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":56,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":16,"armor":56,"hit":1,"sta":15,"str":11},"subclass":1},"id":21701,"inventoryType":16,"itemLevel":73,"name":"Cloak of Concentrated Hatred","quality":4,"requiredLevel":60,"spells":[
+    [15464,1]
+   ],"stats":[
+    [3,16],
+    [4,11],
+    [7,15]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"ap":24,"rap":24,"sta":12},"subclass":0},"id":21702,"inventoryType":2,"itemLevel":73,"name":"Amulet of Foul Warding","quality":4,"requiredLevel":60,"resist":{"nature":20},"spells":[
+    [14027,1]
+   ],"stats":[
+    [7,12]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[198,297,3500],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":70.7,"int":22,"sp":30,"sta":26,"str":16},"subclass":5},"id":21703,"inventoryType":17,"itemLevel":73,"name":"Hammer of Ji'zhi","quality":4,"requiredLevel":60,"spells":[
+    [14798,1]
+   ],"stats":[
+    [5,22],
+    [7,26],
+    [4,16]
+   ],"subclass":5},
+  {"allowableClass":32767,"armor":567,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":12,"armor":567,"heal":33,"int":16,"sta":15,"str":15},"subclass":4},"id":21704,"inventoryType":8,"itemLevel":73,"name":"Boots of the Redeemed Prophecy","quality":4,"requiredLevel":60,"spells":[
+    [9318,1]
+   ],"stats":[
+    [3,12],
+    [4,15],
+    [5,16],
+    [7,15]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":319,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":10,"armor":319,"int":15,"sp":20,"sta":15,"str":15},"subclass":3},"id":21705,"inventoryType":8,"itemLevel":73,"name":"Boots of the Fallen Prophet","quality":4,"requiredLevel":60,"spells":[
+    [14799,1]
+   ],"stats":[
+    [3,10],
+    [4,15],
+    [5,15],
+    [7,15]
+   ],"subclass":3},
+  {"allowableClass":32767,"armor":647,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FEET","stats":{"agi":8,"armor":647,"defense":5,"sta":29,"str":12},"subclass":4},"id":21706,"inventoryType":8,"itemLevel":73,"name":"Boots of the Unwavering Will","quality":4,"requiredLevel":60,"spells":[
+    [13383,1]
+   ],"stats":[
+    [7,29],
+    [4,12],
+    [3,8]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"sp":26},"subclass":0},"id":21707,"inventoryType":11,"itemLevel":73,"name":"Ring of Swarming Thought","quality":4,"requiredLevel":60,"spells":[
+    [18049,1],
+    [26283,1]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":95,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WRIST","stats":{"ap":18,"armor":95,"int":12,"rap":18,"sta":14},"subclass":2},"id":21708,"inventoryType":9,"itemLevel":73,"name":"Beetle Scaled Wristguards","quality":4,"requiredLevel":60,"resist":{"nature":15},"spells":[
+    [9330,1]
+   ],"stats":[
+    [7,14],
+    [5,12]
+   ],"subclass":2},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"int":6,"sp":37,"spellhit":1,"sta":5},"subclass":0},"id":21709,"inventoryType":11,"itemLevel":88,"name":"Ring of the Fallen God","quality":4,"requiredLevel":60,"spells":[
+    [18054,1],
+    [23727,1]
+   ],"stats":[
+    [5,6],
+    [7,5]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":66,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"agi":26,"armor":66,"sta":15,"str":11},"subclass":1},"id":21710,"inventoryType":16,"itemLevel":88,"name":"Cloak of the Fallen God","quality":4,"requiredLevel":60,"spells":[],"stats":[
+    [3,26],
+    [4,11],
+    [7,15]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"heal":57,"mp5":6,"sta":11},"subclass":0},"id":21712,"inventoryType":2,"itemLevel":88,"name":"Amulet of the Fallen God","quality":4,"requiredLevel":60,"spells":[
+    [18037,1],
+    [18379,1]
+   ],"stats":[
+    [7,11]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[97,181,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":20,"crit":1,"dps":53.5,"rap":20,"sta":9},"subclass":4},"id":21715,"inventoryType":13,"itemLevel":72,"name":"Sand Polished Hammer","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9331,1]
+   ],"stats":[
+    [7,9]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":824,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CHEST","stats":{"armor":824,"crit":1,"hit":1,"sta":13,"str":37},"subclass":4},"id":21814,"inventoryType":5,"itemLevel":73,"name":"Breastplate of Annihilation","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [15464,1]
+   ],"stats":[
+    [4,37],
+    [7,13]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[38.36,111.36,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"dps":41.6,"heal":187,"int":19,"mp5":3,"sta":10},"subclass":4},"id":21839,"inventoryType":21,"itemLevel":84,"name":"Scepter of the False Prophet","quality":4,"requiredLevel":60,"spells":[
+    [26814,1],
+    [21625,1]
+   ],"stats":[
+    [7,10],
+    [5,19]
+   ],"subclass":4},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_RELIC","stats":[],"subclass":9},"id":22396,"inventoryType":28,"itemLevel":78,"name":"Totem of Life","quality":4,"requiredLevel":60,"spells":[
+    [27855,1]
+   ],"stats":[],"subclass":9},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_RELIC","stats":[],"subclass":8},"id":22399,"inventoryType":28,"itemLevel":78,"name":"Idol of Health","quality":4,"requiredLevel":60,"spells":[
+    [27846,1]
+   ],"stats":[],"subclass":8},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_RELIC","stats":[],"subclass":7},"id":22402,"inventoryType":28,"itemLevel":78,"name":"Libram of Grace","quality":4,"requiredLevel":60,"spells":[
+    [27847,1]
+   ],"stats":[],"subclass":7},
+  {"allowableClass":-1,"armor":75,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":75,"int":9,"sp":41,"spellcrit":1,"sta":10},"subclass":1},"id":22730,"inventoryType":6,"itemLevel":88,"name":"Eyestalk Waist Cord","quality":4,"requiredLevel":60,"spells":[
+    [18384,1],
+    [18057,1]
+   ],"stats":[
+    [5,9],
+    [7,10]
+   ],"subclass":1},
+  {"allowableClass":-1,"armor":66,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_CLOAK","stats":{"armor":66,"int":10,"sp":30,"spellhit":1,"sta":11},"subclass":1},"id":22731,"inventoryType":16,"itemLevel":88,"name":"Cloak of the Devoured","quality":4,"requiredLevel":60,"spells":[
+    [14798,1],
+    [23727,1]
+   ],"stats":[
+    [5,10],
+    [7,11]
+   ],"subclass":1},
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_NECK","stats":{"defense":10,"dodge":1,"hit":1,"sta":24},"subclass":0},"id":22732,"inventoryType":2,"itemLevel":88,"name":"Mark of C'Thun","quality":4,"requiredLevel":60,"spells":[
+    [13390,1],
+    [13669,1],
+    [15464,1]
+   ],"stats":[
+    [7,24]
+   ],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[103,192,3000],"fit":{"class":2,"slot":"INVTYPE_RANGEDRIGHT","stats":{"ap":18,"crit":1,"dps":49.2,"rap":18},"subclass":3},"id":23557,"inventoryType":26,"itemLevel":81,"name":"Larvae of the Great Worm","quality":4,"requiredLevel":60,"spells":[
+    [7597,1],
+    [9330,1]
+   ],"stats":[],"subclass":3},
+  {"allowableClass":2047,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":23558,"inventoryType":12,"itemLevel":81,"name":"The Burrower's Shell","quality":4,"requiredLevel":60,"spells":[
+    [29506,0]
+   ],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":23570,"inventoryType":12,"itemLevel":81,"name":"Jom Gabbar","quality":4,"requiredLevel":60,"spells":[
+    [29602,0]
+   ],"stats":[],"subclass":0}
+ ],"quests":[
+  {"classes":0,"id":7604,"needs":[
+    [18628,1],
+    [17203,1]
+   ],"rewards":[18592],"title":"A Binding Contract"},
+  {"classes":4,"id":7632,"needs":[
+    [18703,1]
+   ],"rewards":[],"title":"The Ancient Leaf"},
+  {"classes":0,"id":7786,"needs":[
+    [17771,10],
+    [19017,1],
+    [18563,1],
+    [18564,1]
+   ],"prev":7785,"rewards":[],"title":"Thunderaan the Windseeker"},
+  {"classes":1,"id":8544,"needs":[
+    [20928,1],
+    [20875,2],
+    [20863,5],
+    [20858,5]
+   ],"prev":8579,"rewards":[21330],"title":"Conqueror's Spaulders"},
+  {"classes":1,"id":8556,"needs":[
+    [20884,1],
+    [20868,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21393],"title":"Signet of Unyielding Strength"},
+  {"classes":1,"id":8557,"needs":[
+    [20885,1],
+    [20867,2],
+    [20864,5],
+    [20860,5]
+   ],"rewards":[21394],"title":"Drape of Unyielding Strength"},
+  {"classes":1,"id":8558,"needs":[
+    [20886,1],
+    [20873,2],
+    [20862,5],
+    [20858,5]
+   ],"rewards":[21392],"title":"Sickle of Unyielding Strength"},
+  {"classes":1,"id":8559,"needs":[
+    [20928,1],
+    [20882,2],
+    [20865,5],
+    [20859,5]
+   ],"prev":8579,"rewards":[21333],"title":"Conqueror's Greaves"},
+  {"classes":1,"id":8560,"needs":[
+    [20927,1],
+    [20876,2],
+    [20861,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21332],"title":"Conqueror's Legguards"},
+  {"classes":1,"id":8561,"needs":[
+    [20926,1],
+    [20874,2],
+    [20862,5],
+    [20858,5]
+   ],"prev":8579,"rewards":[21329],"title":"Conqueror's Crown"},
+  {"classes":1,"id":8562,"needs":[
+    [20929,1],
+    [20882,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21331],"title":"Conqueror's Breastplate"},
+  {"classes":16,"id":8592,"needs":[
+    [20926,1],
+    [20877,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21348],"title":"Tiara of the Oracle"},
+  {"classes":16,"id":8593,"needs":[
+    [20927,1],
+    [20879,2],
+    [20859,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21352],"title":"Trousers of the Oracle"},
+  {"classes":16,"id":8594,"needs":[
+    [20928,1],
+    [20878,2],
+    [20860,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21350],"title":"Mantle of the Oracle"},
+  {"classes":16,"id":8596,"needs":[
+    [20928,1],
+    [20876,2],
+    [20861,5],
+    [20859,5]
+   ],"prev":8579,"rewards":[21349],"title":"Footwraps of the Oracle"},
+  {"classes":64,"id":8602,"needs":[
+    [20932,1],
+    [20879,2],
+    [20859,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21376],"title":"Stormcaller's Pauldrons"},
+  {"classes":16,"id":8603,"needs":[
+    [20933,1],
+    [20876,2],
+    [20858,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21351],"title":"Vestments of the Oracle"},
+  {"classes":64,"id":8621,"needs":[
+    [20932,1],
+    [20877,2],
+    [20861,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21373],"title":"Stormcaller's Footguards"},
+  {"classes":64,"id":8622,"needs":[
+    [20929,1],
+    [20877,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21374],"title":"Stormcaller's Hauberk"},
+  {"classes":64,"id":8623,"needs":[
+    [20930,1],
+    [20878,2],
+    [20858,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21372],"title":"Stormcaller's Diadem"},
+  {"classes":64,"id":8624,"needs":[
+    [20931,1],
+    [20881,2],
+    [20865,5],
+    [20861,5]
+   ],"prev":8579,"rewards":[21375],"title":"Stormcaller's Leggings"},
+  {"classes":128,"id":8625,"needs":[
+    [20932,1],
+    [20876,2],
+    [20858,5],
+    [20861,5]
+   ],"prev":8579,"rewards":[21345],"title":"Enigma Shoulderpads"},
+  {"classes":4,"id":8626,"needs":[
+    [20928,1],
+    [20879,2],
+    [20858,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21365],"title":"Striker's Footguards"},
+  {"classes":2,"id":8627,"needs":[
+    [20929,1],
+    [20877,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21389],"title":"Avenger's Breastplate"},
+  {"classes":2,"id":8628,"needs":[
+    [20930,1],
+    [20878,2],
+    [20858,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21387],"title":"Avenger's Crown"},
+  {"classes":2,"id":8629,"needs":[
+    [20931,1],
+    [20881,2],
+    [20865,5],
+    [20861,5]
+   ],"prev":8579,"rewards":[21390],"title":"Avenger's Legguards"},
+  {"classes":2,"id":8630,"needs":[
+    [20932,1],
+    [20879,2],
+    [20859,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21391],"title":"Avenger's Pauldrons"},
+  {"classes":128,"id":8631,"needs":[
+    [20927,1],
+    [20877,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21346],"title":"Enigma Leggings"},
+  {"classes":128,"id":8632,"needs":[
+    [20926,1],
+    [20875,2],
+    [20861,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21347],"title":"Enigma Circlet"},
+  {"classes":128,"id":8633,"needs":[
+    [20933,1],
+    [20874,2],
+    [20859,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21343],"title":"Enigma Robes"},
+  {"classes":128,"id":8634,"needs":[
+    [20932,1],
+    [20874,2],
+    [20860,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21344],"title":"Enigma Boots"},
+  {"classes":8,"id":8637,"needs":[
+    [20928,1],
+    [20881,2],
+    [20862,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21359],"title":"Deathdealer's Boots"},
+  {"classes":8,"id":8638,"needs":[
+    [20929,1],
+    [20881,2],
+    [20861,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21364],"title":"Deathdealer's Vest"},
+  {"classes":8,"id":8639,"needs":[
+    [20930,1],
+    [20882,2],
+    [20863,5],
+    [20859,5]
+   ],"prev":8579,"rewards":[21360],"title":"Deathdealer's Helm"},
+  {"classes":8,"id":8640,"needs":[
+    [20927,1],
+    [20875,2],
+    [20858,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21362],"title":"Deathdealer's Leggings"},
+  {"classes":8,"id":8641,"needs":[
+    [20928,1],
+    [20874,2],
+    [20860,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21361],"title":"Deathdealer's Spaulders"},
+  {"classes":2,"id":8655,"needs":[
+    [20932,1],
+    [20877,2],
+    [20861,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21388],"title":"Avenger's Greaves"},
+  {"classes":4,"id":8656,"needs":[
+    [20929,1],
+    [20879,2],
+    [20859,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21370],"title":"Striker's Hauberk"},
+  {"classes":4,"id":8657,"needs":[
+    [20930,1],
+    [20881,2],
+    [20861,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21366],"title":"Striker's Diadem"},
+  {"classes":4,"id":8658,"needs":[
+    [20931,1],
+    [20874,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21368],"title":"Striker's Leggings"},
+  {"classes":4,"id":8659,"needs":[
+    [20928,1],
+    [20882,2],
+    [20862,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21367],"title":"Striker's Pauldrons"},
+  {"classes":256,"id":8660,"needs":[
+    [20932,1],
+    [20875,2],
+    [20863,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21338],"title":"Doomcaller's Footwraps"},
+  {"classes":256,"id":8661,"needs":[
+    [20933,1],
+    [20875,2],
+    [20862,5],
+    [20858,5]
+   ],"prev":8579,"rewards":[21334],"title":"Doomcaller's Robes"},
+  {"classes":256,"id":8662,"needs":[
+    [20926,1],
+    [20876,2],
+    [20860,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21337],"title":"Doomcaller's Circlet"},
+  {"classes":256,"id":8663,"needs":[
+    [20931,1],
+    [20878,2],
+    [20859,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21336],"title":"Doomcaller's Trousers"},
+  {"classes":256,"id":8664,"needs":[
+    [20932,1],
+    [20877,2],
+    [20861,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21335],"title":"Doomcaller's Mantle"},
+  {"classes":1024,"id":8665,"needs":[
+    [20932,1],
+    [20878,2],
+    [20858,5],
+    [20860,5]
+   ],"prev":8579,"rewards":[21355],"title":"Genesis Boots"},
+  {"classes":1024,"id":8666,"needs":[
+    [20933,1],
+    [20878,2],
+    [20861,5],
+    [20865,5]
+   ],"prev":8579,"rewards":[21357],"title":"Genesis Vest"},
+  {"classes":1024,"id":8667,"needs":[
+    [20930,1],
+    [20879,2],
+    [20859,5],
+    [20863,5]
+   ],"prev":8579,"rewards":[21353],"title":"Genesis Helm"},
+  {"classes":1024,"id":8668,"needs":[
+    [20931,1],
+    [20882,2],
+    [20858,5],
+    [20862,5]
+   ],"prev":8579,"rewards":[21356],"title":"Genesis Trousers"},
+  {"classes":1024,"id":8669,"needs":[
+    [20932,1],
+    [20881,2],
+    [20859,5],
+    [20864,5]
+   ],"prev":8579,"rewards":[21354],"title":"Genesis Shoulderpads"},
+  {"classes":16,"id":8689,"needs":[
+    [20885,1],
+    [20870,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21412],"title":"Shroud of Infinite Wisdom"},
+  {"classes":64,"id":8690,"needs":[
+    [20889,1],
+    [20871,2],
+    [20863,5],
+    [20859,5]
+   ],"rewards":[21400],"title":"Cloak of the Gathering Storm"},
+  {"classes":128,"id":8691,"needs":[
+    [20885,1],
+    [20873,2],
+    [20858,5],
+    [20862,5]
+   ],"rewards":[21415],"title":"Drape of Vaulted Secrets"},
+  {"classes":1024,"id":8692,"needs":[
+    [20889,1],
+    [20872,2],
+    [20864,5],
+    [20860,5]
+   ],"rewards":[21409],"title":"Cloak of Unending Life"},
+  {"classes":8,"id":8693,"needs":[
+    [20885,1],
+    [20866,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21406],"title":"Cloak of Veiled Shadows"},
+  {"classes":256,"id":8694,"needs":[
+    [20889,1],
+    [20869,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21418],"title":"Shroud of Unspoken Names"},
+  {"classes":2,"id":8695,"needs":[
+    [20889,1],
+    [20871,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21397],"title":"Cape of Eternal Justice"},
+  {"classes":4,"id":8696,"needs":[
+    [20889,1],
+    [20868,2],
+    [20858,5],
+    [20862,5]
+   ],"rewards":[21403],"title":"Cloak of the Unseen Path"},
+  {"classes":16,"id":8697,"needs":[
+    [20888,1],
+    [20871,2],
+    [20860,5],
+    [20864,5]
+   ],"rewards":[21411],"title":"Ring of Infinite Wisdom"},
+  {"classes":64,"id":8698,"needs":[
+    [20884,1],
+    [20872,2],
+    [20860,5],
+    [20864,5]
+   ],"rewards":[21399],"title":"Ring of the Gathering Storm"},
+  {"classes":128,"id":8699,"needs":[
+    [20884,1],
+    [20866,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21414],"title":"Band of Vaulted Secrets"},
+  {"classes":1024,"id":8700,"needs":[
+    [20884,1],
+    [20873,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21408],"title":"Band of Unending Life"},
+  {"classes":8,"id":8701,"needs":[
+    [20888,1],
+    [20867,2],
+    [20858,5],
+    [20862,5]
+   ],"rewards":[21405],"title":"Band of Veiled Shadows"},
+  {"classes":256,"id":8702,"needs":[
+    [20888,1],
+    [20870,2],
+    [20858,5],
+    [20862,5]
+   ],"rewards":[21417],"title":"Ring of Unspoken Names"},
+  {"classes":2,"id":8703,"needs":[
+    [20884,1],
+    [20872,2],
+    [20860,5],
+    [20864,5]
+   ],"rewards":[21396],"title":"Ring of Eternal Justice"},
+  {"classes":4,"id":8704,"needs":[
+    [20888,1],
+    [20869,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21402],"title":"Signet of the Unseen Path"},
+  {"classes":16,"id":8705,"needs":[
+    [20890,1],
+    [20868,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21410],"title":"Gavel of Infinite Wisdom"},
+  {"classes":64,"id":8706,"needs":[
+    [20886,1],
+    [20869,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21398],"title":"Hammer of the Gathering Storm"},
+  {"classes":128,"id":8707,"needs":[
+    [20890,1],
+    [20871,2],
+    [20860,5],
+    [20864,5]
+   ],"rewards":[21413],"title":"Blade of Vaulted Secrets"},
+  {"classes":1024,"id":8708,"needs":[
+    [20890,1],
+    [20870,2],
+    [20862,5],
+    [20858,5]
+   ],"rewards":[21407],"title":"Mace of Unending Life"},
+  {"classes":8,"id":8709,"needs":[
+    [20886,1],
+    [20872,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21404],"title":"Dagger of Veiled Shadows"},
+  {"classes":256,"id":8710,"needs":[
+    [20890,1],
+    [20867,2],
+    [20859,5],
+    [20863,5]
+   ],"rewards":[21416],"title":"Kris of Unspoken Names"},
+  {"classes":2,"id":8711,"needs":[
+    [20886,1],
+    [20869,2],
+    [20861,5],
+    [20865,5]
+   ],"rewards":[21395],"title":"Blade of Eternal Justice"},
+  {"classes":4,"id":8712,"needs":[
+    [20886,1],
+    [20866,2],
+    [20860,5],
+    [20864,5]
+   ],"rewards":[21401],"title":"Scythe of the Unseen Path"},
+  {"classes":0,"id":8789,"needs":[
+    [21232,1],
+    [18562,3]
+   ],"rewards":[21242,21272,21244,21269],"title":"Imperial Qiraji Armaments"},
+  {"classes":0,"id":8790,"needs":[
+    [21237,1],
+    [18562,3]
+   ],"rewards":[21273,21275,21268],"title":"Imperial Qiraji Regalia"},
+  {"classes":0,"id":8791,"needs":[
+    [21220,1]
+   ],"rewards":[21504,21507,21505,21506],"title":"The Fall of Ossirian"},
+  {"classes":0,"id":8801,"needs":[
+    [21221,1]
+   ],"rewards":[],"title":"C'Thun's Legacy"},
+  {"classes":0,"id":8802,"needs":[
+    [21221,1]
+   ],"prev":8801,"rewards":[21712,21710,21709],"title":"The Savior of Kalimdor"}
+ ],"source":"CMaNGOS classic-db (github.com/cmangos/classic-db, classicdb.sql, GPL-3.0): emulator world database for 1.12. Quests that ask for an item dropped in AQ20 or AQ40, and the items involved (with every Molten Core, AQ20 and AQ40 drop). stats are {stat type, value}; spells are {spell id, trigger} (1 = on equip); fit is the item as ItemFit sees it (slot, class, subclass, stats).","spells":[
+  {"effects":[
+    {"amount":4,"aura":30,"effect":6,"misc":95}
+   ],"id":7517,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":5,"aura":30,"effect":6,"misc":95}
+   ],"id":7518,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":3,"aura":30,"effect":6,"misc":173}
+   ],"id":7574,"name":"Increased Dagger"},
+  {"effects":[
+    {"amount":5,"aura":30,"effect":6,"misc":173}
+   ],"id":7576,"name":"Increased Dagger"},
+  {"effects":[
+    {"amount":1,"aura":52,"effect":6,"misc":0}
+   ],"id":7597,"name":"Increased Critical 1"},
+  {"effects":[
+    {"amount":2,"aura":52,"effect":6,"misc":0}
+   ],"id":7598,"name":"Increased Critical 2"},
+  {"effects":[
+    {"amount":14,"aura":99,"effect":6,"misc":0},
+    {"amount":14,"aura":124,"effect":6,"misc":0}
+   ],"id":9142,"name":"Attack Power 14"},
+  {"effects":[
+    {"amount":24,"aura":135,"effect":6,"misc":126}
+   ],"id":9314,"name":"Increase Healing 24"},
+  {"effects":[
+    {"amount":26,"aura":135,"effect":6,"misc":126}
+   ],"id":9315,"name":"Increase Healing 26"},
+  {"effects":[
+    {"amount":31,"aura":135,"effect":6,"misc":126}
+   ],"id":9317,"name":"Increase Healing 31"},
+  {"effects":[
+    {"amount":33,"aura":135,"effect":6,"misc":126}
+   ],"id":9318,"name":"Increase Healing 33"},
+  {"effects":[
+    {"amount":18,"aura":99,"effect":6,"misc":0},
+    {"amount":18,"aura":124,"effect":6,"misc":0}
+   ],"id":9330,"name":"Attack Power 18"},
+  {"effects":[
+    {"amount":20,"aura":99,"effect":6,"misc":0},
+    {"amount":20,"aura":124,"effect":6,"misc":0}
+   ],"id":9331,"name":"Attack Power 20"},
+  {"effects":[
+    {"amount":22,"aura":99,"effect":6,"misc":0},
+    {"amount":22,"aura":124,"effect":6,"misc":0}
+   ],"id":9332,"name":"Attack Power 22"},
+  {"effects":[
+    {"amount":30,"aura":99,"effect":6,"misc":0},
+    {"amount":30,"aura":124,"effect":6,"misc":0}
+   ],"id":9336,"name":"Attack Power 30"},
+  {"effects":[
+    {"amount":13,"aura":13,"effect":6,"misc":126},
+    {"amount":13,"aura":135,"effect":6,"misc":126}
+   ],"id":9342,"name":"Increase Spell Dam 13"},
+  {"effects":[
+    {"amount":14,"aura":13,"effect":6,"misc":126},
+    {"amount":14,"aura":135,"effect":6,"misc":126}
+   ],"id":9343,"name":"Increase Spell Dam 14"},
+  {"effects":[
+    {"amount":16,"aura":13,"effect":6,"misc":126},
+    {"amount":16,"aura":135,"effect":6,"misc":126}
+   ],"id":9345,"name":"Increase Spell Dam 16"},
+  {"effects":[
+    {"amount":18,"aura":13,"effect":6,"misc":126},
+    {"amount":18,"aura":135,"effect":6,"misc":126}
+   ],"id":9346,"name":"Increase Spell Dam 18"},
+  {"effects":[
+    {"amount":6,"aura":13,"effect":6,"misc":126},
+    {"amount":6,"aura":135,"effect":6,"misc":126}
+   ],"id":9396,"name":"Increase Spell Dam 6"},
+  {"effects":[
+    {"amount":8,"aura":13,"effect":6,"misc":126},
+    {"amount":8,"aura":135,"effect":6,"misc":126}
+   ],"id":9398,"name":"Increase Spell Dam 8"},
+  {"effects":[
+    {"amount":18,"aura":135,"effect":6,"misc":126}
+   ],"id":9406,"name":"Increase Healing 18"},
+  {"effects":[
+    {"amount":22,"aura":135,"effect":6,"misc":126}
+   ],"id":9408,"name":"Increase Healing 22"},
+  {"effects":[
+    {"amount":9,"aura":13,"effect":6,"misc":126},
+    {"amount":9,"aura":135,"effect":6,"misc":126}
+   ],"id":9415,"name":"Increase Spell Dam 9"},
+  {"effects":[
+    {"amount":11,"aura":13,"effect":6,"misc":126},
+    {"amount":11,"aura":135,"effect":6,"misc":126}
+   ],"id":9416,"name":"Increase Spell Dam 11"},
+  {"effects":[
+    {"amount":12,"aura":13,"effect":6,"misc":126},
+    {"amount":12,"aura":135,"effect":6,"misc":126}
+   ],"id":9417,"name":"Increase Spell Dam 12"},
+  {"effects":[
+    {"amount":5,"aura":30,"effect":6,"misc":95}
+   ],"id":13383,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":6,"aura":30,"effect":6,"misc":95}
+   ],"id":13384,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":7,"aura":30,"effect":6,"misc":95}
+   ],"id":13385,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":8,"aura":30,"effect":6,"misc":95}
+   ],"id":13387,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":9,"aura":30,"effect":6,"misc":95}
+   ],"id":13388,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":10,"aura":30,"effect":6,"misc":95}
+   ],"id":13390,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":1,"aura":47,"effect":6,"misc":0}
+   ],"id":13665,"name":"Increased Parry 1"},
+  {"effects":[
+    {"amount":1,"aura":49,"effect":6,"misc":0}
+   ],"id":13669,"name":"Increased Dodge 1"},
+  {"effects":[
+    {"amount":2,"aura":49,"effect":6,"misc":0}
+   ],"id":13670,"name":"Increased Dodge 2"},
+  {"effects":[
+    {"amount":2,"aura":51,"effect":6,"misc":0}
+   ],"id":13675,"name":"Increased Block 2"},
+  {"effects":[
+    {"amount":3,"aura":51,"effect":6,"misc":0}
+   ],"id":13676,"name":"Increased Block 3"},
+  {"effects":[
+    {"amount":29,"aura":13,"effect":6,"misc":126},
+    {"amount":29,"aura":135,"effect":6,"misc":126}
+   ],"id":13881,"name":"Increase Spell Dam 29"},
+  {"effects":[
+    {"amount":24,"aura":99,"effect":6,"misc":0},
+    {"amount":24,"aura":124,"effect":6,"misc":0}
+   ],"id":14027,"name":"Attack Power 24"},
+  {"effects":[
+    {"amount":23,"aura":13,"effect":6,"misc":126},
+    {"amount":23,"aura":135,"effect":6,"misc":126}
+   ],"id":14047,"name":"Increase Spell Dam 23"},
+  {"effects":[
+    {"amount":40,"aura":99,"effect":6,"misc":0},
+    {"amount":40,"aura":124,"effect":6,"misc":0}
+   ],"id":14049,"name":"Attack Power 40"},
+  {"effects":[
+    {"amount":27,"aura":13,"effect":6,"misc":126},
+    {"amount":27,"aura":135,"effect":6,"misc":126}
+   ],"id":14054,"name":"Increase Spell Dam 27"},
+  {"effects":[
+    {"amount":28,"aura":13,"effect":6,"misc":126},
+    {"amount":28,"aura":135,"effect":6,"misc":126}
+   ],"id":14127,"name":"Increase Spell Dam 28"},
+  {"effects":[
+    {"amount":21,"aura":13,"effect":6,"misc":126},
+    {"amount":21,"aura":135,"effect":6,"misc":126}
+   ],"id":14248,"name":"Increase Spell Dam 21"},
+  {"effects":[
+    {"amount":19,"aura":13,"effect":6,"misc":126},
+    {"amount":19,"aura":135,"effect":6,"misc":126}
+   ],"id":14254,"name":"Increase Spell Dam 19"},
+  {"effects":[
+    {"amount":30,"aura":13,"effect":6,"misc":126},
+    {"amount":30,"aura":135,"effect":6,"misc":126}
+   ],"id":14798,"name":"Increase Spell Dam 30"},
+  {"effects":[
+    {"amount":20,"aura":13,"effect":6,"misc":126},
+    {"amount":20,"aura":135,"effect":6,"misc":126}
+   ],"id":14799,"name":"Increase Spell Dam 20"},
+  {"effects":[
+    {"amount":3,"aura":15,"effect":6,"misc":0}
+   ],"id":15438,"name":"Thorns"},
+  {"effects":[
+    {"amount":1,"aura":54,"effect":6,"misc":0}
+   ],"id":15464,"name":"Increased Hit Chance 1"},
+  {"effects":[
+    {"amount":2,"aura":54,"effect":6,"misc":0}
+   ],"id":15465,"name":"Increased Hit Chance 2"},
+  {"effects":[
+    {"amount":53,"aura":135,"effect":6,"misc":126}
+   ],"id":15696,"name":"Increase Healing 53"},
+  {"effects":[
+    {"amount":22,"aura":13,"effect":6,"misc":126},
+    {"amount":22,"aura":135,"effect":6,"misc":126}
+   ],"id":15714,"name":"Increase Spell Dam 22"},
+  {"effects":[
+    {"amount":25,"aura":13,"effect":6,"misc":126},
+    {"amount":25,"aura":135,"effect":6,"misc":126}
+   ],"id":15715,"name":"Increase Spell Dam 25"},
+  {"effects":[
+    {"amount":8,"aura":30,"effect":6,"misc":55}
+   ],"id":15771,"name":"Increased 2H Sword"},
+  {"effects":[
+    {"amount":34,"aura":99,"effect":6,"misc":0},
+    {"amount":34,"aura":124,"effect":6,"misc":0}
+   ],"id":15806,"name":"Attack Power 34"},
+  {"effects":[
+    {"amount":38,"aura":99,"effect":6,"misc":0},
+    {"amount":38,"aura":124,"effect":6,"misc":0}
+   ],"id":15808,"name":"Attack Power 38"},
+  {"effects":[
+    {"amount":42,"aura":99,"effect":6,"misc":0},
+    {"amount":42,"aura":124,"effect":6,"misc":0}
+   ],"id":15809,"name":"Attack Power 42"},
+  {"effects":[
+    {"amount":44,"aura":99,"effect":6,"misc":0},
+    {"amount":44,"aura":124,"effect":6,"misc":0}
+   ],"id":15810,"name":"Attack Power 44"},
+  {"effects":[
+    {"amount":54,"aura":99,"effect":6,"misc":0},
+    {"amount":54,"aura":124,"effect":6,"misc":0}
+   ],"id":15813,"name":"Attack Power 54"},
+  {"effects":[
+    {"amount":62,"aura":99,"effect":6,"misc":0},
+    {"amount":62,"aura":124,"effect":6,"misc":0}
+   ],"id":15816,"name":"Attack Power 62"},
+  {"effects":[
+    {"amount":64,"aura":99,"effect":6,"misc":0},
+    {"amount":64,"aura":124,"effect":6,"misc":0}
+   ],"id":15817,"name":"Attack Power 64"},
+  {"effects":[
+    {"amount":32,"aura":13,"effect":6,"misc":126},
+    {"amount":32,"aura":135,"effect":6,"misc":126}
+   ],"id":17367,"name":"Increase Spell Dam 32"},
+  {"effects":[
+    {"amount":44,"aura":135,"effect":6,"misc":126}
+   ],"id":17371,"name":"Increase Healing 44"},
+  {"effects":[
+    {"amount":23,"aura":13,"effect":6,"misc":4}
+   ],"id":17747,"name":"Increase Fire Dam 23"},
+  {"effects":[
+    {"amount":33,"aura":13,"effect":6,"misc":4}
+   ],"id":17871,"name":"Increase Fire Dam 33"},
+  {"effects":[
+    {"amount":40,"aura":13,"effect":6,"misc":8}
+   ],"id":17997,"name":"Increase Nature Dam 40"},
+  {"effects":[
+    {"amount":33,"aura":13,"effect":6,"misc":32}
+   ],"id":18013,"name":"Increase Shadow Dam 33"},
+  {"effects":[
+    {"amount":35,"aura":135,"effect":6,"misc":126}
+   ],"id":18029,"name":"Increase Healing 35"},
+  {"effects":[
+    {"amount":40,"aura":135,"effect":6,"misc":126}
+   ],"id":18031,"name":"Increase Healing 40"},
+  {"effects":[
+    {"amount":42,"aura":135,"effect":6,"misc":126}
+   ],"id":18032,"name":"Increase Healing 42"},
+  {"effects":[
+    {"amount":46,"aura":135,"effect":6,"misc":126}
+   ],"id":18033,"name":"Increase Healing 46"},
+  {"effects":[
+    {"amount":48,"aura":135,"effect":6,"misc":126}
+   ],"id":18034,"name":"Increase Healing 48"},
+  {"effects":[
+    {"amount":51,"aura":135,"effect":6,"misc":126}
+   ],"id":18035,"name":"Increase Healing 51"},
+  {"effects":[
+    {"amount":55,"aura":135,"effect":6,"misc":126}
+   ],"id":18036,"name":"Increase Healing 55"},
+  {"effects":[
+    {"amount":57,"aura":135,"effect":6,"misc":126}
+   ],"id":18037,"name":"Increase Healing 57"},
+  {"effects":[
+    {"amount":59,"aura":135,"effect":6,"misc":126}
+   ],"id":18038,"name":"Increase Healing 59"},
+  {"effects":[
+    {"amount":62,"aura":135,"effect":6,"misc":126}
+   ],"id":18039,"name":"Increase Healing 62"},
+  {"effects":[
+    {"amount":64,"aura":135,"effect":6,"misc":126}
+   ],"id":18040,"name":"Increase Healing 64"},
+  {"effects":[
+    {"amount":68,"aura":135,"effect":6,"misc":126}
+   ],"id":18042,"name":"Increase Healing 68"},
+  {"effects":[
+    {"amount":70,"aura":135,"effect":6,"misc":126}
+   ],"id":18043,"name":"Increase Healing 70"},
+  {"effects":[
+    {"amount":26,"aura":13,"effect":6,"misc":126},
+    {"amount":26,"aura":135,"effect":6,"misc":126}
+   ],"id":18049,"name":"Increase Spell Dam 26"},
+  {"effects":[
+    {"amount":33,"aura":13,"effect":6,"misc":126},
+    {"amount":33,"aura":135,"effect":6,"misc":126}
+   ],"id":18050,"name":"Increase Spell Dam 33"},
+  {"effects":[
+    {"amount":34,"aura":13,"effect":6,"misc":126},
+    {"amount":34,"aura":135,"effect":6,"misc":126}
+   ],"id":18052,"name":"Increase Spell Dam 34"},
+  {"effects":[
+    {"amount":36,"aura":13,"effect":6,"misc":126},
+    {"amount":36,"aura":135,"effect":6,"misc":126}
+   ],"id":18053,"name":"Increase Spell Dam 36"},
+  {"effects":[
+    {"amount":37,"aura":13,"effect":6,"misc":126},
+    {"amount":37,"aura":135,"effect":6,"misc":126}
+   ],"id":18054,"name":"Increase Spell Dam 37"},
+  {"effects":[
+    {"amount":39,"aura":13,"effect":6,"misc":126},
+    {"amount":39,"aura":135,"effect":6,"misc":126}
+   ],"id":18055,"name":"Increase Spell Dam 39"},
+  {"effects":[
+    {"amount":40,"aura":13,"effect":6,"misc":126},
+    {"amount":40,"aura":135,"effect":6,"misc":126}
+   ],"id":18056,"name":"Increase Spell Dam 40"},
+  {"effects":[
+    {"amount":41,"aura":13,"effect":6,"misc":126},
+    {"amount":41,"aura":135,"effect":6,"misc":126}
+   ],"id":18057,"name":"Increase Spell Dam 41"},
+  {"effects":[
+    {"amount":11,"aura":30,"effect":6,"misc":95}
+   ],"id":18185,"name":"Increased Defense"},
+  {"effects":[
+    {"amount":8,"aura":85,"effect":6,"misc":0}
+   ],"id":18378,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":6,"aura":85,"effect":6,"misc":0}
+   ],"id":18379,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":2,"aura":71,"effect":6,"misc":126}
+   ],"id":18382,"name":"Increased Critical Spell"},
+  {"effects":[
+    {"amount":1,"aura":71,"effect":6,"misc":126}
+   ],"id":18384,"name":"Increased Critical Spell"},
+  {"effects":[
+    {"amount":75,"aura":0,"effect":2,"misc":0},
+    {"amount":-25,"aura":29,"effect":6,"misc":-1}
+   ],"id":21151,"name":"Gutgore Ripper"},
+  {"effects":[
+    {"amount":1,"aura":12,"effect":6,"misc":0}
+   ],"id":21152,"name":"Earthshaker"},
+  {"effects":[
+    {"amount":-700,"aura":123,"effect":6,"misc":1}
+   ],"id":21153,"name":"Bonereaver's Edge"},
+  {"effects":[
+    {"amount":1,"aura":0,"effect":24,"misc":0}
+   ],"id":21160,"name":"Eye of Sulfuras"},
+  {"effects":[
+    {"amount":100,"aura":0,"effect":9,"misc":0}
+   ],"id":21170,"name":"Drain Life"},
+  {"effects":[
+    {"amount":1,"aura":0,"effect":34,"misc":0}
+   ],"id":21180,"name":"Summon Thunderstrike"},
+  {"effects":[
+    {"amount":1,"aura":42,"effect":6,"misc":0}
+   ],"id":21185,"name":"Spinal Reaper"},
+  {"effects":[
+    {"amount":3,"aura":85,"effect":6,"misc":0}
+   ],"id":21361,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":4,"aura":85,"effect":6,"misc":0}
+   ],"id":21362,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":5,"aura":85,"effect":6,"misc":0}
+   ],"id":21363,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":7,"aura":85,"effect":6,"misc":0}
+   ],"id":21364,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":9,"aura":85,"effect":6,"misc":0}
+   ],"id":21365,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":31,"aura":124,"effect":6,"misc":0}
+   ],"id":21438,"name":"Attack Power Ranged 31"},
+  {"effects":[
+    {"amount":3,"aura":51,"effect":6,"misc":0}
+   ],"id":21476,"name":"Increased Block 3"},
+  {"effects":[
+    {"amount":5,"aura":161,"effect":6,"misc":0}
+   ],"id":21596,"name":"Vitality"},
+  {"effects":[
+    {"amount":6,"aura":161,"effect":6,"misc":0}
+   ],"id":21599,"name":"Vitality"},
+  {"effects":[
+    {"amount":4,"aura":85,"effect":6,"misc":0}
+   ],"id":21618,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":4,"aura":85,"effect":6,"misc":0}
+   ],"id":21619,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":5,"aura":85,"effect":6,"misc":0}
+   ],"id":21620,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":2,"aura":85,"effect":6,"misc":0}
+   ],"id":21624,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":3,"aura":85,"effect":6,"misc":0}
+   ],"id":21625,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":6,"aura":85,"effect":6,"misc":0}
+   ],"id":21626,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":6,"aura":85,"effect":6,"misc":0}
+   ],"id":21627,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":7,"aura":85,"effect":6,"misc":0}
+   ],"id":21628,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":10,"aura":85,"effect":6,"misc":0}
+   ],"id":21633,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":11,"aura":85,"effect":6,"misc":0}
+   ],"id":21634,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":14,"aura":85,"effect":6,"misc":0}
+   ],"id":21640,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":15,"aura":85,"effect":6,"misc":0}
+   ],"id":21643,"name":"Increased Mana Regen"},
+  {"effects":[
+    {"amount":30,"aura":138,"effect":6,"misc":0}
+   ],"id":22640,"name":"Eskhandar's Rage"},
+  {"effects":[
+    {"amount":23,"aura":158,"effect":6,"misc":0}
+   ],"id":22852,"name":"Block Value 23"},
+  {"effects":[
+    {"amount":1,"aura":0,"effect":36,"misc":0}
+   ],"id":23007,"name":"Plans: Sulfuron Hammer"},
+  {"effects":[
+    {"amount":1000,"aura":19,"effect":6,"misc":4}
+   ],"id":23101,"name":"Eye of Divinity"},
+  {"effects":[
+    {"amount":15,"aura":158,"effect":6,"misc":0}
+   ],"id":23203,"name":"Block Value 15"},
+  {"effects":[
+    {"amount":16,"aura":161,"effect":6,"misc":0}
+   ],"id":23210,"name":"Vitality"},
+  {"effects":[
+    {"amount":13,"aura":15,"effect":6,"misc":0}
+   ],"id":23266,"name":"Fiery Aura"},
+  {"effects":[
+    {"amount":40,"aura":0,"effect":2,"misc":0}
+   ],"id":23267,"name":"Firebolt"},
+  {"effects":[
+    {"amount":175,"aura":13,"effect":6,"misc":126},
+    {"amount":175,"aura":135,"effect":6,"misc":126}
+   ],"id":23271,"name":"Ephemeral Power"},
+  {"effects":[
+    {"amount":1,"aura":55,"effect":6,"misc":0}
+   ],"id":23727,"name":"Increased Spell Hit Chance 1"},
+  {"effects":[
+    {"amount":2,"aura":55,"effect":6,"misc":0}
+   ],"id":23729,"name":"Increased Spell Hit Chance 2"},
+  {"effects":[
+    {"amount":56,"aura":13,"effect":6,"misc":126},
+    {"amount":56,"aura":135,"effect":6,"misc":126}
+   ],"id":23732,"name":"Increase Spell Dam 56"},
+  {"effects":[
+    {"amount":280,"aura":99,"effect":6,"misc":0}
+   ],"id":24697,"name":"Attack Power - Feral (+280)"},
+  {"effects":[
+    {"amount":100,"aura":42,"effect":6,"misc":0}
+   ],"id":25767,"name":"Mystical Disjunction"},
+  {"effects":[
+    {"amount":-10,"aura":123,"effect":6,"misc":124}
+   ],"id":25975,"name":"Increased Spell Penetration 10"},
+  {"effects":[
+    {"amount":1,"aura":5,"effect":6,"misc":0}
+   ],"id":26108,"name":"Glimpse of Madness"},
+  {"effects":[
+    {"amount":53,"aura":13,"effect":6,"misc":126},
+    {"amount":53,"aura":135,"effect":6,"misc":126}
+   ],"id":26142,"name":"Increase Spell Dam 53"},
+  {"effects":[
+    {"amount":140,"aura":99,"effect":6,"misc":0}
+   ],"id":26153,"name":"Attack Power - Feral (+140)"},
+  {"effects":[
+    {"amount":90,"aura":135,"effect":6,"misc":126}
+   ],"id":26154,"name":"Increase Healing 90"},
+  {"effects":[
+    {"amount":59,"aura":13,"effect":6,"misc":126},
+    {"amount":59,"aura":135,"effect":6,"misc":126}
+   ],"id":26155,"name":"Increase Spell Dam 59"},
+  {"effects":[
+    {"amount":60,"aura":13,"effect":6,"misc":126},
+    {"amount":60,"aura":135,"effect":6,"misc":126}
+   ],"id":26158,"name":"Increase Spell Dam 60"},
+  {"effects":[
+    {"amount":50,"aura":13,"effect":6,"misc":126},
+    {"amount":-100,"aura":123,"effect":6,"misc":124}
+   ],"id":26166,"name":"Obsidian Insight"},
+  {"effects":[
+    {"amount":25,"aura":15,"effect":6,"misc":0}
+   ],"id":26168,"name":"Chitinous Spikes"},
+  {"effects":[
+    {"amount":-20,"aura":123,"effect":6,"misc":124}
+   ],"id":26283,"name":"Increased Spell Penetration 20"},
+  {"effects":[
+    {"amount":1,"aura":0,"effect":42,"misc":15901}
+   ],"id":26391,"name":"Tentacle Call"},
+  {"effects":[
+    {"amount":72,"aura":13,"effect":6,"misc":126},
+    {"amount":72,"aura":135,"effect":6,"misc":126}
+   ],"id":26395,"name":"Increase Spell Dam 72"},
+  {"effects":[
+    {"amount":-70,"aura":10,"effect":6,"misc":127}
+   ],"id":26400,"name":"Arcane Shroud"},
+  {"effects":[
+    {"amount":57,"aura":13,"effect":6,"misc":4}
+   ],"id":26405,"name":"Increase Fire Dam 57"},
+  {"effects":[
+    {"amount":239,"aura":0,"effect":2,"misc":0}
+   ],"id":26415,"name":"Shock"},
+  {"effects":[
+    {"amount":76,"aura":13,"effect":6,"misc":126},
+    {"amount":76,"aura":135,"effect":6,"misc":126}
+   ],"id":26460,"name":"Increase Spell Dam 76"},
+  {"effects":[
+    {"amount":143,"aura":135,"effect":6,"misc":126}
+   ],"id":26461,"name":"Increase Healing 143"},
+  {"effects":[
+    {"amount":1,"aura":42,"effect":6,"misc":0}
+   ],"id":26467,"name":"Persistent Shield"},
+  {"effects":[
+    {"amount":1,"aura":42,"effect":6,"misc":0}
+   ],"id":26480,"name":"Badge of the Swarmguard"},
+  {"effects":[
+    {"amount":187,"aura":135,"effect":6,"misc":126}
+   ],"id":26814,"name":"Increase Healing 187"},
+  {"effects":[
+    {"amount":-150,"aura":107,"effect":6,"misc":10}
+   ],"id":27846,"name":"Faster Healing Touch Cast"},
+  {"effects":[
+    {"amount":-25,"aura":107,"effect":6,"misc":14}
+   ],"id":27847,"name":"Cleanse Cost Reduced"},
+  {"effects":[
+    {"amount":80,"aura":112,"effect":6,"misc":3736}
+   ],"id":27855,"name":"Increased Lesser Healing Wave"},
+  {"effects":[
+    {"amount":900,"aura":69,"effect":6,"misc":127}
+   ],"id":29506,"name":"The Burrower's Shell"},
+  {"effects":[
+    {"amount":1,"aura":23,"effect":6,"misc":0},
+    {"amount":1,"aura":0,"effect":64,"misc":0}
+   ],"id":29602,"name":"Jom Gabbar"}
+ ]}

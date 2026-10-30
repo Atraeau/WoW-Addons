@@ -313,6 +313,8 @@ function M.New(opts)
                         if stats[key] == nil then stats[key] = tonumber(b) end
                     elseif a and stats[e[2]] == nil then
                         stats[e[2]] = tonumber(a)
+                        -- in 1.12 "+X Attack Power" raises melee and ranged attack power alike
+                        if e[2] == "ap" and stats.rap == nil then stats.rap = tonumber(a) end
                         break
                     end
                 end
