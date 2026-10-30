@@ -949,7 +949,11 @@ made earlier leaked into the next prompt):
   item goes on to the next bidder, and the ledger records a `Pass` of kind `undecided` (shown in `history` as "won it as
   a gift but didn't say who gets it"), so the failure is visible. It is not an upgrade pass. Built: `Session:overrideGift`,
   the `override` command (Master Looter only, since only their client holds the session), and a confirmed button on the
-  simulator's waiting card. The Master Looter does not choose the recipient for them.
+  simulator's waiting card.
+- **Decided by the guild leader: the Master Looter does not pick a recipient on a gifter's behalf.** Held off on
+  purpose, to be revisited only if stalled gifts turn out to be a real problem: the system should not give the Master
+  Looter much power over individuals' agency. The override only ends the wait, and its outcome (a recorded pass for the
+  gifter) is the only thing it can do to them.
 
 ### Decisions logged, not yet built: the raid leader, and the loot method (2026-10-30)
 
