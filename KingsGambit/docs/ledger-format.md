@@ -117,7 +117,7 @@ Order is top of the list first. Positions are never numbers: they are an end (`t
 | `Pass` | `member`, `item`, `kind?` | Counts toward pass statistics (`kind = "upgrade"` counts as an upgrade pass). |
 | `Transfer` | `award`, `to` | Re-routes where an earlier award went. |
 | `MovePlayer` | `member`, `reason`, `to` / `above` | A correction. `reason` is required. |
-| `Revert` | `target` | Undoes this writer's most recent `Award` (and, one by one, the ones before it), as long as this writer has made no `MovePlayer` or `RemoveMember` since. The winner goes back directly above the highest-placed of the players who were below them when they won. |
+| `Revert` | `target` | Undoes one of this writer's own `Award`s, the latest or an earlier one, as long as this writer has made no `MovePlayer` or `RemoveMember` since. Later awards stay as they are. The winner goes back directly above the highest-placed of the players who were below them when they won or have won since, so the list ends as if that award had never been made. Refused (`laterwin`) while the same player has a later win: undo that one first. |
 | `Disenchant` | `item`, `to` | Nobody wanted the item. |
 | `Salvage` | `award`, `action` | What the claimer of a salvage item did: `keep`, `gift`, `sell`, `disenchant` or `bank`. |
 

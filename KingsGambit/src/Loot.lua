@@ -853,6 +853,11 @@ end
 function Session:confirm()
     if self.phase ~= "review" then return false, "notreview" end
     local engine, client = self.engine, self.client
+    -- The right to write can end while a session runs (the raid expired, an officer revoked the Master Looter). Check
+    -- before handing anything over: an item given out that cannot be recorded would be a phantom win. The session stays
+    -- in review, so nothing is lost: once the right is back (an officer opens the raid again) confirm works.
+    local mayWrite, whyNot = engine:MayWrite()
+    if not mayWrite then return false, whyNot or "notauthorized" end
     local failures = {}
     local function fail(a, stage, reason) failures[#failures + 1] = { item = a.item, stage = stage, reason = reason } end
 

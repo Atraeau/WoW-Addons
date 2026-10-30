@@ -101,8 +101,8 @@ playstyle, or one you're leaving for a friend). Visibility lets the guild hold
 itself accountable without a mechanic that punishes the wrong thing.
 
 ### Mistakes and regret-trades
-Mistakes are fixed forward. A recent award can be undone exactly; older
-ones are corrected by an officer with a visible correction event. If someone
+Mistakes are fixed forward. Any award of the Master Looter's own can be undone exactly, alone, without disturbing the awards made since; awards from before a manual move
+are corrected by an officer with a visible correction event. If someone
 trades an item away after winning it, the addon detects it: if the recipient had
 bid, it's treated as a *mistake correction* (the giver is restored, the recipient
 pays); if they hadn't, it's a *gift* (standings unchanged). Either can be
@@ -144,7 +144,7 @@ This is what happens, in order, when a boss drops loot. Practice it in the
 5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
    and nothing is handed out until you confirm. If handing an item over fails, that award is not
    recorded and you are told, so the record never claims something that didn't happen.
-6. **Fix mistakes in the open.** The most recent awards can be undone exactly. Anything older is fixed
+6. **Fix mistakes in the open.** Any one of the Master Looter's awards can be undone exactly, without disturbing the ones made since. Anything older is fixed
    by an officer's correction, which is itself a visible entry in the history.
 
 ## What this system does *not* do

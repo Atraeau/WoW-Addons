@@ -490,23 +490,58 @@ end
 -- Undo this writer's most recent award: the winner goes back directly above the highest-placed of the
 -- players who were below them when they won. That restores the winner's order relative to everyone,
 -- whatever other writers did in between (their moves never change anyone else's relative order).
+--
+-- It can also undo an EARLIER award of the same writer without touching the awards made since (a big hand-out
+-- shouldn't have to be taken apart to fix its first item). The list then ends up as if that award had never been made:
+-- the winner goes just above the highest-placed of those who were below them when they won, or have won since (those
+-- sit at the bottom now and would be below them anyway). Awards made after this one remember "who was below me", so
+-- they forget this winner where the winner was above them to begin with. If the same player won something later, that
+-- later win has to be undone first, or their place would be wrong ("laterwin").
 function handlers.Revert(s, ev, d)
     local stack = s.undo[ev.chain]
-    local top = stack and stack[#stack]
-    if not top or top.id ~= d.target then return nil, "notrevertible" end
+    local k
+    for i = #(stack or {}), 1, -1 do
+        if stack[i].id == d.target then k = i; break end
+    end
+    if not k then return nil, "notrevertible" end
+    local top = stack[k]
     local m = s.members[top.member]
     if not (m and m.active) then return nil, "notmember" end
+    for j = k + 1, #stack do
+        if stack[j].member == top.member then return nil, "laterwin" end
+    end
     return function()
+        local wasBelow, since = {}, {}
+        for _, name in ipairs(top.below) do wasBelow[name] = true end
+        for j = k + 1, #stack do since[#since + 1] = stack[j].member end
         table.remove(s.order, indexOf(s.order, top.member))
         local at = #s.order + 1
-        for _, name in ipairs(top.below) do
+        local function consider(name)
             local i = indexOf(s.order, name)
             if i and i < at then at = i end
         end
+        for _, name in ipairs(top.below) do consider(name) end
+        for _, name in ipairs(since) do consider(name) end
         table.insert(s.order, at, top.member)
-        m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
+        if k == #stack then
+            m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
+        else
+            m.wins = m.wins - 1
+            if m.lastWinId == top.id then m.lastWinId, m.lastWinTs = top.lastWinId, top.lastWinTs end
+            -- A later winner who was below this one to begin with: this winner was never below them.
+            for j = k + 1, #stack do
+                local later = stack[j]
+                if wasBelow[later.member] then
+                    local kept = {}
+                    for _, name in ipairs(later.below) do
+                        if name ~= top.member then kept[#kept + 1] = name end
+                    end
+                    later.below = kept
+                end
+            end
+        end
         s.awards[top.id].reverted = true
-        stack[#stack] = nil
+        table.remove(stack, k)
     end
 end
 
@@ -3060,6 +3095,11 @@ end
 function Session:confirm()
     if self.phase ~= "review" then return false, "notreview" end
     local engine, client = self.engine, self.client
+    -- The right to write can end while a session runs (the raid expired, an officer revoked the Master Looter). Check
+    -- before handing anything over: an item given out that cannot be recorded would be a phantom win. The session stays
+    -- in review, so nothing is lost: once the right is back (an officer opens the raid again) confirm works.
+    local mayWrite, whyNot = engine:MayWrite()
+    if not mayWrite then return false, whyNot or "notauthorized" end
     local failures = {}
     local function fail(a, stage, reason) failures[#failures + 1] = { item = a.item, stage = stage, reason = reason } end
 

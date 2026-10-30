@@ -32,7 +32,8 @@ local WHY = {
     longreason = "the reason is too long (200 characters at most)",
     toomany = "you already have 3 requests waiting: wait for the Master Looter to answer them",
     norequest = "there is no waiting request with that number", noaward = "they have no award to change",
-    notrevertible = "that award can't be undone directly any more (the list has moved since): ask for a move instead",
+    notrevertible = "that award can't be undone directly any more (the list has moved since, or it was not made by you): use a move instead",
+    laterwin = "that player won something later: undo that later award first, then this one",
     notrestricted = "that item isn't restricted to classes, so everyone may already bid on it",
     cantequip = "that class can't wear or wield that item", cantequipto = "the player you are gifting to can't wear or wield that item",
     alreadyeligible = "that class may already bid on it",
@@ -50,6 +51,7 @@ local HELP = {
     "  standings [list] [N]            show the list (default main, top 20)",
     "  create <list> [name]            create a list      add <name> [top|bottom|N]     remove <name>",
     "  move <name> <top|bottom|N> <reason>              undo yes (the last award; it asks first)",
+    "  award <name> <item> <reason>    record a win the session didn't (a failed hand-out, a corrected winner)",
     "  loot                            start a session from the open loot window (Master Looter)",
     "  resolve | extend [sec] | confirm | cancel | announce      run the session (Master Looter)",
     "  need|off|pass <item#>   gift <item#> <name>      answer for an item (or: bid <item#> <kind> [name])",
@@ -176,9 +178,16 @@ function M.New(ctx)
     end
 
     function cmds.remove(args)
-        if args == "" then return out("remove <name>") end
-        local ev = append("main", "RemoveMember", { member = name(args) }, ("remove %s <reason>"):format(args))
-        if ev then out(short(name(args)) .. " removed.") end
+        local who, reason = args:match("^(%S+)%s*(.-)$")
+        if not who then return out("remove <name> [reason]") end
+        local chain = list("main")
+        local was = chain and Standings.Position(chain.state, name(who))
+        local data = { member = name(who) }
+        if reason ~= "" then data.reason = reason end
+        local ev = append("main", "RemoveMember", data, ("remove %s <reason>"):format(who))
+        if ev then
+            out(short(name(who)) .. " removed." .. (was and (" They were at place %d: to put them back, add %s %d"):format(was, short(name(who)), was) or ""))
+        end
     end
 
     function cmds.move(args)
@@ -188,28 +197,76 @@ function M.New(ctx)
         if not where then return out(err) end
         local data = { member = name(who), reason = reason }
         for k, v in pairs(where) do data[k] = v end
+        local chain = list("main")
+        local was = chain and Standings.Position(chain.state, name(who))
         local ev = append("main", "MovePlayer", data, ("move %s %s %s"):format(who, pos, reason))
-        if ev then out(short(name(who)) .. " moved. " .. ("This correction is recorded with your reason.")) end
+        if ev then
+            out(short(name(who)) .. " moved (was place " .. tostring(was or "?") .. "; to undo this: move " .. short(name(who)) .. " " .. tostring(was or "?") .. " <reason>). The correction is recorded with your reason.")
+        end
     end
 
     function cmds.undo(args)
         local chain = list("main")
         local stack = chain and chain.state.undo[engine:MyChain()]
-        local top = stack and stack[#stack]
-        if not top then
-            out("Nothing can be undone (only your own most recent awards, and only until something else moves the list).")
+        if not (stack and #stack > 0) then
+            out("Nothing can be undone (only awards you made, and only until you move the list by hand).")
             if #engine:ActiveRaids() > 0 then out("To undo someone else's award during a raid: request undo <name> <reason>") end
             return
         end
-        -- Undo changes the list, so it asks first: say what would be undone, and go ahead only on "undo yes".
-        if args:lower() ~= "yes" then
-            local a = chain.state.awards[top.id]
-            out(("This would undo your most recent award%s. The undo is recorded in the history (nothing is erased)."):format(
-                a and (": " .. short(a.member) .. " won " .. tostring(a.item)) or ""))
-            return out("To go ahead: undo yes")
+        -- undo [name] [yes]: the named player's latest award of yours, or your latest. Later awards are left as they are.
+        local words, confirmed = {}, false
+        for w in args:gmatch("%S+") do
+            if w:lower() == "yes" then confirmed = true else words[#words + 1] = w end
         end
-        local ev = append("main", "Revert", { target = top.id })
-        if ev then out("The last award was undone. The undo is recorded in the history.") end
+        local target
+        if #words == 0 then
+            target = stack[#stack]
+        else
+            local who = name(words[1])
+            for i = #stack, 1, -1 do
+                if stack[i].member == who then target = stack[i]; break end
+            end
+            if not target then
+                out(("%s has no award of yours that can be undone. Awards you can undo, latest first:"):format(short(who)))
+                for i = #stack, math.max(1, #stack - 7), -1 do
+                    local a = chain.state.awards[stack[i].id]
+                    out(("  %s won %s"):format(short(stack[i].member), a and tostring(a.item) or "?"))
+                end
+                return
+            end
+        end
+        local a = chain.state.awards[target.id]
+        -- Undo changes the list, so it asks first: say what would be undone, and go ahead only on "yes".
+        if not confirmed then
+            out(("This would undo %s's award of %s%s. Awards made since stay as they are; the list ends up as if this one had never happened. The undo is recorded in the history (nothing is erased)."):format(
+                short(target.member), a and tostring(a.item) or "?", target == stack[#stack] and " (your latest)" or ""))
+            if #stack > 1 and #words == 0 then out("To undo an earlier one instead: undo <name>") end
+            return out(("To go ahead: undo %s yes"):format(#words > 0 and short(target.member) or ""):gsub("  ", " "))
+        end
+        local ev = append("main", "Revert", { target = target.id })
+        if ev then out(("%s's award of %s was undone and %s went back up the list. The undo is recorded in the history."):format(
+            short(target.member), a and tostring(a.item) or "?", short(target.member))) end
+    end
+
+    -- Record a win that the session didn't: the hand-out failed, or the item went to the wrong person and the mistake is
+    -- acknowledged. It is an ordinary award, so the recipient drops to the bottom as if they had won the bid, and the
+    -- reason and the writer are in the record. (If the wrong winner was already recorded, undo that first.)
+    function cmds.award(args)
+        local usage = "award <name> <item> <reason>  (the player moves to the bottom, as if they had won it; the reason is part of the record)"
+        local who, more = args:match("^(%S+)%s+(.+)$")
+        if not who then return out(usage) end
+        local link, reason = more:match("^(|c.-|r)%s+(.+)$")
+        if not link then link, reason = more:match("^(%S+)%s+(.+)$") end
+        if not link then return out(usage) end
+        local chain = list("main")
+        local member = name(who)
+        if chain and not (chain.state.members[member] and chain.state.members[member].active) then
+            return out(("%s is not on the list, so they cannot be awarded anything. Add them first: add %s"):format(short(member), short(member)))
+        end
+        local ev = append("main", "Award", { member = member, item = link, reason = reason }, ("award %s %s %s"):format(who, link, reason))
+        if ev then
+            out(("Recorded: %s won %s and moves to the bottom. The reason is in the history."):format(short(member), link))
+        end
     end
 
     ---------------------------------------------------------------- Master Looter
@@ -307,9 +364,16 @@ function M.New(ctx)
         local s = hosting()
         if not s then return out("No loot session is running.") end
         local ok, failures = s:confirm()
-        if not ok then return out("Not ready to confirm: " .. why(failures)) end
+        if not ok then
+            out("Not ready to confirm: " .. why(failures))
+            if failures == "expired" or failures == "notauthorized" or failures == "duringraid" then
+                out("Nothing was handed out or recorded, and the session is still waiting. Ask an officer to open the raid with you as Master Looter (raid open), then confirm again; or cancel.")
+            end
+            return
+        end
         for _, f in ipairs(failures) do
-            out(("Could not hand over %s (%s: %s). It was NOT recorded; give it manually."):format(f.item.link, f.stage, tostring(f.reason)))
+            local item = f.item and f.item.link or "a list entry"
+            out(("Could not hand over %s (%s: %s). It was NOT recorded. If you give it by hand, record it with: award <name> <item> <reason>"):format(item, f.stage, tostring(f.reason)))
         end
         out("Confirmed and recorded.")
     end

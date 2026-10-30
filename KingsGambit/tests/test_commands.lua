@@ -38,7 +38,7 @@ test("move needs a reason and is recorded; undo reverses the last award", functi
     clear(client); cmd.handle("undo"); assert(text(client):find("Nothing can be undone"))
     engine:Append("main", "Award", { member = "C-Realm", item = "X" }); eq(engine:Get("main").state.order[3], "C-Realm")
     clear(client); cmd.handle("undo")
-    assert(text(client):find("This would undo your most recent award: C won X"), text(client)); assert(text(client):find("undo yes"))
+    assert(text(client):find("This would undo C's award of X (your latest)", 1, true), text(client)); assert(text(client):find("undo yes"))
     eq(engine:Get("main").state.order[3], "C-Realm", "asking changed nothing")
     cmd.handle("undo yes"); eq(engine:Get("main").state.order[1], "C-Realm")
     local last = engine:Get("main").events[#engine:Get("main").events]; eq(last.type, "Revert")

@@ -149,11 +149,22 @@ test("the wrong winner: undo the award, then record the right one, both at the r
     assert(t:find("Aldric won Gauntlets, at the request of Aldric %(my need bid was missed%)"), t)
 end)
 
+test("an earlier award can be undone on request, leaving the later ones alone", function()
+    local w = guild(); openRaid(w)
+    assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Belt" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Cass-Realm", item = "Ring" }))
+    w.net:advance(2)
+    w.Off.cmd.handle("request undo Brann wrong person")
+    w.net:advance(2); w.Looter.cmd.handle("accept 1"); w.net:advance(3)
+    everyone(w, function(nd) eq(order(nd), "Aldric,Brann,Looter,Cass", nd.name) end)
+end)
+
 test("an undo that can't be done any more stays waiting, and is declined with a reason", function()
     local w = guild(); openRaid(w)
     assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Belt" }))
     assert(w.Looter.engine:Append("main", "Award", { member = "Cass-Realm", item = "Ring" }))
     w.net:advance(2)
+    w.Looter.cmd.handle("move Aldric bottom he asked to be last") -- the Master Looter's own manual move
     w.Off.cmd.handle("request undo Brann wrong person")
     w.net:advance(2)
     clear(w.Looter); w.Looter.cmd.handle("accept 1")
@@ -164,7 +175,7 @@ test("an undo that can't be done any more stays waiting, and is declined with a 
     w.net:advance(2)
     w.Looter.cmd.handle("accept 2")
     w.net:advance(3)
-    eq(order(w.Off), "Brann,Aldric,Looter,Cass")
+    eq(order(w.Off), "Brann,Looter,Cass,Aldric")
 end)
 
 test("a gift correction moves nobody: it records where the item really went", function()

@@ -104,15 +104,72 @@ test("undo still restores the order when another writer's awards came in between
     eq(reasons(v), "")
     eq(order(v), "B,D,E,C,A", "B is back above D (who was below B); everyone else is untouched")
 end)
-test("only the writer's own latest award can be undone", function()
+test("only the writer's own awards can be undone, and only while the list hasn't been moved by hand", function()
     local w = guild()
     w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 360 }, 110)
     w:write("Off", "Elevate", { raid = "r2", ml = "MLB", minutes = 360 }, 110)
     local a1 = w:write("MLA", "Award", { member = "B", item = "X" }, 120, "main")
-    w:write("MLA", "Award", { member = "D", item = "Y" }, 121, "main")
     w:write("MLB", "Revert", { target = a1.id }, 122, "main")
-    w:write("MLA", "Revert", { target = a1.id }, 123, "main")
-    eq(reasons(w:view()), "Revert:notrevertible Revert:notrevertible")
+    eq(reasons(w:view()), "Revert:notrevertible", "someone else's award")
+    w:write("MLA", "MovePlayer", { member = "E", to = "top", reason = "fix" }, 123, "main")
+    w:write("MLA", "Revert", { target = a1.id }, 124, "main")
+    eq(reasons(w:view()), "Revert:notrevertible Revert:notrevertible", "a manual move clears what can be undone")
+end)
+test("an earlier award can be undone without touching the later ones", function()
+    local w = guild()
+    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main") -- A,C,D,E,B
+    w:write("GM", "Award", { member = "D", item = "Y" }, 121, "main")             -- A,C,E,B,D
+    w:write("GM", "Award", { member = "A", item = "Z" }, 122, "main")             -- C,E,B,D,A
+    w:write("GM", "Revert", { target = a1.id }, 123, "main")
+    local v = w:view()
+    eq(reasons(v), ""); eq(order(v), "B,C,E,D,A", "as if B had never won: B above C, who was below B; D and A still paid")
+    eq(v.lists.main.members.B.wins, 0); eq(v.lists.main.members.D.wins, 1)
+end)
+test("undoing an earlier award is refused while the same player has a later win", function()
+    local w = guild()
+    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")
+    local a2 = w:write("GM", "Award", { member = "B", item = "Y" }, 121, "main")
+    w:write("GM", "Revert", { target = a1.id }, 122, "main")
+    eq(reasons(w:view()), "Revert:laterwin")
+    w:write("GM", "Revert", { target = a2.id }, 123, "main")
+    w:write("GM", "Revert", { target = a1.id }, 124, "main")
+    eq(order(w:view()), "A,B,C,D,E"); eq(reasons(w:view()), "Revert:laterwin")
+end)
+test("undoing any one award equals replaying the others without it (random sessions)", function()
+    local names = { "A", "B", "C", "D", "E", "F" }
+    local seed = 12345
+    local function rnd(n) seed = (seed * 1103515245 + 12345) % 2147483648; return seed % n + 1 end
+    for trial = 1, 300 do
+        local w, awards = guild(), {}
+        w:write("GM", "AddMember", { member = "F" }, 108, "main")
+        local count = rnd(6) + 1
+        local t = 120
+        for i = 1, count do
+            t = t + 1
+            local who = names[rnd(6)]
+            awards[i] = { who = who, ev = w:write("GM", "Award", { member = who, item = "I" .. i }, t, "main") }
+        end
+        -- Undo one award that its winner hasn't won again later (the rule); remember which.
+        local pick
+        for _ = 1, 20 do
+            local k = rnd(count)
+            local ok = true
+            for j = k + 1, count do if awards[j].who == awards[k].who then ok = false end end
+            if ok then pick = k; break end
+        end
+        if pick then
+            t = t + 1
+            w:write("GM", "Revert", { target = awards[pick].ev.id }, t, "main")
+            local fresh = guild()
+            fresh:write("GM", "AddMember", { member = "F" }, 108, "main")
+            local tt = 120
+            for i = 1, count do
+                if i ~= pick then tt = tt + 1; fresh:write("GM", "Award", { member = awards[i].who, item = "I" .. i }, tt, "main") end
+            end
+            eq(reasons(w:view()), "", "trial " .. trial)
+            eq(order(w:view()), order(fresh:view()), ("trial %d: %d awards, undid #%d"):format(trial, count, pick))
+        end
+    end
 end)
 
 H.section("Ledger: chains")

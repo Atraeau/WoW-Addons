@@ -138,9 +138,10 @@ function M.EventFor(state, r, chainId)
         if r.kind == "gift" then
             return "Transfer", { award = a.id, to = r.to, member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
         end
-        local stack = state.undo[chainId]
-        local top = stack and stack[#stack]
-        if not (top and top.id == a.id) then return nil, "notrevertible" end
+        -- Any of the Master Looter's own awards still standing can be undone, not only the latest (see Standings Revert).
+        local found
+        for _, e in ipairs(state.undo[chainId] or {}) do if e.id == a.id then found = true end end
+        if not found then return nil, "notrevertible" end
         return "Revert", { target = a.id, member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
     end
     return nil, "badkind"

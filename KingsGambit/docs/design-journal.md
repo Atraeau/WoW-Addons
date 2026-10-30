@@ -1375,6 +1375,61 @@ off-spec on, and win it, because gift bids competed in the main tier by the gift
   script that happened by hand); and a CI step that publishes automatically. The browser pane can no longer open the file directly
   (it loads files as data URLs and the page is now too large), so it is tested over local HTTP.
 
+### Mistakes: an audit, and what the Master Looter needs to put one right (2026-10-30)
+
+**Asked by the guild leader:** test exhaustively the cases where people make mistakes; the addon must handle each one
+gracefully, and the process must be fair and straightforward for the Master Looter. Then, specifically: *the Master
+Looter needs a way to award an item to the correct recipient after the fact, once the mistake is acknowledged, and that
+recipient moves to the bottom of the list as if they had won the bid.*
+
+**What exists (read from the code):** answers can be changed until bidding closes; a pick is final; nothing is written
+until `confirm`, so `cancel` throws a whole session away without touching the list; after `confirm`, `undo` reverses the
+writer's own most recent award; officers and raiders ask through `request`; `move`, `add`, `remove` all need a reason.
+
+**Gaps found, to be closed one by one (each gets tests):**
+1. **No direct `award`.** The Master Looter can only *record* an award through a session. If a hand-out failed ("give it
+   manually"), or the item went to the wrong person, there is no way to record the real winner except asking someone
+   else to send a request, and a request to yourself is refused ("make the change directly"). Decided: a Master Looter
+   (or an officer outside a raid) can `award <name> <item> <reason>`. It is an ordinary `Award` event: the recipient
+   drops to the bottom exactly as if they had won the bid, and the reason and the writer are in the record.
+2. **Undo is only for the very last award.** A session hands out several items; if the first was wrong, the Master
+   Looter would have to undo everything after it and re-enter it. Under test; the aim is to undo one named award
+   without disturbing the others, giving the same list as if it had never been awarded.
+3. **Confirm does not re-check write authority.** If the raid expires or the Master Looter is revoked mid-session, the
+   items could be handed over (`give`) and then fail to record. Under test.
+4. **`move` and `remove` do not say where the player was**, so a mistaken one cannot be put back by hand.
+
+**Decision (guild leader): a correction must not replay history.** In a big bulk session, items are already in
+people's bags; asking for "undo everything after the wrong one, then re-award it all" is not tenable. So gap 2 is
+solved by undoing *one named award*, leaving every later award exactly where it is, and the list ends up as if that one
+award had never happened. How (kept deterministic, since every peer must agree): the winner goes back just above the
+highest-placed of the players who were below them when they won, *or who have won since* (those are at the bottom now
+and would be below them anyway); and the later awards' own "who was below me" notes forget the winner where they
+were above them originally. One rule keeps it exact: if the same player won something *later*, undo that later one
+first (their place would otherwise be wrong); the reply says so. Tested against a plain replay of the other awards.
+
+**Built, with tests (`tests/test_mistakes.lua`, plus the ledger tests):**
+- **`award <name> <item> <reason>`** (Master Looter during a raid; officers outside one; others are pointed to
+  `request award`). An ordinary `Award`: the recipient drops to the bottom as if they had won the bid. A name that is
+  not on the list is explained (add them first). The failed-hand-out message now points to it.
+- **`undo [name] [yes]`** undoes the named player's latest award of yours, leaving later awards alone; with no name it is
+  your latest. It says what it would do and asks first; with a name it cannot undo it lists what it can. Requests
+  (`request undo`) use the same rule. The refusal reasons are plain ("that player won something later: undo that
+  later award first"). A property test checks 300 random sessions: undoing any one award equals replaying the others.
+- **`confirm` checks the right to write before handing anything over.** If the raid ended or the Master Looter was
+  revoked mid-session, nothing is given or recorded, the session stays in review, and the message says what to do
+  (an officer reopens the raid; the same session then confirms). It used to hand the items over first.
+- **`move` and `remove` say where the player was** and how to put them back (`move X <place> <reason>`, `add X <place>`).
+  `remove` now takes an optional reason.
+- **Checked and already fine:** a changed answer counts until bidding closes, a late one is explained; `cancel`
+  writes nothing and the loot can be run again; a second `confirm` records nothing; a failed hand-out is never recorded;
+  a Master Looter's reload mid-session loses only the unconfirmed session.
+- **Fixed on the way:** a failure with no item (the off-spec list entry) crashed the `confirm` message.
+
+**Not done, deliberately:** a wrong *gift* recipient is still fixed with `request gift`, which moves nobody (the winner
+already paid). Whether a regret-trade to someone who had bid should instead send the recipient to the bottom is the
+earlier "bid-test" idea; it needs a decision from the guild leader before it is built.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
