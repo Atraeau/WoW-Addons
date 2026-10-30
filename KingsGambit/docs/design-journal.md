@@ -1011,6 +1011,20 @@ off-spec bid. A player's first off-spec bid enrolls them at the bottom of that l
 with two newcomers the one higher on the main list is ahead. The scenario is now "Off-spec bids", and its lesson states
 this. No rule change.
 
+### Decision (direction): the order newcomers join the off-spec list is a guild-master setting (2026-10-30)
+
+**Raised by the guild leader**, after the off-spec scenario showed that a newcomer's place on the off-spec list comes from their
+main-list place: the rule should be **configurable by the guild master**, because both views have merit.
+- **For using main-list order:** a higher main-list place suggests more commitment or contribution, so it follows
+  that they should have higher status.
+- **Against:** someone may simply have dropped to the bottom by winning loot, so main-list rank is not reliably a sign
+  of commitment (and winning would then cost them off-spec priority too).
+- Like other guild-wide rules, the choice should be **recorded in the ledger** (so every peer and the audit tool agree, and
+  a change of policy is itself visible), set by the guild master.
+- **Open (to decide before building):** which orders to offer, and the default. Candidates: main-list order (today);
+  the order players first bid off-spec; time on the list (when they joined, so winning doesn't cost it). Nothing is
+  built yet; current behaviour (main-list order) stands until then.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
