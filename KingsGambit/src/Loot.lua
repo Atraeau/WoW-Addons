@@ -61,7 +61,7 @@ function M.NewSession(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
-        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {}, salvagers = {},
+        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {},
         bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
@@ -716,12 +716,9 @@ function Session:runSalvage()
         if it.status == "open" then self.queue[#self.queue + 1] = it.id end
     end
     self.qi = 0
-    -- Who is offered first, lowest on the live list first. A player who claims an item goes to the back of this queue
-    -- for the rest of the round, so the salvager rotates through a batch (it never depends on how loot was batched).
-    self.offerQueue = {}
-    for i = #self.order.main, 1, -1 do self.offerQueue[#self.offerQueue + 1] = self.order.main[i] end
-    -- anyone who already salvaged an item during the draft goes to the back, in the order they did
-    for _, name in ipairs(self.salvagers) do moveToBottom(self.offerQueue, name) end
+    -- What is left after the draft (more unwanted items than picks) is plain suicide: each item is offered lowest-first on
+    -- the live list. Claiming at the bottom costs no position, so whoever is lowest stays lowest and may take several
+    -- items: they are lucky that nobody wanted them.
     self:emit("phase", { phase = "salvage" })
     self:nextSalvageItem()
 end
@@ -731,7 +728,8 @@ function Session:nextSalvageItem()
     local id = self.queue[self.qi]
     if not id then return self:finish() end
     local players = {}
-    for _, p in ipairs(self.offerQueue) do
+    for i = #self.order.main, 1, -1 do
+        local p = self.order.main[i]
         if self.eligible[p] and self:canReceive(p, self.items[id]) then players[#players + 1] = p end
     end
     self.claim = { item = id, players = players, idx = 0 }
@@ -779,8 +777,6 @@ function Session:claimItem(player, extra)
     end
     self.turn = nil
     self:award("salvage", player, t.item, to)
-    self.salvagers[#self.salvagers + 1] = player
-    if self.offerQueue then moveToBottom(self.offerQueue, player) end -- back of the queue for the rest of the end-of-draft round
     self:afterSalvageItem()
     return true
 end

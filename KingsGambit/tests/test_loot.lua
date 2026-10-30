@@ -609,18 +609,21 @@ local function claimAll(s, who)
     end
     return table.concat(got, " ")
 end
-test("leftovers are offered lowest first, and a player who claims goes to the back of the queue", function()
-    local s = setup({ nitems = 6 })
+test("leftovers with no picks to interleave with are plain suicide: the lowest player stays lowest and keeps first call", function()
+    local s, engine = setup({ nitems = 6 })
     for i = 1, 6 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
     eq(s.phase, "salvage")
-    eq(claimAll(s, function() return true end), "1:E 2:D 3:C 4:B 5:A 6:E", "everyone willing: it rotates up the list, then round again")
+    eq(claimAll(s, function() return true end), "1:E 2:E 3:E 4:E 5:E 6:E",
+        "claiming at the bottom costs nothing, so E is still the lowest: lucky that nobody wanted so many items")
+    assert(s:confirm()); eq(order(engine), "A,B,C,D,E", "and nobody's place moved")
 end)
-test("someone who declines keeps their place at the front for the next leftover", function()
-    local s = setup({ nitems = 3 })
-    for i = 1, 3 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
-    -- E passes on item 1 (D takes it), but E is still first in line for item 2
-    local got = claimAll(s, function(p, item) return not (p == "E-Realm" and item == 1) and (item ~= 3 or p == "C-Realm") end)
-    eq(got, "1:D 2:E 3:C")
+test("someone who declines is passed over; whoever claims at a lower place pays for it by dropping to the bottom", function()
+    local s, engine = setup({ nitems = 2 })
+    for i = 1, 2 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
+    -- E declines item 1 and D takes it: D now drops below E, so for item 2 D is the lowest and is offered it first
+    local got = claimAll(s, function(p, item) return not (p == "E-Realm" and item == 1) and p == "D-Realm" end)
+    eq(got, "1:D 2:D")
+    assert(s:confirm()); eq(order(engine), "A,B,C,E,D", "D paid a place; E, who declined, did not")
 end)
 test("as the draft executes, each pick owes one unwanted item, offered to the player who just picked", function()
     -- items 1 and 2 are won (A, then B, in list order); items 3 and 4 are passed by everyone
@@ -644,14 +647,14 @@ test("a declined offer goes up the list; if everyone declines the item is disenc
     for _, p in ipairs { "E", "D", "C", "B" } do assert(s:decline(p)) end
     eq(s.items[2].status, "de"); eq(s.phase, "review")
 end)
-test("more unwanted items than picks: the rest go through the end-of-draft salvage round, which still rotates", function()
+test("more unwanted items than picks: the rest go through the end-of-draft round, plain suicide, so one salvager may take several", function()
     local s = setup({ nitems = 5 })
     answerAll(s, 1, { A = "need", B = "pass", C = "pass", D = "pass", E = "pass" })
     for i = 2, 5 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
     eq(s.turn.player, "A-Realm"); eq(s.turn.item, 2)
     -- A takes item 2 (the one pick's offer); items 3-5 are the end-of-draft round: lowest first, claimer to the back
     local got = claimAll(s, function() return true end)
-    eq(got, "2:A 3:E 4:D 5:C", "A salvaged during the draft, so A goes to the back of the end-of-draft queue: it rotates up the list")
+    eq(got, "2:A 3:A 4:A 5:A", "A just picked, is at the bottom, and keeps being offered what nobody wants: no position is sacrificed")
 end)
 test("a gift waiting for its recipient delays the offer until it is settled", function()
     local s = giftWorld()

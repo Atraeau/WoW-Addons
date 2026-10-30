@@ -133,7 +133,8 @@ This is what happens, in order, when a boss drops loot. Practice it in the
 4. **Salvage.** Items nobody wanted are offered to everyone, lowest on the list first, whether or not they could use
    them. This happens as the draft executes: every pick drops its winner to the bottom, so the next unwanted item is
    offered to the player who just picked. The salvagers rotate in the order of the draft. Unwanted items left after the
-   draft (more than there were picks) go through a final round where whoever claims goes to the back of the queue. If everyone declines, the item goes to the disenchanter.
+   draft (more than there were picks) are plain suicide: offered lowest-first, and since claiming at the bottom costs no
+   position, whoever is lowest may take several. They were lucky that nobody wanted so many items. If everyone declines, the item goes to the disenchanter.
 5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
    and nothing is handed out until you confirm. If handing an item over fails, that award is not
    recorded and you are told, so the record never claims something that didn't happen.

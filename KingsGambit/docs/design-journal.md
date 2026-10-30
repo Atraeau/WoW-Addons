@@ -1178,6 +1178,21 @@ who claims drops below the people beneath them, so it costs them a place.
   everyone but is not free for the people it reaches. **Open:** whether the overflow round should let the bottom player keep
   first call (free, but not rotating) or keep the rotation as built.
 
+### Decision: the overflow round is pure suicide, with no rotation (2026-10-30)
+
+**Decided by the guild leader**, on the tension noted above: for unwanted items left after the draft, **pure suicide is fine.**
+Whenever you get an item while you are at the bottom, you stay at the bottom until someone wants something; that
+salvager may persist over several items, and "they get lucky that nobody wants so many items."
+- **Removed:** the "claimer goes to the back of the queue" rotation, and the back-of-queue treatment of players who
+  salvaged during the draft. Items left after the draft are offered lowest-first on the live list, each time.
+- **Kept:** the salvage that happens as the draft executes (each pick is followed by the next unwanted item, offered to
+  the player who just picked), which is what makes the salvagers follow the order of the draft.
+- **Net effect:** the earlier "rotate the leftovers" and "overflow tension" entries above are superseded. A player who
+  declines is passed over and a claimer lower down than the bottom pays for it by dropping below the people who
+  declined; the lowest player keeps first call. Tests updated: no picks to interleave with gives one player all the items
+  and moves nobody; a decline lets the next player pay a place; and more unwanted items than picks all go to the player who
+  just picked.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
