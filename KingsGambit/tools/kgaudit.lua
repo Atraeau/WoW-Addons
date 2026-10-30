@@ -11,7 +11,7 @@ function M.loadEngine(root)
     root = root or "."
     local SK = {}
     for _, name in ipairs({ "Registry", table.unpack(MODULES) }) do
-        local chunk = assert(loadfile(root .. "/src/KingsGambit/" .. name .. ".lua"))
+        local chunk = assert(loadfile(root .. "/src/" .. name .. ".lua"))
         chunk("KingsGambit", SK)
     end
     SK:Resolve()

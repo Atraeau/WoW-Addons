@@ -73,7 +73,7 @@ end)
 
 test("no module looks other modules up itself (only the composition roots do)", function()
     for _, f in ipairs(H.MODULES) do
-        local src = io.open("src/KingsGambit/" .. f .. ".lua"):read("a")
+        local src = io.open("src/" .. f .. ".lua"):read("a")
         assert(not src:find("SK%.modules"), f .. ".lua reads SK.modules: declare the dependency instead")
     end
 end)

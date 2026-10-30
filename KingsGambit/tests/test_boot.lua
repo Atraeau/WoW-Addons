@@ -15,10 +15,10 @@ end
 
 H.section("Addon boot")
 test("both TOC files list the same files, and every file exists", function()
-    local a, b = tocFiles("src/KingsGambit/KingsGambit.toc"), tocFiles("src/KingsGambit/KingsGambit_Camelot.toc")
+    local a, b = tocFiles("src/KingsGambit.toc"), tocFiles("src/KingsGambit_Camelot.toc")
     eq(table.concat(a, ","), table.concat(b, ","), "the two TOCs have drifted apart")
     for _, f in ipairs(a) do
-        local fh = io.open("src/KingsGambit/" .. f, "r")
+        local fh = io.open("src/" .. f, "r")
         assert(fh, "TOC lists a missing file: " .. f); fh:close()
     end
 end)
@@ -48,8 +48,8 @@ test("the addon loads in TOC order, starts at login, and answers slash commands"
     for k, v in pairs(env) do saved[k] = rawget(_G, k); _G[k] = v end
     local ok, err = pcall(function()
         local SK = {}
-        for _, f in ipairs(tocFiles("src/KingsGambit/KingsGambit.toc")) do
-            local chunk = assert(loadfile("src/KingsGambit/" .. f))
+        for _, f in ipairs(tocFiles("src/KingsGambit.toc")) do
+            local chunk = assert(loadfile("src/" .. f))
             chunk("KingsGambit", SK)
         end
         assert(SK.modules.Engine and SK.modules.Sync and SK.modules.LootNet and SK.modules.Commands, "modules registered")

@@ -1,7 +1,7 @@
 #requires -Version 7.0
 <#
 .SYNOPSIS
-    Generate src/KingsGambit/AQ40.lua (training data) from simulator/data/aq40-raw.json.
+    Generate src/AQ40.lua (training data) from simulator/data/aq40-raw.json.
 
 .DESCRIPTION
     aq40-raw.json holds the Temple of Ahn'Qiraj's epic drops per boss as collected from Wowhead Classic (item id,
@@ -158,6 +158,6 @@ foreach ($p in $calls.PSObject.Properties | Sort-Object { [int]$_.Name }) {
 W '}'
 W ''
 W 'function M.Item(id) return M.items[id] end'
-$out = Join-Path $repo 'src/KingsGambit/AQ40.lua'
+$out = Join-Path $repo 'src/AQ40.lua'
 [System.IO.File]::WriteAllText($out, $sb.ToString(), [System.Text.UTF8Encoding]::new($false))
 Write-Host "Wrote $out ($($seen.Count) items, $($raw.bosses.Count) bosses)"

@@ -1,7 +1,7 @@
 #requires -Version 7.0
 <#
 .SYNOPSIS
-    Generate src/KingsGambit/MoltenCore.lua (training data) from simulator/data/mc-raw.json.
+    Generate src/MoltenCore.lua (training data) from simulator/data/mc-raw.json.
 
 .DESCRIPTION
     mc-raw.json holds Molten Core's epic drops per boss as collected from Wowhead Classic (item id, name,
@@ -95,6 +95,6 @@ foreach ($p in $calls.PSObject.Properties | Sort-Object { [int]$_.Name }) {
 W '}'
 W ''
 W 'function M.Item(id) return M.items[id] end'
-$out = Join-Path $repo 'src/KingsGambit/MoltenCore.lua'
+$out = Join-Path $repo 'src/MoltenCore.lua'
 [System.IO.File]::WriteAllText($out, $sb.ToString(), [System.Text.UTF8Encoding]::new($false))
 Write-Host "Wrote $out ($($seen.Count) items, $($raw.bosses.Count) bosses)"

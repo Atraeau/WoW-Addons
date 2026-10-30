@@ -8,7 +8,7 @@ Everything about King's Gambit lives in this folder, so it can move to its own r
 
 | Path | What's there |
 | --- | --- |
-| [`src/KingsGambit/`](src/KingsGambit/) | The addon (TOC and Lua files); this is the folder that goes into `Interface/AddOns` |
+| [`src/`](src/) | The addon (TOC and Lua files); this is the folder that goes into `Interface/AddOns` |
 | [`docs/`](docs/README.md) | Manifesto, player guide, design journal (every decision and why), client interface, ledger format |
 | [`tests/`](tests/) | The test suite (pure Lua 5.4, no game needed) |
 | [`simulator/`](simulator/README.md) | The real engine over a simulated raid, in a browser page, with training scenarios |
@@ -27,5 +27,5 @@ lua scripts/build-simulator.lua
 ```
 
 To play it in the game, deploy from the repository root with `scripts/deploy.ps1` (or `deploy.sh`), which links
-`src/KingsGambit` into the game's AddOns folder. The WoW API reference it was written against is the parent
+`src` into the game's AddOns folder. The WoW API reference it was written against is the parent
 repository's `docs/api.json`.

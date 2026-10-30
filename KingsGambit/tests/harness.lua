@@ -5,9 +5,9 @@ H.MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient
     "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" }
 function H.load(files)
     local SK = {}
-    assert(loadfile("src/KingsGambit/Registry.lua"))("KingsGambit", SK)
+    assert(loadfile("src/Registry.lua"))("KingsGambit", SK)
     for _, f in ipairs(files or H.MODULES) do
-        assert(loadfile("src/KingsGambit/" .. f .. ".lua"))("KingsGambit", SK)
+        assert(loadfile("src/" .. f .. ".lua"))("KingsGambit", SK)
     end
     return SK
 end

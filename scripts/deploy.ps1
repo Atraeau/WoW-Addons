@@ -2,8 +2,8 @@
 <#
 .SYNOPSIS
     Link (or copy) every addon under src/ into the WoW: Forever AddOns folder.
-    Self-contained projects (a top-level folder with its own src/, e.g. KingsGambit/) are found too:
-    every folder under <project>/src/ is an addon.
+    Self-contained projects are found too: a top-level folder whose src/ holds <Project>.toc (e.g.
+    KingsGambit/src/KingsGambit.toc) is an addon named after the project.
 
 .DESCRIPTION
     By default this creates a directory JUNCTION for each addon folder, so the
@@ -57,11 +57,11 @@ if (-not (Test-Path $addonsDir)) {
 # --- Select addons ---------------------------------------------------------
 if (-not (Test-Path $srcDir)) { throw "No src/ folder at $srcDir" }
 $all = @(Get-ChildItem $srcDir -Directory)
-# Projects that keep their addon(s) in their own src/ folder (KingsGambit/src/KingsGambit, ...).
+# Projects whose src/ folder is the addon itself (KingsGambit/src/KingsGambit.toc): linked under the project's name.
 foreach ($project in Get-ChildItem $repoRoot -Directory) {
     $projectSrc = Join-Path $project.FullName 'src'
-    if ($project.Name -ne 'src' -and (Test-Path $projectSrc)) {
-        $all += @(Get-ChildItem $projectSrc -Directory | Where-Object { Get-ChildItem $_.FullName -Filter *.toc })
+    if ($project.Name -ne 'src' -and (Test-Path (Join-Path $projectSrc "$($project.Name).toc"))) {
+        $all += [pscustomobject]@{ Name = $project.Name; FullName = $projectSrc }
     }
 }
 if ($Name) { $all = $all | Where-Object { $Name -contains $_.Name } }

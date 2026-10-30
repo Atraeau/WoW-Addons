@@ -713,13 +713,14 @@ officer can override the heuristic.
 
 **Decided by the guild leader:** everything about King's Gambit lives in one folder of the WoW-Addons repository,
 with no separate docs folder elsewhere, so it can move to its own repository later.
-- `KingsGambit/` now holds the addon (`src/KingsGambit`), `docs/`, `tests/`, `tools/`, `simulator/`, the data and
+- `KingsGambit/` now holds the addon (`src/`, with the TOC and Lua files directly in it), `docs/`, `tests/`, `tools/`, `simulator/`, the data and
   build `scripts/`, and the earlier SuicideKings prototype (`archive/`). Every command runs from that folder
   (`lua tests/run.lua`, `lua scripts/build-simulator.lua`).
 - The files were moved with `git mv`, so their history follows them. Splitting it out later:
   `git subtree split --prefix=KingsGambit`.
 - What stays at the repository root, because it serves every addon:
-  - the deploy scripts, which now also find addons in a project's own `src/` folder;
+  - the deploy scripts, which now also find a project whose `src/` folder is the addon (it holds `<Project>.toc`)
+    and link it into the game under the project's name, `KingsGambit`;
   - the GitHub workflow (GitHub only reads workflows at the root; it now runs inside `KingsGambit/`);
   - the WoW API reference (`docs/api.json`), which the client code was checked against.
 - After pulling this, **re-run the deploy script**: the game's link to the old `src/KingsGambit` no longer points

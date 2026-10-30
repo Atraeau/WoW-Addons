@@ -17,4 +17,4 @@ Also in the repository:
 - [`simulator/`](../simulator/README.md): the real engine over a simulated raid, in a browser, with training scenarios and a sync lab.
 - [`tools/`](../tools/README.md): verify a saved ledger and print standings and history, without the game.
 - [`tests/`](../tests/): the test suite (`lua tests/run.lua`).
-- [`src/KingsGambit/`](../src/KingsGambit/): the addon.
+- [`src/`](../src/): the addon.

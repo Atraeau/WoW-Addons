@@ -89,7 +89,7 @@ local function standing(points)
     return "Unfriendly"
 end
 
--- An item as ItemFit sees it (see src/KingsGambit/ItemFit.lua for the stat keys).
+-- An item as ItemFit sees it (see src/ItemFit.lua for the stat keys).
 local EQUIP_LOC = { [1] = "INVTYPE_HEAD", [2] = "INVTYPE_NECK", [3] = "INVTYPE_SHOULDER", [4] = "INVTYPE_BODY",
     [5] = "INVTYPE_CHEST", [6] = "INVTYPE_WAIST", [7] = "INVTYPE_LEGS", [8] = "INVTYPE_FEET", [9] = "INVTYPE_WRIST",
     [10] = "INVTYPE_HAND", [11] = "INVTYPE_FINGER", [12] = "INVTYPE_TRINKET", [13] = "INVTYPE_WEAPON", [14] = "INVTYPE_SHIELD",

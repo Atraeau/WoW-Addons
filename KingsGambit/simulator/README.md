@@ -10,7 +10,7 @@ the only outside resource is a pinned, integrity-checked copy of
 ## What it is, and is not
 
 - **Is:** the actual rules, the actual ledger and the actual loot session, running on a
-  `MockClient` with bot raiders. The seven training scenarios in `src/KingsGambit/Scenarios.lua`
+  `MockClient` with bot raiders. The seven training scenarios in `src/Scenarios.lua`
   are also tests: the suite runs each one against the engine, and the page can re-run them in
   the browser (`KG('selftest')` in the console).
 - **Is not:** the WoW user interface, and it cannot validate anything about the real client
@@ -27,7 +27,7 @@ lua scripts/build-simulator.lua
 
 - `src/template.html`: the page (HTML, CSS, JavaScript)
 - `src/api.lua`: the JSON bridge between the page and the engine
-- the engine modules come straight from `src/KingsGambit/`
+- the engine modules come straight from `src/`
 
 ## Publishing
 

@@ -1,7 +1,7 @@
 # King's Gambit — Ledger format (v2)
 
 *A specification precise enough to verify a ledger with your own code, without ours. The reference
-implementation is `src/KingsGambit/` (`Hash.lua`, `Ledger.lua`, `Standings.lua`); the audit tool is
+implementation is `src/` (`Hash.lua`, `Ledger.lua`, `Standings.lua`); the audit tool is
 [`tools/`](../tools/README.md). The worked example below is checked by the test suite, so it cannot
 drift from the code. Why it is shaped this way: [ledger-v2-design.md](ledger-v2-design.md).*
 

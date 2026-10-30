@@ -40,7 +40,7 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 A full-featured raid loot system (Suicide Kings–derived) with a tamper-evident shared ledger. The
 engine is plain Lua with no game dependency, so it is fully tested outside WoW.
 
-Everything about it lives in [`KingsGambit/`](KingsGambit/README.md): the addon (`KingsGambit/src/KingsGambit`, which
+Everything about it lives in [`KingsGambit/`](KingsGambit/README.md): the addon (`KingsGambit/src`, which
 the deploy scripts find like any addon under `src/`), its docs, tests, simulator, tools and data scripts, so it can
 move to its own repository unchanged.
 
