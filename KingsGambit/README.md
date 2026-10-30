@@ -11,7 +11,7 @@ Everything about King's Gambit lives in this folder, so it can move to its own r
 | [`src/`](src/) | The addon (TOC and Lua files); this is the folder that goes into `Interface/AddOns` |
 | [`docs/`](docs/README.md) | Manifesto, player guide, design journal (every decision and why), client interface, ledger format |
 | [`tests/`](tests/) | The test suite (pure Lua 5.4, no game needed) |
-| [`simulator/`](simulator/README.md) | The real engine over a simulated raid, in a browser page, with training scenarios |
+| [`simulator/`](simulator/README.md) | The real engine over a simulated raid, in a browser page, with training scenarios. **[Play it online](https://atraeau.github.io/WoW-Addons/kings-gambit/)** |
 | [`tools/`](tools/README.md) | Verify a saved ledger and print standings and history, without the game |
 | [`scripts/`](scripts/) | Build the simulator page; generate the raid training data; extract facts from the CMaNGOS database |
 | [`archive/`](archive/) | The earlier SuicideKings prototype, kept for reference |
@@ -26,7 +26,7 @@ lua tests/run.lua
 lua scripts/build-simulator.lua
 ```
 
-To run the simulator, open the page it builds (it needs an internet connection, to load Lua in the browser).
+To run the simulator, open the page it builds (it needs no network). It is also published at <https://atraeau.github.io/WoW-Addons/kings-gambit/>.
 After changing the engine, rebuild it with the command above first:
 
 ```bash

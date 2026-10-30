@@ -51,6 +51,8 @@
   .turn { border: 1px solid var(--gold); background: rgba(227,179,65,.07); border-radius: 6px; padding: 10px; margin-bottom: 12px; }
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
   select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
+  .credits { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .credits a { color: var(--info); }
   .loading { padding: 40px; text-align: center; color: var(--muted); }
   code { background: var(--panel2); padding: 0 4px; border-radius: 3px; }
   .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
@@ -70,6 +72,13 @@
   <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button></div>
   <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
   <div id="lab" hidden></div>
+  <footer class="credits">
+    King's Gambit is a transparent loot system for WoW: Forever, derived from Suicide Kings.
+    This page runs the addon's own Lua code in your browser (through <a href="https://fengari.io">fengari</a>, MIT license); nothing is sent anywhere.
+    <a href="https://github.com/Atraeau/WoW-Addons/tree/main/KingsGambit">Source and design notes</a>.<br>
+    Item stats come from the <a href="https://github.com/cmangos/classic-db">CMaNGOS classic database</a> (GPL-3.0); drop rates were observed on
+    <a href="https://www.wowhead.com/classic">Wowhead Classic</a>. This is a training simulation, not affiliated with Blizzard Entertainment.
+  </footer>
 </div>
 
 <!--KG_FENGARI-->

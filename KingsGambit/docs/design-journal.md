@@ -1357,6 +1357,24 @@ off-spec on, and win it, because gift bids competed in the main tier by the gift
   off-spec bidder and never prompt for a recipient. Also fixed: an open gift showed "You -> undefined" in the item row; it now
   says it is choosing who gets it, and the new phase has its own label.
 
+### Published: the simulator is on GitHub Pages (2026-10-30)
+
+**Asked by the guild leader:** let someone other than the author play with the simulator, ideally running the same Lua engine.
+- **Where:** <https://atraeau.github.io/WoW-Addons/kings-gambit/>. The repository already serves `docs/` on Pages, so the build now also
+  writes the page to `docs/kings-gambit/index.html`. (If the folder later moves to its own repository, the build takes a folder
+  to publish into.) The hand-written API browser links to it.
+- **The same engine:** the page inlines the addon's real source (all the modules) and runs it on fengari, a Lua 5.3 VM in
+  JavaScript. Same files, different VM from the game's Lua 5.1 variant and from the tests' 5.4.
+- **Vendored, not fetched:** fengari-web 0.1.4 is kept in `simulator/vendor/` (verified byte-for-byte against the integrity hash the
+  page used to pin) and inlined, so the page needs no CDN and no network: loaded over HTTP, the browser makes one request, for
+  the page itself. The page grew from 360 to about 575 KB.
+- **Credits** are in a footer: fengari (MIT), the CMaNGOS classic database (GPL-3.0) for item stats, Wowhead Classic for observed
+  drop rates, and a note that it is a training simulation not affiliated with Blizzard.
+- **Kept current by CI:** the existing "simulator page is up to date" check now covers the published copy as well.
+- **Not done yet:** a Node syntax check of the page's JavaScript in CI (it would have caught the two breakages of the page's
+  script that happened by hand); and a CI step that publishes automatically. The browser pane can no longer open the file directly
+  (it loads files as data URLs and the page is now too large), so it is tested over local HTTP.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

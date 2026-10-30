@@ -34,7 +34,7 @@ jobs:
       - name: Simulator page is up to date
         run: |
           lua5.4 scripts/build-simulator.lua
-          git diff --exit-code --stat simulator/index.html || {
-            echo "::error::simulator/index.html is out of date. Run: lua scripts/build-simulator.lua"
+          git diff --exit-code --stat simulator/index.html ../docs/kings-gambit/index.html || {
+            echo "::error::the simulator page (simulator/index.html, and the published copy docs/kings-gambit/index.html) is out of date. Run, in KingsGambit/: lua scripts/build-simulator.lua"
             exit 1
           }

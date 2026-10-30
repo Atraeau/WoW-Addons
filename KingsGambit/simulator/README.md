@@ -3,9 +3,11 @@
 A browser page that runs the **real** King's Gambit loot engine over a simulated raid, so
 people can practice being the Master Looter before the addon is playable in the game.
 
-Open `simulator/index.html` in a browser. It is one self-contained file (the engine is inlined);
-the only outside resource is a pinned, integrity-checked copy of
-[fengari](https://fengari.io) (Lua in JavaScript) from a CDN, so it needs an internet connection.
+**Play it online: <https://atraeau.github.io/WoW-Addons/kings-gambit/>**
+
+Or open `simulator/index.html` in a browser. It is one self-contained file with no network needs: the engine is
+inlined, and so is [fengari](https://fengari.io) (Lua running in JavaScript), kept in `vendor/` (see its README).
+The page runs the addon's own Lua source: the same files, on a Lua 5.3 VM in the browser instead of the game's.
 
 ## What it is, and is not
 
@@ -31,5 +33,7 @@ lua scripts/build-simulator.lua
 
 ## Publishing
 
-Nothing here is published by GitHub Pages: only `docs/` is. To publish it, move or copy
-`simulator/index.html` into `docs/` (and point `DIR` in `scripts/build-simulator.lua` there).
+GitHub Pages serves the repository's `docs/` folder, so the build also writes the page to
+`docs/kings-gambit/index.html` (when this folder sits inside the WoW-Addons repository), which is the URL above.
+Commit both copies together; CI (`.github/workflows/tests.yml`) fails if either is out of date. If King's Gambit moves
+to its own repository, give the build the folder to publish into: `lua scripts/build-simulator.lua <folder>`.
