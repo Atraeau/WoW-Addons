@@ -709,6 +709,37 @@ officer can override the heuristic.
 - **The Master Looter is a raider like any other.** In a raid night the learner now starts anywhere on the list,
   like everyone, and moves as they win. Only the training scenarios set their own layout.
 
+### Eligibility follows armor type; raiders can ask to be eligible (2026-10-30)
+
+**Decided by the guild leader:**
+- Eligibility comes from a heuristic that is sensitive to armor type and to which classes can wear it.
+- A raider can ask to be eligible for an item. If the Master Looter agrees, the item is eligible for that class
+  from then on. If they decline, the decline is recorded with a reason.
+
+Prompted by a report from the simulator page: a warlock needed and won Flamewaker Legplates (plate). Fifteen
+simulated nights with the current code showed no such bid; the only wins by someone who can't wear an item were
+backstop claims, as designed. Most likely the page was built before the fit changes. Either way it was allowed,
+because proficiency was only a hint.
+
+- **The rule in the drafts:** need, off-spec and gift bids are refused from a class that can't wear or wield the
+  item (`cantequip`), as well as from one the item's "Classes:" line leaves out (`wrongclass`). Gifts to such a
+  class are refused too.
+  - Armor: cloth for every class; leather for all but priests, mages and warlocks; mail for warriors, paladins,
+    hunters and shamans; plate for warriors and paladins.
+  - Shields and relics go to the classes that use them, and weapons follow each class's proficiencies.
+  - An officer's `eligible` rule overrides all of this: it's a deliberate guild call.
+  - Not restricted: the backstop (the salvager may take anything, to sell or disenchant) and the disenchanter.
+- **Requests: `request eligible <item, item id or item#> <reason>`.**
+  - The requester's class (and spec, for the record) travels with the request.
+  - **Accepting** writes the guild's rule for the item: its current classes plus the requester's, with
+    `requestedBy` and the reason. It holds until an officer changes it.
+  - **Declining** writes a `Declined` event carrying the item, class and reason.
+  - **A request that can't be granted is explained, and stays waiting for a decline:** the class can't wear the
+    item, the item isn't restricted, or the class is already eligible.
+  - A refused bid now points the raider to the request.
+- **Why by class, not spec:** spec is part of the record, but eligibility is by class. The game can check a
+  class; a spec can't be checked, and can change at any time.
+
 ### Decision: King's Gambit is one self-contained folder (2026-10-30)
 
 **Decided by the guild leader:** everything about King's Gambit lives in one folder of the WoW-Addons repository,

@@ -19,9 +19,13 @@
 --   remove   member               take a player off the list
 --   award    member, item, to?    record a win that wasn't recorded (e.g. a hand-over that failed)
 --   gift     member, to           the item that player last won actually went to someone else (no position change)
+--   eligible item, class, spec?   let this class bid on an item restricted to other classes, from now on: accepted, it
+--                                 adds the class to the guild's rule for the item (ItemClasses); declined, it is
+--                                 recorded with the reason. Eligibility is by class (what the game can check); the
+--                                 requester's spec is part of the record.
 local _, SK = ...
-local Standings
-local M = SK:NewModule("Requests", { "Standings" }, function(d) Standings = d.Standings end)
+local Standings, ItemFit
+local M = SK:NewModule("Requests", { "Standings", "ItemFit" }, function(d) Standings, ItemFit = d.Standings, d.ItemFit end)
 
 M.LIST = "main"
 M.MAX_REASON = 200
@@ -42,6 +46,7 @@ local NEEDS = {
     remove = function(r) return isName(r.member) end,
     award = function(r) return isName(r.member) and isName(r.item) and (r.to == nil or isName(r.to)) end,
     gift = function(r) return isName(r.member) and isName(r.to) end,
+    eligible = function(r) return isName(r.item) and ItemFit.ItemId(r.item) ~= nil and ItemFit.CLASS_BITS[r.class] ~= nil end,
 }
 M.KINDS = {}
 for k in pairs(NEEDS) do M.KINDS[k] = true end
@@ -63,7 +68,11 @@ function M.Describe(r)
     elseif r.kind == "add" then return ("add %s%s"):format(who, where and (" at " .. where) or "")
     elseif r.kind == "remove" then return ("remove %s from the list"):format(who)
     elseif r.kind == "award" then return ("record that %s won %s%s"):format(who, r.item, r.to and (" for " .. short(r.to)) or "")
-    elseif r.kind == "gift" then return ("%s's last item went to %s"):format(who, short(r.to)) end
+    elseif r.kind == "gift" then return ("%s's last item went to %s"):format(who, short(r.to))
+    elseif r.kind == "eligible" then
+        return ("let %s%s bid on %s"):format(r.spec and (r.spec .. " ") or "", (ItemFit.CLASS_NAMES[r.class] or r.class or "?") .. "s",
+            r.item:match("%[(.-)%]") or ("item " .. tostring(ItemFit.ItemId(r.item))))
+    end
     return r.kind
 end
 
@@ -77,6 +86,34 @@ local function lastAward(state, member)
     end
     return best
 end
+
+-- The guild rule an eligibility request asks for: the item's current classes (the guild's rule, or what the item
+-- itself says) with the requester's class added. Returns the ItemClasses data, or nil + reason.
+function M.EligibleRule(engine, client, r)
+    local id = ItemFit.ItemId(r.item)
+    local rule = engine:ItemRule(id)
+    local fit = ItemFit.Describe(client, r.item, nil, rule)
+    local classes = fit and fit.classes
+    if fit and not rule then
+        -- Without a guild rule, who may have it is the classes it names, narrowed by who can wear or wield it.
+        local ok, why = ItemFit.CanUse(fit, r.class)
+        if not ok and why ~= "classes" then return nil, "cantequip" end
+        local able = {}
+        for _, c in ipairs(M.ClassList()) do if ItemFit.CanUse(fit, c) then able[#able + 1] = c end end
+        if #able < #M.ClassList() then classes = able end
+    end
+    if not classes then return nil, rule and "alreadyeligible" or "notrestricted" end
+    local out = {}
+    for _, c in ipairs(classes) do
+        if c == r.class then return nil, "alreadyeligible" end
+        out[#out + 1] = c
+    end
+    out[#out + 1] = r.class
+    return { item = id, classes = out, reason = r.reason, requestedBy = r.by, rid = r.rid, class = r.class, spec = r.spec,
+        name = r.item:match("%[(.-)%]") }
+end
+
+function M.ClassList() return ItemFit.CLASSES end
 
 -- The ledger event that carries out request `r`, for the Master Looter whose chain is `chainId`.
 -- Returns type, data, or nil + reason.
@@ -177,7 +214,7 @@ function M.New(sync, engine)
             if r.tries >= M.MAX_TRIES then r.state = "unanswered"; em.emit("unanswered", { req = r }); return end
             r.tries = r.tries + 1
             sync:send({ t = "QR", rid = r.rid, kind = r.kind, member = r.member, pos = r.pos, item = r.item, to = r.to,
-                reason = r.reason }, "WHISPER", ml)
+                class = r.class, spec = r.spec, reason = r.reason }, "WHISPER", ml)
             client:after(M.RETRY_SECONDS, try)
         end
         try()
@@ -226,7 +263,7 @@ function M.New(sync, engine)
         end
         if not runningMine() then return ack(sender, { rid = msg.rid, ok = false, why = "notml" }) end
         local r = { rid = msg.rid, by = sender, kind = msg.kind, member = msg.member, pos = msg.pos, item = msg.item,
-            to = msg.to, reason = msg.reason }
+            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason }
         local ok, why = M.Validate(r)
         if not ok then return ack(sender, { rid = msg.rid, ok = false, why = why }) end
         local n = 0
@@ -252,10 +289,17 @@ function M.New(sync, engine)
     function q:accept(num)
         local r, i, mine = take(num)
         if not r then return nil, "norequest" end
-        local list = engine:Get(M.LIST)
-        local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
-        if not type_ then return nil, data end
-        local ev, why = engine:Append(M.LIST, type_, data)
+        local ev, why
+        if r.kind == "eligible" then
+            local data, err = M.EligibleRule(engine, client, r)
+            if not data then return nil, err end
+            ev, why = engine:Write("ItemClasses", data)
+        else
+            local list = engine:Get(M.LIST)
+            local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
+            if not type_ then return nil, data end
+            ev, why = engine:Append(M.LIST, type_, data)
+        end
         if not ev then return nil, why end
         table.remove(mine.pending, i)
         return ev
@@ -267,7 +311,8 @@ function M.New(sync, engine)
         local r, i, mine = take(num)
         if not r then return nil, "norequest" end
         local ev, why = engine:Write("Declined", { request = M.Describe(r), requestedBy = r.by, declineReason = reason,
-            rid = r.rid, kind = r.kind, member = r.member })
+            rid = r.rid, kind = r.kind, member = r.member, item = r.kind == "eligible" and ItemFit.ItemId(r.item) or nil,
+            class = r.class, spec = r.spec })
         if not ev then return nil, why end
         table.remove(mine.pending, i)
         return ev

@@ -270,3 +270,77 @@ test("two raids at once: a request goes to the Master Looter of the requester's 
     w.Aldric.cmd.handle("request @Cass move Aldric bottom again"); w.net:advance(2)
     eq(#w.Cass.requests:pending(), 1)
 end)
+
+H.section("Disputes: asking to be eligible for an item")
+-- A priest's robe: the Master Looter's game says "Classes: Priest". Aldric is a warrior (the default class here).
+local ROBE = "|cffa335ee|Hitem:19999::::::::60:::::|h[Robe of the Faithful]|h|r"
+local function robe(w)
+    w.Looter.client:setItemInfo(ROBE, { name = "Robe of the Faithful", equipLoc = "INVTYPE_ROBE", class = 4, subclass = 1 })
+    w.Looter.client:setItemStats(ROBE, { stats = { int = 20 }, classes = { "PRIEST" } })
+end
+
+test("accepted: the class may bid on the item from now on, recorded with who asked and why", function()
+    local w = guild(); openRaid(w); robe(w)
+    w.Aldric.client:storage().char.spec = { main = "Protection" }
+    w.Aldric.cmd.handle("request eligible " .. ROBE .. " the set bonus is worth it for my tanking")
+    w.net:advance(2)
+    assert(text(w.Looter):find("let Protection Warriors bid on Robe of the Faithful"), text(w.Looter))
+    w.Looter.cmd.handle("accept 1")
+    w.net:advance(3)
+    everyone(w, function(nd)
+        local rule = nd.engine:ItemRule(19999)
+        assert(rule, nd.name .. " has the rule"); eq(table.concat(rule.classes, ","), "PRIEST,WARRIOR", nd.name)
+    end)
+    local ev = w.GM.engine.store.byId[w.GM.engine:ItemRule(19999).id]
+    eq(ev.data.requestedBy, "Aldric-Realm"); eq(ev.data.spec, "Protection"); eq(ev.data.reason, "the set bonus is worth it for my tanking")
+    assert(text(w.Aldric):find("Looter accepted your request"), text(w.Aldric))
+    clear(w.Brann); w.Brann.cmd.handle("history 2")
+    assert(text(w.Brann):find("Looter set who may bid on Robe of the Faithful: Priest, Warrior, at the request of Aldric"), text(w.Brann))
+end)
+
+test("declined: recorded in the ledger with the reason, and nothing changes", function()
+    local w = guild(); openRaid(w); robe(w)
+    w.Aldric.cmd.handle("request eligible " .. ROBE .. " I want it")
+    w.net:advance(2)
+    w.Looter.cmd.handle("decline 1 priests first; ask again if no priest needs it")
+    w.net:advance(3)
+    everyone(w, function(nd)
+        eq(nd.engine:ItemRule(19999), nil, nd.name)
+        local d = nd.engine:View().declined[1]
+        eq(d.data.kind, "eligible"); eq(d.data.item, 19999); eq(d.data.class, "WARRIOR"); eq(d.data.requestedBy, "Aldric-Realm")
+    end)
+    assert(text(w.Aldric):find("Looter declined your request to let Warriors bid on Robe of the Faithful: priests first"), text(w.Aldric))
+end)
+
+test("an eligibility request that isn't needed is explained, and stays waiting for a decline", function()
+    local w = guild(); openRaid(w)
+    w.Looter.client:setItemInfo("item:500", { name = "Cloak", equipLoc = "INVTYPE_CLOAK", class = 4, subclass = 1 })
+    w.Looter.client:setItemStats("item:500", { stats = { sta = 10 } })
+    w.Aldric.cmd.handle("request eligible 500 please")
+    w.net:advance(2)
+    clear(w.Looter); w.Looter.cmd.handle("accept 1")
+    assert(text(w.Looter):find("isn't restricted to classes"), text(w.Looter))
+    eq(#w.Looter.requests:pending(), 1)
+    w.Aldric.cmd.handle("request eligible"); assert(text(w.Aldric):find("request eligible <item or item#> <reason>"), text(w.Aldric))
+end)
+
+test("eligibility follows armor type: a plate item is for plate wearers; a class that can't wear it is told so", function()
+    local w = guild(); openRaid(w)
+    w.Looter.client:setItemInfo("item:600", { name = "Legplates", equipLoc = "INVTYPE_LEGS", class = 4, subclass = 4 })
+    w.Looter.client:setItemStats("item:600", { stats = { str = 20 } })
+    w.Looter.client:setItemInfo("item:601", { name = "Mail Boots", equipLoc = "INVTYPE_FEET", class = 4, subclass = 3 })
+    w.Looter.client:setItemStats("item:601", { stats = { agi = 20 } })
+    -- Brann asks as a mage for the plate (can't wear it), Aldric as a warrior for a mail item restricted... he can
+    -- already wear mail, so there is nothing to ask.
+    w.Brann.client:setRaid({ { name = "Brann", class = "MAGE" }, "Looter" }, { leader = "Looter", lootMethod = "master", masterLooter = "Looter" })
+    w.Brann.cmd.handle("request eligible 600 I'd like the legs")
+    w.Aldric.cmd.handle("request eligible 601 boots")
+    w.net:advance(2)
+    local num = {}
+    for _, p in ipairs(w.Looter.requests:pending()) do num[p.by] = p.num end
+    eq(w.Looter.requests:pending()[1].class ~= nil, true, "the request carries the requester's class")
+    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Brann-Realm"])
+    assert(text(w.Looter):find("that class can't wear or wield that item"), text(w.Looter))
+    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Aldric-Realm"])
+    assert(text(w.Looter):find("isn't restricted to classes") or text(w.Looter):find("may already bid"), text(w.Looter))
+end)

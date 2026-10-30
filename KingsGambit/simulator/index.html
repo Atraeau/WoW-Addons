@@ -2266,6 +2266,20 @@ function Session:start(items)
     return true
 end
 
+-- May a player of `class` bid on an item (ItemFit's view of it) in the drafts? true, or false + "wrongclass" (not a
+-- class the item or the guild's rule names) or "cantequip" (the class can't wear or wield it). Unknown items and
+-- classes are let through.
+function M.MayHave(fit, class)
+    if not (fit and class) then return true end
+    if fit.rule then
+        if ItemFit.Allowed(fit, class) then return true end
+        return false, "wrongclass"
+    end
+    local ok, why = ItemFit.CanUse(fit, class)
+    if ok then return true end
+    return false, why == "classes" and "wrongclass" or "cantequip"
+end
+
 -- What the session knows about item i (ItemFit's view: class restriction, stats), or nil while the game
 -- hasn't cached it. Asked again until known: an uncached item restricts nobody.
 function Session:fitOf(i)
@@ -2293,12 +2307,17 @@ function Session:bid(player, itemId, kind, extra)
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
     end
-    -- An item that names its classes is for those classes only, in the drafts (the backstop and the
-    -- disenchanter are not restricted). Gifting doesn't get around it, in either direction.
+    -- In the drafts, an item is only for the classes that may have it: those it names (or the guild's rule names),
+    -- and, without a guild rule, only those who can equip it at all (armor type, weapon proficiency). The backstop
+    -- and the disenchanter are not restricted. Gifting doesn't get around it, in either direction.
     if kind ~= "pass" then
         local fit = self:fitOf(itemId)
-        if not ItemFit.Allowed(fit, self.class[player]) then return false, "wrongclass" end
-        if to and not ItemFit.Allowed(fit, self.class[to]) then return false, "wrongclassto" end
+        local ok, why = M.MayHave(fit, self.class[player])
+        if not ok then return false, why end
+        if to then
+            ok, why = M.MayHave(fit, self.class[to])
+            if not ok then return false, why .. "to" end
+        end
     end
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
@@ -2382,7 +2401,9 @@ function Session:handleWhisper(sender, text)
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
             else
-                if err == "wrongclass" or err == "wrongclassto" then
+                if err == "cantequip" or err == "cantequipto" then
+                    lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
+                elseif err == "wrongclass" or err == "wrongclassto" then
                     lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
                 else
                     lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))

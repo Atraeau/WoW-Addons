@@ -28,9 +28,13 @@ local WHY = {
     toomany = "you already have 3 requests waiting: wait for the Master Looter to answer them",
     norequest = "there is no waiting request with that number", noaward = "they have no award to change",
     notrevertible = "that award can't be undone directly any more (the list has moved since): ask for a move instead",
+    notrestricted = "that item isn't restricted to classes, so everyone may already bid on it",
+    cantequip = "that class can't wear or wield that item", cantequipto = "the player you are gifting to can't wear or wield that item",
+    alreadyeligible = "that class may already bid on it",
     badpos = "a position is top, bottom or a number",
     -- who may bid on an item
-    wrongclass = "that item is for other classes", wrongclassto = "the player you are gifting to is not one of the classes the item is for",
+    wrongclass = "that item is for other classes (if you think your class should be eligible: request eligible <item#> <reason>)",
+    wrongclassto = "the player you are gifting to is not one of the classes the item is for",
     baditemrule = "that rule is not valid (an item id, the classes, and a reason)",
     baditemsuits = "that override is not valid (an item id, the roles, and a reason)",
 }
@@ -54,6 +58,7 @@ local HELP = {
     "  request move <name> <top|bottom|N> <reason>     ask the Master Looter to change the list during a raid;",
     "  request undo|remove <name> <reason>             also: add <name> [pos] <reason>, award <name> <item> <reason>,",
     "  request gift <name> <to> <reason>               (the item they won went to someone else)",
+    "  request eligible <item> <reason>                ask for your class to be allowed to bid on an item, from now on",
     "  requests                        waiting requests and recent decisions",
     "  accept <n> | decline <n> <reason>                answer a request (Master Looter)",
     "  history [N]                     the last changes to the list, with who, why, and at whose request",
@@ -476,6 +481,7 @@ function M.New(ctx)
         move = "request move <name> <top|bottom|N> <reason>", undo = "request undo <name> <reason>",
         add = "request add <name> [top|bottom|N] <reason>", remove = "request remove <name> <reason>",
         award = "request award <name> <item> <reason>", gift = "request gift <name> <to> <reason>",
+        eligible = "request eligible <item or item#> <reason>",
     }
     local function isPos(p) return p == "top" or p == "bottom" or (tonumber(p) ~= nil) end
 
@@ -485,8 +491,19 @@ function M.New(ctx)
         args = rest or args
         local kind, body = args:match("^(%a+)%s*(.-)$")
         kind = kind and kind:lower()
-        if not (kind and Requests.KINDS[kind]) then return nil, nil, "request <move|undo|add|remove|award|gift> ...  (see help)" end
+        if not (kind and Requests.KINDS[kind]) then return nil, nil, "request <move|undo|add|remove|award|gift|eligible> ...  (see help)" end
         local r = { kind = kind }
+        if kind == "eligible" then
+            -- the item: a link, an item id, or an item's number in the running loot session
+            local link, reason = body:match("^(|c.-|r)%s*(.-)$")
+            if not link then link, reason = body:match("^(%S+)%s*(.-)$") end
+            local n = link and tonumber(link)
+            if n and linkOf(n) then link = linkOf(n) elseif n then link = "item:" .. n end -- a bare item id
+            r.item, r.reason, r.class = link, reason ~= "" and reason or nil, myClass()
+            r.spec = char.spec and char.spec.main
+            if not Requests.Validate(r) then return nil, nil, REQUEST_USAGE.eligible .. "  (a reason is required: it goes in the record)" end
+            return r, target and name(target)
+        end
         local who, more = body:match("^(%S+)%s*(.-)$")
         r.member = who and name(who)
         if kind == "move" then

@@ -171,6 +171,24 @@ test("a raider who whispers a bid for another class's item is told who it is for
     eq(last.kind, "whisper"); assert(last.text:find("item 1 is only for Priest, Mage"), last.text)
 end)
 
+test("an item a class can't equip takes no need, off-spec or gift bids from it (plate for a warlock)", function()
+    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local roster = { { name = "Lock", class = "WARLOCK" }, { name = "Wara", class = "WARRIOR" }, { name = "ML", class = "PALADIN" } }
+    client:setRaid(roster, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
+    client:setItemInfo("item:18861", { name = "Flamewaker Legplates", equipLoc = "INVTYPE_LEGS", class = ARMOR, subclass = 4 })
+    client:setItemStats("item:18861", { stats = { str = 18, sta = 22, dodge = 1 } })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name .. "-Realm", class = m.class }) end
+    local s = Loot.NewSession(engine, { bidSeconds = 0 })
+    assert(s:start({ { link = "item:18861" } }))
+    eq(select(2, s:bid("Lock", 1, "need")), "cantequip"); eq(select(2, s:bid("Lock", 1, "off")), "cantequip")
+    eq(select(2, s:bid("Wara", 1, "gift", { to = "Lock" })), "cantequipto")
+    s:handleWhisper("Lock", "need")
+    assert(client.sent[#client.sent].text:find("can't be worn or wielded by your class"), client.sent[#client.sent].text)
+    assert(s:bid("Wara", 1, "need")); assert(s:bid("ML", 1, "pass")); assert(s:bid("Lock", 1, "pass"))
+end)
+
 H.section("Item fit: the guild's rules, set before the item drops")
 test("an officer's rule decides who may bid, over what the item itself says", function()
     local s = session({ stats = {}, classes = { "PRIEST" } },
