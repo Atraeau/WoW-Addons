@@ -1238,6 +1238,32 @@ list)  4. Nobody wants it (disenchant)  5. A small upgrade nobody will spend the
 item to a friend  7. Fixing a mistake (undo)  8. The lucky salvager  9. A big hand-out  then the two full raid nights.
 A test pins the start, the end, and that unwanted items come before salvaging them.
 
+### Decisions for building the raid leader role and the Master Looter requirement (2026-10-30)
+
+**Asked by the guild leader:** implement the raid leader role and the requirement to establish a Master Looter, with the
+addon assisting where the game's API allows. The game provides `C_PartyInfo.GetLootMethod`, `C_PartyInfo.SetLootMethod(method,
+[lootMaster])` (returns success), `C_PartyInfo.IsLootMethodAvailable` and `GetAvailableLootMethods`, and `UnitIsGroupLeader` /
+`UnitIsGroupAssistant`. Defaults chosen for the open questions logged earlier (all easy to change):
+- **The raid leader is read from the game, never the ledger.** There is always one (in a raid, and a leader in every
+  dungeon group). New Client call `leader()`. The leader is shown wherever roles are shown. **The ledger's authority is not
+  changed:** officers (and the guild master) still open raids and name their Master Looter; the leader is a game role, not
+  an addon authority. (A guild's raid leader will normally be an officer; if not, an officer opens the raid.)
+- **The requirement:** a loot session starts only when **(1) the loot method is Master Looter and (2) the player starting it is
+  the named Master Looter.** Otherwise it is refused with a plain reason that names the raid leader, who is the one who can
+  fix it. This is enforced in `Session:start`, so no front end (text commands, the simulator, a future UI) can bypass it.
+- **Addon assist:** `masterloot [name]` for the raid leader sets the loot method to Master Looter with the named
+  Master Looter (default: themselves) through `C_PartyInfo.SetLootMethod`, after checking `IsLootMethodAvailable`. It never
+  changes the setting on its own, only on that command. A player who isn't the leader is told who is, and to ask them.
+  The addon says when the loot method changes (and to whom).
+- **If the loot method or Master Looter changes during a session, the session is cancelled** and everyone is told. Nothing
+  has been written to the ledger before confirm, so nothing is lost but the answers; they restart once it is fixed.
+- **A mismatch to surface, not enforce:** the raid the ledger has open (an officer's `raid open`) names a Master Looter; if
+  the game's Master Looter is someone else, `raid` says so, since only the ledger's Master Looter may write.
+- **Simulator:** the Roles card shows the **raid leader**, the **loot method** and the **Master Looter**, and each can be
+  changed. You can pick another raider as Master Looter; then a bot Master Looter runs and confirms the loot and you play a
+  raider, so both seats can be learned. Loot is not handed out until the loot method is Master Looter, and the page says
+  why. When you are not the raid leader, setting the loot method means asking them, as in the game.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
