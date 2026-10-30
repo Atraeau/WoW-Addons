@@ -531,11 +531,9 @@ function Session:keepGift(player)
     return resolveRecipient(self, t, t.player)
 end
 
--- Decide not to gift after all: it counts as a pass. The win is withdrawn, the winner keeps their place on the list,
--- and the draft goes on without them for this item. (The page and commands ask for a confirmation first.)
-function Session:withdrawGift(player)
-    local t, why = recipientTurn(self, player)
-    if not t then return false, why end
+-- Undo a gift win that has no recipient: the win is withdrawn, the winner keeps their place on the list, it counts as
+-- a pass for them, and the draft goes on without them for this item. passKind (optional) is recorded with the pass.
+local function undoGift(self, t, passKind, forced)
     local action, it = self.undecided, self.items[t.item]
     for i, a in ipairs(self.pending) do
         if a == action then table.remove(self.pending, i); break end
@@ -544,12 +542,28 @@ function Session:withdrawGift(player)
     local at = indexOf(order, t.player)
     if at then table.remove(order, at); table.insert(order, math.min(action.fromIndex or #order + 1, #order + 1), t.player) end
     it.status, it.winner, it.to, it.tier = "open", nil, nil, nil
-    self.bids[t.player][t.item] = { kind = "pass" }
+    self.bids[t.player][t.item] = { kind = "pass", passKind = passKind }
     self.undecided, self.turn = nil, nil
     self:clearTimer()
-    self:emit("recipient", { player = t.player, item = t.item, withdrawn = true })
+    self:emit("recipient", { player = t.player, item = t.item, withdrawn = true, forced = forced or nil })
     self:continueDraft(t.tier)
     return true
+end
+
+-- Decide not to gift after all. (The page and commands ask for a confirmation first.)
+function Session:withdrawGift(player)
+    local t, why = recipientTurn(self, player)
+    if not t then return false, why end
+    return undoGift(self, t)
+end
+
+-- The Master Looter's override: the winner has not said who gets the gift (away, slow, or unwilling), so the Master
+-- Looter downgrades it to a pass for that player. It is recorded as a pass of kind "undecided", so the history shows it.
+-- Only the Master Looter's own client holds the session, so this is theirs to call.
+function Session:overrideGift()
+    local t = self.turn
+    if not (t and t.type == "recipient") then return false, "noturn" end
+    return undoGift(self, t, "undecided", true)
 end
 
 function Session:setTurn(turn, sec, onTimeout)

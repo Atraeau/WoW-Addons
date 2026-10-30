@@ -57,6 +57,7 @@ local HELP = {
     "  gift <item#> [name]             you may leave the name out and choose later, if you win it",
     "  recipient <name> | keep | withdraw yes           after winning a gift with no name: who gets it, keep it, or",
     "                                  give it up (counts as a pass)",
+    "  override                        Master Looter: the gift winner won't say who gets it; count it as their pass",
     "  raid                            who is Master Looter of the raids that are open",
     "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
@@ -401,6 +402,17 @@ function M.New(ctx)
         if args == "" then return out("recipient <name>   (who gets the gift you won)") end
         act(function(s) return s:chooseRecipient(client:me(), args) end, function(p) return p:recipient(args) end)
     end
+    -- Master Looter: the gifter hasn't said who gets it; downgrade their win to a pass and carry on.
+    function cmds.override()
+        local s = hosting()
+        if not s then return out("No loot session is running.") end
+        local t = s.turn
+        if not (t and t.type == "recipient") then return out("Nothing to override: no one is choosing a gift recipient.") end
+        local who = short(t.player)
+        local ok, err = s:overrideGift()
+        if not ok then return out("Not done: " .. why(err)) end
+        out(("%s's gift is treated as a pass (it is recorded: they didn't say who gets it). The draft goes on."):format(who))
+    end
     function cmds.keep() act(function(s) return s:keepGift(client:me()) end, function(p) return p:keep() end) end
     function cmds.withdraw(args)
         if args:lower() ~= "yes" then
@@ -651,7 +663,9 @@ function M.New(ctx)
         elseif ev.type == "Revert" then text = ("%s undid %s"):format(by, who and (who .. "'s award") or "an award")
         elseif ev.type == "Transfer" then text = ("%s recorded that %s's item went to %s"):format(by, who or "a winner", short(d.to))
         elseif ev.type == "Declined" then text = ("%s declined %s's request to %s: %s"):format(by, short(d.requestedBy), d.request, d.declineReason)
-        elseif ev.type == "Pass" then text = ("%s passed on %s"):format(who, tostring(d.item))
+        elseif ev.type == "Pass" then
+            text = ("%s passed on %s"):format(who, tostring(d.item))
+            if d.kind == "undecided" then text = text .. " (won it as a gift but didn't say who gets it; the Master Looter counted it as a pass)" end
         elseif ev.type == "SetDisenchanter" then text = ("%s chose %s to disenchant for raid %s"):format(by, short(d.name), tostring(d.raid))
         elseif ev.type == "ItemSuits" then
             text = ("%s set who %s suits: %s"):format(by, d.name or ("item " .. tostring(d.item)),
@@ -882,7 +896,7 @@ function M.New(ctx)
                 if t.player == client:me() then
                     return out(("You won item %d as a gift. Who gets it? recipient <name>, or keep (if it suits you), or withdraw yes (a pass)."):format(t.item))
                 end
-                return out(("%s won item %d as a gift and is choosing who gets it. The draft waits for them."):format(short(t.player), t.item))
+                return out(("%s won item %d as a gift and is choosing who gets it. The draft waits for them (override: count it as their pass)."):format(short(t.player), t.item))
             end
             if t.player == client:me() then
                 out(t.type == "pick" and ("Your pick! Items you bid on: " .. table.concat(t.options, ", ") .. ". pick <n> or skip.")

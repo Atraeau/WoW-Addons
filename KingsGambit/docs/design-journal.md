@@ -944,8 +944,12 @@ made earlier leaked into the next prompt):
   is written only once its recipient is known.
 - **Also decided:** in the salvage round the gift is explicit already ("Claim it" or "Claim and gift", disabled until
   someone is chosen).
-- **Open:** a winner who goes quiet blocks the draft until they answer or leave; the Master Looter's only lever today is
-  cancelling. A way for the Master Looter to withdraw on their behalf is probably wanted.
+- **Master Looter override (decided by the guild leader):** if the gifter never says who gets it, the Master Looter may
+  override as they see fit. The gifter's win is **downgraded to a pass for that individual**: they keep their place, the
+  item goes on to the next bidder, and the ledger records a `Pass` of kind `undecided` (shown in `history` as "won it as
+  a gift but didn't say who gets it"), so the failure is visible. It is not an upgrade pass. Built: `Session:overrideGift`,
+  the `override` command (Master Looter only, since only their client holds the session), and a confirmed button on the
+  simulator's waiting card. The Master Looter does not choose the recipient for them.
 
 ### Decisions logged, not yet built: the raid leader, and the loot method (2026-10-30)
 

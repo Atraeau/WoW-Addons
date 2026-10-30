@@ -148,7 +148,8 @@
     const t = st.turn;
     if (!t) return "";
     if (t.type === "recipient" && t.player !== "You") {
-      return '<div class="turn muted"><b>' + esc(t.player) + "</b> won " + itemName(t.item) + " as a gift and is choosing who gets it. The draft waits for them.</div>";
+      return '<div class="turn muted"><b>' + esc(t.player) + "</b> won " + itemName(t.item) + " as a gift and is choosing who gets it. The draft waits for them. " +
+        '<div class="row" style="margin-top:8px"><button data-act="override" title="As Master Looter you may stop waiting: their gift counts as a pass, recorded as such">Override: count it as their pass&hellip;</button></div></div>';
     }
     if (t.player !== "You") {
       return '<div class="turn muted">Waiting for <b>' + esc(t.player) + "</b> to " + (t.type === "pick" ? "pick" : "claim or decline") + "&hellip;" + timerHtml() + "</div>";
@@ -394,6 +395,9 @@
       case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
       case "giveTo": act("recipient", giftTo); break;
       case "keep": act("keep"); break;
+      case "override":
+        if (window.confirm("Stop waiting? Their gift counts as a pass for them (they keep their place), the record says they didn't choose a recipient, and the draft goes on.")) act("override");
+        break;
       case "giveUp":
         if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
         break;

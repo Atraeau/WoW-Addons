@@ -258,6 +258,8 @@ end
 -- give it up (a pass). The draft waits for you.
 function api.recipient(to) return result(sim.session:chooseRecipient("You", to)) end
 function api.keep() return result(sim.session:keepGift("You")) end
+-- You are the Master Looter: the winner of a gift won't say who gets it, so count it as their pass.
+function api.override() return result(sim.session:overrideGift()) end
 function api.withdraw() return result(sim.session:withdrawGift("You")) end
 
 function api.pick(itemId) return result(sim.session:pick("You", tonumber(itemId))) end
