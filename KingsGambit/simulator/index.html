@@ -5444,12 +5444,17 @@ end
       (i === order.length - 1 && title === "Standings" ? ' <span class="tag">salvager</span>' : "") + "</span></li>").join("") + "</ol></div>";
   }
 
+  // "You win", "Brann wins": the verb agrees with who it is
+  const verb = (who, you, other) => (who === "You" ? "You " + you : esc(who) + " " + other);
+  const TIER = { main: "main draft", off: "off-spec draft", salvage: "salvage round" };
+
   function pendingHtml() {
     if (!st.pending || !st.pending.length) return "";
     return '<div class="card"><h2>Will be recorded</h2>' + st.pending.map((a) => {
-      if (a.type === "award") return "<div class=\"small\">" + esc(a.member) + " wins <span class=\"iname\">" + esc(a.item) + "</span> (" + a.tier + ")" + (a.to !== a.member ? " &rarr; " + esc(a.to) : "") + "</div>";
+      if (a.type === "award") return "<div class=\"small\">" + verb(a.member, "win", "wins") + ' <span class="iname">' + esc(a.item) + "</span> (" + (TIER[a.tier] || a.tier) + ")" +
+        (a.to !== a.member ? " and " + (a.member === "You" ? "give" : "gives") + " it to " + esc(a.to) : "") + "</div>";
       if (a.type === "disenchant") return "<div class=\"small\"><span class=\"iname\">" + esc(a.item) + "</span> goes to the disenchanter, " + esc(a.to) + ", to disenchant</div>";
-      return "<div class=\"small muted\">" + esc(a.member) + " joins the " + esc(a.list) + " list</div>";
+      return '<div class="small muted">' + verb(a.member, "join", "joins") + " the " + esc(a.list) + " list</div>";
     }).join("") + (st.phase === "review" ? '<div class="small muted" style="margin-top:6px">Nothing is written to the ledger until you confirm.</div>' : "") + "</div>";
   }
 

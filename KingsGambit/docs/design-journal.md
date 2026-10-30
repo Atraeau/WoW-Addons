@@ -920,6 +920,12 @@ to), still checks that no one else's place changed, and says so if the learner k
 checks the recipient is eligible. A test gifts to Aldric, Dara and Brann, and to nobody. Lessons where the learner is
 only watching (the bots decide) keep their scripted names.
 
+### Simulator wording: verbs agree with "You" (2026-10-30)
+
+The "Will be recorded" panel said "You wins" and "You joins". The page now makes the verb agree ("You win", "Brann
+wins", "You join"), names the stage in plain words ("salvage round", "main draft") and says "and give it to Dara"
+for a gift. Checked in the browser pane with a gift by the learner and a bot's win. No design change.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
