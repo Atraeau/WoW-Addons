@@ -5,13 +5,15 @@
 
 .DESCRIPTION
     aq40-raw.json holds the Temple of Ahn'Qiraj's epic drops per boss as collected from Wowhead Classic (item id,
-    name, slot, item class/subclass, required-class mask, observed drop rate) and the token turn-ins verified so far.
-    This script adds a role tag to every item that is not class-restricted, describes each token (what it makes,
-    and the turn-ins we know), works out drops per kill from the observed rates, and writes a Lua module.
+    name, slot, item class/subclass, required-class mask, observed drop rate). The token turn-ins (which quest, for
+    which class, what it rewards, what materials it asks for) come from aq-cmangos.json, extracted from the CMaNGOS
+    world database by scripts/extract-cmangos.lua; their reputation requirement comes from aq-reputation.json (the
+    wiki). The quest lists collected from Wowhead (aq40-raw.json tokenTurnIns.quests) are checked against them.
+    This script adds a role tag to every item that is not class-restricted, describes each token, works out drops
+    per kill from the observed rates, and writes a Lua module.
 
     The role tags are PROVISIONAL: judged from item names and slots, to be replaced by tags derived from real
-    item stats once those are collected. A token's `makes` is general knowledge of the raid, not yet checked
-    against the quest pages; only the turn-ins listed in the raw data are verified.
+    item stats.
 #>
 [CmdletBinding()]
 param()
@@ -71,17 +73,23 @@ $roles = @{
     "Eye of C'Thun" = 'tank|melee|hunter|caster|healer'
 }
 
-# What each token makes (general knowledge, not yet checked against the quest pages).
-$makes = @{
-    20928 = 'Shoulders or feet'; 20932 = 'Shoulders or feet'
-    20930 = 'Head'; 20926 = 'Head'
-    20931 = 'Legs'; 20927 = 'Legs'
-    20933 = 'Chest'; 20929 = 'Chest'
-    21232 = 'A weapon'; 21237 = 'A weapon'
-    21221 = 'A neck, back or finger item'
+$db = Get-Content (Join-Path $repo 'simulator/data/aq-cmangos.json') -Raw | ConvertFrom-Json
+$rep = Get-Content (Join-Path $repo 'simulator/data/aq-reputation.json') -Raw | ConvertFrom-Json
+$dbItems = @{}
+foreach ($i in $db.items) { $dbItems[[int]$i.id] = $i }
+
+# What a token makes, in words, from the inventory types of its rewards.
+$slotWords = @{
+    1 = 'head'; 2 = 'neck'; 3 = 'shoulders'; 5 = 'chest'; 20 = 'chest'; 7 = 'legs'; 8 = 'feet'; 16 = 'back'; 11 = 'finger'
+    13 = 'weapon'; 14 = 'shield'; 15 = 'weapon'; 17 = 'weapon'; 21 = 'weapon'; 22 = 'weapon'; 26 = 'weapon'
 }
-# Factions by name (the game's faction ids).
-$factions = @{ 'Brood of Nozdormu' = 910 }
+function MakesOf($rewardIds) {
+    $found = @($rewardIds | ForEach-Object { $slotWords[[int]$dbItems[[int]$_].inventoryType] })
+    $words = @('head', 'neck', 'shoulders', 'back', 'chest', 'legs', 'feet', 'finger', 'weapon', 'shield' | Where-Object { $found -contains $_ })
+    $text = if ($words.Count -eq 1) { $words[0] } else { ($words[0..($words.Count - 2)] -join ', ') + ' or ' + $words[-1] }
+    if ($words.Count -eq 1 -and $words[0] -eq 'weapon') { $text = 'a weapon' }
+    $text.Substring(0, 1).ToUpper() + $text.Substring(1)
+}
 
 $classBits = [ordered]@{ WARRIOR = 1; PALADIN = 2; HUNTER = 4; ROGUE = 8; PRIEST = 16; SHAMAN = 64; MAGE = 128; WARLOCK = 256; DRUID = 1024 }
 $armor = @{ 1 = 'cloth'; 2 = 'leather'; 3 = 'mail'; 4 = 'plate' }
@@ -89,13 +97,28 @@ $armor = @{ 1 = 'cloth'; 2 = 'leather'; 3 = 'mail'; 4 = 'plate' }
 function Q([string]$s) { '"' + ($s -replace '\\', '\\' -replace '"', '\"') + '"' }
 function V($v) { if ($v -is [string]) { Q $v } else { [string][int]$v } }
 
-# Verified turn-ins, grouped by token and class.
-$turnIns = @{}
-foreach ($t in $raw.tokenTurnIns.verified) {
-    $tok = [int]$t.token
-    if (-not $turnIns.ContainsKey($tok)) { $turnIns[$tok] = [ordered]@{} }
-    if (-not $turnIns[$tok].Contains($t.class)) { $turnIns[$tok][$t.class] = @() }
-    $turnIns[$tok][$t.class] += $t
+# Turn-ins, grouped by token and class: every quest that asks for the token (its first required item) and
+# rewards something (C'Thun's Legacy only hands the Eye on to The Savior of Kalimdor). A quest open to every
+# class (mask 0) is listed under each class.
+$turnIns = @{}; $rewardsOf = @{}; $questsOf = @{}
+foreach ($q in $db.quests) {
+    if ($q.rewards.Count -eq 0) { continue }
+    $tok = [int]$q.needs[0][0]
+    if (-not $turnIns.ContainsKey($tok)) { $turnIns[$tok] = [ordered]@{}; $questsOf[$tok] = @(); $rewardsOf[$tok] = @() }
+    $questsOf[$tok] += [int]$q.id
+    $rewardsOf[$tok] += $q.rewards
+    foreach ($c in $classBits.Keys) {
+        if ($q.classes -ne 0 -and -not ($q.classes -band $classBits[$c])) { continue }
+        if (-not $turnIns[$tok].Contains($c)) { $turnIns[$tok][$c] = @() }
+        $turnIns[$tok][$c] += $q
+    }
+}
+# The quest lists collected from Wowhead must match.
+foreach ($p in $raw.tokenTurnIns.quests.PSObject.Properties) {
+    if ($p.Name -notmatch '^\d+$') { continue }
+    $want = @($p.Value | ForEach-Object { [int]$_[0] } | Sort-Object) -join ','
+    $got = @($questsOf[[int]$p.Name] | Sort-Object) -join ','
+    if ($want -ne $got) { throw "Token $($p.Name): Wowhead lists quests $want but CMaNGOS has $got" }
 }
 
 $sb = [System.Text.StringBuilder]::new()
@@ -103,8 +126,8 @@ function W([string]$s = '') { [void]$sb.Append($s); [void]$sb.Append("`n") }
 
 W '-- King''s Gambit: Temple of Ahn''Qiraj (AQ40) training data (Phase 4.5). GENERATED by scripts/build-aq-data.ps1'
 W '-- from simulator/data/aq40-raw.json (Wowhead Classic drop tables, epic+ items, collected 2026-10-29). Do not edit by hand.'
-W '-- Role tags are provisional (judged from names; to be replaced from real item stats). A token''s `makes` is not yet'
-W '-- checked against the quest pages; its `turnIns` are only the verified ones, so readiness is unknown for the rest.'
+W '-- Token turn-ins from the CMaNGOS world database (simulator/data/aq-cmangos.json), reputation from the wiki'
+W '-- (simulator/data/aq-reputation.json). Role tags are provisional (judged from names; to be replaced from real item stats).'
 W 'local _, SK = ...'
 W 'local M = SK:NewModule("AQ40")'
 W ''
@@ -127,18 +150,20 @@ foreach ($b in $raw.bosses) {
         $role = if ($mask -ne 0) { 'nil' } elseif ($roles.ContainsKey($name)) { Q $roles[$name] } else { $untagged += $name; 'nil' }
         $line = "    [$id] = { id = $id, name = $(Q $name), slot = $([int]$i[3]), armor = $arm, classes = $mask, role = $role"
         if ($cls -eq 12) {
+            if (-not $turnIns.ContainsKey($id)) { throw "No turn-in quest found for token $id ($name)" }
+            if (-not $rep.byToken.PSObject.Properties[[string]$id]) { throw "No reputation entry for token $id ($name)" }
+            $r = $rep.byToken.([string]$id)
+            $repLua = if ($r) { "{ faction = $(Q $r[0]), factionId = $($rep.factions.($r[0])), standing = $(Q $r[1]) }" } else { 'nil' }
             $parts = @()
-            if ($turnIns.ContainsKey($id)) {
-                foreach ($c in $turnIns[$id].Keys) {
-                    $opts = foreach ($t in $turnIns[$id][$c]) {
-                        $needs = ($t.items | ForEach-Object { "{ $(V $_[0]), $([int]$_[1]) }" }) -join ', '
-                        $rep = if ($t.reputation) { "{ faction = $(Q $t.reputation[0]), factionId = $($factions[$t.reputation[0]]), standing = $(Q $t.reputation[1]) }" } else { 'nil' }
-                        "{ reward = $(Q $t.reward), quest = $([int]$t.quest), needs = { $needs }, reputation = $rep }"
-                    }
-                    $parts += "$c = { $($opts -join ', ') }"
+            foreach ($c in $turnIns[$id].Keys) {
+                $opts = foreach ($t in $turnIns[$id][$c]) {
+                    $needs = ($t.needs | ForEach-Object { "{ $([int]$_[0]), $([int]$_[1]) }" }) -join ', '
+                    $reward = ($t.rewards | ForEach-Object { $dbItems[[int]$_].name }) -join ' / '
+                    "{ reward = $(Q $reward), quest = $([int]$t.id), needs = { $needs }, reputation = $repLua }"
                 }
+                $parts += "$c = { $($opts -join ', ') }"
             }
-            $line += ", token = { makes = $(Q $makes[$id]), turnIns = { $($parts -join ', ') } }"
+            $line += ", token = { makes = $(Q (MakesOf $rewardsOf[$id])), turnIns = { $($parts -join ', ') } }"
         }
         W ($line + ' },')
     }

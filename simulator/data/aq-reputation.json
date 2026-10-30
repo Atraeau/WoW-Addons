@@ -1,0 +1,43 @@
+{
+ "source": "warcraft.wiki.gg quest pages, read 2026-10-30. CMaNGOS classic-db leaves these quests' reputation requirement empty, so it is taken from the wiki. The standing follows the slot the token makes, not the class: checked on the quests listed under sampled (warrior, druid, warlock, priest and mage turn-ins). Tokens whose own quests were not sampled (Bindings of Dominance, Skin of the Great Sandworm, Carapace of the Old God) are given their slot's standing. Wowhead's page for quest 8544 (Conqueror's Spaulders) also gives Neutral.",
+ "factions": { "Brood of Nozdormu": 910, "Cenarion Circle": 609 },
+ "byToken": {
+  "20928": ["Brood of Nozdormu", "Neutral"],
+  "20932": ["Brood of Nozdormu", "Neutral"],
+  "20930": ["Brood of Nozdormu", "Friendly"],
+  "20926": ["Brood of Nozdormu", "Friendly"],
+  "20931": ["Brood of Nozdormu", "Friendly"],
+  "20927": ["Brood of Nozdormu", "Friendly"],
+  "20933": ["Brood of Nozdormu", "Honored"],
+  "20929": ["Brood of Nozdormu", "Honored"],
+  "21232": null,
+  "21237": null,
+  "21221": null,
+  "20884": ["Cenarion Circle", "Honored"],
+  "20888": ["Cenarion Circle", "Honored"],
+  "20885": ["Cenarion Circle", "Revered"],
+  "20889": ["Cenarion Circle", "Revered"],
+  "20886": ["Cenarion Circle", "Exalted"],
+  "20890": ["Cenarion Circle", "Exalted"],
+  "21220": null
+ },
+ "sampled": [
+  [8559, "Conqueror's Greaves", "Neutral"],
+  [8561, "Conqueror's Crown", "Friendly"],
+  [8662, "Doomcaller's Circlet", "Friendly"],
+  [8560, "Conqueror's Legguards", "Friendly"],
+  [8562, "Conqueror's Breastplate", "Honored"],
+  [8666, "Genesis Vest", "Honored"],
+  [8556, "Signet of Unyielding Strength", "Honored"],
+  [8697, "Ring of Infinite Wisdom", "Honored"],
+  [8557, "Drape of Unyielding Strength", "Revered"],
+  [8558, "Sickle of Unyielding Strength", "Exalted"],
+  [8710, "Kris of Unspoken Names", "Exalted"],
+  [8789, "Imperial Qiraji Armaments", "none"],
+  [8802, "The Savior of Kalimdor", "none"],
+  [8791, "The Fall of Ossirian", "none"]
+ ],
+ "disputed": [
+  "Quest 8789 (Imperial Qiraji Armaments) and 8790 (Regalia): CMaNGOS asks for 3 Elementium Ore (18562); the wiki says 3 Elementium Ingot. Kept as CMaNGOS has it until checked in game."
+ ]
+}

@@ -471,6 +471,29 @@ guild leader:
   shoulders are verified, so readiness is "unknown" for the rest until the quest pages are read). AQ20 waits for
   its remaining bosses.
 
+**Token data from a second source (2026-10-30).** Wowhead throttled us after about a dozen pages per session, so
+the turn-in data now comes from the **CMaNGOS classic world database** (github.com/cmangos/classic-db, the open
+source 1.12 server emulator, GPL-3.0). `scripts/extract-cmangos.lua` reads the dump (kept outside the repo) and
+writes only the AQ facts to `simulator/data/aq-cmangos.json`: every quest that asks for an AQ20 or AQ40 drop, its
+materials and rewards, and the items involved with their stats and equip spells.
+- Wowhead stays the source for **drop rates**: they are observed in play, the emulator's loot tables are
+  partly guessed.
+- The two sources were checked against each other. The generator stops if the quest lists collected from Wowhead
+  for seven tokens differ from CMaNGOS (they don't), and the hand-verified warrior shoulders match exactly.
+- CMaNGOS doesn't record these quests' **reputation** requirement, so it comes from the wiki
+  (warcraft.wiki.gg), in `aq-reputation.json`. 14 quests were checked, across five classes. The standing follows the
+  slot, not the class:
+  - Brood of Nozdormu: Neutral for shoulders and boots, Friendly for head and legs, Honored for chest.
+  - Cenarion Circle (AQ20): Honored for rings, Revered for cloaks, Exalted for weapons.
+  - None for the Imperial weapons, the Eye of C'Thun and the Head of Ossirian.
+- Every token now has a turn-in for every class it is for (45 tier quests, and the open weapon and Eye quests), so
+  readiness is known, not "unknown". Materials are matched by **item id**, not name, so a client in another
+  language counts them correctly. What a token `makes` is now derived from its rewards' slots.
+- **Disputed, left as CMaNGOS has it:** the Imperial Qiraji Armaments and Regalia quests ask for 3 Elementium Ore
+  in CMaNGOS and 3 Elementium Ingot on the wiki. To check in game.
+- Still provisional: role tags (the item stats are now in the extract; deriving roles from them is next). AQ20
+  is not yet a raid module.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

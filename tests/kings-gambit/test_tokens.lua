@@ -8,8 +8,11 @@ local Tokens, AQ = SK.modules.Tokens, SK.modules.AQ40
 
 local COMMAND = "|cffa335ee|Hitem:20928::::::::60:::::|h[Qiraji Bindings of Command]|h|r"
 local BROOD = 910
+-- Conqueror's Spaulders (warrior, from the Bindings of Command): 2 Idol of Night, 5 Clay and 5 Stone Scarabs.
+local IDOL_OF_NIGHT, CLAY_SCARAB, STONE_SCARAB = 20875, 20863, 20858
+local SPAULDERS_MATS = { [IDOL_OF_NIGHT] = 2, [STONE_SCARAB] = 5, [CLAY_SCARAB] = 5 }
 local function bags(o)
-    local b = { ["Idol of Night"] = 2, ["Stone Scarab"] = 5, ["Clay Scarab"] = 5 }
+    local b = { [IDOL_OF_NIGHT] = 2, [STONE_SCARAB] = 5, [CLAY_SCARAB] = 5 }
     for k, v in pairs(o or {}) do b[k] = v end
     return function(what) return b[what] or 0 end
 end
@@ -30,6 +33,34 @@ test("the AQ40 data is complete and consistent", function()
     for _, item in pairs(AQ.items) do if item.token then tokens = tokens + 1; assert(item.token.makes, item.name) end end
     eq(tokens, 11)
 end)
+test("every class a token is for has a turn-in, with materials, and the right reputation", function()
+    local STANDING = { [20928] = "Neutral", [20932] = "Neutral", [20930] = "Friendly", [20926] = "Friendly",
+        [20931] = "Friendly", [20927] = "Friendly", [20933] = "Honored", [20929] = "Honored" }
+    for id, item in pairs(AQ.items) do
+        if item.token then
+            for class, bit in pairs(AQ.CLASS_BITS) do
+                local options = item.token.turnIns[class]
+                if item.classes == 0 or item.classes & bit ~= 0 then
+                    assert(options and #options >= 1, item.name .. " has no turn-in for " .. class)
+                    for _, t in ipairs(options) do
+                        eq(t.needs[1][1], id, t.reward .. " asks for its token first")
+                        if STANDING[id] then
+                            assert(#t.needs == 4, t.reward .. " needs an idol and two kinds of scarab")
+                            eq(t.reputation.factionId, BROOD); eq(t.reputation.standing, STANDING[id], t.reward)
+                        end
+                    end
+                else
+                    eq(options, nil, item.name .. " is not for " .. class)
+                end
+            end
+        end
+    end
+    local spaulders = AQ.items[20928].token.turnIns.WARRIOR[1]
+    eq(spaulders.quest, 8544); eq(spaulders.reward, "Conqueror's Spaulders")
+    for k = 2, 4 do eq(spaulders.needs[k][2], SPAULDERS_MATS[spaulders.needs[k][1]], "as checked by hand on Wowhead") end
+    eq(#AQ.items[20928].token.turnIns.WARRIOR, 2, "shoulders or boots")
+    eq(AQ.items[21221].token.makes, "Neck, back or finger")
+end)
 test("a token is found by link, id or name; gear is not a token", function()
     eq(Tokens.Find(COMMAND).id, 20928); eq(Tokens.Find(20928).id, 20928)
     eq(Tokens.Find("Qiraji Bindings of Command").id, 20928); eq(Tokens.Find("qiraji bindings of command").id, 20928)
@@ -49,7 +80,7 @@ H.section("Tokens: readiness")
 test("ready only with every material and the reputation", function()
     local t = Tokens.Find(20928)
     eq(Tokens.Check(t, "WARRIOR", bags(), rep(4)), "ready")
-    eq(Tokens.Check(t, "WARRIOR", bags({ ["Clay Scarab"] = 4 }), rep(4)), "notready", "one scarab short")
+    eq(Tokens.Check(t, "WARRIOR", bags({ [CLAY_SCARAB] = 4 }), rep(4)), "notready", "one scarab short")
     eq(Tokens.Check(t, "WARRIOR", bags(), rep(3)), "notready", "Unfriendly with the Brood")
     eq(Tokens.Check(t, "WARRIOR", bags(), rep(nil)), "notready", "standing unknown")
     eq(Tokens.Check(t, "WARRIOR", bags(), rep(8)), "ready", "Exalted is more than enough")
@@ -58,9 +89,23 @@ test("the token itself is not a requirement: it is what the bid is for", functio
     local t = Tokens.Find(20928)
     eq(Tokens.Check(t, "WARRIOR", bags({ [20928] = 0 }), rep(4)), "ready")
 end)
-test("unknown when no turn-in for the class is in the data yet", function()
-    eq(Tokens.Check(Tokens.Find(20928), "PRIEST", bags(), rep(8)), nil)
-    eq(Tokens.Check(Tokens.Find(20932), "MAGE", bags(), rep(8)), nil)
+test("unknown when the class has no turn-in for the token", function()
+    eq(Tokens.Check(Tokens.Find(20928), "MAGE", bags(), rep(8)), nil, "Bindings of Command are not for mages")
+    eq(Tokens.Check({ token = { turnIns = {} } }, "WARRIOR", bags(), rep(8)), nil)
+end)
+test("any one turn-in is enough: the boots' materials make a priest ready", function()
+    -- Footwraps of the Oracle: 2 Idol of Death (20877), 5 Bronze (20864) and 5 Gold (20859) Scarabs.
+    local t = Tokens.Find(20928)
+    local boots
+    for _, o in ipairs(t.token.turnIns.PRIEST) do if o.reward == "Footwraps of the Oracle" then boots = o end end
+    local have = {}
+    for k = 2, #boots.needs do have[boots.needs[k][1]] = boots.needs[k][2] end
+    eq(Tokens.Check(t, "PRIEST", function(id) return have[id] or 0 end, rep(4)), "ready")
+    eq(Tokens.Check(t, "PRIEST", bags(), rep(4)), "notready", "the warrior's materials are not the priest's")
+end)
+test("the Eye of C'Thun and the Imperial weapons need no reputation", function()
+    eq(Tokens.Check(Tokens.Find(21221), "MAGE", bags(), rep(nil)), "ready", "the Eye alone")
+    eq(Tokens.Check(Tokens.Find(21232), "ROGUE", function(id) return id == 18562 and 3 or 0 end, rep(nil)), "ready")
 end)
 test("the player's own word fills in what the addon can't see", function()
     eq(Tokens.Combine("ready", false), "ready"); eq(Tokens.Combine("ready", true), "ready")
@@ -72,7 +117,7 @@ test("Mine reads this player's bags and reputation through the client", function
     local client = MockClient.New({ name = "Aldric", realm = "Realm" })
     local t = Tokens.Find(20928)
     eq(Tokens.Mine(client, t, "WARRIOR"), "notready")
-    client:setBags({ ["Idol of Night"] = 2, ["Stone Scarab"] = 5, ["Clay Scarab"] = 5 }); client:setReputation(BROOD, 5)
+    client:setBags(SPAULDERS_MATS); client:setReputation(BROOD, 5)
     eq(Tokens.Mine(client, t, "WARRIOR"), "ready")
 end)
 
@@ -159,7 +204,7 @@ test("need on a token reports your readiness; ready lists who wants it", functio
     assert(t:find("is a token %(Shoulders or feet%)"), t); assert(t:find("not ready %(from bags%)"), t)
     eq(host.session.bids["Raidlead-Realm"][1].ready, "notready")
     cmd.handle("need 1 ready"); eq(host.session.bids["Raidlead-Realm"][1].ready, "says")
-    client:setBags({ ["Idol of Night"] = 2, ["Stone Scarab"] = 5, ["Clay Scarab"] = 5 }); client:setReputation(BROOD, 4)
+    client:setBags(SPAULDERS_MATS); client:setReputation(BROOD, 4)
     cmd.handle("need 1"); eq(host.session.bids["Raidlead-Realm"][1].ready, "ready")
     client.printed = {}
     cmd.handle("ready 1")
