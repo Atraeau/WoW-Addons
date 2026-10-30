@@ -446,3 +446,22 @@ test("a lesson with a step still to do is not judged early: 'fix a mistake' wait
         end
     end
 end)
+
+H.section("Sim: the big hand-out scenario")
+test("'big hand-out': ranked choice decides the draft, and four leftovers go to four different salvagers, in order", function()
+    local sc = SK.modules.Scenarios.find("big-handout")
+    local sim, ok, message = Sim.RunScenario(sc)
+    assert(ok, tostring(message))
+    local salvagers, seen = {}, {}
+    for _, it in ipairs(sim.session.items) do
+        if it.tier == "salvage" then
+            local who = (it.winner:gsub("%-.*$", ""))
+            assert(not seen[who], who .. " was offered more than one leftover")
+            seen[who] = true; salvagers[#salvagers + 1] = who
+        end
+    end
+    eq(table.concat(salvagers, ","), "Garo,Fenn,Dara,Cass", "the last four winners, latest first")
+    eq(#sc.items, 10)
+    -- the same holds for other seeds: the scenario is about rules, not luck
+    for seed = 2, 6 do assert(select(2, Sim.RunScenario(sc, { seed = seed })), "seed " .. seed) end
+end)

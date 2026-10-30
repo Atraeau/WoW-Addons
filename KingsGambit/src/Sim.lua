@@ -251,7 +251,8 @@ end
 --       after = function(sim), expect = function(sim) -> ok, message }
 function M.RunScenario(sc, opts)
     opts = opts or {}
-    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = "You" })
+    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = "You",
+        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
     sim.policies = sc.policies or {}
     sim.policies["You"] = sc.you or {}
     sim.autoLearner = true

@@ -313,7 +313,7 @@
   function render() {
     if (!st) return;
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
-    const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + "</h2><div>" + esc(st.lesson.text) + "</div></div>" : "";
+    const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =
       '<div class="layout"><div>' +
         '<div class="card"><h2>Scenarios</h2>' + sideScen + "</div>" +

@@ -167,6 +167,57 @@ M.list = {
                 "order is " .. sim:orderString() .. (reverted and ", with the undo recorded" or ", no undo recorded")
         end,
     },
+    {
+        id = "big-handout",
+        title = "A big hand-out: ranked choice, then the salvagers rotate",
+        lesson = "Ten items have piled up (held until a break). Watch three things happen, in this order.\n\n1. RANKING. Everyone ranked what they want, up front. Nobody is asked anything during the draft.\n\n2. THE DRAFT. It goes down the list. Each player in turn gets their highest-ranked item that is still there, and drops to the bottom. Aldric (first on the list) gets the gauntlets, his first choice. Brann takes the blade, Cass the boots, and Dara the helm, her first choice once the gauntlets are gone. Fenn takes the choker and Garo the robe. Eira and Hale only wanted things that were already taken, so they get nothing.\n\n3. THE SALVAGERS. Four items interest nobody. They are offered from the bottom of the list up, and whoever claims one goes to the back of the line for the next. So each leftover goes to a different salvager: Garo, Fenn, Dara and Cass, the last four winners, latest first. No single salvager takes everything, and it does not matter how the loot was batched.\n\nYou only have to pass on everything (the button under the items), press Start, then confirm.",
+        members = {
+            { name = "Aldric", class = "WARRIOR" }, { name = "Brann", class = "WARRIOR" }, { name = "Cass", class = "DRUID" },
+            { name = "Dara", class = "WARRIOR" }, { name = "Eira", class = "DRUID" }, { name = "Fenn", class = "PRIEST" },
+            { name = "Garo", class = "MAGE" }, { name = "Hale", class = "ROGUE" },
+        },
+        learnerClass = "WARLOCK",
+        items = { "Gauntlets of Might", "Heavy Dark Iron Ring", "Helm of Might", "Brutality Blade", "Quick Strike Ring",
+            "Choker of Enlightenment", "Cenarion Boots", "Wristguards of Stability", "Robe of Volatile Power", "Crimson Shocker" },
+        policies = (function()
+            local P = {}
+            local function ranked(list)
+                local bid = {}
+                for rank, item in ipairs(list) do bid[item] = { "need", rank = rank } end
+                return bid
+            end
+            -- ranked choice: their wishes in order. Everyone would claim a leftover offered to them.
+            P.Aldric = { claim = true, bid = ranked { "Gauntlets of Might", "Helm of Might", "Brutality Blade" } }
+            P.Brann = { claim = true, bid = ranked { "Brutality Blade", "Helm of Might" } }
+            P.Cass = { claim = true, bid = ranked { "Cenarion Boots" } }
+            P.Dara = { claim = true, bid = ranked { "Helm of Might", "Brutality Blade" } }
+            P.Eira = { claim = true, bid = ranked { "Cenarion Boots" } }
+            P.Fenn = { claim = true, bid = ranked { "Choker of Enlightenment", "Robe of Volatile Power" } }
+            P.Garo = { claim = true, bid = ranked { "Choker of Enlightenment", "Robe of Volatile Power" } }
+            P.Hale = { claim = true, bid = ranked { "Brutality Blade" } }
+            return P
+        end)(),
+        you = { claim = false },
+        expect = function(sim)
+            -- awards in the order they were written, split by how each item was won (the draft, or the salvage round)
+            local tierOf = {}
+            for _, it in ipairs(sim.session.items) do tierOf[it.link] = it.tier end
+            local main, salvage = {}, {}
+            for _, ev in ipairs(sim.engine:Get("main").events) do
+                if ev.type == "Award" then
+                    local row = short(ev.data.member) .. ": " .. ev.data.item
+                    if tierOf[ev.data.item] == "salvage" then salvage[#salvage + 1] = row else main[#main + 1] = row end
+                end
+            end
+            local won = table.concat(main, "; ")
+            local want = "Aldric: Gauntlets of Might; Brann: Brutality Blade; Cass: Cenarion Boots; Dara: Helm of Might; "
+                .. "Fenn: Choker of Enlightenment; Garo: Robe of Volatile Power"
+            local rotated = table.concat(salvage, "; ")
+            local wantRotation = "Garo: Heavy Dark Iron Ring; Fenn: Quick Strike Ring; Dara: Wristguards of Stability; Cass: Crimson Shocker"
+            return won == want and rotated == wantRotation,
+                ("draft: %s | leftovers, each to a different salvager: %s"):format(won, rotated)
+        end,
+    },
 }
 
 function M.find(id)

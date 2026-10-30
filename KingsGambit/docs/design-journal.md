@@ -1107,6 +1107,20 @@ bottom) was also offered the Wristguards first in the salvage round, after every
   different leftovers; a decliner stays first in line; and the shape of a long batch (two wins, then two passed items go
   to the latest winner and the one before).
 
+### Simulator: a scenario for the big hand-out (2026-10-30)
+
+**Asked by the guild leader**, because the rotation could confuse people: ranked choice determines the draft order, and the
+salvagers rotate as the leftovers are handed out. "A big hand-out: ranked choice, then the salvagers rotate":
+- **Ten real Molten Core items** held until a break, eight raiders with classes who rank what they want, and four items
+  nobody wants (interleaved with the contested ones). Six players win through ranked choice (first on the list takes
+  their first choice and drops; Dara gets her helm once the gauntlets are gone; Eira and Hale lose out because what they
+  ranked was taken). The four leftovers go to four **different** salvagers: Garo, Fenn, Dara, Cass, the last four winners,
+  latest first.
+- The learner has nothing to decide: pass on everything, Start, confirm. The point is to watch.
+- The lesson is three numbered steps (ranking, the draft, the salvagers); the page now keeps line breaks in lessons.
+- The scenario's check reads the ledger (who won what, and how) and runs under five other seeds in a test, since the
+  lesson is about the rules, not luck. `RunScenario` also accepts a learner class now.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
