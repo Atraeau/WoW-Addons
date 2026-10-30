@@ -158,6 +158,20 @@
       '<button data-act="claimGift">Claim and gift to</button>' + giftSelect() + '<button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
   }
 
+  // Who runs the loot and who disenchants: the Master Looter chooses the disenchanter for the raid (it is recorded),
+  // and loot can't be handed out until there is one. It need not be the Master Looter, and usually isn't.
+  function rolesHtml() {
+    const r = st.roles || {};
+    const names = Object.keys(st.who || {}).sort();
+    const busy = st.phase && ["idle", "done", "cancelled", "none"].indexOf(st.phase) < 0;
+    return '<div class="card"><h2>Roles</h2><div class="small">Master Looter: <b>' + esc(r.masterLooter || "") + "</b></div>" +
+      '<div class="small" style="margin:6px 0 4px">Disenchanter (you choose, per raid):</div>' +
+      '<div class="row"><select id="deSel"' + (busy ? " disabled" : "") + ">" + names.map((n) =>
+        "<option" + (n === r.disenchanter ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>" +
+      '<button data-act="setDe"' + (busy ? " disabled" : "") + ">Set</button></div>" +
+      (busy ? '<div class="small muted" style="margin-top:6px">Locked while loot is being handed out.</div>' : "") + "</div>";
+  }
+
   function giftSelect() {
     const names = (st.players || []).map((p) => p.name).filter((n) => n !== "You");
     if (!giftTo || names.indexOf(giftTo) < 0) giftTo = names[0] || "";
@@ -271,7 +285,7 @@
         '<div class="card"><h2>Scenarios</h2>' + sideScen + "</div>" +
         '<div class="card"><h2>Time</h2><div class="row"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
           [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") + "</div>" +
-          '<div class="small muted" style="margin-top:6px">Simulated clock: ' + st.now.toFixed(0) + 's<br>Ledger head: <code>' + esc(st.head.slice(0, 8)) + "</code></div></div>" +
+          '<div class="small muted" style="margin-top:6px">Simulated clock: ' + st.now.toFixed(0) + 's<br>Ledger head: <code>' + esc(st.head.slice(0, 8)) + "</code></div></div>" + rolesHtml() +
       "</div><div>" + lesson +
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
@@ -352,6 +366,7 @@
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
+      case "setDe": act("setDisenchanter", $("#deSel").value); break;
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);

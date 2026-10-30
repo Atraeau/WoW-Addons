@@ -856,8 +856,28 @@ they need not be the same person, and often aren't.
   `disenchanter` to choose. Unwanted loot goes to them, and a test pins that it does.
 - The engine already allowed this (`deHandler` in the session config); only the simulator defaulted it to the
   Master Looter, which hid the case.
-- Not decided: how a real guild names its disenchanter (an officer setting or a per-raid choice by the Master Looter).
-  Today it is session configuration.
+- Decided next (below): the Master Looter chooses the disenchanter per raid, and loot can't be handed out until they have.
+
+### Decision: the Master Looter designates the disenchanter, per raid, before loot is handed out (2026-10-30)
+
+**Decided by the guild leader:** the disenchanter is a **per-raid choice by the Master Looter**, and **must be designated
+before loot can be distributed**. (It need not be the Master Looter, and often isn't.)
+- **A ledger event, `SetDisenchanter`** (`raid`, `name`): written only by the raid's Master Looter, while the raid
+  is active. The latest choice stands and the Master Looter can change it during the raid. It is recorded and
+  synced like any raid authority event, so everyone can see who was chosen, by whom and when, and it appears in
+  `history` and the audit tool. Anyone else's attempt is refused by the ledger (`notml`).
+- **No designation, no session.** `Session:start` refuses with `nodisenchanter` unless the session was given a
+  disenchanter or the Master Looter's raid has one. The `loot` command says what to do (`disenchanter <name>`).
+  Items nobody wants go to the designated person, as before.
+- **Text interface:** `disenchanter [name]` sets it (Master Looter) or shows who it is.
+- **Simulator:** the learner is the Master Looter of an open raid and the simulated raid starts with a raider chosen
+  (the first cloth-wearer); the new Roles card lets you pick any raider, which is written to the ledger. It is locked
+  while loot is being handed out.
+- **Tests:** the ledger refuses a forged designation and agrees across peers; `loot` is refused until one is set;
+  the engine refuses a bare session; the simulator records and uses the choice. Most other tests get a default
+  disenchanter through the harness, since they are about other rules.
+- **Still open:** what happens if the designated disenchanter leaves the raid before the hand-out (today the give
+  fails and is reported, like any failed hand-out); requiring the disenchanter to be in the raid when chosen.
 
 ### Scaling: measured, not guessed (2026-10-28)
 

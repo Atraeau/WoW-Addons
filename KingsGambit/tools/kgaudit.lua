@@ -103,6 +103,7 @@ local function describe(ev)
     elseif t == "Revert" then return "an award was undone"
     elseif t == "Disenchant" then return tostring(d.item) .. " disenchanted by " .. short(d.to)
     elseif t == "Salvage" then return "an award was " .. tostring(d.action)
+    elseif t == "SetDisenchanter" then return short(d.name) .. " chosen to disenchant for raid " .. tostring(d.raid)
     elseif t == "Elevate" then return short(d.ml) .. " became Master Looter for raid " .. tostring(d.raid) .. " (" .. tostring(d.minutes) .. " min)"
     end
     return t

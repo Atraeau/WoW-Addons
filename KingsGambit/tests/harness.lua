@@ -14,6 +14,16 @@ end
 local SK = H.load()
 SK:Resolve()
 H.SK = SK
+-- A loot session refuses to start until a disenchanter is designated (the raid's Master Looter does that, in the
+-- ledger). Most tests are about other rules, so by default their sessions get one (the local player); the tests
+-- about the requirement itself use H.rawNewSession, which has no default.
+H.rawNewSession = SK.modules.Loot.NewSession
+SK.modules.Loot.NewSession = function(engine, opts)
+    local o = {}
+    for k, v in pairs(opts or {}) do o[k] = v end
+    if o.deHandler == nil and not engine:RaidDisenchanter() then o.deHandler = engine.client:me() end
+    return H.rawNewSession(engine, o)
+end
 
 function H.section(name) print(name) end
 

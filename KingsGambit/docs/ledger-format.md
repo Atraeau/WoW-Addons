@@ -98,6 +98,7 @@ Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
 | `Elevate` | `raid`, `ml`, `minutes` (1 to 1440) | By an officer. Opens raid `raid` with Master Looter `ml` until `ts + minutes*60`. For a running raid with the same `ml`, extends it (never shortens). Skipped for an ended raid or a different `ml`. |
 | `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
+| `SetDisenchanter` | `raid`, `name` | By the raid's Master Looter, while the raid is active. Designates who disenchants what nobody wants, for that raid. The latest choice stands. Loot is not handed out until one is set. |
 | `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
 | `ItemSuits` | `item` (item id), `roles` (tank, melee, hunter, caster, healer; empty = back to the heuristic), `reason`, `name?` | An officer's override of who an item suits (a suggestion, not a rule). |
 | `ItemClasses` | `item` (item id), `classes` (class tokens, empty = any class), `reason`, `name?` | The guild's rule for who may bid on an item in the drafts; it overrides the item's own "Classes:" line. The latest rule for an item wins. |

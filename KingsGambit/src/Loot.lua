@@ -20,7 +20,8 @@ local DEFAULTS = {
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
-    deHandler = nil,     -- who disenchants when nobody wants an item (default: this client)
+    deHandler = nil,     -- who disenchants when nobody wants an item. Normally the raid's designated disenchanter (the
+                         -- Master Looter chooses one per raid, in the ledger); a session cannot start without one
 }
 
 local Session = {}
@@ -101,6 +102,9 @@ function Session:start(items)
     local main = self.engine:Get(cfg.listId)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end
+    -- Loot is not distributed until the Master Looter has said who disenchants what nobody wants.
+    self.deHandler = cfg.deHandler or self.engine:RaidDisenchanter()
+    if not self.deHandler then return false, "nodisenchanter" end
 
     -- When the loot became visible: each item may say (loot held for a later hand-out); default now. Events
     -- the session writes carry it as `seen`, so the ledger orders them by drop time, not hand-out time.
@@ -602,7 +606,7 @@ end
 function Session:finish()
     self:clearTimer()
     self.turn = nil
-    local handler = self.cfg.deHandler or self.client:me()
+    local handler = self.deHandler
     for _, it in ipairs(self.items) do
         if it.status == "de" then
             self.pending[#self.pending + 1] = { type = "disenchant", list = self.cfg.listId, item = it, to = handler }

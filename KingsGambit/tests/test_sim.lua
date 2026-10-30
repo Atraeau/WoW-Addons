@@ -365,14 +365,29 @@ end)
 H.section("Sim: the disenchanter is a raider, not the Master Looter")
 test("each simulated raid names a disenchanter who is not the Master Looter, and unwanted loot goes to them", function()
     local night = Sim.NewMoltenCore({ seed = 1 })
-    assert(night.disenchanter and night.disenchanter ~= night.learner, "a raider, not the learner")
-    local cl = night.info[(night.disenchanter:gsub("%-.*$", ""))].class
+    local designated = night:disenchanterName()
+    assert(designated and designated ~= night.learner, "a raider, not the learner")
+    local cl = night.info[(designated:gsub("%-.*$", ""))].class
     assert(cl == "MAGE" or cl == "WARLOCK" or cl == "PRIEST", "a cloth-wearer, the usual enchanter: " .. cl)
     local sc = SK.modules.Scenarios.find("nobody-wants-it")
     local sim, ok = Sim.RunScenario(sc)
     assert(ok)
     local de
     for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Disenchant" then de = ev end end
-    assert(de and de.data.to ~= "You-Realm" and de.data.to == sim.disenchanter, "the disenchanter, not You")
-    eq(Sim.NewRaid({ members = { "Solo" }, disenchanter = "Solo" }).disenchanter, "Solo-Realm")
+    assert(de and de.data.to ~= "You-Realm" and de.data.to == sim:disenchanterName(), "the disenchanter, not You")
+    eq(Sim.NewRaid({ members = { "Solo" }, disenchanter = "Solo" }):disenchanterName(), "Solo-Realm")
+end)
+test("the Master Looter chooses the disenchanter for the raid; the choice is recorded and used for the next hand-out", function()
+    local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass" } })
+    sim.autoLearner = true
+    local first = sim:disenchanterName()
+    assert(first and first ~= sim.learner)
+    eq(select(2, sim:setDisenchanter("Nobody")), "notinraid", "must be someone in the raid")
+    assert(sim:setDisenchanter("Brann"))
+    eq(sim:disenchanterName(), "Brann-Realm")
+    local found
+    for _, ev in ipairs(sim.engine:View().authApplied) do if ev.type == "SetDisenchanter" and ev.data.name == "Brann-Realm" then found = ev end end
+    assert(found and found.author == sim.learner, "recorded in the ledger by the Master Looter")
+    assert(sim:drop({ "Crimson Shocker" })); assert(sim:runUntil("review", 100)); assert(sim.session:confirm())
+    eq(sim.session.deHandler, "Brann-Realm")
 end)

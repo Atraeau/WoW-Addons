@@ -26,9 +26,9 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, Declined = true, ItemClasses = true, ItemSuits = true }
+    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true }
+    RaidClose = true, SetDisenchanter = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 local function eventId(ev)
@@ -356,6 +356,16 @@ function auth.RaidClose(a, ev, d)
     if not r or raidOver(r, ev) then return nil, "notactive" end
     if ev.author ~= r.ml then return nil, "notml" end
     return function() r.ended, r.endEv = ev.ts, ev end
+end
+
+-- The raid's Master Looter designates who disenchants what nobody wants, for this raid. The latest choice stands;
+-- the Master Looter may change it while the raid is active.
+function auth.SetDisenchanter(a, ev, d)
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev) then return nil, "notactive" end
+    if ev.author ~= r.ml then return nil, "notml" end
+    if not isName(d.name) then return nil, "badname" end
+    return function() r.disenchanter, r.disenchanterEv = d.name, ev end
 end
 
 ---------------------------------------------------------------- the view

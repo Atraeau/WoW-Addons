@@ -92,6 +92,13 @@ function Engine:AllItemSuits() return self.view.itemSuits end
 function Engine:IsVerified() return next(self.verifying) == nil end
 
 function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.client:serverTime()) end
+-- Who disenchants for the raid this character is Master Looter of (designated by them, in the ledger), or nil.
+function Engine:RaidDisenchanter()
+    local me = self.client:me()
+    for _, r in ipairs(self:ActiveRaids()) do
+        if r.ml == me then return r.disenchanter, r end
+    end
+end
 function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
 function Engine:MayWrite(name, t)
     return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())

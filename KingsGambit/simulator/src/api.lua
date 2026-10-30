@@ -93,7 +93,7 @@ local function state()
     end
     -- who holds the two roles: the Master Looter runs the session; the disenchanter takes what nobody wants
     snap.roles = { masterLooter = short(sim.client:masterLooter() or sim.learner),
-        disenchanter = short((s and s.cfg.deHandler) or sim.disenchanter or sim.client:me()) }
+        disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()) }
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
@@ -257,6 +257,15 @@ function api.claim(to)
     return result(sim.session:claimItem("You", to and { to = to } or nil))
 end
 function api.decline() return result(sim.session:decline("You")) end
+-- The Master Looter (you) designates who disenchants what nobody wants, for this raid. It is a record in the ledger,
+-- and loot is not handed out until there is one (the simulator starts with one chosen).
+function api.setDisenchanter(name)
+    local phase = sim.session and sim.session.phase
+    if phase and phase ~= "done" and phase ~= "cancelled" then return result(false, "choose before the loot is handed out, or after") end
+    local ok, why = sim:setDisenchanter(name)
+    return result(ok, why)
+end
+
 function api.extend(sec) return result(sim.session:extend(tonumber(sec) or 30)) end
 function api.resolveNow() return result(sim.session:resolveNow()) end
 

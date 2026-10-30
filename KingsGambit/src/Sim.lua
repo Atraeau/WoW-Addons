@@ -71,10 +71,29 @@ function M.NewRaid(opts)
         end
     end
 
+    -- The learner is the Master Looter of this raid, and designates who disenchants (a record in the ledger, as in
+    -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
+    assert(engine:Write("Elevate", { raid = "sim", ml = learner .. "-Realm", minutes = 24 * 60 }))
+    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or learner) .. "-Realm" }))
+
     return setmetatable({
         client = client, engine = engine, names = names, learner = learner .. "-Realm",
-        disenchanter = de and (de .. "-Realm") or nil, policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
+        policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
+end
+
+-- Who disenchants: the Master Looter's designation for this raid, from the ledger.
+function Sim:disenchanterName() return (self.engine:RaidDisenchanter()) end
+
+-- The Master Looter changes who disenchants (any raider in the raid).
+function Sim:setDisenchanter(name)
+    name = self.client:normalize(name)
+    local known = false
+    for _, n in ipairs(self.names) do if n .. "-Realm" == name then known = true end end
+    if not known then return false, "notinraid" end
+    local ev, err = self.engine:Write("SetDisenchanter", { raid = "sim", name = name })
+    if not ev then return false, err end
+    return true
 end
 
 function Sim:note(text) self.log[#self.log + 1] = { t = self.client:now(), text = text } end
@@ -112,8 +131,6 @@ function Sim:drop(links, cfg, seen, ids)
         items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
     self.client:dropLoot(drops)
-    cfg = cfg or {}
-    cfg.deHandler = cfg.deHandler or self.disenchanter -- nil (no other raider): the Master Looter
     local session = Loot.NewSession(self.engine, cfg)
     self.session = session
     local ok, why = session:start(items)

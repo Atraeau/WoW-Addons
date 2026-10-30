@@ -13,6 +13,7 @@ local WHY = {
     notyourturn = "it is not your turn", noturn = "nothing is waiting for you", badpick = "you didn't bid on that item",
     nosession = "no loot session is running", busy = "a session is already running", notml = "you are not the Master Looter",
     nolist = "no such list", notreview = "the session is not ready to confirm",
+    nodisenchanter = "no disenchanter is designated for this raid yet. Choose who disenchants what nobody wants: disenchanter <name>",
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
     expired = "your raid has ended, and with it your right to write to the list",
@@ -54,6 +55,8 @@ local HELP = {
     "  raid                            who is Master Looter of the raids that are open",
     "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
+    "  disenchanter [name]             choose who disenchants what nobody wants, for your raid (its Master Looter);",
+    "                                  required before loot can be handed out. Without a name: who it is.",
     "  officers [set <names...>]       who are officers (the guild master sets them)",
     "  request move <name> <top|bottom|N> <reason>     ask the Master Looter to change the list during a raid;",
     "  request undo|remove <name> <reason>             also: add <name> [pos] <reason>, award <name> <item> <reason>,",
@@ -469,6 +472,24 @@ function M.New(ctx)
             out(("%s is no longer Master Looter of raid %s. The revocation is in the record."):format(short(r.ml), r.id))
         end
     end
+    function cmds.disenchanter(args)
+        local r = findRaid(client:me())
+        local who = args ~= "" and name(args) or nil
+        if not who then
+            local current = engine:RaidDisenchanter()
+            if current then return out(("%s disenchants for your raid (chosen by you)."):format(short(current))) end
+            local anyRaid = engine:ActiveRaids()[1]
+            if anyRaid and anyRaid.disenchanter then
+                return out(("%s disenchants for raid %s (chosen by its Master Looter, %s)."):format(short(anyRaid.disenchanter), anyRaid.id, short(anyRaid.ml)))
+            end
+            return out("No disenchanter is designated yet. The raid's Master Looter chooses: disenchanter <name>")
+        end
+        if not r then return out("Only a raid's Master Looter chooses its disenchanter, and you are not the Master Looter of an open raid.") end
+        if writeAuthority("SetDisenchanter", { raid = r.id, name = who }) then
+            out(("%s disenchants what nobody wants, for this raid. It is in the record."):format(short(who)))
+        end
+    end
+
     function cmds.raid(args)
         local sub, rest = args:match("^(%S*)%s*(.-)$")
         local fn = raid[sub ~= "" and sub:lower() or "show"]
@@ -615,6 +636,7 @@ function M.New(ctx)
         elseif ev.type == "Transfer" then text = ("%s recorded that %s's item went to %s"):format(by, who or "a winner", short(d.to))
         elseif ev.type == "Declined" then text = ("%s declined %s's request to %s: %s"):format(by, short(d.requestedBy), d.request, d.declineReason)
         elseif ev.type == "Pass" then text = ("%s passed on %s"):format(who, tostring(d.item))
+        elseif ev.type == "SetDisenchanter" then text = ("%s chose %s to disenchant for raid %s"):format(by, short(d.name), tostring(d.raid))
         elseif ev.type == "ItemSuits" then
             text = ("%s set who %s suits: %s"):format(by, d.name or ("item " .. tostring(d.item)),
                 #(d.roles or {}) > 0 and table.concat(d.roles, ", ") or "back to the addon's own judgment")
@@ -635,6 +657,13 @@ function M.New(ctx)
         for _, ev in ipairs(engine:View().applied) do
             if ev.list == "main" or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits" then rows[#rows + 1] = ev end
         end
+        -- who disenchants is a raid decision, not a list change, but it belongs in the same history
+        for _, ev in ipairs(engine:View().authApplied) do
+            if ev.type == "SetDisenchanter" then rows[#rows + 1] = ev end
+        end
+        local order = {}
+        for i, ev in ipairs(rows) do order[ev] = i end
+        table.sort(rows, function(x, y) if x.ts ~= y.ts then return x.ts < y.ts end return order[x] < order[y] end)
         if #rows == 0 then return out("Nothing has happened on the list yet.") end
         out(("The last %d change(s) to the list:"):format(math.min(n, #rows)))
         for i = math.max(1, #rows - n + 1), #rows do out("  " .. c.describe(rows[i])) end
