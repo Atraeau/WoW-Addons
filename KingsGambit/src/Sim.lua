@@ -290,6 +290,64 @@ function Sim:teach(item)
     self.client:setItemStats(link, { stats = fit.stats or {}, classes = ItemFit.ClassesFromMask(item.classes) })
 end
 
+---------------------------------------------------------------- free play
+-- A small random raid and a random drop, all real: the items are drawn from the Molten Core loot table (gear with
+-- a slot and stats, as nearly all loot has), the raiders have a class and spec, and the bots answer from the same
+-- fit heuristic as in a raid night, so nobody bids on what their class can't have. Returns a scenario-shaped table
+-- (members, items, policies) for Sim.NewRaid / Sim:drop. seed makes it repeatable.
+local FREE_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory" }
+function M.FreePlay(seed, opts)
+    opts = opts or {}
+    local count, nitems = opts.raiders or 7, opts.items or 3
+    local rng = M.NewRaid({ members = {}, seed = seed }).client
+    local classes = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID" }
+    local members = {}
+    for i = 1, count do
+        local class = classes[rng:random(#classes)]
+        local specs = ItemFit.SPECS[class]
+        local spec = specs[rng:random(#specs)]
+        members[i] = { name = FREE_NAMES[i], class = class, role = spec.role, spec = spec.name }
+    end
+    local lclass = classes[rng:random(#classes)]
+    local lspecs = ItemFit.SPECS[lclass]
+    local lspec = lspecs[rng:random(#lspecs)]
+    -- real gear: it has an equipment slot and stats (the few quest items and tokens are left to raid nights)
+    local pool = {}
+    for _, it in pairs(MoltenCore.items) do
+        if it.fit and it.fit.slot and it.fit.stats and next(it.fit.stats) then pool[#pool + 1] = it end
+    end
+    table.sort(pool, function(a, b) return a.id < b.id end)
+    local drops, items = {}, {}
+    for i = 1, nitems do
+        local it = table.remove(pool, rng:random(#pool))
+        drops[i], items[i] = it, it.name
+    end
+    local policies = {}
+    for _, m in ipairs(members) do
+        local p = { bid = {}, claim = rng:random() < 0.3 }
+        for _, it in ipairs(drops) do
+            local kind = M.Wants(MoltenCore, it, m.class, m.role, m.spec, nil)
+            if kind and rng:random() < 0.75 then
+                p.bid[it.name] = kind
+            elseif kind then
+                p.bid[it.name] = { "pass", passKind = "upgrade" }
+            else
+                -- can't use it: sometimes win it to hand on to a raider who can (anyone may gift)
+                local friends = {}
+                for _, o in ipairs(members) do
+                    if o.name ~= m.name and M.Wants(MoltenCore, it, o.class, o.role, o.spec, nil) == "need" then friends[#friends + 1] = o.name end
+                end
+                if #friends > 0 and rng:random() < 0.25 then
+                    p.bid[it.name] = { "gift", to = friends[rng:random(#friends)] }
+                end
+            end
+        end
+        policies[m.name] = p
+    end
+    return { members = members, items = items, policies = policies,
+        learnerClass = lclass, learnerSpec = lspec.name, learnerRole = lspec.role }
+end
+
 -- data: a raid data module (MoltenCore, AQ40). opts: seed, learner ("You"), learnerClass ("PRIEST"),
 -- learnerRole ("healer"), shuffle (default true), chance (probability a raider who could use an item still
 -- needs it; default 0.7), readiness (for tokens: chances a bot is { ready, says } ready; the rest are not

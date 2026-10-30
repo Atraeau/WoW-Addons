@@ -47,8 +47,6 @@ local function short(name) return name and (name:gsub("%-.*$", "")) end
 
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
-local FREE_ITEMS = { "Gauntlets of the Ashen Vow", "Cloak of Quiet Embers", "Band of Hollow Oaths", "Helm of Tides", "Mantle of Second Chances", "Staff of Lesser Tides" }
-local FREE_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory" }
 
 local function describe(ev)
     local d, t = ev.data, ev.type
@@ -140,38 +138,10 @@ end
 
 ---------------------------------------------------------------- freeplay
 local function freeScenario(seed)
-    local rng = Sim.NewRaid({ members = {}, seed = seed })
-    local count = 7
-    local members = {}
-    for i = 1, count do members[i] = FREE_NAMES[i] end
-    for i = #members, 2, -1 do
-        local j = rng.client:random(i)
-        members[i], members[j] = members[j], members[i]
-    end
-    local items = {}
-    local pool = {}
-    for i, n in ipairs(FREE_ITEMS) do pool[i] = n end
-    for i = 1, 3 do items[i] = table.remove(pool, rng.client:random(#pool)) end
-    local policies = {}
-    for _, name in ipairs(members) do
-        local p = { bid = {}, claim = rng.client:random() < 0.3 }
-        for _, link in ipairs(items) do
-            local r = rng.client:random()
-            if r < 0.30 then p.bid[link] = "need"
-            elseif r < 0.42 then p.bid[link] = "off"
-            elseif r < 0.48 then p.bid[link] = { "gift", to = members[rng.client:random(#members)] }
-            else p.bid[link] = "pass" end
-        end
-        policies[name] = p
-    end
-    -- a gift to yourself is meaningless; the engine would refuse it, so keep the bot honest
-    for name, p in pairs(policies) do
-        for link, b in pairs(p.bid) do
-            if type(b) == "table" and b.to == name then p.bid[link] = "need" end
-        end
-    end
-    return { id = "free", title = "Free play", members = members, items = items, policies = policies,
-        lesson = "A random raid and a random drop. Run the loot as the Master Looter and watch how the bots behave. Everyone's answers are public, as they are in the real addon.",
+    local free = Sim.FreePlay(seed)
+    return { id = "free", title = "Free play", members = free.members, items = free.items, policies = free.policies,
+        learnerClass = free.learnerClass, learnerSpec = free.learnerSpec, learnerRole = free.learnerRole,
+        lesson = "A random raid (each raider has a class and spec) and a random drop of real Molten Core gear. Run the loot as the Master Looter and watch how the bots behave. Everyone's answers are public, as they are in the real addon.",
         expect = function() return true, "Free play has no right answer. Look at the history on the right to see what was recorded." end }
 end
 
@@ -211,7 +181,8 @@ function api.start(id, seed)
     end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
-    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You" })
+    sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You",
+        learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
     startCount = #sim.engine:View().applied
     local ok, why = sim:drop(scenario.items, scenario.config)

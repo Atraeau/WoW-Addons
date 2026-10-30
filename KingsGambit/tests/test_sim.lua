@@ -297,3 +297,67 @@ test("every training scenario's bidders can have the items they bid on", functio
         eq(refused, 0, sc.id .. " has a bidder whose class can't have the item")
     end
 end)
+
+H.section("Sim: nothing unrealistic can be dropped")
+-- Sampled from the real loot tables (MoltenCore.lua, AQ40.lua): what real raid loot looks like.
+test("raid loot is realistic: gear has a slot and nearly always stats; only quest items, reagents and tokens have no slot", function()
+    for _, data in ipairs { SK.modules.MoltenCore, SK.modules.AQ40 } do
+        local gear, withStats = 0, 0
+        for _, it in pairs(data.items) do
+            assert(it.id and it.name and it.fit and it.fit.class, "an item with an id, a name and a type")
+            if it.fit.slot then
+                gear = gear + 1
+                assert(it.fit.class == 2 or it.fit.class == 4, it.name .. ": equippable items are weapons or armor")
+                if next(it.fit.stats or {}) then withStats = withStats + 1
+                else assert(it.fit.slot == "INVTYPE_TRINKET" or it.fit.slot == "INVTYPE_RELIC", it.name .. ": only trinkets and relics are statless") end
+            else
+                assert(it.fit.class == 7 or it.fit.class == 12 or it.fit.class == 15, it.name .. ": a slotless item is a reagent, quest item or token")
+            end
+        end
+        assert(gear > 80 and withStats / gear > 0.9, "almost all gear has stats")
+    end
+end)
+test("every training scenario drops real, equippable items with stats", function()
+    for _, sc in ipairs(SK.modules.Scenarios.list) do
+        for _, name in ipairs(sc.items) do
+            local it = Sim.FindItem(name)
+            assert(it, sc.id .. ": '" .. name .. "' is not a real raid item")
+            assert(it.fit.slot and next(it.fit.stats), sc.id .. ": '" .. name .. "' has no slot or stats")
+        end
+    end
+end)
+test("free play drops real gear to a classed raid, and no bot bids on what its class can't have", function()
+    local seenItems, classes = {}, {}
+    for seed = 1, 60 do
+        local free = Sim.FreePlay(seed)
+        eq(#free.items, 3); eq(#free.members, 7)
+        for _, name in ipairs(free.items) do
+            local it = Sim.FindItem(name)
+            assert(it and it.fit.slot and next(it.fit.stats), name .. " is real gear"); seenItems[name] = true
+        end
+        for _, m in ipairs(free.members) do assert(ItemFit.SpecOf(m.class, m.spec), "a real spec"); classes[m.class] = true end
+        assert(ItemFit.SpecOf(free.learnerClass, free.learnerSpec))
+        local sim = Sim.NewRaid({ members = free.members, seed = seed, learnerClass = free.learnerClass,
+            learnerSpec = free.learnerSpec, learnerRole = free.learnerRole })
+        sim.policies = free.policies
+        local refused = 0
+        assert(sim:drop(free.items))
+        local bid = sim.session.bid
+        sim.session.bid = function(self, player, id, kind, extra)
+            local ok, why = bid(self, player, id, kind, extra)
+            if not ok then refused = refused + 1 end
+            return ok, why
+        end
+        sim.autoLearner = true
+        assert(sim:runUntil("review", 600)); assert(sim.session:confirm())
+        eq(refused, 0, "seed " .. seed .. ": a bot made a bid it couldn't")
+    end
+    local n = 0
+    for _ in pairs(seenItems) do n = n + 1 end
+    assert(n >= 25, "free play draws from the whole table: " .. n)
+end)
+test("free play is repeatable from its seed", function()
+    local a, b = Sim.FreePlay(5), Sim.FreePlay(5)
+    eq(table.concat(a.items, ","), table.concat(b.items, ","))
+    assert(table.concat(a.items, ",") ~= table.concat(Sim.FreePlay(6).items, ","))
+end)

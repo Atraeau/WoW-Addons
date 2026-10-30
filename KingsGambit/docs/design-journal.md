@@ -826,6 +826,25 @@ the scenario raiders' classes came from a rotation (the "druids" in the off-spec
 - **Principle:** an item the game hasn't described restricts nobody (so a slow cache never blocks a bid), which is
   why anything that stands in for a drop has to describe it.
 
+### Only realistic items can be dropped in the simulation (2026-10-30)
+
+**Asked by the guild leader:** nothing in the simulation should drop an item without a slot; items don't always
+have class restrictions, and needn't have stats, though nearly all do. Sampled from the real loot tables
+(Molten Core 127 items, Ahn'Qiraj 106):
+- **Gear** (216 items) all has an equipment slot and is armor or a weapon. 205 of them have stats; the other 11 are
+  trinkets and relics whose whole value is a use or equip effect (Shard of the Flame, Totem of Life, Badge of the
+  Swarmguard), which is real. Class restrictions are rare (tier pieces and class tokens), as in the game.
+- **17 items genuinely have no equipment slot:** quest items, reagents and tokens (Eye of Sulfuras, Ancient Petrified
+  Leaf, the Qiraji Bindings, Imperial Qiraji Armaments). That is what the game reports for them, so they stay, and
+  are judged by what they become.
+- **What was unrealistic was the free-play mode and the scenarios:** free play used six invented names (no slot,
+  stats or class) and bots that bid at random. It now draws 3 items from the real Molten Core table, only gear with a
+  slot and stats, for a 7-raider roster with real classes and specs (the learner too), and the bots decide from
+  the same fit heuristic as a raid night, so a bid is refused for no one. `Sim.FreePlay` builds it.
+- Tests pin all of this: the loot tables' shape (above), every scenario item is a real equippable item with stats,
+  and 60 seeds of free play run with no refused bid.
+- The mechanics tests still use placeholder names ("X"); they exercise the engine, not the training content.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
