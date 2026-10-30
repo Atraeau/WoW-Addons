@@ -2180,7 +2180,7 @@ function M.NewSession(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
-        items = {}, eligible = {}, eligibleList = {}, class = {},
+        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {},
         bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
@@ -2207,6 +2207,10 @@ local function norm(self, name) return self.client:normalize(name) end
 ---------------------------------------------------------------- timers
 function Session:clearTimer()
     if self.timer then self.client:cancel(self.timer); self.timer = nil end
+end
+
+function Session:unwatchRoster()
+    if self.unwatch then self.unwatch(); self.unwatch = nil end
 end
 
 function Session:armTimer(sec, fn)
@@ -2236,20 +2240,7 @@ function Session:start(items)
         local s = tonumber(it.seen)
         if s and s <= now and s < self.seen then self.seen = s end
     end
-    for _, m in ipairs(self.client:roster()) do
-        if m.online then
-            self.class[m.name] = m.class
-            local mem = main.state.members[m.name]
-            if not (mem and mem.active) and cfg.autoEnroll then
-                self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class, seen = self.seen })
-                mem = main.state.members[m.name]
-            end
-            if mem and mem.active then
-                self.eligible[m.name] = true
-                self.eligibleList[#self.eligibleList + 1] = m.name
-            end
-        end
-    end
+    self:refreshRoster()
 
     for i, it in ipairs(items) do
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
@@ -2263,8 +2254,72 @@ function Session:start(items)
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
+    self.unwatch = self.client:on("roster.changed", function() self:rosterChanged() end)
     self:emit("phase", { phase = "bidding" })
     return true
+end
+
+-- Read the raid. Anyone online and on the list is eligible (a newcomer joins the bottom of the list when
+-- autoEnroll is on), including someone who arrives after the session started. Anyone who has gone offline
+-- or left is `away`: they stay on record but can't win, or hold the session up.
+function Session:refreshRoster()
+    local cfg = self.cfg
+    local main = self.engine:Get(cfg.listId)
+    local here = {}
+    for _, m in ipairs(self.client:roster()) do
+        if m.online then
+            here[m.name] = true
+            self.class[m.name] = m.class
+            if not self.eligible[m.name] then
+                local mem = main.state.members[m.name]
+                if not (mem and mem.active) and cfg.autoEnroll then
+                    self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class, seen = self.seen })
+                    mem = main.state.members[m.name]
+                    if self.order.main and mem and mem.active then self.order.main[#self.order.main + 1] = m.name end
+                end
+                if mem and mem.active then
+                    self.eligible[m.name] = true
+                    self.eligibleList[#self.eligibleList + 1] = m.name
+                end
+            end
+        end
+    end
+    local away = {}
+    for _, name in ipairs(self.eligibleList) do
+        if not here[name] then away[name] = true end
+    end
+    self.away = away
+end
+
+-- Can this player be handed this item right now? They must still be in the raid, and for loot in a window,
+-- the game must list them as a candidate for that slot (someone out of range is not).
+function Session:canReceive(name, item)
+    if self.away[name] then return false end
+    if item.slot then
+        local cands = self.client:candidates(item.slot)
+        if cands then
+            for _, c in ipairs(cands) do
+                if c == name then return true end
+            end
+            return false
+        end
+    end
+    return true
+end
+
+-- The raid changed while a session runs: admit newcomers, stop waiting for those who left, and move a draft
+-- turn on if it was theirs.
+function Session:rosterChanged()
+    if self.phase == "idle" or self.phase == "review" or self.phase == "done" or self.phase == "cancelled" then return end
+    self:refreshRoster()
+    if self.phase == "bidding" then
+        if self:allAnswered() then self:closeBidding() end
+        return
+    end
+    local t = self.turn
+    if t and self.away[t.player] then
+        if t.type == "pick" then self:skip(t.player) else self:decline(t.player) end
+    end
 end
 
 -- May a player of `class` bid on an item (ItemFit's view of it) in the drafts? true, or false + "wrongclass" (not a
@@ -2300,7 +2355,8 @@ function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
     player = norm(self, player)
-    if not self.eligible[player] then return false, "ineligible" end
+    if not self.eligible[player] then self:refreshRoster() end -- someone who joined after the start
+    if not self.eligible[player] or self.away[player] then return false, "ineligible" end
     if not self.items[itemId] then return false, "noitem" end
     if not (kind == "need" or kind == "off" or kind == "gift" or kind == "pass") then return false, "badkind" end
     local to
@@ -2426,8 +2482,10 @@ end
 
 function Session:allAnswered()
     for _, p in ipairs(self.eligibleList) do
-        for _, it in ipairs(self.items) do
-            if not (self.bids[p] and self.bids[p][it.id]) then return false end
+        if not self.away[p] then
+            for _, it in ipairs(self.items) do
+                if not (self.bids[p] and self.bids[p][it.id]) then return false end
+            end
         end
     end
     return true
@@ -2435,15 +2493,18 @@ end
 
 -- Public view of who has answered what, for the Master Looter panel.
 function Session:answerCount()
-    local answered = 0
+    local answered, total = 0, 0
     for _, p in ipairs(self.eligibleList) do
-        local all = true
-        for _, it in ipairs(self.items) do
-            if not (self.bids[p] and self.bids[p][it.id]) then all = false end
+        if not self.away[p] then
+            total = total + 1
+            local all = true
+            for _, it in ipairs(self.items) do
+                if not (self.bids[p] and self.bids[p][it.id]) then all = false end
+            end
+            if all then answered = answered + 1 end
         end
-        if all then answered = answered + 1 end
     end
-    return answered, #self.eligibleList
+    return answered, total
 end
 
 function Session:extend(sec)
@@ -2472,6 +2533,12 @@ local function wants(bid, tier)
     return bid.kind == "off"
 end
 
+-- Who would hold the item if `name` won it in `tier`: the gift target, or the winner.
+function Session:recipient(name, itemId, tier)
+    local bid = self.bids[name] and self.bids[name][itemId]
+    return (tier == "main" and bid and bid.kind == "gift" and bid.to) or name
+end
+
 function Session:hasBid(player, itemId, tier)
     return wants(self.bids[player] and self.bids[player][itemId], tier)
 end
@@ -2482,7 +2549,10 @@ function Session:topCandidate(tier)
         if self.eligible[name] and not self.skipped[tier][name] then
             local opts = {}
             for _, it in ipairs(self.items) do
-                if it.status == "open" and self:hasBid(name, it.id, tier) then opts[#opts + 1] = it.id end
+                if it.status == "open" and self:hasBid(name, it.id, tier)
+                    and self:canReceive(self:recipient(name, it.id, tier), it) then
+                    opts[#opts + 1] = it.id
+                end
             end
             if #opts > 0 then return name, opts end
         end
@@ -2612,7 +2682,8 @@ function Session:nextBackstopItem()
     if not id then return self:finish() end
     local players = {}
     for i = #self.order.main, 1, -1 do
-        if self.eligible[self.order.main[i]] then players[#players + 1] = self.order.main[i] end
+        local p = self.order.main[i]
+        if self.eligible[p] and self:canReceive(p, self.items[id]) then players[#players + 1] = p end
     end
     self.claim = { item = id, players = players, idx = 0 }
     self:offerNext()
@@ -2684,6 +2755,7 @@ function Session:finish()
     end)
     for _, p in ipairs(passes) do self.pending[#self.pending + 1] = p end
     self.phase = "review"
+    self:unwatchRoster()
     self:emit("phase", { phase = "review" })
 end
 
@@ -2734,6 +2806,7 @@ function Session:cancel()
     if self.phase == "done" or self.phase == "cancelled" then return false end
     self:clearTimer()
     self.turn, self.pending = nil, {}
+    self:unwatchRoster()
     self.phase = "cancelled"
     self:emit("phase", { phase = "cancelled" })
     return true

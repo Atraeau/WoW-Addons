@@ -7,7 +7,7 @@ decisions we made, the alternatives we weighed, and why we landed where we did.
 It exists so the work can be **resumed** without re-deriving everything, and so
 the guild can **audit** how each rule came to be.*
 
-**Status:** design phase (no addon code yet). Last updated **2026-10-28**.
+**Status:** the engine, sync, loot session, disputes, item fit and simulator are built and tested (427 tests passing); no UI frames yet (the text interface is complete), and nothing has been field-tested in the game. Last updated **2026-10-30**.
 **Companion docs:** [manifesto.md](manifesto.md) (values & principles) · the full
 design plan (`structured-napping-pancake.md`, user-level `.claude/plans`) ·
 API ground truth at <https://atraeau.github.io/WoW-Addons/>.
@@ -620,7 +620,7 @@ mid-function, which hid what they depended on.
 - **Hints** (`hints on`, off by default) and **`spec <main> [off]`**: an item shows who it suits, and how it
   fits you and your off-spec.
 - **Still to do:**
-  - Officers' overrides of the *suggestions*, as opposed to the class rule.
+  - ~~Officers' overrides of the *suggestions*~~ (done: `ItemSuits`, below).
   - Spec detection from talents (needs an in-game check).
   - Simulated raiders with a class, main spec and off-spec, deciding from real item stats. The raid data needs
     stats from the CMaNGOS extract for that.
@@ -772,6 +772,22 @@ with no separate docs folder elsewhere, so it can move to its own repository lat
   - the WoW API reference (`docs/api.json`), which the client code was checked against.
 - After pulling this, **re-run the deploy script**: the game's link to the old `src/KingsGambit` no longer points
   anywhere.
+
+### Exercising the simulation: gaps found and closed (2026-10-30)
+
+Sixty simulated nights (30 Molten Core, 30 Ahn'Qiraj, 1,530 items) ran clean: no stuck session, no failed
+hand-out, no ledger conflicts, and the same result run after run. Probing the cases a smooth night never produces
+found three real gaps, all in how a session treats the raid after it starts (it read the roster once, at the start):
+- **A winner who couldn't be handed the item.** A raider who left, went offline or was out of loot range (not a
+  candidate for that slot) could still win; the hand-out then failed at confirm and the item sat in the loot window.
+  Now the draft and the backstop pass over anyone who can't receive the item (and a gift whose target can't).
+- **A leaver held the bidding up.** Early close waited for everyone who was in the raid at the start. Now it counts
+  only who is still there, and the session watches roster changes: a turn waiting on someone who left moves on.
+- **A late joiner couldn't answer.** Anyone who joins and is on the list (or is enrolled, with `autoEnroll`) is
+  admitted when they first answer or when the roster changes.
+- A hand-out can still fail at confirm if things change after the draft (the Master Looter loses the role, someone
+  else looted the slot). That is reported as before, and still writes nothing to the ledger.
+- **Still open:** after such a failure there is no "re-offer this item" step; the Master Looter fixes it by hand.
 
 ### Scaling: measured, not guessed (2026-10-28)
 
