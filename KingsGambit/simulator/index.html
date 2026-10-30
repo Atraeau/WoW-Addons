@@ -1067,9 +1067,9 @@ M.METHODS = {
     -- time and randomness
     "now", "serverTime", "after", "every", "cancel", "random",
     -- identity and roster
-    "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
+    "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "leader", "guildRoster",
     -- loot
-    "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
+    "lootMethod", "isMasterLooter", "masterLooter", "setLootMethod", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)
     "itemCount", "reputation",
     -- communication
@@ -1272,6 +1272,13 @@ function M.New(opts)
         end
     end
 
+    -- The raid (or dungeon group) leader: there is always one in a group. nil when not in a group.
+    function h:leader()
+        for _, m in ipairs(S.roster) do
+            if m.rank == 2 then return m.name end
+        end
+    end
+
     function h:guildRoster() return copyList(S.guild) end
 
     -- members: array of "Name" or { name, class, online }; o: leader, assistants, lootMethod, masterLooter.
@@ -1313,6 +1320,25 @@ function M.New(opts)
     end
 
     ---------------------------------------------------------------- loot
+    local METHODS = { master = true, group = true, freeforall = true, needbeforegreed = true, personal = true, roundrobin = true }
+    -- Only the leader can change the loot method, as in the game. For "master", `looter` names the Master Looter (default:
+    -- the leader). Returns true, or false + a reason: nogroup, notleader, badmethod, badlooter.
+    function h:setLootMethod(method, looter)
+        if #S.roster == 0 then return false, "nogroup" end
+        if self:leader() ~= S.me then return false, "notleader" end
+        if not METHODS[method] then return false, "badmethod" end
+        local ml
+        if method == "master" then
+            ml = normalize(looter or S.me)
+            local inRaid = false
+            for _, m in ipairs(S.roster) do if m.name == ml then inRaid = true end end
+            if not inRaid then return false, "badlooter" end
+        end
+        S.lootMethod, S.masterLooter = method, ml
+        self:emit("lootMethod.changed", { method = method })
+        return true
+    end
+
     function h:lootMethod() return S.lootMethod end
     function h:isMasterLooter() return S.lootMethod == "master" and S.masterLooter == S.me end
     -- Who the Master Looter is (Name-Realm), or nil when the loot method is not master looter.
@@ -5626,7 +5652,6 @@ end
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
-    giftTo = ""; // a choice is used once; the next list starts blank
     updateMoved();
     render();
   }
@@ -5640,7 +5665,7 @@ end
 
   function chip(a) {
     if (!a) return '<span class="pill wait">&hellip;</span>';
-    if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + esc(a.to) + "</span>";
+    if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + (a.to ? esc(a.to) : "(to be chosen)") + "</span>";
     if (a.kind === "pass") return '<span class="pill pass">pass' + (a.passKind ? " (" + esc(a.passKind) + ")" : "") + "</span>";
     return '<span class="pill ' + a.kind + '">' + a.kind + (a.ready ? " &middot; " + READY[a.ready] : "") + "</span>";
   }
@@ -5832,8 +5857,12 @@ end
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
   }
 
+  let questionKey = "";
   function render() {
     if (!st) return;
+    const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
+    if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
+
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =

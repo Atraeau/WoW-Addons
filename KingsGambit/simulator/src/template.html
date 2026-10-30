@@ -104,7 +104,6 @@
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
-    giftTo = ""; // a choice is used once; the next list starts blank
     updateMoved();
     render();
   }
@@ -118,7 +117,7 @@
 
   function chip(a) {
     if (!a) return '<span class="pill wait">&hellip;</span>';
-    if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + esc(a.to) + "</span>";
+    if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + (a.to ? esc(a.to) : "(to be chosen)") + "</span>";
     if (a.kind === "pass") return '<span class="pill pass">pass' + (a.passKind ? " (" + esc(a.passKind) + ")" : "") + "</span>";
     return '<span class="pill ' + a.kind + '">' + a.kind + (a.ready ? " &middot; " + READY[a.ready] : "") + "</span>";
   }
@@ -310,8 +309,12 @@
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
   }
 
+  let questionKey = "";
   function render() {
     if (!st) return;
+    const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
+    if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
+
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =

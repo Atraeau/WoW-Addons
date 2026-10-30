@@ -1264,6 +1264,18 @@ addon assisting where the game's API allows. The game provides `C_PartyInfo.GetL
   raider, so both seats can be learned. Loot is not handed out until the loot method is Master Looter, and the page says
   why. When you are not the raid leader, setting the loot method means asking them, as in the game.
 
+### Fixed: a gift's recipient was wiped by a repeated press (2026-10-30)
+
+**Reported:** after gifting the first drop to Brann, the answer read "gift → undefined". Pressing Gift with Brann chosen recorded it
+correctly, but the page cleared the chosen recipient as soon as it was used, so any second press (a double click, a slow click)
+sent a gift with no recipient and overwrote the answer; and a blank recipient was printed as "undefined".
+- A recipient you chose now **stays chosen until the question changes**: it is cleared when the phase or the turn changes (so it
+  never leaks into the next question, and never defaults to a raider), but not by pressing the button again.
+- A gift with no recipient yet reads "gift → (to be chosen)".
+- Verified in the real page: Brann chosen, Gift pressed twice, the answer and the Answers table both read Brann.
+- Not reproduced: one earlier run of the page refused every warrior as a gift recipient ("can't wear or wield it") with only the
+  priest listed; a fresh start and a rebuilt page gave the right recipients each time. Worth watching.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
