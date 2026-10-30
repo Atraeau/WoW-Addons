@@ -990,6 +990,19 @@ learner could undo it (the check ran at the end of the hand-out, but the lesson'
   (`canUndo`), not after a hand-out that awarded nothing.
 - Tests: the lesson reports its pending step, clears it after the undo, and no finished scenario is left waiting.
 
+### Simulator: every scenario starts paused; buttons act on press (2026-10-30)
+
+**Reported:** the clock started running the moment a scenario loaded, so there was no time to read it, and the Pause
+button sometimes needed two presses.
+- **Start button.** Every scenario and raid night now loads paused, with the instruction "read the lesson, then press
+  Start". The button reads Start, then Pause, then Resume. Nothing (bids, timers) runs until then.
+- **The cause of the double press:** the page redraws several times a second, so a button could be replaced between
+  the press and the release and never get its click. That would swallow any button, not only Pause. Buttons now act on
+  press (a keyboard activation still works through click, and a press followed by its click acts once).
+- The sync lab has its own Pause/Run, separate from the loot clock.
+- Checked in the browser pane: starts paused with the clock fixed at 0, Start runs it, one press pauses, and a press
+  plus its click toggles once.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

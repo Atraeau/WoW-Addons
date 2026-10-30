@@ -5415,10 +5415,11 @@ end
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "mc", seed = 1, st = null;
-  let running = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+  let running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
     current = id; result = null; lastMsg = ""; giftTo = "";
+    running = false; started = false; // every scenario begins paused: read it, then press Start
     st = call("start", id, seed);
     prevOrder = st.order || []; moved = {};
     render();
@@ -5643,9 +5644,9 @@ end
     $("#app").innerHTML =
       '<div class="layout"><div>' +
         '<div class="card"><h2>Scenarios</h2>' + sideScen + "</div>" +
-        '<div class="card"><h2>Time</h2><div class="row"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
+        '<div class="card"><h2>Time</h2><div class="row"><button data-act="toggle" class="' + (started ? "" : "primary") + '">' + (!started ? "Start" : running ? "Pause" : "Resume") + "</button>" +
           [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") + "</div>" +
-          '<div class="small muted" style="margin-top:6px">Simulated clock: ' + st.now.toFixed(0) + 's<br>Ledger head: <code>' + esc(st.head.slice(0, 8)) + "</code></div></div>" + rolesHtml() +
+          '<div class="small muted" style="margin-top:6px">' + (started ? "" : "Paused: read the lesson, then press Start. Bids and timers begin when you do.<br>") + 'Simulated clock: ' + st.now.toFixed(0) + 's<br>Ledger head: <code>' + esc(st.head.slice(0, 8)) + "</code></div></div>" + rolesHtml() +
       "</div><div>" + lesson +
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
@@ -5683,7 +5684,7 @@ end
         '<span class="muted small">Lost:</span>' + netBtn("0%", 0, lab.dup) + netBtn("20%", 0.2, lab.dup) + netBtn("40%", 0.4, lab.dup) +
         '<span class="muted small">Duplicated:</span>' + netBtn("0%", lab.drop, 0) + netBtn("50%", lab.drop, 0.5) +
         '<button data-act="lab-join"' + (lab.canAdd ? "" : " disabled") + '>A late player logs in</button><button data-act="lab-reset">Reset</button></div>' +
-        '<div class="row small muted" style="margin-top:8px"><button data-act="toggle">' + (running ? "Pause" : "Run") + "</button>" +
+        '<div class="row small muted" style="margin-top:8px"><button data-act="labToggle">' + (labRunning ? "Pause" : "Run") + "</button>" +
         [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") +
         "<span>Clock " + lab.time.toFixed(0) + "s · " + lab.inFlight + " messages in flight · " + lab.stats.sent + " sent, " + lab.stats.dropped + " lost, " + lab.stats.blocked + " blocked by the split" +
         (lab.split ? " · <b>split: " + esc(lab.split) + "</b>" : "") + "</span></div></div>" +
@@ -5706,7 +5707,21 @@ end
     if (t === "lab") labCall("lab_state");
   }
 
+  // Buttons act when pressed, not when released: the page redraws several times a second, and a button replaced
+  // between press and release never receives its click (that is why Pause sometimes needed two presses). A keyboard
+  // activation has no press, so it still comes through "click".
+  let lastPress = 0;
+  document.addEventListener("pointerdown", (e) => {
+    const el = e.target.closest("button[data-act]");
+    if (!el || el.disabled || e.button !== 0) return;
+    lastPress = performance.now();
+    onAct(e);
+  });
   document.addEventListener("click", (e) => {
+    if (e.detail !== 0 && performance.now() - lastPress < 800) return; // already handled on press
+    onAct(e);
+  });
+  function onAct(e) {
     const el = e.target.closest("[data-act]");
     if (!el || !st) return;
     const a = el.dataset.a, b = el.dataset.b;
@@ -5722,7 +5737,8 @@ end
       case "scenario": seed = 1; start(a); break;
       case "again": seed += 1; start(current); break;
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
-      case "toggle": running = !running; render(); renderLab(); break;
+      case "toggle": started = true; running = !running; render(); renderLab(); break;
+      case "labToggle": labRunning = !labRunning; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
@@ -5742,7 +5758,7 @@ end
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);
     }
-  });
+  }
   // The page redraws as the clock runs, but not while a drop-down has focus (that would close it). Once you have
   // chosen, let go of it so the clock keeps drawing.
   document.addEventListener("change", (e) => {
@@ -5751,7 +5767,7 @@ end
   });
 
   setInterval(() => {
-    if (tab === "lab") { if (running && lab) labCall("lab_advance", speed * 0.25); return; }
+    if (tab === "lab") { if (labRunning && lab) labCall("lab_advance", speed * 0.25); return; }
     if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
     st = call("advance", speed * 0.25);
     updateMoved();
