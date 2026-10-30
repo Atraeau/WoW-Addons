@@ -1205,6 +1205,16 @@ wanted (the gauntlets by Aldric, the blade by Brann), four unwanted.
 - The lesson is two numbered steps; a test runs it on five seeds and checks who took what. In the page, the pending list
   reads Aldric twice and Brann four times, which is the point.
 
+### Fixed: the simulator page was broken by a quote mismatch (2026-10-30)
+
+**Reported:** "the html seems broken": the page stopped at "Starting the engine...". The "Request eligibility" wording change
+left a JavaScript string opened with `'` and closed with `"`, a syntax error that stops the whole page script. It went in
+with that commit and was pushed. The engine and its `KG` API are Lua and run separately from the page's JavaScript, so the
+checks made through the API afterwards kept passing while the page itself was dead; only a look at the real page
+showed it. Fixed, and every scenario was then clicked through in the browser pane with the console watched
+(no errors; the Request eligibility button appears where a class can't bid). Practice from now on: after any
+page-template edit, load the built page and read the console, not only the API.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
