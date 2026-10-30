@@ -77,7 +77,7 @@
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
-  const call = (name, a, b) => JSON.parse(window.KG(name, a, b));
+  const call = (name, a, b, c) => JSON.parse(window.KG(name, a, b, c));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", backstop: "Backstop", review: "Review", done: "Done", cancelled: "Cancelled" };
 
@@ -91,8 +91,8 @@
     render();
   }
 
-  function act(name, a, b) {
-    const r = call(name, a, b);
+  function act(name, a, b, c) {
+    const r = call(name, a, b, c);
     if (r.ok === false) lastMsg = "Not allowed: " + (r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -111,7 +111,15 @@
     if (!a) return '<span class="pill wait">&hellip;</span>';
     if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + esc(a.to) + "</span>";
     if (a.kind === "pass") return '<span class="pill pass">pass' + (a.passKind ? " (" + esc(a.passKind) + ")" : "") + "</span>";
-    return '<span class="pill ' + a.kind + '">' + a.kind + "</span>";
+    return '<span class="pill ' + a.kind + '">' + a.kind + (a.ready ? " &middot; " + READY[a.ready] : "") + "</span>";
+  }
+  const READY = { ready: "ready", says: "says ready", notready: "not ready" };
+
+  // A token: what it makes, and who wants it with their readiness (a hint, never enforced).
+  function tokenHtml(it) {
+    if (!it.token) return "";
+    const w = it.token.wanted.length ? it.token.wanted.map((r) => esc(r.player) + " (" + (READY[r.ready] || "unknown") + ")").join(", ") : "nobody yet";
+    return '<div class="small muted">Token: makes ' + esc(it.token.makes).toLowerCase() + ". Wanted by, in list order: " + w + "</div>";
   }
 
   function remaining() {
@@ -163,9 +171,10 @@
       if (bidding) {
         const a = mine && mine.answers[i];
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
-        ans = '<td><div class="row">' + b("need", "Need") + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
+        ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
       }
-      h += '<tr><td><span class="iname">' + esc(it.link) + "</span></td><td>" + status + "</td>" + ans + "</tr>";
+      h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
     });
     return h + "</table>" + (bidding ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll">Pass on everything</button></div>' : "");
   }
@@ -199,21 +208,22 @@
     if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
     if (p === "done") h += '<button data-act="undo">Undo last award</button>';
-    if (st.mc && (p === "idle" || p === "done" || p === "cancelled")) {
-      if (st.mc.next) {
-        h += '<button class="primary" data-act="mc_kill" data-a="0">Kill ' + esc(st.mc.next) + ', hand out now</button>';
-        h += '<button data-act="mc_kill" data-a="1">Kill ' + esc(st.mc.next) + ', hold the loot</button>';
+    const n = st.night;
+    if (n && (p === "idle" || p === "done" || p === "cancelled")) {
+      if (n.next) {
+        h += '<button class="primary" data-act="kill" data-a="0">Kill ' + esc(n.next) + ', hand out now</button>';
+        h += '<button data-act="kill" data-a="1">Kill ' + esc(n.next) + ', hold the loot</button>';
       }
-      if (st.mc.held.length) h += '<button class="primary" data-act="mc_handout">Hand out held loot (' + st.mc.held.length + ')</button>';
-      if (!st.mc.next && !st.mc.held.length) h += '<span class="muted small">Ragnaros is dead. Molten Core is cleared.</span>';
+      if (n.held.length) h += '<button class="primary" data-act="handout">Hand out held loot (' + n.held.length + ')</button>';
+      if (!n.next && !n.held.length) h += '<span class="muted small">' + esc(n.last) + " is dead. The raid is cleared.</span>";
     }
     h += "</div>";
-    if (st.mc && st.mc.held.length) h += '<div class="small muted" style="margin-top:6px">Held: ' + st.mc.held.map(esc).join(", ") + "</div>";
+    if (n && n.held.length) h += '<div class="small muted" style="margin-top:6px">Held: ' + n.held.map(esc).join(", ") + "</div>";
     return h;
   }
 
   function resultHtml() {
-    if (st.phase !== "done" || st.mc) return "";
+    if (st.phase !== "done" || st.night) return "";
     result = result || call("check");
     return '<div class="card ' + (result.ok ? "good" : "bad") + '"><h2>' + (result.ok ? "Matches the lesson" : "Different from the lesson") + "</h2><div>" + esc(result.message || "") +
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
@@ -307,7 +317,7 @@
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
-      case "bid": act("bid", a, b === "gift" ? giftTo : ""); break;
+      case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);

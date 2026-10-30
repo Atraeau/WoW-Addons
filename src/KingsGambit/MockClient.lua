@@ -260,6 +260,12 @@ function M.New(opts)
         self:emit("item.info", { link = link, itemId = tonumber(tostring(link):match("item:(%d+)")) })
     end
 
+    -- What this player holds: setBags({ [nameOrId] = count }), setReputation(factionId, reaction 1..8).
+    function h:itemCount(what) return (S.bags and S.bags[what]) or 0 end
+    function h:setBags(bags) S.bags = bags end
+    function h:reputation(factionId) return S.reps and S.reps[factionId] end
+    function h:setReputation(factionId, reaction) S.reps = S.reps or {}; S.reps[factionId] = reaction end
+
     ---------------------------------------------------------------- communication
     function h:registerPrefix(prefix)
         S.prefixes[prefix] = true

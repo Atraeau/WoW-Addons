@@ -60,6 +60,8 @@ local function describe(ev)
         return d.item .. " was disenchanted by " .. short(d.to)
     elseif t == "Revert" then
         return "The last award was undone"
+    elseif t == "CreateList" then
+        return "The " .. tostring(d.name) .. " list was started"
     elseif t == "AddMember" then
         return short(d.member) .. " joined the list"
     elseif t == "Transfer" then
@@ -88,10 +90,12 @@ local function state()
     snap.you = "You"
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
-    if sim.mc then
-        local nextBoss = sim.mc.bosses[sim.bossIndex + 1]
-        snap.mc = { next = nextBoss and nextBoss.name or nil, held = {}, killed = sim.bossIndex }
-        for i, h in ipairs(sim.held) do snap.mc.held[i] = h.item.name .. " (" .. h.boss .. ")" end
+    if sim.raid then
+        local bosses = sim.raid.bosses
+        local nextBoss = bosses[sim.bossIndex + 1]
+        snap.night = { next = nextBoss and nextBoss.name or nil, held = {}, killed = sim.bossIndex,
+            last = bosses[#bosses].name, raid = scenario and scenario.title }
+        for i, h in ipairs(sim.held) do snap.night.held[i] = h.item.name .. " (" .. h.boss .. ")" end
     end
     if not s then
         snap.phase, snap.items, snap.players, snap.pending, snap.now = "idle", {}, {}, {}, sim.client:now()
@@ -110,7 +114,7 @@ local function state()
         local row = { name = short(n), answers = {} }
         for _, it in ipairs(s.items) do
             local b = s.bids[n] and s.bids[n][it.id]
-            row.answers[#row.answers + 1] = b and { kind = b.kind, to = short(b.to), passKind = b.passKind } or false
+            row.answers[#row.answers + 1] = b and { kind = b.kind, to = short(b.to), passKind = b.passKind, ready = b.ready } or false
         end
         snap.players[#snap.players + 1] = row
     end
@@ -169,21 +173,36 @@ end
 ---------------------------------------------------------------- the API
 local api = {}
 
+-- Raid nights: a whole raid with a 40-person roster and real loot from real bosses.
+local NIGHTS = {
+    { id = "mc", title = "Molten Core night", new = Sim.NewMoltenCore,
+      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest." },
+    { id = "aq40", title = "Ahn'Qiraj night", new = Sim.NewAQ40,
+      lesson = "The Temple of Ahn'Qiraj drops tokens beside gear: each is for a group of classes and is turned in, with materials and reputation, for a tier piece. Tokens are handed out like any item, under the same rules. Each bidder's readiness is shown (ready, says ready, not ready) so the raid can see it, but it is only a hint and never enforced: materials in the bank can't be seen, and taking a token you can't use yet is your own call." },
+}
+
 function api.scenarios()
-    local out = { { id = "mc", title = "Molten Core night", lesson = MC_LESSON } }
+    local out = {}
+    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
     for _, sc in ipairs(Scenarios.list) do out[#out + 1] = { id = sc.id, title = sc.title, lesson = sc.lesson } end
     return out
 end
 
-local MC_LESSON = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest."
+local function result(ok, why)
+    local s = state()
+    s.ok, s.why = ok and true or false, why
+    return s
+end
 
 function api.start(id, seed)
     seed = tonumber(seed) or 1
-    if id == "mc" then
-        scenario = { id = "mc", title = "Molten Core night", lesson = MC_LESSON }
-        sim = Sim.NewMoltenCore({ seed = seed })
-        startCount = #sim.engine:View().applied
-        return state()
+    for _, n in ipairs(NIGHTS) do
+        if n.id == id then
+            scenario = { id = n.id, title = n.title, lesson = n.lesson }
+            sim = n.new({ seed = seed })
+            startCount = #sim.engine:View().applied
+            return state()
+        end
     end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
@@ -197,9 +216,9 @@ end
 
 function api.state() return state() end
 
--- Molten Core: kill the next boss; hold = "1" keeps the loot for a later hand-out.
-function api.mc_kill(hold)
-    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+-- A raid night: kill the next boss; hold = "1" keeps the loot for a later hand-out.
+function api.kill(hold)
+    if not (sim and sim.raid) then return { error = "not a raid night" } end
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
@@ -207,8 +226,8 @@ function api.mc_kill(hold)
     return result(boss ~= nil, why)
 end
 
-function api.mc_handout()
-    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+function api.handout()
+    if not (sim and sim.raid) then return { error = "not a raid night" } end
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
@@ -216,15 +235,12 @@ function api.mc_handout()
 end
 function api.advance(sec) if sim then sim:advance(tonumber(sec) or 0) end return state() end
 
-local function result(ok, why)
-    local s = state()
-    s.ok, s.why = ok and true or false, why
-    return s
-end
-
+-- kind "needready": need, and you say you can turn the token in.
 function api.bid(itemId, kind, to)
     if to == "" then to = nil end
-    return result(sim.session:bid("You", tonumber(itemId), kind, { to = to }))
+    local ready
+    if kind == "needready" then kind, ready = "need", "says" end
+    return result(sim.session:bid("You", tonumber(itemId), kind, { to = to, ready = ready }))
 end
 
 function api.passAll()
@@ -440,11 +456,11 @@ function api.lab_join()
     return labState()
 end
 
--- JS entry point: window.KG(name, a, b) -> JSON string.
-js.global.KG = function(_, name, a, b)
+-- JS entry point: window.KG(name, a, b, c) -> JSON string.
+js.global.KG = function(_, name, a, b, c)
     local fn = api[name]
     if not fn then return encode({ error = "no such call: " .. tostring(name) }) end
-    local ok, res = pcall(fn, a, b)
+    local ok, res = pcall(fn, a, b, c)
     if not ok then return encode({ error = tostring(res) }) end
     return encode(res)
 end

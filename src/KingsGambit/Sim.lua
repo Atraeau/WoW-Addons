@@ -165,6 +165,13 @@ function Sim:snapshot()
         snap.items = {}
         for i, it in ipairs(s.items) do
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
+            local rows = s:readiness(it.id)
+            if rows then
+                local Tokens = SK.modules.Tokens
+                local wanted = {}
+                for k, r in ipairs(rows) do wanted[k] = { player = short(r.player), kind = r.kind, ready = r.ready, label = Tokens.Label(r.ready) } end
+                snap.items[i].token = { makes = it.token.token.makes, wanted = wanted }
+            end
         end
         if s.turn then
             snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
@@ -192,7 +199,7 @@ function M.RunScenario(sc, opts)
     return sim, passed and true or false, message
 end
 
----------------------------------------------------------------- Molten Core
+---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
 -- A realistic 40-person Alliance raid: class and role for every bot. The learner fills one healer slot.
 local MC_ROSTER = {
     { "WARRIOR", "tank", 3 }, { "WARRIOR", "melee", 5 }, { "ROGUE", "melee", 5 }, { "HUNTER", "hunter", 4 },
@@ -210,22 +217,32 @@ local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { heal
 
 local function hasBit(mask, bit) return math.floor(mask / bit) % 2 == 1 end
 
+-- Does an item's role tag ("healer", or several joined with "|", e.g. "caster|healer") include this role?
+local function forRole(item, role)
+    if not (item.role and role) then return false end
+    for r in item.role:gmatch("[^|]+") do if r == role then return true end end
+    return false
+end
+
 -- Would a raider of this class and role want the item, and as main or off-spec?
--- Returns "need", "off" or nil. Deliberately simple: tier pieces by class, other items by role and armor type.
-function M.Wants(MC, item, class, role)
+-- Returns "need", "off" or nil. Deliberately simple: tier pieces and class tokens by class, other items
+-- (and tokens open to everyone) by role and armor type.
+function M.Wants(data, item, class, role)
     if item.classes ~= 0 then
-        local bit = MC.CLASS_BITS[class]
+        local bit = data.CLASS_BITS[class]
         return (bit and hasBit(item.classes, bit)) and "need" or nil
     end
     if item.armor and item.armor ~= ARMOR[class] then return nil end
-    if item.role == role then return "need" end
+    if forRole(item, role) then return "need" end
     local off = OFFSPEC[class] and OFFSPEC[class][role]
-    if off and item.role == off then return "off" end
+    if off and forRole(item, off) then return "off" end
 end
 
--- opts: seed, learner ("You"), learnerClass ("PRIEST"), learnerRole ("healer"), shuffle (default true),
---       chance (probability a raider who could use an item still needs it; default 0.7).
-function M.NewMoltenCore(opts)
+-- data: a raid data module (MoltenCore, AQ40). opts: seed, learner ("You"), learnerClass ("PRIEST"),
+-- learnerRole ("healer"), shuffle (default true), chance (probability a raider who could use an item still
+-- needs it; default 0.7), readiness (for tokens: chances a bot is { ready, says } ready; the rest are not
+-- ready; default { 0.55, 0.2 }).
+function M.NewRaidNight(data, opts)
     opts = opts or {}
     local members, k = {}, 0
     for _, row in ipairs(MC_ROSTER) do
@@ -238,16 +255,21 @@ function M.NewMoltenCore(opts)
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
         learnerClass = opts.learnerClass or "PRIEST", learnerRole = opts.learnerRole or "healer",
         shuffle = opts.shuffle ~= false })
-    sim.mc = SK.modules.MoltenCore
+    sim.raid = data
     sim.chance = opts.chance or 0.7
+    sim.readiness = opts.readiness or { 0.55, 0.2 }
     sim.bossIndex = 0
     return sim
 end
 
+function M.NewMoltenCore(opts) return M.NewRaidNight(SK.modules.MoltenCore, opts) end
+-- Ahn'Qiraj: tokens (class-group tier tokens, plus weapon and C'Thun tokens) drop beside gear.
+function M.NewAQ40(opts) return M.NewRaidNight(SK.modules.AQ40, opts) end
+
 -- The next boss (or a named one) dies and rolls its loot from the real table. Returns the boss and the
 -- dropped items ({ id, name, ... }). With hold = true the loot is set aside for a later hand-out.
 function Sim:killBoss(name, hold)
-    local MC = assert(self.mc, "not a Molten Core raid")
+    local MC = assert(self.raid, "not a raid night")
     local boss
     if name then
         for i, b in ipairs(MC.bosses) do if b.name == name then boss, self.bossIndex = b, i end end
@@ -281,6 +303,15 @@ function Sim:killBoss(name, hold)
     return boss, dropped
 end
 
+-- A bot's readiness for a token: most dedicated raiders bought their materials; some say so (bank); some
+-- are not ready and bid anyway (their call).
+function Sim:botReadiness()
+    local r, odds = self.client:random(), self.readiness
+    if r < odds[1] then return "ready" end
+    if r < odds[1] + odds[2] then return "says" end
+    return "notready"
+end
+
 -- Put every held item up for loot in one session. The bots answer from their class and role.
 function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
@@ -289,13 +320,16 @@ function Sim:handOut(cfg)
     local links, seen = {}, {}
     for i, h in ipairs(held) do links[i], seen[i] = h.item.name, h.seen end
     self.policies = {}
-    for name, info in pairs(self.info) do
+    -- Roster order, never pairs(): random draws must happen in the same order in every process.
+    for _, name in ipairs(self.names) do
+        local info = self.info[name]
         local p = { bid = {}, claim = self.client:random() < 0.3 }
         local wanted = {}
         for _, h in ipairs(held) do
-            local kind = M.Wants(self.mc, h.item, info.class, info.role)
+            local kind = M.Wants(self.raid, h.item, info.class, info.role)
             if kind and self.client:random() < self.chance then
-                wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 }
+                wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 or h.item.token ~= nil,
+                    ready = h.item.token and self:botReadiness() or nil }
             elseif kind then
                 p.bid[h.item.name] = { "pass", passKind = "upgrade" } -- could use it, chose not to spend the spot
             end
@@ -306,7 +340,7 @@ function Sim:handOut(cfg)
             if a.tier ~= b.tier then return a.tier end
             return a.link < b.link
         end)
-        for rank, w in ipairs(wanted) do p.bid[w.link] = { w.kind, rank = rank } end
+        for rank, w in ipairs(wanted) do p.bid[w.link] = { w.kind, rank = rank, ready = w.ready } end
         self.policies[name] = p
     end
     self.handedOut = held

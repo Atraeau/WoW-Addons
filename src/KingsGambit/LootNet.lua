@@ -5,12 +5,12 @@
 --
 -- Host (Master Looter) <-> Players, message types (all `t` values are two letters):
 --   LS  session start   host -> RAID     { sid, items = { {id, link} }, bid, left, who = { names } }
---   LB  bid             player -> host   { sid, item, kind, to?, passKind? }
+--   LB  bid             player -> host   { sid, item, kind, to?, passKind?, rank?, ready? }
 --   LK  acknowledgement host -> player   { sid, ok, why?, item?, action? }
 --   LP  phase           host -> RAID     { sid, phase }
 --   LT  turn            host -> RAID     { sid, turn = { type, player, options?, item?, tier? }, left }
 --   LX  action          player -> host   { sid, action = pick|skip|claim|decline, item?, to? }
---   LY  public answers  host -> RAID     { sid, a = { { player, item, kind, to? } } }  (batched)
+--   LY  public answers  host -> RAID     { sid, a = { { player, item, kind, to?, ready? } } }  (batched)
 --   LR  results         host -> RAID     { sid, awards = { {item, winner, to, tier} }, de = { {item, to} }, failed }
 --
 -- While a session runs the host repeats its state every few seconds (LS, LP, LT and all LY answers), so
@@ -105,7 +105,7 @@ function M.NewHost(sync, engine)
         end
         local all = {}
         for player, row in pairs(s.bids) do
-            for item, b in pairs(row) do all[#all + 1] = { player = player, item = item, kind = b.kind, to = b.to } end
+            for item, b in pairs(row) do all[#all + 1] = { player = player, item = item, kind = b.kind, to = b.to, ready = b.ready } end
         end
         table.sort(all, function(a, b) if a.player ~= b.player then return a.player < b.player end return a.item < b.item end)
         if #all > 0 then send({ t = "LY", sid = h.sid, a = all }) end
@@ -132,8 +132,8 @@ function M.NewHost(sync, engine)
             h.ev.emit("turn", turn)
         end)
         session:on("bid", function(b)
-            h.answers[#h.answers + 1] = { player = b.player, item = b.item, kind = b.kind,
-                to = session.bids[b.player][b.item].to }
+            local bid = session.bids[b.player][b.item]
+            h.answers[#h.answers + 1] = { player = b.player, item = b.item, kind = b.kind, to = bid.to, ready = bid.ready }
             if not h.flushing then
                 h.flushing = true
                 client:after(1, flush)
@@ -159,7 +159,8 @@ function M.NewHost(sync, engine)
 
     sync:register("LB", function(msg, sender)
         if not (h.session and msg.sid == h.sid) then return ack(sender, { ok = false, why = "nosession", item = msg.item }) end
-        local ok, why = h.session:bid(sender, msg.item, msg.kind, { to = msg.to, passKind = msg.passKind })
+        local ok, why = h.session:bid(sender, msg.item, msg.kind,
+            { to = msg.to, passKind = msg.passKind, rank = msg.rank, ready = msg.ready })
         ack(sender, { ok = ok and true or false, why = why, item = msg.item })
     end)
 
@@ -224,7 +225,7 @@ function M.NewPlayer(sync)
         for _, a in ipairs(msg.a) do
             local row = p.session.answers[a.player]
             if not row then row = {}; p.session.answers[a.player] = row end
-            row[a.item] = { kind = a.kind, to = a.to }
+            row[a.item] = { kind = a.kind, to = a.to, ready = a.ready }
         end
         p.ev.emit("answers")
     end)
@@ -252,13 +253,15 @@ function M.NewPlayer(sync)
         return true
     end
 
-    -- kind: need | off | gift | pass. For a gift, `to` is the recipient.
-    function p:bid(item, kind, to, passKind)
+    -- kind: need | off | gift | pass. For a gift, `to` is the recipient. extra (optional): { rank, ready }
+    -- (see Loot's Session:bid). For a token, `ready` is this player's readiness (Tokens.Mine).
+    function p:bid(item, kind, to, passKind, extra)
         local s = self.session
         if not s then return false, "nosession" end
+        extra = extra or {}
         s.pendingBid = s.pendingBid or {}
-        s.pendingBid[item] = { kind = kind, to = to }
-        return toHost({ t = "LB", item = item, kind = kind, to = to, passKind = passKind })
+        s.pendingBid[item] = { kind = kind, to = to, ready = extra.ready }
+        return toHost({ t = "LB", item = item, kind = kind, to = to, passKind = passKind, rank = extra.rank, ready = extra.ready })
     end
     function p:pick(item) return toHost({ t = "LX", action = "pick", item = item }) end
     function p:skip() return toHost({ t = "LX", action = "skip" }) end

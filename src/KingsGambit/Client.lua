@@ -13,6 +13,8 @@ M.METHODS = {
     "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
     -- loot
     "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo",
+    -- what this player holds (token readiness)
+    "itemCount", "reputation",
     -- communication
     "registerPrefix", "send", "pending", "whisper", "announce", "serialize", "deserialize",
     -- trade

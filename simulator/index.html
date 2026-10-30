@@ -932,6 +932,8 @@ M.METHODS = {
     "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
     -- loot
     "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo",
+    -- what this player holds (token readiness)
+    "itemCount", "reputation",
     -- communication
     "registerPrefix", "send", "pending", "whisper", "announce", "serialize", "deserialize",
     -- trade
@@ -1258,6 +1260,12 @@ function M.New(opts)
         S.pendingInfo[link] = nil
         self:emit("item.info", { link = link, itemId = tonumber(tostring(link):match("item:(%d+)")) })
     end
+
+    -- What this player holds: setBags({ [nameOrId] = count }), setReputation(factionId, reaction 1..8).
+    function h:itemCount(what) return (S.bags and S.bags[what]) or 0 end
+    function h:setBags(bags) S.bags = bags end
+    function h:reputation(factionId) return S.reps and S.reps[factionId] end
+    function h:setReputation(factionId, reaction) S.reps = S.reps or {}; S.reps[factionId] = reaction end
 
     ---------------------------------------------------------------- communication
     function h:registerPrefix(prefix)
@@ -1762,7 +1770,9 @@ function Session:start(items)
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
         local s = tonumber(it.seen)
         if not (s and s <= now) then s = now end
-        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s }
+        local Tokens = SK.modules.Tokens
+        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
+            token = Tokens and Tokens.Find(it.link) or nil }
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
@@ -1772,7 +1782,8 @@ function Session:start(items)
 end
 
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
--- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most) }.
+-- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most),
+-- ready = "ready" | "says" | "notready" (tokens only: can they redeem it? A hint; never enforced) }.
 function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
@@ -1788,7 +1799,9 @@ function Session:bid(player, itemId, kind, extra)
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
     if rank and (rank < 1 or rank ~= math.floor(rank)) then return false, "badrank" end
-    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank }
+    local ready
+    if self.items[itemId].token and kind ~= "pass" and SK.modules.Tokens.STATES[extra.ready] then ready = extra.ready end
+    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank, ready = ready }
     self:emit("bid", { player = player, item = itemId, kind = kind })
     if self:allAnswered() then self:closeBidding() end
     return true
@@ -1800,10 +1813,11 @@ end
 --   "need"  "off"  "pass"  "gift Name"            (when there is only one item)
 --   "1 need"  "need 1"  "#2 pass"  "2: off"  "1 gift Name"   (item number, either side)
 --   "pass"                                         (several items: passes on all of them)
+--   "1 need ready"                                 (a token: I have what it takes to turn it in)
 local WORDS = { need = "need", n = "need", greed = "off", off = "off", os = "off", offspec = "off",
     ["off-spec"] = "off", pass = "pass", p = "pass", gift = "gift", g = "gift" }
 
--- Returns an array of { item, kind, to } (item may be nil = "all items", only for pass), or
+-- Returns an array of { item, kind, to, ready } (item may be nil = "all items", only for pass), or
 -- nil + a reason ("empty", "unclear", "needitem", "needtarget").
 function M.ParseWhisper(text, itemCount)
     if type(text) ~= "string" then return nil, "empty" end
@@ -1812,10 +1826,11 @@ function M.ParseWhisper(text, itemCount)
         local words = {}
         for w in part:gmatch("[^%s]+") do words[#words + 1] = w end
         if #words > 0 then
-            local item, kind, to
+            local item, kind, to, ready
             for _, w in ipairs(words) do
                 local num = w:match("^#?(%d+):?$")
                 if num and not item then item = tonumber(num)
+                elseif w == "ready" and not ready then ready = true
                 elseif WORDS[w] and not kind then kind = WORDS[w]
                 elseif kind == "gift" and not to and w:match("^[%a%-']+$") then to = w
                 else return nil, "unclear" end
@@ -1827,7 +1842,7 @@ function M.ParseWhisper(text, itemCount)
                 elseif kind == "pass" then item = nil -- all items
                 else return nil, "needitem" end
             end
-            answers[#answers + 1] = { item = item, kind = kind, to = to }
+            answers[#answers + 1] = { item = item, kind = kind, to = to, ready = ready }
         end
     end
     if #answers == 0 then return nil, "empty" end
@@ -1858,7 +1873,7 @@ function Session:handleWhisper(sender, text)
         for _, id in ipairs(ids) do
             local rank
             if a.kind ~= "pass" then rank, nextRank = nextRank, nextRank + 1 end
-            local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank })
+            local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank, ready = a.ready and "says" or nil })
             if ok then
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
@@ -2193,6 +2208,19 @@ function Session:cancel()
     self.phase = "cancelled"
     self:emit("phase", { phase = "cancelled" })
     return true
+end
+
+-- Who wants a token, in list order, and how ready each says they are: { { player, kind, ready } }.
+-- Shown to everyone as a hint (Tokens.lua); nil if the item is not a token.
+function Session:readiness(itemId)
+    local it = self.items[itemId]
+    if not (it and it.token) then return nil end
+    local out = {}
+    for _, name in ipairs(self.order.main) do
+        local b = self.bids[name] and self.bids[name][itemId]
+        if b and b.kind ~= "pass" then out[#out + 1] = { player = name, kind = b.kind, ready = b.ready } end
+    end
+    return out
 end
 
 -- A snapshot for UIs and tests.
@@ -3064,6 +3092,375 @@ M.bosses = {
 function M.Item(id) return M.items[id] end
 
 end; chunk("KingsGambit", SK) end
+-- ===== AQ40.lua =====
+do local chunk = function(...)
+-- King's Gambit: Temple of Ahn'Qiraj (AQ40) training data (Phase 4.5). GENERATED by scripts/build-aq-data.ps1
+-- from simulator/data/aq40-raw.json (Wowhead Classic drop tables, epic+ items, collected 2026-10-29). Do not edit by hand.
+-- Role tags are provisional (judged from names; to be replaced from real item stats). A token's `makes` is not yet
+-- checked against the quest pages; its `turnIns` are only the verified ones, so readiness is unknown for the rest.
+local _, SK = ...
+local M = SK:NewModule("AQ40")
+
+M.name = "Temple of Ahn'Qiraj"
+M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, SHAMAN = 64, MAGE = 128, WARLOCK = 256, DRUID = 1024 }
+
+-- items[id] = { id, name, slot, armor, classes (bitmask, 0 = any), role, token? }
+-- token = { makes, turnIns = { [CLASS] = { { reward, quest, needs = { { item, count } }, reputation } } } }
+M.items = {
+    [21702] = { id = 21702, name = "Amulet of Foul Warding", slot = 2, armor = nil, classes = 0, role = "tank" },
+    [21699] = { id = 21699, name = "Barrage Shoulders", slot = 3, armor = "mail", classes = 0, role = "hunter" },
+    [21708] = { id = 21708, name = "Beetle Scaled Wristguards", slot = 9, armor = "leather", classes = 0, role = "tank" },
+    [21706] = { id = 21706, name = "Boots of the Unwavering Will", slot = 8, armor = "plate", classes = 0, role = "tank" },
+    [21814] = { id = 21814, name = "Breastplate of Annihilation", slot = 5, armor = "plate", classes = 0, role = "melee" },
+    [21701] = { id = 21701, name = "Cloak of Concentrated Hatred", slot = 16, armor = nil, classes = 0, role = "melee" },
+    [21698] = { id = 21698, name = "Leggings of Immersion", slot = 7, armor = "leather", classes = 0, role = "healer" },
+    [21700] = { id = 21700, name = "Pendant of the Qiraji Guardian", slot = 2, armor = nil, classes = 0, role = "tank" },
+    [21707] = { id = 21707, name = "Ring of Swarming Thought", slot = 11, armor = nil, classes = 0, role = "caster" },
+    [21704] = { id = 21704, name = "Boots of the Redeemed Prophecy", slot = 8, armor = "plate", classes = 0, role = "healer" },
+    [21703] = { id = 21703, name = "Hammer of Ji'zhi", slot = 17, armor = nil, classes = 0, role = "healer" },
+    [21128] = { id = 21128, name = "Staff of the Qiraji Prophets", slot = 17, armor = nil, classes = 0, role = "caster" },
+    [21705] = { id = 21705, name = "Boots of the Fallen Prophet", slot = 8, armor = "mail", classes = 0, role = "caster" },
+    [21686] = { id = 21686, name = "Mantle of Phrenic Power", slot = 3, armor = "cloth", classes = 0, role = "caster" },
+    [21682] = { id = 21682, name = "Bile-Covered Gauntlets", slot = 10, armor = "leather", classes = 0, role = "melee" },
+    [21687] = { id = 21687, name = "Ukko's Ring of Darkness", slot = 11, armor = nil, classes = 0, role = "tank" },
+    [21696] = { id = 21696, name = "Robes of the Triumvirate", slot = 5, armor = "cloth", classes = 0, role = "healer" },
+    [21695] = { id = 21695, name = "Angelista's Touch", slot = 11, armor = nil, classes = 0, role = "tank" },
+    [21697] = { id = 21697, name = "Cape of the Trinity", slot = 16, armor = nil, classes = 0, role = "caster" },
+    [21693] = { id = 21693, name = "Guise of the Devourer", slot = 1, armor = "leather", classes = 0, role = "tank" },
+    [21694] = { id = 21694, name = "Ternary Mantle", slot = 3, armor = "cloth", classes = 0, role = "healer" },
+    [21692] = { id = 21692, name = "Triad Girdle", slot = 6, armor = "plate", classes = 0, role = "melee" },
+    [21683] = { id = 21683, name = "Mantle of the Desert Crusade", slot = 3, armor = "plate", classes = 0, role = "healer" },
+    [21684] = { id = 21684, name = "Mantle of the Desert's Fury", slot = 3, armor = "mail", classes = 0, role = "caster" },
+    [21232] = { id = 21232, name = "Imperial Qiraji Armaments", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter", token = { makes = "A weapon", turnIns = {  } } },
+    [21237] = { id = 21237, name = "Imperial Qiraji Regalia", slot = 0, armor = nil, classes = 0, role = "caster|healer", token = { makes = "A weapon", turnIns = {  } } },
+    [21674] = { id = 21674, name = "Gauntlets of Steadfast Determination", slot = 10, armor = "plate", classes = 0, role = "tank" },
+    [21672] = { id = 21672, name = "Gloves of Enforcement", slot = 10, armor = "leather", classes = 0, role = "melee" },
+    [21676] = { id = 21676, name = "Leggings of the Festering Swarm", slot = 7, armor = "cloth", classes = 0, role = "caster" },
+    [21678] = { id = 21678, name = "Necklace of Purity", slot = 2, armor = nil, classes = 0, role = "healer" },
+    [21648] = { id = 21648, name = "Recomposed Boots", slot = 8, armor = "cloth", classes = 0, role = "caster" },
+    [21671] = { id = 21671, name = "Robes of the Battleguard", slot = 5, armor = "cloth", classes = 0, role = "caster" },
+    [21675] = { id = 21675, name = "Thick Qirajihide Belt", slot = 6, armor = "leather", classes = 0, role = "tank" },
+    [21670] = { id = 21670, name = "Badge of the Swarmguard", slot = 12, armor = nil, classes = 0, role = "melee" },
+    [21669] = { id = 21669, name = "Creeping Vine Helm", slot = 1, armor = "leather", classes = 0, role = "healer" },
+    [21667] = { id = 21667, name = "Legplates of Blazing Light", slot = 7, armor = "plate", classes = 0, role = "healer" },
+    [21666] = { id = 21666, name = "Sartura's Might", slot = 23, armor = nil, classes = 0, role = "healer" },
+    [21673] = { id = 21673, name = "Silithid Claw", slot = 21, armor = nil, classes = 0, role = "melee" },
+    [21668] = { id = 21668, name = "Scaled Leggings of Qiraji Fury", slot = 7, armor = "mail", classes = 0, role = "caster" },
+    [21664] = { id = 21664, name = "Barbed Choker", slot = 2, armor = nil, classes = 0, role = "melee" },
+    [21627] = { id = 21627, name = "Cloak of Untold Secrets", slot = 16, armor = nil, classes = 0, role = "tank" },
+    [21647] = { id = 21647, name = "Fetish of the Sand Reaver", slot = 12, armor = nil, classes = 0, role = "melee" },
+    [21665] = { id = 21665, name = "Mantle of Wicked Revenge", slot = 3, armor = "leather", classes = 0, role = "melee" },
+    [21639] = { id = 21639, name = "Pauldrons of the Unrelenting", slot = 3, armor = "plate", classes = 0, role = "tank" },
+    [21663] = { id = 21663, name = "Robes of the Guardian Saint", slot = 5, armor = "cloth", classes = 0, role = "healer" },
+    [21651] = { id = 21651, name = "Scaled Sand Reaver Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter" },
+    [21652] = { id = 21652, name = "Silithid Carapace Chestguard", slot = 5, armor = "plate", classes = 0, role = "tank" },
+    [21645] = { id = 21645, name = "Hive Tunneler's Boots", slot = 8, armor = "leather", classes = 0, role = "melee" },
+    [21650] = { id = 21650, name = "Ancient Qiraji Ripper", slot = 13, armor = nil, classes = 0, role = "melee" },
+    [21635] = { id = 21635, name = "Barb of the Sand Reaver", slot = 17, armor = nil, classes = 0, role = "hunter" },
+    [22402] = { id = 22402, name = "Libram of Grace", slot = 28, armor = nil, classes = 0, role = "healer" },
+    [22396] = { id = 22396, name = "Totem of Life", slot = 28, armor = nil, classes = 0, role = "healer" },
+    [20932] = { id = 20932, name = "Qiraji Bindings of Dominance", slot = 0, armor = nil, classes = 1474, role = nil, token = { makes = "Shoulders or feet", turnIns = {  } } },
+    [20928] = { id = 20928, name = "Qiraji Bindings of Command", slot = 0, armor = nil, classes = 29, role = nil, token = { makes = "Shoulders or feet", turnIns = { WARRIOR = { { reward = "Conqueror's Spaulders", quest = 8544, needs = { { 20928, 1 }, { "Idol of Night", 2 }, { "Stone Scarab", 5 }, { "Clay Scarab", 5 } }, reputation = { faction = "Brood of Nozdormu", factionId = 910, standing = "Neutral" } } } } } },
+    [22399] = { id = 22399, name = "Idol of Health", slot = 28, armor = nil, classes = 0, role = "healer" },
+    [21677] = { id = 21677, name = "Ring of the Qiraji Fury", slot = 11, armor = nil, classes = 0, role = "melee" },
+    [21625] = { id = 21625, name = "Scarab Brooch", slot = 12, armor = nil, classes = 0, role = "healer" },
+    [21626] = { id = 21626, name = "Slime-coated Leggings", slot = 7, armor = "mail", classes = 0, role = "hunter" },
+    [21622] = { id = 21622, name = "Sharpened Silithid Femur", slot = 21, armor = nil, classes = 0, role = "caster" },
+    [21624] = { id = 21624, name = "Gauntlets of Kalimdor", slot = 10, armor = "mail", classes = 0, role = "caster" },
+    [21623] = { id = 21623, name = "Gauntlets of the Righteous Champion", slot = 10, armor = "plate", classes = 0, role = "melee" },
+    [21619] = { id = 21619, name = "Gloves of the Messiah", slot = 10, armor = "cloth", classes = 0, role = "healer" },
+    [21618] = { id = 21618, name = "Hive Defiler Wristguards", slot = 9, armor = "plate", classes = 0, role = "melee" },
+    [21620] = { id = 21620, name = "Ring of the Martyr", slot = 11, armor = nil, classes = 0, role = "healer" },
+    [21617] = { id = 21617, name = "Wasphide Gauntlets", slot = 10, armor = "leather", classes = 0, role = "healer" },
+    [21621] = { id = 21621, name = "Cloak of the Golden Hive", slot = 16, armor = nil, classes = 0, role = "tank" },
+    [21616] = { id = 21616, name = "Huhuran's Stinger", slot = 15, armor = nil, classes = 0, role = "hunter" },
+    [20930] = { id = 20930, name = "Vek'lor's Diadem", slot = 0, armor = nil, classes = 1102, role = nil, token = { makes = "Head", turnIns = {  } } },
+    [21598] = { id = 21598, name = "Royal Qiraji Belt", slot = 6, armor = "plate", classes = 0, role = "tank" },
+    [21600] = { id = 21600, name = "Boots of Epiphany", slot = 8, armor = "cloth", classes = 0, role = "caster" },
+    [21602] = { id = 21602, name = "Qiraji Execution Bracers", slot = 9, armor = "leather", classes = 0, role = "melee" },
+    [21601] = { id = 21601, name = "Ring of Emperor Vek'lor", slot = 11, armor = nil, classes = 0, role = "tank" },
+    [21599] = { id = 21599, name = "Vek'lor's Gloves of Devastation", slot = 10, armor = "mail", classes = 0, role = "hunter" },
+    [21597] = { id = 21597, name = "Royal Scepter of Vek'lor", slot = 23, armor = nil, classes = 0, role = "caster" },
+    [20926] = { id = 20926, name = "Vek'nilash's Circlet", slot = 0, armor = nil, classes = 401, role = nil, token = { makes = "Head", turnIns = {  } } },
+    [21608] = { id = 21608, name = "Amulet of Vek'nilash", slot = 2, armor = nil, classes = 0, role = "caster" },
+    [21604] = { id = 21604, name = "Bracelets of Royal Redemption", slot = 9, armor = "cloth", classes = 0, role = "healer" },
+    [21605] = { id = 21605, name = "Gloves of the Hidden Temple", slot = 10, armor = "leather", classes = 0, role = "tank" },
+    [21609] = { id = 21609, name = "Regenerating Belt of Vek'nilash", slot = 6, armor = "leather", classes = 0, role = "tank" },
+    [21606] = { id = 21606, name = "Belt of the Fallen Emperor", slot = 6, armor = "plate", classes = 0, role = "melee" },
+    [21679] = { id = 21679, name = "Kalimdor's Revenge", slot = 17, armor = nil, classes = 0, role = "melee" },
+    [21607] = { id = 21607, name = "Grasp of the Fallen Emperor", slot = 6, armor = "mail", classes = 0, role = "hunter" },
+    [20931] = { id = 20931, name = "Skin of the Great Sandworm", slot = 0, armor = nil, classes = 1350, role = nil, token = { makes = "Legs", turnIns = {  } } },
+    [20927] = { id = 20927, name = "Ouro's Intact Hide", slot = 0, armor = nil, classes = 153, role = nil, token = { makes = "Legs", turnIns = {  } } },
+    [21611] = { id = 21611, name = "Burrower Bracers", slot = 9, armor = "cloth", classes = 0, role = "caster" },
+    [23570] = { id = 23570, name = "Jom Gabbar", slot = 12, armor = nil, classes = 0, role = "melee" },
+    [23557] = { id = 23557, name = "Larvae of the Great Worm", slot = 15, armor = nil, classes = 0, role = "hunter" },
+    [23558] = { id = 23558, name = "The Burrower's Shell", slot = 12, armor = nil, classes = 0, role = "tank" },
+    [21610] = { id = 21610, name = "Wormscale Blocker", slot = 14, armor = nil, classes = 0, role = "healer" },
+    [21615] = { id = 21615, name = "Don Rigoberto's Lost Hat", slot = 1, armor = "cloth", classes = 0, role = "healer" },
+    [20933] = { id = 20933, name = "Husk of the Old God", slot = 0, armor = nil, classes = 1424, role = nil, token = { makes = "Chest", turnIns = {  } } },
+    [21221] = { id = 21221, name = "Eye of C'Thun", slot = 0, armor = nil, classes = 0, role = "tank|melee|hunter|caster|healer", token = { makes = "A neck, back or finger item", turnIns = {  } } },
+    [20929] = { id = 20929, name = "Carapace of the Old God", slot = 0, armor = nil, classes = 79, role = nil, token = { makes = "Chest", turnIns = {  } } },
+    [21583] = { id = 21583, name = "Cloak of Clarity", slot = 16, armor = nil, classes = 0, role = "healer" },
+    [21581] = { id = 21581, name = "Gauntlets of Annihilation", slot = 10, armor = "plate", classes = 0, role = "melee" },
+    [22732] = { id = 22732, name = "Mark of C'Thun", slot = 2, armor = nil, classes = 0, role = "tank" },
+    [21586] = { id = 21586, name = "Belt of Never-ending Agony", slot = 6, armor = "leather", classes = 0, role = "melee" },
+    [22731] = { id = 22731, name = "Cloak of the Devoured", slot = 16, armor = nil, classes = 0, role = "caster" },
+    [21585] = { id = 21585, name = "Dark Storm Gauntlets", slot = 10, armor = "cloth", classes = 0, role = "caster" },
+    [22730] = { id = 22730, name = "Eyestalk Waist Cord", slot = 6, armor = "cloth", classes = 0, role = "caster" },
+    [21582] = { id = 21582, name = "Grasp of the Old God", slot = 6, armor = "cloth", classes = 0, role = "healer" },
+    [21596] = { id = 21596, name = "Ring of the Godslayer", slot = 11, armor = nil, classes = 0, role = "hunter" },
+    [21579] = { id = 21579, name = "Vanquished Tentacle of C'Thun", slot = 12, armor = nil, classes = 0, role = "melee" },
+    [21126] = { id = 21126, name = "Death's Sting", slot = 13, armor = nil, classes = 0, role = "melee" },
+    [21134] = { id = 21134, name = "Dark Edge of Insanity", slot = 17, armor = nil, classes = 0, role = "melee" },
+    [21839] = { id = 21839, name = "Scepter of the False Prophet", slot = 21, armor = nil, classes = 0, role = "healer" },
+}
+
+-- Bosses in the usual kill order. drops = epics per kill (from observed rates); loot = { { id, weight } }.
+M.bosses = {
+    { name = "The Prophet Skeram", id = 15263, drops = 2, loot = {
+        { 21702, 0.157 },  -- Amulet of Foul Warding
+        { 21699, 0.166 },  -- Barrage Shoulders
+        { 21708, 0.165 },  -- Beetle Scaled Wristguards
+        { 21706, 0.162 },  -- Boots of the Unwavering Will
+        { 21814, 0.16 },  -- Breastplate of Annihilation
+        { 21701, 0.16 },  -- Cloak of Concentrated Hatred
+        { 21698, 0.165 },  -- Leggings of Immersion
+        { 21700, 0.159 },  -- Pendant of the Qiraji Guardian
+        { 21707, 0.167 },  -- Ring of Swarming Thought
+        { 21704, 0.093 },  -- Boots of the Redeemed Prophecy
+        { 21703, 0.088 },  -- Hammer of Ji'zhi
+        { 21128, 0.092 },  -- Staff of the Qiraji Prophets
+        { 21705, 0.07 },  -- Boots of the Fallen Prophet
+    } },
+    { name = "The Bug Trio", id = 15543, drops = 2, loot = {
+        { 21686, 0.227 },  -- Mantle of Phrenic Power
+        { 21682, 0.221 },  -- Bile-Covered Gauntlets
+        { 21687, 0.213 },  -- Ukko's Ring of Darkness
+        { 21696, 0.155 },  -- Robes of the Triumvirate
+        { 21695, 0.132 },  -- Angelista's Touch
+        { 21697, 0.141 },  -- Cape of the Trinity
+        { 21693, 0.142 },  -- Guise of the Devourer
+        { 21694, 0.138 },  -- Ternary Mantle
+        { 21692, 0.133 },  -- Triad Girdle
+        { 21683, 0.113 },  -- Mantle of the Desert Crusade
+        { 21684, 0.092 },  -- Mantle of the Desert's Fury
+        { 21232, 0.062 },  -- Imperial Qiraji Armaments
+        { 21237, 0.047 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Battleguard Sartura", id = 15516, drops = 2, loot = {
+        { 21674, 0.158 },  -- Gauntlets of Steadfast Determination
+        { 21672, 0.159 },  -- Gloves of Enforcement
+        { 21676, 0.158 },  -- Leggings of the Festering Swarm
+        { 21678, 0.156 },  -- Necklace of Purity
+        { 21648, 0.161 },  -- Recomposed Boots
+        { 21671, 0.159 },  -- Robes of the Battleguard
+        { 21675, 0.158 },  -- Thick Qirajihide Belt
+        { 21670, 0.154 },  -- Badge of the Swarmguard
+        { 21669, 0.155 },  -- Creeping Vine Helm
+        { 21667, 0.086 },  -- Legplates of Blazing Light
+        { 21666, 0.084 },  -- Sartura's Might
+        { 21673, 0.086 },  -- Silithid Claw
+        { 21668, 0.067 },  -- Scaled Leggings of Qiraji Fury
+        { 21232, 0.054 },  -- Imperial Qiraji Armaments
+        { 21237, 0.054 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Fankriss the Unyielding", id = 15510, drops = 2, loot = {
+        { 21664, 0.161 },  -- Barbed Choker
+        { 21627, 0.162 },  -- Cloak of Untold Secrets
+        { 21647, 0.163 },  -- Fetish of the Sand Reaver
+        { 21665, 0.168 },  -- Mantle of Wicked Revenge
+        { 21639, 0.158 },  -- Pauldrons of the Unrelenting
+        { 21663, 0.16 },  -- Robes of the Guardian Saint
+        { 21651, 0.157 },  -- Scaled Sand Reaver Leggings
+        { 21652, 0.159 },  -- Silithid Carapace Chestguard
+        { 21645, 0.156 },  -- Hive Tunneler's Boots
+        { 21650, 0.091 },  -- Ancient Qiraji Ripper
+        { 21635, 0.091 },  -- Barb of the Sand Reaver
+        { 22402, 0.09 },  -- Libram of Grace
+        { 22396, 0.071 },  -- Totem of Life
+        { 21232, 0.053 },  -- Imperial Qiraji Armaments
+        { 21237, 0.055 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Viscidus", id = 15299, drops = 3, loot = {
+        { 20932, 0.897 },  -- Qiraji Bindings of Dominance
+        { 20928, 0.886 },  -- Qiraji Bindings of Command
+        { 22399, 0.145 },  -- Idol of Health
+        { 21677, 0.155 },  -- Ring of the Qiraji Fury
+        { 21625, 0.149 },  -- Scarab Brooch
+        { 21626, 0.152 },  -- Slime-coated Leggings
+        { 21622, 0.132 },  -- Sharpened Silithid Femur
+        { 21624, 0.071 },  -- Gauntlets of Kalimdor
+        { 21623, 0.08 },  -- Gauntlets of the Righteous Champion
+        { 21232, 0.057 },  -- Imperial Qiraji Armaments
+        { 21237, 0.052 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Princess Huhuran", id = 15509, drops = 3, loot = {
+        { 20932, 0.89 },  -- Qiraji Bindings of Dominance
+        { 20928, 0.873 },  -- Qiraji Bindings of Command
+        { 21619, 0.162 },  -- Gloves of the Messiah
+        { 21618, 0.157 },  -- Hive Defiler Wristguards
+        { 21620, 0.157 },  -- Ring of the Martyr
+        { 21617, 0.162 },  -- Wasphide Gauntlets
+        { 21621, 0.154 },  -- Cloak of the Golden Hive
+        { 21616, 0.088 },  -- Huhuran's Stinger
+        { 21232, 0.055 },  -- Imperial Qiraji Armaments
+        { 21237, 0.053 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Emperor Vek'lor", id = 15276, drops = 2, loot = {
+        { 20930, 0.82 },  -- Vek'lor's Diadem
+        { 21598, 0.149 },  -- Royal Qiraji Belt
+        { 21600, 0.147 },  -- Boots of Epiphany
+        { 21602, 0.147 },  -- Qiraji Execution Bracers
+        { 21601, 0.144 },  -- Ring of Emperor Vek'lor
+        { 21599, 0.145 },  -- Vek'lor's Gloves of Devastation
+        { 21597, 0.081 },  -- Royal Scepter of Vek'lor
+        { 21232, 0.05 },  -- Imperial Qiraji Armaments
+        { 21237, 0.053 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Emperor Vek'nilash", id = 15275, drops = 2, loot = {
+        { 20926, 0.837 },  -- Vek'nilash's Circlet
+        { 21608, 0.146 },  -- Amulet of Vek'nilash
+        { 21604, 0.147 },  -- Bracelets of Royal Redemption
+        { 21605, 0.151 },  -- Gloves of the Hidden Temple
+        { 21609, 0.155 },  -- Regenerating Belt of Vek'nilash
+        { 21606, 0.084 },  -- Belt of the Fallen Emperor
+        { 21679, 0.082 },  -- Kalimdor's Revenge
+        { 21607, 0.063 },  -- Grasp of the Fallen Emperor
+        { 21232, 0.053 },  -- Imperial Qiraji Armaments
+        { 21237, 0.049 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "Ouro", id = 15517, drops = 3, loot = {
+        { 20931, 0.816 },  -- Skin of the Great Sandworm
+        { 20927, 0.791 },  -- Ouro's Intact Hide
+        { 21611, 0.132 },  -- Burrower Bracers
+        { 23570, 0.134 },  -- Jom Gabbar
+        { 23557, 0.139 },  -- Larvae of the Great Worm
+        { 23558, 0.132 },  -- The Burrower's Shell
+        { 21610, 0.134 },  -- Wormscale Blocker
+        { 21615, 0.13 },  -- Don Rigoberto's Lost Hat
+        { 21232, 0.048 },  -- Imperial Qiraji Armaments
+        { 21237, 0.051 },  -- Imperial Qiraji Regalia
+    } },
+    { name = "C'Thun", id = 15727, drops = 5, loot = {
+        { 20933, 0.933 },  -- Husk of the Old God
+        { 21221, 0.929 },  -- Eye of C'Thun
+        { 20929, 0.914 },  -- Carapace of the Old God
+        { 21583, 0.204 },  -- Cloak of Clarity
+        { 21581, 0.212 },  -- Gauntlets of Annihilation
+        { 22732, 0.189 },  -- Mark of C'Thun
+        { 21586, 0.175 },  -- Belt of Never-ending Agony
+        { 22731, 0.163 },  -- Cloak of the Devoured
+        { 21585, 0.161 },  -- Dark Storm Gauntlets
+        { 22730, 0.167 },  -- Eyestalk Waist Cord
+        { 21582, 0.161 },  -- Grasp of the Old God
+        { 21596, 0.167 },  -- Ring of the Godslayer
+        { 21579, 0.126 },  -- Vanquished Tentacle of C'Thun
+        { 21126, 0.092 },  -- Death's Sting
+        { 21134, 0.079 },  -- Dark Edge of Insanity
+        { 21839, 0.075 },  -- Scepter of the False Prophet
+    } },
+}
+
+function M.Item(id) return M.items[id] end
+
+end; chunk("KingsGambit", SK) end
+-- ===== Tokens.lua =====
+do local chunk = function(...)
+-- King's Gambit: tokens and readiness (Phase 4.5).
+-- Some raids (Ahn'Qiraj) drop tokens instead of gear: a class-group item that is turned in, with
+-- materials and reputation, for a tier piece. Tokens are bid on like gear, under the same rules. What
+-- this module adds is READINESS: can the bidder actually redeem it? Readiness is shown, never enforced
+-- (taking a token you can't redeem yet is your call; mistakes are fixed by correction or by trade), and
+-- it is shared with the raid as a hint only: materials in the bank can't be seen by anyone else.
+--
+-- A bid's readiness is one of:
+--   "ready"     the bidder's addon found everything a turn-in for their class needs
+--   "says"      the bidder says they are ready (e.g. materials in the bank, or no addon: "1 need ready")
+--   "notready"  the bidder's addon looked and something is missing
+--   nil         unknown (not a token, or its requirements aren't in our data yet)
+-- Design: docs/kings-gambit/design-journal.md ("Tokens, readiness, materials, and list scope").
+local _, SK = ...
+local M = SK:NewModule("Tokens")
+
+-- Raid data modules that may hold tokens (items with a `token` field).
+M.SOURCES = { "AQ40" }
+
+M.STATES = { ready = true, says = true, notready = true }
+M.LABELS = { ready = "ready", says = "says ready", notready = "not ready (from bags)" }
+
+-- Reputation standings, as the game numbers them (1 = Hated ... 8 = Exalted).
+M.REACTIONS = { Hated = 1, Hostile = 2, Unfriendly = 3, Neutral = 4, Friendly = 5, Honored = 6, Revered = 7, Exalted = 8 }
+
+local byId, byName
+local function index()
+    if byId then return end
+    byId, byName = {}, {}
+    for _, src in ipairs(M.SOURCES) do
+        local data = SK.modules[src]
+        for id, item in pairs(data and data.items or {}) do
+            if item.token then byId[id] = item; byName[item.name:lower()] = item end
+        end
+    end
+end
+
+-- The token data for an item link ("|Hitem:20928:...|h[...]|h"), item id, or plain name; nil if not a token.
+function M.Find(link)
+    index()
+    if type(link) == "number" then return byId[link] end
+    if type(link) ~= "string" then return nil end
+    local id = tonumber(link:match("item:(%d+)"))
+    if id then return byId[id] end
+    local name = link:match("%[(.-)%]") or link
+    return byName[name:lower()]
+end
+
+-- Forget the index (tests and the simulator swap data in).
+function M.Reset() byId, byName = nil, nil end
+
+-- Can a player of `class` redeem `token` with what they have?
+-- count(itemNameOrId) -> number held; reaction(factionId, factionName) -> 1..8 or nil.
+-- Returns "ready", "notready", or nil when no turn-in for the class is known yet. Any one known turn-in
+-- for the class (e.g. shoulders OR boots) being satisfied is enough. The token itself is not counted:
+-- it is what the bid is for.
+function M.Check(token, class, count, reaction)
+    local turnIns = token and token.token and token.token.turnIns
+    local options = turnIns and turnIns[class]
+    if not options or #options == 0 then return nil end
+    for _, t in ipairs(options) do
+        local ok = true
+        for _, need in ipairs(t.needs or {}) do
+            local what, n = need[1], need[2] or 1
+            if what ~= token.id and what ~= token.name and (count(what) or 0) < n then ok = false end
+        end
+        local rep = t.reputation
+        if ok and rep then
+            local at = reaction and reaction(rep.factionId, rep.faction)
+            if not at or at < (M.REACTIONS[rep.standing] or 99) then ok = false end
+        end
+        if ok then return "ready" end
+    end
+    return "notready"
+end
+
+-- What the bid carries: the addon's finding, or the player's own word when the addon can't see it.
+-- declared = true when the player says they are ready.
+function M.Combine(computed, declared)
+    if computed == "ready" then return "ready" end
+    if declared then return "says" end
+    return computed
+end
+
+-- Readiness for this client's own player, from bags and bank (the bank count is the game's cache).
+function M.Mine(client, token, class, declared)
+    local computed = M.Check(token, class,
+        function(what) return client:itemCount(what, true) end,
+        function(factionId, name) return client:reputation(factionId, name) end)
+    return M.Combine(computed, declared)
+end
+
+function M.Label(state) return state and M.LABELS[state] or "unknown" end
+
+end; chunk("KingsGambit", SK) end
 -- ===== Sim.lua =====
 do local chunk = function(...)
 -- King's Gambit: simulated raids with bot raiders (Phase 4.5, training mode foundation).
@@ -3233,6 +3630,13 @@ function Sim:snapshot()
         snap.items = {}
         for i, it in ipairs(s.items) do
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
+            local rows = s:readiness(it.id)
+            if rows then
+                local Tokens = SK.modules.Tokens
+                local wanted = {}
+                for k, r in ipairs(rows) do wanted[k] = { player = short(r.player), kind = r.kind, ready = r.ready, label = Tokens.Label(r.ready) } end
+                snap.items[i].token = { makes = it.token.token.makes, wanted = wanted }
+            end
         end
         if s.turn then
             snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
@@ -3260,7 +3664,7 @@ function M.RunScenario(sc, opts)
     return sim, passed and true or false, message
 end
 
----------------------------------------------------------------- Molten Core
+---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
 -- A realistic 40-person Alliance raid: class and role for every bot. The learner fills one healer slot.
 local MC_ROSTER = {
     { "WARRIOR", "tank", 3 }, { "WARRIOR", "melee", 5 }, { "ROGUE", "melee", 5 }, { "HUNTER", "hunter", 4 },
@@ -3278,22 +3682,32 @@ local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { heal
 
 local function hasBit(mask, bit) return math.floor(mask / bit) % 2 == 1 end
 
+-- Does an item's role tag ("healer", or several joined with "|", e.g. "caster|healer") include this role?
+local function forRole(item, role)
+    if not (item.role and role) then return false end
+    for r in item.role:gmatch("[^|]+") do if r == role then return true end end
+    return false
+end
+
 -- Would a raider of this class and role want the item, and as main or off-spec?
--- Returns "need", "off" or nil. Deliberately simple: tier pieces by class, other items by role and armor type.
-function M.Wants(MC, item, class, role)
+-- Returns "need", "off" or nil. Deliberately simple: tier pieces and class tokens by class, other items
+-- (and tokens open to everyone) by role and armor type.
+function M.Wants(data, item, class, role)
     if item.classes ~= 0 then
-        local bit = MC.CLASS_BITS[class]
+        local bit = data.CLASS_BITS[class]
         return (bit and hasBit(item.classes, bit)) and "need" or nil
     end
     if item.armor and item.armor ~= ARMOR[class] then return nil end
-    if item.role == role then return "need" end
+    if forRole(item, role) then return "need" end
     local off = OFFSPEC[class] and OFFSPEC[class][role]
-    if off and item.role == off then return "off" end
+    if off and forRole(item, off) then return "off" end
 end
 
--- opts: seed, learner ("You"), learnerClass ("PRIEST"), learnerRole ("healer"), shuffle (default true),
---       chance (probability a raider who could use an item still needs it; default 0.7).
-function M.NewMoltenCore(opts)
+-- data: a raid data module (MoltenCore, AQ40). opts: seed, learner ("You"), learnerClass ("PRIEST"),
+-- learnerRole ("healer"), shuffle (default true), chance (probability a raider who could use an item still
+-- needs it; default 0.7), readiness (for tokens: chances a bot is { ready, says } ready; the rest are not
+-- ready; default { 0.55, 0.2 }).
+function M.NewRaidNight(data, opts)
     opts = opts or {}
     local members, k = {}, 0
     for _, row in ipairs(MC_ROSTER) do
@@ -3306,16 +3720,21 @@ function M.NewMoltenCore(opts)
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
         learnerClass = opts.learnerClass or "PRIEST", learnerRole = opts.learnerRole or "healer",
         shuffle = opts.shuffle ~= false })
-    sim.mc = SK.modules.MoltenCore
+    sim.raid = data
     sim.chance = opts.chance or 0.7
+    sim.readiness = opts.readiness or { 0.55, 0.2 }
     sim.bossIndex = 0
     return sim
 end
 
+function M.NewMoltenCore(opts) return M.NewRaidNight(SK.modules.MoltenCore, opts) end
+-- Ahn'Qiraj: tokens (class-group tier tokens, plus weapon and C'Thun tokens) drop beside gear.
+function M.NewAQ40(opts) return M.NewRaidNight(SK.modules.AQ40, opts) end
+
 -- The next boss (or a named one) dies and rolls its loot from the real table. Returns the boss and the
 -- dropped items ({ id, name, ... }). With hold = true the loot is set aside for a later hand-out.
 function Sim:killBoss(name, hold)
-    local MC = assert(self.mc, "not a Molten Core raid")
+    local MC = assert(self.raid, "not a raid night")
     local boss
     if name then
         for i, b in ipairs(MC.bosses) do if b.name == name then boss, self.bossIndex = b, i end end
@@ -3349,6 +3768,15 @@ function Sim:killBoss(name, hold)
     return boss, dropped
 end
 
+-- A bot's readiness for a token: most dedicated raiders bought their materials; some say so (bank); some
+-- are not ready and bid anyway (their call).
+function Sim:botReadiness()
+    local r, odds = self.client:random(), self.readiness
+    if r < odds[1] then return "ready" end
+    if r < odds[1] + odds[2] then return "says" end
+    return "notready"
+end
+
 -- Put every held item up for loot in one session. The bots answer from their class and role.
 function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
@@ -3357,13 +3785,16 @@ function Sim:handOut(cfg)
     local links, seen = {}, {}
     for i, h in ipairs(held) do links[i], seen[i] = h.item.name, h.seen end
     self.policies = {}
-    for name, info in pairs(self.info) do
+    -- Roster order, never pairs(): random draws must happen in the same order in every process.
+    for _, name in ipairs(self.names) do
+        local info = self.info[name]
         local p = { bid = {}, claim = self.client:random() < 0.3 }
         local wanted = {}
         for _, h in ipairs(held) do
-            local kind = M.Wants(self.mc, h.item, info.class, info.role)
+            local kind = M.Wants(self.raid, h.item, info.class, info.role)
             if kind and self.client:random() < self.chance then
-                wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 }
+                wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 or h.item.token ~= nil,
+                    ready = h.item.token and self:botReadiness() or nil }
             elseif kind then
                 p.bid[h.item.name] = { "pass", passKind = "upgrade" } -- could use it, chose not to spend the spot
             end
@@ -3374,7 +3805,7 @@ function Sim:handOut(cfg)
             if a.tier ~= b.tier then return a.tier end
             return a.link < b.link
         end)
-        for rank, w in ipairs(wanted) do p.bid[w.link] = { w.kind, rank = rank } end
+        for rank, w in ipairs(wanted) do p.bid[w.link] = { w.kind, rank = rank, ready = w.ready } end
         self.policies[name] = p
     end
     self.handedOut = held
@@ -3586,6 +4017,8 @@ local function describe(ev)
         return d.item .. " was disenchanted by " .. short(d.to)
     elseif t == "Revert" then
         return "The last award was undone"
+    elseif t == "CreateList" then
+        return "The " .. tostring(d.name) .. " list was started"
     elseif t == "AddMember" then
         return short(d.member) .. " joined the list"
     elseif t == "Transfer" then
@@ -3614,10 +4047,12 @@ local function state()
     snap.you = "You"
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
-    if sim.mc then
-        local nextBoss = sim.mc.bosses[sim.bossIndex + 1]
-        snap.mc = { next = nextBoss and nextBoss.name or nil, held = {}, killed = sim.bossIndex }
-        for i, h in ipairs(sim.held) do snap.mc.held[i] = h.item.name .. " (" .. h.boss .. ")" end
+    if sim.raid then
+        local bosses = sim.raid.bosses
+        local nextBoss = bosses[sim.bossIndex + 1]
+        snap.night = { next = nextBoss and nextBoss.name or nil, held = {}, killed = sim.bossIndex,
+            last = bosses[#bosses].name, raid = scenario and scenario.title }
+        for i, h in ipairs(sim.held) do snap.night.held[i] = h.item.name .. " (" .. h.boss .. ")" end
     end
     if not s then
         snap.phase, snap.items, snap.players, snap.pending, snap.now = "idle", {}, {}, {}, sim.client:now()
@@ -3636,7 +4071,7 @@ local function state()
         local row = { name = short(n), answers = {} }
         for _, it in ipairs(s.items) do
             local b = s.bids[n] and s.bids[n][it.id]
-            row.answers[#row.answers + 1] = b and { kind = b.kind, to = short(b.to), passKind = b.passKind } or false
+            row.answers[#row.answers + 1] = b and { kind = b.kind, to = short(b.to), passKind = b.passKind, ready = b.ready } or false
         end
         snap.players[#snap.players + 1] = row
     end
@@ -3695,21 +4130,36 @@ end
 ---------------------------------------------------------------- the API
 local api = {}
 
+-- Raid nights: a whole raid with a 40-person roster and real loot from real bosses.
+local NIGHTS = {
+    { id = "mc", title = "Molten Core night", new = Sim.NewMoltenCore,
+      lesson = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest." },
+    { id = "aq40", title = "Ahn'Qiraj night", new = Sim.NewAQ40,
+      lesson = "The Temple of Ahn'Qiraj drops tokens beside gear: each is for a group of classes and is turned in, with materials and reputation, for a tier piece. Tokens are handed out like any item, under the same rules. Each bidder's readiness is shown (ready, says ready, not ready) so the raid can see it, but it is only a hint and never enforced: materials in the bank can't be seen, and taking a token you can't use yet is your own call." },
+}
+
 function api.scenarios()
-    local out = { { id = "mc", title = "Molten Core night", lesson = MC_LESSON } }
+    local out = {}
+    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
     for _, sc in ipairs(Scenarios.list) do out[#out + 1] = { id = sc.id, title = sc.title, lesson = sc.lesson } end
     return out
 end
 
-local MC_LESSON = "A full Molten Core night with a 40-person raid and real loot from real bosses. Kill the bosses in order and hand loot out after each one, or hold it and hand it all out at a break: the same rules apply either way. The raiders answer as their class and role would; you are the Master Looter and a healing priest."
+local function result(ok, why)
+    local s = state()
+    s.ok, s.why = ok and true or false, why
+    return s
+end
 
 function api.start(id, seed)
     seed = tonumber(seed) or 1
-    if id == "mc" then
-        scenario = { id = "mc", title = "Molten Core night", lesson = MC_LESSON }
-        sim = Sim.NewMoltenCore({ seed = seed })
-        startCount = #sim.engine:View().applied
-        return state()
+    for _, n in ipairs(NIGHTS) do
+        if n.id == id then
+            scenario = { id = n.id, title = n.title, lesson = n.lesson }
+            sim = n.new({ seed = seed })
+            startCount = #sim.engine:View().applied
+            return state()
+        end
     end
     scenario = (id == "free") and freeScenario(seed) or Scenarios.find(id)
     if not scenario then return { error = "unknown scenario" } end
@@ -3723,9 +4173,9 @@ end
 
 function api.state() return state() end
 
--- Molten Core: kill the next boss; hold = "1" keeps the loot for a later hand-out.
-function api.mc_kill(hold)
-    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+-- A raid night: kill the next boss; hold = "1" keeps the loot for a later hand-out.
+function api.kill(hold)
+    if not (sim and sim.raid) then return { error = "not a raid night" } end
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
@@ -3733,8 +4183,8 @@ function api.mc_kill(hold)
     return result(boss ~= nil, why)
 end
 
-function api.mc_handout()
-    if not (sim and sim.mc) then return { error = "not a Molten Core night" } end
+function api.handout()
+    if not (sim and sim.raid) then return { error = "not a raid night" } end
     if sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled" then
         return result(false, "finish handing out the current loot first")
     end
@@ -3742,15 +4192,12 @@ function api.mc_handout()
 end
 function api.advance(sec) if sim then sim:advance(tonumber(sec) or 0) end return state() end
 
-local function result(ok, why)
-    local s = state()
-    s.ok, s.why = ok and true or false, why
-    return s
-end
-
+-- kind "needready": need, and you say you can turn the token in.
 function api.bid(itemId, kind, to)
     if to == "" then to = nil end
-    return result(sim.session:bid("You", tonumber(itemId), kind, { to = to }))
+    local ready
+    if kind == "needready" then kind, ready = "need", "says" end
+    return result(sim.session:bid("You", tonumber(itemId), kind, { to = to, ready = ready }))
 end
 
 function api.passAll()
@@ -3966,11 +4413,11 @@ function api.lab_join()
     return labState()
 end
 
--- JS entry point: window.KG(name, a, b) -> JSON string.
-js.global.KG = function(_, name, a, b)
+-- JS entry point: window.KG(name, a, b, c) -> JSON string.
+js.global.KG = function(_, name, a, b, c)
     local fn = api[name]
     if not fn then return encode({ error = "no such call: " .. tostring(name) }) end
-    local ok, res = pcall(fn, a, b)
+    local ok, res = pcall(fn, a, b, c)
     if not ok then return encode({ error = tostring(res) }) end
     return encode(res)
 end
@@ -3980,7 +4427,7 @@ end
 <script>
 (function () {
   const $ = (s) => document.querySelector(s);
-  const call = (name, a, b) => JSON.parse(window.KG(name, a, b));
+  const call = (name, a, b, c) => JSON.parse(window.KG(name, a, b, c));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", backstop: "Backstop", review: "Review", done: "Done", cancelled: "Cancelled" };
 
@@ -3994,8 +4441,8 @@ end
     render();
   }
 
-  function act(name, a, b) {
-    const r = call(name, a, b);
+  function act(name, a, b, c) {
+    const r = call(name, a, b, c);
     if (r.ok === false) lastMsg = "Not allowed: " + (r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -4014,7 +4461,15 @@ end
     if (!a) return '<span class="pill wait">&hellip;</span>';
     if (a.kind === "gift") return '<span class="pill gift">gift &rarr; ' + esc(a.to) + "</span>";
     if (a.kind === "pass") return '<span class="pill pass">pass' + (a.passKind ? " (" + esc(a.passKind) + ")" : "") + "</span>";
-    return '<span class="pill ' + a.kind + '">' + a.kind + "</span>";
+    return '<span class="pill ' + a.kind + '">' + a.kind + (a.ready ? " &middot; " + READY[a.ready] : "") + "</span>";
+  }
+  const READY = { ready: "ready", says: "says ready", notready: "not ready" };
+
+  // A token: what it makes, and who wants it with their readiness (a hint, never enforced).
+  function tokenHtml(it) {
+    if (!it.token) return "";
+    const w = it.token.wanted.length ? it.token.wanted.map((r) => esc(r.player) + " (" + (READY[r.ready] || "unknown") + ")").join(", ") : "nobody yet";
+    return '<div class="small muted">Token: makes ' + esc(it.token.makes).toLowerCase() + ". Wanted by, in list order: " + w + "</div>";
   }
 
   function remaining() {
@@ -4066,9 +4521,10 @@ end
       if (bidding) {
         const a = mine && mine.answers[i];
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
-        ans = '<td><div class="row">' + b("need", "Need") + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
+        ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
       }
-      h += '<tr><td><span class="iname">' + esc(it.link) + "</span></td><td>" + status + "</td>" + ans + "</tr>";
+      h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
     });
     return h + "</table>" + (bidding ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll">Pass on everything</button></div>' : "");
   }
@@ -4102,21 +4558,22 @@ end
     if (p === "bidding") h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review") h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
     if (p === "done") h += '<button data-act="undo">Undo last award</button>';
-    if (st.mc && (p === "idle" || p === "done" || p === "cancelled")) {
-      if (st.mc.next) {
-        h += '<button class="primary" data-act="mc_kill" data-a="0">Kill ' + esc(st.mc.next) + ', hand out now</button>';
-        h += '<button data-act="mc_kill" data-a="1">Kill ' + esc(st.mc.next) + ', hold the loot</button>';
+    const n = st.night;
+    if (n && (p === "idle" || p === "done" || p === "cancelled")) {
+      if (n.next) {
+        h += '<button class="primary" data-act="kill" data-a="0">Kill ' + esc(n.next) + ', hand out now</button>';
+        h += '<button data-act="kill" data-a="1">Kill ' + esc(n.next) + ', hold the loot</button>';
       }
-      if (st.mc.held.length) h += '<button class="primary" data-act="mc_handout">Hand out held loot (' + st.mc.held.length + ')</button>';
-      if (!st.mc.next && !st.mc.held.length) h += '<span class="muted small">Ragnaros is dead. Molten Core is cleared.</span>';
+      if (n.held.length) h += '<button class="primary" data-act="handout">Hand out held loot (' + n.held.length + ')</button>';
+      if (!n.next && !n.held.length) h += '<span class="muted small">' + esc(n.last) + " is dead. The raid is cleared.</span>";
     }
     h += "</div>";
-    if (st.mc && st.mc.held.length) h += '<div class="small muted" style="margin-top:6px">Held: ' + st.mc.held.map(esc).join(", ") + "</div>";
+    if (n && n.held.length) h += '<div class="small muted" style="margin-top:6px">Held: ' + n.held.map(esc).join(", ") + "</div>";
     return h;
   }
 
   function resultHtml() {
-    if (st.phase !== "done" || st.mc) return "";
+    if (st.phase !== "done" || st.night) return "";
     result = result || call("check");
     return '<div class="card ' + (result.ok ? "good" : "bad") + '"><h2>' + (result.ok ? "Matches the lesson" : "Different from the lesson") + "</h2><div>" + esc(result.message || "") +
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
@@ -4210,7 +4667,7 @@ end
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
-      case "bid": act("bid", a, b === "gift" ? giftTo : ""); break;
+      case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);

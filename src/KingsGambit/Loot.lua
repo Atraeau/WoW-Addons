@@ -124,7 +124,9 @@ function Session:start(items)
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
         local s = tonumber(it.seen)
         if not (s and s <= now) then s = now end
-        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s }
+        local Tokens = SK.modules.Tokens
+        self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
+            token = Tokens and Tokens.Find(it.link) or nil }
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
@@ -134,7 +136,8 @@ function Session:start(items)
 end
 
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
--- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most) }.
+-- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most),
+-- ready = "ready" | "says" | "notready" (tokens only: can they redeem it? A hint; never enforced) }.
 function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
@@ -150,7 +153,9 @@ function Session:bid(player, itemId, kind, extra)
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
     if rank and (rank < 1 or rank ~= math.floor(rank)) then return false, "badrank" end
-    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank }
+    local ready
+    if self.items[itemId].token and kind ~= "pass" and SK.modules.Tokens.STATES[extra.ready] then ready = extra.ready end
+    self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank, ready = ready }
     self:emit("bid", { player = player, item = itemId, kind = kind })
     if self:allAnswered() then self:closeBidding() end
     return true
@@ -162,10 +167,11 @@ end
 --   "need"  "off"  "pass"  "gift Name"            (when there is only one item)
 --   "1 need"  "need 1"  "#2 pass"  "2: off"  "1 gift Name"   (item number, either side)
 --   "pass"                                         (several items: passes on all of them)
+--   "1 need ready"                                 (a token: I have what it takes to turn it in)
 local WORDS = { need = "need", n = "need", greed = "off", off = "off", os = "off", offspec = "off",
     ["off-spec"] = "off", pass = "pass", p = "pass", gift = "gift", g = "gift" }
 
--- Returns an array of { item, kind, to } (item may be nil = "all items", only for pass), or
+-- Returns an array of { item, kind, to, ready } (item may be nil = "all items", only for pass), or
 -- nil + a reason ("empty", "unclear", "needitem", "needtarget").
 function M.ParseWhisper(text, itemCount)
     if type(text) ~= "string" then return nil, "empty" end
@@ -174,10 +180,11 @@ function M.ParseWhisper(text, itemCount)
         local words = {}
         for w in part:gmatch("[^%s]+") do words[#words + 1] = w end
         if #words > 0 then
-            local item, kind, to
+            local item, kind, to, ready
             for _, w in ipairs(words) do
                 local num = w:match("^#?(%d+):?$")
                 if num and not item then item = tonumber(num)
+                elseif w == "ready" and not ready then ready = true
                 elseif WORDS[w] and not kind then kind = WORDS[w]
                 elseif kind == "gift" and not to and w:match("^[%a%-']+$") then to = w
                 else return nil, "unclear" end
@@ -189,7 +196,7 @@ function M.ParseWhisper(text, itemCount)
                 elseif kind == "pass" then item = nil -- all items
                 else return nil, "needitem" end
             end
-            answers[#answers + 1] = { item = item, kind = kind, to = to }
+            answers[#answers + 1] = { item = item, kind = kind, to = to, ready = ready }
         end
     end
     if #answers == 0 then return nil, "empty" end
@@ -220,7 +227,7 @@ function Session:handleWhisper(sender, text)
         for _, id in ipairs(ids) do
             local rank
             if a.kind ~= "pass" then rank, nextRank = nextRank, nextRank + 1 end
-            local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank })
+            local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank, ready = a.ready and "says" or nil })
             if ok then
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
@@ -555,6 +562,19 @@ function Session:cancel()
     self.phase = "cancelled"
     self:emit("phase", { phase = "cancelled" })
     return true
+end
+
+-- Who wants a token, in list order, and how ready each says they are: { { player, kind, ready } }.
+-- Shown to everyone as a hint (Tokens.lua); nil if the item is not a token.
+function Session:readiness(itemId)
+    local it = self.items[itemId]
+    if not (it and it.token) then return nil end
+    local out = {}
+    for _, name in ipairs(self.order.main) do
+        local b = self.bids[name] and self.bids[name][itemId]
+        if b and b.kind ~= "pass" then out[#out + 1] = { player = name, kind = b.kind, ready = b.ready } end
+    end
+    return out
 end
 
 -- A snapshot for UIs and tests.

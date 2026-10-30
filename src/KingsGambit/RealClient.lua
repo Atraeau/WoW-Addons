@@ -243,6 +243,22 @@ function M.New(opts)
             bindType = bindType, class = classId, subclass = subclassId, itemType = itemType, itemSubType = itemSubType }
     end
 
+    -- How many of an item (id, name or link) this player has; includeBank uses the game's bank cache.
+    function c:itemCount(what, includeBank)
+        local fn = (E.C_Item and E.C_Item.GetItemCount) or E.GetItemCount
+        if not fn or what == nil then return 0 end
+        local ok, n = pcall(fn, what, includeBank and true or false)
+        return (ok and tonumber(n)) or 0
+    end
+
+    -- This player's standing with a faction: 1 (Hated) .. 8 (Exalted), or nil if unknown.
+    function c:reputation(factionId)
+        local fn = E.C_Reputation and E.C_Reputation.GetFactionDataByID
+        if not fn or not factionId then return nil end
+        local ok, data = pcall(fn, factionId)
+        return ok and type(data) == "table" and tonumber(data.reaction) or nil
+    end
+
     ---------------------------------------------------------------- communication
     function c:registerPrefix(prefix)
         local result = E.C_ChatInfo.RegisterAddonMessagePrefix(prefix)

@@ -55,6 +55,8 @@ so a Sim can disable a capability and the engine can degrade gracefully.
 | `candidates(slot)` | array of names | `GetMasterLootCandidate` over the candidate indexes; the Client hides the index mapping |
 | `give(slot, name)` | `true` or `false, reason` | `GiveMasterLoot`; reasons: `notml`, `gone`, `notcandidate`, `full` |
 | `itemInfo(link)` | `{name, ilvl, equipLoc, bindType, class, subclass}` or nil | `GetItemInfo`; may be nil until cached, so the engine must tolerate it |
+| `itemCount(item, includeBank)` | number | `C_Item.GetItemCount`; `item` is an id, name or link. With `includeBank`, the game's cached bank count is included. Used for token readiness |
+| `reputation(factionId)` | 1 (Hated) .. 8 (Exalted), or nil | `C_Reputation.GetFactionDataByID(id).reaction`. Used for token readiness |
 
 ### Communication
 | Method | Returns | Notes / real API |

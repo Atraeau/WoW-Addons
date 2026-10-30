@@ -21,6 +21,8 @@ Loot.lua
 LootNet.lua
 Commands.lua
 MoltenCore.lua
+AQ40.lua
+Tokens.lua
 Sim.lua
 Scenarios.lua
 UI.lua

@@ -21,6 +21,8 @@ local HELP = {
     "  loot                            start a session from the open loot window (Master Looter)",
     "  resolve | extend [sec] | confirm | cancel | announce      run the session (Master Looter)",
     "  need|off|pass <item#>   gift <item#> <name>      answer for an item (or: bid <item#> <kind> [name])",
+    "  need <item#> ready              a token: you can turn it in (e.g. materials in your bank)",
+    "  ready <item#>                   who wants a token, and how ready each one is (a hint, never enforced)",
     "  pick <item#> | skip | claim [name] | decline     your turn in the draft or the backstop",
     "  sync                            ledger sync status       check   probe the game client",
 }
@@ -203,11 +205,29 @@ function M.New(ctx)
         out("There is no loot session to answer.")
     end
 
-    local function bid(item, kind, to)
+    local Tokens = SK.modules.Tokens
+    local function myClass()
+        for _, m in ipairs(client:roster()) do if m.name == client:me() then return m.class end end
+    end
+    -- The link of item n in the session this machine runs or is answering.
+    local function linkOf(item)
+        local s = hosting()
+        local items = s and s.items or (ctx.player and ctx.player.session and ctx.player.session.items) or {}
+        return items[item] and items[item].link
+    end
+
+    -- declared: the player says they can turn a token in (the addon can't always see the bank).
+    local function bid(item, kind, to, declared)
         item = tonumber(item)
         if not item then return out("Which item? Use its number, e.g. need 1") end
-        act(function(s) return s:bid(client:me(), item, kind, { to = to }) end,
-            function(p) return p:bid(item, kind, to) end)
+        local token = Tokens and Tokens.Find(linkOf(item))
+        local ready
+        if token and kind ~= "pass" then
+            ready = Tokens.Mine(client, token, myClass(), declared)
+            out(("Item %d is a token (%s). Your readiness, shown to the raid as a hint: %s."):format(item, token.token.makes, Tokens.Label(ready)))
+        end
+        act(function(s) return s:bid(client:me(), item, kind, { to = to, ready = ready }) end,
+            function(p) return p:bid(item, kind, to, nil, { ready = ready }) end)
     end
 
     function cmds.bid(args)
@@ -218,13 +238,35 @@ function M.New(ctx)
     for _, kind in ipairs { "need", "off", "pass" } do
         cmds[kind] = function(args)
             local item = args:match("^(%d+)") or (#(hosting() and hosting().items or (ctx.player and ctx.player.session and ctx.player.session.items) or {}) == 1 and "1")
-            bid(item, kind)
+            bid(item, kind, nil, args:lower():find("ready", 1, true) ~= nil)
         end
     end
     function cmds.gift(args)
         local item, to = args:match("^(%d+)%s+(%S+)$")
         if not item then return out("gift <item#> <name>") end
         bid(item, "gift", to)
+    end
+
+    function cmds.ready(args)
+        local item = tonumber(args)
+        if not item then return out("ready <item#>") end
+        local token = Tokens and Tokens.Find(linkOf(item))
+        if not token then return out("Item " .. item .. " is not a token.") end
+        local rows = {}
+        local s = hosting()
+        if s then rows = s:readiness(item) or {}
+        elseif ctx.player and ctx.player.session then
+            local answers = ctx.player.session.answers
+            local main = list("main")
+            for _, n in ipairs(main and main.state.order or {}) do
+                local a = answers[n] and answers[n][item]
+                if a and a.kind ~= "pass" then rows[#rows + 1] = { player = n, kind = a.kind, ready = a.ready } end
+            end
+        end
+        out(("%s (makes: %s). Wanted by, in list order:"):format(linkOf(item), token.token.makes))
+        if #rows == 0 then out("  nobody yet") end
+        for _, r in ipairs(rows) do out(("  %s (%s): %s"):format(short(r.player), r.kind, Tokens.Label(r.ready))) end
+        out("Readiness is a hint: materials in someone's bank can't be seen.")
     end
 
     function cmds.pick(args)
@@ -266,8 +308,14 @@ function M.New(ctx)
     if ctx.player then
         ctx.player.on("session", function(s)
             out(("Loot! %d item(s) from %s:"):format(#s.items, short(s.host)))
-            for _, it in ipairs(s.items) do out(("  %d) %s"):format(it.id, it.link)) end
+            local tokens = false
+            for _, it in ipairs(s.items) do
+                local token = Tokens and Tokens.Find(it.link)
+                tokens = tokens or token ~= nil
+                out(("  %d) %s%s"):format(it.id, it.link, token and (" (token: " .. token.token.makes .. ")") or ""))
+            end
             out("Answer with: need <n>, off <n>, pass <n>, or gift <n> <name>.")
+            if tokens then out("For a token, add 'ready' if you can turn it in but the addon can't see it (e.g. bank): need <n> ready.") end
         end)
         ctx.player.on("turn", function(t)
             if not ctx.player:myTurn() then return end
