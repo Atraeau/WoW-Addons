@@ -174,7 +174,15 @@
         const a = mine && mine.answers[i];
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
-        ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        if (it.youMay === false) {
+          // Your class may not have it: only a pass, and why (and, if it is only the class rule, a way to ask).
+          const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
+          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
+          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="As Master Looter you decide; it is recorded with your reason, like an accepted eligibility request">Make ' + CLS + " eligible&hellip;</button>" : "";
+          ans = '<td><div class="row">' + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
+        } else {
+          ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        }
       }
       h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
     });
@@ -333,6 +341,7 @@
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
+      case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);

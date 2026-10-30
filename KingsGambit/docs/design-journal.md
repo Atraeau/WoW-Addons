@@ -739,6 +739,18 @@ because proficiency was only a hint.
   - A refused bid now points the raider to the request.
 - **Why by class, not spec:** spec is part of the record, but eligibility is by class. The game can check a
   class; a spec can't be checked, and can change at any time.
+- **Not offered, rather than refused (asked by the guild leader).** A bot may still try, and the session refuses
+  it. But a person isn't offered a bid they can't make:
+  - **The simulator page** shows only Pass for such an item, with the reason ("Priests can't wear or wield
+    this", or "Not for Priests (for: Warlock)"). For a class-rule item it adds "Make Priests eligible…": the
+    learner is the Master Looter, so it writes the rule with their reason, like an accepted request.
+  - **The text interface** doesn't send the bid. It says why, and how to ask (`request eligible <item#>
+    <reason>`), and the loot announcement marks such items.
+  - **Whisperers** get the denial, as before.
+  - Once an item is made eligible, its bids are open.
+- **Fixed on the way:** in the simulator, item "links" are plain names, so the session never found the item id,
+  and the guild's rules weren't applied to simulated drops. A session item now carries its item id (the real
+  game's loot link has one, and the simulator passes its own), and rules are looked up by it.
 
 ### Decision: King's Gambit is one self-contained folder (2026-10-30)
 

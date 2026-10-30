@@ -84,11 +84,12 @@ end
 -- Start a loot session for these item links and wire the bots to it.
 -- cfg overrides Loot defaults (bidSeconds, pickSeconds, ...).
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
-function Sim:drop(links, cfg, seen)
+-- ids (optional): each link's item id (the simulator's links are plain names).
+function Sim:drop(links, cfg, seen, ids)
     local drops, items = {}, {}
     for i, link in ipairs(links) do
         drops[i] = { link = link }
-        items[i] = { link = link, slot = i, seen = seen and seen[i] or nil }
+        items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
     self.client:dropLoot(drops)
     local session = Loot.NewSession(self.engine, cfg)
@@ -172,6 +173,12 @@ function Sim:snapshot()
         snap.items = {}
         for i, it in ipairs(s.items) do
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
+            -- May the learner bid on it (need, off-spec, gift)? If not, the page offers only a pass, and says why.
+            local fit = s:fitOf(it.id)
+            local me = self.info[short(self.learner)]
+            local may, why = Loot.MayHave(fit, me and me.class)
+            snap.items[i].youMay, snap.items[i].youWhy = may, why
+            snap.items[i].classes = ItemFit.ClassList(fit or {})
             local rows = s:readiness(it.id)
             if rows then
                 local wanted = {}
@@ -359,9 +366,9 @@ function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
     local held = self.held
     self.held = {}
-    local links, seen = {}, {}
+    local links, seen, ids = {}, {}, {}
     for i, h in ipairs(held) do
-        links[i], seen[i] = h.item.name, h.seen
+        links[i], seen[i], ids[i] = h.item.name, h.seen, h.item.id
         self:teach(h.item)
     end
     self.policies = {}
@@ -389,5 +396,5 @@ function Sim:handOut(cfg)
         self.policies[name] = p
     end
     self.handedOut = held
-    return self:drop(links, cfg, seen)
+    return self:drop(links, cfg, seen, ids)
 end

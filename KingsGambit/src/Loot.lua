@@ -126,6 +126,7 @@ function Session:start(items)
         local s = tonumber(it.seen)
         if not (s and s <= now) then s = now end
         self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
+            itemId = tonumber(it.itemId) or ItemFit.ItemId(it.link),
             token = Tokens and Tokens.Find(it.link) or nil }
         self:fitOf(i)
     end
@@ -156,7 +157,7 @@ function Session:fitOf(i)
     local it = self.items[i]
     if it and (not it.fit or it.fit.partial) then
         -- the guild's rule for this item, set ahead of time by an officer, decides who may bid
-        local rule, suits = ItemFit.Rules(self.engine, it.link)
+        local rule, suits = ItemFit.Rules(self.engine, it.itemId)
         it.fit = ItemFit.Describe(self.client, it.link, it.token, rule, suits) or it.fit
     end
     return it and it.fit

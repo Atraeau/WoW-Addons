@@ -270,3 +270,28 @@ test("a player sees who an item is for; with hints on, who it suits and how it f
     assert(note:find("suits: ") and note:find("Priest"), note)
     assert(note:find("your fit: good %(Holy%)"), note); assert(note:find("off%-spec: "), note)
 end)
+
+test("the text interface doesn't offer a bid the session would refuse: it says why, and how to ask", function()
+    local client = MockClient.New({ name = "Pria", realm = "Realm" })
+    client:setRaid({ { name = "Pria", class = "PRIEST" }, { name = "Wara", class = "WARRIOR" } },
+        { leader = "Pria", lootMethod = "master", masterLooter = "Pria" })
+    client:setItemInfo("item:1", { name = "Legplates", equipLoc = "INVTYPE_LEGS", class = ARMOR, subclass = 4 })
+    client:setItemStats("item:1", { stats = { str = 20 } })
+    client:setItemInfo("item:2", { name = "Mage Robe", equipLoc = "INVTYPE_ROBE", class = ARMOR, subclass = 1 })
+    client:setItemStats("item:2", { stats = { int = 20 }, classes = { "MAGE" } })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, n in ipairs { "Pria", "Wara" } do engine:Append("main", "AddMember", { member = n .. "-Realm" }) end
+    local host = { session = Loot.NewSession(engine, { bidSeconds = 0 }), on = function() end }
+    local cmd = Commands.New({ client = client, engine = engine, host = host })
+    assert(host.session:start({ { link = "item:1" }, { link = "item:2" } }))
+    eq(cmd.itemNote("item:1"), "  [your class can't wear or wield it]")
+    assert(cmd.itemNote("item:2"):find("not for your class yet"), cmd.itemNote("item:2"))
+    client.printed = {}
+    cmd.handle("need 1"); cmd.handle("need 2")
+    local t = table.concat(client.printed, "\n")
+    assert(t:find("Item 1: your class can't wear or wield it, so you can only pass"), t)
+    assert(t:find("Item 2: your class isn't eligible for it"), t); assert(t:find("request eligible 2 <reason>"), t)
+    eq(host.session.bids["Pria-Realm"], nil, "nothing was sent")
+    cmd.handle("pass 1"); eq(host.session.bids["Pria-Realm"][1].kind, "pass")
+end)

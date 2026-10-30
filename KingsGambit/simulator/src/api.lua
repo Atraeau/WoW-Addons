@@ -248,6 +248,29 @@ function api.bid(itemId, kind, to)
     return result(sim.session:bid("You", tonumber(itemId), kind, { to = to, ready = ready }))
 end
 
+-- You are the Master Looter: make your own class eligible for an item restricted to others. It is written to the
+-- ledger as the guild's rule for the item, with your reason, like an accepted eligibility request.
+function api.eligible(itemId, reason)
+    local s = sim.session
+    local it = s and s.items[tonumber(itemId)]
+    if not it then return result(false, "noitem") end
+    if not reason or reason == "" then return result(false, "a reason is required: it goes in the record") end
+    local fit = s:fitOf(it.id)
+    local me = sim.info.You.class
+    local ok, why = S.Loot.MayHave(fit, me)
+    if ok then return result(false, "your class may already bid on it") end
+    if why == "cantequip" then return result(false, "your class can't wear or wield it") end
+    local classes = {}
+    for _, c in ipairs(fit.classes or {}) do classes[#classes + 1] = c end
+    classes[#classes + 1] = me
+    if not it.itemId then return result(false, "this item has no item id") end
+    local ev, err = sim.engine:Write("ItemClasses", { item = it.itemId, classes = classes,
+        reason = reason, requestedBy = sim.learner, class = me, name = it.link })
+    if not ev then return result(false, err) end
+    it.fit = nil -- read the item again, with the new rule
+    return state()
+end
+
 function api.passAll()
     for _, it in ipairs(sim.session.items) do sim.session:bid("You", it.id, "pass") end
     return state()

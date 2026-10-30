@@ -2256,6 +2256,7 @@ function Session:start(items)
         local s = tonumber(it.seen)
         if not (s and s <= now) then s = now end
         self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
+            itemId = tonumber(it.itemId) or ItemFit.ItemId(it.link),
             token = Tokens and Tokens.Find(it.link) or nil }
         self:fitOf(i)
     end
@@ -2286,7 +2287,7 @@ function Session:fitOf(i)
     local it = self.items[i]
     if it and (not it.fit or it.fit.partial) then
         -- the guild's rule for this item, set ahead of time by an officer, decides who may bid
-        local rule, suits = ItemFit.Rules(self.engine, it.link)
+        local rule, suits = ItemFit.Rules(self.engine, it.itemId)
         it.fit = ItemFit.Describe(self.client, it.link, it.token, rule, suits) or it.fit
     end
     return it and it.fit
@@ -4103,11 +4104,12 @@ end
 -- Start a loot session for these item links and wire the bots to it.
 -- cfg overrides Loot defaults (bidSeconds, pickSeconds, ...).
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
-function Sim:drop(links, cfg, seen)
+-- ids (optional): each link's item id (the simulator's links are plain names).
+function Sim:drop(links, cfg, seen, ids)
     local drops, items = {}, {}
     for i, link in ipairs(links) do
         drops[i] = { link = link }
-        items[i] = { link = link, slot = i, seen = seen and seen[i] or nil }
+        items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
     self.client:dropLoot(drops)
     local session = Loot.NewSession(self.engine, cfg)
@@ -4191,6 +4193,12 @@ function Sim:snapshot()
         snap.items = {}
         for i, it in ipairs(s.items) do
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
+            -- May the learner bid on it (need, off-spec, gift)? If not, the page offers only a pass, and says why.
+            local fit = s:fitOf(it.id)
+            local me = self.info[short(self.learner)]
+            local may, why = Loot.MayHave(fit, me and me.class)
+            snap.items[i].youMay, snap.items[i].youWhy = may, why
+            snap.items[i].classes = ItemFit.ClassList(fit or {})
             local rows = s:readiness(it.id)
             if rows then
                 local wanted = {}
@@ -4378,9 +4386,9 @@ function Sim:handOut(cfg)
     if #self.held == 0 then return false, "nothing" end
     local held = self.held
     self.held = {}
-    local links, seen = {}, {}
+    local links, seen, ids = {}, {}, {}
     for i, h in ipairs(held) do
-        links[i], seen[i] = h.item.name, h.seen
+        links[i], seen[i], ids[i] = h.item.name, h.seen, h.item.id
         self:teach(h.item)
     end
     self.policies = {}
@@ -4408,7 +4416,7 @@ function Sim:handOut(cfg)
         self.policies[name] = p
     end
     self.handedOut = held
-    return self:drop(links, cfg, seen)
+    return self:drop(links, cfg, seen, ids)
 end
 
 end; chunk("KingsGambit", SK) end
@@ -4805,6 +4813,29 @@ function api.bid(itemId, kind, to)
     return result(sim.session:bid("You", tonumber(itemId), kind, { to = to, ready = ready }))
 end
 
+-- You are the Master Looter: make your own class eligible for an item restricted to others. It is written to the
+-- ledger as the guild's rule for the item, with your reason, like an accepted eligibility request.
+function api.eligible(itemId, reason)
+    local s = sim.session
+    local it = s and s.items[tonumber(itemId)]
+    if not it then return result(false, "noitem") end
+    if not reason or reason == "" then return result(false, "a reason is required: it goes in the record") end
+    local fit = s:fitOf(it.id)
+    local me = sim.info.You.class
+    local ok, why = S.Loot.MayHave(fit, me)
+    if ok then return result(false, "your class may already bid on it") end
+    if why == "cantequip" then return result(false, "your class can't wear or wield it") end
+    local classes = {}
+    for _, c in ipairs(fit.classes or {}) do classes[#classes + 1] = c end
+    classes[#classes + 1] = me
+    if not it.itemId then return result(false, "this item has no item id") end
+    local ev, err = sim.engine:Write("ItemClasses", { item = it.itemId, classes = classes,
+        reason = reason, requestedBy = sim.learner, class = me, name = it.link })
+    if not ev then return result(false, err) end
+    it.fit = nil -- read the item again, with the new rule
+    return state()
+end
+
 function api.passAll()
     for _, it in ipairs(sim.session.items) do sim.session:bid("You", it.id, "pass") end
     return state()
@@ -5127,7 +5158,15 @@ end
         const a = mine && mine.answers[i];
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
-        ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        if (it.youMay === false) {
+          // Your class may not have it: only a pass, and why (and, if it is only the class rule, a way to ask).
+          const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
+          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
+          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="As Master Looter you decide; it is recorded with your reason, like an accepted eligibility request">Make ' + CLS + " eligible&hellip;</button>" : "";
+          ans = '<td><div class="row">' + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
+        } else {
+          ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
+        }
       }
       h += '<tr><td><span class="iname">' + esc(it.link) + "</span>" + tokenHtml(it) + "</td><td>" + status + "</td>" + ans + "</tr>";
     });
@@ -5286,6 +5325,7 @@ end
       case "toggle": running = !running; render(); renderLab(); break;
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid": act("bid", a, b, b === "gift" ? giftTo : ""); break;
+      case "eligible": { const reason = window.prompt("Why should your class be eligible for this item? (It goes in the record.)"); if (reason) act("eligible", a, reason); break; }
       case "claimGift": act("claim", giftTo); break;
       case "claim": act("claim", ""); break;
       default: act(el.dataset.act, a, b);

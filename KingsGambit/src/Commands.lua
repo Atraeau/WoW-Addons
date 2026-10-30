@@ -2,9 +2,9 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local Standings, ItemFit, Tokens, Requests
-local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Tokens?", "Requests?" }, function(d)
-    Standings, ItemFit, Tokens, Requests = d.Standings, d.ItemFit, d.Tokens, d.Requests
+local Standings, ItemFit, Loot, Tokens, Requests
+local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Tokens?", "Requests?" }, function(d)
+    Standings, ItemFit, Loot, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Tokens, d.Requests
 end)
 
 local WHY = {
@@ -294,6 +294,12 @@ function M.New(ctx)
         local parts = {}
         local classes = ItemFit.ClassList(fit)
         if classes then parts[#parts + 1] = "for: " .. classes .. (fit.rule and " (guild rule)" or "") end
+        local mine = myClass()
+        local may, mayWhy = Loot.MayHave(fit, mine)
+        if not may then
+            parts[#parts + 1] = mayWhy == "cantequip" and "your class can't wear or wield it"
+                or "not for your class yet (you can ask: request eligible <item#> <reason>)"
+        end
         if char.hints then
             local suits = ItemFit.SuitsText(fit)
             if suits then parts[#parts + 1] = "suits: " .. suits .. (fit.suits and " (officer's call)" or "") end
@@ -317,6 +323,16 @@ function M.New(ctx)
     local function bid(item, kind, to, declared)
         item = tonumber(item)
         if not item then return out("Which item? Use its number, e.g. need 1") end
+        -- Only bids the session would take are sent: an item your class may not have takes a pass, or a request.
+        if kind ~= "pass" and linkOf(item) then
+            local may, mayWhy = Loot.MayHave(myFit(linkOf(item)), myClass())
+            if not may then
+                out(("Item %d: %s."):format(item, mayWhy == "cantequip" and "your class can't wear or wield it, so you can only pass"
+                    or "your class isn't eligible for it, so you can only pass"))
+                if mayWhy == "wrongclass" then out(("If you think you should be: request eligible %d <reason>"):format(item)) end
+                return
+            end
+        end
         local token = Tokens and Tokens.Find(linkOf(item))
         local ready
         if token and kind ~= "pass" then

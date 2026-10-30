@@ -254,3 +254,14 @@ test("the Master Looter is a raider like any other: in a raid night they start a
     assert(distinct >= 4, "the learner's starting place varies with the seed")
     eq(Sim.NewRaid({ members = { "A", "B" } }):order()[3], "You", "a training scenario still sets its own layout")
 end)
+test("the guild's rules apply to simulated drops too: an officer's eligibility rule lets the learner bid", function()
+    local sim = Sim.NewMoltenCore({ seed = 1 })
+    local MC = SK.modules.MoltenCore
+    assert(sim.engine:Write("ItemClasses", { item = 16805, classes = { "WARLOCK", "PRIEST" }, reason = "testing" }))
+    sim.held = { { item = MC.items[16805], boss = "Lucifron", seen = sim.client:serverTime() } } -- Felheart Gloves (warlock tier)
+    assert(sim:handOut())
+    assert(sim.session:bid("You", 1, "need"), "a priest may need them now")
+    local mage
+    for _, n in ipairs(sim.names) do if sim.info[n].class == "MAGE" then mage = mage or n end end
+    eq(select(2, sim.session:bid(mage, 1, "need")), "wrongclass")
+end)
