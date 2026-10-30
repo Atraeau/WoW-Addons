@@ -180,15 +180,14 @@ function Session:bid(player, itemId, kind, extra)
     end
     -- In the drafts, an item is only for the classes that may have it: those it names (or the guild's rule names),
     -- and, without a guild rule, only those who can equip it at all (armor type, weapon proficiency). The backstop
-    -- and the disenchanter are not restricted. Gifting doesn't get around it, in either direction.
-    if kind ~= "pass" then
-        local fit = self:fitOf(itemId)
-        local ok, why = M.MayHave(fit, self.class[player])
+    -- and the disenchanter are not restricted. Anyone may gift (win it and hand it on): what matters is who ends up
+    -- with it, so the recipient must be one who may have it.
+    if kind == "need" or kind == "off" then
+        local ok, why = M.MayHave(self:fitOf(itemId), self.class[player])
         if not ok then return false, why end
-        if to then
-            ok, why = M.MayHave(fit, self.class[to])
-            if not ok then return false, why .. "to" end
-        end
+    elseif kind == "gift" then
+        local ok, why = M.MayHave(self:fitOf(itemId), self.class[to])
+        if not ok then return false, why .. "to" end
     end
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)

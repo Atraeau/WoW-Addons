@@ -95,7 +95,10 @@
 
   function act(name, a, b, c) {
     const r = call(name, a, b, c);
-    if (r.ok === false) lastMsg = "Not allowed: " + (r.why || "that action isn't available right now");
+    const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
+      cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
+      cantequip: "your class can't wear or wield it" };
+    if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
     updateMoved();
@@ -175,11 +178,12 @@
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
-          // Your class may not have it: only a pass, and why (and, if it is only the class rule, a way to ask).
+          // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
+          // a way to ask.
           const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
           const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
           const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="As Master Looter you decide; it is recorded with your reason, like an accepted eligibility request">Make ' + CLS + " eligible&hellip;</button>" : "";
-          ans = '<td><div class="row">' + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
+          ans = '<td><div class="row">' + b("gift", "Gift") + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
         }

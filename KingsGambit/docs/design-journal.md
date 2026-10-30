@@ -739,6 +739,10 @@ because proficiency was only a hint.
   - A refused bid now points the raider to the request.
 - **Why by class, not spec:** spec is part of the record, but eligibility is by class. The game can check a
   class; a spec can't be checked, and can change at any time.
+- **Anyone may gift, always (decided by the guild leader).** Gifting is winning an item to hand it on, so what
+  matters is who ends up with it. The giver's class doesn't matter (a mage may win plate legs for a warrior), but
+  the recipient must be eligible for the item (a warrior can't gift a priest's robe to a mage). Gift is offered for
+  every item, on the page and in the text interface.
 - **Not offered, rather than refused (asked by the guild leader).** A bot may still try, and the session refuses
   it. But a person isn't offered a bid they can't make:
   - **The simulator page** shows only Pass for such an item, with the reason ("Priests can't wear or wield

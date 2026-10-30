@@ -297,8 +297,8 @@ function M.New(ctx)
         local mine = myClass()
         local may, mayWhy = Loot.MayHave(fit, mine)
         if not may then
-            parts[#parts + 1] = mayWhy == "cantequip" and "your class can't wear or wield it"
-                or "not for your class yet (you can ask: request eligible <item#> <reason>)"
+            parts[#parts + 1] = mayWhy == "cantequip" and "your class can't wear or wield it (you can gift it)"
+                or "not for your class yet (you can gift it, or ask: request eligible <item#> <reason>)"
         end
         if char.hints then
             local suits = ItemFit.SuitsText(fit)
@@ -323,12 +323,13 @@ function M.New(ctx)
     local function bid(item, kind, to, declared)
         item = tonumber(item)
         if not item then return out("Which item? Use its number, e.g. need 1") end
-        -- Only bids the session would take are sent: an item your class may not have takes a pass, or a request.
-        if kind ~= "pass" and linkOf(item) then
+        -- Only bids the session would take are sent: an item your class may not have takes a pass, a gift to
+        -- someone who may have it, or a request.
+        if (kind == "need" or kind == "off") and linkOf(item) then
             local may, mayWhy = Loot.MayHave(myFit(linkOf(item)), myClass())
             if not may then
-                out(("Item %d: %s."):format(item, mayWhy == "cantequip" and "your class can't wear or wield it, so you can only pass"
-                    or "your class isn't eligible for it, so you can only pass"))
+                out(("Item %d: %s."):format(item, mayWhy == "cantequip" and "your class can't wear or wield it, so you can pass or gift it"
+                    or "your class isn't eligible for it, so you can pass or gift it"))
                 if mayWhy == "wrongclass" then out(("If you think you should be: request eligible %d <reason>"):format(item)) end
                 return
             end

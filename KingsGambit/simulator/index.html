@@ -2310,15 +2310,14 @@ function Session:bid(player, itemId, kind, extra)
     end
     -- In the drafts, an item is only for the classes that may have it: those it names (or the guild's rule names),
     -- and, without a guild rule, only those who can equip it at all (armor type, weapon proficiency). The backstop
-    -- and the disenchanter are not restricted. Gifting doesn't get around it, in either direction.
-    if kind ~= "pass" then
-        local fit = self:fitOf(itemId)
-        local ok, why = M.MayHave(fit, self.class[player])
+    -- and the disenchanter are not restricted. Anyone may gift (win it and hand it on): what matters is who ends up
+    -- with it, so the recipient must be one who may have it.
+    if kind == "need" or kind == "off" then
+        local ok, why = M.MayHave(self:fitOf(itemId), self.class[player])
         if not ok then return false, why end
-        if to then
-            ok, why = M.MayHave(fit, self.class[to])
-            if not ok then return false, why .. "to" end
-        end
+    elseif kind == "gift" then
+        local ok, why = M.MayHave(self:fitOf(itemId), self.class[to])
+        if not ok then return false, why .. "to" end
     end
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
@@ -5079,7 +5078,10 @@ end
 
   function act(name, a, b, c) {
     const r = call(name, a, b, c);
-    if (r.ok === false) lastMsg = "Not allowed: " + (r.why || "that action isn't available right now");
+    const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
+      cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
+      cantequip: "your class can't wear or wield it" };
+    if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
     updateMoved();
@@ -5159,11 +5161,12 @@ end
         const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
-          // Your class may not have it: only a pass, and why (and, if it is only the class rule, a way to ask).
+          // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
+          // a way to ask.
           const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
           const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
           const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="As Master Looter you decide; it is recorded with your reason, like an accepted eligibility request">Make ' + CLS + " eligible&hellip;</button>" : "";
-          ans = '<td><div class="row">' + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
+          ans = '<td><div class="row">' + b("gift", "Gift") + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
         }
