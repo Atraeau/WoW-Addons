@@ -22,7 +22,8 @@ Sim.__index = Sim
 local function short(name) return (name:gsub("%-.*$", "")) end
 
 -- opts: seed, learner (default "You"), members (array of names, or of { name, class, role, spec, offSpec };
---       top of the list first), learnerPosition ("last" default, or "first"), learnerClass, learnerRole,
+--       top of the list first), learnerPosition ("last" default, "first", or "random": the Master Looter is a
+--       raider like any other, so in a raid night they start anywhere), learnerClass, learnerRole,
 --       learnerSpec, learnerOffSpec, shuffle (random order from the seed).
 function M.NewRaid(opts)
     opts = opts or {}
@@ -39,7 +40,9 @@ function M.NewRaid(opts)
             names[i], names[j] = names[j], names[i]
         end
     end
-    if opts.learnerPosition == "first" then table.insert(names, 1, learner) else names[#names + 1] = learner end
+    if opts.learnerPosition == "first" then table.insert(names, 1, learner)
+    elseif opts.learnerPosition == "random" then table.insert(names, client:random(#names + 1), learner)
+    else names[#names + 1] = learner end
 
     local roster, info = {}, {}
     for i, m in ipairs(names) do
@@ -224,39 +227,34 @@ local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { heal
 
 local function hasBit(mask, bit) return math.floor(mask / bit) % 2 == 1 end
 
--- Does an item's role tag ("healer", or several joined with "|", e.g. "caster|healer") include this role?
-local function forRole(item, role)
-    if not (item.role and role) then return false end
-    for r in item.role:gmatch("[^|]+") do if r == role then return true end end
-    return false
-end
-
 -- Would a raider want the item, and as main or off-spec? Returns "need", "off" or nil.
--- Tier pieces and class tokens go by class. With specs (spec, offSpec: ItemFit spec names), everything else
--- goes by how the item's real stats fit them (ItemFit): need if it suits the main spec, off if it suits the
--- off-spec. Items whose stats say nothing (quest items, use effects), and raiders without specs, fall back to
--- the hand-made role tags and armor type.
-function M.Wants(data, item, class, role, spec, offSpec)
+-- Tier pieces and class tokens go by class. Everything else goes by the fit heuristic (ItemFit): need if the
+-- item suits the raider's main spec, off if it suits their off-spec. There is no list of items: the heuristic
+-- judges from stats, use effects and what a token or quest item becomes, and an officer's override (suits:
+-- Engine:ItemSuits) decides where it has been set. Without a spec, the class's first spec with that role is used.
+function M.Wants(data, item, class, role, spec, offSpec, suits)
     if item.classes ~= 0 then
         local bit = data.CLASS_BITS[class]
         return (bit and hasBit(item.classes, bit)) and "need" or nil
     end
-    if spec and item.fit then
-        local main = ItemFit.ForPlayer(item.fit, class, spec)
-        if not main.usable then return nil end
-        if main.rating == "good" then return "need" end
-        local off = offSpec and ItemFit.ForPlayer(item.fit, class, offSpec)
-        if off and off.rating == "good" then return "off" end
-        if main.rating then return nil end -- its stats say something, and it isn't for this raider
-        local o = offSpec and ItemFit.SpecOf(class, offSpec)
-        if forRole(item, role) then return "need" end
-        if o and forRole(item, o.role) then return "off" end
-        return nil
+    if not spec then
+        for _, s in ipairs(ItemFit.SPECS[class] or {}) do if s.role == role and not spec then spec = s.name end end
+        offSpec = offSpec or (OFFSPEC[class] and OFFSPEC[class][role] and (function()
+            for _, s in ipairs(ItemFit.SPECS[class]) do if s.role == OFFSPEC[class][role] then return s.name end end
+        end)())
     end
-    if item.armor and item.armor ~= ARMOR[class] then return nil end
-    if forRole(item, role) then return "need" end
-    local off = OFFSPEC[class] and OFFSPEC[class][role]
-    if off and forRole(item, off) then return "off" end
+    if not (spec and item.fit) then return nil end
+    local fit = item.fit
+    if suits then
+        fit = {}
+        for k, v in pairs(item.fit) do fit[k] = v end
+        fit.suits = suits
+    end
+    local main = ItemFit.ForPlayer(fit, class, spec)
+    if not main.usable then return nil end
+    if main.rating == "good" then return "need" end
+    local off = offSpec and ItemFit.ForPlayer(fit, class, offSpec)
+    if off and off.rating == "good" then return "off" end
 end
 
 -- Tell the simulated game client what an item is, as the real one would: its slot, type and stats, and the
@@ -289,8 +287,17 @@ function M.NewRaidNight(data, opts)
         learnerClass = learnerClass, learnerSpec = learnerSpec,
         learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
         learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
-        shuffle = opts.shuffle ~= false })
+        shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random" })
     sim.raid = data
+    -- The guild's officers have already judged the items the heuristic can't (the learner founded this ledger,
+    -- so they write them), through the same ItemSuits events a real officer's 'suits' command writes.
+    local calls = {}
+    for id in pairs(data.officerCalls or {}) do calls[#calls + 1] = id end
+    table.sort(calls)
+    for _, id in ipairs(calls) do
+        local c = data.officerCalls[id]
+        assert(sim.engine:Write("ItemSuits", { item = id, roles = c.roles, reason = c.reason, name = data.items[id] and data.items[id].name }))
+    end
     sim.chance = opts.chance or 0.7
     sim.readiness = opts.readiness or { 0.55, 0.2 }
     sim.bossIndex = 0
@@ -364,7 +371,7 @@ function Sim:handOut(cfg)
         local p = { bid = {}, claim = self.client:random() < 0.3 }
         local wanted = {}
         for _, h in ipairs(held) do
-            local kind = M.Wants(self.raid, h.item, info.class, info.role, info.spec, info.offSpec)
+            local kind = M.Wants(self.raid, h.item, info.class, info.role, info.spec, info.offSpec, self.engine:ItemSuits(h.item.id))
             if kind and self.client:random() < self.chance then
                 wanted[#wanted + 1] = { link = h.item.name, kind = kind, tier = h.item.classes ~= 0 or h.item.token ~= nil,
                     ready = h.item.token and self:botReadiness() or nil }

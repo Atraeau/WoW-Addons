@@ -26,7 +26,7 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, Declined = true, ItemClasses = true }
+    RaidClose = true, Declined = true, ItemClasses = true, ItemSuits = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
@@ -368,6 +368,7 @@ function M.NewView()
         authApplied = {},  -- authority events applied, in write-time order
         declined = {},     -- recorded declined adjustment requests
         itemRules = {},    -- [itemId] = { classes (nil = any class), by, ts, reason, id }: the guild's eligibility rules
+        itemSuits = {},    -- [itemId] = { roles, by, ts, reason, id }: officers' overrides of who an item suits
         last = nil,        -- the last pass-2 event considered (applied or skipped), and its key
         lastKey = nil,
     }
@@ -383,6 +384,19 @@ local function itemRule(d)
     for _, c in ipairs(d.classes) do
         if not CLASS_TOKENS[c] or seen[c] then return nil end
         seen[c] = true
+    end
+    return true
+end
+
+-- An officer's override of the fit heuristic: { item, roles = { "healer", ... } (empty = back to the heuristic), reason }.
+local ROLES = { tank = true, melee = true, hunter = true, caster = true, healer = true }
+local function itemSuits(d)
+    if type(d.item) ~= "number" or d.item < 1 or d.item ~= math.floor(d.item) then return nil end
+    if type(d.roles) ~= "table" or not isName(d.reason) then return nil end
+    local seen = {}
+    for _, r in ipairs(d.roles) do
+        if not ROLES[r] or seen[r] then return nil end
+        seen[r] = true
     end
     return true
 end
@@ -434,6 +448,17 @@ function M.ApplyToView(view, ev, key)
                     for i, c in ipairs(d.classes) do classes[i] = c end
                 end
                 view.itemRules[d.item] = { classes = classes, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
+            end
+        elseif ev.type == "ItemSuits" then
+            local d = ev.data
+            if not itemSuits(d) then
+                ok, why = nil, "baditemsuits"
+            elseif #d.roles == 0 then
+                view.itemSuits[d.item] = nil
+            else
+                local roles = {}
+                for i, r in ipairs(d.roles) do roles[i] = r end
+                view.itemSuits[d.item] = { roles = roles, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
         elseif not isName(ev.list) then
             ok, why = nil, "nolist"

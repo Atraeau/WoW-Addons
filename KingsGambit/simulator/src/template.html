@@ -16,6 +16,8 @@
   .wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
   h1 { font-size: 22px; margin: 0 0 2px; } h2 { font-size: 14px; margin: 0 0 8px; color: var(--gold); text-transform: uppercase; letter-spacing: .05em; }
   .sub { color: var(--muted); margin: 0 0 14px; }
+  .spec { display: block; color: var(--muted); font-size: 11px; line-height: 1.2; }
+  .tag { font-size: 10px; color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; padding: 0 3px; margin-left: 4px; }
   .layout { display: grid; gap: 16px; grid-template-columns: 220px 1fr 280px; align-items: start; }
   @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
   .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
@@ -64,7 +66,7 @@
 <div class="banner">TRAINING · simulated raid · nothing here touches a real ledger or the game</div>
 <div class="wrap">
   <h1>King's Gambit simulator</h1>
-  <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You"), at the bottom of the list.</p>
+  <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You") and a raider like any other: your place on the list moves as you win, the same as everyone's. Whoever is at the bottom is the salvager.</p>
   <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button></div>
   <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
   <div id="lab" hidden></div>
@@ -182,15 +184,28 @@
   function playersHtml() {
     let h = '<table><tr><th>Who\'s answered</th>' + st.items.map((it) => '<th class="small">' + esc(it.link.split(" ")[0]) + "&hellip;</th>").join("") + "</tr>";
     (st.players || []).forEach((p) => {
-      h += '<tr class="' + (p.name === "You" ? "you" : "") + '"><td>' + esc(p.name) + "</td>" + p.answers.map((a) => "<td>" + chip(a) + "</td>").join("") + "</tr>";
+      h += '<tr class="' + (p.name === "You" ? "you" : "") + '"><td>' + nameHtml(p.name) + "</td>" + p.answers.map((a) => "<td>" + chip(a) + "</td>").join("") + "</tr>";
     });
     return h + "</table>";
+  }
+
+  // Class colors as the game shows them; a raider's class, main spec and off-spec under their name.
+  const CLASS_COLOR = { WARRIOR: "#c79c6e", PALADIN: "#f58cba", HUNTER: "#abd473", ROGUE: "#fff569", PRIEST: "#ffffff",
+    SHAMAN: "#0070de", MAGE: "#69ccf0", WARLOCK: "#9482c9", DRUID: "#ff7d0a" };
+  const CLASS_NAME = { WARRIOR: "Warrior", PALADIN: "Paladin", HUNTER: "Hunter", ROGUE: "Rogue", PRIEST: "Priest",
+    SHAMAN: "Shaman", MAGE: "Mage", WARLOCK: "Warlock", DRUID: "Druid" };
+  function nameHtml(n) {
+    const w = st.who && st.who[n];
+    if (!w || !w.class) return esc(n);
+    return '<span style="color:' + (CLASS_COLOR[w.class] || "inherit") + '">' + esc(n) + "</span>" +
+      '<span class="spec">' + esc((w.spec || "") + " " + CLASS_NAME[w.class]) + (w.off ? " · off: " + esc(w.off) : "") + "</span>";
   }
 
   function standingsHtml(order, title) {
     if (!order || !order.length) return "";
     return '<div class="card"><h2>' + title + '</h2><ol class="stand">' + order.map((n, i) =>
-      '<li class="' + (n === "You" ? "you " : "") + (moved[n] && title === "Standings" ? "moved" : "") + '"><span class="n">' + (i + 1) + "</span><span>" + esc(n) + "</span></li>").join("") + "</ol></div>";
+      '<li class="' + (n === "You" ? "you " : "") + (moved[n] && title === "Standings" ? "moved" : "") + '"><span class="n">' + (i + 1) + "</span><span>" + nameHtml(n) +
+      (i === order.length - 1 && title === "Standings" ? ' <span class="tag">salvager</span>' : "") + "</span></li>").join("") + "</ol></div>";
   }
 
   function pendingHtml() {

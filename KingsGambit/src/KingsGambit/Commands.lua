@@ -32,6 +32,7 @@ local WHY = {
     -- who may bid on an item
     wrongclass = "that item is for other classes", wrongclassto = "the player you are gifting to is not one of the classes the item is for",
     baditemrule = "that rule is not valid (an item id, the classes, and a reason)",
+    baditemsuits = "that override is not valid (an item id, the roles, and a reason)",
 }
 local function why(w) return WHY[w] or tostring(w) end
 
@@ -58,6 +59,7 @@ local HELP = {
     "  history [N]                     the last changes to the list, with who, why, and at whose request",
     "  eligible <item> <classes|any> <reason>   set which classes may bid on an item, before it drops (officers)",
     "  eligible [item]                 show the rule for an item, or every rule   (item: a link or an item id)",
+    "  suits <item> <roles|auto> <reason>   override who an item suits (officers): tank, melee, hunter, caster, healer",
     "  spec <main> [off]               your specs, for fit hints     hints on|off   show how items fit you (default off)",
     "  sync                            ledger sync status       check   probe the game client",
 }
@@ -277,7 +279,8 @@ function M.New(ctx)
     ---------------------------------------------------------------- who may bid, and how an item fits
     local char = client:storage().char
     local function myFit(link)
-        return ItemFit.Describe(client, link, Tokens and Tokens.Find(link), engine:ItemRule(ItemFit.ItemId(link)))
+        local rule, suits = ItemFit.Rules(engine, link)
+        return ItemFit.Describe(client, link, Tokens and Tokens.Find(link), rule, suits)
     end
     -- "  [for: Priest, Mage]" when the item is restricted, plus suggestions when this player wants hints.
     function c.itemNote(link)
@@ -288,7 +291,7 @@ function M.New(ctx)
         if classes then parts[#parts + 1] = "for: " .. classes .. (fit.rule and " (guild rule)" or "") end
         if char.hints then
             local suits = ItemFit.SuitsText(fit)
-            if suits then parts[#parts + 1] = "suits: " .. suits end
+            if suits then parts[#parts + 1] = "suits: " .. suits .. (fit.suits and " (officer's call)" or "") end
             local class = myClass()
             if class then
                 local spec = char.spec and char.spec.main
@@ -578,6 +581,9 @@ function M.New(ctx)
         elseif ev.type == "Transfer" then text = ("%s recorded that %s's item went to %s"):format(by, who or "a winner", short(d.to))
         elseif ev.type == "Declined" then text = ("%s declined %s's request to %s: %s"):format(by, short(d.requestedBy), d.request, d.declineReason)
         elseif ev.type == "Pass" then text = ("%s passed on %s"):format(who, tostring(d.item))
+        elseif ev.type == "ItemSuits" then
+            text = ("%s set who %s suits: %s"):format(by, d.name or ("item " .. tostring(d.item)),
+                #(d.roles or {}) > 0 and table.concat(d.roles, ", ") or "back to the addon's own judgment")
         elseif ev.type == "ItemClasses" then
             local names = {}
             for i, cl in ipairs(d.classes or {}) do names[i] = ItemFit.CLASS_NAMES[cl] or cl end
@@ -593,7 +599,7 @@ function M.New(ctx)
         local n = tonumber(args) or 10
         local rows = {}
         for _, ev in ipairs(engine:View().applied) do
-            if ev.list == "main" or ev.type == "Declined" or ev.type == "ItemClasses" then rows[#rows + 1] = ev end
+            if ev.list == "main" or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits" then rows[#rows + 1] = ev end
         end
         if #rows == 0 then return out("Nothing has happened on the list yet.") end
         out(("The last %d change(s) to the list:"):format(math.min(n, #rows)))
@@ -657,6 +663,46 @@ function M.New(ctx)
         local ev, err = engine:Write("ItemClasses", { item = id, classes = classes, reason = reason, name = itemName })
         if not ev then return out("Not recorded: " .. why(err)) end
         out("Recorded. " .. ruleText(id, engine:ItemRule(id), itemName) .. ". When it drops, only these classes can bid in the drafts.")
+    end
+
+    -- suits <item> <roles|auto> <reason>: override the heuristic's judgment of who an item suits (officers),
+    -- e.g. "suits 18820 caster the Talisman is for damage casters". "auto" goes back to the heuristic.
+    -- suits <item>: what the heuristic says, and any override.
+    local ROLE_WORDS = { tank = true, melee = true, hunter = true, caster = true, healer = true }
+    function cmds.suits(args)
+        local link, rest = args:match("^(|c.-|r)%s*(.-)$")
+        if not link then link, rest = args:match("^(%S+)%s*(.-)$") end
+        local id = ItemFit.ItemId(link)
+        if not id then return out("suits <item> <roles|auto> <reason>  (item: a link or an item id)") end
+        local itemName = link:match("%[(.-)%]")
+        if rest == "" then
+            local o = engine:ItemSuits(id)
+            if o then out(("Officer's call for %s: %s. Set by %s: %s"):format(itemName or ("item " .. id), table.concat(o.roles, ", "), short(o.by), o.reason)) end
+            local fit = myFit(link)
+            local text = fit and ItemFit.SuitsText(fit)
+            if not o then out(("The addon's judgment for %s: %s."):format(itemName or ("item " .. id), text or "its stats say nothing (an officer can say: suits <item> <roles> <reason>)")) end
+            return
+        end
+        local list, reason = rest:match("^(%S+)%s+(.+)$")
+        if not list then return out("suits <item> <roles|auto> <reason>  (a reason is required: it goes in the record)") end
+        local roles = {}
+        if list:lower() ~= "auto" then
+            for word in list:gmatch("[^,]+") do
+                if not ROLE_WORDS[word:lower()] then return out("Unknown role '" .. word .. "'. Roles: tank, melee, hunter, caster, healer, or auto.") end
+                roles[#roles + 1] = word:lower()
+            end
+        end
+        local ok, reasonWhy = engine:MayWrite()
+        if not ok then
+            if reasonWhy == "duringraid" then
+                return out(("A raid is running: only its Master Looter (%s) writes now. Set it after the raid, or ask them."):format(mls()))
+            end
+            return out("Not recorded: " .. why(reasonWhy))
+        end
+        local ev, err = engine:Write("ItemSuits", { item = id, roles = roles, reason = reason, name = itemName })
+        if not ev then return out("Not recorded: " .. why(err)) end
+        out(#roles > 0 and ("Recorded: %s suits %s (officer's call, over the addon's judgment)."):format(itemName or ("item " .. id), table.concat(roles, ", "))
+            or ("Recorded: %s is judged by the addon again."):format(itemName or ("item " .. id)))
     end
 
     function cmds.spec(args)

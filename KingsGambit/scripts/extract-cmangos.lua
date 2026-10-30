@@ -112,29 +112,84 @@ local function fitOf(r)
         stats.dps = math.floor(((r.dmg_min1 + r.dmg_max1) / 2) / (r.delay / 1000) * 10 + 0.5) / 10
     end
     local damage, healing = 0, 0
-    for k = 1, 5 do
-        local s = spellsById[r["spellid_" .. k]]
-        if s and r["spelltrigger_" .. k] == 1 then
-            for e = 1, 3 do
-                local aura, amount, misc = s["EffectApplyAuraName" .. e], (s["EffectBasePoints" .. e] or 0) + 1, s["EffectMiscValue" .. e] or 0
-                if s["Effect" .. e] == 6 then
-                    if aura == 13 then
-                        if misc >= 126 then damage = damage + amount
-                        else for bit, school in pairs(SCHOOL) do if math.floor(misc / bit) % 2 == 1 then add(school, amount) end end end
-                    elseif aura == 135 then healing = healing + amount
-                    elseif aura == 85 and misc == 0 then add("mp5", amount)
-                    elseif aura == 30 and misc == 95 then add("defense", amount)
-                    elseif AURA[aura] then add(AURA[aura], amount) end
-                end
+    -- What a spell gives, times `share`: equip effects count fully; a use effect (trigger 0) or a chance on hit
+    -- (trigger 2) counts for USE_SHARE, a rough uptime. A spell that triggers another (aura 42, "chance on hit:
+    -- ...", or effect 64) is followed one step.
+    local USE_SHARE = 0.3
+    local function give(s, share, depth)
+        if not s or depth > 2 then return end
+        for e = 1, 3 do
+            local effect, aura = s["Effect" .. e], s["EffectApplyAuraName" .. e]
+            local amount, misc = ((s["EffectBasePoints" .. e] or 0) + 1) * share, s["EffectMiscValue" .. e] or 0
+            if effect == 6 then
+                if aura == 13 then
+                    if misc >= 126 then damage = damage + amount
+                    else for bit, school in pairs(SCHOOL) do if math.floor(misc / bit) % 2 == 1 then add(school, amount) end end end
+                elseif aura == 135 then healing = healing + amount
+                elseif aura == 85 and misc == 0 then add("mp5", amount)
+                elseif aura == 30 and misc == 95 then add("defense", amount)
+                elseif aura == 42 then give(spellsById[s["EffectTriggerSpell" .. e]], depth == 0 and USE_SHARE or share, depth + 1)
+                elseif aura == 99 and (s.Stances or 0) ~= 0 then add("feralap", amount) -- attack power in Cat/Bear form only
+                elseif AURA[aura] then add(AURA[aura], amount) end
+            elseif effect == 64 then
+                give(spellsById[s["EffectTriggerSpell" .. e]], share, depth + 1)
             end
         end
     end
+    for k = 1, 5 do
+        local trigger = r["spelltrigger_" .. k]
+        local s = spellsById[r["spellid_" .. k]]
+        if trigger == 1 then give(s, 1, 0)
+        elseif trigger == 0 or trigger == 2 then give(s, USE_SHARE, 1) end
+    end
+    for k, v in pairs(stats) do if k ~= "dps" then stats[k] = math.floor(v * 10 + 0.5) / 10 end end
     -- "+damage and healing" carries both auras with the same amount: that is sp. What is left over is
     -- healing only (heal) or damage only (counted as sp too).
     local both = math.min(damage, healing)
-    add("sp", both + (damage - both)); add("heal", healing - both)
+    add("sp", math.floor((both + (damage - both)) * 10 + 0.5) / 10); add("heal", math.floor((healing - both) * 10 + 0.5) / 10)
     return { slot = EQUIP_LOC[r.InventoryType], class = r.class, subclass = r.subclass, stats = stats }
 end
+
+-- What a drop turns into, for items that are only a step on the way (tokens, quest items, crafting reagents):
+-- the rewards of the quests that ask for it (following a quest chain to its first rewards), and the items made
+-- from it. The fit heuristic judges such an item by what it becomes.
+local questsById = {}
+for _, q in ipairs(tables.quest_template) do questsById[q.entry] = q end
+local nextOf = {}
+for _, q in ipairs(tables.quest_template) do
+    if (q.PrevQuestId or 0) > 0 then nextOf[q.PrevQuestId] = nextOf[q.PrevQuestId] or q.entry end
+end
+local function rewardsOf(q, depth)
+    local out = {}
+    for k = 1, 6 do local id = q["RewChoiceItemId" .. k]; if id and id > 0 then out[#out + 1] = id end end
+    for k = 1, 4 do local id = q["RewItemId" .. k]; if id and id > 0 then out[#out + 1] = id end end
+    if #out == 0 and depth < 6 then
+        local nxt = (q.NextQuestInChain or 0) > 0 and q.NextQuestInChain or nextOf[q.entry]
+        if nxt and questsById[nxt] then return rewardsOf(questsById[nxt], depth + 1) end
+    end
+    return out
+end
+local turnsInto = {}
+local function into(drop, id)
+    if id == drop then return end
+    turnsInto[drop] = turnsInto[drop] or {}
+    for _, x in ipairs(turnsInto[drop]) do if x == id then return end end
+    table.insert(turnsInto[drop], id)
+end
+for _, q in ipairs(tables.quest_template) do
+    for k = 1, 4 do
+        local need = q["ReqItemId" .. k]
+        if drops[need] then for _, id in ipairs(rewardsOf(q, 0)) do into(need, id) end end
+    end
+end
+for _, s in ipairs(tables.spell_template) do
+    if s.Effect1 == 24 and (s.EffectItemType1 or 0) > 0 then -- create item, from reagents
+        for k = 1, 8 do
+            if drops[s["Reagent" .. k]] then into(s["Reagent" .. k], s.EffectItemType1) end
+        end
+    end
+end
+for _, list in pairs(turnsInto) do table.sort(list) end
 
 local quests, needItems = {}, {}
 for _, q in ipairs(tables.quest_template) do
@@ -168,6 +223,7 @@ for _, q in ipairs(tables.quest_template) do
 end
 table.sort(quests, function(a, b) return a.id < b.id end)
 for id in pairs(drops) do needItems[id] = true end
+for _, list in pairs(turnsInto) do for _, id in ipairs(list) do needItems[id] = true end end
 
 local spellNeeded, items = {}, {}
 for id in pairs(needItems) do
@@ -195,6 +251,7 @@ for id in pairs(needItems) do
             startQuest = (r.startquest or 0) > 0 and r.startquest or nil,
             fit = fitOf(r),
         }
+        items[#items].fit.into = turnsInto[id]
     end
 end
 table.sort(items, function(a, b) return a.id < b.id end)

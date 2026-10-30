@@ -13,7 +13,7 @@ includes the hash of the previous event in its chain, so changing or removing a 
 Standings are never stored. They are what you get by replaying every chain's events in **two passes** (section 5):
 
 1. **Authority events** in **write order**: by `ts`, then `chain` (as text), then `seq`.
-2. **List events** (and `Declined`, `ItemClasses`) in **sort-key order**: by key, then `chain`, then `seq`.
+2. **List events** (and `Declined`, `ItemClasses`, `ItemSuits`) in **sort-key order**: by key, then `chain`, then `seq`.
 
 An event's **key** is when its loot became visible: `data.seen` if the event has a valid one, otherwise `ts`, but
 never less than the key of the previous event in the same chain. So a raid that hands loot out at a break is
@@ -81,7 +81,7 @@ The ledger-wide state is: the guild master, the set of officers, and raids (`{ i
 ended by }`). A raid is **active for an event** when the event comes after the `Elevate` that opened it in write order,
 its `ts` is before `expires`, and it comes before the `RaidClose` or `Revoke` that ended it (if any).
 
-A list event, `Declined` or `ItemClasses` is allowed when:
+A list event, `Declined`, `ItemClasses` or `ItemSuits` is allowed when:
 
 - its author is the Master Looter of a raid active for it, or
 - its author was an officer (or the guild master) when it was written and **no** raid is active for it.
@@ -99,6 +99,7 @@ Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
 | `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
 | `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
+| `ItemSuits` | `item` (item id), `roles` (tank, melee, hunter, caster, healer; empty = back to the heuristic), `reason`, `name?` | An officer's override of who an item suits (a suggestion, not a rule). |
 | `ItemClasses` | `item` (item id), `classes` (class tokens, empty = any class), `reason`, `name?` | The guild's rule for who may bid on an item in the drafts; it overrides the item's own "Classes:" line. The latest rule for an item wins. |
 
 ### List events (with `list`)

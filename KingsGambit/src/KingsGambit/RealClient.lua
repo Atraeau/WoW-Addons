@@ -262,6 +262,7 @@ function M.New(opts)
         { "Improves your chance to get a critical strike by (%d+)%%", "crit" },
         { "Restores (%d+) mana per 5 sec", "mp5" },
         { "%+(%d+) ranged Attack Power", "rap" },
+        { "Increases attack power by (%d+) in Cat", "feralap" },
         { "%+(%d+) Attack Power", "ap" },
         { "Increased Defense %+(%d+)", "defense" },
         { "Increases your chance to dodge an attack by (%d+)%%", "dodge" },

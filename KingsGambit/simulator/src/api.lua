@@ -88,6 +88,11 @@ local function state()
     local s = sim.session
     snap.scenario = scenario and scenario.id or "free"
     snap.you = "You"
+    -- every raider's class, main spec and off-spec, so the page can show who is who
+    snap.who = {}
+    for n, info in pairs(sim.info) do
+        snap.who[n] = { class = info.class, spec = info.spec, off = info.offSpec, role = info.role }
+    end
     snap.log = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then

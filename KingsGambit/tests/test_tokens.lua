@@ -27,7 +27,7 @@ test("the AQ40 data is complete and consistent", function()
         for _, entry in ipairs(b.loot) do
             local item = AQ.items[entry[1]]
             assert(item, b.name .. " drops an unknown item " .. entry[1])
-            assert(item.classes ~= 0 or item.role, item.name .. " has neither a class nor a role")
+            assert(item.classes ~= 0 or item.fit, item.name .. " has neither a class nor a fit")
         end
     end
     for _, item in pairs(AQ.items) do if item.token then tokens = tokens + 1; assert(item.token.makes, item.name) end end

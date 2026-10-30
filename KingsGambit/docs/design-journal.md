@@ -674,6 +674,41 @@ so item affinity is really simulated and tested.
 - **Not modeled:** resistance gear (fire resistance for Ragnaros, nature for Huhuran). Those items rank on their
   other stats.
 
+### Decision: item fit is a heuristic, never a list; officers override it (2026-10-30)
+
+**Decided by the guild leader:** who an item suits comes from a heuristic, not a hardcoded list of items, and an
+officer can override the heuristic.
+- **Override.** A new global ledger event, `ItemSuits` (item, roles, reason; no roles = back to the heuristic),
+  set with `suits <item> <roles|auto> <reason>`. Officers set it outside raids, the Master Looter during their
+  raid, and it shows in `history`. An item with an override suits exactly the roles named, among the specs that
+  can use it. Hints mark it "officer's call". It sits beside `ItemClasses`, which is a rule about who may bid;
+  `ItemSuits` is only a suggestion.
+- **The hand-made role tags are gone** from the raid data and the simulator. Every item is judged by heuristic:
+  - **stats and equip effects**, as before;
+  - **use and proc effects**, read from their spell auras (following a proc into the spell it triggers) and
+    counted at 30% for uptime. Talisman of Ephemeral Power reads as spell damage; Jom Gabbar as attack power;
+  - **what an item becomes:**
+    - Tokens are judged by their quest rewards, and quest items by the first rewards along their quest chain.
+      Bindings of the Windseeker (Garr and Baron Geddon) and Essence of the Firelord (Ragnaros) are judged as
+      Thunderfury, which is no drop itself.
+    - Reagents are judged by what is made from them: Eye of Sulfuras and Sulfuron Ingot by Sulfuras and the
+      Sulfuron Hammer.
+    - A spec counts as suited if it's among the best fits for any one of those things, each measured on its own
+      scale. Raw scores of a caster staff and a melee mace can't be compared.
+  - **relics** (libram, idol, totem) suit their one class.
+- **What the heuristic can't judge** (effects that aren't stats: damage shields, absorbs, threat reduction, a
+  summoned tentacle, armor penetration) gets no suggestion. In the simulated guild, its officers have made those
+  calls (`simulator/data/officer-calls.json`: seven trinkets). The simulator writes them into its ledger before a
+  night, through the same `ItemSuits` events a real officer's command writes.
+- **Tuning found along the way:**
+  - Attack power usable only in Cat or Bear form (the Blessed Qiraji War Hammer) counts for feral druids only.
+  - A weapon made for forms, like a caster weapon, counts no weapon damage for anyone.
+  - Base armor on cloaks and jewelry counts for nobody, because it's set by the slot.
+- **The simulator page** shows every raider's class (in class colors), main spec and off-spec under their name, in
+  the answers and the standings, and marks the bottom of the list as the salvager.
+- **The Master Looter is a raider like any other.** In a raid night the learner now starts anywhere on the list,
+  like everyone, and moves as they win. Only the training scenarios set their own layout.
+
 ### Decision: King's Gambit is one self-contained folder (2026-10-30)
 
 **Decided by the guild leader:** everything about King's Gambit lives in one folder of the WoW-Addons repository,

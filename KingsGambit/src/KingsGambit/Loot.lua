@@ -142,7 +142,8 @@ function Session:fitOf(i)
     local it = self.items[i]
     if it and (not it.fit or it.fit.partial) then
         -- the guild's rule for this item, set ahead of time by an officer, decides who may bid
-        it.fit = ItemFit.Describe(self.client, it.link, it.token, self.engine:ItemRule(ItemFit.ItemId(it.link))) or it.fit
+        local rule, suits = ItemFit.Rules(self.engine, it.link)
+        it.fit = ItemFit.Describe(self.client, it.link, it.token, rule, suits) or it.fit
     end
     return it and it.fit
 end

@@ -568,8 +568,18 @@
     [7,11],
     [6,11]
    ],"subclass":0},
-  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17203,"inventoryType":0,"itemLevel":60,"name":"Sulfuron Ingot","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17204,"inventoryType":0,"itemLevel":60,"name":"Eye of Sulfuras","quality":5,"requiredLevel":0,"spells":[
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[223,372,3700],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":80.4,"sta":12,"str":12},"subclass":5},"id":17182,"inventoryType":17,"itemLevel":80,"name":"Sulfuras, Hand of Ragnaros","quality":5,"requiredLevel":60,"resist":{"fire":30},"spells":[
+    [21162,2],
+    [21142,1]
+   ],"stats":[
+    [4,12],
+    [7,12]
+   ],"subclass":5},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[176,295,3700],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":63.6},"subclass":5},"id":17193,"inventoryType":17,"itemLevel":67,"name":"Sulfuron Hammer","quality":4,"requiredLevel":60,"spells":[
+    [21159,2]
+   ],"stats":[],"subclass":5},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"into":[17193,18592],"stats":[],"subclass":0},"id":17203,"inventoryType":0,"itemLevel":60,"name":"Sulfuron Ingot","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"into":[17182],"stats":[],"subclass":0},"id":17204,"inventoryType":0,"itemLevel":60,"name":"Eye of Sulfuras","quality":5,"requiredLevel":0,"spells":[
     [21160,0]
    ],"stats":[],"subclass":0},
   {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":17771,"inventoryType":0,"itemLevel":60,"name":"Elementium Bar","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
@@ -579,16 +589,28 @@
     [3,4]
    ],"subclass":13},
   {"allowableClass":-1,"armor":0,"block":0,"class":7,"fit":{"class":7,"stats":[],"subclass":0},"id":18562,"inventoryType":0,"itemLevel":60,"name":"Elementium Ore","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":18563,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":18564,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"into":[19019],"stats":[],"subclass":0},"id":18563,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":15,"armor":0,"block":0,"class":15,"fit":{"class":15,"into":[19019],"stats":[],"subclass":0},"id":18564,"inventoryType":0,"itemLevel":70,"name":"Bindings of the Windseeker","quality":5,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
   {"allowableClass":2047,"armor":0,"block":0,"class":9,"fit":{"class":9,"stats":[],"subclass":4},"id":18592,"inventoryType":0,"itemLevel":63,"name":"Plans: Sulfuron Hammer","quality":4,"requiredLevel":0,"spells":[
     [23007,0]
    ],"stats":[],"subclass":4},
+  {"allowableClass":16,"armor":0,"block":0,"class":2,"dmg":[134,222,3000],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":59.3,"heal":106,"int":31,"spi":12,"sta":10},"subclass":10},"id":18608,"inventoryType":17,"itemLevel":75,"name":"Benediction","quality":4,"requiredLevel":60,"resist":{"shadow":20},"spells":[
+    [23041,0],
+    [23236,1],
+    [23264,1]
+   ],"stats":[
+    [5,31],
+    [7,10],
+    [6,12]
+   ],"subclass":10},
   {"allowableClass":2047,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":18628,"inventoryType":0,"itemLevel":60,"name":"Thorium Brotherhood Contract","quality":4,"requiredLevel":60,"spells":[],"startQuest":7604,"stats":[],"subclass":0},
-  {"allowableClass":16,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18646,"inventoryType":12,"itemLevel":71,"name":"The Eye of Divinity","quality":4,"requiredLevel":60,"spells":[
+  {"allowableClass":16,"armor":0,"block":0,"class":4,"fit":{"class":4,"into":[18608],"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18646,"inventoryType":12,"itemLevel":71,"name":"The Eye of Divinity","quality":4,"requiredLevel":60,"spells":[
     [23101,1]
    ],"stats":[],"subclass":0},
-  {"allowableClass":4,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":18703,"inventoryType":0,"itemLevel":71,"name":"Ancient Petrified Leaf","quality":4,"requiredLevel":60,"spells":[],"startQuest":7632,"stats":[],"subclass":0},
+  {"allowableClass":4,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[18714],"stats":[],"subclass":0},"id":18703,"inventoryType":0,"itemLevel":71,"name":"Ancient Petrified Leaf","quality":4,"requiredLevel":60,"spells":[],"startQuest":7632,"stats":[],"subclass":0},
+  {"allowableClass":4,"armor":0,"block":0,"class":11,"fit":{"class":11,"stats":[],"subclass":2},"id":18714,"inventoryType":18,"itemLevel":75,"name":"Ancient Sinew Wrapped Lamina","quality":4,"requiredLevel":60,"spells":[
+    [14829,1]
+   ],"stats":[],"subclass":2},
   {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[155,234,2900],"fit":{"class":2,"slot":"INVTYPE_2HWEAPON","stats":{"dps":67.1,"int":24,"mp5":9,"sta":25},"subclass":5},"id":18803,"inventoryType":17,"itemLevel":70,"name":"Finkle's Lava Dredger","quality":4,"requiredLevel":60,"resist":{"fire":15},"spells":[
     [21365,1]
    ],"stats":[
@@ -659,7 +681,7 @@
     [5,9],
     [6,9]
    ],"subclass":3},
-  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":18820,"inventoryType":12,"itemLevel":66,"name":"Talisman of Ephemeral Power","quality":4,"requiredLevel":60,"spells":[
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":{"sp":52.5},"subclass":0},"id":18820,"inventoryType":12,"itemLevel":66,"name":"Talisman of Ephemeral Power","quality":4,"requiredLevel":60,"spells":[
     [23271,0]
    ],"stats":[],"subclass":0},
   {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_FINGER","stats":{"ap":30,"crit":1,"rap":30,"sta":8,"str":5},"subclass":0},"id":18821,"inventoryType":11,"itemLevel":67,"name":"Quick Strike Ring","quality":4,"requiredLevel":60,"spells":[
@@ -746,7 +768,13 @@
    ],"stats":[
     [7,20]
    ],"subclass":0},
-  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":19017,"inventoryType":0,"itemLevel":1,"name":"Essence of the Firelord","quality":1,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[19019],"stats":[],"subclass":0},"id":19017,"inventoryType":0,"itemLevel":1,"name":"Essence of the Firelord","quality":1,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":-1,"armor":0,"block":0,"class":2,"dmg":[44,115,1900],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"agi":5,"dps":41.8,"sta":8},"subclass":7},"id":19019,"inventoryType":13,"itemLevel":80,"name":"Thunderfury, Blessed Blade of the Windseeker","quality":5,"requiredLevel":60,"resist":{"fire":8,"nature":9},"spells":[
+    [21992,2]
+   ],"stats":[
+    [3,5],
+    [7,8]
+   ],"subclass":7},
   {"allowableClass":-1,"armor":61,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_WAIST","stats":{"armor":61,"int":16,"sp":25,"spellcrit":1,"sta":12},"subclass":1},"id":19136,"inventoryType":6,"itemLevel":71,"name":"Mana Igniting Cord","quality":4,"requiredLevel":60,"spells":[
     [15715,1],
     [18384,1]
@@ -832,20 +860,20 @@
   {"allowableClass":1110,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20879,"inventoryType":0,"itemLevel":61,"name":"Idol of Life","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
   {"allowableClass":1102,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20881,"inventoryType":0,"itemLevel":61,"name":"Idol of Strife","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
   {"allowableClass":1037,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20882,"inventoryType":0,"itemLevel":61,"name":"Idol of War","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1219,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20884,"inventoryType":0,"itemLevel":1,"name":"Qiraji Magisterial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20885,"inventoryType":0,"itemLevel":1,"name":"Qiraji Martial Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20886,"inventoryType":0,"itemLevel":1,"name":"Qiraji Spiked Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":284,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20888,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ceremonial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20889,"inventoryType":0,"itemLevel":1,"name":"Qiraji Regal Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20890,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ornate Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":401,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20926,"inventoryType":0,"itemLevel":1,"name":"Vek'nilash's Circlet","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20927,"inventoryType":0,"itemLevel":1,"name":"Ouro's Intact Hide","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":29,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20928,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Command","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20929,"inventoryType":0,"itemLevel":1,"name":"Carapace of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1102,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20930,"inventoryType":0,"itemLevel":1,"name":"Vek'lor's Diadem","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20931,"inventoryType":0,"itemLevel":1,"name":"Skin of the Great Sandworm","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1474,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20932,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Dominance","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":20933,"inventoryType":0,"itemLevel":1,"name":"Husk of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1219,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21393,21396,21399,21408,21414],"stats":[],"subclass":0},"id":20884,"inventoryType":0,"itemLevel":1,"name":"Qiraji Magisterial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21394,21406,21412,21415],"stats":[],"subclass":0},"id":20885,"inventoryType":0,"itemLevel":1,"name":"Qiraji Martial Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21392,21395,21398,21401,21404],"stats":[],"subclass":0},"id":20886,"inventoryType":0,"itemLevel":1,"name":"Qiraji Spiked Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":284,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21402,21405,21411,21417],"stats":[],"subclass":0},"id":20888,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ceremonial Ring","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21397,21400,21403,21409,21418],"stats":[],"subclass":0},"id":20889,"inventoryType":0,"itemLevel":1,"name":"Qiraji Regal Drape","quality":3,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21407,21410,21413,21416],"stats":[],"subclass":0},"id":20890,"inventoryType":0,"itemLevel":1,"name":"Qiraji Ornate Hilt","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":401,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21329,21337,21347,21348],"stats":[],"subclass":0},"id":20926,"inventoryType":0,"itemLevel":1,"name":"Vek'nilash's Circlet","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":153,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21332,21346,21352,21362],"stats":[],"subclass":0},"id":20927,"inventoryType":0,"itemLevel":1,"name":"Ouro's Intact Hide","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":29,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21330,21333,21349,21350,21359,21361,21365,21367],"stats":[],"subclass":0},"id":20928,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Command","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":79,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21331,21364,21370,21374,21389],"stats":[],"subclass":0},"id":20929,"inventoryType":0,"itemLevel":1,"name":"Carapace of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1102,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21353,21360,21366,21372,21387],"stats":[],"subclass":0},"id":20930,"inventoryType":0,"itemLevel":1,"name":"Vek'lor's Diadem","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1350,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21336,21356,21368,21375,21390],"stats":[],"subclass":0},"id":20931,"inventoryType":0,"itemLevel":1,"name":"Skin of the Great Sandworm","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1474,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21335,21338,21344,21345,21354,21355,21373,21376,21388,21391],"stats":[],"subclass":0},"id":20932,"inventoryType":0,"itemLevel":1,"name":"Qiraji Bindings of Dominance","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":1424,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21334,21343,21351,21357],"stats":[],"subclass":0},"id":20933,"inventoryType":0,"itemLevel":1,"name":"Husk of the Old God","quality":4,"requiredLevel":0,"spells":[],"stats":[],"subclass":0},
   {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[95,144,1800],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":38,"dps":66.4,"rap":38,"sta":10},"subclass":15},"id":21126,"inventoryType":13,"itemLevel":84,"name":"Death's Sting","quality":4,"requiredLevel":60,"spells":[
     [15808,1],
     [7574,1]
@@ -867,10 +895,10 @@
     [3,19],
     [7,25]
    ],"subclass":1},
-  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":21220,"inventoryType":0,"itemLevel":60,"name":"Head of Ossirian the Unscarred","quality":4,"requiredLevel":60,"spells":[],"startQuest":8791,"stats":[],"subclass":0},
-  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"stats":[],"subclass":0},"id":21221,"inventoryType":0,"itemLevel":60,"name":"Eye of C'Thun","quality":4,"requiredLevel":60,"spells":[],"startQuest":8801,"stats":[],"subclass":0},
-  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":21232,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Armaments","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
-  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"stats":[],"subclass":0},"id":21237,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Regalia","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21504,21505,21506,21507],"stats":[],"subclass":0},"id":21220,"inventoryType":0,"itemLevel":60,"name":"Head of Ossirian the Unscarred","quality":4,"requiredLevel":60,"spells":[],"startQuest":8791,"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":12,"fit":{"class":12,"into":[21709,21710,21712],"stats":[],"subclass":0},"id":21221,"inventoryType":0,"itemLevel":60,"name":"Eye of C'Thun","quality":4,"requiredLevel":60,"spells":[],"startQuest":8801,"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"into":[21242,21244,21269,21272],"stats":[],"subclass":0},"id":21232,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Armaments","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
+  {"allowableClass":32767,"armor":0,"block":0,"class":15,"fit":{"class":15,"into":[21268,21273,21275],"stats":[],"subclass":0},"id":21237,"inventoryType":0,"itemLevel":60,"name":"Imperial Qiraji Regalia","quality":4,"requiredLevel":60,"spells":[],"stats":[],"subclass":0},
   {"allowableClass":32767,"armor":0,"block":0,"class":2,"dmg":[110,205,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":14,"crit":1,"dps":60.6,"int":10,"rap":14,"sta":9},"subclass":0},"id":21242,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji War Axe","quality":4,"requiredLevel":60,"spells":[
     [7597,1],
     [9142,1]
@@ -885,7 +913,7 @@
    ],"stats":[
     [7,7]
    ],"subclass":15},
-  {"allowableClass":32767,"armor":70,"block":0,"class":2,"dmg":[89,166,2100],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"ap":280,"armor":70,"defense":8,"dps":60.7,"sta":12,"str":10},"subclass":4},"id":21268,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji War Hammer","quality":4,"requiredLevel":60,"spells":[
+  {"allowableClass":32767,"armor":70,"block":0,"class":2,"dmg":[89,166,2100],"fit":{"class":2,"slot":"INVTYPE_WEAPON","stats":{"armor":70,"defense":8,"dps":60.7,"feralap":280,"sta":12,"str":10},"subclass":4},"id":21268,"inventoryType":13,"itemLevel":79,"name":"Blessed Qiraji War Hammer","quality":4,"requiredLevel":60,"spells":[
     [24697,1],
     [13387,1]
    ],"stats":[
@@ -1422,7 +1450,7 @@
     [7,11],
     [3,18]
    ],"subclass":1},
-  {"allowableClass":1024,"armor":0,"block":0,"class":2,"dmg":[67,149,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"agi":7,"ap":140,"dps":41.5,"int":11,"sp":40,"sta":10,"str":9},"subclass":4},"id":21407,"inventoryType":21,"itemLevel":70,"name":"Mace of Unending Life","quality":4,"requiredLevel":60,"spells":[
+  {"allowableClass":1024,"armor":0,"block":0,"class":2,"dmg":[67,149,2600],"fit":{"class":2,"slot":"INVTYPE_WEAPONMAINHAND","stats":{"agi":7,"dps":41.5,"feralap":140,"int":11,"sp":40,"sta":10,"str":9},"subclass":4},"id":21407,"inventoryType":21,"itemLevel":70,"name":"Mace of Unending Life","quality":4,"requiredLevel":60,"spells":[
     [18056,1],
     [26153,1]
    ],"stats":[
@@ -1650,7 +1678,7 @@
     [5,29],
     [7,18]
    ],"subclass":1},
-  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":21473,"inventoryType":12,"itemLevel":74,"name":"Eye of Moam","quality":3,"requiredLevel":60,"spells":[
+  {"allowableClass":32767,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":{"sp":15},"subclass":0},"id":21473,"inventoryType":12,"itemLevel":74,"name":"Eye of Moam","quality":3,"requiredLevel":60,"spells":[
     [26166,0]
    ],"stats":[],"subclass":0},
   {"allowableClass":32767,"armor":151,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_SHOULDER","stats":{"agi":25,"armor":151,"sta":7,"str":11},"subclass":2},"id":21474,"inventoryType":3,"itemLevel":74,"name":"Chitinous Shoulderguards","quality":3,"requiredLevel":60,"spells":[],"stats":[
@@ -2442,7 +2470,7 @@
   {"allowableClass":2047,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":23558,"inventoryType":12,"itemLevel":81,"name":"The Burrower's Shell","quality":4,"requiredLevel":60,"spells":[
     [29506,0]
    ],"stats":[],"subclass":0},
-  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":[],"subclass":0},"id":23570,"inventoryType":12,"itemLevel":81,"name":"Jom Gabbar","quality":4,"requiredLevel":60,"spells":[
+  {"allowableClass":-1,"armor":0,"block":0,"class":4,"fit":{"class":4,"slot":"INVTYPE_TRINKET","stats":{"ap":19.5,"rap":19.5},"subclass":0},"id":23570,"inventoryType":12,"itemLevel":81,"name":"Jom Gabbar","quality":4,"requiredLevel":60,"spells":[
     [29602,0]
    ],"stats":[],"subclass":0}
  ],"quests":[
@@ -3075,6 +3103,9 @@
     {"amount":20,"aura":135,"effect":6,"misc":126}
    ],"id":14799,"name":"Increase Spell Dam 20"},
   {"effects":[
+    {"amount":15,"aura":141,"effect":6,"misc":0}
+   ],"id":14829,"name":"Haste"},
+  {"effects":[
     {"amount":3,"aura":15,"effect":6,"misc":0}
    ],"id":15438,"name":"Thorns"},
   {"effects":[
@@ -3231,6 +3262,9 @@
     {"amount":1,"aura":71,"effect":6,"misc":126}
    ],"id":18384,"name":"Increased Critical Spell"},
   {"effects":[
+    {"amount":5,"aura":15,"effect":6,"misc":0}
+   ],"id":21142,"name":"Immolation"},
+  {"effects":[
     {"amount":75,"aura":0,"effect":2,"misc":0},
     {"amount":-25,"aura":29,"effect":6,"misc":-1}
    ],"id":21151,"name":"Gutgore Ripper"},
@@ -3241,8 +3275,16 @@
     {"amount":-700,"aura":123,"effect":6,"misc":1}
    ],"id":21153,"name":"Bonereaver's Edge"},
   {"effects":[
+    {"amount":83,"aura":0,"effect":2,"misc":0},
+    {"amount":4,"aura":3,"effect":6,"misc":0}
+   ],"id":21159,"name":"Fireball"},
+  {"effects":[
     {"amount":1,"aura":0,"effect":24,"misc":0}
    ],"id":21160,"name":"Eye of Sulfuras"},
+  {"effects":[
+    {"amount":273,"aura":0,"effect":2,"misc":0},
+    {"amount":15,"aura":3,"effect":6,"misc":0}
+   ],"id":21162,"name":"Fireball"},
   {"effects":[
     {"amount":100,"aura":0,"effect":9,"misc":0}
    ],"id":21170,"name":"Drain Life"},
@@ -3316,6 +3358,11 @@
     {"amount":15,"aura":85,"effect":6,"misc":0}
    ],"id":21643,"name":"Increased Mana Regen"},
   {"effects":[
+    {"amount":-25,"aura":22,"effect":6,"misc":8},
+    {"amount":300,"aura":0,"effect":2,"misc":0},
+    {"amount":1,"aura":0,"effect":64,"misc":0}
+   ],"id":21992,"name":"Thunderfury"},
+  {"effects":[
     {"amount":30,"aura":138,"effect":6,"misc":0}
    ],"id":22640,"name":"Eskhandar's Rage"},
   {"effects":[
@@ -3325,6 +3372,9 @@
     {"amount":1,"aura":0,"effect":36,"misc":0}
    ],"id":23007,"name":"Plans: Sulfuron Hammer"},
   {"effects":[
+    {"amount":1,"aura":0,"effect":34,"misc":0}
+   ],"id":23041,"name":"Call Anathema"},
+  {"effects":[
     {"amount":1000,"aura":19,"effect":6,"misc":4}
    ],"id":23101,"name":"Eye of Divinity"},
   {"effects":[
@@ -3333,6 +3383,12 @@
   {"effects":[
     {"amount":16,"aura":161,"effect":6,"misc":0}
    ],"id":23210,"name":"Vitality"},
+  {"effects":[
+    {"amount":2,"aura":107,"effect":6,"misc":7}
+   ],"id":23236,"name":"Benediction"},
+  {"effects":[
+    {"amount":106,"aura":135,"effect":6,"misc":126}
+   ],"id":23264,"name":"Increase Healing 106"},
   {"effects":[
     {"amount":13,"aura":15,"effect":6,"misc":0}
    ],"id":23266,"name":"Fiery Aura"},

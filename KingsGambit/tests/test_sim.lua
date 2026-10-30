@@ -87,18 +87,34 @@ test("the Molten Core data is complete and consistent", function()
         for _, entry in ipairs(b.loot) do
             local item = MC.items[entry[1]]
             assert(item, b.name .. " drops an unknown item " .. entry[1])
-            assert(item.classes ~= 0 or item.role, item.name .. " has neither a class nor a role")
+            assert(item.classes ~= 0 or item.fit, item.name .. " has neither a class nor a fit")
         end
     end
     eq(MC.items[17076].name, "Bonereaver's Edge"); eq(MC.items[16863].name, "Gauntlets of Might")
 end)
-test("who wants what follows class, armor and role", function()
-    local function wants(id, class, role) return Sim.Wants(MC, MC.items[id], class, role) end
-    eq(wants(16863, "WARRIOR", "tank"), "need", "tier gloves for a warrior"); eq(wants(16863, "PALADIN", "healer"), nil)
-    eq(wants(17109, "PRIEST", "healer"), "need", "healer neck"); eq(wants(17109, "MAGE", "caster"), nil)
-    eq(wants(18875, "PRIEST", "healer"), nil, "leather healer legs are not for a priest")
-    eq(wants(18875, "DRUID", "tank"), "off", "but a tank druid takes them as off-spec")
-    eq(wants(17066, "WARRIOR", "melee"), "off", "a dps warrior wants the tank shield as off-spec")
+test("who wants what follows class, spec and the item's real stats (no list of items)", function()
+    local function wants(id, class, spec, off) return Sim.Wants(MC, MC.items[id], class, nil, spec, off) end
+    eq(wants(16863, "WARRIOR", "Protection"), "need", "tier gloves for a warrior"); eq(wants(16863, "PALADIN", "Holy"), nil)
+    eq(wants(17109, "PRIEST", "Holy"), "need", "Choker of Enlightenment: healing"); eq(wants(17109, "MAGE", "Fire"), "need", "and spell damage")
+    eq(wants(17109, "WARRIOR", "Fury"), nil)
+    eq(wants(17066, "WARRIOR", "Fury", "Protection"), "off", "Drillborer Disk: a dps warrior's off-spec tank shield")
+    eq(wants(18816, "ROGUE", "Combat"), "need", "Perdition's Blade"); eq(wants(18816, "PRIEST", "Holy"), nil)
+    eq(wants(17103, "MAGE", "Frost"), "need", "Azuresong Mageblade is a caster sword"); eq(wants(17103, "WARRIOR", "Fury"), nil)
+end)
+test("items that only become something are judged by what they become: the Bindings by Thunderfury", function()
+    local function wants(id, class, spec) return Sim.Wants(MC, MC.items[id], class, nil, spec) end
+    for _, id in ipairs { 18563, 18564, 19017 } do -- Bindings of the Windseeker (Geddon, Garr), Essence of the Firelord
+        eq(wants(id, "WARRIOR", "Fury"), "need", MC.items[id].name); eq(wants(id, "MAGE", "Fire"), nil, MC.items[id].name)
+    end
+    eq(wants(17204, "PALADIN", "Retribution"), "need", "Eye of Sulfuras: Sulfuras, a two-handed mace")
+end)
+test("where the heuristic can't judge an item, an officer's call decides, from the ledger", function()
+    local sim = Sim.NewMoltenCore({ seed = 1 })
+    local shard = sim.engine:ItemSuits(17082) -- Shard of the Flame
+    eq(shard.roles[1], "tank"); assert(shard.reason:find("for tanks"))
+    eq(Sim.Wants(MC, MC.items[17082], "WARRIOR", nil, "Protection", nil, shard), "need")
+    eq(Sim.Wants(MC, MC.items[17082], "WARRIOR", nil, "Protection"), nil, "without the call, nobody")
+    eq(Sim.Wants(MC, MC.items[17082], "MAGE", nil, "Fire", nil, shard), nil)
 end)
 test("a full Molten Core night, one boss at a time, ends cleanly", function()
     local sim = Sim.NewMoltenCore({ seed = 3 })
@@ -187,7 +203,7 @@ local function night(sim, data)
             if it.tier == "main" or it.tier == "off" then
                 local item = sim.handedOut[i].item
                 local info = sim.info[(it.winner:gsub("%-.*$", ""))]
-                local want = Sim.Wants(data, item, info.class, info.role, info.spec, info.offSpec)
+                local want = Sim.Wants(data, item, info.class, info.role, info.spec, info.offSpec, sim.engine:ItemSuits(item.id))
                 if it.winner ~= sim.learner then
                     eq(want, it.tier == "main" and "need" or "off",
                         ("%s (%s) won on %s by a %s %s"):format(item.name, it.tier, boss.name, info.spec, info.class))
@@ -226,4 +242,15 @@ test("item stats come from the CMaNGOS database: every raid item can be judged",
     end
     local choker = SK.modules.MoltenCore.items[17109].fit.stats -- Choker of Enlightenment
     eq(choker.int, 10); eq(choker.spi, 10); eq(choker.sta, 9); eq(choker.sp, 18)
+end)
+test("the Master Looter is a raider like any other: in a raid night they start anywhere on the list", function()
+    local places = {}
+    for seed = 1, 6 do
+        local sim = Sim.NewMoltenCore({ seed = seed })
+        for i, n in ipairs(sim:order()) do if n == "You" then places[i] = true end end
+    end
+    local distinct = 0
+    for _ in pairs(places) do distinct = distinct + 1 end
+    assert(distinct >= 4, "the learner's starting place varies with the seed")
+    eq(Sim.NewRaid({ members = { "A", "B" } }):order()[3], "You", "a training scenario still sets its own layout")
 end)

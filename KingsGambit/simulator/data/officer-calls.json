@@ -1,0 +1,12 @@
+{
+ "source": "The simulated guild's officers: their overrides of the item-fit heuristic (ItemSuits events), for the raid items whose effect is not a stat, so the heuristic can't judge them (damage shields, absorbs, threat reduction, summons, armor penetration). The simulator writes them into its ledger before a raid night, through the same path a real officer's 'suits' command uses. Roles: tank, melee, hunter, caster, healer.",
+ "calls": {
+  "18815": [["tank"], "Essence of the Pure Flame: a fire damage shield, for whoever is being hit"],
+  "17082": [["tank"], "Shard of the Flame: health regeneration and a stamina use effect, for tanks"],
+  "21625": [["healer"], "Scarab Brooch: heals leave an absorb shield"],
+  "21647": [["melee", "hunter"], "Fetish of the Sand Reaver: threat reduction for physical damage"],
+  "23558": [["tank"], "The Burrower's Shell: an absorb, for tanks"],
+  "21579": [["melee", "hunter"], "Vanquished Tentacle of C'Thun: a summoned tentacle that adds physical damage"],
+  "21670": [["melee", "hunter"], "Badge of the Swarmguard: armor penetration on hit"]
+ }
+}

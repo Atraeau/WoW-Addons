@@ -7,11 +7,15 @@
 --     and the Master Looter or disenchanter who gets what nobody took, are not restricted. See Allowed.
 --   * FIT (a suggestion, never a rule): how well the item's stats match each spec, from the baked-in priorities
 --     below plus armor and weapon proficiency. It feeds hints (off by default), the "suits" line, and bots.
+--     It is a heuristic, with no list of items: an officer can override it for an item (the ledger's ItemSuits
+--     event: which roles it suits, and why), and the override then decides.
 --
 -- An item, as this module sees it (Describe builds it from the game):
---   { link, slot = equipLoc, class = item class id, subclass = id, stats = { [key] = value }, classes = { "PRIEST", ... } | nil }
+--   { link, slot = equipLoc, class = item class id, subclass = id, stats = { [key] = value }, classes = { "PRIEST", ... } | nil,
+--     into = { item, ... } | nil (what a token, quest item or reagent becomes; it is judged by those) }
 -- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap (in 1.12 "+X Attack Power"
---            is both: ap and rap; "+X ranged Attack Power" is rap only) dps (a weapon's damage per
+--            is both: ap and rap; "+X ranged Attack Power" is rap only; feralap is attack power in Cat and Bear form
+--            only) dps (a weapon's damage per
 --            second; a spec's weights value it as `dps` on a melee weapon and `rangedDps` on a bow, gun, crossbow,
 --            thrown weapon or wand)
 --            sp (damage and healing) heal (healing only) spellhit spellcrit mp5, and school damage:
@@ -74,8 +78,9 @@ M.SPECS = {
     },
     DRUID = {
         { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4, rangedDps = 0.5 } },
-        { name = "Feral (bear)", role = "tank", weights = w { sta = 1, armor = 0.05, agi = 0.8, defense = 1, dodge = 12, str = 0.4, hit = 6 } },
-        { name = "Feral (cat)", role = "melee", weights = w { agi = 1, str = 1, ap = 0.5, crit = 14, hit = 12 } },
+        { name = "Feral (bear)", role = "tank", weights = w { sta = 1, armor = 0.05, agi = 0.8, defense = 1, dodge = 12, str = 0.4, hit = 6,
+            feralap = 0.3 } },
+        { name = "Feral (cat)", role = "melee", weights = w { agi = 1, str = 1, ap = 0.5, crit = 14, hit = 12, feralap = 0.5 } },
         { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1, rangedDps = 0.3 } },
     },
 }
@@ -124,16 +129,25 @@ end
 -- game hasn't cached it yet (and no rule names its classes). token (optional): Tokens data, whose class group
 -- restricts it. rule (optional): the guild's rule for the item (Engine:ItemRule), which decides who may bid,
 -- over what the item itself says.
-function M.Describe(client, link, token, rule)
+-- suits (optional): an officer's override of the heuristic (Engine:ItemSuits): { roles = { "healer", ... } }.
+function M.Describe(client, link, token, rule, suits)
     local info = client:itemInfo(link)
     local st = client:itemStats(link)
-    if not info and not token and not rule then return nil end
+    if not info and not token and not rule and not suits then return nil end
     info = info or {}
     local item = { link = link, slot = info.equipLoc, class = info.class, subclass = info.subclass,
         stats = (st and st.stats) or {}, classes = st and st.classes, partial = not info.equipLoc and not token }
     if token then item.classes = M.ClassesFromMask(token.classes); item.token = true end
     if rule then item.classes, item.rule = rule.classes, rule end
+    if suits then item.suits = suits end
     return item
+end
+
+-- The guild's rules for an item, from the ledger: its class rule and the officers' override of its fit.
+function M.Rules(engine, link)
+    local id = M.ItemId(link)
+    if not (engine and id) then return nil, nil end
+    return engine:ItemRule(id), engine:ItemSuits(id)
 end
 
 -- The item id in a link ("|Hitem:19019:...") or a plain id, or nil.
@@ -178,11 +192,13 @@ local ARMOR_MATTERS = { tank = true, melee = true, hunter = true }
 local RANGED = { [2] = true, [3] = true, [16] = true, [18] = true, [19] = true }
 local CASTER_STATS = { sp = true, heal = true, int = true, spi = true, mp5 = true, spellhit = true, spellcrit = true,
     fire = true, frost = true, shadow = true, arcane = true, nature = true, holy = true }
-local PHYSICAL_STATS = { str = true, agi = true, ap = true, rap = true, hit = true, crit = true }
+local PHYSICAL_STATS = { str = true, agi = true, ap = true, rap = true, hit = true, crit = true, feralap = true }
 -- A weapon whose stats are all for spellcasting (a caster's staff, sword or dagger) is not a melee weapon,
--- whatever its damage: nobody counts its damage per second. Wands are always for casters.
+-- whatever its damage: nobody counts its damage per second. Wands are always for casters. Nor is one made for
+-- druids' forms (feral attack power): in a form, weapon damage doesn't count.
 local function casterWeapon(item)
     if item.subclass == 19 then return false end
+    if item.stats and item.stats.feralap then return true end
     local caster, physical = false, false
     for k in pairs(item.stats or {}) do
         if CASTER_STATS[k] then caster = true elseif PHYSICAL_STATS[k] then physical = true end
@@ -190,11 +206,30 @@ local function casterWeapon(item)
     return caster and not physical
 end
 function M.Score(item, spec, class)
+    if item.suits then -- an officer's override: the roles it names, and no others
+        for _, r in ipairs(item.suits.roles) do if r == spec.role then return 1 end end
+        return 0
+    end
+    if item.into and #item.into > 0 then
+        -- A step on the way (a token, quest item or reagent): judged by each thing it becomes on that thing's own
+        -- scale (its score for this spec, as a share of its best spec's score), and the best of those. Raw scores
+        -- of a caster staff and a melee mace can't be compared; shares can.
+        local best = 0
+        for _, r in ipairs(item.into) do
+            if M.CanUse(r, class) then
+                r.best = r.best or M.Best(r)
+                local s = r.best > 0 and M.Score(r, spec, class) / r.best or 0
+                if s > best then best = s end
+            end
+        end
+        return best
+    end
     local total = 0
     local weapon = item.class == WEAPON
     local ranged, noDps = weapon and RANGED[item.subclass], weapon and casterWeapon(item)
     for k, v in pairs(item.stats or {}) do
         local wgt = spec.weights[k] or 0
+        if k == "armor" and ANY_ARMOR_SLOT[item.slot] then wgt = 0 end -- a cloak's or ring's armor is set by its slot
         if k == "dps" then
             if noDps then wgt = 0
             elseif ranged then wgt = spec.weights.rangedDps or 0
@@ -206,7 +241,23 @@ function M.Score(item, spec, class)
         local rank = ARMOR_RANK[item.subclass]
         if rank and rank < BEST_ARMOR[class] then total = total * 0.6 end
     end
+    -- A relic (libram, idol, totem) whose effect isn't a stat is for its one class, whatever the spec.
+    if total == 0 and item.class == ARMOR and (item.subclass == 7 or item.subclass == 8 or item.subclass == 9) then return 1 end
     return total
+end
+
+-- The best score any spec that can use the item gets (0 if its stats say nothing).
+function M.Best(item)
+    local best = 0
+    for _, class in ipairs(M.CLASSES) do
+        if M.CanUse(item, class) then
+            for _, s in ipairs(M.SPECS[class]) do
+                local v = M.Score(item, s, class)
+                if v > best then best = v end
+            end
+        end
+    end
+    return best
 end
 
 -- Every spec that can use the item, best first: { { class, spec, role, score } }.

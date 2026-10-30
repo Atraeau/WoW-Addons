@@ -5,8 +5,9 @@
 
 .DESCRIPTION
     mc-raw.json holds Molten Core's epic drops per boss as collected from Wowhead Classic (item id, name,
-    slot, item class/subclass, required-class mask, observed drop rate). This script adds a role tag to
-    every item that is not class-restricted (which raiders would want it), works out how many epics each
+    slot, item class/subclass, required-class mask, observed drop rate). This script adds each item as the
+    fit heuristic sees it (stats, and what a quest item or reagent becomes, from cmangos.json), the simulated
+    officers' calls for items the heuristic can't judge (officer-calls.json), works out how many epics each
     boss drops per kill from the observed rates, and writes a Lua module the simulator and scenarios use.
 #>
 [CmdletBinding()]
@@ -18,40 +19,20 @@ $raw = Get-Content (Join-Path $repo 'simulator/data/mc-raw.json') -Raw | Convert
 $cm = Get-Content (Join-Path $repo 'simulator/data/cmangos.json') -Raw | ConvertFrom-Json
 $cmItems = @{}
 foreach ($i in $cm.items) { $cmItems[[int]$i.id] = $i }
-function FitLua([int]$id) {
+function FitLua([int]$id, [bool]$inner = $false) {
     $it = $cmItems[$id]
     if (-not $it -or -not $it.fit) { return 'nil' }
     $f = $it.fit
     $stats = if ($f.stats -is [array]) { "" } else { ($f.stats.PSObject.Properties | Sort-Object Name | ForEach-Object { "$($_.Name) = $([double]$_.Value)" }) -join ', ' }
     $slot = if ($f.slot) { "`"$($f.slot)`"" } else { 'nil' }
-    "{ slot = $slot, class = $([int]$f.class), subclass = $([int]$f.subclass), stats = { $stats } }"
+    $into = ''
+    if ($f.into -and -not $inner) {
+        $parts = @($f.into | ForEach-Object { FitLua ([int]$_) $true } | Where-Object { $_ -ne 'nil' })
+        if ($parts.Count) { $into = ", into = { " + ($parts -join ', ') + " }" }
+    }
+    "{ slot = $slot, class = $([int]$f.class), subclass = $([int]$f.subclass), stats = { $stats }$into }"
 }
 
-# Who wants each item that is not class-restricted. Roles: tank, melee, hunter, caster, healer.
-# Quest and crafting items are tagged by who uses them. These tags are judgment calls, easy to edit.
-$roles = @{
-    'Choker of Enlightenment' = 'healer'; 'Robe of Volatile Power' = 'healer'; 'Manastorm Leggings' = 'healer'
-    'Salamander Scale Pants' = 'healer'; 'Helm of the Lifegiver' = 'healer'; 'Aurastone Hammer' = 'healer'
-    'Seal of the Archmagus' = 'healer'; 'Staff of Dominance' = 'healer'; 'Magma Tempered Boots' = 'healer'
-    'Deep Earth Spaulders' = 'healer'; 'Hyperthermically Insulated Lava Dredger' = 'healer'; 'Fireproof Cloak' = 'healer'
-    'Gloves of the Hypnotic Flame' = 'healer'; 'Wild Growth Spaulders' = 'healer'; 'Band of Sulfuras' = 'healer'
-    "Malistar's Defender" = 'healer'; 'Sash of Whispered Secrets' = 'healer'; 'The Eye of Divinity' = 'healer'
-    'Crimson Shocker' = 'caster'; 'Ring of Spell Power' = 'caster'; 'Sorcerous Dagger' = 'caster'
-    'Mana Igniting Cord' = 'caster'; 'Fire Runed Grimoire' = 'caster'; 'Talisman of Ephemeral Power' = 'caster'
-    'Azuresong Mageblade' = 'caster'; 'Cauterizing Band' = 'caster'; 'Choker of the Fire Lord' = 'caster'
-    'Earthshaker' = 'melee'; "Eskhandar's Right Claw" = 'melee'; 'Brutality Blade' = 'melee'; 'Gutgore Ripper' = 'melee'
-    'Obsidian Edged Blade' = 'melee'; 'Quick Strike Ring' = 'melee'; 'Aged Core Leather Gloves' = 'melee'
-    'Flameguard Gauntlets' = 'melee'; 'Wristguards of Stability' = 'melee'; 'Shadowstrike' = 'melee'
-    'Core Hound Tooth' = 'melee'; 'Band of Accuria' = 'melee'; "Bonereaver's Edge" = 'melee'; 'Spinal Reaper' = 'melee'
-    "Perdition's Blade" = 'melee'; 'Onslaught Girdle' = 'melee'; 'Cloak of the Shrouded Mists' = 'melee'
-    'Bindings of the Windseeker' = 'melee'; 'Eye of Sulfuras' = 'melee'; 'Essence of the Firelord' = 'melee'
-    'Medallion of Steadfast Might' = 'tank'; 'Drillborer Disk' = 'tank'; 'Heavy Dark Iron Ring' = 'tank'
-    'Flamewaker Legplates' = 'tank'; 'Core Forged Greaves' = 'tank'; "Dragon's Blood Cape" = 'tank'
-    'Essence of the Pure Flame' = 'tank'; 'Shard of the Flame' = 'tank'; 'Fireguard Shoulders' = 'tank'
-    "Striker's Mark" = 'hunter'; 'Blastershot Launcher' = 'hunter'; 'Wristguards of True Flight' = 'hunter'
-    'Crown of Destruction' = 'hunter'; 'Sabatons of the Flamewalker' = 'hunter'; 'Ancient Petrified Leaf' = 'hunter'
-    'Sulfuron Ingot' = 'crafter'
-}
 $classBits = [ordered]@{ WARRIOR = 1; PALADIN = 2; HUNTER = 4; ROGUE = 8; PRIEST = 16; SHAMAN = 64; MAGE = 128; WARLOCK = 256; DRUID = 1024 }
 # Armor subclass by item class 4: 1 cloth, 2 leather, 3 mail, 4 plate.
 $armor = @{ 1 = 'cloth'; 2 = 'leather'; 3 = 'mail'; 4 = 'plate' }
@@ -69,12 +50,11 @@ W 'local M = SK:NewModule("MoltenCore")'
 W ''
 W ('M.CLASS_BITS = { ' + (($classBits.GetEnumerator() | ForEach-Object { "$($_.Key) = $($_.Value)" }) -join ', ') + ' }')
 W ''
-W '-- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), role, fit }'
+W '-- items[id] = { id, name, slot, armor ("cloth"|"leather"|"mail"|"plate"|nil), classes (bitmask, 0 = any), fit }'
 W '-- fit: the item as ItemFit sees it (slot, item class, subclass, stats), from the CMaNGOS world database'
-W '-- (simulator/data/cmangos.json). role: a hand-made tag, used where the stats say nothing (quest items, use effects).'
+W '-- (simulator/data/cmangos.json).'
 W 'M.items = {'
 $seen = @{}
-$untagged = @()
 foreach ($b in $raw.bosses) {
     foreach ($i in $b[2]) {
         $id = [int]$i[0]
@@ -83,9 +63,8 @@ foreach ($b in $raw.bosses) {
         $name = [string]$i[1]
         $cls = [int]$i[4]; $sub = [int]$i[5]; $mask = [int]$i[6]
         $arm = if ($cls -eq 4 -and $armor.ContainsKey($sub)) { "`"$($armor[$sub])`"" } else { 'nil' }
-        $role = if ($mask -ne 0 -and $mask -ne 15) { 'nil' } elseif ($roles.ContainsKey($name)) { Q $roles[$name] } else { $untagged += $name; 'nil' }
-        if ($mask -eq 15) { $mask = 0 } # Bindings: listed as usable by several classes; treat as role-tagged
-        W ("    [$id] = { id = $id, name = $(Q $name), slot = $([int]$i[3]), armor = $arm, classes = $mask, role = $role, fit = $(FitLua $id) },")
+        if ($mask -eq 15) { $mask = 0 } # Bindings: listed as usable by several classes; judged by what they become
+        W ("    [$id] = { id = $id, name = $(Q $name), slot = $([int]$i[3]), armor = $arm, classes = $mask, fit = $(FitLua $id) },")
     }
 }
 W '}'
@@ -103,8 +82,19 @@ foreach ($b in $raw.bosses) {
 }
 W '}'
 W ''
+# The simulated guild's officers' overrides of the fit heuristic, for items in this raid (officer-calls.json).
+$calls = (Get-Content (Join-Path $repo 'simulator/data/officer-calls.json') -Raw | ConvertFrom-Json).calls
+W '-- The simulated guild''s officers'' overrides of the fit heuristic (simulator/data/officer-calls.json), for items'
+W '-- whose effect is not a stat. The simulator records them in its ledger (ItemSuits) before a raid night.'
+W 'M.officerCalls = {'
+foreach ($p in $calls.PSObject.Properties | Sort-Object { [int]$_.Name }) {
+    if (-not $seen.ContainsKey([int]$p.Name)) { continue }
+    $rolesLua = ($p.Value[0] | ForEach-Object { Q $_ }) -join ', '
+    W ("    [$($p.Name)] = { roles = { $rolesLua }, reason = $(Q $p.Value[1]) },")
+}
+W '}'
+W ''
 W 'function M.Item(id) return M.items[id] end'
 $out = Join-Path $repo 'src/KingsGambit/MoltenCore.lua'
 [System.IO.File]::WriteAllText($out, $sb.ToString(), [System.Text.UTF8Encoding]::new($false))
 Write-Host "Wrote $out ($($seen.Count) items, $($raw.bosses.Count) bosses)"
-if ($untagged.Count) { Write-Warning ("No role tag for: " + ($untagged -join ', ')) }
