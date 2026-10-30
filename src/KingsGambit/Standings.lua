@@ -47,6 +47,21 @@ local function placement(s, order, d, default)
     return nil, "badpos"
 end
 
+-- A position as a person types it ("top", "bottom" or a number) as an anchor: { to = "top"|"bottom" } or
+-- { above = whoever holds that place now, not counting `moving` }. Numbers are never stored, because their
+-- meaning would shift as other raids' events arrive. Returns the anchor, or nil + reason ("badpos").
+function M.Anchor(s, pos, moving)
+    if pos == "top" or pos == "bottom" then return { to = pos } end
+    local n = tonumber(pos)
+    if not (n and s) or n < 1 or n ~= math.floor(n) then return nil, "badpos" end
+    local others = {}
+    for _, member in ipairs(s.order) do
+        if member ~= moving then others[#others + 1] = member end
+    end
+    if n > #others then return { to = "bottom" } end
+    return { above = others[n] }
+end
+
 local handlers = {}
 
 function handlers.CreateList(s, ev, d)

@@ -512,6 +512,57 @@ not anticipate raids or dungeons. Focus is on functionality.
   it isn't, a token falls back to the player's own word ("says ready"). Class restrictions on tokens are read from
   the item, like any other item.
 
+### Built: the dispute path (2026-10-30)
+
+The ledger already enforced who may write (one Master Looter per raid; officers only outside raids), but nothing in
+the interface used it: no command opened a raid, so a Master Looter who wasn't an officer couldn't record anything,
+and an officer's edit during a raid failed with a bare "duringraid".
+- **Raid authority commands.** `raid open [name] [hours]` (officers; writes Elevate, default 4 hours),
+  `raid extend`, `raid revoke [name]` (officers), `raid close` (the Master Looter), `raid` (who is Master Looter,
+  for how long), `officers [set ...]` (the guild master). `loot` refuses to start a session its Master Looter
+  couldn't record, and says who can open the raid.
+- **Requests** (`Requests.lua`). During a raid, anyone, officer or raider, can ask the Master Looter for a change,
+  always with a reason: move, undo, add, remove, award (a win that wasn't recorded) and gift (the item went to
+  someone else). The Master Looter answers `accept <n>` or `decline <n> <reason>`.
+  - **Accepted:** the change is written by the Master Looter, carrying `requestedBy`, the request id and the reason.
+  - **Declined:** a `Declined` event, with the reason.
+  - **Both are in the ledger**, so the outcome reaches the requester (and the player affected, who is told why
+    their place changed) the way every event does. A lost whisper can't lose a decision.
+- **Choice made while building it: raiders may send requests, not only officers.** The design only named officers,
+  but a raider's dispute ("my need bid was missed") is the commonest conflict, and with this it is raised,
+  answered and recorded, instead of argued in chat. The Master Looter still decides.
+- **Protections:**
+  - The requester's name is the whisper's sender as the game reports it, so it can't be forged.
+  - Each player has at most 3 requests waiting at a time.
+  - A request is re-sent until acknowledged, and repeats are ignored.
+  - Waiting requests survive a /reload.
+  - Closing a raid with requests waiting asks first, because once it is closed the Master Looter can't answer
+    them.
+- **Seen by everyone:** `history [N]` lists recent changes with who made them, why, and at whose request,
+  declined requests included. `requests` shows the waiting ones and recent decisions.
+- **Undo, as built:** only the Master Looter's own most recent award can be undone directly. If the list has moved
+  since, the accept fails and the request stays waiting, so the Master Looter declines it and asks for a move
+  instead. The "wrong winner" case is an undo followed by an award.
+- **Bug found in the simulator's network** (not in the addon): re-attaching a player after a /reload stepped
+  their clock twice per tick, so their messages left "in the future". Fixed; a test reloads a Master Looter
+  mid-raid.
+- **Tested** (`test_requests.lua`, 14 scenarios over the simulated network):
+  - an officer pointed to requests during a raid;
+  - an accepted request, a declined one, and the wrong winner put right;
+  - an undo that came too late;
+  - a gift correction;
+  - lossy and duplicated messages;
+  - a Master Looter's reload;
+  - nobody to ask: no raid, no addon on the other end, or the wrong person;
+  - flooding and forged requests;
+  - closing a raid with requests waiting, and revoking a Master Looter;
+  - two raids at once.
+- **Still open:**
+  - Officers taken from the game's guild ranks: `officers set` is the manual stand-in until the rank flag is
+    checked in game (Nov 4).
+  - Requests to an officer when no raid is running: today the requester is told to ask in chat.
+  - Requests to other lists, once list scope exists.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

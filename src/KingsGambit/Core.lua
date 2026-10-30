@@ -31,9 +31,11 @@ local function Start()
     sync:start()
     local host = M.LootNet.NewHost(sync, engine)
     local player = M.LootNet.NewPlayer(sync)
-    SK.client, SK.engine, SK.sync, SK.host, SK.player = client, engine, sync, host, player
+    local requests = M.Requests.New(sync, engine)
+    SK.client, SK.engine, SK.sync, SK.host, SK.player, SK.requests = client, engine, sync, host, player, requests
     SK.db, SK.char = client:storage().account, client:storage().char
-    SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player, selfcheck = M.SelfCheck })
+    SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player,
+        requests = requests, selfcheck = M.SelfCheck })
     for _, m in pairs(M) do
         if m.OnInit then m:OnInit() end
     end

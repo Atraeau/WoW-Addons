@@ -19,6 +19,7 @@ Sync.lua
 SelfCheck.lua
 Loot.lua
 LootNet.lua
+Requests.lua
 Commands.lua
 MoltenCore.lua
 AQ40.lua

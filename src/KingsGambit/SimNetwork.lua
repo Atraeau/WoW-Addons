@@ -27,13 +27,14 @@ function M.New(opts)
     }
 
     -- name must equal the client's me(). o: { guild = true, raid = true } channel membership.
+    -- Attaching a name again (a player who reloaded) replaces its node; it is still stepped once per tick.
     function net:attach(client, o)
         o = o or {}
         local name = client:me()
         local node = { name = name, client = client, guild = o.guild ~= false, raid = o.raid ~= false,
             offset = client:now() - self.time }
+        if not self.nodes[name] then self.order[#self.order + 1] = name end
         self.nodes[name] = node
-        self.order[#self.order + 1] = name
         client.onSend = function(_, msg) self:route(node, msg) end
         return node
     end
