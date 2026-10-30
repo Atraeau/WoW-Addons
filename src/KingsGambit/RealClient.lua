@@ -7,9 +7,8 @@
 -- unverified assumptions to confirm in the dungeon field test.
 -- Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
 local _, SK = ...
-local M = SK:NewModule("RealClient")
-local Hash = SK.modules.Hash
-local Client = SK.modules.Client
+local Hash, Client
+local M = SK:NewModule("RealClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 

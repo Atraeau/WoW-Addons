@@ -4,9 +4,8 @@
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
 -- Design: docs/kings-gambit/client-interface.md
 local _, SK = ...
-local M = SK:NewModule("MockClient")
-local Hash = SK.modules.Hash
-local Client = SK.modules.Client
+local Hash, Client
+local M = SK:NewModule("MockClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 local PM_MOD = 2147483647 -- Park-Miller: state * 16807 stays below 2^53, so it is exact

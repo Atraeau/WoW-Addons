@@ -10,7 +10,8 @@
 -- nothing is written to the ledger until confirm(). Winners drop to the bottom of the
 -- scratch order exactly as the ledger will replay them.
 local _, SK = ...
-local M = SK:NewModule("Loot")
+local Tokens
+local M = SK:NewModule("Loot", { "Tokens?" }, function(d) Tokens = d.Tokens end)
 
 local DEFAULTS = {
     listId = "main",
@@ -124,7 +125,6 @@ function Session:start(items)
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
         local s = tonumber(it.seen)
         if not (s and s <= now) then s = now end
-        local Tokens = SK.modules.Tokens
         self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
             token = Tokens and Tokens.Find(it.link) or nil }
     end
@@ -154,7 +154,7 @@ function Session:bid(player, itemId, kind, extra)
     local rank = tonumber(extra.rank)
     if rank and (rank < 1 or rank ~= math.floor(rank)) then return false, "badrank" end
     local ready
-    if self.items[itemId].token and kind ~= "pass" and SK.modules.Tokens.STATES[extra.ready] then ready = extra.ready end
+    if self.items[itemId].token and kind ~= "pass" and Tokens and Tokens.STATES[extra.ready] then ready = extra.ready end
     self.bids[player][itemId] = { kind = kind, to = to, passKind = extra.passKind, rank = rank, ready = ready }
     self:emit("bid", { player = player, item = itemId, kind = kind })
     if self:allAnswered() then self:closeBidding() end

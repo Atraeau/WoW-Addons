@@ -20,8 +20,8 @@
 --   award    member, item, to?    record a win that wasn't recorded (e.g. a hand-over that failed)
 --   gift     member, to           the item that player last won actually went to someone else (no position change)
 local _, SK = ...
-local M = SK:NewModule("Requests")
-local Standings = SK.modules.Standings
+local Standings
+local M = SK:NewModule("Requests", { "Standings" }, function(d) Standings = d.Standings end)
 
 M.LIST = "main"
 M.MAX_REASON = 200

@@ -6,6 +6,7 @@
 ## SavedVariables: KingsGambitDB
 ## SavedVariablesPerCharacter: KingsGambitCharDB
 
+Registry.lua
 Core.lua
 Hash.lua
 Standings.lua

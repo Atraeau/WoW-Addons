@@ -12,10 +12,14 @@
 --   nil         unknown (not a token, or its requirements aren't in our data yet)
 -- Design: docs/kings-gambit/design-journal.md ("Tokens, readiness, materials, and list scope").
 local _, SK = ...
-local M = SK:NewModule("Tokens")
-
--- Raid data modules that may hold tokens (items with a `token` field).
-M.SOURCES = { "AQ40" }
+-- Raid data modules that may hold tokens (items with a `token` field). Optional dependencies: without them a
+-- token's readiness is the player's own word.
+local SOURCES, sources, deps = { "AQ40" }, {}, {}
+for i, name in ipairs(SOURCES) do deps[i] = name .. "?" end
+local M = SK:NewModule("Tokens", deps, function(d)
+    for _, name in ipairs(SOURCES) do sources[name] = d[name] end
+end)
+M.SOURCES = SOURCES
 
 M.STATES = { ready = true, says = true, notready = true }
 M.LABELS = { ready = "ready", says = "says ready", notready = "not ready (from bags)" }
@@ -28,7 +32,7 @@ local function index()
     if byId then return end
     byId, byName = {}, {}
     for _, src in ipairs(M.SOURCES) do
-        local data = SK.modules[src]
+        local data = sources[src]
         for id, item in pairs(data and data.items or {}) do
             if item.token then byId[id] = item; byName[item.name:lower()] = item end
         end

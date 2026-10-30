@@ -3,8 +3,10 @@
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local M = SK:NewModule("Sim")
-local MockClient, Engine, Loot = SK.modules.MockClient, SK.modules.Engine, SK.modules.Loot
+local MockClient, Engine, Loot, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.Tokens, d.MoltenCore, d.AQ40
+end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
 
@@ -167,7 +169,6 @@ function Sim:snapshot()
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
             local rows = s:readiness(it.id)
             if rows then
-                local Tokens = SK.modules.Tokens
                 local wanted = {}
                 for k, r in ipairs(rows) do wanted[k] = { player = short(r.player), kind = r.kind, ready = r.ready, label = Tokens.Label(r.ready) } end
                 snap.items[i].token = { makes = it.token.token.makes, wanted = wanted }
@@ -262,9 +263,9 @@ function M.NewRaidNight(data, opts)
     return sim
 end
 
-function M.NewMoltenCore(opts) return M.NewRaidNight(SK.modules.MoltenCore, opts) end
+function M.NewMoltenCore(opts) return M.NewRaidNight(MoltenCore, opts) end
 -- Ahn'Qiraj: tokens (class-group tier tokens, plus weapon and C'Thun tokens) drop beside gear.
-function M.NewAQ40(opts) return M.NewRaidNight(SK.modules.AQ40, opts) end
+function M.NewAQ40(opts) return M.NewRaidNight(AQ40, opts) end
 
 -- The next boss (or a named one) dies and rolls its loot from the real table. Returns the boss and the
 -- dropped items ({ id, name, ... }). With hold = true the loot is set aside for a later hand-out.

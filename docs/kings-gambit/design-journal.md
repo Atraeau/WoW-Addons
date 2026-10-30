@@ -563,6 +563,28 @@ and an officer's edit during a raid failed with a bare "duringraid".
   - Requests to an officer when no raid is running: today the requester is told to ask in chat.
   - Requests to other lists, once list scope exists.
 
+### Decision: dependency injection for modules, not load order (2026-10-30)
+
+**Decided by the guild leader.** Modules used to capture each other when their file loaded
+(`local Hash = SK.modules.Hash`), so they only worked if the TOC listed them in the right order, and the same
+ordered list was kept in four places (two TOCs, the test harness, the simulator build). Some also looked modules up
+mid-function, which hid what they depended on.
+- `Registry.lua` (loaded first: the only file whose place matters) holds the registry. A module declares what it
+  uses, `SK:NewModule("Ledger", { "Hash", "Standings" }, function(d) ... end)`, and receives it from
+  `SK:Resolve()`, each module after its own dependencies.
+- **A missing dependency or a cycle stops startup with an error that names it**, instead of failing later as a nil.
+- **A name ending in "?" is optional.** Raid data is: `Tokens`, `Loot` and `Sim` take `AQ40?` / `MoltenCore?`,
+  in line with the decision that the addon must not depend on per-raid data.
+- **Resolving happens only in the composition roots:** Core at login, the test harness, the simulator page and
+  the audit tool. A test fails if any module reads `SK.modules` itself.
+- Runtime objects were already injected through their constructors (`Engine.New(client)`,
+  `Requests.New(sync, engine)`, `Commands.New(ctx)`), and stay so.
+- **Tested:**
+  - the modules load and work in reversed and shuffled order;
+  - dependencies are injected first;
+  - a missing dependency and a cycle are reported by name;
+  - the addon works without the raid data.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

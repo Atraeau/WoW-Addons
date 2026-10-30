@@ -2,7 +2,10 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local M = SK:NewModule("Commands")
+local Standings, Tokens, Requests
+local M = SK:NewModule("Commands", { "Standings", "Tokens?", "Requests?" }, function(d)
+    Standings, Tokens, Requests = d.Standings, d.Tokens, d.Requests
+end)
 
 local WHY = {
     closed = "bidding is closed", ineligible = "you are not eligible for this drop", noitem = "there is no such item",
@@ -104,7 +107,7 @@ function M.New(ctx)
     -- Numbers are never stored, because their meaning would shift as other raids' events arrive.
     function c.where(listId, pos, moving)
         local chain = list(listId)
-        local anchor = SK.modules.Standings.Anchor(chain and chain.state, pos, moving)
+        local anchor = Standings.Anchor(chain and chain.state, pos, moving)
         if not anchor then return nil, "Position must be top, bottom or a number." end
         return anchor
     end
@@ -255,7 +258,6 @@ function M.New(ctx)
         out("There is no loot session to answer.")
     end
 
-    local Tokens = SK.modules.Tokens
     local function myClass()
         for _, m in ipairs(client:roster()) do if m.name == client:me() then return m.class end end
     end
@@ -390,7 +392,7 @@ function M.New(ctx)
         local waiting = ctx.requests and ctx.requests:pending() or {}
         if #waiting > 0 and args ~= "anyway" then
             out(("%d request(s) are still waiting. Once the raid is closed you can't answer them:"):format(#waiting))
-            for _, p in ipairs(waiting) do out(("  #%d from %s: %s"):format(p.num, short(p.by), SK.modules.Requests.Describe(p))) end
+            for _, p in ipairs(waiting) do out(("  #%d from %s: %s"):format(p.num, short(p.by), Requests.Describe(p))) end
             return out("Answer them (accept <n>, decline <n> <reason>), or close regardless: raid close anyway")
         end
         if writeAuthority("RaidClose", { raid = r.id }) then
@@ -430,7 +432,6 @@ function M.New(ctx)
     end
 
     ---------------------------------------------------------------- requests (the dispute path)
-    local Requests = SK.modules.Requests
     local REQUEST_USAGE = {
         move = "request move <name> <top|bottom|N> <reason>", undo = "request undo <name> <reason>",
         add = "request add <name> [top|bottom|N] <reason>", remove = "request remove <name> <reason>",
@@ -622,7 +623,6 @@ function M.New(ctx)
     end
 
     if ctx.requests then
-        local Requests = SK.modules.Requests
         local q = ctx.requests
         q.on("request", function(p)
             local r = p.req

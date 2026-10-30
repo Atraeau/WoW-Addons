@@ -1,10 +1,18 @@
 -- Shared test harness: loads the addon modules the way WoW does (addonName, namespace).
 local H = { passed = 0, failed = 0 }
-local SK = { modules = {} }
-function SK:NewModule(n) local m = { name = n }; self.modules[n] = m; return m end
-for _, f in ipairs { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "Loot", "SimNetwork", "Sync", "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" } do
-    assert(loadfile("src/KingsGambit/" .. f .. ".lua"))("KingsGambit", SK)
+-- The registry first; the modules in any order (they declare their dependencies; see Registry.lua).
+H.MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "Loot", "SimNetwork", "Sync",
+    "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" }
+function H.load(files)
+    local SK = {}
+    assert(loadfile("src/KingsGambit/Registry.lua"))("KingsGambit", SK)
+    for _, f in ipairs(files or H.MODULES) do
+        assert(loadfile("src/KingsGambit/" .. f .. ".lua"))("KingsGambit", SK)
+    end
+    return SK
 end
+local SK = H.load()
+SK:Resolve()
 H.SK = SK
 
 function H.section(name) print(name) end

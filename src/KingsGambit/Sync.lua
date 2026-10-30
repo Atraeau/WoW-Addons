@@ -11,8 +11,8 @@
 --   E  events     { t="E", c = chain, n = sender's count, events = { ... } }
 -- Other modules plug in their own message types with Sync:register (two or more letters).
 local _, SK = ...
-local M = SK:NewModule("Sync")
-local Hash = SK.modules.Hash
+local Hash
+local M = SK:NewModule("Sync", { "Hash" }, function(d) Hash = d.Hash end)
 
 M.PREFIX = "KGAMBIT"
 

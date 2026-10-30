@@ -9,12 +9,12 @@ local MODULES = { "Hash", "Standings", "Ledger" }
 -- Load the engine modules from a repo checkout. root = repo root (default ".").
 function M.loadEngine(root)
     root = root or "."
-    local SK = { modules = {} }
-    function SK:NewModule(n) local m = { name = n }; self.modules[n] = m; return m end
-    for _, name in ipairs(MODULES) do
+    local SK = {}
+    for _, name in ipairs({ "Registry", table.unpack(MODULES) }) do
         local chunk = assert(loadfile(root .. "/src/KingsGambit/" .. name .. ".lua"))
         chunk("KingsGambit", SK)
     end
+    SK:Resolve()
     return SK.modules
 end
 

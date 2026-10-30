@@ -1,18 +1,11 @@
--- King's Gambit: namespace, module registry, startup wiring, /gambit entry point.
+-- King's Gambit: namespace, startup wiring (the composition root), /gambit entry point.
+-- The module registry is Registry.lua, loaded first.
 -- Design: docs/kings-gambit/ (manifesto, rationale, design-journal).
 local ADDON, SK = ...
 _G.KingsGambit = SK
 
 SK.name = ADDON
 SK.SCHEMA = 1
-SK.modules = {}
-
--- Modules register themselves so load order stays explicit in the TOC.
-function SK:NewModule(name)
-    local m = { name = name }
-    self.modules[name] = m
-    return m
-end
 
 -- SavedVariables (created by RealClient:storage(), read by the Engine):
 -- KingsGambitDB (account-wide): schema, lists = { [listId] = { events = {...} } }, config, orphans, selfcheck
@@ -24,6 +17,7 @@ end
 
 -- Everything is built at PLAYER_LOGIN, when the player's name, realm and group are all known.
 local function Start()
+    SK:Resolve() -- every file has loaded: hand each module what it depends on
     local M = SK.modules
     local client = M.RealClient.New()
     local engine = M.Engine.New(client)

@@ -3,8 +3,8 @@
 -- KingsGambitDB.selfcheck so they can be read back from the SavedVariables file after /reload.
 -- Everything here is safe to run anywhere: no loot is given, no ledger events are written.
 local _, SK = ...
-local M = SK:NewModule("SelfCheck")
-local Client = SK.modules.Client
+local Client
+local M = SK:NewModule("SelfCheck", { "Client" }, function(d) Client = d.Client end)
 
 local function show(v)
     if type(v) == "table" then

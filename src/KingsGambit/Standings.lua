@@ -8,8 +8,8 @@
 --
 -- Apply validates BEFORE it mutates, so a rejected event never changes state.
 local _, SK = ...
-local M = SK:NewModule("Standings")
-local Hash = SK.modules.Hash
+local Hash
+local M = SK:NewModule("Standings", { "Hash" }, function(d) Hash = d.Hash end)
 
 function M.New()
     return {

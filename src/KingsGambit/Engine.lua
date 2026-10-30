@@ -2,8 +2,8 @@
 -- to the WoW client only through a Client. No module-level state: tests and training can run many engines
 -- in one process. Design: docs/kings-gambit/ledger-v2-design.md
 local _, SK = ...
-local M = SK:NewModule("Engine")
-local Ledger = SK.modules.Ledger
+local Ledger
+local M = SK:NewModule("Engine", { "Ledger" }, function(d) Ledger = d.Ledger end)
 
 local Engine = {}
 Engine.__index = Engine

@@ -17,9 +17,8 @@
 --   id     = Hash(prev .. "|" .. Canon{v, ledger, chain, seq, ts, author, type, list, data})
 -- Keep this file Lua 5.1-safe and 32-bit-integer safe.
 local _, SK = ...
-local M = SK:NewModule("Ledger")
-local Hash = SK.modules.Hash
-local Standings = SK.modules.Standings
+local Hash, Standings
+local M = SK:NewModule("Ledger", { "Hash", "Standings" }, function(d) Hash, Standings = d.Hash, d.Standings end)
 
 M.GENESIS = "0000000000000000"
 M.VERSION = 2

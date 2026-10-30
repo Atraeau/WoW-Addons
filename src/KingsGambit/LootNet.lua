@@ -20,8 +20,8 @@
 -- Only the Master Looter's messages are believed (players check the sender against the client's
 -- masterLooter()); the host only accepts bids and actions through the Loot session's own rules.
 local _, SK = ...
-local M = SK:NewModule("LootNet")
-local Loot = SK.modules.Loot
+local Loot
+local M = SK:NewModule("LootNet", { "Loot" }, function(d) Loot = d.Loot end)
 
 local function newEmitter()
     local handlers = {}
