@@ -1025,6 +1025,21 @@ main-list place: the rule should be **configurable by the guild master**, becaus
   the order players first bid off-spec; time on the list (when they joined, so winning doesn't cost it). Nothing is
   built yet; current behaviour (main-list order) stands until then.
 
+### Decision (direction, supersedes the "options" above): the off-spec list starts from a random seed (2026-10-30)
+
+**Decided by the guild leader**, in answer to which orders the guild master should be able to choose: none of the three.
+The off-spec list should not borrow the main list's order at all, because **players at the top of the main list would
+otherwise also get an unfair off-spec advantage.** Instead:
+- **The off-spec list is created at the very first session (not lazily), with all raiders in a random seed order.**
+- **Newcomers after that start at the bottom**, just like the main list.
+- **Leaning toward a roll as the tie breaker** (a roll is the random element; exactly where it applies is being settled:
+  see the open question below). A roll must be recorded in the ledger (the result, or the seed, is in the event that
+  creates the list or settles the tie), so every peer and the audit tool replay the same order and nothing is
+  decided by who ran it.
+- This replaces today's behaviour (lazy enrollment, newcomers ordered by main-list place), and revisits the earlier
+  rejection of a "free roll" for loot, which was about a costless roll over scarce items, not about seeding an order.
+- Nothing is built yet.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
