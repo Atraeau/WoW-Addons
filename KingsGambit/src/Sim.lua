@@ -88,6 +88,14 @@ end
 function Sim:drop(links, cfg, seen, ids)
     local drops, items = {}, {}
     for i, link in ipairs(links) do
+        -- A link that names a known raid item is taught to the game client like a real drop (slot, stats, the
+        -- classes it names), so the class and proficiency rules apply to it. Other names are unknown items.
+        local known = M.FindItem(link)
+        if known then
+            self:teach(known)
+            ids = ids or {}
+            ids[i] = ids[i] or known.id
+        end
         drops[i] = { link = link }
         items[i] = { link = link, slot = i, seen = seen and seen[i] or nil, itemId = ids and ids[i] or nil }
     end
@@ -266,6 +274,14 @@ end
 
 -- Tell the simulated game client what an item is, as the real one would: its slot, type and stats, and the
 -- classes it names (tier pieces). The loot session reads it like any item, so the class rule applies.
+function M.FindItem(name)
+    for _, data in ipairs { MoltenCore, AQ40 } do
+        for _, it in pairs(data.items) do
+            if it.name == name then return it end
+        end
+    end
+end
+
 function Sim:teach(item)
     local link = item.name
     if self.client:itemInfo(link) then return end

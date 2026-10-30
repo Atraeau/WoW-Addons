@@ -265,3 +265,35 @@ test("the guild's rules apply to simulated drops too: an officer's eligibility r
     for _, n in ipairs(sim.names) do if sim.info[n].class == "MAGE" then mage = mage or n end end
     eq(select(2, sim.session:bid(mage, 1, "need")), "wrongclass")
 end)
+
+H.section("Sim: scenario items are real items")
+test("in 'the first drop' only warriors may bid on the warrior-only gauntlets; a paladin is refused", function()
+    local sc = SK.modules.Scenarios.find("first-drop")
+    local sim = Sim.NewRaid({ members = sc.members })
+    sim.policies = {}
+    assert(sim:drop(sc.items))
+    sim.client:setRaid({ { name = "Aldric", class = "WARRIOR" }, { name = "Pally", class = "PALADIN" }, { name = "You", class = "WARLOCK" } },
+        { leader = "You", lootMethod = "master", masterLooter = "You" })
+    sim.session:refreshRoster()
+    eq(select(2, sim.session:bid("Pally", 1, "need")), "wrongclass", "a paladin can't need a warrior-only item")
+    eq(select(2, sim.session:bid("You", 1, "need")), "wrongclass")
+    assert(sim.session:bid("Aldric", 1, "need"))
+    local fit = sim.session:fitOf(1)
+    assert(fit and fit.classes, "the item is known to the session, with the classes it names")
+end)
+test("every training scenario's bidders can have the items they bid on", function()
+    for _, sc in ipairs(SK.modules.Scenarios.list) do
+        local sim = Sim.NewRaid({ members = sc.members })
+        sim.policies = sc.policies or {}
+        local refused = 0
+        assert(sim:drop(sc.items))
+        local bid = sim.session.bid
+        sim.session.bid = function(self, player, id, kind, extra)
+            local ok, why = bid(self, player, id, kind, extra)
+            if not ok and (why == "wrongclass" or why == "cantequip") then refused = refused + 1 end
+            return ok, why
+        end
+        sim:runUntil("main", 40)
+        eq(refused, 0, sc.id .. " has a bidder whose class can't have the item")
+    end
+end)

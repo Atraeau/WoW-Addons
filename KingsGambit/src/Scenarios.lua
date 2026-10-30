@@ -5,7 +5,16 @@
 local _, SK = ...
 local M = SK:NewModule("Scenarios")
 
-local RAID = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn" } -- top of the list first; You are last
+-- Top of the list first; You are last. Each has a class, because the loot rules go by class: the item has to be
+-- one their class can wear or wield (and the gloves below are for warriors only).
+local CLASSES = { Aldric = "WARRIOR", Brann = "WARRIOR", Cass = "DRUID", Dara = "WARRIOR", Eira = "DRUID", Fenn = "PRIEST" }
+local NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn" }
+local function raid(override)
+    local out = {}
+    for i, n in ipairs(NAMES) do out[i] = { name = n, class = (override and override[n]) or CLASSES[n] } end
+    return out
+end
+local RAID = raid()
 
 local function lastEvent(sim, listId, type_)
     local found
@@ -114,7 +123,7 @@ M.list = {
         id = "fix-a-mistake",
         title = "Fixing a mistake",
         lesson = "Golemagg drops Staff of Dominance. Brann wins it, but you handed it out by mistake. Mistakes are fixed forward: the undo is itself a recorded event, so the history shows what happened and who fixed it. Nothing is erased.",
-        members = RAID,
+        members = raid({ Brann = "MAGE" }),
         items = { "Staff of Dominance" },
         policies = { Brann = { bid = { ["Staff of Dominance"] = "need" } } },
         after = function(sim)

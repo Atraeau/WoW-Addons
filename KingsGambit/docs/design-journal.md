@@ -812,6 +812,20 @@ salvager did with the item.
   commands, the simulator page, the tests and the docs. Entries above that say "backstop" are the record of what we
   called it then, and are left as written.
 
+### Fixed: the training scenarios used items the game client didn't know (2026-10-30)
+
+**Reported by the guild leader from the simulator page:** in "The first drop", a paladin could bid on the
+warrior-only Gauntlets of Might. The class rule was right; the scenarios never reached it. Their items were plain
+names, never taught to the simulated game client, so the session saw an unknown item, which restricts nobody. And
+the scenario raiders' classes came from a rotation (the "druids" in the off-spec lesson were a priest and a hunter).
+- `Sim:drop` now teaches any link that names a known raid item (Molten Core, Ahn'Qiraj) to the client first, with its
+  slot, stats and named classes, and passes its item id, so scenario drops are judged like real ones.
+- Each scenario raider now has a class that fits the lesson (warriors for the gauntlets, druids for the leather
+  legs, a mage for the staff). A test pins both: a paladin is refused on the gauntlets, and no scenario has a
+  bidder whose class can't have the item.
+- **Principle:** an item the game hasn't described restricts nobody (so a slow cache never blocks a bid), which is
+  why anything that stands in for a drop has to describe it.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
