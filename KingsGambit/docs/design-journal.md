@@ -1164,6 +1164,20 @@ pick) the Quick Strike Ring as the second, and so on: *salvagers rotate in the o
   each unwanted item is salvaged by the player who just picked; in the overflow case (more unwanted items than picks)
   the end-of-draft claims move other players to the bottom after the winners, by design.
 
+### The principle behind the salvager, stated by the guild leader (2026-10-30)
+
+**Why the last person on the list is the salvager:** when they "suicide" (drop to the bottom) they can go no further down,
+so **they sacrifice no position.** Claiming an unwanted item is free only for the player at the bottom; anyone higher
+who claims drops below the people beneath them, so it costs them a place.
+- **Consistent with what is built:** in the draft, whoever has just picked is at the bottom, so offering the next unwanted
+  item to them costs nothing and leaves the order unchanged. A player who declines passes the offer up the list, to someone
+  who would pay a place to take it.
+- **A tension to watch:** in the end-of-draft round (more unwanted items than picks) the rotation puts the bottom
+  player *last* in the queue after they have claimed, so later items are offered first to players who would have to give up
+  a place to accept them. Many will decline, so such overflow items tend to end up disenchanted. Rotation is fairer to
+  everyone but is not free for the people it reaches. **Open:** whether the overflow round should let the bottom player keep
+  first call (free, but not rotating) or keep the rotation as built.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
