@@ -1276,6 +1276,21 @@ sent a gift with no recipient and overwrote the answer; and a blank recipient wa
 - Not reproduced: one earlier run of the page refused every warrior as a gift recipient ("can't wear or wield it") with only the
   priest listed; a fresh start and a rebuilt page gave the right recipients each time. Worth watching.
 
+### Decision: an unwanted item goes to the salvager, who decides; no second round of offers (2026-10-30)
+
+**Clarified by the guild leader**, reading the "Nobody wants it" lesson, which said the item was offered up the list again after
+everyone passed: **when nobody wants something, it goes to the salvager, not bottom-up through everyone. The salvager decides; there
+is no further round of bidding.**
+- **The rule:** an unwanted item is offered to **one** player, the salvager (the lowest on the list at that moment, normally the
+  player who just picked). They decide: **claim it** (keep it, or gift it on, as before) or **decline it**, and then it goes to the
+  disenchanter. It is never offered to the next player up.
+- **Replaces:** the cascade ("declined, so the next lowest player is asked, and so on until everyone declined"). Everything
+  else is unchanged: the interleaving with the draft, that the salvager follows the order of the draft, and that in the
+  end-of-draft round the lowest player may take several items.
+- **Consistent with the principle:** the salvager is the one player for whom claiming is free; nobody higher up is asked to
+  give up a place for an item nobody wanted.
+- The "Nobody wants it" lesson, the page's decline button, the text prompts and the rationale were reworded to match.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

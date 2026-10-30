@@ -629,16 +629,20 @@ end
 -- is normally the player who just picked (winning drops you to the bottom). So the salvagers rotate in the order of
 -- the draft. If they decline it goes up the list; if everyone declines it is disenchanted. Returns true if an offer is
 -- now waiting on someone (the draft resumes when it is settled).
+-- The salvager for an item: the lowest player on the live list who can be handed it. Only they are asked.
+function Session:salvagerFor(item)
+    for i = #self.order.main, 1, -1 do
+        local p = self.order.main[i]
+        if self.eligible[p] and self:canReceive(p, item) then return p end
+    end
+end
+
 function Session:offerLeftover()
     local it = self:nextLeftover()
     if not it then return false end
     it.offered = true
-    local players = {}
-    for i = #self.order.main, 1, -1 do
-        local p = self.order.main[i]
-        if self.eligible[p] and self:canReceive(p, it) then players[#players + 1] = p end
-    end
-    self.claim = { item = it.id, players = players, idx = 0, resume = true }
+    local salvager = self:salvagerFor(it)
+    self.claim = { item = it.id, players = { salvager }, idx = 0, resume = true }
     self:offerNext()
     return self.turn ~= nil
 end
@@ -708,7 +712,8 @@ function Session:skip(player)
 end
 
 ---------------------------------------------------------------- salvage and disenchant
--- Items nobody drafted are offered lowest position first, with no usability gate.
+-- Items nobody wanted go to the salvager (the lowest on the list), with no usability gate. They decide: claim it, or
+-- decline and the disenchanter takes it. It is never offered to anyone else.
 function Session:runSalvage()
     self.phase = "salvage"
     self.queue = {}
@@ -727,12 +732,8 @@ function Session:nextSalvageItem()
     self.qi = self.qi + 1
     local id = self.queue[self.qi]
     if not id then return self:finish() end
-    local players = {}
-    for i = #self.order.main, 1, -1 do
-        local p = self.order.main[i]
-        if self.eligible[p] and self:canReceive(p, self.items[id]) then players[#players + 1] = p end
-    end
-    self.claim = { item = id, players = players, idx = 0 }
+    local salvager = self:salvagerFor(self.items[id])
+    self.claim = { item = id, players = { salvager }, idx = 0 }
     self:offerNext()
 end
 

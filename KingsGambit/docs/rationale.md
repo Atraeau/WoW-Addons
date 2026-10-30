@@ -70,15 +70,15 @@ and pass it up. Because the cost is real, it can't be gamed, and generosity is
 recognized in the record.
 
 ### When nobody bids (the salvage round)
-Items with no Need or Off-spec bids are offered in *reverse* order
-(lowest position first) to everyone, whether or not they can use the item. The
-claimer drops to the bottom (nearly free for someone already there) and can keep it,
-gift it up, sell it, disenchant it, or donate it to the guild bank. If everybody
-passes, it goes to the Master Looter or the designated disenchanter, and then to
-the guild bank.
+Items with no Need or Off-spec bids go to the *salvager*, the player at the bottom of the
+list at that moment, whether or not they can use the item. The salvager decides: they claim it
+(and can keep it, gift it on, sell it, disenchant it, or donate it to the guild bank), or decline,
+and then it goes to the designated disenchanter and the guild bank. Nobody else is asked: there is
+no second round of offers up the list.
 
-**Why:** Usable loot should find a home, not a shard. Offering lowest-first keeps
-high-position players from farming scraps. We rejected a free roll because a
+**Why:** Usable loot should find a home, not a shard. The player at the bottom is the
+salvager because dropping to the bottom costs them no position; no one higher up is asked to
+give up a place for something nobody wanted. We rejected a free roll because a
 costless roll can be gamed by collusion.
 
 ### Item value
@@ -130,11 +130,12 @@ This is what happens, in order, when a boss drops loot. Practice it in the
    theirs automatically; if they want several, they pick one (a pick that times out counts as a skip).
    Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
    play for items no main-spec player wanted.
-4. **Salvage.** Items nobody wanted are offered to everyone, lowest on the list first, whether or not they could use
-   them. This happens as the draft executes: every pick drops its winner to the bottom, so the next unwanted item is
-   offered to the player who just picked. The salvagers rotate in the order of the draft. Unwanted items left after the
-   draft (more than there were picks) are plain suicide: offered lowest-first, and since claiming at the bottom costs no
-   position, whoever is lowest may take several. They were lucky that nobody wanted so many items. If everyone declines, the item goes to the disenchanter.
+4. **Salvage.** Items nobody wanted go to the salvager, the player at the bottom of the list, whether or not they
+   could use them. They decide: claim it, or decline and the disenchanter takes it. Nobody else is asked. This happens as the
+   draft executes: every pick drops its winner to the bottom, so the next unwanted item goes to the player who just
+   picked, and the salvagers rotate in the order of the draft. Unwanted items left after the draft (more than there were picks)
+   go to the lowest player, and since claiming at the bottom costs no position, they may take several. They were lucky that
+   nobody wanted so many items.
 5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
    and nothing is handed out until you confirm. If handing an item over fails, that award is not
    recorded and you are told, so the record never claims something that didn't happen.

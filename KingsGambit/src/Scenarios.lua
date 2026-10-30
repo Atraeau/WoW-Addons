@@ -62,7 +62,7 @@ M.list = {
     {
         id = "minor-upgrade-proxy",
         title = "A small upgrade nobody will spend their rank on",
-        lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to someone who can use it: Aldric, or any raider who would. Nothing is wasted, and nobody paid for scraps.",
+        lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item goes to the salvager, the player at the bottom of the list. That is you, so you decide: you claim it for free and gift it up to someone who can use it: Aldric, or any raider who would. Nothing is wasted, and nobody paid for scraps.",
         members = RAID,
         items = { "Quick Strike Ring" },
         policies = {},
@@ -134,14 +134,17 @@ M.list = {
     {
         id = "nobody-wants-it",
         title = "Nobody wants it",
-        lesson = "Shazzrah drops a wand the raid has already outgrown. Everyone passes, and everyone passes again when it is offered from the bottom up. Only then is it disenchanted, and the shards go to the guild bank. Usable loot gets every chance first.",
+        lesson = "Shazzrah drops a wand the raid has already outgrown, and everyone passes. An item nobody wants goes to the salvager: the player at the bottom of the list, who is you here. The salvager decides. They can claim it (keep it, or gift it to someone who can use it), or decline, and then the disenchanter takes it and the shards go to the guild bank. Nobody else is asked: there is no second round of offers up the list. Here, decline it.",
         members = RAID,
         items = { "Crimson Shocker" },
         policies = {},
         expect = function(sim)
             local de = lastEvent(sim, "main", "Disenchant")
             local ok = de ~= nil and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
-            return ok, de and ("disenchanted by " .. short(de.data.to)) or "no Disenchant event"
+            if not de then
+                return false, "you claimed the wand, so the disenchanter never got it. In this lesson nobody wants it: as the salvager, decline it and it goes to the disenchanter."
+            end
+            return ok, "declined by the salvager, so it went to the disenchanter, " .. short(de.data.to) .. ". Nobody else was asked."
         end,
     },
     {
@@ -221,7 +224,7 @@ M.list = {
     {
         id = "lucky-salvager",
         title = "Nobody wants most of it: the lucky salvager",
-        lesson = "Six items drop. Only two are wanted: Aldric wants the gauntlets, Brann the blade. The other four interest nobody. Watch where they go.\n\n1. AS THE DRAFT GOES. Aldric picks first and drops to the bottom, so the first unwanted item (the Heavy Dark Iron Ring) is offered to him. Claiming at the bottom costs him nothing: he has no further to fall. Then Brann picks, drops to the bottom, and is offered the next unwanted item (the Quick Strike Ring).\n\n2. WHAT IS LEFT AFTER THE DRAFT. Two items remain (Wristguards of Stability and the Crimson Shocker) and there are no picks left to hand them out with. They are plain suicide: offered from the bottom up, and the lowest player is Brann. He claims them too, and he is still at the bottom afterward, because nothing he did cost him a place. He got lucky that so few people wanted so much.\n\nNobody else's place moved at all. You only have to pass on everything, press Start, then confirm.",
+        lesson = "Six items drop. Only two are wanted: Aldric wants the gauntlets, Brann the blade. The other four interest nobody. Watch where they go.\n\n1. AS THE DRAFT GOES. Aldric picks first and drops to the bottom, so the first unwanted item (the Heavy Dark Iron Ring) is offered to him. Claiming at the bottom costs him nothing: he has no further to fall. Then Brann picks, drops to the bottom, and is offered the next unwanted item (the Quick Strike Ring).\n\n2. WHAT IS LEFT AFTER THE DRAFT. Two items remain (Wristguards of Stability and the Crimson Shocker) and there are no picks left to hand them out with. They go to the salvager, the lowest player, who is Brann. He claims them too, and he is still at the bottom afterward, because nothing he did cost him a place. He got lucky that so few people wanted so much.\n\nNobody else's place moved at all. You only have to pass on everything, press Start, then confirm.",
         members = {
             { name = "Aldric", class = "WARRIOR" }, { name = "Brann", class = "WARRIOR" }, { name = "Cass", class = "DRUID" },
             { name = "Dara", class = "WARRIOR" }, { name = "Eira", class = "DRUID" }, { name = "Fenn", class = "PRIEST" },
