@@ -242,6 +242,85 @@ function M.New(opts)
             bindType = bindType, class = classId, subclass = subclassId, itemType = itemType, itemSubType = itemSubType }
     end
 
+    -- An item's stats and class restriction, as ItemFit reads them: { stats = { key = value }, classes = {...} | nil },
+    -- or nil until the game has the item. Base stats come from GetItemStats; equip effects and "Classes:" from the
+    -- tooltip text (English patterns for the effects; the classes line uses the client's own format string).
+    local STAT_KEYS = {
+        ITEM_MOD_STRENGTH_SHORT = "str", ITEM_MOD_AGILITY_SHORT = "agi", ITEM_MOD_STAMINA_SHORT = "sta",
+        ITEM_MOD_INTELLECT_SHORT = "int", ITEM_MOD_SPIRIT_SHORT = "spi", RESISTANCE0_NAME = "armor",
+        ITEM_MOD_ATTACK_POWER_SHORT = "ap", ITEM_MOD_RANGED_ATTACK_POWER_SHORT = "rap", ITEM_MOD_SPELL_POWER_SHORT = "sp",
+        ITEM_MOD_SPELL_HEALING_DONE_SHORT = "heal", ITEM_MOD_MANA_REGENERATION_SHORT = "mp5", ITEM_MOD_DAMAGE_PER_SECOND_SHORT = "dps",
+        ITEM_MOD_BLOCK_VALUE_SHORT = "block", ITEM_MOD_DEFENSE_SKILL_RATING_SHORT = "defense",
+    }
+    local EQUIP = {
+        { "Increases damage and healing done by magical spells and effects by up to (%d+)", "sp" },
+        { "Increases healing done by spells and effects by up to (%d+)", "heal" },
+        { "Increases damage done by (%a+) spells and effects by up to (%d+)", "school" },
+        { "Improves your chance to hit with spells by (%d+)%%", "spellhit" },
+        { "Improves your chance to hit by (%d+)%%", "hit" },
+        { "Improves your chance to get a critical strike with spells by (%d+)%%", "spellcrit" },
+        { "Improves your chance to get a critical strike by (%d+)%%", "crit" },
+        { "Restores (%d+) mana per 5 sec", "mp5" },
+        { "%+(%d+) ranged Attack Power", "rap" },
+        { "%+(%d+) Attack Power", "ap" },
+        { "Increased Defense %+(%d+)", "defense" },
+        { "Increases your chance to dodge an attack by (%d+)%%", "dodge" },
+        { "Increases your chance to parry an attack by (%d+)%%", "parry" },
+        { "Increases your chance to block attacks with a shield by (%d+)%%", "blockPct" },
+        { "Increases the block value of your shield by (%d+)", "block" },
+    }
+    local function classPattern()
+        local fmt = E.ITEM_CLASSES_ALLOWED or "Classes: %s"
+        local escaped = fmt:gsub("([%(%)%.%+%-%*%?%[%]%^%$])", "%%%1")
+        return "^" .. escaped:gsub("%%s", "(.+)") .. "$"
+    end
+    local function classToken(name)
+        for _, t in ipairs({ E.LOCALIZED_CLASS_NAMES_MALE, E.LOCALIZED_CLASS_NAMES_FEMALE }) do
+            for token, n in pairs(t or {}) do if n == name then return token end end
+        end
+        local upper = name:upper()
+        return upper
+    end
+    function c:itemStats(link)
+        link = safe(link)
+        if not link then return nil end
+        local stats = {}
+        local getStats = (E.C_Item and E.C_Item.GetItemStats) or E.GetItemStats
+        if getStats then
+            local ok, raw = pcall(getStats, link)
+            if ok and type(raw) == "table" then
+                for k, v in pairs(raw) do if STAT_KEYS[k] and tonumber(v) then stats[STAT_KEYS[k]] = tonumber(v) end end
+            end
+        end
+        local tip = E.C_TooltipInfo and E.C_TooltipInfo.GetHyperlink
+        if not tip then return { stats = stats } end
+        local ok, data = pcall(tip, link)
+        if not (ok and type(data) == "table" and type(data.lines) == "table") then return nil end
+        local classes
+        local pattern = classPattern()
+        for _, line in ipairs(data.lines) do
+            local text = safe(line.leftText)
+            if type(text) == "string" then
+                local list = text:match(pattern)
+                if list then
+                    classes = {}
+                    for name in list:gmatch("[^,]+") do classes[#classes + 1] = classToken((name:gsub("^%s+", ""):gsub("%s+$", ""))) end
+                end
+                for _, e in ipairs(EQUIP) do
+                    local a, b = text:match(e[1])
+                    if e[2] == "school" and a and b then
+                        local key = a:lower()
+                        if stats[key] == nil then stats[key] = tonumber(b) end
+                    elseif a and stats[e[2]] == nil then
+                        stats[e[2]] = tonumber(a)
+                        break
+                    end
+                end
+            end
+        end
+        return { stats = stats, classes = classes }
+    end
+
     -- How many of an item (id, name or link) this player has; includeBank uses the game's bank cache.
     function c:itemCount(what, includeBank)
         local fn = (E.C_Item and E.C_Item.GetItemCount) or E.GetItemCount

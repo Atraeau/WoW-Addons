@@ -1,7 +1,7 @@
 -- Shared test harness: loads the addon modules the way WoW does (addonName, namespace).
 local H = { passed = 0, failed = 0 }
 -- The registry first; the modules in any order (they declare their dependencies; see Registry.lua).
-H.MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "Loot", "SimNetwork", "Sync",
+H.MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "ItemFit", "Loot", "SimNetwork", "Sync",
     "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" }
 function H.load(files)
     local SK = {}

@@ -2,9 +2,9 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local Standings, Tokens, Requests
-local M = SK:NewModule("Commands", { "Standings", "Tokens?", "Requests?" }, function(d)
-    Standings, Tokens, Requests = d.Standings, d.Tokens, d.Requests
+local Standings, ItemFit, Tokens, Requests
+local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Tokens?", "Requests?" }, function(d)
+    Standings, ItemFit, Tokens, Requests = d.Standings, d.ItemFit, d.Tokens, d.Requests
 end)
 
 local WHY = {
@@ -29,6 +29,9 @@ local WHY = {
     norequest = "there is no waiting request with that number", noaward = "they have no award to change",
     notrevertible = "that award can't be undone directly any more (the list has moved since): ask for a move instead",
     badpos = "a position is top, bottom or a number",
+    -- who may bid on an item
+    wrongclass = "that item is for other classes", wrongclassto = "the player you are gifting to is not one of the classes the item is for",
+    baditemrule = "that rule is not valid (an item id, the classes, and a reason)",
 }
 local function why(w) return WHY[w] or tostring(w) end
 
@@ -53,6 +56,9 @@ local HELP = {
     "  requests                        waiting requests and recent decisions",
     "  accept <n> | decline <n> <reason>                answer a request (Master Looter)",
     "  history [N]                     the last changes to the list, with who, why, and at whose request",
+    "  eligible <item> <classes|any> <reason>   set which classes may bid on an item, before it drops (officers)",
+    "  eligible [item]                 show the rule for an item, or every rule   (item: a link or an item id)",
+    "  spec <main> [off]               your specs, for fit hints     hints on|off   show how items fit you (default off)",
     "  sync                            ledger sync status       check   probe the game client",
 }
 
@@ -201,7 +207,7 @@ function M.New(ctx)
         if not ok then return out("Could not start: " .. why(err)) end
         local s = ctx.host.session
         out(("Loot session started for %d item(s). %d eligible. Players answer in their addon or by whisper."):format(#s.items, #s.eligibleList))
-        for _, it in ipairs(s.items) do out(("  %d) %s"):format(it.id, it.link)) end
+        for _, it in ipairs(s.items) do out(("  %d) %s%s"):format(it.id, it.link, c.itemNote(it.link))) end
         out("Next: announce (tell the raid how to answer), resolve (close bidding), extend, confirm, cancel.")
     end
 
@@ -266,6 +272,37 @@ function M.New(ctx)
         local s = hosting()
         local items = s and s.items or (ctx.player and ctx.player.session and ctx.player.session.items) or {}
         return items[item] and items[item].link
+    end
+
+    ---------------------------------------------------------------- who may bid, and how an item fits
+    local char = client:storage().char
+    local function myFit(link)
+        return ItemFit.Describe(client, link, Tokens and Tokens.Find(link), engine:ItemRule(ItemFit.ItemId(link)))
+    end
+    -- "  [for: Priest, Mage]" when the item is restricted, plus suggestions when this player wants hints.
+    function c.itemNote(link)
+        local fit = myFit(link)
+        if not fit then return "" end
+        local parts = {}
+        local classes = ItemFit.ClassList(fit)
+        if classes then parts[#parts + 1] = "for: " .. classes .. (fit.rule and " (guild rule)" or "") end
+        if char.hints then
+            local suits = ItemFit.SuitsText(fit)
+            if suits then parts[#parts + 1] = "suits: " .. suits end
+            local class = myClass()
+            if class then
+                local spec = char.spec and char.spec.main
+                local f = ItemFit.ForPlayer(fit, class, spec)
+                if not f.usable then parts[#parts + 1] = "you can't use it"
+                elseif f.rating then parts[#parts + 1] = ("your fit: %s (%s)"):format(f.rating, f.spec) end
+                local off = char.spec and char.spec.off
+                if f.usable and off then
+                    local g = ItemFit.ForPlayer(fit, class, off)
+                    if g.rating then parts[#parts + 1] = ("off-spec: %s"):format(g.rating) end
+                end
+            end
+        end
+        return #parts > 0 and ("  [" .. table.concat(parts, "; ") .. "]") or ""
     end
 
     -- declared: the player says they can turn a token in (the addon can't always see the bank).
@@ -541,6 +578,11 @@ function M.New(ctx)
         elseif ev.type == "Transfer" then text = ("%s recorded that %s's item went to %s"):format(by, who or "a winner", short(d.to))
         elseif ev.type == "Declined" then text = ("%s declined %s's request to %s: %s"):format(by, short(d.requestedBy), d.request, d.declineReason)
         elseif ev.type == "Pass" then text = ("%s passed on %s"):format(who, tostring(d.item))
+        elseif ev.type == "ItemClasses" then
+            local names = {}
+            for i, cl in ipairs(d.classes or {}) do names[i] = ItemFit.CLASS_NAMES[cl] or cl end
+            text = ("%s set who may bid on %s: %s"):format(by, d.name or ("item " .. tostring(d.item)),
+                #names > 0 and table.concat(names, ", ") or "any class")
         else text = ("%s: %s"):format(by, ev.type) end
         if ev.type ~= "Declined" and d.requestedBy then text = text .. (", at the request of %s"):format(short(d.requestedBy)) end
         if d.reason and ev.type ~= "Declined" then text = text .. (" (%s)"):format(d.reason) end
@@ -551,11 +593,101 @@ function M.New(ctx)
         local n = tonumber(args) or 10
         local rows = {}
         for _, ev in ipairs(engine:View().applied) do
-            if ev.list == "main" or ev.type == "Declined" then rows[#rows + 1] = ev end
+            if ev.list == "main" or ev.type == "Declined" or ev.type == "ItemClasses" then rows[#rows + 1] = ev end
         end
         if #rows == 0 then return out("Nothing has happened on the list yet.") end
         out(("The last %d change(s) to the list:"):format(math.min(n, #rows)))
         for i = math.max(1, #rows - n + 1), #rows do out("  " .. c.describe(rows[i])) end
+    end
+
+    local CLASS_WORDS = {}
+    for token, n in pairs(ItemFit.CLASS_NAMES) do CLASS_WORDS[n:lower()] = token end
+
+    local function ruleText(id, rule, name)
+        local names = ItemFit.ClassList({ classes = rule.classes }) or "any class"
+        return ("%s: %s. Set by %s: %s"):format(name or ("item " .. id), names, short(rule.by), rule.reason)
+    end
+    local function ruleName(rule)
+        local ev = engine.store.byId[rule.id]
+        return ev and ev.data.name
+    end
+
+    -- eligible                                  every rule
+    -- eligible <item>                           the rule for one item
+    -- eligible <item> <classes|any> <reason>    set it (classes joined with commas: warrior,rogue,hunter)
+    function cmds.eligible(args)
+        if args == "" then
+            local ids = {}
+            for id in pairs(engine:ItemRules()) do ids[#ids + 1] = id end
+            table.sort(ids)
+            if #ids == 0 then return out("No item rules yet. Set one with: eligible <item> <classes|any> <reason>") end
+            for _, id in ipairs(ids) do
+                local rule = engine:ItemRule(id)
+                out("  " .. ruleText(id, rule, ruleName(rule)))
+            end
+            return
+        end
+        local link, rest = args:match("^(|c.-|r)%s*(.-)$")
+        if not link then link, rest = args:match("^(%S+)%s*(.-)$") end
+        local id = ItemFit.ItemId(link)
+        if not id then return out("Which item? Shift-click it into the command, or give its item id.") end
+        local itemName = link:match("%[(.-)%]")
+        if rest == "" then
+            local rule = engine:ItemRule(id)
+            if not rule then return out("No rule for item " .. id .. ": the item itself decides (its 'Classes:' line, if any).") end
+            return out(ruleText(id, rule, ruleName(rule)))
+        end
+        local list, reason = rest:match("^(%S+)%s+(.+)$")
+        if not list then return out("eligible <item> <classes|any> <reason>  (a reason is required: it goes in the record)") end
+        local classes = {}
+        if list:lower() ~= "any" then
+            for word in list:gmatch("[^,]+") do
+                local token = CLASS_WORDS[word:lower()]
+                if not token then return out("Unknown class '" .. word .. "'. Classes: warrior, paladin, hunter, rogue, priest, shaman, mage, warlock, druid, or any.") end
+                classes[#classes + 1] = token
+            end
+        end
+        local ok, reasonWhy = engine:MayWrite()
+        if not ok then
+            if reasonWhy == "duringraid" then
+                return out(("A raid is running: only its Master Looter (%s) writes now. Set the rule after the raid, or ask them."):format(mls()))
+            end
+            return out("Not recorded: " .. why(reasonWhy))
+        end
+        local ev, err = engine:Write("ItemClasses", { item = id, classes = classes, reason = reason, name = itemName })
+        if not ev then return out("Not recorded: " .. why(err)) end
+        out("Recorded. " .. ruleText(id, engine:ItemRule(id), itemName) .. ". When it drops, only these classes can bid in the drafts.")
+    end
+
+    function cmds.spec(args)
+        local main, off = args:match("^(%S+)%s*(%S*)$")
+        if not main then
+            local s = char.spec
+            return out(s and ("Your specs: %s%s."):format(s.main, s.off and (", off-spec " .. s.off) or "") or "No spec set. spec <main> [off]")
+        end
+        local class = myClass()
+        if not class then return out("Your class isn't known yet (join a group, or try again in a moment).") end
+        local function find(word)
+            word = word:lower()
+            for _, s in ipairs(ItemFit.SPECS[class]) do
+                if s.name:lower():find(word, 1, true) == 1 or s.name:lower():find("(" .. word, 1, true) then return s.name end
+            end
+        end
+        local m, o = find(main), off ~= "" and find(off) or nil
+        if not m or (off ~= "" and not o) then
+            local names = {}
+            for i, s in ipairs(ItemFit.SPECS[class]) do names[i] = s.name end
+            return out("Specs for your class: " .. table.concat(names, ", ") .. ".")
+        end
+        char.spec = { main = m, off = o }
+        out(("Your specs: %s%s. Used for hints only (hints on)."):format(m, o and (", off-spec " .. o) or ""))
+    end
+
+    function cmds.hints(args)
+        local a = args:lower()
+        if a == "on" then char.hints = true elseif a == "off" then char.hints = nil end
+        out(char.hints and "Hints are on: items show who they suit and how they fit you. A suggestion, never a rule."
+            or "Hints are off: you judge items yourself (hints on to see suggestions).")
     end
 
     ---------------------------------------------------------------- misc
@@ -589,7 +721,7 @@ function M.New(ctx)
             for _, it in ipairs(s.items) do
                 local token = Tokens and Tokens.Find(it.link)
                 tokens = tokens or token ~= nil
-                out(("  %d) %s%s"):format(it.id, it.link, token and (" (token: " .. token.token.makes .. ")") or ""))
+                out(("  %d) %s%s%s"):format(it.id, it.link, token and (" (token: " .. token.token.makes .. ")") or "", c.itemNote(it.link)))
             end
             out("Answer with: need <n>, off <n>, pass <n>, or gift <n> <name>.")
             if tokens then out("For a token, add 'ready' if you can turn it in but the addon can't see it (e.g. bank): need <n> ready.") end

@@ -254,6 +254,13 @@ function M.New(opts)
         if o and o.delayed then S.pendingInfo[link] = true end
     end
 
+    -- Stats and class restriction: { stats = { str = 12, ... }, classes = { "PRIEST" } | nil } (see ItemFit).
+    function h:setItemStats(link, st) S.itemStats = S.itemStats or {}; S.itemStats[link] = st end
+    function h:itemStats(link)
+        if S.pendingInfo[link] then return nil end
+        return S.itemStats and S.itemStats[link] or nil
+    end
+
     function h:cacheItem(link)
         S.pendingInfo[link] = nil
         self:emit("item.info", { link = link, itemId = tonumber(tostring(link):match("item:(%d+)")) })

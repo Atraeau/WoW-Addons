@@ -5,7 +5,7 @@
 -- chain, in two passes:
 --   1. authority events (Genesis, SetGuildMaster, SetOfficers, Elevate, Revoke, RaidClose) in order of the time
 --      they were written, giving who was guild master and officer when, and every raid's final window;
---   2. list events (and Declined) merged in SORT-KEY order, each checked against that authority at the time it
+--   2. list events (and Declined, ItemClasses) merged in SORT-KEY order, each checked against that authority at the time it
 --      was written.
 -- The sort key is when the loot became visible: an event may carry data.seen (the loot window's time); its key
 -- is max(seen or ts, the key of the writer's previous event). So a raid that hands loot out at a break is
@@ -26,7 +26,7 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, Declined = true }
+    RaidClose = true, Declined = true, ItemClasses = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
@@ -367,9 +367,24 @@ function M.NewView()
         applied = {},      -- list events (and Declined) applied, in sort-key order
         authApplied = {},  -- authority events applied, in write-time order
         declined = {},     -- recorded declined adjustment requests
+        itemRules = {},    -- [itemId] = { classes (nil = any class), by, ts, reason, id }: the guild's eligibility rules
         last = nil,        -- the last pass-2 event considered (applied or skipped), and its key
         lastKey = nil,
     }
+end
+
+-- A guild rule for who may bid on an item: { item = item id, classes = { "PRIEST", ... } (empty = any class), reason }.
+local CLASS_TOKENS = { WARRIOR = true, PALADIN = true, HUNTER = true, ROGUE = true, PRIEST = true, SHAMAN = true, MAGE = true,
+    WARLOCK = true, DRUID = true }
+local function itemRule(d)
+    if type(d.item) ~= "number" or d.item < 1 or d.item ~= math.floor(d.item) then return nil end
+    if type(d.classes) ~= "table" or not isName(d.reason) then return nil end
+    local seen = {}
+    for _, c in ipairs(d.classes) do
+        if not CLASS_TOKENS[c] or seen[c] then return nil end
+        seen[c] = true
+    end
+    return true
 end
 
 local function conflict(view, ev, why)
@@ -407,6 +422,18 @@ function M.ApplyToView(view, ev, key)
                 ok, why = nil, "baddecline"
             else
                 view.declined[#view.declined + 1] = ev
+            end
+        elseif ev.type == "ItemClasses" then
+            local d = ev.data
+            if not itemRule(d) then
+                ok, why = nil, "baditemrule"
+            else
+                local classes
+                if #d.classes > 0 then
+                    classes = {}
+                    for i, c in ipairs(d.classes) do classes[i] = c end
+                end
+                view.itemRules[d.item] = { classes = classes, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
         elseif not isName(ev.list) then
             ok, why = nil, "nolist"

@@ -79,6 +79,12 @@ function Engine:Lists()
     return out
 end
 
+-- The guild's rule for who may bid on an item (by item id), or nil: { classes (nil = any), by, ts, reason }.
+function Engine:ItemRule(itemId) return self.view.itemRules[tonumber(itemId)] end
+
+-- Every item rule, as { [itemId] = rule }.
+function Engine:ItemRules() return self.view.itemRules end
+
 function Engine:IsVerified() return next(self.verifying) == nil end
 
 function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.client:serverTime()) end

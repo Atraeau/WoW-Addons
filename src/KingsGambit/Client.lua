@@ -12,7 +12,7 @@ M.METHODS = {
     -- identity and roster
     "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
     -- loot
-    "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo",
+    "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)
     "itemCount", "reputation",
     -- communication

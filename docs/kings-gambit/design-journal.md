@@ -585,6 +585,46 @@ mid-function, which hid what they depended on.
   - a missing dependency and a cycle are reported by name;
   - the addon works without the raid data.
 
+### Built: item fit, the class rule, and the guild's item rules (2026-10-30)
+
+**Decided by the guild leader:**
+- **Default suggestions are baked in,** from the stats each class spec commonly values.
+- **An item that names its classes may only be taken by those classes.** The salvager, the Master Looter and
+  the disenchanter are the exceptions.
+- **Officers (or the Master Looter) can set, before an item drops, which classes may bid on it,** so there is
+  less room for a mistake in the moment.
+
+**Built:**
+- **`ItemFit.lua`:**
+  - **Stat priorities** for all 27 specs (Druid Feral counts twice, as bear and as cat), each with a role.
+  - **Armor and weapon proficiency** at 60, including shields and relics.
+  - **Scoring:** a spec's score is the item's stats weighted by that spec's priorities. An item suits the specs
+    within 70% of its best score.
+  - **Armor of a lighter kind** counts for less, but only for tanks and physical damage. Hybrid casters and
+    healers wear lighter armor all the time.
+  - **No useful stats** (a trinket with only a use effect): nobody is suggested, and the raid judges it.
+- **`client:itemStats(link)`** reads the game's stats (`GetItemStats`), the equip effects and the "Classes:" line
+  (from the tooltip). The equip-effect patterns are English for now. The "Classes:" line uses the client's own
+  format string and localized class names.
+- **The class rule, in the loot session:**
+  - Need, off-spec and gift bids on a restricted item are refused for other classes, and a gift can't go to
+    them either. A whisperer is told who the item is for.
+  - The backstop is not restricted (the salvager may take anything), nor is the disenchant floor (the Master
+    Looter or disenchanter).
+  - An item the game hasn't cached yet restricts nobody until it is known.
+- **The guild's item rules:** a new global ledger event, `ItemClasses` (item id, classes, reason).
+  - Set with `eligible <item link or id> <classes|any> <reason>`, and shown with `eligible [item]` and `history`.
+  - A rule overrides the item's own "Classes:" line, and it applies even before the game has cached the item.
+  - The ledger's usual authority applies: officers outside raids, the Master Looter during their raid.
+  - This is the text form of the "UI" asked for; it can move to a panel when the addon has frames.
+- **Hints** (`hints on`, off by default) and **`spec <main> [off]`**: an item shows who it suits, and how it
+  fits you and your off-spec.
+- **Still to do:**
+  - Officers' overrides of the *suggestions*, as opposed to the class rule.
+  - Spec detection from talents (needs an in-game check).
+  - Simulated raiders with a class, main spec and off-spec, deciding from real item stats. The raid data needs
+    stats from the CMaNGOS extract for that.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -10,8 +10,8 @@
 -- nothing is written to the ledger until confirm(). Winners drop to the bottom of the
 -- scratch order exactly as the ledger will replay them.
 local _, SK = ...
-local Tokens
-local M = SK:NewModule("Loot", { "Tokens?" }, function(d) Tokens = d.Tokens end)
+local Tokens, ItemFit
+local M = SK:NewModule("Loot", { "ItemFit", "Tokens?" }, function(d) Tokens, ItemFit = d.Tokens, d.ItemFit end)
 
 local DEFAULTS = {
     listId = "main",
@@ -127,12 +127,24 @@ function Session:start(items)
         if not (s and s <= now) then s = now end
         self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
             token = Tokens and Tokens.Find(it.link) or nil }
+        self:fitOf(i)
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
     self:emit("phase", { phase = "bidding" })
     return true
+end
+
+-- What the session knows about item i (ItemFit's view: class restriction, stats), or nil while the game
+-- hasn't cached it. Asked again until known: an uncached item restricts nobody.
+function Session:fitOf(i)
+    local it = self.items[i]
+    if it and (not it.fit or it.fit.partial) then
+        -- the guild's rule for this item, set ahead of time by an officer, decides who may bid
+        it.fit = ItemFit.Describe(self.client, it.link, it.token, self.engine:ItemRule(ItemFit.ItemId(it.link))) or it.fit
+    end
+    return it and it.fit
 end
 
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
@@ -149,6 +161,13 @@ function Session:bid(player, itemId, kind, extra)
     if kind == "gift" then
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
+    end
+    -- An item that names its classes is for those classes only, in the drafts (the backstop and the
+    -- disenchanter are not restricted). Gifting doesn't get around it, in either direction.
+    if kind ~= "pass" then
+        local fit = self:fitOf(itemId)
+        if not ItemFit.Allowed(fit, self.class[player]) then return false, "wrongclass" end
+        if to and not ItemFit.Allowed(fit, self.class[to]) then return false, "wrongclassto" end
     end
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
@@ -232,7 +251,11 @@ function Session:handleWhisper(sender, text)
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
             else
-                lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+                if err == "wrongclass" or err == "wrongclassto" then
+                    lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
+                else
+                    lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+                end
             end
         end
     end

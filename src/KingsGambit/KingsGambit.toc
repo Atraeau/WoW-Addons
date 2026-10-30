@@ -18,6 +18,7 @@ Engine.lua
 SimNetwork.lua
 Sync.lua
 SelfCheck.lua
+ItemFit.lua
 Loot.lua
 LootNet.lua
 Requests.lua

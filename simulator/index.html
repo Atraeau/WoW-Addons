@@ -521,7 +521,7 @@ do local chunk = function(...)
 -- chain, in two passes:
 --   1. authority events (Genesis, SetGuildMaster, SetOfficers, Elevate, Revoke, RaidClose) in order of the time
 --      they were written, giving who was guild master and officer when, and every raid's final window;
---   2. list events (and Declined) merged in SORT-KEY order, each checked against that authority at the time it
+--   2. list events (and Declined, ItemClasses) merged in SORT-KEY order, each checked against that authority at the time it
 --      was written.
 -- The sort key is when the loot became visible: an event may carry data.seen (the loot window's time); its key
 -- is max(seen or ts, the key of the writer's previous event). So a raid that hands loot out at a break is
@@ -542,7 +542,7 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, Declined = true }
+    RaidClose = true, Declined = true, ItemClasses = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
@@ -883,9 +883,24 @@ function M.NewView()
         applied = {},      -- list events (and Declined) applied, in sort-key order
         authApplied = {},  -- authority events applied, in write-time order
         declined = {},     -- recorded declined adjustment requests
+        itemRules = {},    -- [itemId] = { classes (nil = any class), by, ts, reason, id }: the guild's eligibility rules
         last = nil,        -- the last pass-2 event considered (applied or skipped), and its key
         lastKey = nil,
     }
+end
+
+-- A guild rule for who may bid on an item: { item = item id, classes = { "PRIEST", ... } (empty = any class), reason }.
+local CLASS_TOKENS = { WARRIOR = true, PALADIN = true, HUNTER = true, ROGUE = true, PRIEST = true, SHAMAN = true, MAGE = true,
+    WARLOCK = true, DRUID = true }
+local function itemRule(d)
+    if type(d.item) ~= "number" or d.item < 1 or d.item ~= math.floor(d.item) then return nil end
+    if type(d.classes) ~= "table" or not isName(d.reason) then return nil end
+    local seen = {}
+    for _, c in ipairs(d.classes) do
+        if not CLASS_TOKENS[c] or seen[c] then return nil end
+        seen[c] = true
+    end
+    return true
 end
 
 local function conflict(view, ev, why)
@@ -923,6 +938,18 @@ function M.ApplyToView(view, ev, key)
                 ok, why = nil, "baddecline"
             else
                 view.declined[#view.declined + 1] = ev
+            end
+        elseif ev.type == "ItemClasses" then
+            local d = ev.data
+            if not itemRule(d) then
+                ok, why = nil, "baditemrule"
+            else
+                local classes
+                if #d.classes > 0 then
+                    classes = {}
+                    for i, c in ipairs(d.classes) do classes[i] = c end
+                end
+                view.itemRules[d.item] = { classes = classes, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
         elseif not isName(ev.list) then
             ok, why = nil, "nolist"
@@ -1005,7 +1032,7 @@ M.METHODS = {
     -- identity and roster
     "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "guildRoster",
     -- loot
-    "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo",
+    "lootMethod", "isMasterLooter", "masterLooter", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)
     "itemCount", "reputation",
     -- communication
@@ -1329,6 +1356,13 @@ function M.New(opts)
         if o and o.delayed then S.pendingInfo[link] = true end
     end
 
+    -- Stats and class restriction: { stats = { str = 12, ... }, classes = { "PRIEST" } | nil } (see ItemFit).
+    function h:setItemStats(link, st) S.itemStats = S.itemStats or {}; S.itemStats[link] = st end
+    function h:itemStats(link)
+        if S.pendingInfo[link] then return nil end
+        return S.itemStats and S.itemStats[link] or nil
+    end
+
     function h:cacheItem(link)
         S.pendingInfo[link] = nil
         self:emit("item.info", { link = link, itemId = tonumber(tostring(link):match("item:(%d+)")) })
@@ -1530,6 +1564,12 @@ function Engine:Lists()
     return out
 end
 
+-- The guild's rule for who may bid on an item (by item id), or nil: { classes (nil = any), by, ts, reason }.
+function Engine:ItemRule(itemId) return self.view.itemRules[tonumber(itemId)] end
+
+-- Every item rule, as { [itemId] = rule }.
+function Engine:ItemRules() return self.view.itemRules end
+
 function Engine:IsVerified() return next(self.verifying) == nil end
 
 function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.client:serverTime()) end
@@ -1715,6 +1755,268 @@ function Engine:verifyTick()
 end
 
 end; chunk("KingsGambit", SK) end
+-- ===== ItemFit.lua =====
+do local chunk = function(...)
+-- King's Gambit: item fit. Which classes may take an item, and which specs it suits, worked out from the item
+-- itself when it drops (design journal: "no dependence on per-raid data"; "item fit").
+--
+-- Two different things:
+--   * RESTRICTION (a rule): an item that names its classes ("Classes: Priest, Mage" on the tooltip, or a token's
+--     class group) may only be bid on by those classes, in the main and off-spec drafts. The backstop's salvager,
+--     and the Master Looter or disenchanter who gets what nobody took, are not restricted. See Allowed.
+--   * FIT (a suggestion, never a rule): how well the item's stats match each spec, from the baked-in priorities
+--     below plus armor and weapon proficiency. It feeds hints (off by default), the "suits" line, and bots.
+--
+-- An item, as this module sees it (Describe builds it from the game):
+--   { link, slot = equipLoc, class = item class id, subclass = id, stats = { [key] = value }, classes = { "PRIEST", ... } | nil }
+-- Stat keys: str agi sta int spi armor defense dodge parry blockPct block hit crit ap rap dps
+--            sp (damage and healing) heal (healing only) spellhit spellcrit mp5, and school damage:
+--            fire frost shadow arcane nature holy. Percent stats are in percent (hit = 1 means +1%).
+-- Keep this file Lua 5.1-safe (no bitwise operators).
+local _, SK = ...
+local M = SK:NewModule("ItemFit")
+
+M.CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "SHAMAN", "MAGE", "WARLOCK", "DRUID" }
+M.CLASS_BITS = { WARRIOR = 1, PALADIN = 2, HUNTER = 4, ROGUE = 8, PRIEST = 16, SHAMAN = 64, MAGE = 128, WARLOCK = 256, DRUID = 1024 }
+
+-- Default stat priorities per spec: rough values of one point of each stat (one percent for percent stats),
+-- as commonly valued by raiders. Suggestions, not truth: officers can override an item's fit (later), and
+-- players decide for themselves. role: tank, melee, hunter, caster, healer.
+local function w(t) return t end
+local MELEE = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 12, sta = 0.2, dps = 2.5 }
+M.SPECS = {
+    WARRIOR = {
+        { name = "Arms", role = "melee", weights = MELEE },
+        { name = "Fury", role = "melee", weights = w { str = 1, agi = 0.6, ap = 0.5, crit = 14, hit = 15, sta = 0.2, dps = 2.5 } },
+        { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.3, dodge = 13, parry = 13, blockPct = 9, block = 0.4,
+            armor = 0.01, str = 0.3, agi = 0.5, hit = 6, dps = 0.5 } },
+    },
+    PALADIN = {
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.9, mp5 = 2.2, spellcrit = 9, spi = 0.2, sta = 0.1 } },
+        { name = "Protection", role = "tank", weights = w { sta = 1, defense = 1.2, sp = 0.5, int = 0.3, blockPct = 8, block = 0.5,
+            dodge = 10, parry = 10, armor = 0.01, str = 0.3 } },
+        { name = "Retribution", role = "melee", weights = w { str = 1, crit = 14, hit = 12, ap = 0.5, agi = 0.5, int = 0.2, sp = 0.3,
+            holy = 0.3, dps = 2.5 } },
+    },
+    HUNTER = {
+        { name = "Beast Mastery", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.2, dps = 1.5 } },
+        { name = "Marksmanship", role = "hunter", weights = w { agi = 1, rap = 0.5, ap = 0.5, hit = 14, crit = 15, int = 0.3, sta = 0.2, dps = 1.5 } },
+        { name = "Survival", role = "hunter", weights = w { agi = 1.2, rap = 0.5, ap = 0.5, hit = 14, crit = 14, int = 0.3, sta = 0.3, dps = 1.5 } },
+    },
+    ROGUE = {
+        { name = "Assassination", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 15, sta = 0.2, dps = 2.5 } },
+        { name = "Combat", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 15, crit = 14, sta = 0.2, dps = 2.5 } },
+        { name = "Subtlety", role = "melee", weights = w { agi = 1, str = 0.5, ap = 0.5, hit = 14, crit = 14, sta = 0.2, dps = 2.5 } },
+    },
+    PRIEST = {
+        { name = "Discipline", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.5, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
+        { name = "Holy", role = "healer", weights = w { heal = 1, sp = 1, int = 0.6, spi = 0.6, mp5 = 2.5, spellcrit = 6, sta = 0.1 } },
+        { name = "Shadow", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 5, sta = 0.3, int = 0.3, spi = 0.2 } },
+    },
+    SHAMAN = {
+        { name = "Elemental", role = "caster", weights = w { sp = 1, nature = 1, fire = 0.4, spellhit = 12, spellcrit = 10, int = 0.4, mp5 = 1 } },
+        { name = "Enhancement", role = "melee", weights = w { str = 1, agi = 0.7, ap = 0.5, crit = 14, hit = 12, int = 0.2, dps = 2.5 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, mp5 = 2.5, int = 0.8, spellcrit = 8, sta = 0.1 } },
+    },
+    MAGE = {
+        { name = "Arcane", role = "caster", weights = w { sp = 1, arcane = 1, frost = 0.5, spellhit = 12, spellcrit = 10, int = 0.5, sta = 0.2 } },
+        { name = "Fire", role = "caster", weights = w { sp = 1, fire = 1, spellhit = 12, spellcrit = 11, int = 0.4, sta = 0.2 } },
+        { name = "Frost", role = "caster", weights = w { sp = 1, frost = 1, spellhit = 12, spellcrit = 9, int = 0.4, sta = 0.2 } },
+    },
+    WARLOCK = {
+        { name = "Affliction", role = "caster", weights = w { sp = 1, shadow = 1, spellhit = 12, spellcrit = 4, sta = 0.4, int = 0.3 } },
+        { name = "Demonology", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.3, spellhit = 12, spellcrit = 6, sta = 0.5, int = 0.3 } },
+        { name = "Destruction", role = "caster", weights = w { sp = 1, shadow = 1, fire = 0.6, spellhit = 12, spellcrit = 10, sta = 0.4, int = 0.3 } },
+    },
+    DRUID = {
+        { name = "Balance", role = "caster", weights = w { sp = 1, arcane = 0.9, nature = 0.9, spellhit = 12, spellcrit = 10, int = 0.4 } },
+        { name = "Feral (bear)", role = "tank", weights = w { sta = 1, armor = 0.05, agi = 0.8, defense = 1, dodge = 12, str = 0.4, hit = 6 } },
+        { name = "Feral (cat)", role = "melee", weights = w { agi = 1, str = 1, ap = 0.5, crit = 14, hit = 12 } },
+        { name = "Restoration", role = "healer", weights = w { heal = 1, sp = 1, int = 0.7, spi = 0.6, mp5 = 2.5, sta = 0.1 } },
+    },
+}
+
+---------------------------------------------------------------- proficiency (what a class can equip at 60)
+local ARMOR, WEAPON, MISC = 4, 2, 0
+-- Armor subclasses: 1 cloth, 2 leather, 3 mail, 4 plate, 6 shield, 7 libram, 8 idol, 9 totem.
+local ARMOR_RANK = { [1] = 1, [2] = 2, [3] = 3, [4] = 4 }
+M.ARMOR_NAMES = { [1] = "cloth", [2] = "leather", [3] = "mail", [4] = "plate", [6] = "shield", [7] = "libram", [8] = "idol", [9] = "totem" }
+local BEST_ARMOR = { WARRIOR = 4, PALADIN = 4, HUNTER = 3, SHAMAN = 3, ROGUE = 2, DRUID = 2, PRIEST = 1, MAGE = 1, WARLOCK = 1 }
+local SPECIAL_ARMOR = { [6] = { WARRIOR = true, PALADIN = true, SHAMAN = true }, [7] = { PALADIN = true }, [8] = { DRUID = true },
+    [9] = { SHAMAN = true } }
+-- Weapon subclasses: 0 axe, 1 2h axe, 2 bow, 3 gun, 4 mace, 5 2h mace, 6 polearm, 7 sword, 8 2h sword, 10 staff,
+-- 13 fist, 15 dagger, 16 thrown, 18 crossbow, 19 wand.
+local function set(list) local s = {} for _, v in ipairs(list) do s[v] = true end return s end
+local WEAPONS = {
+    WARRIOR = set { 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 13, 15, 16, 18 },
+    PALADIN = set { 0, 1, 4, 5, 6, 7, 8 },
+    HUNTER = set { 0, 1, 2, 3, 6, 7, 8, 10, 13, 15, 16, 18 },
+    ROGUE = set { 2, 3, 4, 7, 13, 15, 16, 18 },
+    PRIEST = set { 4, 10, 15, 19 },
+    SHAMAN = set { 0, 1, 4, 5, 10, 13, 15 },
+    MAGE = set { 7, 10, 15, 19 },
+    WARLOCK = set { 7, 10, 15, 19 },
+    DRUID = set { 4, 5, 10, 13, 15 },
+}
+M.WEAPON_NAMES = { [0] = "axe", [1] = "two-handed axe", [2] = "bow", [3] = "gun", [4] = "mace", [5] = "two-handed mace",
+    [6] = "polearm", [7] = "sword", [8] = "two-handed sword", [10] = "staff", [13] = "fist weapon", [15] = "dagger",
+    [16] = "thrown weapon", [18] = "crossbow", [19] = "wand" }
+-- Slots that are the same for everyone whatever their armor subclass says (cloaks are "cloth").
+local ANY_ARMOR_SLOT = { INVTYPE_CLOAK = true, INVTYPE_NECK = true, INVTYPE_FINGER = true, INVTYPE_TRINKET = true,
+    INVTYPE_HOLDABLE = true, INVTYPE_TABARD = true, INVTYPE_BODY = true }
+
+---------------------------------------------------------------- building an item
+-- The classes a class bitmask names (tokens use the game's masks; 0 or nil = every class).
+function M.ClassesFromMask(mask)
+    if not mask or mask == 0 then return nil end
+    local out = {}
+    for _, c in ipairs(M.CLASSES) do
+        if math.floor(mask / M.CLASS_BITS[c]) % 2 == 1 then out[#out + 1] = c end
+    end
+    return out
+end
+
+-- The item as this module sees it, from the game (client:itemInfo and client:itemStats), or nil while the
+-- game hasn't cached it yet (and no rule names its classes). token (optional): Tokens data, whose class group
+-- restricts it. rule (optional): the guild's rule for the item (Engine:ItemRule), which decides who may bid,
+-- over what the item itself says.
+function M.Describe(client, link, token, rule)
+    local info = client:itemInfo(link)
+    local st = client:itemStats(link)
+    if not info and not token and not rule then return nil end
+    info = info or {}
+    local item = { link = link, slot = info.equipLoc, class = info.class, subclass = info.subclass,
+        stats = (st and st.stats) or {}, classes = st and st.classes, partial = not info.equipLoc and not token }
+    if token then item.classes = M.ClassesFromMask(token.classes); item.token = true end
+    if rule then item.classes, item.rule = rule.classes, rule end
+    return item
+end
+
+-- The item id in a link ("|Hitem:19019:...") or a plain id, or nil.
+function M.ItemId(link)
+    if type(link) == "number" then return link end
+    return type(link) == "string" and tonumber(link:match("item:(%d+)") or link:match("^%s*(%d+)%s*$")) or nil
+end
+
+---------------------------------------------------------------- the rule
+-- May a player of `class` bid on `item` in the main or off-spec draft? Only an item that names its classes
+-- restricts anyone; an unknown class (no roster data) is let through.
+function M.Allowed(item, class)
+    if not (item and item.classes) or not class then return true end
+    for _, c in ipairs(item.classes) do if c == class then return true end end
+    return false
+end
+
+---------------------------------------------------------------- fit (suggestions)
+-- Can a player of `class` equip it at all? Returns true, or false + why ("classes", "armor", "weapon").
+function M.CanUse(item, class)
+    if not M.Allowed(item, class) then return false, "classes" end
+    if item.class == ARMOR and not ANY_ARMOR_SLOT[item.slot] then
+        local special = SPECIAL_ARMOR[item.subclass]
+        if special then return special[class] == true or false, "armor" end
+        local rank = ARMOR_RANK[item.subclass]
+        if rank and rank > BEST_ARMOR[class] then return false, "armor" end
+    elseif item.class == WEAPON and item.subclass ~= nil and WEAPONS[class] then
+        if item.subclass ~= 20 and not WEAPONS[class][item.subclass] then return false, "weapon" end -- 20: fishing pole
+    end
+    return true
+end
+
+local function specOf(class, name)
+    for _, s in ipairs(M.SPECS[class] or {}) do if s.name == name then return s end end
+end
+M.SpecOf = specOf
+
+-- How much the item's stats are worth to a spec (0 if it has none the spec values). For tanks and physical
+-- damage, armor of a lighter kind than the class wears in raids counts for less (a warrior can wear leather,
+-- but rarely wants to); casters and healers of hybrid classes wear lighter armor all the time.
+local ARMOR_MATTERS = { tank = true, melee = true, hunter = true }
+function M.Score(item, spec, class)
+    local total = 0
+    for k, v in pairs(item.stats or {}) do total = total + v * (spec.weights[k] or 0) end
+    if class and ARMOR_MATTERS[spec.role] and item.class == ARMOR and not ANY_ARMOR_SLOT[item.slot] then
+        local rank = ARMOR_RANK[item.subclass]
+        if rank and rank < BEST_ARMOR[class] then total = total * 0.6 end
+    end
+    return total
+end
+
+-- Every spec that can use the item, best first: { { class, spec, role, score } }.
+function M.Ranked(item)
+    local out = {}
+    for _, class in ipairs(M.CLASSES) do
+        if M.CanUse(item, class) then
+            for _, s in ipairs(M.SPECS[class]) do
+                out[#out + 1] = { class = class, spec = s.name, role = s.role, score = M.Score(item, s, class) }
+            end
+        end
+    end
+    table.sort(out, function(a, b)
+        if a.score ~= b.score then return a.score > b.score end
+        if a.class ~= b.class then return a.class < b.class end
+        return a.spec < b.spec
+    end)
+    return out
+end
+
+M.GOOD, M.OK = 0.7, 0.35 -- share of the best spec's score
+
+-- The specs the item suits best (score at least GOOD of the best), or {} if its stats say nothing (e.g. a
+-- trinket with only a use effect: then nobody is suggested, and the raid judges for itself).
+function M.Suits(item)
+    local ranked = M.Ranked(item)
+    local best = ranked[1] and ranked[1].score or 0
+    local out = {}
+    if best <= 0 then return out end
+    for _, r in ipairs(ranked) do
+        if r.score >= best * M.GOOD then out[#out + 1] = r end
+    end
+    return out
+end
+
+-- The fit for one player: { usable, why?, spec, score, rating = "good" | "ok" | "poor" | nil }. specName
+-- (optional) is the player's spec; without it, the class's best spec for this item is used.
+function M.ForPlayer(item, class, specName)
+    local ok, why = M.CanUse(item, class)
+    if not ok then return { usable = false, why = why } end
+    local ranked = M.Ranked(item)
+    local best = ranked[1] and ranked[1].score or 0
+    local mine
+    for _, r in ipairs(ranked) do
+        if r.class == class and (r.spec == specName or not specName) and (not mine or r.score > mine.score) then mine = r end
+    end
+    if not mine then return { usable = true } end
+    local rating
+    if best > 0 then
+        local share = mine.score / best
+        rating = share >= M.GOOD and "good" or share >= M.OK and "ok" or "poor"
+    end
+    return { usable = true, spec = mine.spec, role = mine.role, score = mine.score, rating = rating }
+end
+
+-- Display helpers.
+local CLASS_NAMES = { WARRIOR = "Warrior", PALADIN = "Paladin", HUNTER = "Hunter", ROGUE = "Rogue", PRIEST = "Priest",
+    SHAMAN = "Shaman", MAGE = "Mage", WARLOCK = "Warlock", DRUID = "Druid" }
+M.CLASS_NAMES = CLASS_NAMES
+
+function M.ClassList(item)
+    if not (item and item.classes) then return nil end
+    local names = {}
+    for i, c in ipairs(item.classes) do names[i] = CLASS_NAMES[c] or c end
+    return table.concat(names, ", ")
+end
+
+-- "Holy Paladin, Restoration Shaman, ..." (at most `limit`, default 4).
+function M.SuitsText(item, limit)
+    local suits = M.Suits(item)
+    if #suits == 0 then return nil end
+    local parts = {}
+    for i = 1, math.min(#suits, limit or 4) do parts[i] = suits[i].spec .. " " .. CLASS_NAMES[suits[i].class] end
+    if #suits > (limit or 4) then parts[#parts + 1] = ("and %d more"):format(#suits - (limit or 4)) end
+    return table.concat(parts, ", ")
+end
+
+end; chunk("KingsGambit", SK) end
 -- ===== Loot.lua =====
 do local chunk = function(...)
 -- King's Gambit: the loot session and draft engine (Phase 4).
@@ -1729,8 +2031,8 @@ do local chunk = function(...)
 -- nothing is written to the ledger until confirm(). Winners drop to the bottom of the
 -- scratch order exactly as the ledger will replay them.
 local _, SK = ...
-local Tokens
-local M = SK:NewModule("Loot", { "Tokens?" }, function(d) Tokens = d.Tokens end)
+local Tokens, ItemFit
+local M = SK:NewModule("Loot", { "ItemFit", "Tokens?" }, function(d) Tokens, ItemFit = d.Tokens, d.ItemFit end)
 
 local DEFAULTS = {
     listId = "main",
@@ -1846,12 +2148,24 @@ function Session:start(items)
         if not (s and s <= now) then s = now end
         self.items[i] = { id = i, link = it.link, slot = it.slot, status = "open", seen = s,
             token = Tokens and Tokens.Find(it.link) or nil }
+        self:fitOf(i)
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
     self:emit("phase", { phase = "bidding" })
     return true
+end
+
+-- What the session knows about item i (ItemFit's view: class restriction, stats), or nil while the game
+-- hasn't cached it. Asked again until known: an uncached item restricts nobody.
+function Session:fitOf(i)
+    local it = self.items[i]
+    if it and (not it.fit or it.fit.partial) then
+        -- the guild's rule for this item, set ahead of time by an officer, decides who may bid
+        it.fit = ItemFit.Describe(self.client, it.link, it.token, self.engine:ItemRule(ItemFit.ItemId(it.link))) or it.fit
+    end
+    return it and it.fit
 end
 
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
@@ -1868,6 +2182,13 @@ function Session:bid(player, itemId, kind, extra)
     if kind == "gift" then
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
+    end
+    -- An item that names its classes is for those classes only, in the drafts (the backstop and the
+    -- disenchanter are not restricted). Gifting doesn't get around it, in either direction.
+    if kind ~= "pass" then
+        local fit = self:fitOf(itemId)
+        if not ItemFit.Allowed(fit, self.class[player]) then return false, "wrongclass" end
+        if to and not ItemFit.Allowed(fit, self.class[to]) then return false, "wrongclassto" end
     end
     self.bids[player] = self.bids[player] or {}
     local rank = tonumber(extra.rank)
@@ -1951,7 +2272,11 @@ function Session:handleWhisper(sender, text)
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
                 lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
             else
-                lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+                if err == "wrongclass" or err == "wrongclassto" then
+                    lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
+                else
+                    lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+                end
             end
         end
     end
