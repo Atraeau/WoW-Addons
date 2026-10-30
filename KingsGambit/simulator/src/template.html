@@ -155,7 +155,7 @@
     return '<div class="turn"><b>Salvage round, offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
       "As a salvager, claiming costs you almost nothing at the bottom. Keep it with the Claim it button, or choose who gets it in the Gift to list and press Claim and gift." +
       '<div class="row" style="margin-top:8px"><button class="primary" data-act="claim" data-a="">Claim it</button>' +
-      '<span class="muted">Gift to:</span>' + giftSelect(t.item) + '<button data-act="claimGift">Claim and gift</button><button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
+      '<span class="muted">Gift to:</span>' + giftSelect(t.item) + '<button data-act="claimGift"' + (giftTo ? "" : ' disabled title="Choose who to gift it to first"') + '>Claim and gift</button><button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
   }
 
   // Who runs the loot and who disenchants: the Master Looter chooses the disenchanter for the raid (it is recorded),
@@ -175,8 +175,8 @@
   function giftSelect(itemId) {
     const item = itemId != null && (st.items || []).filter((x) => x.id === itemId)[0];
     const names = item && item.giftTargets ? item.giftTargets : (st.players || []).map((p) => p.name).filter((n) => n !== "You");
-    if (names.indexOf(giftTo) < 0) giftTo = ""; // nobody until you choose
-    return '<select id="giftTo"><option value=""' + (giftTo === "" ? " selected" : "") + ">&mdash; nobody &mdash;</option>" +
+    if (names.indexOf(giftTo) < 0) giftTo = ""; // blank until you choose
+    return '<select id="giftTo"><option value=""' + (giftTo === "" ? " selected" : "") + "></option>" +
       names.map((n) => '<option value="' + esc(n) + '"' + (n === giftTo ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>";
   }
 
@@ -191,7 +191,7 @@
       let ans = "";
       if (bidding) {
         const a = mine && mine.answers[i];
-        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
+        const b = (k, label) => '<button class="b-' + k + (a && a.kind === k ? " sel" : "") + '"' + (k === "gift" && !giftTo ? ' disabled title="Choose who to gift it to first (the Gift to list)"' : "") + ' data-act="bid" data-a="' + it.id + '" data-b="' + k + '">' + (a && a.kind === k ? "&#10003; " : "") + label + "</button>";
         const ready = it.token ? '<button class="b-need' + (a && a.kind === "need" && a.ready ? " sel" : "") + '" data-act="bid" data-a="' + it.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "";
         if (it.youMay === false) {
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,

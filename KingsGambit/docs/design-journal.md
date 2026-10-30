@@ -899,8 +899,8 @@ Reports from the page (a pass that wasn't acknowledged; a "Gift to" list that cl
 faults:
 - **The page redrew itself four times a second,** which closed an open drop-down and lost the choice. It no longer
   redraws while a list has focus, and releases it once a recipient is chosen, so the clock keeps drawing.
-- **The picker starts at "nobody".** Gifting with nobody chosen says to choose someone first, instead of silently
-  picking the first raider. It sits before its button ("Gift to: [..] Claim and gift") and lists only raiders who are
+- **The picker starts blank** (no placeholder text), and **the gift can't be confirmed until someone is chosen**: the
+  Gift and "Claim and gift" buttons stay disabled, with a hint, instead of silently picking the first raider. It sits before its button ("Gift to: [..] Claim and gift") and lists only raiders who are
   eligible for the item.
 - **A chosen answer is unmistakable:** a tick, a filled button, and "Your answer: Pass (you can change it until
   bidding closes)".
