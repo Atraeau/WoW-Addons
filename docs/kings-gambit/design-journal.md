@@ -494,6 +494,24 @@ materials and rewards, and the items involved with their stats and equip spells.
 - Still provisional: role tags (the item stats are now in the extract; deriving roles from them is next). AQ20
   is not yet a raid module.
 
+### Decision: no dependence on per-raid data; item fit by heuristic, with recorded overrides (2026-10-30)
+
+**Decided by the guild leader.** The addon must not need an update every time new content comes out, so it does
+not anticipate raids or dungeons. Focus is on functionality.
+- **Item fit is worked out at drop time, from the item itself**, through the game: item class and subclass, armor
+  type, slot, class restriction ("Classes: ..."), and stats and equip effects (`GetItemInfoInstant`,
+  `GetItemStats`, the tooltip). A heuristic maps these to the classes and specs the item suits. It works for any
+  item, including content the addon has never seen.
+- **Officers or the guild master can override the fit for an item, durably**, e.g. "this trinket is for tanks
+  too". An override is an event in the ledger (who, when, which item, what fit, why), so every peer applies it the
+  same way and the change is visible in the history. It is guild-wide and lasts until changed again.
+- Fit stays **informational**, as before: it feeds hints (player-toggleable, off by default), the after-the-fact
+  camp-watch and the simulator's bots. It never decides who may bid.
+- **Raid data modules (Molten Core, AQ40) are training data only**, for the simulator and tests, not something
+  the addon needs to work. Token turn-in data becomes optional: where it's present, readiness is checked; where
+  it isn't, a token falls back to the player's own word ("says ready"). Class restrictions on tokens are read from
+  the item, like any other item.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
