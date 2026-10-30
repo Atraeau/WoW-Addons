@@ -15,7 +15,7 @@ local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WA
 --   default = kind used for items not listed in `bid` (default "pass")
 --   pick  = "first" | { itemLink, ... } (preference order when it is this bot's draft turn)
 --   skip  = true to skip a draft turn instead of picking
---   claim = true to claim backstop offers (false = decline); claimTo = "Name" to gift the item up
+--   claim = true to claim salvage offers (false = decline); claimTo = "Name" to gift the item up
 local Sim = {}
 Sim.__index = Sim
 

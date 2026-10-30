@@ -3,7 +3,7 @@
 --
 -- Two different things:
 --   * RESTRICTION (a rule): an item that names its classes ("Classes: Priest, Mage" on the tooltip, or a token's
---     class group) may only be bid on by those classes, in the main and off-spec drafts. The backstop's salvager,
+--     class group) may only be bid on by those classes, in the main and off-spec drafts. The salvage round's salvager,
 --     and the Master Looter or disenchanter who gets what nobody took, are not restricted. See Allowed.
 --   * FIT (a suggestion, never a rule): how well the item's stats match each spec, from the baked-in priorities
 --     below plus armor and weapon proficiency. It feeds hints (off by default), the "suits" line, and bots.

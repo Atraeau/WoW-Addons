@@ -801,6 +801,17 @@ is attributed to whoever set it.
 - **Changed:** the hint a raider sees now names the author and the reason ("suits: ... (Name's call: reason)"), not
   just "officer's call", so the attribution is visible where the override is used.
 
+### Naming: the salvage round and the salvager (2026-10-30)
+
+**Asked by the guild leader:** the simulator used two terms ("backstop" and "salvager") for what looked like the same
+thing. One vocabulary now: the **salvage round** is the stage where items nobody drafted are offered lowest-first
+to everyone, and a **salvager** is whoever is offered and claims an item (the player at the bottom of the list is
+offered first, and the page tags them). This matches the ledger's existing `Salvage` event, which records what the
+salvager did with the item.
+- "Backstop" is retired everywhere: the session phase and tier are now `salvage`, and so are the code, the text
+  commands, the simulator page, the tests and the docs. Entries above that say "backstop" are the record of what we
+  called it then, and are left as written.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

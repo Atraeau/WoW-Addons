@@ -226,7 +226,7 @@ test("a full AQ40 clear: tokens go only to their class groups, and readiness is 
             if it.token then
                 assert(snap.token and snap.token.makes, "the snapshot describes the token")
                 for _, w in ipairs(snap.token.wanted) do if w.ready then withReadiness = withReadiness + 1 end end
-                if it.status == "awarded" and it.tier ~= "backstop" then
+                if it.status == "awarded" and it.tier ~= "salvage" then
                     tokenAwards = tokenAwards + 1
                     local class = sim.info[(it.winner:gsub("%-.*$", ""))].class
                     assert(Sim.Wants(AQ, it.token, class, sim.info[(it.winner:gsub("%-.*$", ""))].role), it.token.name .. " to " .. class)

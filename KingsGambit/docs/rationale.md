@@ -69,7 +69,7 @@ it sits too high to bid economically. A player near the bottom can claim it chea
 and pass it up. Because the cost is real, it can't be gamed, and generosity is
 recognized in the record.
 
-### When nobody bids (the backstop)
+### When nobody bids (the salvage round)
 Items with no Need or Off-spec bids are offered in *reverse* order
 (lowest position first) to everyone, whether or not they can use the item. The
 claimer drops to the bottom (nearly free for someone already there) and can keep it,
@@ -130,7 +130,7 @@ This is what happens, in order, when a boss drops loot. Practice it in the
    theirs automatically; if they want several, they pick one (a pick that times out counts as a skip).
    Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
    play for items no main-spec player wanted.
-4. **The backstop.** Anything left is offered one item at a time, lowest on the list first, to everyone,
+4. **The salvage round.** Anything left is offered one item at a time, lowest on the list first, to everyone,
    whether or not they could use it. If everyone declines, the item goes to the disenchanter.
 5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
    and nothing is handed out until you confirm. If handing an item over fails, that award is not
@@ -155,7 +155,7 @@ This is what happens, in order, when a boss drops loot. Practice it in the
 - **Position / standing:** where you sit on the list.
 - **Need / Off-spec / Gift / Pass:** your response when an item drops.
 - **Draft:** the ordered picking when several items drop at once.
-- **Backstop:** the lowest-first offer for items nobody bid on.
-- **Salvager:** whoever claims a backstop item and decides its fate.
+- **Salvage round:** the lowest-first offer for items nobody bid on.
+- **Salvager:** whoever claims a salvage item and decides its fate.
 - **Camp-watch:** an officer flag for players whose pattern suggests hoarding.
 - **Fix-forward:** correcting mistakes with new visible entries, not edits.

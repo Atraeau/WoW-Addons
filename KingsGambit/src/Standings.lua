@@ -146,7 +146,7 @@ end
 
 local SALVAGE_ACTIONS = { keep = true, gift = true, sell = true, disenchant = true, bank = true }
 
--- What the player who claimed a backstop item did with it. Recorded for transparency only.
+-- What the player who claimed a salvage item did with it. Recorded for transparency only.
 function handlers.Salvage(s, ev, d)
     local a = s.awards[d.award]
     if not a or a.reverted then return nil, "noaward" end

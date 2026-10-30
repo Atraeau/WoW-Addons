@@ -50,7 +50,7 @@ local HELP = {
     "  need|off|pass <item#>   gift <item#> <name>      answer for an item (or: bid <item#> <kind> [name])",
     "  need <item#> ready              a token: you can turn it in (e.g. materials in your bank)",
     "  ready <item#>                   who wants a token, and how ready each one is (a hint, never enforced)",
-    "  pick <item#> | skip | claim [name] | decline     your turn in the draft or the backstop",
+    "  pick <item#> | skip | claim [name] | decline     your turn in the draft or the salvage round",
     "  raid                            who is Master Looter of the raids that are open",
     "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
@@ -598,7 +598,7 @@ function M.New(ctx)
             if not ev then return out("Not declined: " .. why(err)) end
             return out(("Declined, and recorded: %s"):format(c.describe(ev)))
         end
-        -- no number: declining a backstop offer in a loot session
+        -- no number: declining a salvage offer in a loot session
         act(function(s) return s:decline(client:me()) end, function(p) return p:decline() end)
     end
 
@@ -811,7 +811,7 @@ function M.New(ctx)
             if t.type == "pick" then
                 out("It's your pick! Items you bid on: " .. table.concat(t.options, ", ") .. ".  Use: pick <n>, or skip.")
             else
-                out(("Item %d is offered to you from the bottom up. claim [name to gift it to], or decline."):format(t.item))
+                out(("Salvage round: item %d is offered to you from the bottom up. claim [name to gift it to], or decline."):format(t.item))
             end
         end)
         ctx.player.on("result", function(r)

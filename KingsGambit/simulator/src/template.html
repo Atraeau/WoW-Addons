@@ -81,7 +81,7 @@
   const $ = (s) => document.querySelector(s);
   const call = (name, a, b, c) => JSON.parse(window.KG(name, a, b, c));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", backstop: "Backstop", review: "Review", done: "Done", cancelled: "Cancelled" };
+  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "mc", seed = 1, st = null;
   let running = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
@@ -152,8 +152,8 @@
         '<div class="row" style="margin-top:8px">' + t.options.map((id) => '<button class="primary" data-act="pick" data-a="' + id + '">Claim ' + itemName(id) + "</button>").join("") +
         '<button data-act="skip">Skip my turn</button></div>' + timerHtml() + "</div>";
     }
-    return '<div class="turn"><b>Offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
-      "Claiming costs you almost nothing at the bottom. You can keep it, or gift it up to someone who can use it." +
+    return '<div class="turn"><b>Salvage round, offered to you from the bottom up:</b> <span class="iname">' + itemName(t.item) + "</span>. " +
+      "As a salvager, claiming costs you almost nothing at the bottom. You can keep it, or gift it up to someone who can use it." +
       '<div class="row" style="margin-top:8px"><button class="primary" data-act="claim" data-a="">Claim it</button>' +
       '<button data-act="claimGift">Claim and gift to</button>' + giftSelect() + '<button data-act="decline">Decline</button></div>' + timerHtml() + "</div>";
   }

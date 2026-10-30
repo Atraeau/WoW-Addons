@@ -1,10 +1,10 @@
 -- King's Gambit: the loot session and draft engine (Phase 4).
 -- Pure logic over an Engine and its Client: no WoW calls, no frames. A Session takes a
--- batch of items through bidding, the tiered priority draft, the backstop and the
+-- batch of items through bidding, the tiered priority draft, the salvage round and the
 -- disenchant floor, then (after confirmation) hands the items out and records the results
 -- in the ledger. Rules: docs/rationale.md.
 --
---   bidding  -> main draft -> off-spec draft -> backstop -> disenchant -> review -> done
+--   bidding  -> main draft -> off-spec draft -> salvage -> disenchant -> review -> done
 --
 -- The draft works on scratch copies of the standings, so picks can be made live while
 -- nothing is written to the ledger until confirm(). Winners drop to the bottom of the
@@ -18,7 +18,7 @@ local DEFAULTS = {
     offListId = "off",
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
-    claimSeconds = 10,   -- a backstop offer that times out counts as a decline
+    claimSeconds = 10,   -- a salvage offer that times out counts as a decline
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
     deHandler = nil,     -- who disenchants when nobody wants an item (default: this client)
 }
@@ -235,7 +235,7 @@ function Session:bid(player, itemId, kind, extra)
         if not to or to == player then return false, "badtarget" end
     end
     -- In the drafts, an item is only for the classes that may have it: those it names (or the guild's rule names),
-    -- and, without a guild rule, only those who can equip it at all (armor type, weapon proficiency). The backstop
+    -- and, without a guild rule, only those who can equip it at all (armor type, weapon proficiency). The salvage round
     -- and the disenchanter are not restricted. Anyone may gift (win it and hand it on): what matters is who ends up
     -- with it, so the recipient must be one who may have it.
     if kind == "need" or kind == "off" then
@@ -493,7 +493,7 @@ function Session:continueDraft(tier)
     end
     self.turn = nil
     self:clearTimer()
-    if tier == "main" then self:runDraft("off") else self:runBackstop() end
+    if tier == "main" then self:runDraft("off") else self:runSalvage() end
 end
 
 -- Ranked choice: if the player ranked every option, the one they ranked highest (lowest number; ties go
@@ -533,20 +533,20 @@ function Session:skip(player)
     return true
 end
 
----------------------------------------------------------------- backstop and disenchant
+---------------------------------------------------------------- salvage and disenchant
 -- Items nobody drafted are offered lowest position first, with no usability gate.
-function Session:runBackstop()
-    self.phase = "backstop"
+function Session:runSalvage()
+    self.phase = "salvage"
     self.queue = {}
     for _, it in ipairs(self.items) do
         if it.status == "open" then self.queue[#self.queue + 1] = it.id end
     end
     self.qi = 0
-    self:emit("phase", { phase = "backstop" })
-    self:nextBackstopItem()
+    self:emit("phase", { phase = "salvage" })
+    self:nextSalvageItem()
 end
 
-function Session:nextBackstopItem()
+function Session:nextSalvageItem()
     self.qi = self.qi + 1
     local id = self.queue[self.qi]
     if not id then return self:finish() end
@@ -566,7 +566,7 @@ function Session:offerNext()
     if not player then
         self.items[c.item].status, self.items[c.item].tier = "de", "de"
         self.turn = nil
-        return self:nextBackstopItem()
+        return self:nextSalvageItem()
     end
     self:setTurn({ type = "claim", item = c.item, player = player },
         self.cfg.claimSeconds, function() self:decline(player) end)
@@ -585,8 +585,8 @@ function Session:claimItem(player, extra)
         if not to or to == player then return false, "badtarget" end
     end
     self.turn = nil
-    self:award("backstop", player, t.item, to)
-    self:nextBackstopItem()
+    self:award("salvage", player, t.item, to)
+    self:nextSalvageItem()
     return true
 end
 

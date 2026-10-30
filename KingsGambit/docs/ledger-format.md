@@ -118,7 +118,7 @@ Order is top of the list first. Positions are never numbers: they are an end (`t
 | `MovePlayer` | `member`, `reason`, `to` / `above` | A correction. `reason` is required. |
 | `Revert` | `target` | Undoes this writer's most recent `Award` (and, one by one, the ones before it), as long as this writer has made no `MovePlayer` or `RemoveMember` since. The winner goes back directly above the highest-placed of the players who were below them when they won. |
 | `Disenchant` | `item`, `to` | Nobody wanted the item. |
-| `Salvage` | `award`, `action` | What the claimer of a backstop item did: `keep`, `gift`, `sell`, `disenchant` or `bank`. |
+| `Salvage` | `award`, `action` | What the claimer of a salvage item did: `keep`, `gift`, `sell`, `disenchant` or `bank`. |
 
 ## 6. Verifying
 
