@@ -134,10 +134,11 @@ local function state()
                 undecided = a.undecided or nil }
         elseif a.type == "disenchant" then
             snap.pending[#snap.pending + 1] = { type = "disenchant", to = short(a.to), item = a.item.link }
-        elseif a.type == "enroll" then
-            snap.pending[#snap.pending + 1] = { type = "enroll", member = short(a.member), list = a.list }
         end
     end
+    -- the off-spec list: created at the first session in a random order, then newcomers at the bottom
+    snap.enrollments = {}
+    for _, e in ipairs(s.enrollments) do snap.enrollments[#snap.enrollments + 1] = { member = short(e.member), seeded = e.seeded or false } end
     snap.cfg = { bidSeconds = s.cfg.bidSeconds, pickSeconds = s.cfg.pickSeconds, claimSeconds = s.cfg.claimSeconds }
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     return snap

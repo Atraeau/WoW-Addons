@@ -1032,13 +1032,35 @@ The off-spec list should not borrow the main list's order at all, because **play
 otherwise also get an unfair off-spec advantage.** Instead:
 - **The off-spec list is created at the very first session (not lazily), with all raiders in a random seed order.**
 - **Newcomers after that start at the bottom**, just like the main list.
-- **Leaning toward a roll as the tie breaker** (a roll is the random element; exactly where it applies is being settled:
-  see the open question below). A roll must be recorded in the ledger (the result, or the seed, is in the event that
-  creates the list or settles the tie), so every peer and the audit tool replay the same order and nothing is
-  decided by who ran it.
+- **The roll seeds the first list only (decided).** One roll when the list is created; after that it is list order only,
+  newcomers at the bottom, and no further rolls (no tie-breaker rolls, no roll per item). The result is kept in the
+  ledger as the order the raiders were added in, so every peer and the audit tool replay the same order and nothing
+  depends on who ran it.
 - This replaces today's behaviour (lazy enrollment, newcomers ordered by main-list place), and revisits the earlier
   rejection of a "free roll" for loot, which was about a costless roll over scarce items, not about seeding an order.
-- Nothing is built yet.
+- **Built (off-spec list):** created at the first session with all raiders present, shuffled; newcomers at the bottom.
+  The list is written at confirm, with the awards.
+
+### Decision: the main list is created the same way, and the two lists are independent random orders (2026-10-30)
+
+**Raised by the guild leader:** how the main list is created had not been established, and it should follow similar
+rules; **the main list and the off-spec list must be unique random orders on initialization.**
+- **Main list:** when the first session starts and the list has no members, everyone present is added in a random
+  order (the roll, recorded as the order of the `AddMember` events). Anyone who comes later goes to the bottom, as
+  already happens. A guild that wants to hand-build its list can still use `create` and `add` before the first session:
+  the seed applies only to an empty list.
+- **Independent:** the off-spec list is shuffled separately, not copied from the main list. If a draw happens to match
+  the main order exactly, it is redrawn (a few tries), so the two start as different orders.
+- **Scenarios** that teach a specific layout still set their own lists; raid nights seed from their seed.
+- **Built:** `Session:refreshRoster` seeds an empty main list at the first session (a shuffle from the client's random
+  source, `Loot.Shuffle`); the off-spec list is seeded and redrawn if it matches the main order; both are the order of the
+  `AddMember` events in the ledger. List creation moved out of the "will be recorded" awards into `enrollments`
+  (written first at confirm), and the page shows one line for it instead of one per raider.
+- **Tests:** seeding differs by seed and the ledger holds the order; a hand-built list is left alone and latecomers go to
+  the bottom; the off list never equals the main order across 30 seeds of a 3-raider raid; the off-spec scenario checks
+  the real seeded order (three seeds in the browser: different orders, ahead-of-the-other bidder wins).
+- **Open:** whether the seed should include main-list members who are absent at the first session (today: only raiders
+  present, and an absent member joins the bottom of the off-spec list when first present).
 
 ### Scaling: measured, not guessed (2026-10-28)
 

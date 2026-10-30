@@ -159,14 +159,64 @@ test("main need always beats off-spec", function()
     answerAll(s, 1, { A = "pass", B = "off", C = "need", D = "pass", E = "pass" })
     eq(s.pending[1].member, "C-Realm"); eq(s.pending[1].tier, "main"); eq(#s.pending, 1)
 end)
-test("off-spec bidders are enrolled lazily and winning moves only the off list", function()
+test("the first session creates the off-spec list with every raider in a random seed order; the winner is whoever is ahead", function()
     local s, engine = setup()
     answerAll(s, 1, { A = "pass", B = "off", C = "off", D = "pass", E = "pass" })
-    eq(s.phase, "review"); eq(s.pending[1].type, "enroll"); eq(s.pending[2].type, "enroll")
-    eq(s.pending[3].type, "award"); eq(s.pending[3].list, "off"); eq(s.pending[3].member, "B-Realm")
+    eq(s.phase, "review")
+    local seeded = {}
+    for _, e in ipairs(s.enrollments) do seeded[#seeded + 1] = e.member:gsub("%-Realm", "") end
+    eq(#seeded, 5, "all five raiders are on the new list, not only the bidders")
+    local sorted = { table.unpack(seeded) }; table.sort(sorted); eq(table.concat(sorted), "ABCDE")
+    local award = s.pending[#s.pending]
+    eq(award.type, "award"); eq(award.list, "off")
+    local ahead = (function() for _, n in ipairs(seeded) do if n == "B" or n == "C" then return n end end end)()
+    eq(award.member, ahead .. "-Realm", "of the two bidders, the one ahead in the seeded order wins")
     assert(s:confirm())
     eq(order(engine, "main"), "A,B,C,D,E", "the main list is untouched by an off-spec win")
-    eq(order(engine, "off"), "C,B", "enrolled in main order, then the winner drops to the bottom")
+    local expected = {}
+    for _, n in ipairs(seeded) do if n ~= ahead then expected[#expected + 1] = n end end
+    expected[#expected + 1] = ahead
+    eq(order(engine, "off"), table.concat(expected, ","), "the seeded order, with the winner moved to the bottom")
+end)
+test("the seed is random (it differs by seed), not the main list's order, and is recorded in the ledger", function()
+    local seen, sameAsMain = {}, 0
+    for seed = 1, 12 do
+        local client = MockClient.New({ name = "Raidlead", realm = "Realm", seed = seed })
+        local engine = Engine.New(client)
+        engine:CreateList("main", "Main")
+        for _, n in ipairs { "A", "B", "C", "D", "E" } do engine:Append("main", "AddMember", { member = n .. "-Realm", class = "WARRIOR" }) end
+        client:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+        client:dropLoot({ { link = "item:1" } })
+        local s = Loot.NewSession(engine); assert(s:start({ { link = "item:1", slot = 1 } }))
+        answerAll(s, 1, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" })
+        s:decline("E"); for _, p in ipairs { "D", "C", "B", "A" } do s:decline(p) end
+        assert(s:confirm())
+        local o = order(engine, "off"); seen[o] = true
+        if o == "A,B,C,D,E" then sameAsMain = sameAsMain + 1 end
+        local adds = {}
+        for _, ev in ipairs(engine:Get("off").events) do if ev.type == "AddMember" then adds[#adds + 1] = ev.data.member:gsub("%-Realm", "") end end
+        eq(table.concat(adds, ","), o, "the ledger holds the order they were added in")
+    end
+    local distinct = 0
+    for _ in pairs(seen) do distinct = distinct + 1 end
+    assert(distinct >= 8, "different seeds give different orders: " .. distinct)
+    assert(sameAsMain <= 1, "the off list does not copy the main list")
+end)
+test("after the first session, newcomers join the off list at the bottom and nothing is rolled again", function()
+    local s, engine, client = setup()
+    answerAll(s, 1, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" })
+    for _, p in ipairs { "E", "D", "C", "B", "A" } do s:decline(p) end
+    assert(s:confirm())
+    local before = order(engine, "off")
+    engine:Append("main", "AddMember", { member = "F-Realm", class = "WARRIOR" })
+    engine:Append("main", "AddMember", { member = "G-Realm", class = "WARRIOR" })
+    client:setRaid({ "A", "B", "C", "D", "E", "F", "G" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+    client:dropLoot({ { link = "item:2" } })
+    local s2 = Loot.NewSession(engine); assert(s2:start({ { link = "item:2", slot = 1 } }))
+    answerAll(s2, 1, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass", F = "pass", G = "pass" })
+    for _, p in ipairs { "G", "F", "E", "D", "C", "B", "A" } do s2:decline(p) end
+    assert(s2:confirm())
+    eq(order(engine, "off"), before .. ",F,G", "the existing order is kept; newcomers go to the bottom")
 end)
 test("an existing off list decides the off-spec order", function()
     local s, engine = setup()
@@ -500,4 +550,51 @@ test("the Master Looter can override a gifter who never says who gets it: it is 
     local p = events(engine, "main", "Pass")[1]
     assert(p and p.data.member == "A-Realm" and p.data.kind == "undecided", "recorded as a pass that says why")
     eq(engine:Get("main").state.members["A-Realm"].upgradePasses, 0, "it is not an upgrade pass")
+end)
+
+H.section("Loot: the lists start as independent random orders")
+test("the first session seeds an empty main list in a random order; later arrivals go to the bottom", function()
+    local orders, distinct = {}, 0
+    for seed = 1, 12 do
+        local client = MockClient.New({ name = "Raidlead", realm = "Realm", seed = seed })
+        local engine = Engine.New(client)
+        engine:CreateList("main", "Main") -- an empty list: nobody added by hand
+        client:setRaid({ "A", "B", "C", "D", "E" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+        client:dropLoot({ { link = "item:1" } })
+        local s = Loot.NewSession(engine); assert(s:start({ { link = "item:1", slot = 1 } }))
+        local o = order(engine, "main")
+        if not orders[o] then orders[o] = true; distinct = distinct + 1 end
+        local adds = {}
+        for _, ev in ipairs(engine:Get("main").events) do if ev.type == "AddMember" then adds[#adds + 1] = ev.data.member:gsub("%-Realm", "") end end
+        eq(table.concat(adds, ","), o, "the ledger holds the order they were added in")
+        eq(#adds, 5)
+    end
+    assert(distinct >= 8, "different seeds give different orders: " .. distinct)
+    -- a list built by hand first is left alone, and a latecomer goes to the bottom
+    local s, engine, client = setup()
+    eq(order(engine, "main"), "A,B,C,D,E")
+    client:setRaid({ "A", "B", "C", "D", "E", "F" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+    s:cancel()
+    client:dropLoot({ { link = "item:2" } })
+    local s2 = Loot.NewSession(engine); assert(s2:start({ { link = "item:2", slot = 1 } }))
+    eq(order(engine, "main"), "A,B,C,D,E,F")
+end)
+test("the main list and the off-spec list are independent orders: the off list is not the main list's order", function()
+    local same, total = 0, 0
+    for seed = 1, 30 do
+        local client = MockClient.New({ name = "Raidlead", realm = "Realm", seed = seed })
+        local engine = Engine.New(client)
+        engine:CreateList("main", "Main")
+        client:setRaid({ "A", "B", "C" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+        client:dropLoot({ { link = "item:1" } })
+        local s = Loot.NewSession(engine); assert(s:start({ { link = "item:1", slot = 1 } }))
+        answerAll(s, 1, { A = "pass", B = "pass", C = "pass" })
+        while s.turn do s:decline(s.turn.player) end -- the main order is random now: decline whoever is offered
+        local mainOrder = order(engine, "main")
+        assert(s:confirm())
+        total = total + 1
+        if order(engine, "off") == mainOrder then same = same + 1 end
+    end
+    eq(same, 0, "with only three raiders a match would be common by chance; the draw is redrawn until it differs")
+    assert(total == 30)
 end)

@@ -39,6 +39,16 @@ local function indexOf(t, v)
     end
 end
 
+-- An unbiased random shuffle of `list` in place, from the client's random source (so it is repeatable in the simulator
+-- and tests, and the result is what gets recorded).
+function M.Shuffle(client, list)
+    for i = #list, 2, -1 do
+        local j = client:random(i)
+        list[i], list[j] = list[j], list[i]
+    end
+    return list
+end
+
 local function moveToBottom(order, name)
     local i = indexOf(order, name)
     if i then table.remove(order, i); order[#order + 1] = name end
@@ -51,7 +61,7 @@ function M.NewSession(engine, opts)
     for k, v in pairs(opts or {}) do cfg[k] = v end
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
-        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {},
+        items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {},
         bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
@@ -114,7 +124,7 @@ function Session:start(items)
         local s = tonumber(it.seen)
         if s and s <= now and s < self.seen then self.seen = s end
     end
-    self:refreshRoster()
+    self:refreshRoster(true) -- (the very first time, an empty list is seeded in a random order)
 
     for i, it in ipairs(items) do
         if type(it.link) ~= "string" or it.link == "" then return false, "badlink" end
@@ -136,26 +146,35 @@ end
 -- Read the raid. Anyone online and on the list is eligible (a newcomer joins the bottom of the list when
 -- autoEnroll is on), including someone who arrives after the session started. Anyone who has gone offline
 -- or left is `away`: they stay on record but can't win, or hold the session up.
-function Session:refreshRoster()
+function Session:refreshRoster(seedIfEmpty)
     local cfg = self.cfg
     local main = self.engine:Get(cfg.listId)
-    local here = {}
+    local here, newcomers = {}, {}
     for _, m in ipairs(self.client:roster()) do
         if m.online then
             here[m.name] = true
             self.class[m.name] = m.class
             if not self.eligible[m.name] then
                 local mem = main.state.members[m.name]
-                if not (mem and mem.active) and cfg.autoEnroll then
-                    self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class, seen = self.seen })
-                    mem = main.state.members[m.name]
-                    if self.order.main and mem and mem.active then self.order.main[#self.order.main + 1] = m.name end
-                end
                 if mem and mem.active then
                     self.eligible[m.name] = true
                     self.eligibleList[#self.eligibleList + 1] = m.name
+                elseif cfg.autoEnroll then
+                    newcomers[#newcomers + 1] = m
                 end
             end
+        end
+    end
+    -- Raiders not yet on the list join at its bottom. The very first time (an empty list, at the first session) they
+    -- are put in a random order instead: the roll that seeds the list, kept as the order the AddMember events are in.
+    if seedIfEmpty and #main.state.order == 0 then M.Shuffle(self.client, newcomers) end
+    for _, m in ipairs(newcomers) do
+        self.engine:Append(cfg.listId, "AddMember", { member = m.name, class = m.class, seen = self.seen })
+        local mem = main.state.members[m.name]
+        if self.order.main and mem and mem.active then self.order.main[#self.order.main + 1] = m.name end
+        if mem and mem.active then
+            self.eligible[m.name] = true
+            self.eligibleList[#self.eligibleList + 1] = m.name
         end
     end
     local away = {}
@@ -437,23 +456,31 @@ function Session:topCandidate(tier)
     end
 end
 
--- Lazy enrollment: off-spec bidders not yet on the off list join at its bottom.
+-- The off-spec list does not borrow the main list's order (that would hand the top of the main list an off-spec
+-- advantage too). The first session creates it with every raider present in a random seed order (the one roll, kept in
+-- the ledger as the order they are added in); after that, newcomers join at the bottom, as on the main list, and
+-- nothing is rolled again.
 function Session:buildOffOrder()
     local off = self.engine:Get(self.cfg.offListId)
     local order = off and copy(off.state.order) or {}
     local seen = {}
     for _, n in ipairs(order) do seen[n] = true end
-    for _, name in ipairs(self.order.main) do
-        if self.eligible[name] and not seen[name] then
-            for _, it in ipairs(self.items) do
-                if it.status == "open" and self:hasBid(name, it.id, "off") then
-                    order[#order + 1] = name
-                    seen[name] = true
-                    self.pending[#self.pending + 1] = { type = "enroll", list = self.cfg.offListId, member = name }
-                    break
-                end
-            end
+    local newcomers = {}
+    for _, name in ipairs(self.eligibleList) do
+        if not seen[name] then newcomers[#newcomers + 1] = name end
+    end
+    if not off then
+        -- the roll: a shuffle of everyone present, from the client's random source (a shuffle is unbiased)
+        -- Independent of the main list: if the draw happens to be the main list's own order, draw again (a few tries).
+        local mainOrder = table.concat(self.order.main, "\n")
+        for _ = 1, 8 do
+            M.Shuffle(self.client, newcomers)
+            if #newcomers < 2 or table.concat(newcomers, "\n") ~= mainOrder then break end
         end
+    end
+    for _, name in ipairs(newcomers) do
+        order[#order + 1] = name
+        self.enrollments[#self.enrollments + 1] = { list = self.cfg.offListId, member = name, seeded = (not off) or nil }
     end
     self.order.off = order
 end
@@ -749,12 +776,15 @@ function Session:confirm()
     local failures = {}
     local function fail(a, stage, reason) failures[#failures + 1] = { item = a.item, stage = stage, reason = reason } end
 
+    -- The off-spec list first (created at the first session, in its random seed order; newcomers at the bottom), so
+    -- the awards that follow find it.
+    for _, e in ipairs(self.enrollments) do
+        if not engine:Get(e.list) then engine:Write("CreateList", { name = "Off-spec", seen = self.seen }, e.list) end
+        local ev, err = engine:Append(e.list, "AddMember", { member = e.member, class = self.class[e.member], seen = self.seen })
+        if not ev then fail({ item = nil }, "ledger", err) end
+    end
     for _, a in ipairs(self.pending) do
-        if a.type == "enroll" then
-            if not engine:Get(a.list) then engine:Write("CreateList", { name = "Off-spec", seen = self.seen }, a.list) end
-            local ev, err = engine:Append(a.list, "AddMember", { member = a.member, class = self.class[a.member], seen = self.seen })
-            if not ev then fail(a, "ledger", err) end
-        elseif a.type == "award" and not a.to then
+        if a.type == "award" and not a.to then
             fail(a, "recipient", "norecipient") -- a gift nobody has said who gets (cannot happen: the draft waits)
         elseif a.type == "award" then
             local ok, why = true, nil
@@ -810,6 +840,6 @@ end
 -- A snapshot for UIs and tests.
 function Session:status()
     local answered, total = self:answerCount()
-    return { phase = self.phase, turn = self.turn, items = self.items, pending = self.pending,
+    return { phase = self.phase, turn = self.turn, items = self.items, pending = self.pending, enrollments = self.enrollments,
         answered = answered, eligible = total, deadline = self.deadline }
 end

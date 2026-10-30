@@ -105,7 +105,7 @@ M.list = {
     {
         id = "off-spec",
         title = "Off-spec bids",
-        lesson = "Gehennas drops leather healer legs. Nobody needs them for their main, but two druids, Cass and Eira, bid on them for an off-spec. Nothing is rolled: off-spec has its own list, and the first time someone bids off-spec they join the bottom of it, in main-list order. Cass is higher on the main list, so Cass is ahead of Eira on the off-spec list and wins. Winning costs Cass a place on the off-spec list only: the main list does not move, and Eira is now first in line next time.",
+        lesson = "Gehennas drops leather healer legs. Nobody needs them for their main, but two druids, Cass and Eira, bid on them for an off-spec. Off-spec has its own list. It is created at the first session, with everyone present in a random order of its own (not the main list's order, so the top of the main list gets no off-spec advantage); that roll is recorded in the ledger, and after it nothing is rolled again. Whichever of Cass and Eira is ahead on that list wins. Winning costs them a place on the off-spec list only: the main list does not move.",
         members = RAID,
         items = { "Salamander Scale Pants" },
         policies = {
@@ -113,8 +113,22 @@ M.list = {
             Eira = { bid = { ["Salamander Scale Pants"] = "off" } },
         },
         expect = function(sim)
+            -- The seeded off-spec list is in the ledger as the order everyone was added. Of the two bidders, whoever is
+            -- ahead wins and drops to the bottom of that list; the main list is untouched.
+            local seeded = {}
+            for _, ev in ipairs(sim.engine:Get("off").events) do
+                if ev.type == "AddMember" then seeded[#seeded + 1] = short(ev.data.member) end
+            end
+            local winner
+            for _, n in ipairs(seeded) do if (n == "Cass" or n == "Eira") and not winner then winner = n end end
+            local want = {}
+            for _, n in ipairs(seeded) do if n ~= winner then want[#want + 1] = n end end
+            want[#want + 1] = winner
             local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ","):gsub("%-Realm", "")
-            return main == "Aldric,Brann,Cass,Dara,Eira,Fenn,You" and off == "Eira,Cass", ("main %s; off %s"):format(main, off)
+            local award = lastEvent(sim, "off", "Award")
+            local ok = #seeded == 7 and award ~= nil and short(award.data.member) == winner
+                and main == "Aldric,Brann,Cass,Dara,Eira,Fenn,You" and off == table.concat(want, ",")
+            return ok, ("seeded off-spec order %s; %s won; main %s; off now %s"):format(table.concat(seeded, ","), tostring(winner), main, off)
         end,
     },
     {

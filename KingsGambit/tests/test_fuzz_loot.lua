@@ -63,11 +63,11 @@ local function run(seed)
     for i, n in ipairs(sim.engine:Get("main").state.order) do expectMain[i] = n end
     local offBefore = sim.engine:Get("off")
     expectOff = offBefore and { table.unpack and table.unpack(offBefore.state.order) } or nil
-    local awards, des, enrolls = {}, {}, {}
+    local awards, des, enrolls = {}, {}, session.enrollments
     for _, a in ipairs(session.pending) do
         if a.type == "award" then awards[#awards + 1] = a
         elseif a.type == "disenchant" then des[#des + 1] = a
-        elseif a.type == "enroll" then enrolls[#enrolls + 1] = a end
+        end
     end
 
     local ok, failures = session:confirm()
