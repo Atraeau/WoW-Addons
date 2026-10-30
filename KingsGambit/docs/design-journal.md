@@ -1157,6 +1157,12 @@ pick) the Quick Strike Ring as the second, and so on: *salvagers rotate in the o
   full decline disenchanting while the draft carries on, more unwanted items than picks, and a pending gift delaying
   the offer until its recipient is settled.
 - **Supersedes** the earlier "rotate the leftovers" build, whose queue started from the last winner.
+- **A property worth keeping (the guild leader's framing):** treat salvage as just another drop to the bottom of the list. Because
+  the salvager is the player who just picked (already at the bottom), claiming changes nothing, so **the list returns to the
+  order in which the main items were won**: after the big hand-out it ends Eira, Hale, You (untouched, in their old order),
+  then Aldric, Brann, Cass, Dara, Fenn, Garo (the picks in draft order). A test pins it on five seeds. It holds whenever
+  each unwanted item is salvaged by the player who just picked; in the overflow case (more unwanted items than picks)
+  the end-of-draft claims move other players to the bottom after the winners, by design.
 
 ### Scaling: measured, not guessed (2026-10-28)
 

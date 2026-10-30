@@ -465,3 +465,15 @@ test("'big hand-out': ranked choice decides the draft, and each pick's winner is
     -- the same holds for other seeds: the scenario is about rules, not luck
     for seed = 2, 6 do assert(select(2, Sim.RunScenario(sc, { seed = seed })), "seed " .. seed) end
 end)
+test("salvage is just another drop to the bottom: the list ends with the winners in the order the draft ran", function()
+    local sc = SK.modules.Scenarios.find("big-handout")
+    local sim, ok = Sim.RunScenario(sc)
+    assert(ok)
+    eq(sim:orderString(), "Eira,Hale,You,Aldric,Brann,Cass,Dara,Fenn,Garo",
+        "non-winners keep their relative order above; the six winners follow, in the order they picked (the salvage claims did not reorder them)")
+    -- the same holds on other seeds
+    for seed = 2, 5 do
+        local s2 = Sim.RunScenario(sc, { seed = seed })
+        eq(s2:orderString(), "Eira,Hale,You,Aldric,Brann,Cass,Dara,Fenn,Garo", "seed " .. seed)
+    end
+end)
