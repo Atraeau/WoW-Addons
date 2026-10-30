@@ -676,6 +676,10 @@ function Session:runSalvage()
         if it.status == "open" then self.queue[#self.queue + 1] = it.id end
     end
     self.qi = 0
+    -- Who is offered first, lowest on the live list first. A player who claims an item goes to the back of this queue
+    -- for the rest of the round, so the salvager rotates through a batch (it never depends on how loot was batched).
+    self.offerQueue = {}
+    for i = #self.order.main, 1, -1 do self.offerQueue[#self.offerQueue + 1] = self.order.main[i] end
     self:emit("phase", { phase = "salvage" })
     self:nextSalvageItem()
 end
@@ -685,8 +689,7 @@ function Session:nextSalvageItem()
     local id = self.queue[self.qi]
     if not id then return self:finish() end
     local players = {}
-    for i = #self.order.main, 1, -1 do
-        local p = self.order.main[i]
+    for _, p in ipairs(self.offerQueue) do
         if self.eligible[p] and self:canReceive(p, self.items[id]) then players[#players + 1] = p end
     end
     self.claim = { item = id, players = players, idx = 0 }
@@ -723,6 +726,7 @@ function Session:claimItem(player, extra)
     end
     self.turn = nil
     self:award("salvage", player, t.item, to)
+    moveToBottom(self.offerQueue, player) -- to the back of the queue for the rest of this round
     self:nextSalvageItem()
     return true
 end

@@ -1095,8 +1095,17 @@ bottom) was also offered the Wristguards first in the salvage round, after every
   leftover first (checked: four leftover items, everyone willing, one player gets all four). Rotation only happens
   across batches, as other players' wins push people below them. If the intent is that "whoever is salvager doesn't get
   to be salvager for everything", that needs a rule: see the open question below.
-- **Open:** whether, within one salvage round, a player who has claimed an item goes to the back of the queue for the
-  remaining items (so the salvager rotates inside a batch, with no reference to sessions).
+- **Decided by the guild leader (after playing out a 10-item batch):** keep the priority draft and ranked choice, and **rotate
+  the leftovers**: within a salvage round, a player who claims an item goes to the back of the queue for the remaining
+  items. The round still starts lowest-first on the live list; in the example (items 5 and 7 passed by everyone), item 5
+  goes to the lowest player and item 7 to the next one down, without any rule about how the loot was batched.
+  Considered and not chosen: resolving strictly in drop order (each unwanted item to whoever is lowest at that
+  moment), which would replace the priority draft and ranked choice and make drop order matter, the "arbitrary order
+  advantage" the draft was designed to avoid.
+- **Built:** `Session.offerQueue`: the round starts from the live list, lowest first; a claimer (including one who gifts
+  it on) moves to the back for the remaining items; a decliner keeps their place. Tests: four willing claimers get four
+  different leftovers; a decliner stays first in line; and the shape of a long batch (two wins, then two passed items go
+  to the latest winner and the one before).
 
 ### Scaling: measured, not guessed (2026-10-28)
 

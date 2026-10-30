@@ -131,7 +131,8 @@ This is what happens, in order, when a boss drops loot. Practice it in the
    Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
    play for items no main-spec player wanted.
 4. **The salvage round.** Anything left is offered one item at a time, lowest on the list first, to everyone,
-   whether or not they could use it. If everyone declines, the item goes to the disenchanter.
+   whether or not they could use it. Whoever claims an item goes to the back of the queue for the rest of the round,
+   so the salvager rotates through a batch. If everyone declines, the item goes to the disenchanter.
 5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
    and nothing is handed out until you confirm. If handing an item over fails, that award is not
    recorded and you are told, so the record never claims something that didn't happen.

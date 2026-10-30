@@ -598,3 +598,38 @@ test("the main list and the off-spec list are independent orders: the off list i
     eq(same, 0, "with only three raiders a match would be common by chance; the draw is redrawn until it differs")
     assert(total == 30)
 end)
+
+H.section("Loot: the salvager rotates through a batch")
+local function claimAll(s, who)
+    local got = {}
+    while s.turn and s.turn.type == "claim" do
+        local p, item = s.turn.player, s.turn.item
+        if who(p, item) then assert(s:claimItem(p)); got[#got + 1] = item .. ":" .. p:gsub("%-Realm", "")
+        else assert(s:decline(p)) end
+    end
+    return table.concat(got, " ")
+end
+test("leftovers are offered lowest first, and a player who claims goes to the back of the queue", function()
+    local s = setup({ nitems = 6 })
+    for i = 1, 6 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
+    eq(s.phase, "salvage")
+    eq(claimAll(s, function() return true end), "1:E 2:D 3:C 4:B 5:A 6:E", "everyone willing: it rotates up the list, then round again")
+end)
+test("someone who declines keeps their place at the front for the next leftover", function()
+    local s = setup({ nitems = 3 })
+    for i = 1, 3 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
+    -- E passes on item 1 (D takes it), but E is still first in line for item 2
+    local got = claimAll(s, function(p, item) return not (p == "E-Realm" and item == 1) and (item ~= 3 or p == "C-Realm") end)
+    eq(got, "1:D 2:E 3:C")
+end)
+test("the shape of a long batch: the salvager for a passed item is the latest winner, and it rotates", function()
+    -- items 1 and 2 are won, items 3 and 4 are passed by everyone (the batch could as well have been handed out in pieces)
+    local s, engine = setup({ nitems = 4 })
+    answerAll(s, 1, { A = "need", B = "pass", C = "pass", D = "pass", E = "pass" })
+    answerAll(s, 2, { A = "pass", B = "need", C = "pass", D = "pass", E = "pass" })
+    for i = 3, 4 do answerAll(s, i, { A = "pass", B = "pass", C = "pass", D = "pass", E = "pass" }) end
+    eq(s.phase, "salvage", "A and B won the first two; the list is now C,D,E,A,B")
+    eq(claimAll(s, function() return true end), "3:B 4:A", "item 3 to the latest winner, item 4 to the one before")
+    assert(s:confirm())
+    eq(order(engine), "C,D,E,B,A")
+end)
