@@ -490,3 +490,15 @@ test("'lucky salvager': one unwanted item per pick as the draft goes, then the l
         eq(table.concat(by, ","), "Aldric,Brann,Brann,Brann", "the first two unwanted items to the two picks; the overflow to the lowest")
     end
 end)
+
+test("the scenarios are in teaching order: the single-item basics first, the big hand-outs last", function()
+    local ids = {}
+    for _, sc in ipairs(SK.modules.Scenarios.list) do ids[#ids + 1] = sc.id end
+    eq(ids[1], "first-drop", "starts with one item and one winner")
+    eq(ids[#ids], "big-handout", "ends with the big hand-out")
+    local pos = {}
+    for i, id in ipairs(ids) do pos[id] = i end
+    assert(pos["nobody-wants-it"] < pos["minor-upgrade-proxy"], "unwanted items are met before salvaging them")
+    assert(pos["lucky-salvager"] < pos["big-handout"])
+    eq(#ids, 9)
+end)

@@ -1228,6 +1228,16 @@ page-template edit, load the built page and read the console, not only the API.
   written, as its own event restoring the award exactly where it was (the same limit undo has). Worth adding only if misclicks
   prove to be a real problem for guilds.
 
+### Simulator: the scenarios run from simple to nuanced (2026-10-30)
+
+**Asked by the guild leader:** put the Molten Core and Ahn'Qiraj nights at the end of the list, so the page starts simple and
+progresses to the more nuanced parts of loot management. The page now opens on the first scenario (it used to open on the
+Molten Core night), and the order is a teaching order:
+1. The first drop (one item, one winner)  2. Two items, one player who wants both (ranking)  3. Off-spec bids (the second
+list)  4. Nobody wants it (disenchant)  5. A small upgrade nobody will spend their rank on (salvage and gifting)  6. Gifting an
+item to a friend  7. Fixing a mistake (undo)  8. The lucky salvager  9. A big hand-out  then the two full raid nights.
+A test pins the start, the end, and that unwanted items come before salvaging them.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -250,6 +250,15 @@ M.list = {
     },
 }
 
+-- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
+-- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
+-- (The raid nights come after all of these, on the page.)
+local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
+    "fix-a-mistake", "lucky-salvager", "big-handout" }
+local rank = {}
+for i, id in ipairs(ORDER) do rank[id] = i end
+table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)
+
 function M.find(id)
     for _, sc in ipairs(M.list) do
         if sc.id == id then return sc end

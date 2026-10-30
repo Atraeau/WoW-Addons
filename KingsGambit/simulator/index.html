@@ -5079,6 +5079,15 @@ M.list = {
     },
 }
 
+-- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
+-- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
+-- (The raid nights come after all of these, on the page.)
+local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
+    "fix-a-mistake", "lucky-salvager", "big-handout" }
+local rank = {}
+for i, id in ipairs(ORDER) do rank[id] = i end
+table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)
+
 function M.find(id)
     for _, sc in ipairs(M.list) do
         if sc.id == id then return sc end
@@ -5257,8 +5266,9 @@ local NIGHTS = {
 
 function api.scenarios()
     local out = {}
-    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
+    -- simple first, more nuanced later: the teaching scenarios in order, then the full raid nights
     for _, sc in ipairs(Scenarios.list) do out[#out + 1] = { id = sc.id, title = sc.title, lesson = sc.lesson } end
+    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
     return out
 end
 
@@ -5595,7 +5605,7 @@ end
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
-  let scenarios = [], current = "mc", seed = 1, st = null;
+  let scenarios = [], current = "", seed = 1, st = null;
   let running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
@@ -5967,7 +5977,7 @@ end
   window.addEventListener("load", () => {
     if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Check your connection (the page loads a Lua runtime from a CDN).</div>'; return; }
     scenarios = call("scenarios");
-    start(current);
+    start(scenarios[0].id); // begin with the simplest
   });
 })();
 </script>

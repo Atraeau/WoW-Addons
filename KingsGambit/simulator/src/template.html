@@ -83,7 +83,7 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
-  let scenarios = [], current = "mc", seed = 1, st = null;
+  let scenarios = [], current = "", seed = 1, st = null;
   let running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
 
   function start(id) {
@@ -455,7 +455,7 @@
   window.addEventListener("load", () => {
     if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Check your connection (the page loads a Lua runtime from a CDN).</div>'; return; }
     scenarios = call("scenarios");
-    start(current);
+    start(scenarios[0].id); // begin with the simplest
   });
 })();
 </script>

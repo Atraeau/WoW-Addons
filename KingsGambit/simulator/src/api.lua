@@ -166,8 +166,9 @@ local NIGHTS = {
 
 function api.scenarios()
     local out = {}
-    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
+    -- simple first, more nuanced later: the teaching scenarios in order, then the full raid nights
     for _, sc in ipairs(Scenarios.list) do out[#out + 1] = { id = sc.id, title = sc.title, lesson = sc.lesson } end
+    for _, n in ipairs(NIGHTS) do out[#out + 1] = { id = n.id, title = n.title, lesson = n.lesson } end
     return out
 end
 
