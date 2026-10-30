@@ -62,7 +62,12 @@ free way to dodge spending your main position.
 Gifting is *winning and then handing the item to someone else*, in any
 direction, including upward. You pay the position cost; the recipient gets the
 item. You can change the target before the item resolves, or re-route it
-afterward.
+afterward. You may also leave the target open and choose if you win: the draft then waits
+for you.
+
+A gift is a proxy, not a want, so it comes **after** everyone who wants the item: main
+(need) bids are drafted first, then off-spec, then gifts. Even a gift from the bottom of the
+list, which costs nothing, can't override an off-spec bid.
 
 **Why:** A minor upgrade shouldn't be wasted just because the player who'd use
 it sits too high to bid economically. A player near the bottom can claim it cheaply
@@ -129,7 +134,7 @@ This is what happens, in order, when a boss drops loot. Practice it in the
 3. **The draft.** The highest player who wants something goes first. If they want only one item it is
    theirs automatically; if they want several, they pick one (a pick that times out counts as a skip).
    Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
-   play for items no main-spec player wanted.
+   play for items no main-spec player wanted, and gifts come after that, for items nobody wanted for themselves.
 4. **Salvage.** Items nobody wanted go to the salvager, the player at the bottom of the list, whether or not they
    could use them. They decide: claim it, or decline and the disenchanter takes it. Nobody else is asked. This happens as the
    draft executes: every pick drops its winner to the bottom, so the next unwanted item goes to the player who just

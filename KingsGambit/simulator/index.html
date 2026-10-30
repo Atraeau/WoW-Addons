@@ -2251,7 +2251,7 @@ function M.NewSession(engine, opts)
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
         items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {},
-        bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
+        bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {}, gift = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
 end
@@ -2633,14 +2633,17 @@ end
 ---------------------------------------------------------------- the draft
 local function wants(bid, tier)
     if not bid then return false end
-    if tier == "main" then return bid.kind == "need" or bid.kind == "gift" end
+    -- Three tiers, in this order: main (need), off-spec, then gifts. A gift is a proxy, not a want, so it never outranks
+    -- anyone who wants the item (even the bottom player, whose gift costs nothing, can't override an off-spec bid).
+    if tier == "main" then return bid.kind == "need" end
+    if tier == "gift" then return bid.kind == "gift" end
     return bid.kind == "off"
 end
 
 -- Who would hold the item if `name` won it in `tier`: the gift target, or the winner.
 function Session:recipient(name, itemId, tier)
     local bid = self.bids[name] and self.bids[name][itemId]
-    return (tier == "main" and bid and bid.kind == "gift" and bid.to) or name
+    return (tier == "gift" and bid and bid.kind == "gift" and bid.to) or name
 end
 
 function Session:hasBid(player, itemId, tier)
@@ -2695,7 +2698,7 @@ end
 function Session:award(tier, who, itemId, toOverride)
     local it = self.items[itemId]
     local bid = self.bids[who] and self.bids[who][itemId]
-    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "main"
+    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "gift"
     local undecided = isGift and not bid.to
     local to = toOverride or (isGift and bid.to or who)
     if undecided then to = nil end
@@ -2742,7 +2745,6 @@ local function resolveRecipient(self, t, to)
     self.items[t.item].to = to
     self.undecided, self.turn = nil, nil
     self:clearTimer()
-    if t.tier == "main" then self.owedSalvage = true end
     self:emit("recipient", { player = t.player, item = t.item, to = to })
     self:continueDraft(t.tier)
     return true
@@ -2814,6 +2816,8 @@ end
 function Session:runDraft(tier)
     self.phase = tier
     if tier == "off" then self:buildOffOrder() end
+    -- gifts are drafted in main-list order as it stands now (the winners so far are at the bottom); a gift costs its place
+    if tier == "gift" then self.order.gift = self.order.main end
     self:emit("phase", { phase = tier })
     self:continueDraft(tier)
 end
@@ -2878,7 +2882,10 @@ function Session:continueDraft(tier)
     end
     self.turn = nil
     self:clearTimer()
-    if tier == "main" then self:runDraft("off") else self:runSalvage() end
+    -- main (need) -> off-spec -> gifts -> the salvage of what is left
+    if tier == "main" then self:runDraft("off")
+    elseif tier == "off" then self:runDraft("gift")
+    else self:runSalvage() end
 end
 
 -- Ranked choice: if the player ranked every option, the one they ranked highest (lowest number; ties go
@@ -5811,7 +5818,7 @@ end
   const $ = (s) => document.querySelector(s);
   const call = (name, a, b, c) => JSON.parse(window.KG(name, a, b, c));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
+  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", gift: "Gifts", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
   let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
@@ -5948,7 +5955,7 @@ end
     let h = '<table><tr><th>Item</th><th>Status</th>' + (bidding ? "<th>Your answer</th>" : "") + "</tr>";
     st.items.forEach((it, i) => {
       let status = '<span class="pill wait">open</span>';
-      if (it.status === "awarded") status = '<span class="pill win">' + esc(it.winner) + (it.to !== it.winner ? " &rarr; " + esc(it.to) : "") + " (" + it.tier + ")</span>";
+      if (it.status === "awarded") status = '<span class="pill win">' + esc(it.winner) + (it.to === undefined && it.tier === "gift" ? " &rarr; (choosing who gets it)" : (it.to !== it.winner ? " &rarr; " + esc(it.to) : "")) + " (" + (TIER[it.tier] || it.tier) + ")</span>";
       else if (it.status === "de") status = '<span class="pill">disenchant</span>';
       let ans = "";
       if (bidding) {
@@ -6011,7 +6018,7 @@ end
 
   // "You win", "Brann wins": the verb agrees with who it is
   const verb = (who, you, other) => (who === "You" ? "You " + you : esc(who) + " " + other);
-  const TIER = { main: "main draft", off: "off-spec draft", salvage: "salvage round" };
+  const TIER = { main: "main draft", off: "off-spec draft", gift: "gift draft", salvage: "salvage round" };
 
   // The history is the ledger: one row per event, with when (since the ledger began), who wrote it, the kind of
   // event, what it says, and its id. Consecutive "added to the list" events arrive grouped.

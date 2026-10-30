@@ -213,7 +213,7 @@ function M.NewPlayer(sync)
     sync:register("LP", function(msg, sender)
         if not fromHost(msg, sender) then return end
         p.session.phase = msg.phase
-        if msg.phase ~= "main" and msg.phase ~= "off" and msg.phase ~= "salvage" then p.session.turn = nil end
+        if msg.phase ~= "main" and msg.phase ~= "off" and msg.phase ~= "gift" and msg.phase ~= "salvage" then p.session.turn = nil end
         p.ev.emit("phase", msg.phase, msg.reason)
     end)
 

@@ -62,7 +62,7 @@ function M.NewSession(engine, opts)
     return setmetatable({
         engine = engine, client = engine.client, cfg = cfg, phase = "idle",
         items = {}, eligible = {}, eligibleList = {}, class = {}, away = {}, enrollments = {},
-        bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {} },
+        bids = {}, pending = {}, order = {}, skipped = { main = {}, off = {}, gift = {} },
         handlers = {}, turn = nil, timer = nil, deadline = nil,
     }, Session)
 end
@@ -444,14 +444,17 @@ end
 ---------------------------------------------------------------- the draft
 local function wants(bid, tier)
     if not bid then return false end
-    if tier == "main" then return bid.kind == "need" or bid.kind == "gift" end
+    -- Three tiers, in this order: main (need), off-spec, then gifts. A gift is a proxy, not a want, so it never outranks
+    -- anyone who wants the item (even the bottom player, whose gift costs nothing, can't override an off-spec bid).
+    if tier == "main" then return bid.kind == "need" end
+    if tier == "gift" then return bid.kind == "gift" end
     return bid.kind == "off"
 end
 
 -- Who would hold the item if `name` won it in `tier`: the gift target, or the winner.
 function Session:recipient(name, itemId, tier)
     local bid = self.bids[name] and self.bids[name][itemId]
-    return (tier == "main" and bid and bid.kind == "gift" and bid.to) or name
+    return (tier == "gift" and bid and bid.kind == "gift" and bid.to) or name
 end
 
 function Session:hasBid(player, itemId, tier)
@@ -506,7 +509,7 @@ end
 function Session:award(tier, who, itemId, toOverride)
     local it = self.items[itemId]
     local bid = self.bids[who] and self.bids[who][itemId]
-    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "main"
+    local isGift = (not toOverride) and bid and bid.kind == "gift" and tier == "gift"
     local undecided = isGift and not bid.to
     local to = toOverride or (isGift and bid.to or who)
     if undecided then to = nil end
@@ -553,7 +556,6 @@ local function resolveRecipient(self, t, to)
     self.items[t.item].to = to
     self.undecided, self.turn = nil, nil
     self:clearTimer()
-    if t.tier == "main" then self.owedSalvage = true end
     self:emit("recipient", { player = t.player, item = t.item, to = to })
     self:continueDraft(t.tier)
     return true
@@ -625,6 +627,8 @@ end
 function Session:runDraft(tier)
     self.phase = tier
     if tier == "off" then self:buildOffOrder() end
+    -- gifts are drafted in main-list order as it stands now (the winners so far are at the bottom); a gift costs its place
+    if tier == "gift" then self.order.gift = self.order.main end
     self:emit("phase", { phase = tier })
     self:continueDraft(tier)
 end
@@ -689,7 +693,10 @@ function Session:continueDraft(tier)
     end
     self.turn = nil
     self:clearTimer()
-    if tier == "main" then self:runDraft("off") else self:runSalvage() end
+    -- main (need) -> off-spec -> gifts -> the salvage of what is left
+    if tier == "main" then self:runDraft("off")
+    elseif tier == "off" then self:runDraft("gift")
+    else self:runSalvage() end
 end
 
 -- Ranked choice: if the player ranked every option, the one they ranked highest (lowest number; ties go

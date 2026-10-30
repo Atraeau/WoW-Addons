@@ -1338,6 +1338,25 @@ Following the decisions logged above (these supersede the "not built yet" notes 
 - If findability ever matters, a subtitle (for example "King's Gambit: a transparent loot ledger") is cheaper than a rename,
   which would touch the folder, TOC, saved variables, slash command, docs and tests.
 
+### Decision: gifts come after off-spec; the salvager can't override an off-spec bid with a gift (2026-10-30)
+
+**Raised by the guild leader** as an edge case: at the bottom of the list you can bid to **gift** as a main bid for an item that others bid
+off-spec on, and win it, because gift bids competed in the main tier by the gifter's own position (the bottom player pays nothing).
+**Decided:** off-spec is prioritized over gifting. The salvager shouldn't be able to override off-spec.
+- **Need still beats off-spec:** a main (need) bid, including the bottom player's, still gets the item for themselves ahead of off-spec.
+- **A gift is not a want, it is a proxy,** so it does not outrank anyone who wants the item. The draft order is now: **main (need), then
+  off-spec, then gifts**, then the salvage of items nobody wanted. Previously gifts sat inside the main tier.
+- **A gift still costs its position:** the gifter wins at their own place on the main list (the gift tier runs in main-list order) and drops
+  to the bottom. For a gift where nobody else wants the item, nothing changes: the minor-upgrade proxy still works. It only stops a
+  gift from preempting an item someone wanted for off-spec.
+- Supersedes the earlier line "Gift bids compete in the main tier at the gifter's own position". Everything else about gifts is
+  unchanged (the recipient must be eligible; an open recipient makes the draft wait; the override and the pass).
+- **Built:** a third draft tier, `gift`, after `main` and `off` (phases: bidding, main, off, gift, salvage). `main` takes need
+  bids only. Tests pin it: an off-spec bid beats a gift from the bottom of the list; need beats a gift whatever the positions and
+  still beats off-spec; a gift alone works as before. In the simulator the same bids as the report now give the item to the
+  off-spec bidder and never prompt for a recipient. Also fixed: an open gift showed "You -> undefined" in the item row; it now
+  says it is choosing who gets it, and the new phase has its own label.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

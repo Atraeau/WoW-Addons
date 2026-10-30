@@ -81,7 +81,7 @@
   const $ = (s) => document.querySelector(s);
   const call = (name, a, b, c) => JSON.parse(window.KG(name, a, b, c));
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
+  const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", gift: "Gifts", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
   let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
@@ -218,7 +218,7 @@
     let h = '<table><tr><th>Item</th><th>Status</th>' + (bidding ? "<th>Your answer</th>" : "") + "</tr>";
     st.items.forEach((it, i) => {
       let status = '<span class="pill wait">open</span>';
-      if (it.status === "awarded") status = '<span class="pill win">' + esc(it.winner) + (it.to !== it.winner ? " &rarr; " + esc(it.to) : "") + " (" + it.tier + ")</span>";
+      if (it.status === "awarded") status = '<span class="pill win">' + esc(it.winner) + (it.to === undefined && it.tier === "gift" ? " &rarr; (choosing who gets it)" : (it.to !== it.winner ? " &rarr; " + esc(it.to) : "")) + " (" + (TIER[it.tier] || it.tier) + ")</span>";
       else if (it.status === "de") status = '<span class="pill">disenchant</span>';
       let ans = "";
       if (bidding) {
@@ -281,7 +281,7 @@
 
   // "You win", "Brann wins": the verb agrees with who it is
   const verb = (who, you, other) => (who === "You" ? "You " + you : esc(who) + " " + other);
-  const TIER = { main: "main draft", off: "off-spec draft", salvage: "salvage round" };
+  const TIER = { main: "main draft", off: "off-spec draft", gift: "gift draft", salvage: "salvage round" };
 
   // The history is the ledger: one row per event, with when (since the ledger began), who wrote it, the kind of
   // event, what it says, and its id. Consecutive "added to the list" events arrive grouped.
