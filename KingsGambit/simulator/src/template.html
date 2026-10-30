@@ -50,6 +50,8 @@
   ol.stand li.you { color: var(--info); }
   .turn { border: 1px solid var(--gold); background: rgba(227,179,65,.07); border-radius: 6px; padding: 10px; margin-bottom: 12px; }
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .fixrow { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .fixsel { max-width: 150px; }
   select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
   .credits { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
   .credits a { color: var(--info); }
@@ -114,7 +116,11 @@
       notleader: "only the raid leader can change the loot method: ask them with the button",
       notmasterloot: "the loot method is not Master Looter, so loot cannot be handed out: the raid leader has to set it (any loot waiting is kept)",
       otherlooter: "the Master Looter is chosen when a run starts: pick them in the Master Looter list and restart",
-      notinraid: "that player is not in the raid" };
+      notinraid: "that player is not in the raid",
+      laterwin: "that player won something later: undo that later award first, then this one",
+      notrevertible: "that award can't be undone any more (the list was moved by hand since)",
+      notmember: "they aren't on the list", samewinner: "that is the person it was recorded for: choose who really has it",
+      noreason: "a reason is required (it goes in the record)", noitem: "choose which item", badtarget: "choose who it went to" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
     if (r.phase) st = r;
@@ -303,6 +309,38 @@
     return '<div class="card"><h2>History (the ledger)</h2><div class="log">' + hidden + (rows || '<span class="muted small">Nothing recorded yet.</span>') + "</div></div>";
   }
 
+  // Corrections: the Master Looter puts a mistake right. Each is one entry in the history, with a reason. The drop-downs'
+  // choices are kept here (not read back from the page) because the page redraws.
+  const fixSel = {};
+  function fixSelect(id, names, blank) {
+    if (names.indexOf(fixSel[id]) < 0) fixSel[id] = "";
+    return '<select class="fixsel" data-fix="' + id + '"><option value=""' + (fixSel[id] === "" ? " selected" : "") + ">" + esc(blank) + "</option>" +
+      names.map((n) => '<option value="' + esc(n) + '"' + (n === fixSel[id] ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select>";
+  }
+  function correctionsHtml() {
+    const c = st.corrections, p = st.phase;
+    if (!c || (st.roles && !st.roles.youAreML) || ["idle", "done", "cancelled"].indexOf(p) < 0) return "";
+    if (!c.awards.length && !c.items.length) return "";
+    const names = st.order || [];
+    const rows = c.awards.map((a) => {
+      const id = "to" + a.id;
+      return '<div class="fixrow"><div><b>' + esc(a.member) + "</b> won <span class=\"iname\">" + esc(a.item) + "</span>" + (a.to && a.to !== a.member ? " (given to " + esc(a.to) + ")" : "") + "</div>" +
+        '<div class="row" style="margin-top:4px"><button data-act="fixUndo" data-a="' + esc(a.id) + '"' + (a.laterWin ? ' disabled title="' + esc(a.member) + ' won something later: undo that one first"' : "") +
+        ' title="Wrong winner, or it should not have been awarded. ' + esc(a.member) + ' goes back up the list; later awards stay as they are.">Undo this</button>' +
+        '<span class="muted small">It went to:</span>' + fixSelect(id, names.filter((n) => n !== a.member), "") +
+        '<button data-act="fixTrade" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A regret-trade: ' + esc(a.member) + ' is restored to their place and the one who has it moves to the bottom, as if they had won the bid.">Regret-trade</button>' +
+        '<button data-act="fixGift" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A deliberate gift by the winner: it only records where the item went. Nobody moves.">It was a gift</button></div></div>';
+    }).join("");
+    const award = c.items.length
+      ? '<div class="fixrow"><div><b>Record a win the session didn\'t</b> <span class="muted small">(a hand-out that failed, or the right winner after an undo)</span></div>' +
+        '<div class="row" style="margin-top:4px">' + fixSelect("awMember", names, "who won it") + fixSelect("awItem", c.items, "which item") +
+        '<button data-act="fixAward" title="The player moves to the bottom, as if they had won the bid.">Award</button></div></div>'
+      : "";
+    return '<div class="card"><h2>Corrections (Master Looter)</h2>' +
+      '<div class="small muted" style="margin-bottom:6px">Each correction asks for a reason and is its own entry in the history: nothing is erased. Items already handed out stay where they are; only the list changes.</div>' +
+      (rows || '<div class="small muted">No awards of yours to change yet.</div>') + award + "</div>";
+  }
+
   function pendingHtml() {
     const enr = st.enrollments || [];
     if ((!st.pending || !st.pending.length) && !enr.length) return "";
@@ -367,7 +405,7 @@
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
           turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
-        resultHtml() + pendingHtml() +
+        resultHtml() + pendingHtml() + correctionsHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
         historyHtml() +
@@ -470,6 +508,24 @@
       case "undo":
         if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
         break;
+      case "fixUndo":
+        if (window.confirm("Undo this award? The winner goes back up the list and later awards stay as they are. The undo is recorded in the history.")) act("undoAward", a);
+        break;
+      case "fixTrade": case "fixGift": {
+        const to = fixSel[b];
+        if (!to) { lastMsg = "Choose who it went to first (the \"It went to\" list)."; render(); break; }
+        const reason = window.prompt(el.dataset.act === "fixTrade"
+          ? "Why? The winner is restored to their place and " + to + " moves to the bottom, as if they had won it. (Your reason goes in the record.)"
+          : "Why? This only records that the winner gave it to " + to + ": nobody moves. (Your reason goes in the record.)");
+        if (reason) act(el.dataset.act === "fixTrade" ? "trade" : "giftAward", a, to, reason);
+        break;
+      }
+      case "fixAward": {
+        if (!fixSel.awMember || !fixSel.awItem) { lastMsg = "Choose who won it and which item first."; render(); break; }
+        const reason = window.prompt("Why? " + fixSel.awMember + " moves to the bottom, as if they had won it. (Your reason goes in the record.)");
+        if (reason) act("award", fixSel.awMember, fixSel.awItem, reason);
+        break;
+      }
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
       case "setLeader": act("setLeader", $("#leaderSel").value); break;
       case "setMethod": act(st.roles && st.roles.youAreLeader ? "setLootMethod" : "askLeader", $("#methodSel").value); break;
@@ -485,6 +541,7 @@
   // chosen, let go of it so the clock keeps drawing.
   document.addEventListener("change", (e) => {
     if (e.target.id === "giftTo") { giftTo = e.target.value; e.target.blur(); render(); }
+    if (e.target.dataset && e.target.dataset.fix) { fixSel[e.target.dataset.fix] = e.target.value; e.target.blur(); }
     if (["deSel", "leaderSel", "methodSel", "mlSel"].indexOf(e.target.id) >= 0) e.target.blur();
   });
 
@@ -499,7 +556,7 @@
   }, 250);
 
   window.addEventListener("load", () => {
-    if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Check your connection (the page loads a Lua runtime from a CDN).</div>'; return; }
+    if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Reload the page; if it keeps failing, your browser may be blocking scripts on this page.</div>'; return; }
     scenarios = call("scenarios");
     start(scenarios[0].id); // begin with the simplest
   });

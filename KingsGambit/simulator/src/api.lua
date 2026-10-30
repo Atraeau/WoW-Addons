@@ -66,8 +66,9 @@ local function describe(ev, byId)
         if d.to and d.to ~= d.member then text = text .. "; the item went to " .. short(d.to) end
         if d.replaces then
             local old = byId[d.replaces]
-            text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. ((old and old.data and short(old.data.member)) or "someone else")
-                .. ": they are back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
+            local first = (old and old.data and short(old.data.member)) or "the first winner"
+            text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. first
+                .. ": " .. first .. " is back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
         end
         return text
     elseif t == "Pass" then
@@ -158,6 +159,19 @@ local function state()
     -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
     snap.canUndo = stack ~= nil and #stack > 0
+    -- the awards you can change, latest first, and the items a win could be recorded for
+    local awards = sim.engine:Get("main").state.awards
+    snap.corrections = { awards = {}, items = {} }
+    for i = #(stack or {}), 1, -1 do
+        local e, a = stack[i], awards[stack[i].id]
+        local later = false
+        for j = i + 1, #stack do if stack[j].member == e.member then later = true end end
+        snap.corrections.awards[#snap.corrections.awards + 1] = { id = e.id, member = short(e.member), item = a and a.item, to = a and short(a.to), laterWin = later }
+    end
+    local seen = {}
+    for _, it in ipairs(s and s.items or sim.lastItems or {}) do
+        if not seen[it.link] then seen[it.link] = true; snap.corrections.items[#snap.corrections.items + 1] = it.link end
+    end
     snap.log, snap.logHidden = logLines()
     if scenario then snap.lesson = { title = scenario.title, text = scenario.lesson } end
     if sim.raid then
@@ -417,6 +431,50 @@ function api.undo()
     local top = stack and stack[#stack]
     if not top then return result(false, "nothing to undo") end
     local ev, err = sim.engine:Append("main", "Revert", { target = top.id })
+    return result(ev ~= nil, err)
+end
+
+---------------------------------------------------------------- corrections (the Master Looter puts a mistake right)
+-- Each one is a single ledger entry written by the Master Looter, with a reason (it goes in the record).
+local function myAward(id)
+    for _, e in ipairs(sim.engine:Get("main").state.undo[sim.engine:MyChain()] or {}) do
+        if e.id == id then return sim.engine:Get("main").state.awards[id] end
+    end
+end
+local function needReason(reason) if type(reason) ~= "string" or reason:match("^%s*$") then return false, "noreason" end return true end
+
+-- Undo one named award of yours; later awards stay as they are.
+function api.undoAward(id)
+    if sim.ml ~= sim.learner then return notML() end
+    local ev, err = sim.engine:Append("main", "Revert", { target = id })
+    return result(ev ~= nil, err)
+end
+-- The item really went to someone else, and it was not a gift: the winner is restored, the recipient pays (a regret-trade).
+function api.trade(id, to, reason)
+    if sim.ml ~= sim.learner then return notML() end
+    local ok, why = needReason(reason); if not ok then return result(false, why) end
+    local a = myAward(id)
+    if not a then return result(false, "notrevertible") end
+    if not to or to == "" then return result(false, "badtarget") end
+    local ev, err = sim.engine:Append("main", "Award", { member = sim.client:normalize(to), item = a.item, replaces = id, reason = reason })
+    return result(ev ~= nil, err)
+end
+-- A deliberate gift by the winner: it went elsewhere on their say-so and nobody moves.
+function api.giftAward(id, to, reason)
+    if sim.ml ~= sim.learner then return notML() end
+    local ok, why = needReason(reason); if not ok then return result(false, why) end
+    if not myAward(id) then return result(false, "notrevertible") end
+    if not to or to == "" then return result(false, "badtarget") end
+    local ev, err = sim.engine:Append("main", "Transfer", { award = id, to = sim.client:normalize(to), reason = reason })
+    return result(ev ~= nil, err)
+end
+-- Record a win the session didn't (a failed hand-out, or a corrected winner): the winner drops to the bottom.
+function api.award(member, item, reason)
+    if sim.ml ~= sim.learner then return notML() end
+    local ok, why = needReason(reason); if not ok then return result(false, why) end
+    if not member or member == "" then return result(false, "badtarget") end
+    if not item or item == "" then return result(false, "noitem") end
+    local ev, err = sim.engine:Append("main", "Award", { member = sim.client:normalize(member), item = item, reason = reason })
     return result(ev ~= nil, err)
 end
 

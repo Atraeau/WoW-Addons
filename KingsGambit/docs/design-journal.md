@@ -1448,6 +1448,19 @@ bid. This closes the "bid-test" question left open above (it is no longer about 
 - **Gift** stays what it was: `request gift` records that the item went elsewhere *by the winner's choice* and moves
   nobody. It is the explicit, deliberate case.
 
+### Simulator: the Master Looter's corrections, as controls (2026-10-30)
+
+The simulator page now has a **Corrections (Master Looter)** card, shown to the learner when they are the Master Looter
+and nothing is mid-session. One row per award of theirs, latest first:
+- **Undo this** (one named award; later awards stay; disabled, with the reason, if that player won something later).
+- **It went to: [player] + Regret-trade** (the winner is restored, the recipient pays) or **It was a gift** (records
+  where it went, nobody moves). Both ask for a reason, which goes in the record.
+- **Record a win the session didn't** (who, which item, reason): the plain `award`.
+The old "Undo last award" button stays for the simple lesson. Refusals are in plain words (the same reasons as the
+commands). When a bot is the Master Looter the card is hidden: the learner would ask through a request, which the
+simulator does not model yet. Checked in the browser (a trade, an award and an undo gave the standings the engine
+tests expect); the engine rules themselves are the tested part (`test_ledger`, `test_mistakes`).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
