@@ -910,6 +910,16 @@ faults:
   the test suite, so it was loaded and played in the browser pane (pass, wait for the offer, choose a recipient,
   confirm: "Matches the lesson").
 
+### Fixed: a lesson must not hardcode the learner's choice (2026-10-30)
+
+**Reported:** gifting the ring to Dara in "A small upgrade nobody will spend a turn on" was treated as if it had
+gone to Aldric. The lesson text named Aldric and its check required Aldric as the recipient, so any other eligible
+raider showed "Different from the lesson". The lesson is that the salvager claims the item at no cost and hands it
+up, so **any raider who can use it is a correct recipient**. The check now accepts any of them (naming who it went
+to), still checks that no one else's place changed, and says so if the learner kept the ring. The engine already
+checks the recipient is eligible. A test gifts to Aldric, Dara and Brann, and to nobody. Lessons where the learner is
+only watching (the bots decide) keep their scripted names.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -412,3 +412,18 @@ test("a salvager can gift only to someone eligible for the item; the page is tol
     assert(sim.session:claimItem("You", { to = "Wara" }))
     assert(MC)
 end)
+test("the proxy lesson accepts a gift to any raider who can use the ring, not only Aldric; keeping it is explained", function()
+    local base = SK.modules.Scenarios.find("minor-upgrade-proxy")
+    for _, who in ipairs { "Aldric", "Dara", "Brann" } do
+        local sc = {}
+        for k, v in pairs(base) do sc[k] = v end
+        sc.you = { claim = true, claimTo = who }
+        local sim, ok, message = Sim.RunScenario(sc)
+        assert(ok, who .. ": " .. tostring(message)); assert(message:find("gifted to " .. who), message)
+    end
+    local keep = {}
+    for k, v in pairs(base) do keep[k] = v end
+    keep.you = { claim = true }
+    local _, ok, message = Sim.RunScenario(keep)
+    assert(not ok and message:find("kept it"), tostring(message))
+end)

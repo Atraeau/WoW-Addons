@@ -62,7 +62,7 @@ M.list = {
     {
         id = "minor-upgrade-proxy",
         title = "A small upgrade nobody will spend a turn on",
-        lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to Aldric. Nothing is wasted, and nobody paid for scraps.",
+        lesson = "Baron Geddon drops a Quick Strike Ring. Aldric would use it, but it is not worth his place on the list, so everyone passes. The item is offered from the bottom up. You are at the bottom, so you claim it for free and gift it up to someone who can use it: Aldric, or any raider who would. Nothing is wasted, and nobody paid for scraps.",
         members = RAID,
         items = { "Quick Strike Ring" },
         policies = {},
@@ -71,12 +71,18 @@ M.list = {
             local award = lastEvent(sim, "main", "Award")
             if not award then
                 if lastEvent(sim, "main", "Disenchant") then
-                    return false, "nobody claimed the ring, so it was disenchanted. When it is offered to you, choose \"Claim and gift to\" Aldric before the offer's timer runs out."
+                    return false, "nobody claimed the ring, so it was disenchanted. When it is offered to you, choose who to gift it to (Aldric, say) and press \"Claim and gift\" before the offer's timer runs out."
                 end
                 return false, "no award was recorded"
             end
-            local ok = short(award.data.member) == "You" and short(award.data.to) == "Aldric" and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
-            return ok, ("claimed by %s for %s; order %s"):format(short(award.data.member), short(award.data.to), sim:orderString())
+            -- Any raider will do as the recipient (the engine has already checked they may have the ring): the lesson is
+            -- that the salvager claims it at no cost and hands it up, and that nobody else's place changes.
+            local to = short(award.data.to)
+            if not award.data.to or award.data.to == award.data.member then
+                return false, "you claimed the ring but kept it. To make the lesson work, gift it to a raider who can use it, such as Aldric."
+            end
+            local ok = short(award.data.member) == "You" and sim:orderString() == "Aldric,Brann,Cass,Dara,Eira,Fenn,You"
+            return ok, ("claimed by You and gifted to %s; order %s"):format(to, sim:orderString())
         end,
     },
     {
