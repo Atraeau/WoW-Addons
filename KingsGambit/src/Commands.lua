@@ -47,7 +47,7 @@ local HELP = {
     "King's Gambit commands:",
     "  standings [list] [N]            show the list (default main, top 20)",
     "  create <list> [name]            create a list      add <name> [top|bottom|N]     remove <name>",
-    "  move <name> <top|bottom|N> <reason>              undo (the last award)",
+    "  move <name> <top|bottom|N> <reason>              undo yes (the last award; it asks first)",
     "  loot                            start a session from the open loot window (Master Looter)",
     "  resolve | extend [sec] | confirm | cancel | announce      run the session (Master Looter)",
     "  need|off|pass <item#>   gift <item#> <name>      answer for an item (or: bid <item#> <kind> [name])",
@@ -189,7 +189,7 @@ function M.New(ctx)
         if ev then out(short(name(who)) .. " moved. " .. ("This correction is recorded with your reason.")) end
     end
 
-    function cmds.undo()
+    function cmds.undo(args)
         local chain = list("main")
         local stack = chain and chain.state.undo[engine:MyChain()]
         local top = stack and stack[#stack]
@@ -197,6 +197,13 @@ function M.New(ctx)
             out("Nothing can be undone (only your own most recent awards, and only until something else moves the list).")
             if #engine:ActiveRaids() > 0 then out("To undo someone else's award during a raid: request undo <name> <reason>") end
             return
+        end
+        -- Undo changes the list, so it asks first: say what would be undone, and go ahead only on "undo yes".
+        if args:lower() ~= "yes" then
+            local a = chain.state.awards[top.id]
+            out(("This would undo your most recent award%s. The undo is recorded in the history (nothing is erased)."):format(
+                a and (": " .. short(a.member) .. " won " .. tostring(a.item)) or ""))
+            return out("To go ahead: undo yes")
         end
         local ev = append("main", "Revert", { target = top.id })
         if ev then out("The last award was undone. The undo is recorded in the history.") end

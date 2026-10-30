@@ -1215,6 +1215,19 @@ showed it. Fixed, and every scenario was then clicked through in the browser pan
 (no errors; the Request eligibility button appears where a class can't bid). Practice from now on: after any
 page-template edit, load the built page and read the console, not only the API.
 
+### Decision: undo asks for confirmation; no general redo (2026-10-30)
+
+**Question from the guild leader:** should there be a redo in addition to undo? **Decided: not now; undo asks first.**
+- **Why no general redo:** the ledger is append-only and fix-forward, so an undo is already its own recorded event; a redo
+  would add back-and-forth to the record for little gain, undo only restores the list (the item was already handed
+  out), and redo gets ambiguous once anything else has moved. If an undo was a mistake, the award can be recorded again
+  in the normal way (the winner lands at the bottom: the true cost of winning now).
+- **Built:** `undo` now says what it would undo ("C won X") and does nothing until `undo yes`; the simulator's button asks
+  with a confirmation first. Declining changes nothing.
+- **Kept as an option for later:** a narrow redo, allowed only straight after your own undo and before anything else is
+  written, as its own event restoring the award exactly where it was (the same limit undo has). Worth adding only if misclicks
+  prove to be a real problem for guilds.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

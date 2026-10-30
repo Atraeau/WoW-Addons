@@ -5936,6 +5936,9 @@ end
       case "giveUp":
         if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
         break;
+      case "undo":
+        if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
+        break;
       case "setDe": act("setDisenchanter", $("#deSel").value); break;
       case "claimGift":
         if (!giftTo) { lastMsg = "Choose who to gift it to first (the \"Gift to\" list), then press Claim and gift."; render(); break; }
