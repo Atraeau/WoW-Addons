@@ -1003,6 +1003,14 @@ button sometimes needed two presses.
 - Checked in the browser pane: starts paused with the clock fixed at 0, Start runs it, one press pauses, and a press
   plus its click toggles once.
 
+### Wording: off-spec is bidding, not rolling (2026-10-30)
+
+The off-spec scenario was titled "Off-spec rolls" and didn't say who wins. There is no rolling anywhere (the free
+roll was rejected, above). Who wins an off-spec item is deterministic: the first player on the off-spec list with an
+off-spec bid. A player's first off-spec bid enrolls them at the bottom of that list, newcomers in main-list order, so
+with two newcomers the one higher on the main list is ahead. The scenario is now "Off-spec bids", and its lesson states
+this. No rule change.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
