@@ -1062,6 +1062,22 @@ rules; **the main list and the off-spec list must be unique random orders on ini
 - **Open:** whether the seed should include main-list members who are absent at the first session (today: only raiders
   present, and an absent member joins the bottom of the off-spec list when first present).
 
+### Proposal: create both lists from the guild roster before the first raid (2026-10-30)
+
+**Proposed by the guild leader** (tentatively: "we could perhaps"): instead of seeding the lists from whoever is present at
+the first session, create them **from the guild roster, before the first raid starts.** That settles the open question
+about absent members (everyone on the roster is on both lists from the start) and means the first session never has to
+create anything.
+- **Same rules as decided:** each list is its own random order, and anyone who joins the guild/list later goes to the
+  bottom, no further rolls. The roll is still recorded in the ledger as the order of the `AddMember` events.
+- **Who sets it up:** a one-time action by the guild master (or an officer) before the first raid, e.g. `lists init`, written
+  to the ledger; the first-session seeding stays only as a fallback for a guild that never ran it.
+- **Open questions:** whether every guild member is on the list (a guild roster includes alts, casuals and
+  inactive members, who would sit at random places in the order); how an officer trims it (remove after, exclude at
+  init, or choose by rank); and the Client's guild roster currently reports name, class and online status but **not
+  rank**, so any rank filter needs a small Client extension.
+- Nothing built for this yet: current behaviour (seed at the first session, from raiders present) stands.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
