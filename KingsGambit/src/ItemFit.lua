@@ -279,6 +279,24 @@ function M.Ranked(item)
 end
 
 M.GOOD, M.OK = 0.7, 0.35 -- share of the best spec's score
+M.USEFUL = 0.15 -- the least share of the best spec's score that still makes a class eligible by default
+
+-- Does the item have stats worth having for a class? This is the default for who may bid, beside "can they wear it":
+-- a warlock can wield a sword, but a sword of strength and agility does nothing for them. False only when the
+-- heuristic can judge the item (some spec values it) and no spec of the class gets even USEFUL of the best spec's
+-- score. That is well under the "ok" rating: the point is to keep out the class the stats are nothing to, not to rank
+-- the rest (a warrior in mail, or a mage with a tank's sta cloak, is a poor fit but not a pointless one).
+-- An item the stats can't judge (a use-effect trinket) and an item with an officer's suggestion stay open to everyone
+-- who can use it: the officer's call is a suggestion, and a guild rule (`eligible`) is how to restrict or open it.
+function M.Worthwhile(item, class)
+    if item.suits or not M.SPECS[class] then return true end
+    if item.best == nil then item.best = M.Best(item) end
+    if item.best <= 0 then return true end
+    for _, s in ipairs(M.SPECS[class]) do
+        if M.Score(item, s, class) >= item.best * M.USEFUL then return true end
+    end
+    return false
+end
 
 -- The specs the item suits best (score at least GOOD of the best), or {} if its stats say nothing (e.g. a
 -- trinket with only a use effect: then nobody is suggested, and the raid judges for itself).

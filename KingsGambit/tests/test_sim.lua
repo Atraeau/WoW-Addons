@@ -433,7 +433,7 @@ test("a lesson with a step still to do is not judged early: 'fix a mistake' wait
     sc.after = nil -- the learner has handed the staff out but not undone it yet
     local sim = Sim.RunScenario(sc)
     local hint = sc.todo(sim)
-    assert(hint and hint:find("Undo last award"), tostring(hint))
+    assert(hint and hint:find("Undo this"), tostring(hint))
     local last
     for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Award" then last = ev end end
     assert(sim.engine:Append("main", "Revert", { target = last.id }))
@@ -495,12 +495,13 @@ test("the scenarios are in teaching order: the single-item basics first, the big
     local ids = {}
     for _, sc in ipairs(SK.modules.Scenarios.list) do ids[#ids + 1] = sc.id end
     eq(ids[1], "first-drop", "starts with one item and one winner")
-    eq(ids[#ids], "big-handout", "ends with the big hand-out")
+    eq(ids[#ids], "regret-after-draft", "ends with the fix after a big hand-out")
     local pos = {}
     for i, id in ipairs(ids) do pos[id] = i end
     assert(pos["nobody-wants-it"] < pos["minor-upgrade-proxy"], "unwanted items are met before salvaging them")
     assert(pos["lucky-salvager"] < pos["big-handout"])
-    eq(#ids, 10)
+    assert(pos["big-handout"] < pos["regret-after-draft"], "the fix after a hand-out comes after the hand-out itself")
+    eq(#ids, 11)
     assert(pos["fix-a-mistake"] < pos["regret-trade"], "the plain undo comes before the trade")
 end)
 
@@ -546,6 +547,64 @@ test("'the item went to someone else': the regret-trade passes; the gift, a bare
         assert(s.engine:Append("main", "Award", { member = "Dara-Realm", item = a.data.item, reason = "traded" }))
     end)
     eq(tsc.todo(tsim), nil); local ok2, msg2 = tsc.expect(tsim); assert(ok2 and msg2:find("two steps"), msg2)
+end)
+
+test("'the item went to someone else, after a big hand-out': the salvager-winner is restored without moving, the recipient pays", function()
+    local base = SK.modules.Scenarios.find("regret-after-draft")
+    local function run(fix, seed)
+        local sc = {}
+        for k, v in pairs(base) do sc[k] = v end
+        sc.after = fix
+        return Sim.RunScenario(sc, seed and { seed = seed } or nil), sc
+    end
+    local function events(sim, type_, item)
+        local out = {}
+        for _, ev in ipairs(sim.engine:Get("main").events) do
+            if ev.type == type_ and (not item or ev.data.item == item) then out[#out + 1] = ev end
+        end
+        return out
+    end
+    local WANT = "Eira,You,Aldric,Brann,Cass,Dara,Fenn,Garo,Hale"
+    -- before any fix: the draft as it ran, and the learner is told which row to use
+    local sim, sc = run(nil)
+    eq(sim:orderString(), "Eira,Hale,You,Aldric,Brann,Cass,Dara,Fenn,Garo")
+    assert(sc.todo(sim):find("not the ring"), tostring(sc.todo(sim))); assert(not sc.expect(sim))
+    -- the one-step regret-trade: Hale pays, nobody else moves, Brann keeps the ring win that already put him at the bottom
+    local rsim, rsc = run(base.after)
+    eq(rsim:orderString(), WANT); eq(rsc.todo(rsim), nil)
+    local ok, msg = rsc.expect(rsim); assert(ok and msg:find("one step"), msg)
+    local st = rsim.engine:Get("main").state
+    eq(st.members["Brann-Realm"].wins, 1, "only the ring is still his win")
+    eq(st.members["Hale-Realm"].wins, 1)
+    eq(#events(rsim, "Award", "Quick Strike Ring"), 1, "the ring award is untouched")
+    -- two steps (undo, then record Hale's win) end in the same place
+    local tsim, tsc = run(function(s)
+        local a = events(s, "Award", "Brutality Blade")[1]
+        assert(s.engine:Append("main", "Revert", { target = a.id }))
+        assert(s.engine:Append("main", "Award", { member = "Hale-Realm", item = a.data.item, reason = "traded" }))
+    end)
+    eq(tsim:orderString(), WANT); eq(tsc.todo(tsim), nil); assert(select(2, tsc.expect(tsim)):find("two steps"))
+    -- a bare undo leaves Hale unpaid; a gift moves nobody
+    local usim, usc = run(function(s) assert(s.engine:Append("main", "Revert", { target = events(s, "Award", "Brutality Blade")[1].id })) end)
+    assert(usc.todo(usim):find("Hale"), tostring(usc.todo(usim))); assert(not usc.expect(usim))
+    local gsim, gsc = run(function(s)
+        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale-Realm", reason = "gift" }))
+    end)
+    assert(gsc.todo(gsim):find("nobody moves"), tostring(gsc.todo(gsim))); assert(not gsc.expect(gsim))
+    -- a gift tried first and then put right is not held against the learner
+    local fsim, fsc = run(function(s)
+        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale-Realm", reason = "gift" }))
+        base.after(s)
+    end)
+    eq(fsc.todo(fsim), nil); assert(fsc.expect(fsim))
+    -- undoing the wrong row (the ring) is not the fix: the lesson does not pass
+    local wsim, wsc = run(function(s) assert(s.engine:Append("main", "Revert", { target = events(s, "Award", "Quick Strike Ring")[1].id })) end)
+    assert(not wsc.expect(wsim))
+    -- the standings do not depend on luck
+    for seed = 2, 5 do
+        local s2, sc2 = run(base.after, seed)
+        eq(s2:orderString(), WANT, "seed " .. seed); assert(sc2.expect(s2))
+    end
 end)
 
 H.section("Sim: the raid leader, the loot method and the Master Looter")

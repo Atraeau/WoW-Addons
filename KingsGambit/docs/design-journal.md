@@ -1470,6 +1470,68 @@ final list, not the route: the regret-trade in one step passes, so does undo the
 used), a gift or a bare undo get a plain hint saying what is wrong, and a wrong try that was then put right is not held
 against the learner. Tested for all five routes; played in the page, gift first and then the trade. Ten scenarios now.
 
+### Decision: an earlier award can be undone even if its winner won again later (2026-10-31)
+
+Found by thinking through a regret-trade after a big hand-out. In a draft the first pickers are also the
+salvagers, so one player holds two awards in a row (the pick, then the leftover they claimed). Until now undoing
+the first was refused (`laterwin`), which would have left the Master Looter stuck: "Aldric traded his gauntlets
+to Hale" could not be fixed without taking the hand-out apart.
+
+It is safe to allow, and the rule is simple: the later win already dropped that player to the bottom, so with or
+without the earlier win they stand in the same place. Undoing the earlier one therefore **moves nobody**; it only
+takes one win off the count, and everyone who was passed over by it is unaffected. What has to be kept right is the
+bookkeeping a later undo needs: the later win inherits "who was below me" from the undone one (so undoing both,
+in either order, puts the player back where they started), and the saved win counts of the later entries drop by
+one. Entries made after the player's later win are untouched (the list is the same either way from there).
+
+Also decided (the guild leader): **a gift only needs its destination to be eligible.** The gifter needs no
+eligibility for the item. A rule limiting gifters to items they could use themselves was considered and dropped.
+
+Checked the way the rest of undo is: a random-session test against a replay without the award, now with repeated
+winners and chains of undo and regret-trade.
+
+The simulator's old "Undo last award" button goes. The Corrections card undoes any one award, so one place does
+it, and the lesson "Fixing a mistake" points there. A new lesson for the regret-trade after a draft follows.
+
+### Decision: default eligibility needs stats that help the class, not only the ability to equip it (2026-10-31)
+
+**Decided by the guild leader**, after seeing a warlock offered the Brutality Blade: a warlock can wield a sword, but
+it has nothing on it for them. The default for who may bid ("can they wear or wield it", from the earlier decision on
+armor type) now also asks whether the item's stats help the class.
+
+- **The check** (`ItemFit.Worthwhile`, used by `MayHave`): a class is eligible by default when some spec of it
+  scores at least 15% of the best spec's score for the item (`ItemFit.USEFUL`). That is deliberately well below the
+  "ok" rating (35%), which ranks suggestions: this only keeps out a class the stats are nothing to. A warrior in
+  mail boots or a mage with a tank's stamina cloak is a poor fit but not a pointless one, and stays eligible.
+- **Where it doesn't apply:** an item the heuristic can't judge (no stats it values: a use-effect trinket), an item
+  with an officer's suggestion (`ItemSuits` is a suggestion, as decided before), and any item with a guild rule
+  (`eligible`): a deliberate guild call decides on its own. The salvager and the disenchanter are still not
+  restricted.
+- **Same rule for bids and gifts:** need, off-spec, and a gift's recipient. New refusal `nostats` / `nostatsto`
+  (in plain words: "its stats don't help your class").
+- **Asking still works:** `request eligible` is offered for it (the page too). Accepting writes the rule as the
+  classes the item helps plus the requester, not "everyone who can wield it", so a warlock's request doesn't also
+  open the sword to a mage.
+- **Tuning is one number.** If the threshold lets in or keeps out the wrong classes in a real raid, change
+  `USEFUL`; the stats and the weights per spec are the heuristic's, as before.
+
+### Simulator: the regret-trade after a big hand-out (2026-10-31)
+
+The single-drop lesson is easy: the winner goes back up, the recipient drops. After a draft the standings are harder,
+and this lesson (the last one, after the big hand-out) is built to meet that. Brann's blade was traded to Hale, who got
+nothing in the draft (he only wanted the blade). Brann is also the second salvager, so he holds a second award, the
+Quick Strike Ring, after the blade, and the draft went on after him.
+
+- The right answer: Brann does not move (the ring already put him at the bottom), Hale drops to the bottom, nobody
+  else moves, and the draft is not replayed. The lesson says so, and why Brann seems not to move.
+- It is judged on the list at the end, like the earlier lessons: a gift (nobody moves), a bare undo (Hale unpaid), the
+  one-step regret-trade and undo-then-award are all told apart, and a wrong try that is put right is not held against
+  the learner. Undoing the wrong row (the ring) doesn't pass.
+- Tested at the engine level with random sessions that include repeat winners and chains of undo and trade.
+- The simulator's old "Undo last award" button is gone; the Corrections card does it (any award), so there is one place.
+- The learner is told which row to use ("Brann's Brutality Blade, not the ring"). A harder version could let them find
+  it themselves; for now the lesson is about the standings, not hunting for the row.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

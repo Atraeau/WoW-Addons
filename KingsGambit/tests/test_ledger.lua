@@ -125,49 +125,80 @@ test("an earlier award can be undone without touching the later ones", function(
     eq(reasons(v), ""); eq(order(v), "B,C,E,D,A", "as if B had never won: B above C, who was below B; D and A still paid")
     eq(v.lists.main.members.B.wins, 0); eq(v.lists.main.members.D.wins, 1)
 end)
-test("undoing an earlier award is refused while the same player has a later win", function()
+test("an earlier award can be undone even if its winner won again later: nobody moves, and undoing both restores the place", function()
     local w = guild()
-    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")
+    local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")  -- A,C,D,E,B
     local a2 = w:write("GM", "Award", { member = "B", item = "Y" }, 121, "main")
     w:write("GM", "Revert", { target = a1.id }, 122, "main")
-    eq(reasons(w:view()), "Revert:laterwin")
+    local v = w:view()
+    eq(reasons(v), ""); eq(order(v), "A,C,D,E,B", "B won Y anyway, so B stands where they did"); eq(v.lists.main.members.B.wins, 1)
+    eq(v.lists.main.members.B.lastWinId, a2.id)
     w:write("GM", "Revert", { target = a2.id }, 123, "main")
-    w:write("GM", "Revert", { target = a1.id }, 124, "main")
-    eq(order(w:view()), "A,B,C,D,E"); eq(reasons(w:view()), "Revert:laterwin")
+    v = w:view()
+    eq(order(v), "A,B,C,D,E", "with both undone B is back where they began"); eq(v.lists.main.members.B.wins, 0)
+    eq(reasons(v), "")
 end)
-test("undoing any one award equals replaying the others without it (random sessions)", function()
+test("a draft-shaped session: undo a salvager's first award after others have picked", function()
+    local w = guild()
+    w:write("GM", "AddMember", { member = "F" }, 108, "main")
+    local gaunt = w:write("GM", "Award", { member = "A", item = "Gauntlets" }, 120, "main") -- B,C,D,E,F,A
+    w:write("GM", "Award", { member = "A", item = "Ring" }, 121, "main")                       -- salvage: A again
+    w:write("GM", "Award", { member = "B", item = "Blade" }, 122, "main")                      -- C,D,E,F,A,B
+    w:write("GM", "Award", { member = "D", item = "Helm" }, 123, "main")                       -- C,E,F,A,B,D
+    w:write("GM", "Award", { member = "F", item = "Gauntlets", replaces = gaunt.id, reason = "traded at the door" }, 124, "main")
+    local v = w:view()
+    eq(reasons(v), ""); eq(order(v), "C,E,A,B,D,F", "A keeps the ring win (so keeps their place); F pays")
+    eq(v.lists.main.members.A.wins, 1); eq(v.lists.main.members.F.wins, 1)
+end)
+test("undoing or trading any awards equals replaying the others without them (random sessions, repeat winners, chains of fixes)", function()
     local names = { "A", "B", "C", "D", "E", "F" }
     local seed = 12345
     local function rnd(n) seed = (seed * 1103515245 + 12345) % 2147483648; return seed % n + 1 end
-    for trial = 1, 300 do
-        local w, awards = guild(), {}
+    local function replay(live)
+        local ord, wins, last = { "A", "B", "C", "D", "E", "F" }, {}, {}
+        for _, a in ipairs(live) do
+            for i, n in ipairs(ord) do if n == a.who then table.remove(ord, i); break end end
+            ord[#ord + 1] = a.who
+            wins[a.who] = (wins[a.who] or 0) + 1; last[a.who] = a.id
+        end
+        return table.concat(ord, ","), wins, last
+    end
+    for trial = 1, 500 do
+        local w, live, t, log = guild(), {}, 120, {}
         w:write("GM", "AddMember", { member = "F" }, 108, "main")
-        local count = rnd(6) + 1
-        local t = 120
-        for i = 1, count do
+        local function award(who)
             t = t + 1
-            local who = names[rnd(6)]
-            awards[i] = { who = who, ev = w:write("GM", "Award", { member = who, item = "I" .. i }, t, "main") }
+            live[#live + 1] = { who = who, id = w:write("GM", "Award", { member = who, item = "I" .. t }, t, "main").id }
+            log[#log + 1] = "award " .. who
         end
-        -- Undo one award that its winner hasn't won again later (the rule); remember which.
-        local pick
-        for _ = 1, 20 do
-            local k = rnd(count)
-            local ok = true
-            for j = k + 1, count do if awards[j].who == awards[k].who then ok = false end end
-            if ok then pick = k; break end
-        end
-        if pick then
+        for _ = 1, rnd(7) + 1 do award(names[rnd(6)]) end
+        for _ = 1, rnd(6) do
+            local kind = #live == 0 and 3 or rnd(3)
+            local k = rnd(math.max(#live, 1))
             t = t + 1
-            w:write("GM", "Revert", { target = awards[pick].ev.id }, t, "main")
-            local fresh = guild()
-            fresh:write("GM", "AddMember", { member = "F" }, 108, "main")
-            local tt = 120
-            for i = 1, count do
-                if i ~= pick then tt = tt + 1; fresh:write("GM", "Award", { member = awards[i].who, item = "I" .. i }, tt, "main") end
+            if kind == 1 then
+                log[#log + 1] = "undo #" .. k .. " (" .. live[k].who .. ")"
+                w:write("GM", "Revert", { target = live[k].id }, t, "main")
+                table.remove(live, k)
+            elseif kind == 2 then
+                local to
+                repeat to = names[rnd(6)] until to ~= live[k].who
+                log[#log + 1] = "trade #" .. k .. " (" .. live[k].who .. ") to " .. to
+                local ev = w:write("GM", "Award", { member = to, item = "T" .. t, replaces = live[k].id, reason = "traded" }, t, "main")
+                table.remove(live, k)
+                live[#live + 1] = { who = to, id = ev.id }
+            else
+                t = t - 1
+                award(names[rnd(6)])
             end
-            eq(reasons(w:view()), "", "trial " .. trial)
-            eq(order(w:view()), order(fresh:view()), ("trial %d: %d awards, undid #%d"):format(trial, count, pick))
+            local ord, wins, last = replay(live)
+            local v = w:view()
+            local ctx = ("trial %d: %s"):format(trial, table.concat(log, "; "))
+            eq(reasons(v), "", ctx); eq(order(v), ord, ctx)
+            for _, n in ipairs(names) do
+                local m = v.lists.main.members[n]
+                eq(m.wins, wins[n] or 0, ctx .. " wins of " .. n); eq(m.lastWinId, last[n], ctx .. " last win of " .. n)
+            end
         end
     end
 end)
@@ -429,11 +460,10 @@ end)
 test("a trade that can't be done changes nothing at all (no half correction)", function()
     local w = guild()
     local a1 = w:write("GM", "Award", { member = "B", item = "X" }, 120, "main")
-    w:write("GM", "Award", { member = "B", item = "Y" }, 121, "main")             -- B won again: a1 can't go first
-    w:write("GM", "Award", { member = "D", item = "X", replaces = a1.id }, 122, "main")
     w:write("GM", "Award", { member = "B", item = "X", replaces = a1.id }, 123, "main")
     w:write("GM", "Award", { member = "Zed", item = "X", replaces = a1.id }, 124, "main")
+    w:write("GM", "Award", { member = "D", item = "X", replaces = "nope" }, 125, "main")
     local v = w:view()
-    eq(reasons(v), "Award:laterwin Award:samewinner Award:notmember", "refused as a whole")
+    eq(reasons(v), "Award:samewinner Award:notmember Award:notrevertible", "refused as a whole")
     eq(order(v), "A,C,D,E,B"); eq(v.lists.main.members.D.wins, 0)
 end)

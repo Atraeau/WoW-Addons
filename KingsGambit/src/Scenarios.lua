@@ -157,7 +157,7 @@ M.list = {
         -- What the learner still has to do before the lesson can be judged: the page shows this instead of a verdict.
         todo = function(sim)
             if not lastEvent(sim, "main", "Revert") then
-                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: press \"Undo last award\" above. The undo is written as its own event, so the history shows what happened."
+                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: in the Corrections card below, press \"Undo this\" on Brann's award. The undo is written as its own event, so the history shows what happened."
             end
         end,
         after = function(sim)
@@ -289,11 +289,52 @@ M.list = {
     },
 }
 
+-- The regret-trade after a big hand-out: the hardest case for the standings. The first pickers are also the
+-- salvagers, so the winner of the item that went to someone else has also won a leftover since (their place is already
+-- the bottom), and the real recipient may be someone who got nothing at all.
+do
+    local base
+    for _, sc in ipairs(M.list) do if sc.id == "big-handout" then base = sc end end
+    local WANT = "Eira,You,Aldric,Brann,Cass,Dara,Fenn,Garo,Hale"
+    local function blade(sim)
+        for _, ev in ipairs(sim.engine:Get("main").events) do
+            if ev.type == "Award" and ev.data.item == "Brutality Blade" and short(ev.data.member) == "Brann" then return ev end
+        end
+    end
+    M.list[#M.list + 1] = {
+        id = "regret-after-draft",
+        title = "The item went to someone else, after a big hand-out",
+        lesson = "The same ten items as the big hand-out, and the same draft: pass on everything, press Start, confirm. Afterward Brann tells you: \"I traded the Brutality Blade to Hale at the door.\" Hale ranked it first too, and lost it only because Brann is higher on the list. Fix the list, in the Corrections card.\n\nThis is harder than the single drop. Brann won the blade, and also the Quick Strike Ring (he picked second, so he was the second salvager), and the draft went on after him. Choose Hale in \"It went to\" on Brann's Brutality Blade and press Regret-trade. Notice what does and doesn't change:\n\n1. Brann does not move. He also won the ring after the blade, and that already dropped him to the bottom when his turn came, so he stands in the same place with or without the blade. He just loses that win (and keeps the ring).\n2. Hale, who got nothing in the draft, pays now: he drops to the bottom, as if he had won the blade.\n3. Nobody else moves, and nobody has to hand anything back: the draft is not replayed.\n\n(\"It was a gift\" is for a deliberate gift: nobody would move, which would be unfair to Hale's wait.)",
+        members = base.members, learnerClass = base.learnerClass, items = base.items, policies = base.policies, you = base.you,
+        todo = function(sim)
+            local last = lastEvent(sim, "main", "Award")
+            if last and short(last.data.member) == "Hale" and last.data.item == "Brutality Blade" and sim:orderString() == WANT then return nil end
+            if lastEvent(sim, "main", "Transfer") then
+                return "A gift only records where the blade went; nobody moves, so Brann keeps a win he did not have and Hale pays nothing. Hale wanted it and lost only on rank: this was a regret-trade. Fix it: use Regret-trade on Brann's Brutality Blade (Corrections card)."
+            end
+            if lastEvent(sim, "main", "Revert") then
+                return "You undid a win, so that player is restored. Now Hale has the blade and should pay for it: record it with \"Record a win the session didn't\" (Hale, the blade), or undo that and use Regret-trade on Brann's Brutality Blade, which does both in one step."
+            end
+            return "The hand-out is done, but Brann traded the blade to Hale. Fix the list: in the Corrections card, find Brann's Brutality Blade (not the ring), choose Hale in \"It went to\" and press Regret-trade."
+        end,
+        after = function(sim)
+            local award = assert(blade(sim))
+            assert(sim.engine:Append("main", "Award", { member = "Hale-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+        end,
+        expect = function(sim)
+            local last = lastEvent(sim, "main", "Award")
+            local ok = sim:orderString() == WANT and last ~= nil and short(last.data.member) == "Hale" and last.data.item == "Brutality Blade"
+            local how = last and last.data.replaces and "in one step (a regret-trade)" or "in two steps (undo, then award)"
+            return ok, ("order is %s; Hale paid for the blade, Brann kept his place (the ring was his later win), %s"):format(sim:orderString(), how)
+        end,
+    }
+end
+
 -- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
 -- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
 -- (The raid nights come after all of these, on the page.)
 local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
-    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout" }
+    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout", "regret-after-draft" }
 local rank = {}
 for i, id in ipairs(ORDER) do rank[id] = i end
 table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)

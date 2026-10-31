@@ -33,12 +33,13 @@ local WHY = {
     toomany = "you already have 3 requests waiting: wait for the Master Looter to answer them",
     norequest = "there is no waiting request with that number", noaward = "they have no award to change",
     notrevertible = "that award can't be undone directly any more (the list has moved since, or it was not made by you): use a move instead",
-    laterwin = "that player won something later: undo that later award first, then this one",
     notrestricted = "that item isn't restricted to classes, so everyone may already bid on it",
     cantequip = "that class can't wear or wield that item", cantequipto = "the player you are gifting to can't wear or wield that item",
     alreadyeligible = "that class may already bid on it",
     badpos = "a position is top, bottom or a number",
     -- who may bid on an item
+    nostats = "that item has no stats that help that class (if it should be eligible: request eligible <item#> <reason>)",
+    nostatsto = "the item has no stats that help the player you are gifting to",
     wrongclass = "that item is for other classes (if you think your class should be eligible: request eligible <item#> <reason>)",
     wrongclassto = "the player you are gifting to is not one of the classes the item is for",
     baditemrule = "that rule is not valid (an item id, the classes, and a reason)",
@@ -458,6 +459,7 @@ function M.New(ctx)
         local may, mayWhy = Loot.MayHave(fit, mine)
         if not may then
             parts[#parts + 1] = mayWhy == "cantequip" and "your class can't wear or wield it (you can gift it)"
+                or mayWhy == "nostats" and "its stats don't help your class (you can gift it, or ask: request eligible <item#> <reason>)"
                 or "not for your class yet (you can gift it, or ask: request eligible <item#> <reason>)"
         end
         if char.hints then
@@ -489,8 +491,9 @@ function M.New(ctx)
             local may, mayWhy = Loot.MayHave(myFit(linkOf(item)), myClass())
             if not may then
                 out(("Item %d: %s."):format(item, mayWhy == "cantequip" and "your class can't wear or wield it, so you can pass or gift it"
+                    or mayWhy == "nostats" and "its stats don't help your class, so you can pass or gift it"
                     or "your class isn't eligible for it, so you can pass or gift it"))
-                if mayWhy == "wrongclass" then out(("If you think you should be: request eligible %d <reason>"):format(item)) end
+                if mayWhy == "wrongclass" or mayWhy == "nostats" then out(("If you think you should be: request eligible %d <reason>"):format(item)) end
                 return
             end
         end

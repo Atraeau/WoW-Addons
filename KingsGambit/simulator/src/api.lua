@@ -156,9 +156,7 @@ local function state()
         disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()),
         leader = short(leader), lootMethod = sim.client:lootMethod(),
         youAreML = (sim.ml == sim.learner), youAreLeader = (leader == sim.learner), mlChoice = mlChoice }
-    -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
-    snap.canUndo = stack ~= nil and #stack > 0
     -- the awards you can change, latest first, and the items a win could be recorded for
     local awards = sim.engine:Get("main").state.awards
     snap.corrections = { awards = {}, items = {} }
@@ -362,8 +360,12 @@ function api.eligible(itemId, reason)
     local ok, why = S.Loot.MayHave(fit, me)
     if ok then return result(false, "your class may already bid on it") end
     if why == "cantequip" then return result(false, "your class can't wear or wield it") end
+    -- the rule names every class that may have it now, plus yours (an item that names no classes, like a sword with
+    -- stats for some classes only, gets its list from who can use it)
     local classes = {}
-    for _, c in ipairs(fit.classes or {}) do classes[#classes + 1] = c end
+    for _, c in ipairs(S.ItemFit.CLASSES) do
+        if S.Loot.MayHave(fit, c) then classes[#classes + 1] = c end
+    end
     classes[#classes + 1] = me
     if not it.itemId then return result(false, "this item has no item id") end
     local ev, err = sim.engine:Write("ItemClasses", { item = it.itemId, classes = classes,
@@ -421,17 +423,6 @@ function api.confirm()
     local s = result(ok, ok and nil or failures)
     if ok then s.failures = failures end
     return s
-end
-
--- Undo the most recent award by writing a Revert event (fix-forward).
-function api.undo()
-    if sim.ml ~= sim.learner then return notML() end
-    local chain = sim.engine:Get("main")
-    local stack = chain.state.undo[sim.engine:MyChain()]
-    local top = stack and stack[#stack]
-    if not top then return result(false, "nothing to undo") end
-    local ev, err = sim.engine:Append("main", "Revert", { target = top.id })
-    return result(ev ~= nil, err)
 end
 
 ---------------------------------------------------------------- corrections (the Master Looter puts a mistake right)

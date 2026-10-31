@@ -109,7 +109,8 @@
     const r = call(name, a, b, c);
     const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
-      cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
+      cantequip: "your class can't wear or wield it", nostats: "nothing on it helps your class (ask to be eligible if you think it should)",
+      nostatsto: "nothing on it helps the player you chose to gift it to", badtarget: "choose someone in the raid to gift it to",
       cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
       wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it",
       notml: "only the Master Looter can do that: another raider holds the role in this run (choose yourself as Master Looter and restart to take the controls)",
@@ -117,7 +118,6 @@
       notmasterloot: "the loot method is not Master Looter, so loot cannot be handed out: the raid leader has to set it (any loot waiting is kept)",
       otherlooter: "the Master Looter is chosen when a run starts: pick them in the Master Looter list and restart",
       notinraid: "that player is not in the raid",
-      laterwin: "that player won something later: undo that later award first, then this one",
       notrevertible: "that award can't be undone any more (the list was moved by hand since)",
       notmember: "they aren't on the list", samewinner: "that is the person it was recorded for: choose who really has it",
       noreason: "a reason is required (it goes in the record)", noitem: "choose which item", badtarget: "choose who it went to" };
@@ -244,8 +244,10 @@
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
           // a way to ask.
           const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
-          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
-          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason, like an accepted request.">Request eligibility&hellip;</button>' : "";
+          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this."
+            : it.youWhy === "nostats" ? "Nothing on this helps " + CLS + " (its stats are for other classes)."
+            : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
+          const ask = (it.youWhy === "wrongclass" || it.youWhy === "nostats") ? '<button data-act="eligible" data-a="' + it.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason, like an accepted request.">Request eligibility&hellip;</button>' : "";
           ans = '<td><div class="row">' + b("gift", "Gift") + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
@@ -325,8 +327,9 @@
     const rows = c.awards.map((a) => {
       const id = "to" + a.id;
       return '<div class="fixrow"><div><b>' + esc(a.member) + "</b> won <span class=\"iname\">" + esc(a.item) + "</span>" + (a.to && a.to !== a.member ? " (given to " + esc(a.to) + ")" : "") + "</div>" +
-        '<div class="row" style="margin-top:4px"><button data-act="fixUndo" data-a="' + esc(a.id) + '"' + (a.laterWin ? ' disabled title="' + esc(a.member) + ' won something later: undo that one first"' : "") +
-        ' title="Wrong winner, or it should not have been awarded. ' + esc(a.member) + ' goes back up the list; later awards stay as they are.">Undo this</button>' +
+        '<div class="row" style="margin-top:4px"><button data-act="fixUndo" data-a="' + esc(a.id) + '"' + ' title="Wrong winner, or it should not have been awarded. ' + (a.laterWin
+          ? esc(a.member) + ' also won something later, which already put them at the bottom, so their place does not change: they just lose this win. Later awards stay as they are.'
+          : esc(a.member) + ' goes back up the list; later awards stay as they are.') + '">Undo this</button>' +
         '<span class="muted small">It went to:</span>' + fixSelect(id, names.filter((n) => n !== a.member), "") +
         '<button data-act="fixTrade" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A regret-trade: ' + esc(a.member) + ' is restored to their place and the one who has it moves to the bottom, as if they had won the bid.">Regret-trade</button>' +
         '<button data-act="fixGift" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A deliberate gift by the winner: it only records where the item went. Nobody moves.">It was a gift</button></div></div>';
@@ -362,7 +365,6 @@
     if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
     if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
-    if (p === "done" && st.canUndo && isML) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -504,9 +506,6 @@
         break;
       case "giveUp":
         if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
-        break;
-      case "undo":
-        if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
         break;
       case "fixUndo":
         if (window.confirm("Undo this award? The winner goes back up the list and later awards stay as they are. The undo is recorded in the history.")) act("undoAward", a);

@@ -236,8 +236,9 @@ function Session:rosterChanged()
 end
 
 -- May a player of `class` bid on an item (ItemFit's view of it) in the drafts? true, or false + "wrongclass" (not a
--- class the item or the guild's rule names) or "cantequip" (the class can't wear or wield it). Unknown items and
--- classes are let through.
+-- class the item or the guild's rule names), "cantequip" (the class can't wear or wield it) or "nostats" (it can, but
+-- the item's stats do nothing for any of the class's specs). Unknown items and classes are let through, and a guild
+-- rule decides on its own.
 function M.MayHave(fit, class)
     if not (fit and class) then return true end
     if fit.rule then
@@ -245,8 +246,9 @@ function M.MayHave(fit, class)
         return false, "wrongclass"
     end
     local ok, why = ItemFit.CanUse(fit, class)
-    if ok then return true end
-    return false, why == "classes" and "wrongclass" or "cantequip"
+    if not ok then return false, why == "classes" and "wrongclass" or "cantequip" end
+    if not ItemFit.Worthwhile(fit, class) then return false, "nostats" end
+    return true
 end
 
 -- What the session knows about item i (ItemFit's view: class restriction, stats), or nil while the game
@@ -374,6 +376,8 @@ function Session:handleWhisper(sender, text)
             else
                 if err == "cantequip" or err == "cantequipto" then
                     lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
+                elseif err == "nostats" or err == "nostatsto" then
+                    lines[#lines + 1] = ("item %d has no stats that help %s"):format(id, err == "nostats" and "your class" or "theirs")
                 elseif err == "wrongclass" or err == "wrongclassto" then
                     lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
                 else

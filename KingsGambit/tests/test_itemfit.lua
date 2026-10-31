@@ -188,6 +188,58 @@ test("an item a class can't equip takes no need or off-spec bids from it, nor gi
     assert(s:bid("Lock", 1, "pass")); assert(s:bid("Wara", 1, "need")); assert(s:bid("ML", 1, "pass"))
 end)
 
+-- A one-handed sword of strength and agility (the Brutality Blade), for a raid of a warlock, a mage, a warrior and a rogue.
+local function blade(stats, rule)
+    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local roster = { { name = "Lock", class = "WARLOCK" }, { name = "Maga", class = "MAGE" }, { name = "Wara", class = "WARRIOR" },
+        { name = "Rogu", class = "ROGUE" }, { name = "ML", class = "PALADIN" } }
+    client:setRaid(roster, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
+    client:setItemInfo("item:18832", { name = "Brutality Blade", equipLoc = "INVTYPE_WEAPON", class = WEAPON, subclass = 7 })
+    client:setItemStats("item:18832", stats)
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name .. "-Realm", class = m.class }) end
+    if rule then assert(engine:Write("ItemClasses", rule)) end
+    local s = Loot.NewSession(engine, { bidSeconds = 0 })
+    assert(s:start({ { link = "item:18832" } }))
+    return s, engine, client
+end
+H.section("Item fit: eligibility also needs stats that help the class")
+test("a warlock can wield the Brutality Blade but nothing on it helps them, so they can't bid (nor a mage); melee classes can", function()
+    local s, _, client = blade({ stats = { str = 9, agi = 9, crit = 1, dps = 51.6 } })
+    for _, who in ipairs { "Lock", "Maga" } do
+        eq(select(2, s:bid(who, 1, "need")), "nostats", who); eq(select(2, s:bid(who, 1, "off")), "nostats", who)
+    end
+    assert(s:bid("Wara", 1, "need")); assert(s:bid("Rogu", 1, "off"))
+    eq(select(2, s:bid("Wara", 1, "gift", { to = "Lock" })), "nostatsto", "nor may it be gifted to them")
+    assert(s:bid("Lock", 1, "gift", { to = "Rogu" }), "but they may win it for someone it helps")
+    assert(s:bid("Lock", 1, "pass"))
+    s:handleWhisper("Maga", "need")
+    assert(client.sent[#client.sent].text:find("has no stats that help your class"), client.sent[#client.sent].text)
+end)
+test("the same sword with stats for casters is open to the warlock and the mage, and not to the warrior", function()
+    local s = blade({ stats = { sp = 30, int = 10, spellcrit = 1 } })
+    assert(s:bid("Lock", 1, "need")); assert(s:bid("Maga", 1, "need"))
+    eq(select(2, s:bid("Wara", 1, "need")), "nostats"); eq(select(2, s:bid("Rogu", 1, "need")), "nostats")
+end)
+test("an item the stats can't judge, or one with a guild rule, is not narrowed by stats", function()
+    local s = blade({ stats = {} })
+    assert(s:bid("Lock", 1, "need"), "no stats to judge by: everyone who can wield it may bid")
+    local r = blade({ stats = { str = 9, agi = 9, dps = 51.6 } }, { item = 18832, classes = { "WARLOCK", "WARRIOR" }, reason = "guild call" })
+    assert(r:bid("Lock", 1, "need"), "the guild's rule says the warlock may"); eq(select(2, r:bid("Rogu", 1, "need")), "wrongclass")
+end)
+test("an eligibility request for a blade is granted as the classes it helps plus the requester", function()
+    local _, engine, client = blade({ stats = { str = 9, agi = 9, crit = 1, dps = 51.6 } })
+    local rule, whyNot = SK.modules.Requests.EligibleRule(engine, client, { item = "item:18832", class = "WARLOCK",
+        by = "Lock-Realm", reason = "I'd like it for the vendor price" })
+    assert(rule, "granted: " .. tostring(whyNot))
+    local has = {}
+    for _, c in ipairs(rule.classes) do has[c] = true end
+    eq(has.WARLOCK, true); eq(has.WARRIOR, true); eq(has.ROGUE, true); eq(has.MAGE, nil, "the mage's stats are no better, and they didn't ask")
+    local _, why = SK.modules.Requests.EligibleRule(engine, client, { item = "item:18832", class = "WARRIOR", by = "x", reason = "y" })
+    eq(why, "alreadyeligible")
+end)
+
 H.section("Item fit: the guild's rules, set before the item drops")
 test("an officer's rule decides who may bid, over what the item itself says", function()
     local s = session({ stats = {}, classes = { "PRIEST" } },

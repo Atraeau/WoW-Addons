@@ -104,7 +104,9 @@ function M.EligibleRule(engine, client, r)
         local ok, why = ItemFit.CanUse(fit, r.class)
         if not ok and why ~= "classes" then return nil, "cantequip" end
         local able = {}
-        for _, c in ipairs(M.ClassList()) do if ItemFit.CanUse(fit, c) then able[#able + 1] = c end end
+        for _, c in ipairs(M.ClassList()) do
+            if ItemFit.CanUse(fit, c) and ItemFit.Worthwhile(fit, c) then able[#able + 1] = c end
+        end
         if #able < #M.ClassList() then classes = able end
     end
     if not classes then return nil, rule and "alreadyeligible" or "notrestricted" end

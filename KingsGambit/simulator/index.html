@@ -511,8 +511,9 @@ end
 -- shouldn't have to be taken apart to fix its first item). The list then ends up as if that award had never been made:
 -- the winner goes just above the highest-placed of those who were below them when they won, or have won since (those
 -- sit at the bottom now and would be below them anyway). Awards made after this one remember "who was below me", so
--- they forget this winner where the winner was above them to begin with. If the same player won something later, that
--- later win has to be undone first, or their place would be wrong ("laterwin").
+-- they forget this winner where the winner was above them to begin with. If the same player won something later (a
+-- draft pick, then the leftover they claimed as salvager), that later win already put them at the bottom, so they stand
+-- in the same place either way: nobody moves, and the later win takes over remembering who was below them.
 function planRevert(s, ev, target)
     local stack = s.undo[ev.chain]
     local k
@@ -523,37 +524,57 @@ function planRevert(s, ev, target)
     local top = stack[k]
     local m = s.members[top.member]
     if not (m and m.active) then return nil, "notmember" end
+    -- The player's next win, if they have one: it dropped them to the bottom, so they stand in the same place with or
+    -- without this one. Undoing this award then moves nobody.
+    local nextWin
     for j = k + 1, #stack do
-        if stack[j].member == top.member then return nil, "laterwin" end
+        if stack[j].member == top.member then nextWin = j; break end
     end
     return function()
         local wasBelow, since = {}, {}
         for _, name in ipairs(top.below) do wasBelow[name] = true end
         for j = k + 1, #stack do since[#since + 1] = stack[j].member end
-        table.remove(s.order, indexOf(s.order, top.member))
-        local at = #s.order + 1
-        local function consider(name)
-            local i = indexOf(s.order, name)
-            if i and i < at then at = i end
-        end
-        for _, name in ipairs(top.below) do consider(name) end
-        for _, name in ipairs(since) do consider(name) end
-        table.insert(s.order, at, top.member)
-        if k == #stack then
-            m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
-        else
+        if nextWin then
+            -- Their next win stands in for this one: it also remembers who was below them before this win, so undoing
+            -- that win puts them back where they started. The saved win counts of their later entries drop by one.
+            local later = stack[nextWin]
+            local seen = {}
+            for _, name in ipairs(later.below) do seen[name] = true end
+            for _, name in ipairs(top.below) do
+                if not seen[name] then later.below[#later.below + 1] = name end
+            end
             m.wins = m.wins - 1
-            if m.lastWinId == top.id then m.lastWinId, m.lastWinTs = top.lastWinId, top.lastWinTs end
-            -- A later winner who was below this one to begin with: this winner was never below them.
-            for j = k + 1, #stack do
-                local later = stack[j]
-                if wasBelow[later.member] then
-                    local kept = {}
-                    for _, name in ipairs(later.below) do
-                        if name ~= top.member then kept[#kept + 1] = name end
-                    end
-                    later.below = kept
+            for j = nextWin, #stack do
+                if stack[j].member == top.member then stack[j].wins = stack[j].wins - 1 end
+            end
+            if later.lastWinId == top.id then later.lastWinId, later.lastWinTs = top.lastWinId, top.lastWinTs end
+        else
+            table.remove(s.order, indexOf(s.order, top.member))
+            local at = #s.order + 1
+            local function consider(name)
+                local i = indexOf(s.order, name)
+                if i and i < at then at = i end
+            end
+            for _, name in ipairs(top.below) do consider(name) end
+            for _, name in ipairs(since) do consider(name) end
+            table.insert(s.order, at, top.member)
+            if k == #stack then
+                m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
+            else
+                m.wins = m.wins - 1
+                if m.lastWinId == top.id then m.lastWinId, m.lastWinTs = top.lastWinId, top.lastWinTs end
+            end
+        end
+        -- A later winner who was below this one to begin with: this winner was never below them. (Only those before the
+        -- player's own next win: from there on they are at the bottom either way.)
+        for j = k + 1, (nextWin or #stack + 1) - 1 do
+            local later = stack[j]
+            if wasBelow[later.member] then
+                local kept = {}
+                for _, name in ipairs(later.below) do
+                    if name ~= top.member then kept[#kept + 1] = name end
                 end
+                later.below = kept
             end
         end
         s.awards[top.id].reverted = true
@@ -2199,6 +2220,24 @@ function M.Ranked(item)
 end
 
 M.GOOD, M.OK = 0.7, 0.35 -- share of the best spec's score
+M.USEFUL = 0.15 -- the least share of the best spec's score that still makes a class eligible by default
+
+-- Does the item have stats worth having for a class? This is the default for who may bid, beside "can they wear it":
+-- a warlock can wield a sword, but a sword of strength and agility does nothing for them. False only when the
+-- heuristic can judge the item (some spec values it) and no spec of the class gets even USEFUL of the best spec's
+-- score. That is well under the "ok" rating: the point is to keep out the class the stats are nothing to, not to rank
+-- the rest (a warrior in mail, or a mage with a tank's sta cloak, is a poor fit but not a pointless one).
+-- An item the stats can't judge (a use-effect trinket) and an item with an officer's suggestion stay open to everyone
+-- who can use it: the officer's call is a suggestion, and a guild rule (`eligible`) is how to restrict or open it.
+function M.Worthwhile(item, class)
+    if item.suits or not M.SPECS[class] then return true end
+    if item.best == nil then item.best = M.Best(item) end
+    if item.best <= 0 then return true end
+    for _, s in ipairs(M.SPECS[class]) do
+        if M.Score(item, s, class) >= item.best * M.USEFUL then return true end
+    end
+    return false
+end
 
 -- The specs the item suits best (score at least GOOD of the best), or {} if its stats say nothing (e.g. a
 -- trinket with only a use effect: then nobody is suggested, and the raid judges for itself).
@@ -2496,8 +2535,9 @@ function Session:rosterChanged()
 end
 
 -- May a player of `class` bid on an item (ItemFit's view of it) in the drafts? true, or false + "wrongclass" (not a
--- class the item or the guild's rule names) or "cantequip" (the class can't wear or wield it). Unknown items and
--- classes are let through.
+-- class the item or the guild's rule names), "cantequip" (the class can't wear or wield it) or "nostats" (it can, but
+-- the item's stats do nothing for any of the class's specs). Unknown items and classes are let through, and a guild
+-- rule decides on its own.
 function M.MayHave(fit, class)
     if not (fit and class) then return true end
     if fit.rule then
@@ -2505,8 +2545,9 @@ function M.MayHave(fit, class)
         return false, "wrongclass"
     end
     local ok, why = ItemFit.CanUse(fit, class)
-    if ok then return true end
-    return false, why == "classes" and "wrongclass" or "cantequip"
+    if not ok then return false, why == "classes" and "wrongclass" or "cantequip" end
+    if not ItemFit.Worthwhile(fit, class) then return false, "nostats" end
+    return true
 end
 
 -- What the session knows about item i (ItemFit's view: class restriction, stats), or nil while the game
@@ -2634,6 +2675,8 @@ function Session:handleWhisper(sender, text)
             else
                 if err == "cantequip" or err == "cantequipto" then
                     lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
+                elseif err == "nostats" or err == "nostatsto" then
+                    lines[#lines + 1] = ("item %d has no stats that help %s"):format(id, err == "nostats" and "your class" or "theirs")
                 elseif err == "wrongclass" or err == "wrongclassto" then
                     lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
                 else
@@ -5162,7 +5205,7 @@ M.list = {
         -- What the learner still has to do before the lesson can be judged: the page shows this instead of a verdict.
         todo = function(sim)
             if not lastEvent(sim, "main", "Revert") then
-                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: press \"Undo last award\" above. The undo is written as its own event, so the history shows what happened."
+                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: in the Corrections card below, press \"Undo this\" on Brann's award. The undo is written as its own event, so the history shows what happened."
             end
         end,
         after = function(sim)
@@ -5294,11 +5337,52 @@ M.list = {
     },
 }
 
+-- The regret-trade after a big hand-out: the hardest case for the standings. The first pickers are also the
+-- salvagers, so the winner of the item that went to someone else has also won a leftover since (their place is already
+-- the bottom), and the real recipient may be someone who got nothing at all.
+do
+    local base
+    for _, sc in ipairs(M.list) do if sc.id == "big-handout" then base = sc end end
+    local WANT = "Eira,You,Aldric,Brann,Cass,Dara,Fenn,Garo,Hale"
+    local function blade(sim)
+        for _, ev in ipairs(sim.engine:Get("main").events) do
+            if ev.type == "Award" and ev.data.item == "Brutality Blade" and short(ev.data.member) == "Brann" then return ev end
+        end
+    end
+    M.list[#M.list + 1] = {
+        id = "regret-after-draft",
+        title = "The item went to someone else, after a big hand-out",
+        lesson = "The same ten items as the big hand-out, and the same draft: pass on everything, press Start, confirm. Afterward Brann tells you: \"I traded the Brutality Blade to Hale at the door.\" Hale ranked it first too, and lost it only because Brann is higher on the list. Fix the list, in the Corrections card.\n\nThis is harder than the single drop. Brann won the blade, and also the Quick Strike Ring (he picked second, so he was the second salvager), and the draft went on after him. Choose Hale in \"It went to\" on Brann's Brutality Blade and press Regret-trade. Notice what does and doesn't change:\n\n1. Brann does not move. He also won the ring after the blade, and that already dropped him to the bottom when his turn came, so he stands in the same place with or without the blade. He just loses that win (and keeps the ring).\n2. Hale, who got nothing in the draft, pays now: he drops to the bottom, as if he had won the blade.\n3. Nobody else moves, and nobody has to hand anything back: the draft is not replayed.\n\n(\"It was a gift\" is for a deliberate gift: nobody would move, which would be unfair to Hale's wait.)",
+        members = base.members, learnerClass = base.learnerClass, items = base.items, policies = base.policies, you = base.you,
+        todo = function(sim)
+            local last = lastEvent(sim, "main", "Award")
+            if last and short(last.data.member) == "Hale" and last.data.item == "Brutality Blade" and sim:orderString() == WANT then return nil end
+            if lastEvent(sim, "main", "Transfer") then
+                return "A gift only records where the blade went; nobody moves, so Brann keeps a win he did not have and Hale pays nothing. Hale wanted it and lost only on rank: this was a regret-trade. Fix it: use Regret-trade on Brann's Brutality Blade (Corrections card)."
+            end
+            if lastEvent(sim, "main", "Revert") then
+                return "You undid a win, so that player is restored. Now Hale has the blade and should pay for it: record it with \"Record a win the session didn't\" (Hale, the blade), or undo that and use Regret-trade on Brann's Brutality Blade, which does both in one step."
+            end
+            return "The hand-out is done, but Brann traded the blade to Hale. Fix the list: in the Corrections card, find Brann's Brutality Blade (not the ring), choose Hale in \"It went to\" and press Regret-trade."
+        end,
+        after = function(sim)
+            local award = assert(blade(sim))
+            assert(sim.engine:Append("main", "Award", { member = "Hale-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+        end,
+        expect = function(sim)
+            local last = lastEvent(sim, "main", "Award")
+            local ok = sim:orderString() == WANT and last ~= nil and short(last.data.member) == "Hale" and last.data.item == "Brutality Blade"
+            local how = last and last.data.replaces and "in one step (a regret-trade)" or "in two steps (undo, then award)"
+            return ok, ("order is %s; Hale paid for the blade, Brann kept his place (the ring was his later win), %s"):format(sim:orderString(), how)
+        end,
+    }
+end
+
 -- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
 -- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
 -- (The raid nights come after all of these, on the page.)
 local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
-    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout" }
+    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout", "regret-after-draft" }
 local rank = {}
 for i, id in ipairs(ORDER) do rank[id] = i end
 table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)
@@ -5471,9 +5555,7 @@ local function state()
         disenchanter = short((s and s.deHandler) or sim:disenchanterName() or sim.client:me()),
         leader = short(leader), lootMethod = sim.client:lootMethod(),
         youAreML = (sim.ml == sim.learner), youAreLeader = (leader == sim.learner), mlChoice = mlChoice }
-    -- is there an award of yours that can be undone? (the Undo button is only offered then)
     local stack = sim.engine:Get("main").state.undo[sim.engine:MyChain()]
-    snap.canUndo = stack ~= nil and #stack > 0
     -- the awards you can change, latest first, and the items a win could be recorded for
     local awards = sim.engine:Get("main").state.awards
     snap.corrections = { awards = {}, items = {} }
@@ -5677,8 +5759,12 @@ function api.eligible(itemId, reason)
     local ok, why = S.Loot.MayHave(fit, me)
     if ok then return result(false, "your class may already bid on it") end
     if why == "cantequip" then return result(false, "your class can't wear or wield it") end
+    -- the rule names every class that may have it now, plus yours (an item that names no classes, like a sword with
+    -- stats for some classes only, gets its list from who can use it)
     local classes = {}
-    for _, c in ipairs(fit.classes or {}) do classes[#classes + 1] = c end
+    for _, c in ipairs(S.ItemFit.CLASSES) do
+        if S.Loot.MayHave(fit, c) then classes[#classes + 1] = c end
+    end
     classes[#classes + 1] = me
     if not it.itemId then return result(false, "this item has no item id") end
     local ev, err = sim.engine:Write("ItemClasses", { item = it.itemId, classes = classes,
@@ -5736,17 +5822,6 @@ function api.confirm()
     local s = result(ok, ok and nil or failures)
     if ok then s.failures = failures end
     return s
-end
-
--- Undo the most recent award by writing a Revert event (fix-forward).
-function api.undo()
-    if sim.ml ~= sim.learner then return notML() end
-    local chain = sim.engine:Get("main")
-    local stack = chain.state.undo[sim.engine:MyChain()]
-    local top = stack and stack[#stack]
-    if not top then return result(false, "nothing to undo") end
-    local ev, err = sim.engine:Append("main", "Revert", { target = top.id })
-    return result(ev ~= nil, err)
 end
 
 ---------------------------------------------------------------- corrections (the Master Looter puts a mistake right)
@@ -6010,7 +6085,8 @@ end
     const r = call(name, a, b, c);
     const WHY = { wrongclassto: "the player you chose to gift it to isn't eligible for it (their class)",
       cantequipto: "the player you chose to gift it to can't wear or wield it", wrongclass: "your class isn't eligible for it",
-      cantequip: "your class can't wear or wield it", badtarget: "choose someone in the raid to gift it to",
+      cantequip: "your class can't wear or wield it", nostats: "nothing on it helps your class (ask to be eligible if you think it should)",
+      nostatsto: "nothing on it helps the player you chose to gift it to", badtarget: "choose someone in the raid to gift it to",
       cantkeep: "it isn't for your class, so you can't keep it: name who gets it, or give it up", unreachable: "they are out of loot range",
       wrongclassto: "the player you chose isn't eligible for it (their class)", cantequipto: "the player you chose can't wear or wield it",
       notml: "only the Master Looter can do that: another raider holds the role in this run (choose yourself as Master Looter and restart to take the controls)",
@@ -6018,7 +6094,6 @@ end
       notmasterloot: "the loot method is not Master Looter, so loot cannot be handed out: the raid leader has to set it (any loot waiting is kept)",
       otherlooter: "the Master Looter is chosen when a run starts: pick them in the Master Looter list and restart",
       notinraid: "that player is not in the raid",
-      laterwin: "that player won something later: undo that later award first, then this one",
       notrevertible: "that award can't be undone any more (the list was moved by hand since)",
       notmember: "they aren't on the list", samewinner: "that is the person it was recorded for: choose who really has it",
       noreason: "a reason is required (it goes in the record)", noitem: "choose which item", badtarget: "choose who it went to" };
@@ -6145,8 +6220,10 @@ end
           // Your class may not have it: a pass or a gift (anyone may gift), and why; if it is only the class rule,
           // a way to ask.
           const CLS = (CLASS_NAME[(st.who && st.who.You && st.who.You.class) || ""] || "your class") + "s";
-          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this." : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
-          const ask = it.youWhy === "wrongclass" ? '<button data-act="eligible" data-a="' + it.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason, like an accepted request.">Request eligibility&hellip;</button>' : "";
+          const why = it.youWhy === "cantequip" ? CLS + " can't wear or wield this."
+            : it.youWhy === "nostats" ? "Nothing on this helps " + CLS + " (its stats are for other classes)."
+            : "Not for " + CLS + (it.classes ? " (for: " + esc(it.classes) + ")" : "") + ".";
+          const ask = (it.youWhy === "wrongclass" || it.youWhy === "nostats") ? '<button data-act="eligible" data-a="' + it.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason, like an accepted request.">Request eligibility&hellip;</button>' : "";
           ans = '<td><div class="row">' + b("gift", "Gift") + b("pass", "Pass") + ask + '</div><div class="small muted">' + why + "</div></td>";
         } else {
           ans = '<td><div class="row">' + b("need", "Need") + ready + b("off", "Off") + b("gift", "Gift") + b("pass", "Pass") + "</div></td>";
@@ -6226,8 +6303,9 @@ end
     const rows = c.awards.map((a) => {
       const id = "to" + a.id;
       return '<div class="fixrow"><div><b>' + esc(a.member) + "</b> won <span class=\"iname\">" + esc(a.item) + "</span>" + (a.to && a.to !== a.member ? " (given to " + esc(a.to) + ")" : "") + "</div>" +
-        '<div class="row" style="margin-top:4px"><button data-act="fixUndo" data-a="' + esc(a.id) + '"' + (a.laterWin ? ' disabled title="' + esc(a.member) + ' won something later: undo that one first"' : "") +
-        ' title="Wrong winner, or it should not have been awarded. ' + esc(a.member) + ' goes back up the list; later awards stay as they are.">Undo this</button>' +
+        '<div class="row" style="margin-top:4px"><button data-act="fixUndo" data-a="' + esc(a.id) + '"' + ' title="Wrong winner, or it should not have been awarded. ' + (a.laterWin
+          ? esc(a.member) + ' also won something later, which already put them at the bottom, so their place does not change: they just lose this win. Later awards stay as they are.'
+          : esc(a.member) + ' goes back up the list; later awards stay as they are.') + '">Undo this</button>' +
         '<span class="muted small">It went to:</span>' + fixSelect(id, names.filter((n) => n !== a.member), "") +
         '<button data-act="fixTrade" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A regret-trade: ' + esc(a.member) + ' is restored to their place and the one who has it moves to the bottom, as if they had won the bid.">Regret-trade</button>' +
         '<button data-act="fixGift" data-a="' + esc(a.id) + '" data-b="' + esc(id) + '" title="A deliberate gift by the winner: it only records where the item went. Nobody moves.">It was a gift</button></div></div>';
@@ -6263,7 +6341,6 @@ end
     if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
     if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
     if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
-    if (p === "done" && st.canUndo && isML) h += '<button data-act="undo" title="As Master Looter you can undo your own most recent award. The undo is recorded, never erased.">Undo last award</button>';
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -6405,9 +6482,6 @@ end
         break;
       case "giveUp":
         if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
-        break;
-      case "undo":
-        if (window.confirm("Undo your most recent award? The list goes back as it was. The undo is recorded in the history as its own event: nothing is erased.")) act("undo");
         break;
       case "fixUndo":
         if (window.confirm("Undo this award? The winner goes back up the list and later awards stay as they are. The undo is recorded in the history.")) act("undoAward", a);

@@ -330,7 +330,7 @@ test("an eligibility request that isn't needed is explained, and stays waiting f
     w.Aldric.cmd.handle("request eligible 500 please")
     w.net:advance(2)
     clear(w.Looter); w.Looter.cmd.handle("accept 1")
-    assert(text(w.Looter):find("isn't restricted to classes"), text(w.Looter))
+    assert(text(w.Looter):find("may already bid"), text(w.Looter)) -- a warrior's sta cloak: stats that help them, nothing to grant
     eq(#w.Looter.requests:pending(), 1)
     w.Aldric.cmd.handle("request eligible"); assert(text(w.Aldric):find("request eligible <item or item#> <reason>"), text(w.Aldric))
 end)

@@ -195,8 +195,9 @@ end
 -- shouldn't have to be taken apart to fix its first item). The list then ends up as if that award had never been made:
 -- the winner goes just above the highest-placed of those who were below them when they won, or have won since (those
 -- sit at the bottom now and would be below them anyway). Awards made after this one remember "who was below me", so
--- they forget this winner where the winner was above them to begin with. If the same player won something later, that
--- later win has to be undone first, or their place would be wrong ("laterwin").
+-- they forget this winner where the winner was above them to begin with. If the same player won something later (a
+-- draft pick, then the leftover they claimed as salvager), that later win already put them at the bottom, so they stand
+-- in the same place either way: nobody moves, and the later win takes over remembering who was below them.
 function planRevert(s, ev, target)
     local stack = s.undo[ev.chain]
     local k
@@ -207,37 +208,57 @@ function planRevert(s, ev, target)
     local top = stack[k]
     local m = s.members[top.member]
     if not (m and m.active) then return nil, "notmember" end
+    -- The player's next win, if they have one: it dropped them to the bottom, so they stand in the same place with or
+    -- without this one. Undoing this award then moves nobody.
+    local nextWin
     for j = k + 1, #stack do
-        if stack[j].member == top.member then return nil, "laterwin" end
+        if stack[j].member == top.member then nextWin = j; break end
     end
     return function()
         local wasBelow, since = {}, {}
         for _, name in ipairs(top.below) do wasBelow[name] = true end
         for j = k + 1, #stack do since[#since + 1] = stack[j].member end
-        table.remove(s.order, indexOf(s.order, top.member))
-        local at = #s.order + 1
-        local function consider(name)
-            local i = indexOf(s.order, name)
-            if i and i < at then at = i end
-        end
-        for _, name in ipairs(top.below) do consider(name) end
-        for _, name in ipairs(since) do consider(name) end
-        table.insert(s.order, at, top.member)
-        if k == #stack then
-            m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
-        else
+        if nextWin then
+            -- Their next win stands in for this one: it also remembers who was below them before this win, so undoing
+            -- that win puts them back where they started. The saved win counts of their later entries drop by one.
+            local later = stack[nextWin]
+            local seen = {}
+            for _, name in ipairs(later.below) do seen[name] = true end
+            for _, name in ipairs(top.below) do
+                if not seen[name] then later.below[#later.below + 1] = name end
+            end
             m.wins = m.wins - 1
-            if m.lastWinId == top.id then m.lastWinId, m.lastWinTs = top.lastWinId, top.lastWinTs end
-            -- A later winner who was below this one to begin with: this winner was never below them.
-            for j = k + 1, #stack do
-                local later = stack[j]
-                if wasBelow[later.member] then
-                    local kept = {}
-                    for _, name in ipairs(later.below) do
-                        if name ~= top.member then kept[#kept + 1] = name end
-                    end
-                    later.below = kept
+            for j = nextWin, #stack do
+                if stack[j].member == top.member then stack[j].wins = stack[j].wins - 1 end
+            end
+            if later.lastWinId == top.id then later.lastWinId, later.lastWinTs = top.lastWinId, top.lastWinTs end
+        else
+            table.remove(s.order, indexOf(s.order, top.member))
+            local at = #s.order + 1
+            local function consider(name)
+                local i = indexOf(s.order, name)
+                if i and i < at then at = i end
+            end
+            for _, name in ipairs(top.below) do consider(name) end
+            for _, name in ipairs(since) do consider(name) end
+            table.insert(s.order, at, top.member)
+            if k == #stack then
+                m.wins, m.lastWinId, m.lastWinTs = top.wins, top.lastWinId, top.lastWinTs
+            else
+                m.wins = m.wins - 1
+                if m.lastWinId == top.id then m.lastWinId, m.lastWinTs = top.lastWinId, top.lastWinTs end
+            end
+        end
+        -- A later winner who was below this one to begin with: this winner was never below them. (Only those before the
+        -- player's own next win: from there on they are at the bottom either way.)
+        for j = k + 1, (nextWin or #stack + 1) - 1 do
+            local later = stack[j]
+            if wasBelow[later.member] then
+                local kept = {}
+                for _, name in ipairs(later.below) do
+                    if name ~= top.member then kept[#kept + 1] = name end
                 end
+                later.below = kept
             end
         end
         s.awards[top.id].reverted = true
