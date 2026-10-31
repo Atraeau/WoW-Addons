@@ -19,8 +19,10 @@
   .spec { display: block; color: var(--muted); font-size: 11px; line-height: 1.2; }
   .tag { font-size: 10px; color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; padding: 0 3px; margin-left: 4px; }
   .layout { display: grid; gap: 16px; grid-template-columns: 220px 1fr 280px; align-items: start; }
+  /* min-width 0: a grid column otherwise grows to the widest thing in it (the answers table) and the page overflows a phone */
+  .layout > * { min-width: 0; }
   @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; overflow-x: auto; }
   .card.good { border-color: var(--good); } .card.bad { border-color: var(--bad); }
   button { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
   button:hover:not(:disabled) { border-color: var(--muted); } button:disabled { opacity: .45; cursor: default; }
@@ -3235,6 +3237,349 @@ function Session:status()
 end
 
 end; chunk("KingsGambit", SK) end
+-- ===== Requests.lua =====
+do local chunk = function(...)
+-- King's Gambit: adjustment requests, the dispute path (design: docs/ledger-v2-design.md, section 4).
+-- During a raid only that raid's Master Looter writes to the ledger. Anyone else who thinks the list should change
+-- (an officer fixing a mistake, a raider disputing a result) sends the Master Looter a REQUEST, with a reason. The
+-- Master Looter accepts or declines it, and both outcomes go in the ledger:
+--   accepted: the change itself, written by the Master Looter, carrying requestedBy, rid and the reason;
+--   declined: a Declined event { request, requestedBy, declineReason, rid }, which changes no standing.
+-- The outcome reaches the requester (and everyone) through the ledger, as any event does, so a lost whisper can't
+-- lose a decision. The requester's name is the whisper's sender as the game reports it, so it can't be forged.
+--
+-- Messages (Sync plugin types):
+--   QR  request   requester -> Master Looter (WHISPER)  { rid, kind, member?, pos?, item?, to?, reason }
+--   QK  received  Master Looter -> requester (WHISPER)  { rid, ok, num?, why? }
+-- A request is re-sent until it is acknowledged (the Master Looter ignores repeats), then waits for its outcome.
+--
+-- Kinds (all on the main list):
+--   move     member, pos          move a player (top, bottom or a place number)
+--   undo     member               undo that player's most recent award (only if it is the Master Looter's latest)
+--   add      member, pos?         add a player (default: bottom)
+--   remove   member               take a player off the list
+--   award    member, item, to?    record a win that wasn't recorded (e.g. a hand-over that failed)
+--   trade    member, to           the item that player last won actually went to someone else, and it was not a gift:
+--                                 a regret-trade. The winner is restored and the recipient pays (one atomic Award that
+--                                 replaces the earlier one). The default reading of "it went to someone else".
+--   gift     member, to           the same, but a deliberate gift by the winner (no position change)
+--   eligible item, class, spec?   let this class bid on an item restricted to other classes, from now on: accepted, it
+--                                 adds the class to the guild's rule for the item (ItemClasses); declined, it is
+--                                 recorded with the reason. Eligibility is by class (what the game can check); the
+--                                 requester's spec is part of the record.
+local _, SK = ...
+local Standings, ItemFit
+local M = SK:NewModule("Requests", { "Standings", "ItemFit" }, function(d) Standings, ItemFit = d.Standings, d.ItemFit end)
+
+M.LIST = "main"
+M.MAX_REASON = 200
+M.MAX_PENDING_PER_PLAYER = 3
+M.RETRY_SECONDS, M.MAX_TRIES = 4, 5
+
+local function isName(v) return type(v) == "string" and v ~= "" end
+local function short(n) return n and (n:gsub("%-.*$", "")) end
+
+local POSITIONS = { top = true, bottom = true }
+local function isPos(p) return POSITIONS[p] or (tonumber(p) ~= nil and tonumber(p) >= 1 and tonumber(p) % 1 == 0) end
+
+-- What each kind needs. Returns true, or nil + reason.
+local NEEDS = {
+    move = function(r) return isName(r.member) and isPos(r.pos) end,
+    undo = function(r) return isName(r.member) end,
+    add = function(r) return isName(r.member) and (r.pos == nil or isPos(r.pos)) end,
+    remove = function(r) return isName(r.member) end,
+    award = function(r) return isName(r.member) and isName(r.item) and (r.to == nil or isName(r.to)) end,
+    gift = function(r) return isName(r.member) and isName(r.to) end,
+    trade = function(r) return isName(r.member) and isName(r.to) end,
+    eligible = function(r) return isName(r.item) and ItemFit.ItemId(r.item) ~= nil and ItemFit.CLASS_BITS[r.class] ~= nil end,
+}
+M.KINDS = {}
+for k in pairs(NEEDS) do M.KINDS[k] = true end
+
+function M.Validate(r)
+    if type(r) ~= "table" or not NEEDS[r.kind] then return nil, "badkind" end
+    if not isName(r.reason) then return nil, "noreason" end
+    if #r.reason > M.MAX_REASON then return nil, "longreason" end
+    if not NEEDS[r.kind](r) then return nil, "badrequest" end
+    return true
+end
+
+-- The request in words (also what a Declined event records as `request`).
+function M.Describe(r)
+    local who = short(r.member) or "?"
+    local where = r.pos == "top" and "the top" or r.pos == "bottom" and "the bottom" or r.pos and ("place " .. r.pos)
+    if r.kind == "move" then return ("move %s to %s"):format(who, where)
+    elseif r.kind == "undo" then return ("undo %s's last award"):format(who)
+    elseif r.kind == "add" then return ("add %s%s"):format(who, where and (" at " .. where) or "")
+    elseif r.kind == "remove" then return ("remove %s from the list"):format(who)
+    elseif r.kind == "award" then return ("record that %s won %s%s"):format(who, r.item, r.to and (" for " .. short(r.to)) or "")
+    elseif r.kind == "gift" then return ("%s's last item went to %s (a gift: nobody moves)"):format(who, short(r.to))
+    elseif r.kind == "trade" then return ("%s's last item went to %s (restore %s, %s moves to the bottom)"):format(who, short(r.to), who, short(r.to))
+    elseif r.kind == "eligible" then
+        return ("let %s%s bid on %s"):format(r.spec and (r.spec .. " ") or "", (ItemFit.CLASS_NAMES[r.class] or r.class or "?") .. "s",
+            r.item:match("%[(.-)%]") or ("item " .. tostring(ItemFit.ItemId(r.item))))
+    end
+    return r.kind
+end
+
+-- The most recent award to `member` that hasn't been undone, as { id, ... }, or nil.
+local function lastAward(state, member)
+    local best
+    for id, a in pairs(state.awards) do
+        if a.member == member and not a.reverted and (not best or a.ts > best.ts or (a.ts == best.ts and id > best.id)) then
+            best = { id = id, ts = a.ts, item = a.item }
+        end
+    end
+    return best
+end
+
+-- The guild rule an eligibility request asks for: the item's current classes (the guild's rule, or what the item
+-- itself says) with the requester's class added. Returns the ItemClasses data, or nil + reason.
+function M.EligibleRule(engine, client, r)
+    local id = ItemFit.ItemId(r.item)
+    local rule = engine:ItemRule(id)
+    local fit = ItemFit.Describe(client, r.item, nil, rule)
+    local classes = fit and fit.classes
+    if fit and not rule then
+        -- Without a guild rule, who may have it is the classes it names, narrowed by who can wear or wield it.
+        local ok, why = ItemFit.CanUse(fit, r.class)
+        if not ok and why ~= "classes" then return nil, "cantequip" end
+        local able = {}
+        for _, c in ipairs(M.ClassList()) do
+            if ItemFit.CanUse(fit, c) and ItemFit.Worthwhile(fit, c) then able[#able + 1] = c end
+        end
+        if #able < #M.ClassList() then classes = able end
+    end
+    if not classes then return nil, rule and "alreadyeligible" or "notrestricted" end
+    local out = {}
+    for _, c in ipairs(classes) do
+        if c == r.class then return nil, "alreadyeligible" end
+        out[#out + 1] = c
+    end
+    out[#out + 1] = r.class
+    return { item = id, classes = out, reason = r.reason, requestedBy = r.by, rid = r.rid, class = r.class, spec = r.spec,
+        name = r.item:match("%[(.-)%]") }
+end
+
+function M.ClassList() return ItemFit.CLASSES end
+
+-- The ledger event that carries out request `r`, for the Master Looter whose chain is `chainId`.
+-- Returns type, data, or nil + reason.
+function M.EventFor(state, r, chainId)
+    if not state then return nil, "nolist" end
+    local d = { member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
+    if r.kind == "move" or r.kind == "add" then
+        if r.pos then
+            local anchor, why = Standings.Anchor(state, r.pos, r.member)
+            if not anchor then return nil, why end
+            for k, v in pairs(anchor) do d[k] = v end
+        end
+        return r.kind == "move" and "MovePlayer" or "AddMember", d
+    elseif r.kind == "remove" then
+        return "RemoveMember", d
+    elseif r.kind == "award" then
+        d.item, d.to = r.item, r.to
+        return "Award", d
+    elseif r.kind == "undo" or r.kind == "gift" or r.kind == "trade" then
+        local a = lastAward(state, r.member)
+        if not a then return nil, "noaward" end
+        if r.kind == "trade" then
+            local to = state.members[r.to]
+            if not (to and to.active) then return nil, "notmember" end
+            if r.to == r.member then return nil, "samewinner" end
+            local found
+            for _, e in ipairs(state.undo[chainId] or {}) do if e.id == a.id then found = true end end
+            if not found then return nil, "notrevertible" end
+            return "Award", { member = r.to, item = a.item, replaces = a.id, requestedBy = r.by, rid = r.rid, reason = r.reason }
+        end
+        if r.kind == "gift" then
+            return "Transfer", { award = a.id, to = r.to, member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
+        end
+        -- Any of the Master Looter's own awards still standing can be undone, not only the latest (see Standings Revert).
+        local found
+        for _, e in ipairs(state.undo[chainId] or {}) do if e.id == a.id then found = true end end
+        if not found then return nil, "notrevertible" end
+        return "Revert", { target = a.id, member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
+    end
+    return nil, "badkind"
+end
+
+---------------------------------------------------------------- the live side
+local function newEmitter()
+    local handlers = {}
+    return {
+        on = function(event, fn)
+            local list = handlers[event] or {}
+            handlers[event] = list
+            local entry = { fn = fn, active = true }
+            list[#list + 1] = entry
+            return function() entry.active = false end
+        end,
+        emit = function(event, payload)
+            local snapshot = {}
+            for i, x in ipairs(handlers[event] or {}) do snapshot[i] = x end
+            for _, x in ipairs(snapshot) do if x.active then x.fn(payload) end end
+        end,
+    }
+end
+
+-- Events: request {req} (Master Looter: a new one), received {req} (requester: acknowledged), refused {req, why},
+-- unanswered {req}, decided {req?, ev, accepted, by} (anyone: an event carrying a request's outcome arrived).
+function M.New(sync, engine)
+    local client = engine.client
+    local em = newEmitter()
+    local q = { sync = sync, engine = engine, client = client, on = em.on, sent = {}, counter = 0 }
+    engine.db.requests = engine.db.requests or {}
+
+    -- This character's queue as a Master Looter (kept in saved data, so a /reload loses nothing).
+    local function queue()
+        local me = client:me()
+        local mine = engine.db.requests[me]
+        if not mine then mine = { num = 0, pending = {} }; engine.db.requests[me] = mine end
+        return mine
+    end
+
+    -- The Master Looter to send to: `target` if named, else the one running this player's group's raid,
+    -- else the only raid running. Returns the name, or nil + reason.
+    function q:masterLooterFor(target, t)
+        local raids = engine:ActiveRaids(t)
+        if #raids == 0 then return nil, "noraid" end
+        if target then
+            for _, r in ipairs(raids) do if r.ml == target then return r.ml end end
+            return nil, "notml"
+        end
+        local mine = client:masterLooter()
+        for _, r in ipairs(raids) do if r.ml == mine then return r.ml end end
+        if #raids == 1 then return raids[1].ml end
+        return nil, "whichraid"
+    end
+
+    ---------------------------------------------------------------- requester
+    -- Send a request. r = { kind, member, pos?, item?, to?, reason }; target (optional) = a Master Looter's name.
+    -- Returns the request (with rid and ml), or nil + reason.
+    function q:send(r, target)
+        local ok, why = M.Validate(r)
+        if not ok then return nil, why end
+        local ml, mlWhy = self:masterLooterFor(target)
+        if not ml then return nil, mlWhy end
+        if ml == client:me() then return nil, "self" end
+        self.counter = self.counter + 1
+        r.rid = ("%s:%d:%d"):format(client:me(), client:serverTime(), self.counter)
+        r.by, r.ml, r.tries, r.state = client:me(), ml, 0, "sending"
+        self.sent[r.rid] = r
+        local function try()
+            if r.state ~= "sending" then return end
+            if r.tries >= M.MAX_TRIES then r.state = "unanswered"; em.emit("unanswered", { req = r }); return end
+            r.tries = r.tries + 1
+            sync:send({ t = "QR", rid = r.rid, kind = r.kind, member = r.member, pos = r.pos, item = r.item, to = r.to,
+                class = r.class, spec = r.spec, reason = r.reason }, "WHISPER", ml)
+            client:after(M.RETRY_SECONDS, try)
+        end
+        try()
+        return r
+    end
+
+    sync:register("QK", function(msg, sender)
+        local r = type(msg.rid) == "string" and q.sent[msg.rid]
+        if not r or sender ~= r.ml or r.state ~= "sending" then return end
+        if msg.ok then
+            r.state, r.num = "waiting", msg.num
+            em.emit("received", { req = r })
+        else
+            r.state, r.why = "refused", msg.why
+            em.emit("refused", { req = r, why = msg.why })
+        end
+    end)
+
+    -- Outcomes arrive as ledger events (written here or by a peer).
+    engine:OnChange(function(kind, _, ev)
+        if (kind ~= "local" and kind ~= "remote") or type(ev) ~= "table" or type(ev.data) ~= "table" then return end
+        local rid = ev.data.rid
+        if not isName(rid) then return end
+        local r = q.sent[rid]
+        if r then r.state = (ev.type == "Declined") and "declined" or "accepted" end
+        em.emit("decided", { req = r, ev = ev, accepted = ev.type ~= "Declined", by = ev.author,
+            mine = r ~= nil, why = ev.data.declineReason })
+    end)
+
+    ---------------------------------------------------------------- Master Looter
+    local function ack(to, extra)
+        extra.t = "QK"
+        sync:send(extra, "WHISPER", to)
+    end
+
+    -- Am I the Master Looter of a raid that is running now?
+    local function runningMine()
+        for _, r in ipairs(engine:ActiveRaids()) do if r.ml == client:me() then return r end end
+    end
+
+    sync:register("QR", function(msg, sender)
+        if type(msg.rid) ~= "string" or msg.rid:sub(1, #sender + 1) ~= sender .. ":" then return end
+        local mine = queue()
+        for _, p in ipairs(mine.pending) do
+            if p.rid == msg.rid then return ack(sender, { rid = msg.rid, ok = true, num = p.num }) end -- a repeat
+        end
+        if not runningMine() then return ack(sender, { rid = msg.rid, ok = false, why = "notml" }) end
+        local r = { rid = msg.rid, by = sender, kind = msg.kind, member = msg.member, pos = msg.pos, item = msg.item,
+            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason }
+        local ok, why = M.Validate(r)
+        if not ok then return ack(sender, { rid = msg.rid, ok = false, why = why }) end
+        local n = 0
+        for _, p in ipairs(mine.pending) do if p.by == sender then n = n + 1 end end
+        if n >= M.MAX_PENDING_PER_PLAYER then return ack(sender, { rid = msg.rid, ok = false, why = "toomany" }) end
+        mine.num = mine.num + 1
+        r.num, r.at = mine.num, client:serverTime()
+        mine.pending[#mine.pending + 1] = r
+        ack(sender, { rid = r.rid, ok = true, num = r.num })
+        em.emit("request", { req = r })
+    end)
+
+    function q:pending() return queue().pending end
+
+    local function take(num)
+        local mine = queue()
+        for i, p in ipairs(mine.pending) do
+            if p.num == num then return p, i, mine end
+        end
+    end
+
+    -- Accept request `num`: write the change. Returns the event, or nil + reason (the request stays pending).
+    function q:accept(num)
+        local r, i, mine = take(num)
+        if not r then return nil, "norequest" end
+        local ev, why
+        if r.kind == "eligible" then
+            local data, err = M.EligibleRule(engine, client, r)
+            if not data then return nil, err end
+            ev, why = engine:Write("ItemClasses", data)
+        else
+            local list = engine:Get(M.LIST)
+            local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
+            if not type_ then return nil, data end
+            ev, why = engine:Append(M.LIST, type_, data)
+        end
+        if not ev then return nil, why end
+        table.remove(mine.pending, i)
+        return ev
+    end
+
+    -- Decline request `num`, with a reason (required: it goes in the record). Returns the event, or nil + reason.
+    function q:decline(num, reason)
+        if not isName(reason) then return nil, "noreason" end
+        local r, i, mine = take(num)
+        if not r then return nil, "norequest" end
+        local ev, why = engine:Write("Declined", { request = M.Describe(r), requestedBy = r.by, declineReason = reason,
+            rid = r.rid, kind = r.kind, member = r.member, item = r.kind == "eligible" and ItemFit.ItemId(r.item) or nil,
+            class = r.class, spec = r.spec })
+        if not ev then return nil, why end
+        table.remove(mine.pending, i)
+        return ev
+    end
+
+    return q
+end
+
+end; chunk("KingsGambit", SK) end
 -- ===== SimNetwork.lua =====
 do local chunk = function(...)
 -- King's Gambit: SimNetwork, a simulated addon-message network joining several MockClients
@@ -4497,9 +4842,9 @@ do local chunk = function(...)
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -5029,6 +5374,42 @@ function Sim:handOut(cfg)
     return ok, why
 end
 
+---------------------------------------------------------------- a raider asks the Master Looter
+-- When a bot is the Master Looter the learner is a raider: they can't write to the ledger, they ask (undo, a regret-trade,
+-- or "it was a gift", for a player's last award), with a reason. The bot Master Looter decides at once, the way the real
+-- addon's accept and decline do: what can be done is written as the Master Looter's entry "at the request of" the
+-- learner, and what can't is declined with the reason in the record. Returns true + a sentence, or false + a reason code
+-- (the request itself was malformed) or false + a sentence (declined).
+local DECLINE = {
+    noaward = "that player has no award that is still standing",
+    notrevertible = "that award can no longer be changed (the list was moved by hand since)",
+    notmember = "the player it went to isn't on the list",
+    samewinner = "that is who it was recorded for already",
+}
+function Sim:ask(kind, member, to, reason)
+    if self.ml == self.learner then return false, "youareml" end
+    if type(reason) ~= "string" or reason:match("^%s*$") then return false, "noreason" end
+    self.asked = (self.asked or 0) + 1
+    local r = { kind = kind, member = member and self.client:normalize(member), reason = reason, by = self.learner,
+        rid = ("sim:%d"):format(self.asked) }
+    if to and to ~= "" then r.to = self.client:normalize(to) end
+    local ok, why = Requests.Validate(r)
+    if not ok then return false, why == "badrequest" and "badtarget" or why end
+    local state = self.engine:Get("main").state
+    local type_, data = Requests.EventFor(state, r, self.engine:MyChain())
+    local ml = short(self.ml)
+    if not type_ then
+        local text = DECLINE[data] or tostring(data)
+        local ev, err = self.engine:Write("Declined", { request = Requests.Describe(r), requestedBy = r.by, declineReason = text,
+            rid = r.rid, kind = r.kind, member = r.member })
+        if not ev then return false, err end
+        return false, ml .. " declined: " .. text
+    end
+    local ev, err = self.engine:Append("main", type_, data)
+    if not ev then return false, err end
+    return true, ml .. " accepted and wrote it to the ledger: " .. Requests.Describe(r)
+end
+
 ---------------------------------------------------------------- the raid leader, the loot method
 -- Who the raid leader is (always someone, in a group).
 function Sim:leaderName() return self.client:leader() end
@@ -5469,6 +5850,7 @@ local function describe(ev, byId)
             text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. first
                 .. ": " .. first .. " is back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
         end
+        if d.requestedBy then text = text .. " (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")" end
         return text
     elseif t == "Pass" then
         return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")
@@ -5478,9 +5860,12 @@ local function describe(ev, byId)
         local target = byId[d.target]
         if target and target.data then
             return "The award of " .. tostring(target.data.item) .. " to " .. short(target.data.member) .. " was undone, and they went back up the list"
+                .. (d.requestedBy and (" (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")") or "")
         end
         return "An earlier award was undone"
-    elseif t == "Transfer" then return "The item of an earlier award was re-routed to " .. short(d.to)
+    elseif t == "Transfer" then
+        return "The item of an earlier award was re-routed to " .. short(d.to)
+            .. (d.requestedBy and (" (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")") or "")
     elseif t == "MovePlayer" then
         return short(d.member) .. " was moved on the " .. listName(ev.list) .. " to " .. (d.to or ("just above " .. short(d.above))) .. ": " .. tostring(d.reason)
     elseif t == "Elevate" then
@@ -5495,7 +5880,7 @@ local function describe(ev, byId)
     elseif t == "ItemSuits" then
         return "Who " .. tostring(d.name or d.item) .. " suits was set to " .. ((d.roles and #d.roles > 0) and table.concat(d.roles, ", ") or "the addon's own judgment")
             .. (d.reason and (": " .. d.reason) or "")
-    elseif t == "Declined" then return "A request was declined: " .. tostring(d.declineReason)
+    elseif t == "Declined" then return "A request was declined" .. (d.requestedBy and (" (from " .. short(d.requestedBy) .. ")") or "") .. ": " .. tostring(d.declineReason)
     end
     return t
 end
@@ -5564,6 +5949,18 @@ local function state()
         local later = false
         for j = i + 1, #stack do if stack[j].member == e.member then later = true end end
         snap.corrections.awards[#snap.corrections.awards + 1] = { id = e.id, member = short(e.member), item = a and a.item, to = a and short(a.to), laterWin = later }
+    end
+    -- when a bot is the Master Looter you can only ask: each player's latest standing award, in list order
+    if sim.ml ~= sim.learner then
+        local latest = {}
+        for id, aw in pairs(awards) do
+            local cur = latest[aw.member]
+            if not aw.reverted and (not cur or aw.ts > cur.ts or (aw.ts == cur.ts and id > cur.id)) then latest[aw.member] = { id = id, ts = aw.ts, item = aw.item } end
+        end
+        snap.asks = {}
+        for _, name in ipairs(sim.engine:Get("main").state.order) do
+            if latest[name] then snap.asks[#snap.asks + 1] = { member = short(name), item = latest[name].item } end
+        end
     end
     local seen = {}
     for _, it in ipairs(s and s.items or sim.lastItems or {}) do
@@ -5868,6 +6265,19 @@ function api.award(member, item, reason)
     return result(ev ~= nil, err)
 end
 
+-- You are a raider and a bot is the Master Looter: ask them to put a mistake right (see Sim:ask). The answer is in `note`.
+local function ask(kind, member, to, reason)
+    local ok, text = sim:ask(kind, member, to, reason)
+    local s = state()
+    if ok then s.ok, s.note = true, text
+    elseif text and text:find(" ") then s.ok, s.note = true, text -- declined: a result, not an error
+    else s.ok, s.why = false, text end
+    return s
+end
+function api.askUndo(member, reason) return ask("undo", member, nil, reason) end
+function api.askTrade(member, to, reason) return ask("trade", member, to, reason) end
+function api.askGift(member, to, reason) return ask("gift", member, to, reason) end
+
 -- Run every training scenario headlessly inside this runtime (used to verify the browser build).
 function api.selftest()
     local results = {}
@@ -6071,10 +6481,10 @@ end
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", gift: "Gifts", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
-  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "", lastNote = "";
 
   function start(id) {
-    current = id; result = null; lastMsg = ""; giftTo = "";
+    current = id; result = null; lastMsg = ""; lastNote = ""; giftTo = "";
     running = false; started = false; // every scenario begins paused: read it, then press Start
     st = call("start", id, seed, mlChoice);
     prevOrder = st.order || []; moved = {};
@@ -6099,6 +6509,7 @@ end
       noreason: "a reason is required (it goes in the record)", noitem: "choose which item", badtarget: "choose who it went to" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
+    lastNote = r.note || ""; // what a bot Master Looter said to your request
     if (r.phase) st = r;
     updateMoved();
     render();
@@ -6320,6 +6731,24 @@ end
       (rows || '<div class="small muted">No awards of yours to change yet.</div>') + award + "</div>";
   }
 
+  // When a bot is the Master Looter you can't write to the ledger: you ask, with a reason, and they accept or decline.
+  function askHtml() {
+    const a = st.asks, p = st.phase;
+    if (!a || !a.length || !st.roles || st.roles.youAreML || ["idle", "done", "cancelled"].indexOf(p) < 0) return "";
+    const names = st.order || [];
+    const rows = a.map((x) => {
+      const id = "ask" + x.member;
+      return '<div class="fixrow"><div><b>' + esc(x.member) + '</b> last won <span class="iname">' + esc(x.item) + "</span></div>" +
+        '<div class="row" style="margin-top:4px"><button data-act="askUndo" data-a="' + esc(x.member) + '" title="Ask the Master Looter to undo it: ' + esc(x.member) + ' goes back up the list.">Ask to undo it</button>' +
+        '<span class="muted small">It went to:</span>' + fixSelect(id, names.filter((n) => n !== x.member), "") +
+        '<button data-act="askTrade" data-a="' + esc(x.member) + '" data-b="' + esc(id) + '" title="A regret-trade: the winner is restored to their place and the one who has it moves to the bottom.">Ask for a regret-trade</button>' +
+        '<button data-act="askGift" data-a="' + esc(x.member) + '" data-b="' + esc(id) + '" title="A deliberate gift by the winner: it only records where the item went. Nobody moves.">Ask: it was a gift</button></div></div>';
+    }).join("");
+    return '<div class="card"><h2>Ask the Master Looter</h2>' +
+      '<div class="small muted" style="margin-bottom:6px"><b>' + esc(st.roles.masterLooter) + '</b> holds the ledger. If a result is wrong, ask them to put it right, with a reason: they accept (and write it, naming you) or decline (and say why). Both are in the history.</div>' +
+      (lastNote ? '<div class="small" style="margin:6px 0;padding:6px;border:1px solid var(--line)">' + esc(lastNote) + "</div>" : "") + rows + "</div>";
+  }
+
   function pendingHtml() {
     const enr = st.enrollments || [];
     if ((!st.pending || !st.pending.length) && !enr.length) return "";
@@ -6383,7 +6812,7 @@ end
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
           turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
-        resultHtml() + pendingHtml() + correctionsHtml() +
+        resultHtml() + pendingHtml() + correctionsHtml() + askHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
         historyHtml() +
@@ -6493,6 +6922,18 @@ end
           ? "Why? The winner is restored to their place and " + to + " moves to the bottom, as if they had won it. (Your reason goes in the record.)"
           : "Why? This only records that the winner gave it to " + to + ": nobody moves. (Your reason goes in the record.)");
         if (reason) act(el.dataset.act === "fixTrade" ? "trade" : "giftAward", a, to, reason);
+        break;
+      }
+      case "askUndo": {
+        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what went wrong (it goes in the record).");
+        if (reason) act("askUndo", a, reason);
+        break;
+      }
+      case "askTrade": case "askGift": {
+        const to = fixSel[b];
+        if (!to) { lastMsg = "Choose who it went to first (the \"It went to\" list)."; render(); break; }
+        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what happened (it goes in the record).");
+        if (reason) act(el.dataset.act, a, to, reason);
         break;
       }
       case "fixAward": {
