@@ -18,3 +18,6 @@ wow-dev.config.local.json
 
 # Logs
 *.log
+
+# Node tooling (CI installs playwright for the simulator smoke test)
+node_modules/

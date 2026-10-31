@@ -1532,6 +1532,28 @@ Quick Strike Ring, after the blade, and the draft went on after him.
 - The learner is told which row to use ("Brann's Brutality Blade, not the ring"). A harder version could let them find
   it themselves; for now the lesson is about the standings, not hunting for the row.
 
+### Built: CI plays the simulator page, and a push to main publishes it (2026-10-31)
+
+Asked for by the guild leader: fixes should deploy live without anyone running the build by hand, and the page's
+JavaScript, which no test covered, should be checked.
+
+- **`tests` workflow, three jobs.**
+  - `lua`: the engine's tests, as before. On a pull request it still fails if the committed simulator page is stale.
+  - `page`: builds the page from the sources, parses every JavaScript script in it (`scripts/check-simulator.mjs`,
+    which catches a quote mismatch like the one we once shipped), and plays every lesson in headless Chromium
+    (`simulator/test/smoke.mjs`, with the driver in `smoke-driver.js`). The driver passes on everything, goes to the
+    confirm button, and finishes the three "fix a mistake" lessons with the Corrections card, which must then match.
+    It runs unchanged in the browser pane, which is how it was written and checked.
+  - `publish` (a push to main only, after both pass): rebuilds the page and, if the committed copies
+    (`simulator/index.html`, `docs/kings-gambit/index.html`) differ, commits them as `github-actions[bot]` with
+    `[skip ci]`, pushes, and asks GitHub Pages for a build (a push with the workflow's own token doesn't start one by itself).
+- **What this means day to day:** change the engine or the template, push; if the built page wasn't rebuilt locally,
+  CI rebuilds and commits it, and the live page follows. The commit the bot adds sits on top of yours, so
+  `git pull` before the next push. Pull requests never publish.
+- **Not changed:** Pages still serves `docs/` on main (a settings change to "deploy from Actions" wasn't needed).
+- **Limits:** the smoke test plays each lesson as a learner who passes on everything, so it proves the pages work and the
+  fixes can be applied, not that every lesson's "right answer" is reachable by a person (the engine tests judge that).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as
