@@ -171,6 +171,42 @@ M.list = {
         end,
     },
     {
+        id = "regret-trade",
+        title = "The item went to someone else",
+        lesson = "Lucifron drops the warrior Tier 1 gloves. Brann and Dara both need them, and Brann is higher on the list, so he wins and the gloves are handed to him. Then Brann says: \"I'd rather Dara had them. I traded them to her at the door.\" The item is now with Dara, but the list still says Brann won.\n\nThis is a regret-trade, not a gift: Dara wanted the gloves and was beaten only by rank. So the list should end as if Dara had won them: Brann is restored to his place (he did not really win), and Dara pays and drops to the bottom. In the Corrections card below, choose Dara in \"It went to\" and press Regret-trade. (\"It was a gift\" is for when the winner deliberately gives it away: it records where the item went and moves nobody, which would be unfair here.)",
+        members = RAID,
+        items = { "Gauntlets of Might" },
+        policies = {
+            Brann = { bid = { ["Gauntlets of Might"] = "need" } },
+            Dara = { bid = { ["Gauntlets of Might"] = "need" } },
+        },
+        todo = function(sim)
+            local last = lastEvent(sim, "main", "Award")
+            -- judged on where things stand, so a wrong try that was then put right leaves nothing to do
+            if last and short(last.data.member) == "Dara" and sim:orderString() == "Aldric,Brann,Cass,Eira,Fenn,You,Dara" then return nil end
+            if lastEvent(sim, "main", "Transfer") then
+                return "A gift only records where the item went; nobody moves, so Brann keeps the win and Dara pays nothing. Dara wanted these gloves, so this was a regret-trade: Brann is restored and Dara drops to the bottom. Fix it: use Regret-trade on Brann's award (Corrections card)."
+            end
+            if not (last and last.data.replaces) and not lastEvent(sim, "main", "Revert") then
+                return "Brann won the gloves and they were handed to him, but he traded them to Dara. Fix the list: in the Corrections card, choose Dara in \"It went to\" and press Regret-trade."
+            end
+            if lastEvent(sim, "main", "Revert") and not (last and short(last.data.member) == "Dara" and sim:orderString():find("Dara$")) then
+                return "You undid Brann's win, so he is restored. Now Dara has the gloves and should pay for them: record it with \"Record a win the session didn't\" (Dara, the gloves), or undo that and use Regret-trade, which does both in one step."
+            end
+        end,
+        after = function(sim)
+            local award = lastEvent(sim, "main", "Award")
+            assert(sim.engine:Append("main", "Award", { member = "Dara-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+        end,
+        expect = function(sim)
+            local want = "Aldric,Brann,Cass,Eira,Fenn,You,Dara"
+            local last = lastEvent(sim, "main", "Award")
+            local ok = sim:orderString() == want and last ~= nil and short(last.data.member) == "Dara"
+            local how = last and last.data.replaces and "in one step (a regret-trade)" or "in two steps (undo, then award)"
+            return ok, ("order is %s; Brann restored, Dara paid %s"):format(sim:orderString(), how)
+        end,
+    },
+    {
         id = "big-handout",
         title = "A big hand-out: ranked choice, then the salvagers rotate",
         lesson = "Ten items have piled up (held until a break). Watch three things happen, in this order.\n\n1. RANKING. Everyone ranked what they want, up front. Nobody is asked anything during the draft.\n\n2. THE DRAFT. It goes down the list. Each player in turn gets their highest-ranked item that is still there, and drops to the bottom. Aldric (first on the list) gets the gauntlets, his first choice. Brann takes the blade, Cass the boots, and Dara the helm, her first choice once the gauntlets are gone. Fenn takes the choker and Garo the robe. Eira and Hale only wanted things that were already taken, so they get nothing.\n\n3. THE SALVAGERS. Four items interest nobody. They are salvaged as the draft goes: every pick drops its winner to the bottom, so the next unwanted item is offered to the player who just picked. Aldric picked first, so he is the first salvager (Heavy Dark Iron Ring); Brann picked second, so he is the second (Quick Strike Ring); then Cass (Wristguards) and Dara (Crimson Shocker). The salvagers rotate in the order of the draft: no single salvager takes everything, and it does not matter how the loot was batched.\n\nYou only have to pass on everything (the button under the items), press Start, then confirm.",
@@ -257,7 +293,7 @@ M.list = {
 -- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
 -- (The raid nights come after all of these, on the page.)
 local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
-    "fix-a-mistake", "lucky-salvager", "big-handout" }
+    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout" }
 local rank = {}
 for i, id in ipairs(ORDER) do rank[id] = i end
 table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)

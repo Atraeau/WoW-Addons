@@ -500,7 +500,52 @@ test("the scenarios are in teaching order: the single-item basics first, the big
     for i, id in ipairs(ids) do pos[id] = i end
     assert(pos["nobody-wants-it"] < pos["minor-upgrade-proxy"], "unwanted items are met before salvaging them")
     assert(pos["lucky-salvager"] < pos["big-handout"])
-    eq(#ids, 9)
+    eq(#ids, 10)
+    assert(pos["fix-a-mistake"] < pos["regret-trade"], "the plain undo comes before the trade")
+end)
+
+test("'the item went to someone else': the regret-trade passes; the gift, a bare undo, and doing nothing do not", function()
+    local base = SK.modules.Scenarios.find("regret-trade")
+    local function run(fix)
+        local sc = {}
+        for k, v in pairs(base) do sc[k] = v end
+        sc.after = fix
+        local sim = Sim.RunScenario(sc)
+        local function last(type_) local f; for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == type_ then f = ev end end return f end
+        return sim, sc, last
+    end
+    -- nothing done yet: Brann won, the learner is told what to do
+    local sim, sc = run(nil)
+    eq(sim:orderString(), "Aldric,Cass,Dara,Eira,Fenn,You,Brann"); assert(sc.todo(sim):find("Regret%-trade"), tostring(sc.todo(sim)))
+    -- a gift: nobody moves, and the lesson says why that is wrong here
+    local gsim, gsc = run(function(s)
+        local a
+        for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
+        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara-Realm", reason = "gift" }))
+    end)
+    assert(gsc.todo(gsim):find("nobody moves"), tostring(gsc.todo(gsim))); assert(not gsc.expect(gsim))
+    -- an undo alone restores Brann but Dara has not paid
+    local usim, usc = run(function(s)
+        local a; for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
+        assert(s.engine:Append("main", "Revert", { target = a.id }))
+    end)
+    assert(usc.todo(usim):find("Dara"), tostring(usc.todo(usim))); assert(not usc.expect(usim))
+    -- the regret-trade in one step (the scenario's own fix), and undo then award in two: both end right
+    local rsim, rsc = run(base.after)
+    eq(rsc.todo(rsim), nil); local ok, msg = rsc.expect(rsim); assert(ok and msg:find("one step"), msg)
+    -- a gift tried first, then put right with the regret-trade: nothing is left to do
+    local fsim, fsc = run(function(s)
+        local a; for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
+        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara-Realm", reason = "gift" }))
+        base.after(s)
+    end)
+    eq(fsc.todo(fsim), nil, "the wrong try is not held against a correct fix"); assert(fsc.expect(fsim))
+    local tsim, tsc = run(function(s)
+        local a; for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
+        assert(s.engine:Append("main", "Revert", { target = a.id }))
+        assert(s.engine:Append("main", "Award", { member = "Dara-Realm", item = a.data.item, reason = "traded" }))
+    end)
+    eq(tsc.todo(tsim), nil); local ok2, msg2 = tsc.expect(tsim); assert(ok2 and msg2:find("two steps"), msg2)
 end)
 
 H.section("Sim: the raid leader, the loot method and the Master Looter")

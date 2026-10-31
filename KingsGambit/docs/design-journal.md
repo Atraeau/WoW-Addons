@@ -1461,6 +1461,15 @@ commands). When a bot is the Master Looter the card is hidden: the learner would
 simulator does not model yet. Checked in the browser (a trade, an award and an undo gave the standings the engine
 tests expect); the engine rules themselves are the tested part (`test_ledger`, `test_mistakes`).
 
+### Simulator: a scenario for the regret-trade (2026-10-30)
+
+New scenario, "The item went to someone else", right after "Fixing a mistake": Brann and Dara both need the warrior
+gloves, Brann wins and is handed them, then Brann says he traded them to Dara at the door. The lesson draws the line
+between a regret-trade (Dara wanted them: Brann restored, Dara pays) and a gift (deliberate: nobody moves). It judges the
+final list, not the route: the regret-trade in one step passes, so does undo then "Record a win" (the note says which was
+used), a gift or a bare undo get a plain hint saying what is wrong, and a wrong try that was then put right is not held
+against the learner. Tested for all five routes; played in the page, gift first and then the trade. Ten scenarios now.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -12,7 +12,7 @@ The page runs the addon's own Lua source: the same files, on a Lua 5.3 VM in the
 ## What it is, and is not
 
 - **Is:** the actual rules, the actual ledger and the actual loot session, running on a
-  `MockClient` with bot raiders. The nine training scenarios in `src/Scenarios.lua` (simple first, in teaching order; the two full raid nights come after them)
+  `MockClient` with bot raiders. The ten training scenarios in `src/Scenarios.lua` (simple first, in teaching order; the two full raid nights come after them)
   are also tests: the suite runs each one against the engine, and the page can re-run them in
   the browser (`KG('selftest')` in the console).
 - **Is not:** the WoW user interface, and it cannot validate anything about the real client
