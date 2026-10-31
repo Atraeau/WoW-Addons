@@ -100,5 +100,43 @@ async () => {
     played.push(title + ": " + headings().filter((h) => /lesson|fix/i.test(h)).join(", "));
     if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
   }
+  // A bot as the Master Looter: you play a raider, the session confirms itself, and you ask for corrections instead of
+  // making them. Ask for a regret-trade of the winner's item and expect the bot to answer.
+  {
+    const where = "[a bot is the Master Looter] ";
+    const before = errors.length;
+    fire(btn("scenario", "The first drop"));
+    await sleep(400);
+    const sel = document.querySelector("#mlSel");
+    if (!sel) {
+      problems.push(where + "no Master Looter selector");
+    } else {
+      sel.value = "Aldric";
+      sel.dispatchEvent(new Event("change", { bubbles: true }));
+      fire(btn("setMl"));
+      await sleep(400);
+      const passAll = byText("Pass on everything");
+      if (passAll) fire(passAll);
+      const fast = btn("speed", "16x");
+      if (fast) fire(fast);
+      const start = btn("toggle", "Start");
+      if (start) fire(start);
+      const card = await waitFor(() => [...document.querySelectorAll(".card")].find((c) => /Ask the Master Looter/.test(c.textContent)), 30000);
+      if (!card) {
+        problems.push(where + "never offered the Ask the Master Looter card: " + headings().join(" | "));
+      } else {
+        const row = card.querySelector(".fixrow");
+        const who = row.querySelector("b").textContent;
+        const other = [...row.querySelector("select").options].map((o) => o.value).find((v) => v && v !== who);
+        await choose(row, other);
+        const trade = [...document.querySelectorAll(".card")].find((c) => /Ask the Master Looter/.test(c.textContent)).querySelector("[data-act=askTrade]");
+        fire(trade);
+        const answered = await waitFor(() => /Aldric (accepted|declined)/.test(document.body.innerText), 5000);
+        if (!answered) problems.push(where + "the bot Master Looter did not answer the request");
+        else played.push("a bot is the Master Looter: asked for a regret-trade of " + who + "'s item, " + (/Aldric accepted/.test(document.body.innerText) ? "accepted" : "declined"));
+      }
+    }
+    if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
+  }
   return { problems, played, errors };
 }

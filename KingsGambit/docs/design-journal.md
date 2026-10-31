@@ -1554,6 +1554,30 @@ JavaScript, which no test covered, should be checked.
 - **Limits:** the smoke test plays each lesson as a learner who passes on everything, so it proves the pages work and the
   fixes can be applied, not that every lesson's "right answer" is reachable by a person (the engine tests judge that).
 
+### Simulator: asking a bot Master Looter, the phone layout, and a note for the salvager (2026-10-31)
+
+Three loose ends closed together.
+
+- **Requests when a bot is the Master Looter.** Until now the Corrections card was hidden when a bot held the role, and
+  the page had no way to show what a raider can do about a wrong result. A raider can't write to the ledger; they ask.
+  The new card, "Ask the Master Looter", lists each player's latest standing award with three asks: undo it, a
+  regret-trade (who it went to), or "it was a gift". Each takes a reason. The bot Master Looter answers at once with
+  the real rules (`Requests.EventFor`): what can be done is written as the Master Looter's entry, naming the
+  requester and the reason (the history shows "at the request of You"); what can't is declined, and the decline, with
+  its reason, is in the ledger. It is `Sim:ask`, so it is tested like the rest (accepted, declined, nothing changes on a
+  decline). The bot always accepts what is possible: a bot that declines for judgment is a later extra, not needed for
+  the mechanics. `Requests` joined the simulator's engine modules.
+- **Phone layout.** On a 375px screen the page overflowed sideways: the middle grid column grew to the width of the
+  answers table, so every card was 740px wide. Grid children now have `min-width: 0` and cards scroll sideways if
+  something inside is wider (the answers table), so the page itself no longer scrolls. Checked in the browser pane at
+  phone size; not on a physical phone.
+- **Salvage note.** The `Salvage` ledger entry (what the salvager did with it: keep, gift, sell, disenchant, bank) had
+  nobody to write it. The Master Looter now can: `salvaged <name> <action>` notes it against that player's latest
+  standing award; nobody moves, and it shows in the history. It is for transparency only. The salvager can't write to
+  the ledger themselves (only the Master Looter does during a raid); a request kind for it can come later if guilds
+  want the salvager to say it themselves.
+- The browser smoke test plays the bot-Master-Looter flow too.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

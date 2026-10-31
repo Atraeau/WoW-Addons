@@ -19,8 +19,10 @@
   .spec { display: block; color: var(--muted); font-size: 11px; line-height: 1.2; }
   .tag { font-size: 10px; color: var(--muted); border: 1px solid var(--muted); border-radius: 3px; padding: 0 3px; margin-left: 4px; }
   .layout { display: grid; gap: 16px; grid-template-columns: 220px 1fr 280px; align-items: start; }
+  /* min-width 0: a grid column otherwise grows to the widest thing in it (the answers table) and the page overflows a phone */
+  .layout > * { min-width: 0; }
   @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 16px; overflow-x: auto; }
   .card.good { border-color: var(--good); } .card.bad { border-color: var(--bad); }
   button { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
   button:hover:not(:disabled) { border-color: var(--muted); } button:disabled { opacity: .45; cursor: default; }
@@ -95,10 +97,10 @@
   const PHASE = { bidding: "Bidding", main: "Main draft", off: "Off-spec draft", gift: "Gifts", salvage: "Salvage", review: "Review", done: "Done", cancelled: "Cancelled" };
 
   let scenarios = [], current = "", seed = 1, st = null;
-  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "";
+  let mlChoice = "You", running = false, started = false, labRunning = true, speed = 4, giftTo = "", prevOrder = [], moved = {}, result = null, lastMsg = "", lastNote = "";
 
   function start(id) {
-    current = id; result = null; lastMsg = ""; giftTo = "";
+    current = id; result = null; lastMsg = ""; lastNote = ""; giftTo = "";
     running = false; started = false; // every scenario begins paused: read it, then press Start
     st = call("start", id, seed, mlChoice);
     prevOrder = st.order || []; moved = {};
@@ -123,6 +125,7 @@
       noreason: "a reason is required (it goes in the record)", noitem: "choose which item", badtarget: "choose who it went to" };
     if (r.ok === false) lastMsg = "Not allowed: " + (WHY[r.why] || r.why || "that action isn't available right now");
     else lastMsg = "";
+    lastNote = r.note || ""; // what a bot Master Looter said to your request
     if (r.phase) st = r;
     updateMoved();
     render();
@@ -344,6 +347,24 @@
       (rows || '<div class="small muted">No awards of yours to change yet.</div>') + award + "</div>";
   }
 
+  // When a bot is the Master Looter you can't write to the ledger: you ask, with a reason, and they accept or decline.
+  function askHtml() {
+    const a = st.asks, p = st.phase;
+    if (!a || !a.length || !st.roles || st.roles.youAreML || ["idle", "done", "cancelled"].indexOf(p) < 0) return "";
+    const names = st.order || [];
+    const rows = a.map((x) => {
+      const id = "ask" + x.member;
+      return '<div class="fixrow"><div><b>' + esc(x.member) + '</b> last won <span class="iname">' + esc(x.item) + "</span></div>" +
+        '<div class="row" style="margin-top:4px"><button data-act="askUndo" data-a="' + esc(x.member) + '" title="Ask the Master Looter to undo it: ' + esc(x.member) + ' goes back up the list.">Ask to undo it</button>' +
+        '<span class="muted small">It went to:</span>' + fixSelect(id, names.filter((n) => n !== x.member), "") +
+        '<button data-act="askTrade" data-a="' + esc(x.member) + '" data-b="' + esc(id) + '" title="A regret-trade: the winner is restored to their place and the one who has it moves to the bottom.">Ask for a regret-trade</button>' +
+        '<button data-act="askGift" data-a="' + esc(x.member) + '" data-b="' + esc(id) + '" title="A deliberate gift by the winner: it only records where the item went. Nobody moves.">Ask: it was a gift</button></div></div>';
+    }).join("");
+    return '<div class="card"><h2>Ask the Master Looter</h2>' +
+      '<div class="small muted" style="margin-bottom:6px"><b>' + esc(st.roles.masterLooter) + '</b> holds the ledger. If a result is wrong, ask them to put it right, with a reason: they accept (and write it, naming you) or decline (and say why). Both are in the history.</div>' +
+      (lastNote ? '<div class="small" style="margin:6px 0;padding:6px;border:1px solid var(--line)">' + esc(lastNote) + "</div>" : "") + rows + "</div>";
+  }
+
   function pendingHtml() {
     const enr = st.enrollments || [];
     if ((!st.pending || !st.pending.length) && !enr.length) return "";
@@ -407,7 +428,7 @@
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
           turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
-        resultHtml() + pendingHtml() + correctionsHtml() +
+        resultHtml() + pendingHtml() + correctionsHtml() + askHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
         historyHtml() +
@@ -517,6 +538,18 @@
           ? "Why? The winner is restored to their place and " + to + " moves to the bottom, as if they had won it. (Your reason goes in the record.)"
           : "Why? This only records that the winner gave it to " + to + ": nobody moves. (Your reason goes in the record.)");
         if (reason) act(el.dataset.act === "fixTrade" ? "trade" : "giftAward", a, to, reason);
+        break;
+      }
+      case "askUndo": {
+        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what went wrong (it goes in the record).");
+        if (reason) act("askUndo", a, reason);
+        break;
+      }
+      case "askTrade": case "askGift": {
+        const to = fixSel[b];
+        if (!to) { lastMsg = "Choose who it went to first (the \"It went to\" list)."; render(); break; }
+        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what happened (it goes in the record).");
+        if (reason) act(el.dataset.act, a, to, reason);
         break;
       }
       case "fixAward": {

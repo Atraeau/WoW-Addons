@@ -70,6 +70,7 @@ local function describe(ev, byId)
             text = short(d.member) .. " has " .. tostring(d.item) .. ", which had been recorded for " .. first
                 .. ": " .. first .. " is back in their place and " .. short(d.member) .. " dropped to the bottom (a regret-trade)"
         end
+        if d.requestedBy then text = text .. " (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")" end
         return text
     elseif t == "Pass" then
         return short(d.member) .. " passed on " .. tostring(d.item) .. (d.kind and (" (" .. d.kind .. ")") or "")
@@ -79,9 +80,12 @@ local function describe(ev, byId)
         local target = byId[d.target]
         if target and target.data then
             return "The award of " .. tostring(target.data.item) .. " to " .. short(target.data.member) .. " was undone, and they went back up the list"
+                .. (d.requestedBy and (" (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")") or "")
         end
         return "An earlier award was undone"
-    elseif t == "Transfer" then return "The item of an earlier award was re-routed to " .. short(d.to)
+    elseif t == "Transfer" then
+        return "The item of an earlier award was re-routed to " .. short(d.to)
+            .. (d.requestedBy and (" (at the request of " .. short(d.requestedBy) .. ": " .. tostring(d.reason) .. ")") or "")
     elseif t == "MovePlayer" then
         return short(d.member) .. " was moved on the " .. listName(ev.list) .. " to " .. (d.to or ("just above " .. short(d.above))) .. ": " .. tostring(d.reason)
     elseif t == "Elevate" then
@@ -96,7 +100,7 @@ local function describe(ev, byId)
     elseif t == "ItemSuits" then
         return "Who " .. tostring(d.name or d.item) .. " suits was set to " .. ((d.roles and #d.roles > 0) and table.concat(d.roles, ", ") or "the addon's own judgment")
             .. (d.reason and (": " .. d.reason) or "")
-    elseif t == "Declined" then return "A request was declined: " .. tostring(d.declineReason)
+    elseif t == "Declined" then return "A request was declined" .. (d.requestedBy and (" (from " .. short(d.requestedBy) .. ")") or "") .. ": " .. tostring(d.declineReason)
     end
     return t
 end
@@ -165,6 +169,18 @@ local function state()
         local later = false
         for j = i + 1, #stack do if stack[j].member == e.member then later = true end end
         snap.corrections.awards[#snap.corrections.awards + 1] = { id = e.id, member = short(e.member), item = a and a.item, to = a and short(a.to), laterWin = later }
+    end
+    -- when a bot is the Master Looter you can only ask: each player's latest standing award, in list order
+    if sim.ml ~= sim.learner then
+        local latest = {}
+        for id, aw in pairs(awards) do
+            local cur = latest[aw.member]
+            if not aw.reverted and (not cur or aw.ts > cur.ts or (aw.ts == cur.ts and id > cur.id)) then latest[aw.member] = { id = id, ts = aw.ts, item = aw.item } end
+        end
+        snap.asks = {}
+        for _, name in ipairs(sim.engine:Get("main").state.order) do
+            if latest[name] then snap.asks[#snap.asks + 1] = { member = short(name), item = latest[name].item } end
+        end
     end
     local seen = {}
     for _, it in ipairs(s and s.items or sim.lastItems or {}) do
@@ -468,6 +484,19 @@ function api.award(member, item, reason)
     local ev, err = sim.engine:Append("main", "Award", { member = sim.client:normalize(member), item = item, reason = reason })
     return result(ev ~= nil, err)
 end
+
+-- You are a raider and a bot is the Master Looter: ask them to put a mistake right (see Sim:ask). The answer is in `note`.
+local function ask(kind, member, to, reason)
+    local ok, text = sim:ask(kind, member, to, reason)
+    local s = state()
+    if ok then s.ok, s.note = true, text
+    elseif text and text:find(" ") then s.ok, s.note = true, text -- declined: a result, not an error
+    else s.ok, s.why = false, text end
+    return s
+end
+function api.askUndo(member, reason) return ask("undo", member, nil, reason) end
+function api.askTrade(member, to, reason) return ask("trade", member, to, reason) end
+function api.askGift(member, to, reason) return ask("gift", member, to, reason) end
 
 -- Run every training scenario headlessly inside this runtime (used to verify the browser build).
 function api.selftest()

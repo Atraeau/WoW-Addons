@@ -75,6 +75,7 @@ local HELP = {
     "  request trade <name> <to> <reason>              (the item they won went to someone else: restore them, <to> pays)",
     "  request gift <name> <to> <reason>               (the same, but a deliberate gift: nobody moves)",
     "  trade <name> <to> <reason>      Master Looter: the item went to someone else; restore the winner, <to> moves to the bottom",
+    "  salvaged <name> <keep|gift|sell|disenchant|bank>   Master Looter: note what a salvager did with their item (for the record only)",
     "  request eligible <item> <reason>                ask for your class to be allowed to bid on an item, from now on",
     "  requests                        waiting requests and recent decisions",
     "  accept <n> | decline <n> <reason>                answer a request (Master Looter)",
@@ -298,6 +299,24 @@ function M.New(ctx)
         if ev then
             out(("Recorded: %s's %s went to %s. %s is back in their place and %s moves to the bottom."):format(short(name(who)), tostring(a.item), short(toName), short(name(who)), short(toName)))
         end
+    end
+
+    -- What the salvager (or anyone who claimed a leftover) did with it: keep, gift, sell, disenchant or bank. For transparency
+    -- only: it moves nobody. Written by the Master Looter, about the player's most recent award that still stands.
+    function cmds.salvaged(args)
+        local usage = "salvaged <name> <keep|gift|sell|disenchant|bank>  (what <name> did with their latest item; it moves nobody)"
+        local who, action = args:match("^(%S+)%s+(%S+)%s*$")
+        if not who then return out(usage) end
+        action = action:lower()
+        local st = list("main") and list("main").state
+        local best, bestId
+        for id, a in pairs(st and st.awards or {}) do
+            if a.member == name(who) and not a.reverted and (not best or a.ts > best.ts or (a.ts == best.ts and id > bestId)) then best, bestId = a, id end
+        end
+        if not best then return out(("%s has no award on the list to note."):format(short(name(who)))) end
+        local ev = append("main", "Salvage", { award = bestId, action = action, member = best.member }, ("salvaged %s %s"):format(who, action))
+        if ev then out(("Noted: %s %s %s. The list is unchanged."):format(short(name(who)), ({ keep = "kept", gift = "gave away", sell = "sold",
+            disenchant = "disenchanted", bank = "banked" })[action] or action, tostring(best.item))) end
     end
 
     ---------------------------------------------------------------- Master Looter
@@ -835,6 +854,8 @@ function M.New(ctx)
         elseif ev.type == "AddMember" then text = ("%s added %s"):format(by, who)
         elseif ev.type == "RemoveMember" then text = ("%s removed %s"):format(by, who)
         elseif ev.type == "Revert" then text = ("%s undid %s"):format(by, who and (who .. "'s award") or "an award")
+        elseif ev.type == "Salvage" then text = ("%s noted that %s's item was %s"):format(by, who or "a winner",
+            ({ keep = "kept", gift = "given away", sell = "sold", disenchant = "disenchanted", bank = "banked" })[d.action] or tostring(d.action))
         elseif ev.type == "Transfer" then text = ("%s recorded that %s's item went to %s"):format(by, who or "a winner", short(d.to))
         elseif ev.type == "Declined" then text = ("%s declined %s's request to %s: %s"):format(by, short(d.requestedBy), d.request, d.declineReason)
         elseif ev.type == "Pass" then

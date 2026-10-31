@@ -607,6 +607,37 @@ test("'the item went to someone else, after a big hand-out': the salvager-winner
     end
 end)
 
+H.section("Sim: a raider asks a bot Master Looter")
+test("when a bot is the Master Looter you ask: it accepts what can be done, naming you, and declines what can't", function()
+    local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass", "Dara" }, masterLooter = "Aldric" })
+    local function award(who, item) assert(sim.engine:Append("main", "Award", { member = who .. "-Realm", item = item })) end
+    award("Brann", "Sword")      -- Aldric,Cass,Dara,You,Brann
+    award("Cass", "Ring")        -- Aldric,Dara,You,Brann,Cass
+    -- you may not ask when you are the Master Looter, and a reason is required
+    local mine = Sim.NewRaid({ members = { "Aldric", "Brann" } })
+    eq(select(2, mine:ask("undo", "Brann", nil, "x")), "youareml")
+    eq(select(2, sim:ask("undo", "Brann", nil, "  ")), "noreason")
+    eq(select(2, sim:ask("trade", "Brann", nil, "it went to Dara")), "badtarget", "who it went to is needed")
+    -- a regret-trade of Brann's sword to Dara: one entry, written by the bot Master Looter at your request
+    local ok, text = sim:ask("trade", "Brann", "Dara", "traded at the door")
+    assert(ok and text:find("Aldric accepted"), tostring(text))
+    eq(sim:orderString(), "Aldric,Brann,You,Cass,Dara", "as if Brann never won: Cass and Dara paid, in that order")
+    local last
+    for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Award" then last = ev end end
+    eq(last.data.requestedBy, "You-Realm"); eq(last.data.member, "Dara-Realm"); assert(last.data.replaces)
+    -- asking again for the same item is declined: Brann's award is gone. The decline is in the ledger, with the reason
+    local ok2, text2 = sim:ask("undo", "Brann", nil, "again")
+    assert(not ok2 and text2:find("declined"), tostring(text2))
+    local declined = sim.engine:View().declined[1]
+    assert(declined and declined.data.requestedBy == "You-Realm" and declined.data.declineReason:find("no award"), "recorded")
+    eq(sim:orderString(), "Aldric,Brann,You,Cass,Dara", "a declined request changes nothing")
+    -- a gift moves nobody; an undo restores
+    local okg = sim:ask("gift", "Cass", "Dara", "she gave it to Dara")
+    assert(okg); eq(sim:orderString(), "Aldric,Brann,You,Cass,Dara")
+    local oku = sim:ask("undo", "Dara", nil, "wrong winner")
+    assert(oku); eq(sim.engine:View().conflicts and #sim.engine:View().conflicts, 0)
+end)
+
 H.section("Sim: the raid leader, the loot method and the Master Looter")
 test("a simulated raid has a raid leader who is not the learner, the loot method is Master Looter, and the learner is the Master Looter", function()
     local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass" } })

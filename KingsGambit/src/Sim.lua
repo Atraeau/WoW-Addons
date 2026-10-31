@@ -3,9 +3,9 @@
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, ItemFit, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -533,6 +533,42 @@ function Sim:handOut(cfg)
     local ok, why = self:drop(links, cfg, seen, ids)
     if ok then self.held = {} end -- (a refused session, e.g. no Master Looter set, keeps the loot to hand out later)
     return ok, why
+end
+
+---------------------------------------------------------------- a raider asks the Master Looter
+-- When a bot is the Master Looter the learner is a raider: they can't write to the ledger, they ask (undo, a regret-trade,
+-- or "it was a gift", for a player's last award), with a reason. The bot Master Looter decides at once, the way the real
+-- addon's accept and decline do: what can be done is written as the Master Looter's entry "at the request of" the
+-- learner, and what can't is declined with the reason in the record. Returns true + a sentence, or false + a reason code
+-- (the request itself was malformed) or false + a sentence (declined).
+local DECLINE = {
+    noaward = "that player has no award that is still standing",
+    notrevertible = "that award can no longer be changed (the list was moved by hand since)",
+    notmember = "the player it went to isn't on the list",
+    samewinner = "that is who it was recorded for already",
+}
+function Sim:ask(kind, member, to, reason)
+    if self.ml == self.learner then return false, "youareml" end
+    if type(reason) ~= "string" or reason:match("^%s*$") then return false, "noreason" end
+    self.asked = (self.asked or 0) + 1
+    local r = { kind = kind, member = member and self.client:normalize(member), reason = reason, by = self.learner,
+        rid = ("sim:%d"):format(self.asked) }
+    if to and to ~= "" then r.to = self.client:normalize(to) end
+    local ok, why = Requests.Validate(r)
+    if not ok then return false, why == "badrequest" and "badtarget" or why end
+    local state = self.engine:Get("main").state
+    local type_, data = Requests.EventFor(state, r, self.engine:MyChain())
+    local ml = short(self.ml)
+    if not type_ then
+        local text = DECLINE[data] or tostring(data)
+        local ev, err = self.engine:Write("Declined", { request = Requests.Describe(r), requestedBy = r.by, declineReason = text,
+            rid = r.rid, kind = r.kind, member = r.member })
+        if not ev then return false, err end
+        return false, ml .. " declined: " .. text
+    end
+    local ev, err = self.engine:Append("main", type_, data)
+    if not ev then return false, err end
+    return true, ml .. " accepted and wrote it to the ledger: " .. Requests.Describe(r)
 end
 
 ---------------------------------------------------------------- the raid leader, the loot method
