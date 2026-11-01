@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Link (or copy) every addon under src/ into the WoW: Forever AddOns folder. Self-contained projects are found
-# too: a top-level folder whose src/ holds <Project>.toc (KingsGambit/src/KingsGambit.toc) is an addon named after it.
-# macOS and Linux counterpart of deploy.ps1: same config file, same modes.
+# Build every addon under src/ into AddOns/ (scripts/build-addons.lua: exactly the files the client loads), then link
+# (or copy) the built folders into the WoW: Forever AddOns folder. Needs Lua 5.4 on the PATH, as the tests do.
+# macOS and Linux counterpart of deploy.ps1: same config file, same modes (no --watch: run it again after an edit).
 #
-#   scripts/deploy.sh                 symlink all addons under src/
+#   scripts/deploy.sh                 build, then symlink all addons under src/
 #   scripts/deploy.sh --name MyAddon  only the named addon(s); repeatable
 #   scripts/deploy.sh --copy          copy instead of link
 #   scripts/deploy.sh --clean         remove the deployed link/copy
@@ -13,8 +13,8 @@
 # On a Mac, if the configured gamePath does not exist, /Applications/World of Warcraft is
 # used when present; otherwise override it locally:
 #   { "gamePath": "/Applications/World of Warcraft" }
-# A symlink here plays the role the junction plays on Windows: the game reads
-# your source live, so a Lua edit only needs /reload in game.
+# A symlink here plays the role the junction plays on Windows: the game reads the build,
+# so after an edit run this again (it rebuilds), then /reload in game.
 set -euo pipefail
 
 repoRoot="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -90,30 +90,27 @@ if [ ! -d "$addonsDir" ]; then
 	exit 1
 fi
 
-# --- Select addons ------------------------------------------------------------
+# --- Select and build addons -----------------------------------------------------
 [ -d "$srcDir" ] || { echo "No src/ folder at $srcDir" >&2; exit 1; }
 selected=()
-candidates=()
-for d in "$srcDir"/*/; do candidates+=("$(basename "$d")=${d%/}"); done
-for p in "$repoRoot"/*/; do
-	project="$(basename "$p")"
-	[ "$project" = src ] && continue
-	[ -f "$p/src/$project.toc" ] && candidates+=("$project=${p%/}/src")
-done
-for c in "${candidates[@]}"; do
-	n="${c%%=*}"; d="${c#*=}"
-	[ -d "$d" ] || continue
+for d in "$srcDir"/*/; do
+	n="$(basename "$d")"
 	if [ ${#names[@]} -gt 0 ]; then
 		keep=0
 		for want in "${names[@]}"; do [ "$want" = "$n" ] && keep=1; done
 		[ $keep -eq 1 ] || continue
 	fi
-	selected+=("$n=$d")
+	selected+=("$n")
 done
 [ ${#selected[@]} -gt 0 ] || { echo "No matching addons found under src/." >&2; exit 1; }
 
-for s in "${selected[@]}"; do
-	n="${s%%=*}"; target="${s#*=}"
+if [ "$mode" != clean ]; then
+	command -v lua >/dev/null 2>&1 || { echo "Lua is needed to build the addons (scripts/build-addons.lua): install Lua 5.4; the tests use the same one." >&2; exit 1; }
+	( cd "$repoRoot" && lua scripts/build-addons.lua --check --name "$(IFS=,; echo "${selected[*]}")" ) || { echo "The build failed; nothing was deployed from it." >&2; exit 1; }
+fi
+
+for n in "${selected[@]}"; do
+	target="$repoRoot/AddOns/$n"
 	link="$addonsDir/$n"
 	# Always remove any existing deployment first (link or copied folder).
 	if [ -L "$link" ]; then

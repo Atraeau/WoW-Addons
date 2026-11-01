@@ -1,0 +1,8 @@
+## Interface: 16001
+## Title: Demo
+## Version: 1.2
+# a comment, then a blank line
+
+Main.lua
+UI.xml
+Sub\Helper.lua [AllowLoadGameType classic]

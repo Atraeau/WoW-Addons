@@ -1,6 +1,8 @@
-# Build output
+# Build output (scripts/build-addons.lua builds src/<Addon> into AddOns/<Addon>)
 /build/
 /dist/
+/AddOns/
+scripts/fixtures/build-addons/out/
 *.zip
 
 # Editor / OS

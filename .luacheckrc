@@ -1,5 +1,5 @@
 -- Luacheck config for World of Warcraft addon development.
--- Install luacheck (via LuaRocks) to lint: `luacheck src KingsGambit/src`
+-- Install luacheck (via LuaRocks) to lint: `luacheck src`
 -- The WoW client uses Lua 5.1 semantics.
 
 std = "lua51"
@@ -13,6 +13,9 @@ exclude_files = {
 	".luarocks/",
 	"types/",   -- generated LSP definitions (annotations only)
 	"vendor/",  -- tracked third-party addons
+	"AddOns/",   -- build output
+	-- development-only parts of an addon project (they run on desktop Lua, not the game client)
+	"src/*/tests/", "src/*/tools/", "src/*/simulator/", "src/*/scripts/", "src/*/archive/", "src/*/docs/",
 }
 
 -- Each addon gets its own private table via the "..." vararg on load:

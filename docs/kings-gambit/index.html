@@ -1165,7 +1165,7 @@ M.METHODS = {
     -- time and randomness
     "now", "serverTime", "after", "every", "cancel", "random",
     -- identity and roster
-    "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "leader", "guildRoster",
+    "addonVersion", "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "leader", "guildRoster",
     -- loot
     "lootMethod", "isMasterLooter", "masterLooter", "setLootMethod", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)
@@ -1358,6 +1358,8 @@ function M.New(opts)
 
     ---------------------------------------------------------------- identity, roster
     function h:me() return S.me end
+    function h:addonVersion() return S.addonVersion or "dev" end
+    function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
     function h:inRaid() return S.inRaid and #S.roster > 0 end
     function h:inGroup() return #S.roster > 0 end
@@ -3728,7 +3730,13 @@ do local chunk = function(...)
 -- deterministically (longer branch wins, ties to the lower id) and the losing events are kept for review.
 --
 -- Messages (serialized tables, split into <=255-byte frames):
---   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } } }
+--   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } },
+--                   p = sync protocol (this file's PROTOCOL), a = the sender's addon build, e.g. "0.0.1.57" }
+--
+-- Versions. The build (`a`) is for people: it is shown, and a newer one is announced. The protocol (`p`) decides whether two
+-- clients can work together: heartbeats from a different protocol are ignored (nothing is requested from them) and
+-- announced, so neither side silently loses changes. A heartbeat with no `p` is from before this field and counts as
+-- protocol 1. Adding an optional field to a message does NOT change the protocol; changing what a message means does.
 --   R  request    { t="R", c = chain, from = seq }      -> reply E starting at `from`
 --   E  events     { t="E", c = chain, n = sender's count, events = { ... } }
 -- Other modules plug in their own message types with Sync:register (two or more letters).
@@ -3753,6 +3761,26 @@ local DEFAULTS = {
     maxRetries = 8,
 }
 
+M.PROTOCOL = 1
+
+-- Compare two builds such as "0.0.1.57" and "0.0.1.60": -1 if a is older, 0 if equal, 1 if a is newer; nil if either isn't dotted
+-- numbers (a development copy says "dev").
+function M.CompareBuild(a, b)
+    local function parts(v)
+        if type(v) ~= "string" or v == "" or v:find("[^%d%.]") then return nil end
+        local out = {}
+        for n in v:gmatch("%d+") do out[#out + 1] = tonumber(n) end
+        return #out > 0 and out or nil
+    end
+    local x, y = parts(a), parts(b)
+    if not (x and y) then return nil end
+    for i = 1, math.max(#x, #y) do
+        local p, q = x[i] or 0, y[i] or 0
+        if p ~= q then return p < q and -1 or 1 end
+    end
+    return 0
+end
+
 local Sync = {}
 Sync.__index = Sync
 
@@ -3764,12 +3792,15 @@ function M.New(engine, opts)
         engine = engine, client = engine.client, cfg = cfg,
         outbox = {}, partial = {}, nextMsgId = 1, lastRequest = {}, forkBuf = {}, custom = {}, waiting = {},
         handlers = {}, unsub = {}, timers = {}, blocked = nil, running = false,
-        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0, otherLedger = 0 },
+        stats = { rejected = 0, droppedFrames = 0, forksResolved = 0, otherLedger = 0, incompatible = 0 },
+        peers = {}, -- [name] = { build, protocol, seen }: what each player's heartbeats said
     }, Sync)
 end
 
 ---------------------------------------------------------------- events
 -- Events: forkResolved { chain, at, winner = "ours"|"theirs", orphaned }
+--         incompatible { peer, protocol, ours, build }  (once per player and protocol: their protocol is not ours)
+--         newerBuild { peer, build, ours }               (once per player and build: they run a newer build than ours)
 function Sync:on(event, fn)
     local list = self.handlers[event]
     if not list then list = {}; self.handlers[event] = list end
@@ -3891,7 +3922,7 @@ function Sync:heartbeat()
     local store = self.engine.store
     local c = {}
     for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
-    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c })
+    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, p = M.PROTOCOL, a = self.client:addonVersion() })
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
@@ -3964,8 +3995,39 @@ function Sync:handle(msg, sender)
     elseif self.custom[t] then self.custom[t](msg, sender) end
 end
 
+-- Everyone whose heartbeat we have seen, with how their build compares to ours: { name, build, protocol, relation } where
+-- relation is "same", "newer", "older", "unknown" (a build that isn't comparable) or "incompatible" (a different protocol).
+function Sync:peerVersions()
+    local mine, out = self.client:addonVersion(), {}
+    for name, p in pairs(self.peers) do
+        local relation
+        if p.protocol ~= M.PROTOCOL then relation = "incompatible"
+        else
+            local cmp = M.CompareBuild(p.build, mine)
+            relation = cmp == nil and "unknown" or cmp == 0 and "same" or cmp > 0 and "newer" or "older"
+        end
+        out[#out + 1] = { name = name, build = p.build, protocol = p.protocol, relation = relation }
+    end
+    table.sort(out, function(a, b) return a.name < b.name end)
+    return out
+end
+
 function Sync:onHeartbeat(msg, sender)
     if type(msg.c) ~= "table" then return end
+    local theirs = tonumber(msg.p) or 1
+    local build = type(msg.a) == "string" and #msg.a <= 32 and msg.a or nil
+    local known = self.peers[sender]
+    self.peers[sender] = { build = build, protocol = theirs, seen = self.client:now() }
+    if theirs ~= M.PROTOCOL then
+        self.stats.incompatible = self.stats.incompatible + 1
+        if not known or known.protocol ~= theirs then
+            self:emit("incompatible", { peer = sender, protocol = theirs, ours = M.PROTOCOL, build = build })
+        end
+        return -- their messages mean something else: request nothing from them
+    end
+    if build and not (known and known.build == build) and M.CompareBuild(build, self.client:addonVersion()) == 1 then
+        self:emit("newerBuild", { peer = sender, build = build, ours = self.client:addonVersion() })
+    end
     local store = self.engine.store
     if type(msg.l) == "string" and msg.l ~= "" and store.id and msg.l ~= store.id then
         self.stats.otherLedger = self.stats.otherLedger + 1 -- a different ledger (another guild, training)

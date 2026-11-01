@@ -1,0 +1,5 @@
+<Ui>
+  <Script file="Extra.lua"/>
+  <Include file="Sub/More.xml"/>
+  <Texture file="Interface\Buttons\Nothing"/>
+</Ui>

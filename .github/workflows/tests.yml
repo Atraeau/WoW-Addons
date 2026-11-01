@@ -1,21 +1,33 @@
 name: tests
 
-# King's Gambit (in KingsGambit/):
-#   lua      the engine's test suite (pure Lua, no game needed). On a pull request it also fails if the committed
-#            simulator page is out of date.
-#   page     builds the simulator page, syntax-checks its JavaScript, and plays every lesson in headless Chromium.
-#   publish  on a push to main, once both pass: rebuilds the simulator page and, if the committed copies differ,
-#            commits them back ("[skip ci]") and asks GitHub Pages to rebuild. So a fix to the engine or the page
-#            goes live without anyone running the build by hand. Pull requests never publish.
+# Everything under src/<Addon>/ is that addon's source: game code plus tests, simulator and docs. scripts/build-addons.lua builds
+# it into AddOns/<Addon>/, exactly the files the WoW client loads (from the addon's TOC files).
+#
+#   lua      King's Gambit's test suite (pure Lua, no game needed). On a pull request it also fails if the committed simulator
+#            page is out of date.
+#   page     builds King's Gambit's simulator page, syntax-checks its JavaScript, and plays every lesson in headless
+#            Chromium, served in pieces like a slow connection.
+#   addons   tests the build tool, builds every addon and checks what ships, and keeps the zips as a download on the run.
+#   publish  on a push to main, once the above pass: rebuilds the simulator page and, if the committed copies differ,
+#            commits them back ("[skip ci]") and asks GitHub Pages to rebuild.
+#   release  on a push to main, once the above pass: for each addon whose shipped files changed, publishes a GitHub
+#            pre-release "<Addon>-v<version>" with the addon's zip (the addon folder at the top: what CurseForge takes).
+#            The version is the TOC version plus this run's number. Pull requests never publish anything.
 on:
   push:
     branches: [main]
     paths:
-      - 'KingsGambit/**'
+      - 'src/**'
+      - 'scripts/build-addons.lua'
+      - 'scripts/test-build-addons.lua'
+      - 'scripts/fixtures/**'
       - '.github/workflows/tests.yml'
   pull_request:
     paths:
-      - 'KingsGambit/**'
+      - 'src/**'
+      - 'scripts/build-addons.lua'
+      - 'scripts/test-build-addons.lua'
+      - 'scripts/fixtures/**'
       - '.github/workflows/tests.yml'
   workflow_dispatch: {}
 
@@ -27,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: KingsGambit
+        working-directory: src/KingsGambit
     steps:
       - uses: actions/checkout@v4
 
@@ -41,8 +53,8 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           lua5.4 scripts/build-simulator.lua
-          git diff --exit-code --stat simulator/index.html ../docs/kings-gambit/index.html || {
-            echo "::error::the simulator page (simulator/index.html, and the published copy docs/kings-gambit/index.html) is out of date. Run, in KingsGambit/: lua scripts/build-simulator.lua"
+          git diff --exit-code --stat simulator/index.html ../../docs/kings-gambit/index.html || {
+            echo "::error::the simulator page (simulator/index.html, and the published copy docs/kings-gambit/index.html) is out of date. Run, in src/KingsGambit/: lua scripts/build-simulator.lua"
             exit 1
           }
 
@@ -50,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: KingsGambit
+        working-directory: src/KingsGambit
     steps:
       - uses: actions/checkout@v4
 
@@ -75,6 +87,26 @@ jobs:
       - name: Play every lesson in the page
         run: node simulator/test/smoke.mjs simulator/index.html
 
+  addons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua 5.4
+        run: sudo apt-get update && sudo apt-get install -y lua5.4 zip
+
+      - name: The build tool's own tests
+        run: lua5.4 scripts/test-build-addons.lua
+
+      - name: Build every addon and check what ships
+        run: lua5.4 scripts/build-addons.lua --check --build "$GITHUB_RUN_NUMBER" --zip dist
+
+      - name: Keep the zips with this run
+        uses: actions/upload-artifact@v4
+        with:
+          name: addons-${{ github.run_number }}
+          path: dist/*.zip
+
   publish:
     needs: [lua, page]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -87,7 +119,7 @@ jobs:
       cancel-in-progress: false
     defaults:
       run:
-        working-directory: KingsGambit
+        working-directory: src/KingsGambit
     steps:
       - uses: actions/checkout@v4
 
@@ -99,16 +131,74 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           lua5.4 scripts/build-simulator.lua
-          if git diff --quiet -- simulator/index.html ../docs/kings-gambit/index.html; then
+          if git diff --quiet -- simulator/index.html ../../docs/kings-gambit/index.html; then
             echo "The committed simulator page is already current."
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add simulator/index.html ../docs/kings-gambit/index.html
+          git add simulator/index.html ../../docs/kings-gambit/index.html
           git commit -m "chore: rebuild the simulator page from its sources [skip ci]"
           git pull --rebase origin main
           git push origin HEAD:main
           # a push made with the workflow's own token doesn't start a Pages build by itself: ask for one
           gh api -X POST "repos/${{ github.repository }}/pages/builds"
           echo "Rebuilt, pushed and asked Pages to redeploy."
+
+  release:
+    needs: [lua, page, addons]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release-addons
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      KEEP: 30   # releases kept per addon; older ones are deleted with their tags
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Lua 5.4
+        run: sudo apt-get update && sudo apt-get install -y lua5.4 zip
+
+      - name: Publish a release for every addon whose shipped files changed
+        run: |
+          # What ships, hashed. Only the files the client loads count, so a change to tests, docs or the
+          # simulator makes no release. The TOC version stamp is left out here so the hash is stable.
+          lua5.4 scripts/build-addons.lua --check --out AddOns
+          mkdir -p dist
+          for addon in $(lua5.4 scripts/build-addons.lua --list --releasable); do
+            hash=$(cd "AddOns/$addon" && find . -type f | LC_ALL=C sort | xargs sha256sum | sha256sum | cut -d' ' -f1)
+            last=$(gh release list --limit 200 --json tagName -q '.[].tagName' | grep "^${addon}-v" | head -n 1 || true)
+            previous=""
+            if [ -n "$last" ]; then
+              previous=$(gh release view "$last" --json body -q .body | sed -n 's/^Content hash: //p' | head -n 1)
+            fi
+            if [ "$hash" = "$previous" ]; then
+              echo "$addon: shipped files unchanged since $last, no release."
+              continue
+            fi
+            line=$(lua5.4 scripts/build-addons.lua --out AddOns-release --name "$addon" --build "$GITHUB_RUN_NUMBER" --zip dist | grep '^BUILT')
+            version=$(echo "$line" | awk '{print $3}')
+            zip=$(echo "$line" | awk '{print $4}')
+            tag="${addon}-v${version}"
+            {
+              echo "Continuous build of **${addon}** ${version} from commit ${GITHUB_SHA::7}. Unzip into \`Interface/AddOns/\`; the zip holds the \`${addon}\` folder."
+              echo
+              echo "Content hash: ${hash}"
+              echo
+              echo "Recent changes to ${addon}:"
+              git log -n 10 --format='- %s (%h)' -- "src/${addon}"
+            } > notes.md
+            gh release create "$tag" "$zip" --target "$GITHUB_SHA" --prerelease --title "${addon} ${version}" --notes-file notes.md
+            echo "$addon: published $tag"
+            # keep the newest $KEEP releases of this addon
+            gh release list --limit 200 --json tagName -q '.[].tagName' | grep "^${addon}-v" | tail -n +"$((KEEP + 1))" | while read -r old; do
+              gh release delete "$old" --cleanup-tag --yes
+              echo "$addon: deleted old release $old"
+            done
+          done

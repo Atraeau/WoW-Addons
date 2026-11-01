@@ -14,12 +14,12 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 
 | Path | What's there |
 | --- | --- |
-| [`src/`](src) | Your addons — one folder each (source of truth) |
-| [`KingsGambit/`](KingsGambit/README.md) | A self-contained addon project (its addon is in `KingsGambit/src/`) |
+| [`src/`](src) | Your addons — one folder each, holding **everything** about that addon: game code, tests, simulators, docs (source of truth) |
+| `AddOns/` | **Build output** (gitignored): `src/<Addon>` built into exactly the files the client loads, mirroring the game's `Interface/AddOns` folder. See [Building and releases](#building-and-releases) |
 | [`vendor/`](vendor) | Tracked third-party addons (patched for this client) |
 | [`docs/api/`](docs/api/README.md) | **Generated API reference** — 405 namespaces in 19 category folders |
 | [`docs/README.md`](docs/README.md) | How the API docs + LSP definitions are generated |
-| [`scripts/`](scripts) | Deploy, scaffold, and doc/definition generators |
+| [`scripts/`](scripts) | Build, deploy, scaffold, and doc/definition generators |
 | [`types/`](types/WowForeverAPI.lua) | Lua Language Server definitions (client-accurate autocomplete) |
 | [`wow-dev.config.json`](wow-dev.config.json) | Game path, flavor, interface version (shared config) |
 | [`.vscode/`](.vscode) | Recommended extensions + Lua LSP settings |
@@ -30,7 +30,7 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | --- | --- | --- |
 | HelloForever | [`src/HelloForever`](src/HelloForever) | Example addon produced by the scaffolder (`/hf`) |
 | WowBagSorter | [`src/WowBagSorter`](src/WowBagSorter) | Bag/bank sorter (originally Classic 1.13; may need 12.0 fixes) |
-| KingsGambit | [`KingsGambit/`](KingsGambit/README.md) | King's Gambit raid loot ledger (derived from Suicide Kings): a self-contained project folder |
+| KingsGambit | [`src/KingsGambit`](src/KingsGambit/README.md) | King's Gambit raid loot ledger (derived from Suicide Kings); the addon itself is in its `src/` |
 | WowApiExport | [`src/WowApiExport`](src/WowApiExport) | Dev tool — dumps the client's own API docs (`/apiexport`) |
 | BTPCompatCheck | [`src/BTPCompatCheck`](src/BTPCompatCheck) | Dev tool — probes which APIs exist on the client (`/btpcheck`) |
 | BlizzThreatPlates | [`vendor/BlizzThreatPlates`](vendor/BlizzThreatPlates) | Patched third-party addon (MIT) — see [PATCHES.md](vendor/BlizzThreatPlates/PATCHES.md) |
@@ -40,19 +40,37 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 A full-featured raid loot system (Suicide Kings–derived) with a tamper-evident shared ledger. The
 engine is plain Lua with no game dependency, so it is fully tested outside WoW.
 
-Everything about it lives in [`KingsGambit/`](KingsGambit/README.md): the addon (`KingsGambit/src`, which
-the deploy scripts find like any addon under `src/`), its docs, tests, simulator, tools and data scripts, so it can
-move to its own repository unchanged.
+Everything about it lives in [`src/KingsGambit/`](src/KingsGambit/README.md): the addon (its `src/`, with the training and
+simulation code the game uses too), plus its docs, tests, simulator, tools and data scripts. The build ships only what
+its TOC loads.
 
-- Design: [manifesto](KingsGambit/docs/manifesto.md), [player guide](KingsGambit/docs/rationale.md),
-  [design journal](KingsGambit/docs/design-journal.md) (every decision and why),
-  [client interface](KingsGambit/docs/client-interface.md), [ledger format](KingsGambit/docs/ledger-format.md),
-  [UI sketch](KingsGambit/docs/ui-sketch.html)
-- Try it: open [`KingsGambit/simulator/index.html`](KingsGambit/simulator/README.md) in a browser: the real engine over
-  a simulated raid, with training scenarios and a sync lab
-- Audit: [`KingsGambit/tools/`](KingsGambit/tools/README.md): verify a saved ledger and print standings/history without the game
-- Tests: `cd KingsGambit && lua tests/run.lua` (Lua 5.4); CI runs them on every push
+- Design: [manifesto](src/KingsGambit/docs/manifesto.md), [player guide](src/KingsGambit/docs/rationale.md),
+  [design journal](src/KingsGambit/docs/design-journal.md) (every decision and why),
+  [client interface](src/KingsGambit/docs/client-interface.md), [ledger format](src/KingsGambit/docs/ledger-format.md),
+  [UI sketch](src/KingsGambit/docs/ui-sketch.html)
+- Try it: the [live simulator](https://atraeau.github.io/WoW-Addons/kings-gambit/) (or open
+  [`src/KingsGambit/simulator/index.html`](src/KingsGambit/simulator/README.md)): the real engine over a simulated raid, with
+  training scenarios and a sync lab
+- Audit: [`src/KingsGambit/tools/`](src/KingsGambit/tools/README.md): verify a saved ledger and print standings/history without the game
+- Tests: `cd src/KingsGambit && lua tests/run.lua` (Lua 5.4); CI runs them on every push
 - In game: `/gambit check` probes the live client and saves the results for review
+
+## Building and releases
+
+`src/<Addon>/` is the whole project for an addon. `scripts/build-addons.lua` turns it into `AddOns/<Addon>/`: the TOC
+files, every file they list (following XML includes), assets the code names by their `Interface\AddOns\<Addon>\` path,
+and a license file; nothing else. An addon can add a `build.lua` (`root = "src"` if its TOC is in a subfolder; `extra = {...}`).
+
+```
+lua scripts/build-addons.lua --check          # build everything into AddOns/ and verify what ships
+lua scripts/test-build-addons.lua             # the build tool's own tests
+.\scripts\deploy.ps1 [-Name X] [-Watch]       # build, then junction AddOns/<Addon> into the game (-Watch rebuilds on save)
+```
+
+**Releases come from CI.** Every push to `main` that changes what an addon ships publishes a GitHub pre-release
+`<Addon>-v<version>` with `<Addon>-<version>.zip` (the addon folder at the top, ready to upload to CurseForge). The
+version is the TOC's `## Version:` plus the run number (`0.0.1.57`); change the TOC version for a bigger step. Pushes
+that only touch tests, docs or the simulator publish nothing. The newest 30 per addon are kept.
 
 ## API reference
 
