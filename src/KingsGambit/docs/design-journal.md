@@ -1689,6 +1689,8 @@ and nothing else: no build version was read or sent, and a client that couldn't 
   than answering questions it may not understand.
 - **`/gambit version`** shows this build, the three numbers, and each other player seen with how their build compares
   (same, newer, older, can't compare, incompatible).
+- **First release, checked 2026-11-01:** KingsGambit-v0.0.1.84 and WowBagSorter-v3.0.84 were published by CI (the dev tools opted out). The
+  KingsGambit zip holds the `KingsGambit` folder with the 25 files its TOCs load and `## Version: 0.0.1.84` stamped in.
 - **Not decided yet:** what to do about a ledger format change (`v = 3`). Today a different `v` is rejected, which is safe
   but means two builds can't share a ledger; a migration plan is needed before the first such change.
 
