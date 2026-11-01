@@ -1,0 +1,4 @@
+## Interface: 16001
+## Title: Strict
+## Version: 1.2
+Core.lua

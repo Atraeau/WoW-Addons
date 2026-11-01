@@ -69,7 +69,10 @@ lua scripts/test-build-addons.lua             # the build tool's own tests
 
 **Releases come from CI.** Every push to `main` that changes what an addon ships publishes a GitHub pre-release
 `<Addon>-v<version>` with `<Addon>-<version>.zip` (the addon folder at the top, ready to upload to CurseForge). The
-version is the TOC's `## Version:` plus the run number (`0.0.1.57`); change the TOC version for a bigger step. Pushes
+version is the TOC's `## Version:` plus the run number as SemVer build metadata (`0.1.0+57`); change the TOC version for a bigger step.
+King's Gambit uses [Semantic Versioning](https://semver.org) to decide who may play together: the same `MAJOR` (or the same `MAJOR.MINOR`
+while it is 0.x), not the same exact version. A change to the ledger's entries, rules or messages must start a new line, and a test enforces
+that (see the ledger format doc). Pushes
 that only touch tests, docs or the simulator publish nothing. The newest 30 per addon are kept.
 
 ## API reference

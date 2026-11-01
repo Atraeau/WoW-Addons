@@ -4,11 +4,11 @@
 -- everyone whose turn it is, and publishes the answers (public by design) and the results.
 --
 -- Host (Master Looter) <-> Players, message types (all `t` values are two letters):
---   LS  session start   host -> RAID     { sid, items = { {id, link} }, bid, left, who = { names }, p = loot protocol }
+--   LS  session start   host -> RAID     { sid, items = { {id, link} }, bid, left, who = { names }, a = the host's addon version }
 --
--- Versions: `p` is this file's PROTOCOL. A player whose addon speaks another protocol ignores the session and says so (event
--- "incompatible"), rather than answering questions it may not understand. No `p` is a host from before the field: protocol 1.
--- Adding an optional field does not change the protocol; changing what a message means does.
+-- Versions (see Version.lua): a player whose addon version is on another line than the host's ignores the session and says so
+-- (event "incompatible", with who has to update), rather than answering questions it may not understand. Within a line the
+-- versions may differ. A host with no readable version (a development copy) is let through.
 --   LB  bid             player -> host   { sid, item, kind, to?, passKind?, rank?, ready? }
 --   LK  acknowledgement host -> player   { sid, ok, why?, item?, action? }
 --   LP  phase           host -> RAID     { sid, phase }
@@ -24,9 +24,8 @@
 -- Only the Master Looter's messages are believed (players check the sender against the client's
 -- masterLooter()); the host only accepts bids and actions through the Loot session's own rules.
 local _, SK = ...
-local Loot
-local M = SK:NewModule("LootNet", { "Loot" }, function(d) Loot = d.Loot end)
-M.PROTOCOL = 1
+local Loot, Version
+local M = SK:NewModule("LootNet", { "Loot", "Version" }, function(d) Loot, Version = d.Loot, d.Version end)
 
 local function newEmitter()
     local handlers = {}
@@ -102,7 +101,7 @@ function M.NewHost(sync, engine)
         local list, who = {}, {}
         for i, it in ipairs(s.items) do list[i] = { id = it.id, link = it.link } end
         for _, name in ipairs(s.eligibleList) do who[#who + 1] = name end
-        send({ t = "LS", sid = h.sid, items = list, bid = s.cfg.bidSeconds, left = remaining(client, s.deadline), who = who, p = M.PROTOCOL })
+        send({ t = "LS", sid = h.sid, items = list, bid = s.cfg.bidSeconds, left = remaining(client, s.deadline), who = who, a = client:addonVersion() })
         send({ t = "LP", sid = h.sid, phase = s.phase })
         if s.turn then
             send({ t = "LT", sid = h.sid, left = remaining(client, s.deadline),
@@ -156,7 +155,7 @@ function M.NewHost(sync, engine)
         local list, who = {}, {}
         for i, it in ipairs(session.items) do list[i] = { id = it.id, link = it.link } end
         for _, name in ipairs(session.eligibleList) do who[#who + 1] = name end
-        send({ t = "LS", sid = self.sid, items = list, bid = session.cfg.bidSeconds, left = remaining(client, session.deadline), who = who, p = M.PROTOCOL })
+        send({ t = "LS", sid = self.sid, items = list, bid = session.cfg.bidSeconds, left = remaining(client, session.deadline), who = who, a = client:addonVersion() })
         if self.beaconTimer then client:cancel(self.beaconTimer) end
         self.beaconTimer = client:every(h.beaconSeconds, stateBeacon)
         return true
@@ -210,11 +209,12 @@ function M.NewPlayer(sync)
         if not ml or sender ~= ml then return end -- only the Master Looter can open a session
         if type(msg.sid) ~= "string" or type(msg.items) ~= "table" then return end
         if p.session and p.session.sid == msg.sid then return end -- a repeat of the announcement
-        local theirs = tonumber(msg.p) or 1
-        if theirs ~= M.PROTOCOL then
-            if p.warnedProtocol ~= sender .. theirs then
-                p.warnedProtocol = sender .. theirs
-                p.ev.emit("incompatible", { host = sender, protocol = theirs, ours = M.PROTOCOL })
+        local theirs = type(msg.a) == "string" and msg.a or nil
+        local rel = Version.Relation(client:addonVersion(), theirs)
+        if not rel.compatible then
+            if p.warnedBuild ~= sender .. theirs then
+                p.warnedBuild = sender .. theirs
+                p.ev.emit("incompatible", { host = sender, build = theirs, ours = client:addonVersion(), mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine })
             end
             return
         end

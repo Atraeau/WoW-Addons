@@ -4,8 +4,8 @@ local OUT = "scripts/fixtures/build-addons/out"
 local windows = package.config:sub(1, 1) == "\\"
 local LUA = (arg and arg[-1]) or "lua" -- the interpreter running this test
 
-local function run(args)
-    local cmd = LUA .. " scripts/build-addons.lua --src scripts/fixtures/build-addons/src --out " .. OUT .. " " .. args .. " 2>&1"
+local function run(args, src)
+    local cmd = LUA .. " scripts/build-addons.lua --src " .. (src or "scripts/fixtures/build-addons/src") .. " --out " .. OUT .. " " .. args .. " 2>&1"
     local p = assert(io.popen(cmd))
     local text = p:read("a")
     local ok = p:close()
@@ -62,15 +62,18 @@ good, why = same(rooted, { "Rooted.toc", "Core.lua" })
 check(good, "with build.lua root = src, only that folder ships (tests and README stay out)", why)
 
 out, ok = run("--files --build 42 --name Demo")
-check(ok and out:find("BUILT Demo 1.2.42", 1, true), "--build stamps the version: the TOC version plus the build number", out)
+check(ok and out:find("BUILT Demo 1.2+42", 1, true), "--build stamps SemVer build metadata: the TOC version plus +N", out)
 local toc = read(OUT .. "/Demo/Demo.toc") or ""
-check(toc:find("## Version: 1.2.42", 1, true) and toc:find("## Title: Demo", 1, true), "the built TOC carries the stamped version and keeps its other lines")
+check(toc:find("## Version: 1.2+42", 1, true) and toc:find("## Title: Demo", 1, true), "the built TOC carries the stamped version and keeps its other lines")
 check((read("scripts/fixtures/build-addons/src/Demo/Demo.toc") or ""):find("## Version: 1.2\n", 1, true), "the source TOC is untouched")
 
 out = run("--list --releasable")
 check(out:find("Demo", 1, true) and not out:find("Rooted", 1, true), "--list --releasable leaves out an addon with release = false", out)
 out = run("--list")
 check(out:find("Demo", 1, true) and out:find("Rooted", 1, true), "--list shows every addon", out)
+
+out, ok = run("--build 7", "scripts/fixtures/build-addons-bad/src")
+check(not ok and out:find("is not Semantic Versioning", 1, true), "an addon with semver = true and a version that isn't SemVer fails the build", out)
 
 -- a listed file that is missing is an error, and nothing is built for that addon
 local bad = "scripts/fixtures/build-addons/src/Demo/Demo.toc"

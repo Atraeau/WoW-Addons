@@ -16,14 +16,16 @@
 --   root  = "src"                folder, inside src/<Addon>, that holds the TOC files and is shipped as the addon (default ".")
 --   extra = { "Media", "x.txt" } more files or folders to ship, relative to root
 --   release = false              never publish this addon as a release (examples and dev tools); it still builds and deploys
+--   semver = true                the TOC's "## Version:" must be Semantic Versioning (https://semver.org); the build fails otherwise
 --
 -- Usage (from the repository root):
 --   lua scripts/build-addons.lua [options]
 --     --name A,B      only these addons
 --     --out DIR       where to build (default AddOns)
 --     --src DIR       where the addons are (default src)
---     --build N       stamp "## Version: <TOC version>.N" into the built TOC files (CI passes its run number)
---     --zip DIR       also write DIR/<Addon>-<version>.zip, with the addon folder at the top (what CurseForge takes)
+--     --build N       stamp "## Version: <TOC version>+N" into the built TOC files: SemVer build metadata, which never changes
+--                     precedence or compatibility (CI passes its run number; a version that already has "+" gets ".N" added)
+--     --zip DIR       also write DIR/<Addon>-<version>.zip ("+" written as "_"), with the addon folder at the top (what CurseForge takes)
 --     --check         verify the build (nothing unexpected shipped, every listed file present); exit 1 on a problem
 --     --files         also print "FILE <Addon> <path>" for every shipped file
 --     --list          print the addon names and stop (with --releasable: only those CI publishes releases for)
@@ -131,7 +133,28 @@ end
 local function loadSettings(addonDir)
     local chunk = loadfile(addonDir .. "/build.lua")
     local s = chunk and chunk() or {}
-    return { root = s.root or ".", extra = s.extra or {}, release = s.release ~= false }
+    return { root = s.root or ".", extra = s.extra or {}, release = s.release ~= false, semver = s.semver == true }
+end
+
+-- Is this Semantic Versioning: MAJOR.MINOR.PATCH, then optionally -prerelease and +build; no leading zeros? (Version.lua in
+-- King's Gambit reads versions the same way at run time.)
+local function isSemver(v)
+    local a, b, c, rest = v:match("^(%d+)%.(%d+)%.(%d+)(.*)$")
+    if not a then return false end
+    for _, n in ipairs { a, b, c } do if #n > 1 and n:sub(1, 1) == "0" then return false end end
+    local pre, after = rest:match("^%-([%w%.%-]+)(.*)$")
+    if pre then
+        for id in (pre .. "."):gmatch("(.-)%.") do
+            if id == "" or (id:match("^%d+$") and #id > 1 and id:sub(1, 1) == "0") then return false end
+        end
+        rest = after
+    end
+    if rest ~= "" then
+        local build = rest:match("^%+([%w%.%-]+)$")
+        if not build then return false end
+        for id in (build .. "."):gmatch("(.-)%.") do if id == "" then return false end end
+    end
+    return true
 end
 
 -- Work out what ships. Returns { files = { [relpath] = true }, order = { relpath... }, tocs = { relpath... }, warnings = { ... },
@@ -155,7 +178,16 @@ local function plan(name, addonDir, settings)
     end
     if #tocs == 0 then problems[#problems + 1] = name .. ": no " .. name .. ".toc in " .. root end
     local texts = {}
-    for _, rel in ipairs(tocs) do add(rel); texts[rel] = readFile(root .. "/" .. rel) end
+    for _, rel in ipairs(tocs) do
+        add(rel)
+        texts[rel] = readFile(root .. "/" .. rel)
+        if settings.semver then
+            local v = tocField(texts[rel], "Version")
+            if not (v and isSemver(v)) then
+                problems[#problems + 1] = ("%s: %s has '## Version: %s', which is not Semantic Versioning (MAJOR.MINOR.PATCH)"):format(name, rel, tostring(v))
+            end
+        end
+    end
 
     -- everything the TOCs list, following XML includes
     local function follow(rel, why)
@@ -265,7 +297,7 @@ for _, name in ipairs(addons) do
             local dest = opts.out .. "/" .. name
             removeTree(dest)
             local baseVersion = tocField(p.texts[p.tocs[1]], "Version") or "0"
-            local version = opts.build and (baseVersion .. "." .. opts.build) or baseVersion
+            local version = opts.build and (baseVersion .. (baseVersion:find("+", 1, true) and "." or "+") .. opts.build) or baseVersion
             table.sort(p.order)
             for _, rel in ipairs(p.order) do
                 local data = readFile(p.root .. "/" .. rel)
@@ -300,7 +332,7 @@ for _, name in ipairs(addons) do
             local zip = "-"
             if opts.zip then
                 mkdirs(opts.zip)
-                zip = opts.zip .. "/" .. name .. "-" .. version .. ".zip"
+                zip = opts.zip .. "/" .. name .. "-" .. version:gsub("%+", "_") .. ".zip"
                 os.remove(zip)
                 local cmd
                 if windows then

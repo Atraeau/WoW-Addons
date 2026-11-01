@@ -164,16 +164,34 @@ fork).
 
 ## Versions
 
-Three numbers matter, and they change for different reasons:
+The addon's version is [Semantic Versioning](https://semver.org): `MAJOR.MINOR.PATCH`, optionally `-prerelease` and `+build`
+(`0.1.0+84`: the release build stamps `+<run number>` into the TOC; build metadata never affects which versions work together).
 
-- **Addon build** (`## Version:` in the TOC, e.g. `0.0.1.57`): CI stamps the TOC version plus the run number into every release. It
-  is for people: `/gambit version` shows it and the builds of the other players seen, and a newer build is announced once.
-- **Ledger format** (`v` on every event, currently `2`): what an entry means. An event with another `v` is rejected (`badversion`), so a
-  format change needs a migration plan before it ships.
-- **Protocols** (`Sync.PROTOCOL`, `LootNet.PROTOCOL`, currently `1` each): what the addon messages mean. The sync heartbeat carries
-  `p` (protocol) and `a` (build); the loot session start (`LS`) carries `p`. A different protocol is announced and ignored, so
-  neither side silently loses changes or answers a question it can't read. A message with no `p` is from before the field and
-  counts as protocol 1.
+**Who works with whom.** Players do not have to run the same version. They work together when they are on the same **line**:
+the same `MAJOR`, or, while `MAJOR` is `0` (initial development, where SemVer allows anything to change), the same
+`MAJOR.MINOR`. So `0.1.0` and `0.1.7` share a ledger; `0.1.7` and `0.2.0` do not; from `1.0.0` on, `1.2.0` and `1.9.4` do and
+`1.9.4` and `2.0.0` do not. Within a line a newer `MINOR` or `PATCH` has features and fixes the older one lacks, and the older
+one keeps working.
 
-Adding an optional field to a message or event does **not** change a protocol; changing what existing fields mean does. Builds change
-with every push; protocols and the ledger format rarely, and never casually.
+**What puts a change on a new line** (a `MAJOR` bump, or `MINOR` while 0.x): anything an older client on the same line could not
+live with. For a shared ledger that means the entries and rules: a new or changed event type, a changed meaning of an existing
+one, a change to the ledger format (`v`, currently `2`) or to how standings follow from entries, or to the addon messages. An
+older client rejects an event type or message it doesn't know, so its standings would silently differ; that is why adding one is
+**not** a compatible change here, even though it would be a "feature" elsewhere. A fix, a UI change, a new command or an optional
+message field older clients ignore bumps `MINOR` or `PATCH` only.
+
+**How it's enforced.** `tests/compat_baseline.lua` records the ledger-facing surface (ledger format, every event type, request kind
+and message type) and the line. `tests/test_compat.lua` fails, listing exactly what was added or removed, when the code no longer
+matches, and also checks that the TOC version is valid SemVer on the recorded line. Changing the surface therefore forces a decision:
+start a new line (bump the TOC version and the baseline's `line`), or say why it is compatible and update the lists. A change to what an
+existing event *does* isn't visible to that test and needs the same decision by hand.
+
+**What the addon does.** Every addon message carries the sender's version (`a`). A player on another line is announced once
+("X runs King's Gambit 0.2.0, which this version can't work with: update"), the one on the older line is the one that must update,
+and nothing they send is acted on, so neither side applies what it may misread. A newer version on the same line is announced once as
+an optional update. A sender whose version can't be read (a development copy, an older build) is let through, and the ledger's own
+checks (`v`, hashes, rules) still refuse what it cannot read. `/gambit version` lists the players seen and how each compares. The
+loot session start (`LS`) is judged the same way; a raider on another line than the Master Looter ignores the session and is told.
+
+**Not decided yet:** how a ledger written on one line is read after everyone moves to the next (a migration). Today a different `v` is
+rejected, which is safe, but nothing converts old entries; that is needed before the first breaking change to the format itself.

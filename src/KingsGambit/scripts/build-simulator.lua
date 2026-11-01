@@ -8,7 +8,7 @@
 -- implementation of the rules to drift. Inlined so it works from file:// and GitHub Pages alike.
 local SRC = "src/"
 local DIR = "simulator/"
-local MODULES = { "Hash", "Standings", "Ledger", "Client", "MockClient", "Engine", "ItemFit", "Loot", "Requests", "SimNetwork", "Sync", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" }
+local MODULES = { "Hash", "Version", "Standings", "Ledger", "Client", "MockClient", "Engine", "ItemFit", "Loot", "Requests", "SimNetwork", "Sync", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios" }
 
 -- The Lua-in-JS runtime (fengari-web, MIT) is vendored in simulator/vendor/ and inlined, so the page needs no network and
 -- no CDN. See simulator/vendor/README.md for its source and the hash it was verified against.

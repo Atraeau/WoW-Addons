@@ -1671,6 +1671,9 @@ set that aside as more pain than it is worth for now: it can still be split late
 
 ### Decision: versions: a build number for people, protocol numbers for compatibility (2026-11-01)
 
+*Superseded the same day by the Semantic Versioning decision below, for the two protocol integers (`Sync.PROTOCOL`, `LootNet.PROTOCOL`): they
+are gone. The addon reporting its TOC version, the heartbeat carrying it, `/gambit version` and the "announce, don't act" idea stay.*
+
 Raised by the guild leader: with a release from every push, players will run different builds and the addon talks to
 other players, so it needs versioning. What existed was a ledger format number on every event (`v = 2`, a mismatch is rejected)
 and nothing else: no build version was read or sent, and a client that couldn't read another's messages said nothing.
@@ -1693,6 +1696,37 @@ and nothing else: no build version was read or sent, and a client that couldn't 
   KingsGambit zip holds the `KingsGambit` folder with the 25 files its TOCs load and `## Version: 0.0.1.84` stamped in.
 - **Not decided yet:** what to do about a ledger format change (`v = 3`). Today a different `v` is rejected, which is safe
   but means two builds can't share a ledger; a migration plan is needed before the first such change.
+
+### Decision: Semantic Versioning, and compatibility by line, not by exact version (2026-11-02)
+
+**Decided by the guild leader:** the addon uses Semantic Versioning, players advertise their version, and a client is required to update
+only for changes that break ledger compatibility, following the SemVer standard, not because it differs in any way from the
+others. (This replaces the two protocol numbers of the previous decision, which would have drifted from the version people see.)
+
+- **The version is SemVer.** `## Version: 0.1.0` in the TOC (it was `0.0.1`; this is the first real line). CI stamps `+<run>` as build
+  metadata (`0.1.0+84`), which SemVer says never affects precedence, so continuous builds of one version are "the same version". The
+  build tool fails King's Gambit's build if the TOC version isn't SemVer (`semver = true` in its `build.lua`). Release zips are
+  named `KingsGambit-0.1.0_84.zip` (a `+` is awkward in a file name); the release tag keeps it.
+- **A line, not an exact match.** Two clients work together exactly when they share `MAJOR`, or `MAJOR.MINOR` while `MAJOR` is 0. The
+  reason for the 0.x rule: SemVer item 4 says anything may change in 0.y.z, so for a ledger MINOR has to be the breaking step until 1.0.
+  Within a line the versions may differ freely; a newer MINOR/PATCH on the same line is announced once as an optional update.
+  `Version.lua` (pure Lua) implements the SemVer 2.0.0 parsing and precedence, including pre-release ordering, and is tested against
+  the examples in the spec.
+- **What counts as breaking for a ledger is stricter than for most software.** An older client rejects an event type or message it
+  doesn't know, and its standings then silently differ, so *adding* an event type or a message is a breaking change here, not a
+  compatible feature. Bug fixes, UI, new commands and optional message fields older clients ignore are compatible.
+- **Enforced by a test, not memory.** `tests/compat_baseline.lua` records the ledger-facing surface (ledger format, event types,
+  request kinds, message types found in the source) and the line; `tests/test_compat.lua` fails with the exact additions and removals
+  when the code drifts, and checks the TOC version is valid SemVer on the recorded line. Changing the surface forces a choice: new line
+  (bump the TOC and the baseline's `line`) or an explicit statement that it is compatible. What an existing event *does* isn't visible
+  to it and still needs the same decision by hand. Checked by temporarily removing entries from the baseline: the failure lists them.
+- **Advertised on every message.** `Sync:post` stamps the sender's version (`a`) on every addon message, so even the first event a player
+  pushes can be judged: a test found that judging only heartbeats let a client on another line be heard for the first second.
+  A player on another line is announced once with who must update, and their messages are dropped. The exception: the loot session start
+  also reaches `LootNet` so a raider is told the Master Looter's version can't be used. A version that can't be read (a development copy, the
+  four-part `0.0.1.84` built before this decision) is let through; the ledger's own checks still apply.
+- **Not decided:** migration. A different ledger format `v` is still rejected outright; nothing converts old entries when a new line
+  changes the format. That needs a plan before the first change to `v` itself.
 
 ### Scaling: measured, not guessed (2026-10-28)
 

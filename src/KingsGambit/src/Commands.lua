@@ -2,9 +2,9 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local Standings, ItemFit, Loot, Ledger, Sync, LootNet, Tokens, Requests
-local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Sync", "LootNet", "Tokens?", "Requests?" }, function(d)
-    Standings, ItemFit, Loot, Ledger, Sync, LootNet, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Sync, d.LootNet, d.Tokens, d.Requests
+local Standings, ItemFit, Loot, Ledger, Version, Tokens, Requests
+local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Version", "Tokens?", "Requests?" }, function(d)
+    Standings, ItemFit, Loot, Ledger, Version, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Version, d.Tokens, d.Requests
 end)
 
 local WHY = {
@@ -148,16 +148,20 @@ function M.New(ctx)
 
     function cmds.help() for _, l in ipairs(HELP) do out(l) end end
 
-    -- Which version is this, and does it match what the others run? Players are listed from their heartbeats.
+    -- Which version is this, and can it work with what the others run? Players are listed from their heartbeats.
     function cmds.version()
-        out(("King's Gambit %s (ledger format %d, sync protocol %d, loot protocol %d)"):format(client:addonVersion(),
-            Ledger.VERSION, Sync.PROTOCOL, LootNet.PROTOCOL))
+        local mine = client:addonVersion()
+        local line = Version.Line(mine)
+        out(("King's Gambit %s (works with %s; ledger format %d)"):format(mine,
+            line and (line:find("%.") and (line .. ".x") or (line .. ".x.y")) .. ", a different version on that line is fine" or "anyone: a development copy",
+            Ledger.VERSION))
         local peers = ctx.sync and ctx.sync:peerVersions() or {}
         if #peers == 0 then out("No other King's Gambit players seen yet."); return end
-        local WORDS = { same = "same as yours", newer = "newer than yours", older = "older than yours", unknown = "can't compare" }
+        local WORDS = { same = "same as yours", newer = "newer than yours, compatible", older = "older than yours, compatible", unknown = "can't compare" }
         for _, p in ipairs(peers) do
             if p.relation == "incompatible" then
-                out(("  %s: %s, sync protocol %d. INCOMPATIBLE with yours (%d): update the older one to see each other's changes"):format(short(p.name), p.build or "unknown version", p.protocol, Sync.PROTOCOL))
+                out(("  %s: %s. INCOMPATIBLE: they are on %s.x, you are on %s.x; %s must update to share the ledger"):format(short(p.name),
+                    p.build or "unknown version", p.line, p.ourLine, p.mustUpdate == "them" and "they" or "you"))
             else
                 out(("  %s: %s (%s)"):format(short(p.name), p.build or "unknown version", WORDS[p.relation]))
             end
@@ -1067,16 +1071,18 @@ function M.New(ctx)
     ---------------------------------------------------------------- notifications from the protocol
     if ctx.sync then
         ctx.sync:on("incompatible", function(e)
-            out(("%s runs a King's Gambit this one can't talk to (sync protocol %d, yours %d). Until one of you updates, neither sees the other's changes. Type: version"):format(short(e.peer), e.protocol, e.ours))
+            if e.mustUpdate == "them" then
+                out(("%s runs King's Gambit %s, an older line than yours (%s.x): it can't share the ledger with this version until they update. Type: version"):format(short(e.peer), e.build or "?", e.ourLine))
+            else
+                out(("%s runs King's Gambit %s, which this version (%s) can't work with: update King's Gambit to share the ledger with them. Type: version"):format(short(e.peer), e.build or "?", e.ours))
+            end
+            if client:masterLooter() == e.peer then out("They are the Master Looter: you won't see their loot sessions until this is sorted out.") end
         end)
         ctx.sync:on("newerBuild", function(e)
-            out(("%s runs King's Gambit %s, newer than yours (%s): a new version is available."):format(short(e.peer), e.build, e.ours))
+            out(("%s runs King's Gambit %s, newer than yours (%s). An update is available; it is not required."):format(short(e.peer), e.build, e.ours))
         end)
     end
     if ctx.player then
-        ctx.player.on("incompatible", function(e)
-            out(("The Master Looter (%s) runs a loot version this one can't talk to (protocol %d, yours %d): you won't see their loot sessions until you update."):format(short(e.host), e.protocol, e.ours))
-        end)
         ctx.player.on("session", function(s)
             out(("Loot! %d item(s) from %s:"):format(#s.items, short(s.host)))
             local tokens = false
