@@ -588,7 +588,7 @@
   }, 250);
 
   window.addEventListener("load", () => {
-    if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Reload the page; if it keeps failing, your browser may be blocking scripts on this page.</div>'; return; }
+    if (!window.KG) { $("#app").innerHTML = '<div class="loading">The engine did not start. Reload the page; if it keeps failing, your browser may be blocking scripts on this page.' + (window.KG_BOOT_ERROR ? "<br><code>" + esc(window.KG_BOOT_ERROR) + "</code>" : "") + "</div>"; return; }
     scenarios = call("scenarios");
     start(scenarios[0].id); // begin with the simplest
   });

@@ -1578,6 +1578,27 @@ Three loose ends closed together.
   want the salvager to say it themselves.
 - The browser smoke test plays the bot-Master-Looter flow too.
 
+### Fixed: the live simulator page did not start, and CI could not see it (2026-11-01)
+
+Reported by the guild leader: the published page showed "The engine did not start". The browser console had Lua
+syntax errors "near <eof>" from both embedded scripts.
+
+- **Cause.** The page's Lua was in `<script type="application/lua">`, which fengari-web runs the moment the element
+  is inserted into the page. A browser builds that element while the download is still arriving, so on a real
+  connection it can run a script that has only part of its text. Opening the file locally delivers all of it at once,
+  so it worked there. It grew likelier as the page grew (635 KB now). Reproduced by feeding the live page to the
+  browser in 60 KB pieces: the same two errors.
+- **Why CI passed.** The smoke test opened the page from a local file, the one way it can't fail. That is a gap in
+  the test I wrote, and the journal entry above that called the page "played in CI" overstated what it proved.
+- **Fix.** The Lua now sits in inert `text/x-kg-lua` scripts, and a classic script right after them loads both with
+  `fengari.load`. A classic script runs only once everything above it has been parsed, so the text is whole. A load
+  error is shown on the page ("The engine did not start" plus the error), not only in the console.
+- **Test.** CI's smoke test now serves the page over HTTP in 40 KB pieces with gaps, like a slow connection, and plays every
+  lesson that way, and also opens the local file. Checked by hand against both the old page (fails the same way as live)
+  and the new one (starts, 14 lessons and nights play, no errors) in the browser pane.
+- **Lesson for the publish job.** It deploys whatever passes CI, so CI has to test the way the page is really served.
+  After a publish, the live URL itself is worth a look.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -48,8 +48,20 @@ local function sub(marker, text)
     html = html:sub(1, a - 1) .. text .. html:sub(b + 1)
 end
 sub("<!--KG_FENGARI-->", FENGARI)
-sub("<!--KG_ENGINE-->", '<script type="application/lua">\n' .. engine .. "\n</script>")
-sub("<!--KG_API-->", '<script type="application/lua">\n' .. api .. "\n</script>")
+-- The Lua is NOT given the type fengari-web runs by itself ("application/lua"): it starts a script as soon as the element is
+-- inserted, which on a slow or chunked download is before all of its text has arrived (a SyntaxError "near <eof>" and a
+-- page that never starts). An inert type, and a classic script that runs only after both have been fully parsed, avoids that.
+local BOOT = [=[
+<script>
+(function () {
+  ["kg-engine", "kg-api"].forEach(function (id) {
+    try { fengari.load(fengari.to_luastring(document.getElementById(id).textContent), "=" + id)(); }
+    catch (e) { window.KG_BOOT_ERROR = window.KG_BOOT_ERROR || (id + ": " + e); console.error(e); }
+  });
+})();
+</script>]=]
+sub("<!--KG_ENGINE-->", '<script type="text/x-kg-lua" id="kg-engine">\n' .. engine .. "\n</script>")
+sub("<!--KG_API-->", '<script type="text/x-kg-lua" id="kg-api">\n' .. api .. "\n</script>\n" .. BOOT)
 
 -- Where it goes: the simulator folder (for opening the file locally), and, when this folder sits inside the WoW-Addons
 -- repository, docs/kings-gambit/ there, which GitHub Pages serves at <site>/kings-gambit/. Extra folders can be given as
