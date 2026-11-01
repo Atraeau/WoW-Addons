@@ -25,7 +25,7 @@ whose `seen` is invalid is skipped (`badseen`), and its key falls back to `ts`.
 
 | Field | Type | Meaning |
 |---|---|---|
-| `v` | number | Format version. Currently `2`. |
+| `v` | number | The format the event was written in. Currently `2`; see "Migrating the ledger" below for how a new one is introduced. An event keeps its `v` for ever. |
 | `ledger` | string | The `id` of the ledger's Genesis event; `""` on the Genesis event itself. |
 | `chain` | string | `author .. "#" .. epoch`, where `epoch` is 8 hex characters chosen when the chain starts. |
 | `seq` | number | Position in its chain, starting at `1`. |
@@ -100,6 +100,7 @@ Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
 | `SetDisenchanter` | `raid`, `name` | By the raid's Master Looter, while the raid is active. Designates who disenchants what nobody wants, for that raid. The latest choice stands. Loot is not handed out until one is set. |
 | `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
+| `Migrate` | `from`, `to`, `cut`, `digest`, `reason` | The cutover to a new format (see "Migrating the ledger"). By the guild master only, written in the NEW format (`v == to`), `to == from + 1`, `from` the ledger's current format. `cut` is `{ [chain] = n }`: how many events of each chain are before the change. `digest` is the standings those events produce. |
 | `ItemSuits` | `item` (item id), `roles` (tank, melee, hunter, caster, healer; empty = back to the heuristic), `reason`, `name?` | An officer's override of who an item suits (a suggestion, not a rule). |
 | `ItemClasses` | `item` (item id), `classes` (class tokens, empty = any class), `reason`, `name?` | The guild's rule for who may bid on an item in the drafts; it overrides the item's own "Classes:" line. The latest rule for an item wins. |
 
@@ -195,3 +196,29 @@ loot session start (`LS`) is judged the same way; a raider on another line than 
 
 **Not decided yet:** how a ledger written on one line is read after everyone moves to the next (a migration). Today a different `v` is
 rejected, which is safe, but nothing converts old entries; that is needed before the first breaking change to the format itself.
+
+## Migrating the ledger
+
+The ledger is never rewritten, so a change to what events look like or mean can't edit old entries (that would break every hash and the tamper-evidence
+that is the point). Instead:
+
+- **Every event keeps its format.** `v` is the format it was written in, for ever. Hashes and chains stay valid however old.
+- **Every published event type has a schema** (`src/Schemas.lua`): the fields of each type in each format, which are required, and their types. A published
+  (format, type) schema is frozen: `tests/schema_baseline.lua` holds a hash of each, and a test fails if one changes or disappears. To change an event, make a new
+  format and an **upcaster** from the old one.
+- **Upcasters read old ledgers** (`src/Migrations.lua`). For each old format there is a pure function mapping an event to the next format's equivalent; replaying
+  a ledger runs every event through the chain to the newest format, so current code reads any old ledger. An upcaster makes the old *meaning* explicit where the new
+  rules would differ (a changed default becomes an explicit value), so a past outcome is never re-decided.
+- **A golden ledger per published format** (`tests/ledgers/format2.lua`, 41 real events covering every event type) must always load, verify and replay to the
+  standings it was frozen with. This is the proof that "any ledger, however old" still works; it also catches a wrong upcaster before release.
+- **The cutover is a ledger entry** (`Migrate`, guild master only). Until it, everyone writes the ledger's current format, even a release that knows the next
+  (a *downcaster* writes the old shape). `cut` names exactly which events are before the change, the same on every machine whatever order they arrive in. After the
+  cut, an event in the old format is recorded as a conflict (`staleformat`: its writer needs to update), never silently applied. The entry itself is in the new
+  format, so a client that cannot read it learns the ledger has moved on when it arrives (`unreadable`).
+- **The migration proves itself on every machine.** `digest` is the standings (orders, wins, passes, awards and where an undo would put each winner back) the cut's
+  history produces. Each client replays that history under its own code and compares. A client that gets a different answer is *frozen*: it refuses to write, and says why.
+- **Rollout.** A release that adds a format reads both and keeps writing the old one, advertising the formats it reads in heartbeats (`f`); `migrate status` shows the
+  guild master who is ready, and `migrate <format> <reason>` writes the cutover. It is a ledger decision, not a download, so players update on their own schedule;
+  only those who cannot read the new format must update after it.
+
+This strategy is evaluated against a simulated breaking change (`tests/migration_fixture.lua`, `tests/test_migration.lua`): `KG_SCORECARD=1 lua tests/run.lua` prints every check.

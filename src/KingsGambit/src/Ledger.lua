@@ -17,18 +17,18 @@
 --   id     = Hash(prev .. "|" .. Canon{v, ledger, chain, seq, ts, author, type, list, data})
 -- Keep this file Lua 5.1-safe and 32-bit-integer safe.
 local _, SK = ...
-local Hash, Standings
-local M = SK:NewModule("Ledger", { "Hash", "Standings" }, function(d) Hash, Standings = d.Hash, d.Standings end)
+local Hash, Standings, Migrations
+local M = SK:NewModule("Ledger", { "Hash", "Standings", "Migrations" }, function(d) Hash, Standings, Migrations = d.Hash, d.Standings, d.Migrations end)
 
 M.GENESIS = "0000000000000000"
-M.VERSION = 2
+M.VERSION = 2 -- the format a ledger starts in, and the newest the RELEASED addon writes; see Migrations.lua for how it changes
 M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event was written
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true }
+    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 local function eventId(ev)
@@ -74,8 +74,9 @@ end
 M.ByKey = byKey
 
 ---------------------------------------------------------------- the store
-function M.NewStore()
-    return { id = nil, genesisChain = nil, chains = {}, byId = {}, keyOf = {} }
+-- rules: what this build understands (Migrations.lua); the released addon's default is format 2 only.
+function M.NewStore(rules)
+    return { id = nil, genesisChain = nil, chains = {}, byId = {}, keyOf = {}, rules = rules or Migrations.Default, verified = {} }
 end
 
 -- The sort key `ev` would get if appended now (it must be the next event of its chain).
@@ -94,7 +95,7 @@ function M.Receive(store, ev, trustHash)
         return nil, "malformed"
     end
     if store.byId[ev.id] then return "duplicate" end
-    if ev.v ~= M.VERSION then return nil, "badversion" end
+    if not store.rules.read[ev.v] then return nil, "badversion" end -- a format this build can't read (a newer one: update)
     if ev.chain:sub(1, #ev.author + 1) ~= ev.author .. "#" or #ev.chain ~= #ev.author + 9 then return nil, "badchain" end
     if not trustHash then
         local okHash, id = pcall(eventId, ev)
@@ -129,9 +130,9 @@ function M.Receive(store, ev, trustHash)
 end
 
 -- Build an event at the tip of `chainId` (not yet received).
-function M.Build(store, chainId, author, type_, data, ts, list)
+function M.Build(store, chainId, author, type_, data, ts, list, format)
     local chain = store.chains[chainId]
-    local ev = { v = M.VERSION, ledger = (type_ == "Genesis") and "" or (store.id or ""), chain = chainId,
+    local ev = { v = format or M.VERSION, ledger = (type_ == "Genesis") and "" or (store.id or ""), chain = chainId,
         seq = chain and (#chain.events + 1) or 1, prev = chain and chain.head or M.GENESIS,
         ts = ts, author = author, type = type_, list = list, data = data or {} }
     local okHash, id = pcall(eventId, ev)
@@ -148,14 +149,15 @@ function M.DropChain(store, cid)
         store.keyOf[ev.id] = nil
     end
     store.chains[cid] = nil
+    store.verified = {} -- what a migration's cut contained may have changed
     if store.genesisChain == cid then store.id, store.genesisChain = nil, nil end
 end
 
 -- Load saved chains, verifying links, times and (for chains up to verifyLimit events) hashes. The Genesis
 -- chain goes first. saved = { chains = { [chainId] = { events = {...} } } }.
 -- Returns store, problems ({ [chainId] = {reason, index} }), lazy ({ [chainId] = chain } still to hash-check).
-function M.LoadStore(saved, verifyLimit)
-    local store, problems, lazy = M.NewStore(), {}, {}
+function M.LoadStore(saved, verifyLimit, rules)
+    local store, problems, lazy = M.NewStore(rules), {}, {}
     local chains = (saved and saved.chains) or {}
     local function isGenesis(cid)
         local e = chains[cid].events and chains[cid].events[1]
@@ -229,7 +231,7 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {} }
+    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {} }
 end
 
 local function snapshotOfficers(a)
@@ -316,6 +318,23 @@ function auth.SetGuildMaster(a, ev, d)
     return function() a.gm = d.name end
 end
 
+-- The cutover to a new format: the guild master's entry. `cut` says how many events of each chain are before the change, `digest` is the
+-- standings that history produces (checked by every client, see VerifyMigrations), and the entry itself is written in the NEW format, so
+-- a client that cannot read it learns the ledger has moved on the moment it arrives.
+function auth.Migrate(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if type(d.from) ~= "number" or type(d.to) ~= "number" or d.to ~= d.from + 1 or ev.v ~= d.to then return nil, "badmigrate" end
+    if d.from ~= a.format then return nil, "wrongformat" end
+    if type(d.cut) ~= "table" or not isName(d.digest) or not isName(d.reason) then return nil, "badmigrate" end
+    for cid, n in pairs(d.cut) do
+        if type(cid) ~= "string" or type(n) ~= "number" or n < 0 or n ~= math.floor(n) then return nil, "badmigrate" end
+    end
+    return function()
+        a.format = d.to
+        a.migrations[#a.migrations + 1] = { ev = ev, from = d.from, to = d.to, cut = d.cut, digest = d.digest }
+    end
+end
+
 function auth.SetOfficers(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
     if type(d.names) ~= "table" then return nil, "badnames" end
@@ -369,8 +388,10 @@ function auth.SetDisenchanter(a, ev, d)
 end
 
 ---------------------------------------------------------------- the view
-function M.NewView()
+function M.NewView(rules)
     return {
+        rules = rules or Migrations.Default,
+        frozen = nil,      -- set when a migration's digest does not match this client's replay: it must not write (see VerifyMigrations)
         lists = {},        -- [listId] = Standings state
         auth = newAuth(),  -- final authority state, plus history for "as of time t" questions
         conflicts = {},    -- { id, chain, author, type, list, reason, ts }
@@ -420,10 +441,20 @@ end
 local function applyAuthority(view, ev)
     local a = view.auth
     local commit, why
-    if ev.type ~= "Genesis" and not a.gm then
+    local cur = ev
+    if ev.type ~= "Migrate" then
+        if ev.v ~= a.format then
+            why = ev.v < a.format and "staleformat" or "earlyformat"
+        else
+            cur, why = Migrations.Up(view.rules, ev)
+        end
+    end
+    if why then
+        -- refused above
+    elseif ev.type ~= "Genesis" and not a.gm then
         why = "noledger"
     else
-        commit, why = auth[ev.type](a, ev, ev.data)
+        commit, why = auth[ev.type](a, cur, cur.data)
     end
     if not commit then conflict(view, ev, why); return nil, why end
     commit()
@@ -437,18 +468,27 @@ end
 -- the event is recorded as a conflict and skipped (it stays in its chain).
 function M.ApplyToView(view, ev, key)
     view.last, view.lastKey = ev, key
-    local ok, why = mayWrite(view.auth, ev.author, ev)
+    -- the format the event must be in (by the cut of each migration, so it is the same on every machine), then up to the newest this build works in
+    local ok, why, cur = true, nil, nil
+    local fmt = Migrations.FormatFor(view.auth.migrations, ev)
+    if ev.v ~= fmt then
+        ok, why = nil, ev.v < fmt and "staleformat" or "earlyformat"
+    else
+        cur, why = Migrations.Up(view.rules, ev)
+        ok = cur ~= nil
+    end
+    if ok then ok, why = mayWrite(view.auth, ev.author, ev) end
     if ok and ev.data and ev.data.seen ~= nil and not seenOf(ev) then ok, why = nil, "badseen" end
     if ok then
-        if ev.type == "Declined" then
-            local d = ev.data
+        if cur.type == "Declined" then
+            local d = cur.data
             if not (isName(d.requestedBy) and isName(d.request) and isName(d.declineReason)) then
                 ok, why = nil, "baddecline"
             else
                 view.declined[#view.declined + 1] = ev
             end
-        elseif ev.type == "ItemClasses" then
-            local d = ev.data
+        elseif cur.type == "ItemClasses" then
+            local d = cur.data
             if not itemRule(d) then
                 ok, why = nil, "baditemrule"
             else
@@ -459,8 +499,8 @@ function M.ApplyToView(view, ev, key)
                 end
                 view.itemRules[d.item] = { classes = classes, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
-        elseif ev.type == "ItemSuits" then
-            local d = ev.data
+        elseif cur.type == "ItemSuits" then
+            local d = cur.data
             if not itemSuits(d) then
                 ok, why = nil, "baditemsuits"
             elseif #d.roles == 0 then
@@ -470,17 +510,19 @@ function M.ApplyToView(view, ev, key)
                 for i, r in ipairs(d.roles) do roles[i] = r end
                 view.itemSuits[d.item] = { roles = roles, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
-        elseif not isName(ev.list) then
+        elseif cur.type == "Migrate" then
+            -- recorded by pass 1 (authority); nothing to apply to a list
+        elseif not isName(cur.list) then
             ok, why = nil, "nolist"
         else
-            local s = view.lists[ev.list]
+            local s = view.lists[cur.list]
             local fresh = false
             if not s then
-                if ev.type == "CreateList" then s, fresh = Standings.New(), true else ok, why = nil, "nolist" end
+                if cur.type == "CreateList" then s, fresh = Standings.New(), true else ok, why = nil, "nolist" end
             end
             if ok then
-                ok, why = Standings.Apply(s, ev)
-                if ok and fresh then view.lists[ev.list] = s end
+                ok, why = Standings.Apply(s, cur, view.rules.handlers)
+                if ok and fresh then view.lists[cur.list] = s end
             end
         end
     end
@@ -494,13 +536,39 @@ end
 
 -- Replay the whole store into a fresh view. `extra` (optional) is one more event, not yet in the store,
 -- appended to its chain for this replay only (used to check a write before making it).
-function M.View(store, extra)
-    local view = M.NewView()
+-- Check every migration in force: replay the history inside its cut under THIS client's code and compare the standings with the digest the
+-- guild master recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
+-- wrong upcaster): the view is frozen, and the engine refuses to write. The result is remembered, since a cut never changes.
+function M.VerifyMigrations(view, store)
+    for _, m in ipairs(view.auth.migrations) do
+        local checked = store.verified[m.ev.id]
+        if checked == nil then
+            checked = { got = M.CutDigest(store, m.cut) }
+            checked.ok = checked.got == m.digest
+            store.verified[m.ev.id] = checked
+        end
+        if not checked.ok and not view.frozen then
+            view.frozen = { reason = "migrationmismatch", migration = m.ev.id, to = m.to, expected = m.digest, got = checked.got }
+        end
+    end
+end
+
+-- The standings digest of exactly the events inside `cut`, replayed under this store's rules.
+function M.CutDigest(store, cut)
+    local view = M.View(store, nil, function(ev) return Migrations.InCut(cut, ev) end)
+    return Migrations.StandingsDigest(view)
+end
+
+-- `include` (optional) keeps only the events it accepts: a view of part of the ledger (a migration's cut).
+function M.View(store, extra, include)
+    local view = M.NewView(store.rules)
     local all, keys = {}, {}
     for _, chain in pairs(store.chains) do
         for _, ev in ipairs(chain.events) do
-            all[#all + 1] = ev
-            keys[ev] = store.keyOf[ev.id]
+            if not include or include(ev) then
+                all[#all + 1] = ev
+                keys[ev] = store.keyOf[ev.id]
+            end
         end
     end
     if extra then
@@ -513,6 +581,7 @@ function M.View(store, extra)
     end
     table.sort(authority, byTs)
     for _, ev in ipairs(authority) do applyAuthority(view, ev) end
+    if not include then M.VerifyMigrations(view, store) end
     table.sort(rest, function(a, b) return byKey(keys[a], a, keys[b], b) end)
     for _, ev in ipairs(rest) do M.ApplyToView(view, ev, keys[ev]) end
     return view

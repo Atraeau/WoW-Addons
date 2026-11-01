@@ -270,11 +270,12 @@ function handlers.Revert(s, ev, d) return planRevert(s, ev, d.target) end
 
 M.TYPES = {}
 for k in pairs(handlers) do M.TYPES[k] = true end
+M.HANDLERS = handlers -- a future format that changes the rules supplies its own set (see Migrations.lua)
 
 -- Validate and apply one list event. Returns true, or nil + reason (state untouched).
-function M.Apply(s, ev)
+function M.Apply(s, ev, handlerSet)
     if type(ev.data) ~= "table" then return nil, "baddata" end
-    local h = handlers[ev.type]
+    local h = (handlerSet or handlers)[ev.type]
     if not h then return nil, "unknowntype" end
     if ev.type ~= "CreateList" and not s.created then return nil, "nolist" end
     local commit, err = h(s, ev, ev.data)

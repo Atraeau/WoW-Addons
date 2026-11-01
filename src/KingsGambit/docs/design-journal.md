@@ -1728,6 +1728,67 @@ others. (This replaces the two protocol numbers of the previous decision, which 
 - **Not decided:** migration. A different ledger format `v` is still rejected outright; nothing converts old entries when a new line
   changes the format. That needs a plan before the first change to `v` itself.
 
+### Decision: ledger migration: immutable history, a schema for every published event, upcast on read, a signed cutover (2026-11-02)
+
+**Asked for by the guild leader:** a migration strategy for the ledger, with a simulated breaking change to test it against, and
+(added while we were designing it) *a data structure for every published ledger event type, so that any ledger can be migrated no matter
+how old it has become.*
+
+**What is hard here.** The ledger is append-only and hash-chained, written by many players, merged deterministically, and replayed in full
+into the standings. Rewriting old entries would break every hash and the tamper-evidence that is the point of the ledger, and players
+update at different times. So history can never be rewritten, and no one can be asked to switch at one instant.
+
+**The strategy (expand, cut over, contract).**
+1. **History is never rewritten.** Every event keeps the format (`v`) it was written in. Chains, hashes and authors stay exactly as they
+   were, so a ledger written years ago still verifies.
+2. **Upcast on read.** A release that changes the format carries a pure function per old format that maps an old event to the next
+   format's equivalent (`Migrations.upcast[f]`: event of format f -> event of format f+1, never mutating the stored one). Replaying an old
+   ledger runs every event through the chain of upcasters, so the *current* code can read *any* old ledger. An upcaster must make the old
+   meaning explicit where the new rules would differ (for example, a default that changed becomes an explicit value), so past outcomes
+   are never re-decided: nobody's place moves because the rules changed.
+3. **A schema for every published event type, per format, frozen once published** (`Schemas.lua`): the fields, their types, which are
+   required. It is the record of what every event ever looked like, so an old ledger can always be validated, and it drives the checks
+   below. Changing a published (format, type) schema is refused by a test; the way to change an event is a new format and an upcaster.
+4. **A golden ledger for every published format** (`tests/ledgers/`): a real saved ledger covering every event type, with the standings it
+   must replay to. Every release's code must load it, verify it, and replay it to the same standings, forever. This corpus is the actual proof
+   that "any ledger, however old" still works; a test also checks each upcaster maps every event type of its format to a valid event of the next.
+5. **Expand: a bridge release reads both formats and keeps writing the old one.** It is compatible with the line it sits on (see
+   Semantic Versioning), so players update on their own schedule. Heartbeats advertise which formats a client can read, so the guild
+   master can see who is ready (`migrate status`).
+6. **Cut over: the guild master writes a `Migrate` entry** (authority event, guild master only): `{ from, to, cut, digest, reason }`.
+   `cut` names exactly how many events of each chain are before the change, so which events are old and which new is the same on every
+   machine whatever order they arrive in (a vector cut, not a timestamp). `digest` is the standings those events produce, as the guild
+   master's client computes them. Every client replays the cut under its own code and checks it gets the same digest: that is the migration
+   proving itself on every machine. A client that gets a different answer refuses to write and says so. After the cut, events must be in the
+   new format; an event still in the old format after the cut is recorded as a conflict ("stale format": its writer needs to update), not
+   silently applied. The first new-format event anyone sees is the `Migrate` entry itself, so an unprepared client learns that the
+   ledger has moved on the moment it arrives ("this ledger moved to format 3: update").
+7. **Contract (later):** once nobody writes the old format, a signed checkpoint can let a future release drop old upcasters. Not built:
+   the golden corpus means we only do it deliberately.
+
+**Writing.** A client writes in the ledger's *current* format (taken from the last `Migrate`), never in the newest it knows, so a bridge
+release never writes something an old client can't read before the guild master says so.
+
+**Versions.** The `Migrate` machinery is itself a change to the ledger's surface (a new event type, readable formats), so it ships once as
+a new line (0.2.0). After that a breaking change to the *data* needs no line bump on its own: the bridge release is compatible with its line,
+and the cutover is a ledger decision, not a download. What changes the requirement for players is the guild master's cutover, and only
+for clients that can't read the new format.
+
+**What building it showed.**
+- The digest covers the whole public record, not just the order: orders, wins, passes, awards and where an undo would put each winner back. A first version
+  hashed only order and wins, and a wrong upcaster's effect was hidden by a later move in one random guild. A migration is only as well tested as its corpus,
+  so the evaluation always includes the one case this change breaks (a member added with no position by the old release), placed where nothing can mask it.
+- A digest proves *this* ledger's history reproduces, not that an upcaster is right in general; the golden ledger covers every event type and the upcaster tests cover
+  the rest. Both are needed.
+- Events written in the old format after the cutover (by someone who has not updated) are recorded, not applied, on every new client identically, and recovered
+  deterministically when that player updates. A write made at the same moment as the cutover loses; it is visible, not lost silently.
+- The evaluation has teeth: removing the digest check, breaking the cut, or recording a wrong digest each makes it fail (tested).
+
+**The simulated breaking change** (a test fixture, never shipped): a hypothetical format 3 with a structural change (Award's `member` and
+`to` become `winner` and `recipient`) and a semantic one (a new member with no stated position goes to the top, not the bottom). It is used
+to score the strategy: history preserved, digests agree, convergence under loss and reordering, old clients told rather than corrupted,
+stale writes recorded, a deliberately wrong upcaster caught by the digest. See `tests/test_migration.lua`.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

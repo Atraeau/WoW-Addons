@@ -22,6 +22,12 @@ local WHY = {
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
     expired = "your raid has ended, and with it your right to write to the list",
     notofficer = "only an officer can do that", notguildmaster = "only the guild master can do that",
+    -- ledger formats (see Migrations.lua)
+    frozen = "this client could not reproduce the last migration, so it will not write (it would not agree with everyone else): update King's Gambit",
+    badmigrate = "the next format is the current one plus one", cantwrite = "this version does not know that format yet: update King's Gambit first",
+    wrongformat = "the ledger is not in the format that migration starts from", unrepresentable = "that can't be written in the ledger's current format until it is migrated",
+    nodowncast = "that can't be written in the ledger's current format until it is migrated",
+    staleformat = "written in an older format after the ledger was migrated", earlyformat = "written in a newer format before the ledger was migrated",
     raidbusy = "that raid already has a different Master Looter", raidended = "that raid has already ended",
     notactive = "no such raid is running", badminutes = "the raid can last at most 24 hours",
     -- requests
@@ -76,6 +82,8 @@ local HELP = {
     "  request gift <name> <to> <reason>               (the same, but a deliberate gift: nobody moves)",
     "  trade <name> <to> <reason>      Master Looter: the item went to someone else; restore the winner, <to> moves to the bottom",
     "  version                         this addon's version, and what the other players run",
+    "  migrate [status]                the ledger's format, and which players can read the next one",
+    "  migrate <format> <reason>       guild master: move the ledger to the next format (everyone must be ready first)",
     "  salvaged <name> <keep|gift|sell|disenchant|bank>   Master Looter: note what a salvager did with their item (for the record only)",
     "  request eligible <item> <reason>                ask for your class to be allowed to bid on an item, from now on",
     "  requests                        waiting requests and recent decisions",
@@ -147,6 +155,43 @@ function M.New(ctx)
     local cmds = {}
 
     function cmds.help() for _, l in ipairs(HELP) do out(l) end end
+
+    -- The ledger's format, and who can read the next one. The guild master moves the ledger to it with `migrate <format> <reason>` once the guild is ready:
+    -- the entry records exactly which entries are before the change and what they add up to, and every client checks its own replay against that.
+    function cmds.migrate(args)
+        local sub, rest = args:match("^(%S*)%s*(.-)$")
+        local fmt = engine:Format()
+        if tonumber(sub) then
+            if rest == "" then return out("migrate <format> <reason>: say why (it goes in the record)") end
+            local ev, err = engine:Migrate(tonumber(sub), rest)
+            if ev then
+                out(("Recorded: the ledger is now in format %d. Players whose King's Gambit can't read it are told to update; the rest check the change against their own replay."):format(fmt + 1))
+            else
+                out("Not recorded: " .. why(err))
+            end
+            return
+        end
+        local readable = engine:Readable()
+        out(("The ledger is in format %d. This version reads format%s %s."):format(fmt, #readable > 1 and "s" or "", table.concat(readable, ", ")))
+        local frozen = engine:Frozen()
+        if frozen then out(("This client could not reproduce the migration to format %d (it got a different result from the guild master's), so it will not write. Update King's Gambit."):format(frozen.to)) end
+        local nextFormat = fmt + 1
+        if readable[#readable] < nextFormat then out(("This version does not know format %d: there is nothing newer to move to yet."):format(nextFormat)); return end
+        local ready, notReady, unknown = {}, {}, {}
+        for _, p in ipairs(ctx.sync and ctx.sync:peerVersions() or {}) do
+            local who = short(p.name)
+            if not p.formats then unknown[#unknown + 1] = who
+            else
+                local can = false
+                for _, f in ipairs(p.formats) do if f == nextFormat then can = true end end
+                if can then ready[#ready + 1] = who else notReady[#notReady + 1] = who end
+            end
+        end
+        out(("Format %d is available. Can read it: %s. Cannot yet: %s. Not heard from: %s."):format(nextFormat,
+            #ready > 0 and table.concat(ready, ", ") or "nobody", #notReady > 0 and table.concat(notReady, ", ") or "nobody",
+            #unknown > 0 and table.concat(unknown, ", ") or "nobody"))
+        out("The guild master moves the ledger with: migrate " .. nextFormat .. " <reason>. Anyone who cannot read it yet will have to update first.")
+    end
 
     -- Which version is this, and can it work with what the others run? Players are listed from their heartbeats.
     function cmds.version()
@@ -1077,6 +1122,9 @@ function M.New(ctx)
                 out(("%s runs King's Gambit %s, which this version (%s) can't work with: update King's Gambit to share the ledger with them. Type: version"):format(short(e.peer), e.build or "?", e.ours))
             end
             if client:masterLooter() == e.peer then out("They are the Master Looter: you won't see their loot sessions until this is sorted out.") end
+        end)
+        ctx.sync:on("unreadable", function(e)
+            out(("The ledger has moved to format %d, which this version cannot read (it reads %s). Update King's Gambit to see new entries. Type: version"):format(e.format, table.concat(e.readable, ", ")))
         end)
         ctx.sync:on("newerBuild", function(e)
             out(("%s runs King's Gambit %s, newer than yours (%s). An update is available; it is not required."):format(short(e.peer), e.build, e.ours))

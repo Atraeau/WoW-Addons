@@ -4,7 +4,7 @@
 -- run this to check the record independently. See tools/kg.lua for the command line.
 local M = {}
 
-local MODULES = { "Hash", "Standings", "Ledger" }
+local MODULES = { "Hash", "Migrations", "Standings", "Ledger" }
 
 -- Load the engine modules from a repo checkout. root = the KingsGambit folder (default ".").
 function M.loadEngine(root)

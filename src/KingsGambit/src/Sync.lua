@@ -7,7 +7,8 @@
 --
 -- Messages (serialized tables, split into <=255-byte frames):
 --   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } },
---                   a = the sender's addon version, e.g. "0.1.0+84" }
+--                   a = the sender's addon version, e.g. "0.1.0+84",
+--                   f = { ledger formats the sender can read, e.g. 2, 3 } }
 -- Every message carries `a` (post adds it), so even the first one a player sends can be judged by version.
 --
 -- Versions (see Version.lua). The addon version is Semantic Versioning, and two clients work together when they are on the same
@@ -60,6 +61,8 @@ end
 -- Events: forkResolved { chain, at, winner = "ours"|"theirs", orphaned }
 --         incompatible { peer, build, ours, mustUpdate = "them"|"us", line, ourLine }  (once per player and version: another line)
 --         newerBuild { peer, build, ours }  (once per player and version: a newer version on our own line; an update is available)
+--         unreadable { peer, format, readable, newer }  (once per format: an entry arrived in a ledger format this build can't read. When the
+--                    ledger has been migrated (see Migrations.lua) a build that doesn't know the new format learns it here, and must update)
 function Sync:on(event, fn)
     local list = self.handlers[event]
     if not list then list = {}; self.handlers[event] = list end
@@ -182,7 +185,7 @@ function Sync:heartbeat()
     local store = self.engine.store
     local c = {}
     for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
-    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion() })
+    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion(), f = self.engine:Readable() })
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
@@ -254,8 +257,11 @@ function Sync:note(sender, build)
     if build == nil then return not (known and known.incompatible) end
     local mine = self.client:addonVersion()
     local rel = Version.Relation(mine, build)
-    self.peers[sender] = { build = build, seen = self.client:now(), incompatible = not rel.compatible }
-    if known and known.build == build then return rel.compatible end
+    local before = known and known.build
+    local rec = known or {}
+    rec.build, rec.seen, rec.incompatible = build, self.client:now(), not rel.compatible
+    self.peers[sender] = rec
+    if before == build then return rel.compatible end
     if not rel.compatible then
         self:emit("incompatible", { peer = sender, build = build, ours = mine, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine })
     elseif rel.known and rel.order == 1 then
@@ -287,7 +293,7 @@ function Sync:peerVersions()
         local rel = Version.Relation(mine, p.build)
         local relation = not rel.known and "unknown" or not rel.compatible and "incompatible"
             or rel.order == 0 and "same" or rel.order > 0 and "newer" or "older"
-        out[#out + 1] = { name = name, build = p.build, relation = relation, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine }
+        out[#out + 1] = { name = name, build = p.build, relation = relation, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine, formats = p.formats }
     end
     table.sort(out, function(a, b) return a.name < b.name end)
     return out
@@ -295,6 +301,13 @@ end
 
 function Sync:onHeartbeat(msg, sender)
     if type(msg.c) ~= "table" then return end
+    if type(msg.f) == "table" and self.peers[sender] then
+        local formats = {}
+        for _, f in ipairs(msg.f) do
+            if type(f) == "number" and f == math.floor(f) and #formats < 8 then formats[#formats + 1] = f end
+        end
+        self.peers[sender].formats = formats
+    end
     local store = self.engine.store
     if type(msg.l) == "string" and msg.l ~= "" and store.id and msg.l ~= store.id then
         self.stats.otherLedger = self.stats.otherLedger + 1 -- a different ledger (another guild, training)
@@ -333,6 +346,15 @@ function Sync:onEvents(msg, sender)
             elseif err == "fork" then
                 self:beginFork(cid, evs, idx, msg.n, sender)
             elseif err ~= "noledger" then -- noledger: the heartbeat names the genesis chain to fetch first
+                if err == "badversion" and type(ev) == "table" and type(ev.v) == "number" then
+                    -- the ledger is in a format this build can't read (a migration happened): say so once per format
+                    self.unreadable = self.unreadable or {}
+                    if not self.unreadable[ev.v] then
+                        self.unreadable[ev.v] = true
+                        local readable = self.engine:Readable()
+                        self:emit("unreadable", { peer = sender, format = ev.v, readable = readable, newer = ev.v > readable[#readable] })
+                    end
+                end
                 self.stats.rejected = self.stats.rejected + 1
                 self.client:log("warn", ("sync rejected an event on '%s': %s"):format(cid, tostring(err)))
             end

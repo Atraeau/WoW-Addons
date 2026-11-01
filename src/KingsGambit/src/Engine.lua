@@ -2,8 +2,8 @@
 -- to the WoW client only through a Client. No module-level state: tests and training can run many engines
 -- in one process. Design: docs/ledger-v2-design.md
 local _, SK = ...
-local Ledger
-local M = SK:NewModule("Engine", { "Ledger" }, function(d) Ledger = d.Ledger end)
+local Ledger, Migrations
+local M = SK:NewModule("Engine", { "Ledger", "Migrations" }, function(d) Ledger, Migrations = d.Ledger, d.Migrations end)
 
 local Engine = {}
 Engine.__index = Engine
@@ -12,6 +12,7 @@ local HEX = "0123456789abcdef"
 
 -- opts.syncVerifyLimit (default 2000): chains up to this many events are hash-verified at load; longer
 -- ones are verified in the background (see verifyTick). opts.verifyBatch: events per background tick.
+-- opts.rules: what this build understands (Migrations.lua); the released addon reads and writes format 2 only.
 function M.New(client, opts)
     local acct = client:storage().account
     acct.schema = 2
@@ -19,9 +20,11 @@ function M.New(client, opts)
     acct.ledger.chains = acct.ledger.chains or {}
     acct.mine = acct.mine or {}
     acct.config = acct.config or {}
-    local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {},
+    local rules = (opts and opts.rules) or Migrations.Default
+    assert(Migrations.Check(rules))
+    local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {}, rules = rules,
         verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
-    local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000)
+    local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000, rules)
     e.store, e.problems, e.verifying = store, problems, lazy
     for cid, chain in pairs(store.chains) do acct.ledger.chains[cid] = { events = chain.events } end
     for cid, p in pairs(problems) do
@@ -56,6 +59,12 @@ function Engine:rebuild()
 end
 
 function Engine:Fingerprint() return self.fingerprint end
+-- The format the ledger is in now (what a new entry is written in), and whether this client has refused to write because it can't reproduce
+-- a migration (see Ledger.VerifyMigrations): { reason, migration, to, expected, got } or nil.
+function Engine:Format() return self.view.auth.format end
+-- The ledger formats this build can read, lowest first (advertised in heartbeats so the guild master can see who is ready).
+function Engine:Readable() return Migrations.Readable(self.rules) end
+function Engine:Frozen() return self.view.frozen end
 function Engine:LedgerId() return self.store.id end
 function Engine:View() return self.view end
 function Engine:Conflicts() return self.view.conflicts end
@@ -150,10 +159,19 @@ end
 
 -- Write one event on this character's chain. It is checked against the current view first and only
 -- written if it would be accepted. Returns the event, or nil + reason.
-function Engine:Write(type_, data, list)
+-- `format` (optional) is the format to write in, for the entry that starts a new one (Migrate); otherwise the ledger's current format.
+function Engine:Write(type_, data, list, format)
     if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
+    if self.view.frozen then return nil, "frozen" end
+    local fmt = format or self.view.auth.format
+    if fmt ~= self.rules.current then
+        -- the code builds entries in its newest shape; the ledger may still be in an older format: write that one
+        local down, why = Migrations.Down(self.rules, { v = self.rules.current, type = type_, list = list, data = data }, fmt)
+        if not down then return nil, why or "unrepresentable" end
+        type_, data, list = down.type, down.data, down.list
+    end
     local cid = self:MyChain()
-    local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list)
+    local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list, fmt)
     if not ev then return nil, err end
     local view = self.view
     local fresh
@@ -181,6 +199,20 @@ function Engine:Write(type_, data, list)
     self.fingerprint = Ledger.Fingerprint(self.store)
     self:fire("local", cid, ev)
     return ev
+end
+
+-- Move the ledger to the next format (the guild master does this once per migration, when the guild is ready). The entry names exactly
+-- how many events of each chain are before the change, and the digest of the standings they produce, as THIS client reads them. Returns
+-- the event, or nil + reason: "frozen", "badmigrate" (not the next format), "cantwrite" (this build doesn't work in that format), or
+-- what the ledger says ("notguildmaster").
+function Engine:Migrate(to, reason)
+    if self.view.frozen then return nil, "frozen" end
+    if type(to) ~= "number" or to ~= self.view.auth.format + 1 then return nil, "badmigrate" end
+    if self.rules.current < to then return nil, "cantwrite" end
+    local cut = {}
+    for cid, chain in pairs(self.store.chains) do cut[cid] = #chain.events end
+    local digest = Ledger.CutDigest(self.store, cut)
+    return self:Write("Migrate", { from = to - 1, to = to, cut = cut, digest = digest, reason = reason }, nil, to)
 end
 
 -- Start a new ledger (the guild master does this once). Returns the Genesis event.

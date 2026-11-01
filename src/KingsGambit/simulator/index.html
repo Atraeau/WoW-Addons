@@ -438,6 +438,299 @@ function M.Relation(mine, theirs)
 end
 
 end; chunk("KingsGambit", SK) end
+-- ===== Schemas.lua =====
+do local chunk = function(...)
+-- King's Gambit: the schema of every ledger event type, for every format that has ever been published. Pure Lua.
+--
+-- Why this exists. The ledger is append-only and never rewritten, so every event ever written stays in the shape it was written in.
+-- To migrate a ledger however old it has become, we have to know exactly what each event looked like in each format. This file is that
+-- record: one table per format, one entry per event type, naming every field, its type, and whether it is required.
+--
+-- The rule: a published (format, type) entry is FROZEN. tests/schema_baseline.lua holds a hash of each, and tests/test_schemas.lua
+-- fails if one changes or disappears. To change an event, make a new format: a new table here, and an upcaster from the old one
+-- (Migrations.lua). Adding an event type to a format is a change to the ledger's surface and starts a new compatibility line
+-- (Version.lua), and its hash is added to the baseline on purpose.
+--
+-- A field spec is a type name, with "!" after it when the field is required: "name!", "pos", "int!". Fields not listed are ignored by
+-- validation (readers ignore what they don't know); the field lists are what the format's own code reads and writes. `list` says whether
+-- the event belongs to a list (so its envelope carries `list`) or is a ledger-wide event.
+-- Keep this file Lua 5.1-safe.
+local _, SK = ...
+local Hash
+local M = SK:NewModule("Schemas", { "Hash" }, function(d) Hash = d.Hash end)
+
+local CLASS_TOKENS = { WARRIOR = true, PALADIN = true, HUNTER = true, ROGUE = true, PRIEST = true, SHAMAN = true, MAGE = true,
+    WARLOCK = true, DRUID = true }
+local ROLES = { tank = true, melee = true, hunter = true, caster = true, healer = true }
+local SALVAGE = { keep = true, gift = true, sell = true, disenchant = true, bank = true }
+
+local function isName(v) return type(v) == "string" and v ~= "" end
+local function allOf(list, ok)
+    if type(list) ~= "table" then return false end
+    for _, v in ipairs(list) do if not ok(v) then return false end end
+    return true
+end
+
+-- The field types. Each takes a value and says whether it is valid.
+M.TYPES = {
+    name = isName,                                   -- a non-empty string (a player, an item name, an id, a reason)
+    text = function(v) return type(v) == "string" end,
+    number = function(v) return type(v) == "number" and v == v end,
+    int = function(v) return type(v) == "number" and v == math.floor(v) end,
+    time = function(v) return type(v) == "number" end,
+    pos = function(v) return v == "top" or v == "bottom" end,
+    names = function(v) return allOf(v, isName) end,
+    classes = function(v) return allOf(v, function(c) return CLASS_TOKENS[c] == true end) end,
+    roles = function(v) return allOf(v, function(r) return ROLES[r] == true end) end,
+    salvage = function(v) return SALVAGE[v] == true end,
+    table = function(v) return type(v) == "table" end,
+}
+
+-- Fields that may appear on any event: when the loot became visible, and who asked for it and why (a corrected or requested entry).
+local COMMON = { seen = "time", requestedBy = "name", rid = "name" }
+
+-- The envelope every event has, in format 2.
+local ENVELOPE2 = { v = "int!", ledger = "text!", chain = "name!", seq = "int!", prev = "name!", ts = "time!", author = "name!",
+    type = "name!", list = "text", data = "table!", id = "name!" }
+
+local FORMATS = {}
+
+---------------------------------------------------------------- format 2 (released in 0.1.x)
+FORMATS[2] = {
+    envelope = ENVELOPE2,
+    types = {
+        -- events on a list
+        CreateList = { list = true, data = { name = "name!" } },
+        AddMember = { list = true, data = { member = "name!", class = "text", to = "pos", above = "name" } },
+        RemoveMember = { list = true, data = { member = "name!", reason = "text" } },
+        Award = { list = true, data = { member = "name!", item = "name!", to = "name", replaces = "name", reason = "text" } },
+        Pass = { list = true, data = { member = "name!", item = "name!", kind = "text" } },
+        Transfer = { list = true, data = { award = "name!", to = "name!", member = "name", reason = "text" } },
+        Disenchant = { list = true, data = { item = "name!", to = "name!" } },
+        Salvage = { list = true, data = { award = "name!", action = "salvage!", member = "name" } },
+        MovePlayer = { list = true, data = { member = "name!", reason = "name!", to = "pos", above = "name" } },
+        Revert = { list = true, data = { target = "name!", member = "name", reason = "text" } },
+        -- ledger-wide events
+        Genesis = { list = false, data = { name = "name!" } },
+        SetGuildMaster = { list = false, data = { name = "name!" } },
+        SetOfficers = { list = false, data = { names = "names!" } },
+        Elevate = { list = false, data = { raid = "name!", ml = "name!", minutes = "number!" } },
+        Revoke = { list = false, data = { raid = "name!" } },
+        RaidClose = { list = false, data = { raid = "name!" } },
+        SetDisenchanter = { list = false, data = { raid = "name!", name = "name!" } },
+        Declined = { list = false, data = { request = "name!", requestedBy = "name!", declineReason = "name!", kind = "text", member = "text", item = "number",
+            class = "text", spec = "text" } },
+        ItemClasses = { list = false, data = { item = "int!", classes = "classes!", reason = "name!", class = "text", spec = "text", name = "text" } },
+        ItemSuits = { list = false, data = { item = "int!", roles = "roles!", reason = "name!" } },
+        -- the cutover to a new format (see Migrations.lua): written by the guild master, in the NEW format
+        Migrate = { list = false, data = { from = "int!", to = "int!", cut = "table!", digest = "name!", reason = "name!" } },
+    },
+}
+M.FORMATS = FORMATS
+M.COMMON = COMMON
+
+---------------------------------------------------------------- reading the registry
+-- The formats described here, lowest first.
+function M.Formats()
+    local out = {}
+    for f in pairs(FORMATS) do out[#out + 1] = f end
+    table.sort(out)
+    return out
+end
+
+-- The schema of one event type in one format, or nil.
+function M.Get(format, type_)
+    local f = FORMATS[format]
+    return f and f.types[type_]
+end
+
+-- Every event type of a format, sorted.
+function M.Types(format)
+    local f = FORMATS[format]
+    local out = {}
+    if f then for t in pairs(f.types) do out[#out + 1] = t end end
+    table.sort(out)
+    return out
+end
+
+local function check(spec, value, where)
+    local typeName, required = spec:match("^(%a+)(!?)$")
+    local ok = M.TYPES[typeName]
+    if not ok then return nil, where .. ": unknown field type " .. spec end
+    if value == nil then
+        if required == "!" then return nil, where .. " is required" end
+        return true
+    end
+    if not ok(value) then return nil, where .. " is not a valid " .. typeName end
+    return true
+end
+
+-- Does `ev` (an event as stored, in `format`) match that format's schema? Returns true, or nil + why.
+function M.Validate(format, ev)
+    local f = FORMATS[format]
+    if not f then return nil, "unknownformat" end
+    if type(ev) ~= "table" then return nil, "notanevent" end
+    for field, spec in pairs(f.envelope) do
+        local ok, why = check(spec, ev[field], "envelope." .. field)
+        if not ok then return nil, why end
+    end
+    local t = f.types[ev.type]
+    if not t then return nil, "unknowntype" end
+    if t.list and not isName(ev.list) then return nil, "envelope.list is required for " .. ev.type end
+    for field, spec in pairs(t.data) do
+        local ok, why = check(spec, ev.data[field], ev.type .. "." .. field)
+        if not ok then return nil, why end
+    end
+    for field, spec in pairs(COMMON) do
+        local ok, why = check(spec, ev.data[field], ev.type .. "." .. field)
+        if not ok then return nil, why end
+    end
+    return true
+end
+
+-- A fingerprint of one format's entry for one type (what the frozen baseline records).
+function M.Hash(format, type_)
+    local t = M.Get(format, type_)
+    if not t then return nil end
+    return Hash.Sum(Hash.Canon({ list = t.list, data = t.data }))
+end
+function M.EnvelopeHash(format)
+    local f = FORMATS[format]
+    return f and Hash.Sum(Hash.Canon(f.envelope))
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== Migrations.lua =====
+do local chunk = function(...)
+-- King's Gambit: migrating the ledger between formats. Pure Lua. Keep this file Lua 5.1-safe.
+--
+-- The ledger is never rewritten: every event keeps the format (`v`) it was written in, so every hash and every chain still verifies,
+-- however old. A format change instead ships as code that can READ the old format: for each old format an UPCASTER maps an event of that
+-- format to the equivalent event of the next, and the replay runs every event through the chain of upcasters to the newest
+-- format before applying it. An upcaster is a pure function of one event. It must make the old MEANING explicit wherever the new rules
+-- would decide differently (a default that changed becomes an explicit value), so a past outcome is never re-decided: nobody's place
+-- moves because the rules did. The ledger itself carries the proof: the guild master's `Migrate` entry (Ledger.lua) holds a digest of
+-- the standings the old history produces, and every client checks that its own replay of that history, through its own upcasters,
+-- produces the same digest.
+--
+-- While the ledger is still in an older format than a client's newest, the client WRITES the ledger's format: a downcaster maps what
+-- the code builds (the newest shape) to the older one. A change a downcaster cannot express is refused until the cutover.
+--
+-- What this build understands is a RULESET:
+--   current  = N                the newest format; the shape the code works in
+--   read     = { [f] = true }   every format it can read: from the oldest it still keeps, up to `current`
+--   upcast   = { [f] = fn }     event of format f -> event of format f+1, for every readable f below `current`
+--   downcast = { [f] = fn }     event of format f -> event of format f-1 (only to write an older ledger; may be partial)
+--   handlers = table | nil      the list-event handlers of format `current` (nil: Standings' own)
+-- Both kinds of function take an event and return a NEW event (never touching the stored one): use Migrations.Derive. They return nil + why
+-- for an event they cannot map.
+local _, SK = ...
+local Hash
+local M = SK:NewModule("Migrations", { "Hash" }, function(d) Hash = d.Hash end)
+
+M.BASE = 2 -- the first format there was; every ledger starts in it
+
+-- What the released addon understands today: format 2, and nothing older or newer.
+M.Default = { current = 2, read = { [2] = true }, upcast = {}, downcast = {}, name = "format 2" }
+
+-- A copy of `ev` with some fields replaced (and `v` untouched: the caller says what it is).
+function M.Derive(ev, changes)
+    local out = {}
+    for k, v in pairs(ev) do out[k] = v end
+    for k, v in pairs(changes or {}) do out[k] = v end
+    return out
+end
+
+-- Is a ruleset well formed? true, or nil + why. Every readable format below `current` needs an upcaster.
+function M.Check(rules)
+    if type(rules) ~= "table" or type(rules.current) ~= "number" then return nil, "nocurrent" end
+    if type(rules.read) ~= "table" or not rules.read[rules.current] then return nil, "cannotreadcurrent" end
+    for f in pairs(rules.read) do
+        if f > rules.current then return nil, "readsnewerthancurrent" end
+        if f < rules.current and type(rules.upcast[f]) ~= "function" then return nil, "noupcaster:" .. f end
+        if f < rules.current and not rules.read[f + 1] then return nil, "gap:" .. f end
+    end
+    return true
+end
+
+-- The formats a ruleset can read, lowest first.
+function M.Readable(rules)
+    local out = {}
+    for f in pairs(rules.read) do out[#out + 1] = f end
+    table.sort(out)
+    return out
+end
+
+-- Bring an event of any readable format up to `rules.current`. Returns the event in the current shape, or nil + why:
+-- "unreadable" (a format this build does not read), "noupcast", or what the upcaster said.
+function M.Up(rules, ev)
+    if not rules.read[ev.v] then return nil, "unreadable" end
+    local cur = ev
+    for f = ev.v, rules.current - 1 do
+        local up = rules.upcast[f]
+        if not up then return nil, "noupcast" end
+        local nxt, why = up(cur)
+        if type(nxt) ~= "table" then return nil, why or "upcastfailed" end
+        nxt.v = f + 1
+        if nxt.id ~= ev.id then nxt.id = ev.id end -- a conflict refers to the stored event
+        cur = nxt
+    end
+    return cur
+end
+
+-- Take an event in `rules.current` shape down to `format` (to write an older ledger). Returns the event, or nil + why.
+function M.Down(rules, ev, format)
+    local cur = ev
+    for f = ev.v, format + 1, -1 do
+        local down = rules.downcast[f]
+        if not down then return nil, "nodowncast" end
+        local nxt, why = down(cur)
+        if type(nxt) ~= "table" then return nil, why or "unrepresentable" end
+        nxt.v = f - 1
+        cur = nxt
+    end
+    return cur
+end
+
+---------------------------------------------------------------- the cutover
+-- A cut says how many events of each chain are BEFORE a migration: { [chainId] = n }. Which events are old and which are new is
+-- then the same on every machine, whatever order they arrived in.
+function M.InCut(cut, ev)
+    local n = cut[ev.chain]
+    return n ~= nil and ev.seq <= n
+end
+
+-- The format an event must be in, given the migrations in force (each { cut, to }, in order): the format of the last one it is
+-- NOT inside the cut of, else the first format.
+function M.FormatFor(migrations, ev)
+    local fmt = M.BASE
+    for _, m in ipairs(migrations) do
+        if not M.InCut(m.cut, ev) then fmt = m.to end
+    end
+    return fmt
+end
+
+-- A fingerprint of everything a view says that outlives the moment: each list's order, each member's wins, passes and standing, each award
+-- (who, what, whether undone), and where an undo would put each winner back. Equal digests mean everyone stands in the same place with the
+-- same record AND the same corrections available, so a mistake in an upcaster can't hide behind a later move. The projection is the migration's
+-- contract: it reads the replayed lists, never the events, so it means the same under every format.
+function M.StandingsDigest(view)
+    local lists = {}
+    for id, s in pairs(view.lists) do
+        local members, awards, undo = {}, {}, {}
+        for name, m in pairs(s.members) do members[name] = { active = m.active, wins = m.wins, passes = m.passes } end
+        for aid, a in pairs(s.awards) do awards[aid] = { member = a.member, item = a.item, reverted = a.reverted or false } end
+        for chain, stack in pairs(s.undo) do
+            local entries = {}
+            for k, e in ipairs(stack) do entries[k] = { id = e.id, member = e.member, below = e.below } end
+            undo[chain] = entries
+        end
+        lists[id] = { order = s.order, members = members, awards = awards, undo = undo }
+    end
+    return Hash.Sum(Hash.Canon(lists))
+end
+
+end; chunk("KingsGambit", SK) end
 -- ===== Standings.lua =====
 do local chunk = function(...)
 -- King's Gambit: the rules of one list (ledger v2). Pure Lua.
@@ -712,11 +1005,12 @@ function handlers.Revert(s, ev, d) return planRevert(s, ev, d.target) end
 
 M.TYPES = {}
 for k in pairs(handlers) do M.TYPES[k] = true end
+M.HANDLERS = handlers -- a future format that changes the rules supplies its own set (see Migrations.lua)
 
 -- Validate and apply one list event. Returns true, or nil + reason (state untouched).
-function M.Apply(s, ev)
+function M.Apply(s, ev, handlerSet)
     if type(ev.data) ~= "table" then return nil, "baddata" end
-    local h = handlers[ev.type]
+    local h = (handlerSet or handlers)[ev.type]
     if not h then return nil, "unknowntype" end
     if ev.type ~= "CreateList" and not s.created then return nil, "nolist" end
     local commit, err = h(s, ev, ev.data)
@@ -753,18 +1047,18 @@ do local chunk = function(...)
 --   id     = Hash(prev .. "|" .. Canon{v, ledger, chain, seq, ts, author, type, list, data})
 -- Keep this file Lua 5.1-safe and 32-bit-integer safe.
 local _, SK = ...
-local Hash, Standings
-local M = SK:NewModule("Ledger", { "Hash", "Standings" }, function(d) Hash, Standings = d.Hash, d.Standings end)
+local Hash, Standings, Migrations
+local M = SK:NewModule("Ledger", { "Hash", "Standings", "Migrations" }, function(d) Hash, Standings, Migrations = d.Hash, d.Standings, d.Migrations end)
 
 M.GENESIS = "0000000000000000"
-M.VERSION = 2
+M.VERSION = 2 -- the format a ledger starts in, and the newest the RELEASED addon writes; see Migrations.lua for how it changes
 M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event was written
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true }
+    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 local function eventId(ev)
@@ -810,8 +1104,9 @@ end
 M.ByKey = byKey
 
 ---------------------------------------------------------------- the store
-function M.NewStore()
-    return { id = nil, genesisChain = nil, chains = {}, byId = {}, keyOf = {} }
+-- rules: what this build understands (Migrations.lua); the released addon's default is format 2 only.
+function M.NewStore(rules)
+    return { id = nil, genesisChain = nil, chains = {}, byId = {}, keyOf = {}, rules = rules or Migrations.Default, verified = {} }
 end
 
 -- The sort key `ev` would get if appended now (it must be the next event of its chain).
@@ -830,7 +1125,7 @@ function M.Receive(store, ev, trustHash)
         return nil, "malformed"
     end
     if store.byId[ev.id] then return "duplicate" end
-    if ev.v ~= M.VERSION then return nil, "badversion" end
+    if not store.rules.read[ev.v] then return nil, "badversion" end -- a format this build can't read (a newer one: update)
     if ev.chain:sub(1, #ev.author + 1) ~= ev.author .. "#" or #ev.chain ~= #ev.author + 9 then return nil, "badchain" end
     if not trustHash then
         local okHash, id = pcall(eventId, ev)
@@ -865,9 +1160,9 @@ function M.Receive(store, ev, trustHash)
 end
 
 -- Build an event at the tip of `chainId` (not yet received).
-function M.Build(store, chainId, author, type_, data, ts, list)
+function M.Build(store, chainId, author, type_, data, ts, list, format)
     local chain = store.chains[chainId]
-    local ev = { v = M.VERSION, ledger = (type_ == "Genesis") and "" or (store.id or ""), chain = chainId,
+    local ev = { v = format or M.VERSION, ledger = (type_ == "Genesis") and "" or (store.id or ""), chain = chainId,
         seq = chain and (#chain.events + 1) or 1, prev = chain and chain.head or M.GENESIS,
         ts = ts, author = author, type = type_, list = list, data = data or {} }
     local okHash, id = pcall(eventId, ev)
@@ -884,14 +1179,15 @@ function M.DropChain(store, cid)
         store.keyOf[ev.id] = nil
     end
     store.chains[cid] = nil
+    store.verified = {} -- what a migration's cut contained may have changed
     if store.genesisChain == cid then store.id, store.genesisChain = nil, nil end
 end
 
 -- Load saved chains, verifying links, times and (for chains up to verifyLimit events) hashes. The Genesis
 -- chain goes first. saved = { chains = { [chainId] = { events = {...} } } }.
 -- Returns store, problems ({ [chainId] = {reason, index} }), lazy ({ [chainId] = chain } still to hash-check).
-function M.LoadStore(saved, verifyLimit)
-    local store, problems, lazy = M.NewStore(), {}, {}
+function M.LoadStore(saved, verifyLimit, rules)
+    local store, problems, lazy = M.NewStore(rules), {}, {}
     local chains = (saved and saved.chains) or {}
     local function isGenesis(cid)
         local e = chains[cid].events and chains[cid].events[1]
@@ -965,7 +1261,7 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {} }
+    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {} }
 end
 
 local function snapshotOfficers(a)
@@ -1052,6 +1348,23 @@ function auth.SetGuildMaster(a, ev, d)
     return function() a.gm = d.name end
 end
 
+-- The cutover to a new format: the guild master's entry. `cut` says how many events of each chain are before the change, `digest` is the
+-- standings that history produces (checked by every client, see VerifyMigrations), and the entry itself is written in the NEW format, so
+-- a client that cannot read it learns the ledger has moved on the moment it arrives.
+function auth.Migrate(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if type(d.from) ~= "number" or type(d.to) ~= "number" or d.to ~= d.from + 1 or ev.v ~= d.to then return nil, "badmigrate" end
+    if d.from ~= a.format then return nil, "wrongformat" end
+    if type(d.cut) ~= "table" or not isName(d.digest) or not isName(d.reason) then return nil, "badmigrate" end
+    for cid, n in pairs(d.cut) do
+        if type(cid) ~= "string" or type(n) ~= "number" or n < 0 or n ~= math.floor(n) then return nil, "badmigrate" end
+    end
+    return function()
+        a.format = d.to
+        a.migrations[#a.migrations + 1] = { ev = ev, from = d.from, to = d.to, cut = d.cut, digest = d.digest }
+    end
+end
+
 function auth.SetOfficers(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
     if type(d.names) ~= "table" then return nil, "badnames" end
@@ -1105,8 +1418,10 @@ function auth.SetDisenchanter(a, ev, d)
 end
 
 ---------------------------------------------------------------- the view
-function M.NewView()
+function M.NewView(rules)
     return {
+        rules = rules or Migrations.Default,
+        frozen = nil,      -- set when a migration's digest does not match this client's replay: it must not write (see VerifyMigrations)
         lists = {},        -- [listId] = Standings state
         auth = newAuth(),  -- final authority state, plus history for "as of time t" questions
         conflicts = {},    -- { id, chain, author, type, list, reason, ts }
@@ -1156,10 +1471,20 @@ end
 local function applyAuthority(view, ev)
     local a = view.auth
     local commit, why
-    if ev.type ~= "Genesis" and not a.gm then
+    local cur = ev
+    if ev.type ~= "Migrate" then
+        if ev.v ~= a.format then
+            why = ev.v < a.format and "staleformat" or "earlyformat"
+        else
+            cur, why = Migrations.Up(view.rules, ev)
+        end
+    end
+    if why then
+        -- refused above
+    elseif ev.type ~= "Genesis" and not a.gm then
         why = "noledger"
     else
-        commit, why = auth[ev.type](a, ev, ev.data)
+        commit, why = auth[ev.type](a, cur, cur.data)
     end
     if not commit then conflict(view, ev, why); return nil, why end
     commit()
@@ -1173,18 +1498,27 @@ end
 -- the event is recorded as a conflict and skipped (it stays in its chain).
 function M.ApplyToView(view, ev, key)
     view.last, view.lastKey = ev, key
-    local ok, why = mayWrite(view.auth, ev.author, ev)
+    -- the format the event must be in (by the cut of each migration, so it is the same on every machine), then up to the newest this build works in
+    local ok, why, cur = true, nil, nil
+    local fmt = Migrations.FormatFor(view.auth.migrations, ev)
+    if ev.v ~= fmt then
+        ok, why = nil, ev.v < fmt and "staleformat" or "earlyformat"
+    else
+        cur, why = Migrations.Up(view.rules, ev)
+        ok = cur ~= nil
+    end
+    if ok then ok, why = mayWrite(view.auth, ev.author, ev) end
     if ok and ev.data and ev.data.seen ~= nil and not seenOf(ev) then ok, why = nil, "badseen" end
     if ok then
-        if ev.type == "Declined" then
-            local d = ev.data
+        if cur.type == "Declined" then
+            local d = cur.data
             if not (isName(d.requestedBy) and isName(d.request) and isName(d.declineReason)) then
                 ok, why = nil, "baddecline"
             else
                 view.declined[#view.declined + 1] = ev
             end
-        elseif ev.type == "ItemClasses" then
-            local d = ev.data
+        elseif cur.type == "ItemClasses" then
+            local d = cur.data
             if not itemRule(d) then
                 ok, why = nil, "baditemrule"
             else
@@ -1195,8 +1529,8 @@ function M.ApplyToView(view, ev, key)
                 end
                 view.itemRules[d.item] = { classes = classes, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
-        elseif ev.type == "ItemSuits" then
-            local d = ev.data
+        elseif cur.type == "ItemSuits" then
+            local d = cur.data
             if not itemSuits(d) then
                 ok, why = nil, "baditemsuits"
             elseif #d.roles == 0 then
@@ -1206,17 +1540,19 @@ function M.ApplyToView(view, ev, key)
                 for i, r in ipairs(d.roles) do roles[i] = r end
                 view.itemSuits[d.item] = { roles = roles, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
             end
-        elseif not isName(ev.list) then
+        elseif cur.type == "Migrate" then
+            -- recorded by pass 1 (authority); nothing to apply to a list
+        elseif not isName(cur.list) then
             ok, why = nil, "nolist"
         else
-            local s = view.lists[ev.list]
+            local s = view.lists[cur.list]
             local fresh = false
             if not s then
-                if ev.type == "CreateList" then s, fresh = Standings.New(), true else ok, why = nil, "nolist" end
+                if cur.type == "CreateList" then s, fresh = Standings.New(), true else ok, why = nil, "nolist" end
             end
             if ok then
-                ok, why = Standings.Apply(s, ev)
-                if ok and fresh then view.lists[ev.list] = s end
+                ok, why = Standings.Apply(s, cur, view.rules.handlers)
+                if ok and fresh then view.lists[cur.list] = s end
             end
         end
     end
@@ -1230,13 +1566,39 @@ end
 
 -- Replay the whole store into a fresh view. `extra` (optional) is one more event, not yet in the store,
 -- appended to its chain for this replay only (used to check a write before making it).
-function M.View(store, extra)
-    local view = M.NewView()
+-- Check every migration in force: replay the history inside its cut under THIS client's code and compare the standings with the digest the
+-- guild master recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
+-- wrong upcaster): the view is frozen, and the engine refuses to write. The result is remembered, since a cut never changes.
+function M.VerifyMigrations(view, store)
+    for _, m in ipairs(view.auth.migrations) do
+        local checked = store.verified[m.ev.id]
+        if checked == nil then
+            checked = { got = M.CutDigest(store, m.cut) }
+            checked.ok = checked.got == m.digest
+            store.verified[m.ev.id] = checked
+        end
+        if not checked.ok and not view.frozen then
+            view.frozen = { reason = "migrationmismatch", migration = m.ev.id, to = m.to, expected = m.digest, got = checked.got }
+        end
+    end
+end
+
+-- The standings digest of exactly the events inside `cut`, replayed under this store's rules.
+function M.CutDigest(store, cut)
+    local view = M.View(store, nil, function(ev) return Migrations.InCut(cut, ev) end)
+    return Migrations.StandingsDigest(view)
+end
+
+-- `include` (optional) keeps only the events it accepts: a view of part of the ledger (a migration's cut).
+function M.View(store, extra, include)
+    local view = M.NewView(store.rules)
     local all, keys = {}, {}
     for _, chain in pairs(store.chains) do
         for _, ev in ipairs(chain.events) do
-            all[#all + 1] = ev
-            keys[ev] = store.keyOf[ev.id]
+            if not include or include(ev) then
+                all[#all + 1] = ev
+                keys[ev] = store.keyOf[ev.id]
+            end
         end
     end
     if extra then
@@ -1249,6 +1611,7 @@ function M.View(store, extra)
     end
     table.sort(authority, byTs)
     for _, ev in ipairs(authority) do applyAuthority(view, ev) end
+    if not include then M.VerifyMigrations(view, store) end
     table.sort(rest, function(a, b) return byKey(keys[a], a, keys[b], b) end)
     for _, ev in ipairs(rest) do M.ApplyToView(view, ev, keys[ev]) end
     return view
@@ -1786,8 +2149,8 @@ do local chunk = function(...)
 -- to the WoW client only through a Client. No module-level state: tests and training can run many engines
 -- in one process. Design: docs/ledger-v2-design.md
 local _, SK = ...
-local Ledger
-local M = SK:NewModule("Engine", { "Ledger" }, function(d) Ledger = d.Ledger end)
+local Ledger, Migrations
+local M = SK:NewModule("Engine", { "Ledger", "Migrations" }, function(d) Ledger, Migrations = d.Ledger, d.Migrations end)
 
 local Engine = {}
 Engine.__index = Engine
@@ -1796,6 +2159,7 @@ local HEX = "0123456789abcdef"
 
 -- opts.syncVerifyLimit (default 2000): chains up to this many events are hash-verified at load; longer
 -- ones are verified in the background (see verifyTick). opts.verifyBatch: events per background tick.
+-- opts.rules: what this build understands (Migrations.lua); the released addon reads and writes format 2 only.
 function M.New(client, opts)
     local acct = client:storage().account
     acct.schema = 2
@@ -1803,9 +2167,11 @@ function M.New(client, opts)
     acct.ledger.chains = acct.ledger.chains or {}
     acct.mine = acct.mine or {}
     acct.config = acct.config or {}
-    local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {},
+    local rules = (opts and opts.rules) or Migrations.Default
+    assert(Migrations.Check(rules))
+    local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {}, rules = rules,
         verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
-    local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000)
+    local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000, rules)
     e.store, e.problems, e.verifying = store, problems, lazy
     for cid, chain in pairs(store.chains) do acct.ledger.chains[cid] = { events = chain.events } end
     for cid, p in pairs(problems) do
@@ -1840,6 +2206,12 @@ function Engine:rebuild()
 end
 
 function Engine:Fingerprint() return self.fingerprint end
+-- The format the ledger is in now (what a new entry is written in), and whether this client has refused to write because it can't reproduce
+-- a migration (see Ledger.VerifyMigrations): { reason, migration, to, expected, got } or nil.
+function Engine:Format() return self.view.auth.format end
+-- The ledger formats this build can read, lowest first (advertised in heartbeats so the guild master can see who is ready).
+function Engine:Readable() return Migrations.Readable(self.rules) end
+function Engine:Frozen() return self.view.frozen end
 function Engine:LedgerId() return self.store.id end
 function Engine:View() return self.view end
 function Engine:Conflicts() return self.view.conflicts end
@@ -1934,10 +2306,19 @@ end
 
 -- Write one event on this character's chain. It is checked against the current view first and only
 -- written if it would be accepted. Returns the event, or nil + reason.
-function Engine:Write(type_, data, list)
+-- `format` (optional) is the format to write in, for the entry that starts a new one (Migrate); otherwise the ledger's current format.
+function Engine:Write(type_, data, list, format)
     if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
+    if self.view.frozen then return nil, "frozen" end
+    local fmt = format or self.view.auth.format
+    if fmt ~= self.rules.current then
+        -- the code builds entries in its newest shape; the ledger may still be in an older format: write that one
+        local down, why = Migrations.Down(self.rules, { v = self.rules.current, type = type_, list = list, data = data }, fmt)
+        if not down then return nil, why or "unrepresentable" end
+        type_, data, list = down.type, down.data, down.list
+    end
     local cid = self:MyChain()
-    local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list)
+    local ev, err = Ledger.Build(self.store, cid, self.client:me(), type_, data, self:nextTs(cid), list, fmt)
     if not ev then return nil, err end
     local view = self.view
     local fresh
@@ -1965,6 +2346,20 @@ function Engine:Write(type_, data, list)
     self.fingerprint = Ledger.Fingerprint(self.store)
     self:fire("local", cid, ev)
     return ev
+end
+
+-- Move the ledger to the next format (the guild master does this once per migration, when the guild is ready). The entry names exactly
+-- how many events of each chain are before the change, and the digest of the standings they produce, as THIS client reads them. Returns
+-- the event, or nil + reason: "frozen", "badmigrate" (not the next format), "cantwrite" (this build doesn't work in that format), or
+-- what the ledger says ("notguildmaster").
+function Engine:Migrate(to, reason)
+    if self.view.frozen then return nil, "frozen" end
+    if type(to) ~= "number" or to ~= self.view.auth.format + 1 then return nil, "badmigrate" end
+    if self.rules.current < to then return nil, "cantwrite" end
+    local cut = {}
+    for cid, chain in pairs(self.store.chains) do cut[cid] = #chain.events end
+    local digest = Ledger.CutDigest(self.store, cut)
+    return self:Write("Migrate", { from = to - 1, to = to, cut = cut, digest = digest, reason = reason }, nil, to)
 end
 
 -- Start a new ledger (the guild master does this once). Returns the Genesis event.
@@ -3851,7 +4246,8 @@ do local chunk = function(...)
 --
 -- Messages (serialized tables, split into <=255-byte frames):
 --   H  heartbeat  { t="H", l = ledger id or "", g = genesis chain or "", c = { [chain] = { n, h } },
---                   a = the sender's addon version, e.g. "0.1.0+84" }
+--                   a = the sender's addon version, e.g. "0.1.0+84",
+--                   f = { ledger formats the sender can read, e.g. 2, 3 } }
 -- Every message carries `a` (post adds it), so even the first one a player sends can be judged by version.
 --
 -- Versions (see Version.lua). The addon version is Semantic Versioning, and two clients work together when they are on the same
@@ -3904,6 +4300,8 @@ end
 -- Events: forkResolved { chain, at, winner = "ours"|"theirs", orphaned }
 --         incompatible { peer, build, ours, mustUpdate = "them"|"us", line, ourLine }  (once per player and version: another line)
 --         newerBuild { peer, build, ours }  (once per player and version: a newer version on our own line; an update is available)
+--         unreadable { peer, format, readable, newer }  (once per format: an entry arrived in a ledger format this build can't read. When the
+--                    ledger has been migrated (see Migrations.lua) a build that doesn't know the new format learns it here, and must update)
 function Sync:on(event, fn)
     local list = self.handlers[event]
     if not list then list = {}; self.handlers[event] = list end
@@ -4026,7 +4424,7 @@ function Sync:heartbeat()
     local store = self.engine.store
     local c = {}
     for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
-    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion() })
+    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion(), f = self.engine:Readable() })
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
@@ -4098,8 +4496,11 @@ function Sync:note(sender, build)
     if build == nil then return not (known and known.incompatible) end
     local mine = self.client:addonVersion()
     local rel = Version.Relation(mine, build)
-    self.peers[sender] = { build = build, seen = self.client:now(), incompatible = not rel.compatible }
-    if known and known.build == build then return rel.compatible end
+    local before = known and known.build
+    local rec = known or {}
+    rec.build, rec.seen, rec.incompatible = build, self.client:now(), not rel.compatible
+    self.peers[sender] = rec
+    if before == build then return rel.compatible end
     if not rel.compatible then
         self:emit("incompatible", { peer = sender, build = build, ours = mine, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine })
     elseif rel.known and rel.order == 1 then
@@ -4131,7 +4532,7 @@ function Sync:peerVersions()
         local rel = Version.Relation(mine, p.build)
         local relation = not rel.known and "unknown" or not rel.compatible and "incompatible"
             or rel.order == 0 and "same" or rel.order > 0 and "newer" or "older"
-        out[#out + 1] = { name = name, build = p.build, relation = relation, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine }
+        out[#out + 1] = { name = name, build = p.build, relation = relation, mustUpdate = rel.mustUpdate, line = rel.line, ourLine = rel.ourLine, formats = p.formats }
     end
     table.sort(out, function(a, b) return a.name < b.name end)
     return out
@@ -4139,6 +4540,13 @@ end
 
 function Sync:onHeartbeat(msg, sender)
     if type(msg.c) ~= "table" then return end
+    if type(msg.f) == "table" and self.peers[sender] then
+        local formats = {}
+        for _, f in ipairs(msg.f) do
+            if type(f) == "number" and f == math.floor(f) and #formats < 8 then formats[#formats + 1] = f end
+        end
+        self.peers[sender].formats = formats
+    end
     local store = self.engine.store
     if type(msg.l) == "string" and msg.l ~= "" and store.id and msg.l ~= store.id then
         self.stats.otherLedger = self.stats.otherLedger + 1 -- a different ledger (another guild, training)
@@ -4177,6 +4585,15 @@ function Sync:onEvents(msg, sender)
             elseif err == "fork" then
                 self:beginFork(cid, evs, idx, msg.n, sender)
             elseif err ~= "noledger" then -- noledger: the heartbeat names the genesis chain to fetch first
+                if err == "badversion" and type(ev) == "table" and type(ev.v) == "number" then
+                    -- the ledger is in a format this build can't read (a migration happened): say so once per format
+                    self.unreadable = self.unreadable or {}
+                    if not self.unreadable[ev.v] then
+                        self.unreadable[ev.v] = true
+                        local readable = self.engine:Readable()
+                        self:emit("unreadable", { peer = sender, format = ev.v, readable = readable, newer = ev.v > readable[#readable] })
+                    end
+                end
                 self.stats.rejected = self.stats.rejected + 1
                 self.client:log("warn", ("sync rejected an event on '%s': %s"):format(cid, tostring(err)))
             end
