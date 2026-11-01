@@ -1821,6 +1821,9 @@ Asked for by the guild leader: a way to try the migration strategy in the simula
 - **One implementation, two uses:** the simulated format 3, the evaluation, the three breaks and the interactive world are one pure-Lua file, `simulator/src/migration_lab.lua`. The tests
   load it (`tests/test_migration.lua`) and the page embeds it, so what a person clicks is exactly what CI runs. It is development-only: the build embeds it in the page and it is not one of
   the addon's modules, so it never ships in the game.
+- **A fix after first use:** the "Move the ledger to format 3" button was reported as always disabled. It is disabled only once the ledger has moved (a ledger moves once) or while a check
+  runs, but it gave no reason, and the way back (Reset) was hidden in another section. It now says "Already moved to format 3" with a note, Reset sits beside the verdict, and a check that
+  fails can no longer leave the lab stuck busy.
 - **Guarded in CI:** the smoke driver walks a cutover with the buttons, expects the wrong client to freeze, and requires the evaluation and the "can it fail" check to pass.
 
 ### Scaling: measured, not guessed (2026-10-28)
