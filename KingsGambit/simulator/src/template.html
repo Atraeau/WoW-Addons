@@ -54,6 +54,9 @@
   .log div { padding: 3px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
   .fixrow { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
   .fixsel { max-width: 150px; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+  .modalbox { background: var(--panel); border: 1px solid var(--gold); border-radius: 8px; padding: 16px; max-width: 460px; width: 100%; }
+  .modalin { width: 100%; box-sizing: border-box; margin-top: 10px; font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 6px; }
   select { font: inherit; color: var(--text); background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 4px; }
   .credits { margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
   .credits a { color: var(--info); }
@@ -410,6 +413,34 @@
       '</div><div class="row" style="margin-top:8px"><button data-act="again">Run it again</button><button data-act="next" class="primary">Next scenario</button></div></div>';
   }
 
+  // The page's own confirm and prompt. The browser's native dialogs are not shown everywhere (an embedded browser, or a page
+  // that has dialogs blocked, answers "no" at once), and then a button that asks "are you sure?" seems dead. This one is
+  // part of the page: it resolves to true (confirm), the typed text (prompt, never empty) or null (cancelled).
+  function ask(message, input, okLabel) {
+    return new Promise((resolve) => {
+      const wrap = document.createElement("div");
+      wrap.className = "modal";
+      wrap.innerHTML = '<div class="modalbox" role="dialog" aria-modal="true"><div style="white-space: pre-line">' + esc(message) + "</div>" +
+        (input ? '<input class="modalin" type="text" maxlength="200" autocomplete="off" placeholder="Your reason">' : "") +
+        '<div class="row" style="margin-top:12px;justify-content:flex-end"><button data-modal="cancel">Cancel</button><button class="primary" data-modal="ok">' + esc(okLabel || "OK") + "</button></div></div>";
+      document.body.appendChild(wrap);
+      const field = wrap.querySelector("input");
+      const value = () => (field ? field.value.trim() || null : true);
+      const onKey = (e) => {
+        if (e.key === "Escape") finish(null);
+        else if (e.key === "Enter" && e.target.tagName !== "BUTTON") { const v = value(); if (v) finish(v); }
+      };
+      const finish = (v) => { document.removeEventListener("keydown", onKey, true); wrap.remove(); resolve(v); };
+      document.addEventListener("keydown", onKey, true);
+      wrap.addEventListener("click", (e) => {
+        const m = e.target.dataset && e.target.dataset.modal;
+        if (m === "cancel" || e.target === wrap) finish(null);
+        else if (m === "ok") { const v = value(); if (v) finish(v); else field.focus(); }
+      });
+      (field || wrap.querySelector("[data-modal=ok]")).focus();
+    });
+  }
+
   let questionKey = "";
   function render() {
     if (!st) return;
@@ -519,43 +550,44 @@
       case "speed": speed = Number(a); render(); renderLab(); break;
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
-      case "eligible": { const reason = window.prompt("Why are you asking to be eligible for this item? (Your reason goes in the record.)"); if (reason) act("eligible", a, reason); break; }
+      case "eligible": ask("Why are you asking to be eligible for this item? (Your reason goes in the record.)", true, "Ask").then((reason) => { if (reason) act("eligible", a, reason); }); break;
       case "giveTo": act("recipient", giftTo); break;
       case "keep": act("keep"); break;
       case "override":
-        if (window.confirm("Stop waiting? Their gift counts as a pass for them (they keep their place), the record says they didn't choose a recipient, and the draft goes on.")) act("override");
+        ask("Stop waiting? Their gift counts as a pass for them (they keep their place), the record says they didn't choose a recipient, and the draft goes on.", false, "Stop waiting").then((ok) => { if (ok) act("override"); });
         break;
       case "giveUp":
-        if (window.confirm("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.")) act("withdraw");
+        ask("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.", false, "Give up").then((ok) => { if (ok) act("withdraw"); });
         break;
       case "fixUndo":
-        if (window.confirm("Undo this award? The winner goes back up the list and later awards stay as they are. The undo is recorded in the history.")) act("undoAward", a);
+        ask("Undo this award? The winner goes back up the list and later awards stay as they are. The undo is recorded in the history.", false, "Undo").then((ok) => { if (ok) act("undoAward", a); });
         break;
       case "fixTrade": case "fixGift": {
         const to = fixSel[b];
         if (!to) { lastMsg = "Choose who it went to first (the \"It went to\" list)."; render(); break; }
-        const reason = window.prompt(el.dataset.act === "fixTrade"
+        const kind = el.dataset.act;
+        ask(kind === "fixTrade"
           ? "Why? The winner is restored to their place and " + to + " moves to the bottom, as if they had won it. (Your reason goes in the record.)"
-          : "Why? This only records that the winner gave it to " + to + ": nobody moves. (Your reason goes in the record.)");
-        if (reason) act(el.dataset.act === "fixTrade" ? "trade" : "giftAward", a, to, reason);
+          : "Why? This only records that the winner gave it to " + to + ": nobody moves. (Your reason goes in the record.)", true, "Record it")
+          .then((reason) => { if (reason) act(kind === "fixTrade" ? "trade" : "giftAward", a, to, reason); });
         break;
       }
       case "askUndo": {
-        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what went wrong (it goes in the record).");
-        if (reason) act("askUndo", a, reason);
+        ask("Why? Tell " + st.roles.masterLooter + " what went wrong (it goes in the record).", true, "Ask").then((reason) => { if (reason) act("askUndo", a, reason); });
         break;
       }
       case "askTrade": case "askGift": {
         const to = fixSel[b];
         if (!to) { lastMsg = "Choose who it went to first (the \"It went to\" list)."; render(); break; }
-        const reason = window.prompt("Why? Tell " + st.roles.masterLooter + " what happened (it goes in the record).");
-        if (reason) act(el.dataset.act, a, to, reason);
+        const kind = el.dataset.act;
+        ask("Why? Tell " + st.roles.masterLooter + " what happened (it goes in the record).", true, "Ask").then((reason) => { if (reason) act(kind, a, to, reason); });
         break;
       }
       case "fixAward": {
         if (!fixSel.awMember || !fixSel.awItem) { lastMsg = "Choose who won it and which item first."; render(); break; }
-        const reason = window.prompt("Why? " + fixSel.awMember + " moves to the bottom, as if they had won it. (Your reason goes in the record.)");
-        if (reason) act("award", fixSel.awMember, fixSel.awItem, reason);
+        const member = fixSel.awMember, item = fixSel.awItem;
+        ask("Why? " + member + " moves to the bottom, as if they had won it. (Your reason goes in the record.)", true, "Record it")
+          .then((reason) => { if (reason) act("award", member, item, reason); });
         break;
       }
       case "setDe": act("setDisenchanter", $("#deSel").value); break;

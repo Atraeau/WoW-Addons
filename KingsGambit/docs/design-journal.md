@@ -1599,6 +1599,21 @@ syntax errors "near <eof>" from both embedded scripts.
 - **Lesson for the publish job.** It deploys whatever passes CI, so CI has to test the way the page is really served.
   After a publish, the live URL itself is worth a look.
 
+### Fixed: "Undo this" did nothing where the browser's own dialogs aren't shown (2026-11-01)
+
+Reported by the guild leader: in "Fixing a mistake" the Undo this button did not work. It asked "Undo this award?"
+with the browser's `confirm()`. Where native dialogs aren't shown (an embedded browser such as the app's pane, or a
+page with dialogs blocked) `confirm()` answers "no" at once, so the press was silently dropped. The same went for
+every action that asks for a reason with `prompt()` (regret-trade, gift, award, the raider's asks, the eligibility
+request) and for "stop waiting" / "give up this gift". Reproduced with a real click in the pane: nothing happened;
+with `confirm` stubbed to yes it worked.
+
+- **Fix.** The page has its own confirm and prompt, a small dialog in the page (`ask`): Enter or the button accepts,
+  Escape or Cancel doesn't, and a reason can't be empty. No native dialog is left in the template.
+- **Test.** The smoke driver now makes `confirm` and `prompt` answer "no" and drives the page's dialog instead, so any
+  future native dialog fails the lesson. This is the check that was missing: the earlier driver stubbed the dialogs to
+  "yes", which hid the problem. Checked in the pane with real clicks.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

@@ -11,8 +11,18 @@ async () => {
   const errors = [];
   window.addEventListener("error", (e) => errors.push(String(e.message)));
   window.addEventListener("unhandledrejection", (e) => errors.push("unhandled: " + String(e.reason)));
-  window.confirm = () => true;
-  window.prompt = () => "smoke test";
+  // Native dialogs answer "no" at once in some browsers (an embedded one, or a page with dialogs blocked): the page must
+  // not depend on them. Any use of one fails the lesson, so a button that asks "are you sure?" has to use the page's own.
+  window.confirm = () => false;
+  window.prompt = () => null;
+  const answerModal = () => {
+    const ok = document.querySelector(".modal [data-modal=ok]");
+    if (!ok) return false;
+    const field = document.querySelector(".modal input");
+    if (field) field.value = "smoke test";
+    ok.click();
+    return true;
+  };
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const fire = (b) => b.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
@@ -40,14 +50,18 @@ async () => {
 
   // The corrections a lesson asks for, by scenario title.
   const FIXES = {
-    "Fixing a mistake": async () => fire(btn("fixUndo")),
+    "Fixing a mistake": async () => { fire(btn("fixUndo")); await sleep(200); if (!answerModal()) throw new Error("no confirmation dialog appeared"); },
     "The item went to someone else": async () => {
       await choose(fixRow("Brann", "Gauntlets of Might"), "Dara");
       fire(fixRow("Brann", "Gauntlets of Might").querySelector("[data-act=fixTrade]"));
+      await sleep(200);
+      if (!answerModal()) throw new Error("no reason dialog appeared");
     },
     "The item went to someone else, after a big hand-out": async () => {
       await choose(fixRow("Brann", "Brutality Blade"), "Hale");
       fire(fixRow("Brann", "Brutality Blade").querySelector("[data-act=fixTrade]"));
+      await sleep(200);
+      if (!answerModal()) throw new Error("no reason dialog appeared");
     },
   };
 
@@ -76,6 +90,7 @@ async () => {
     if (start) fire(start);
     // play on until the confirm button: a learner who is offered a leftover or a gift declines
     const confirm = await waitFor(() => {
+      answerModal();
       const c = btn("confirm");
       if (c) return c;
       const d = btn("decline");
@@ -131,6 +146,8 @@ async () => {
         await choose(row, other);
         const trade = [...document.querySelectorAll(".card")].find((c) => /Ask the Master Looter/.test(c.textContent)).querySelector("[data-act=askTrade]");
         fire(trade);
+        await sleep(200);
+        if (!answerModal()) problems.push(where + "no reason dialog appeared");
         const answered = await waitFor(() => /Aldric (accepted|declined)/.test(document.body.innerText), 5000);
         if (!answered) problems.push(where + "the bot Master Looter did not answer the request");
         else played.push("a bot is the Master Looter: asked for a regret-trade of " + who + "'s item, " + (/Aldric accepted/.test(document.body.innerText) ? "accepted" : "declined"));
