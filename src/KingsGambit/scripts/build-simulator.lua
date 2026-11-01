@@ -36,6 +36,14 @@ for _, name in ipairs({ "Registry", table.unpack(MODULES) }) do
     parts[#parts + 1] = 'end; chunk("KingsGambit", SK) end'
 end
 parts[#parts + 1] = "SK:Resolve()"
+-- The migration lab (simulator/src/migration_lab.lua) is development-only: it is NOT one of the addon's modules and never ships in the game. The tests load
+-- the same file, so the page and the tests run the same code.
+local lab = read(DIR .. "src/migration_lab.lua")
+assert(not lab:find("</script", 1, true), "the migration lab must not contain </script")
+parts[#parts + 1] = "-- ===== migration_lab.lua (simulator only) ====="
+parts[#parts + 1] = "KG_LAB = (function(...)"
+parts[#parts + 1] = lab
+parts[#parts + 1] = "end)(SK)"
 local engine = table.concat(parts, "\n")
 assert(not engine:find("</script", 1, true), "engine source must not contain </script")
 local api = read(DIR .. "src/api.lua")

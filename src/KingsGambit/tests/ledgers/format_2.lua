@@ -1,5 +1,5 @@
 -- A real saved ledger in FORMAT 2, as released in 0.1.x, using every event type that format has. GENERATED once by
--- tests/ledgers/make-format2.lua and then frozen: do not edit or regenerate. Every release must load it, verify it and
+-- tests/ledgers/make_format_2.lua and then frozen: do not edit or regenerate. Every release must load it, verify it and
 -- replay it to `expect`. See tests/test_schemas.lua and the design journal (ledger migration).
 return {
   expect = {

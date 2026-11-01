@@ -1,9 +1,9 @@
--- Builds tests/ledgers/format2.lua: a REAL saved ledger in format 2 (the format released in 0.1.x) that uses every event type
+-- Builds tests/ledgers/format_2.lua: a REAL saved ledger in format 2 (the format released in 0.1.x) that uses every event type
 -- that format has, together with the standings it must always replay to.
 --
 -- It is data, not a test: once written and committed it must NEVER change, and nobody should regenerate it. Its whole value is that
 -- it is what format 2 looked like on the day it was published, so every later release can be held to loading, verifying and
--- replaying it to the same standings (tests/test_schemas.lua). Run from src/KingsGambit:  lua tests/ledgers/make-format2.lua
+-- replaying it to the same standings (tests/test_schemas.lua). Run from src/KingsGambit:  lua tests/ledgers/make_format_2.lua
 local H = dofile("tests/harness.lua")
 local SK = H.SK
 local Ledger, Hash = SK.modules.Ledger, SK.modules.Hash
@@ -98,11 +98,11 @@ local chains = {}
 for cid, chain in pairs(store.chains) do chains[cid] = { events = chain.events } end
 local out = {
     "-- A real saved ledger in FORMAT 2, as released in 0.1.x, using every event type that format has. GENERATED once by",
-    "-- tests/ledgers/make-format2.lua and then frozen: do not edit or regenerate. Every release must load it, verify it and",
+    "-- tests/ledgers/make_format_2.lua and then frozen: do not edit or regenerate. Every release must load it, verify it and",
     "-- replay it to `expect`. See tests/test_schemas.lua and the design journal (ledger migration).",
     "return " .. ser({ format = 2, ledger = { chains = chains }, expect = expect }) .. "\n",
 }
-local f = assert(io.open("tests/ledgers/format2.lua", "wb"))
+local f = assert(io.open("tests/ledgers/format_2.lua", "wb"))
 f:write(table.concat(out, "\n"))
 f:close()
-print("wrote tests/ledgers/format2.lua: " .. (function() local n = 0 for _, c in pairs(chains) do n = n + #c.events end return n end)() .. " events")
+print("wrote tests/ledgers/format_2.lua: " .. (function() local n = 0 for _, c in pairs(chains) do n = n + #c.events end return n end)() .. " events")

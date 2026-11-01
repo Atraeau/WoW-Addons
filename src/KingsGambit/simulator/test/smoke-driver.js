@@ -174,5 +174,36 @@ async () => {
     }
     if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
   }
+  // The migration lab: walk a migration with the buttons, then run the scored evaluation and the "can it fail" check
+  {
+    const where = "[migration lab] ";
+    const before = errors.length;
+    fire(btn("tab", "Migration lab"));
+    await sleep(600);
+    const verdict = () => (document.querySelector("#mig .verdict") || { textContent: "" }).textContent;
+    const lab = (act, a, b) => buttons().find((x) => x.dataset.act === act && (a === undefined || x.dataset.a === a) && (b === undefined || x.dataset.b === b));
+    if (!/still in format 2/.test(verdict())) problems.push(where + "did not start with one ledger in format 2: " + verdict().slice(0, 120));
+    fire(lab("mig-write", "GM", "member")); fire(lab("mig-write", "Off", "member")); fire(lab("mig-write", "Off", "award"));
+    const fast = btn("speed", "16x"); if (fast) fire(fast);
+    const ok1 = await waitFor(() => /still in format 2/.test(verdict()) && !/Not the same/.test(verdict()) && document.querySelectorAll("#mig .peer .pill.good").length === 5, 20000);
+    if (!ok1) problems.push(where + "the players did not agree after writing entries");
+    fire(lab("mig-migrate"));
+    const ok2 = await waitFor(() => /Format 3 is in force/.test(verdict()) && /replayed the old history themselves/.test(verdict()), 20000);
+    if (!ok2) problems.push(where + "the cutover did not complete: " + verdict().slice(0, 160));
+    fire(lab("mig-write", "Off", "member"));
+    fire(lab("mig-update", "Off")); fire(lab("mig-update", "Eira"));
+    const ok3 = await waitFor(() => /Everyone is on the new release/.test(verdict()), 30000);
+    if (!ok3) problems.push(where + "the laggards did not update: " + verdict().slice(0, 160));
+    fire(lab("mig-wrong"));
+    const ok4 = await waitFor(() => /FROZEN/.test(document.querySelector("#mig").textContent), 30000);
+    if (!ok4) problems.push(where + "the client with a wrong conversion was not frozen");
+    for (const [act, a, want] of [["mig-eval", "one", /Passed: \d+ of \d+ checks held/], ["mig-mut", undefined, /the evaluation noticed every break/]]) {
+      fire(lab(act, a));
+      const done = await waitFor(() => [...document.querySelectorAll("#mig .card h2")].some((h) => want.test(h.textContent)), 60000);
+      if (!done) problems.push(where + act + ": did not pass: " + [...document.querySelectorAll("#mig .card h2")].map((h) => h.textContent).join(" | "));
+    }
+    played.push("migration lab: walked a cutover, froze a wrong client, scored the evaluation");
+    if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
+  }
   return { problems, played, errors };
 }

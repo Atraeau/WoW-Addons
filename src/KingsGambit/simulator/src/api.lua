@@ -812,6 +812,30 @@ function api.lab_check(id)
     return s
 end
 
+---------------------------------------------------------------- migration lab
+-- The interactive world and the evaluation come from the shared lab module (simulator/src/migration_lab.lua).
+local mig
+local function migWorld() if not mig then mig = KG_LAB.New() end return mig end
+local function migResult(ok, why)
+    local s = migWorld():state()
+    s.ok, s.why = ok and true or false, why
+    return s
+end
+function api.mig_state() return migWorld():state() end
+function api.mig_reset() mig = KG_LAB.New(); return mig:state() end
+function api.mig_advance(sec) migWorld():advance(sec); return mig:state() end
+function api.mig_write(name, kind) return migResult(migWorld():write(name, kind)) end
+function api.mig_migrate() return migResult(migWorld():migrate()) end
+function api.mig_update(name) return migResult(migWorld():update(name)) end
+function api.mig_wrong() return migResult(migWorld():joinWrong()) end
+function api.mig_net(drop, dup) migWorld():net(drop, dup); return mig:state() end
+-- one scored evaluation (the page calls it per guild so it can show progress)
+function api.mig_eval_one(seed, lossy)
+    local card, stats = KG_LAB.evaluate(tonumber(seed) or 1, lossy == "1" or lossy == 1)
+    return { seed = tonumber(seed), lossy = (lossy == "1" or lossy == 1), card = card, events = stats.events, cutoverSeconds = stats.cutoverSeconds, stale = stats.stale, lateSeconds = stats.lateSeconds }
+end
+function api.mig_mutations() return { results = KG_LAB.mutations() } end
+
 -- JS entry point: window.KG(name, a, b, c) -> JSON string.
 js.global.KG = function(_, name, a, b, c)
     local fn = api[name]

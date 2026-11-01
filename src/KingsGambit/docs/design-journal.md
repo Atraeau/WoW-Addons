@@ -1789,6 +1789,40 @@ for clients that can't read the new format.
 to score the strategy: history preserved, digests agree, convergence under loss and reordering, old clients told rather than corrupted,
 stale writes recorded, a deliberately wrong upcaster caught by the digest. See `tests/test_migration.lua`.
 
+### Decision: the ledger format is one whole number, separate from the addon's Semantic Version (2026-11-02)
+
+Asked by the guild leader (who leaned to a single number): should the ledger's format version be Semantic Versioning too, or one number? **One whole
+number (`v`), independent of the addon version.** Reasons:
+
+- **It answers a different question.** The addon's SemVer says which *players* may work together (a line). The format says whether *this build can read this event*:
+  membership in the set of formats a build reads (`2`, `3`), not a range or a precedence. A bridge release adds a readable format without changing its line.
+- **Ledger events have no compatible-change class today.** An older reader rejects an event type it doesn't know, so there is no safe "MINOR" for the data: every change is a
+  new format, an upcaster and a cutover. A second number would always be 0.
+- **It is hashed into every event.** Keeping it a plain integer keeps every old id valid, and `Schemas`/`Migrations` key on it directly.
+- **Compatible additions are handled where they actually happen:** an added optional field is a deliberate edit of the frozen schema baseline (a reviewed change with its
+  hash), not a number.
+- **What would change this:** a mechanism for old readers to *skip* informational event types safely (an "ignorable" marker on the event). Then a compatible
+  additive class exists and a minor revision would mean something. Not built; we would revisit then.
+
+Files for each published format's golden ledger are named with an underscore, `tests/ledgers/format_2.lua` (generated once by `make_format_2.lua`).
+
+### Simulator: the migration lab (2026-11-02)
+
+Asked for by the guild leader: a way to try the migration strategy in the simulator. A third tab, **Migration lab**, next to the loot session and the sync lab.
+
+- **An interactive world:** five real engines on a simulated network. GM (guild master) and two raiders run the new release, which can read formats 2 and 3 and writes the
+  ledger's current format; Off (an officer) and Eira are still on the old release. Buttons write entries at the guild master and the officer (a new member with no position, an
+  award), move the ledger to format 3 (the cutover), update an old player, and let a client with a wrong conversion join. Every player card shows its release, the ledger
+  format it sees, its standings, and what it was told or recorded (checked the digest, told to update, frozen, stale entries). A verdict banner says what is true now and what to
+  try next. Each control says what it does, as in the sync lab.
+- **A scored evaluation:** "Run the evaluation" runs a whole migration on a separate guild (random history, the cutover, writes after it, a wrong client, the updates) and lists
+  every check with a tick or a cross. "Run it over 8 random guilds" does it eight times, half on a network that drops and repeats messages. "Prove the evaluation can fail" breaks
+  the strategy three ways on purpose and checks the scoring notices each. In a browser: one guild ~1 s, eight ~11 s, the three breaks ~5 s.
+- **One implementation, two uses:** the simulated format 3, the evaluation, the three breaks and the interactive world are one pure-Lua file, `simulator/src/migration_lab.lua`. The tests
+  load it (`tests/test_migration.lua`) and the page embeds it, so what a person clicks is exactly what CI runs. It is development-only: the build embeds it in the page and it is not one of
+  the addon's modules, so it never ships in the game.
+- **Guarded in CI:** the smoke driver walks a cutover with the buttons, expects the wrong client to freeze, and requires the evaluation and the "can it fail" check to pass.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

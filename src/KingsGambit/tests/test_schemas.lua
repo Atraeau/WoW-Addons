@@ -61,7 +61,7 @@ test("validation checks required fields and types, and ignores fields it does no
 end)
 
 H.section("Schemas: the golden ledger of format 2 (released in 0.1.x)")
-local golden = assert(loadfile("tests/ledgers/format2.lua"))()
+local golden = assert(loadfile("tests/ledgers/format_2.lua"))()
 H.goldenFormat2 = golden
 
 test("every event type format 2 had when it was published appears in the golden ledger", function()

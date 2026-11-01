@@ -209,7 +209,7 @@ that is the point). Instead:
 - **Upcasters read old ledgers** (`src/Migrations.lua`). For each old format there is a pure function mapping an event to the next format's equivalent; replaying
   a ledger runs every event through the chain to the newest format, so current code reads any old ledger. An upcaster makes the old *meaning* explicit where the new
   rules would differ (a changed default becomes an explicit value), so a past outcome is never re-decided.
-- **A golden ledger per published format** (`tests/ledgers/format2.lua`, 41 real events covering every event type) must always load, verify and replay to the
+- **A golden ledger per published format** (`tests/ledgers/format_2.lua`, 41 real events covering every event type) must always load, verify and replay to the
   standings it was frozen with. This is the proof that "any ledger, however old" still works; it also catches a wrong upcaster before release.
 - **The cutover is a ledger entry** (`Migrate`, guild master only). Until it, everyone writes the ledger's current format, even a release that knows the next
   (a *downcaster* writes the old shape). `cut` names exactly which events are before the change, the same on every machine whatever order they arrive in. After the

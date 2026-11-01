@@ -77,9 +77,10 @@
 <div class="wrap">
   <h1>King's Gambit simulator</h1>
   <p class="sub">The real loot engine, running in your browser over a simulated raid. You are the Master Looter ("You") and a raider like any other: your place on the list moves as you win, the same as everyone's. Whoever is at the bottom is the salvager.</p>
-  <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button></div>
+  <div class="tabs"><button data-act="tab" data-a="loot" id="tab-loot" class="on">Loot session</button><button data-act="tab" data-a="lab" id="tab-lab">Sync lab</button><button data-act="tab" data-a="mig" id="tab-mig">Migration lab</button></div>
   <div id="app"><div class="loading">Starting the engine&hellip;</div></div>
   <div id="lab" hidden></div>
+  <div id="mig" hidden></div>
   <footer class="credits">
     King's Gambit is a transparent loot system for WoW: Forever, derived from Suicide Kings.
     This page runs the addon's own Lua code in your browser (through <a href="https://fengari.io">fengari</a>, MIT license); nothing is sent anywhere.
@@ -549,13 +550,141 @@
         '<p class="hint"><b>Muted.</b> Their addon cannot send. What they write is kept and sent after they are unmuted.</p></div></div>';
   }
 
+  // ---------------------------------------------------------------- the migration lab
+  // A hypothetical "format 3" of the ledger (nothing like it exists yet) used to try the migration strategy: players on different releases, a cutover,
+  // an update, and a client whose conversion of old entries is wrong. The checks at the bottom score the whole strategy and prove the scoring can fail.
+  let mig = null, migEval = null, migMut = null, migBusy = "", migMsg = "";
+  const MIG_WHY = { notauthorized: "only the guild master and officers can write entries", noplayer: "no such player", nolist: "there is no list yet",
+    alreadynew: "that player is already on the new release", alreadyjoined: "Fenn has already joined",
+    badmigrate: "the ledger has already moved to the next format (or this is not the next format)", frozen: "that client refused: it could not reproduce the cutover",
+    cantwrite: "that release does not know the next format", notguildmaster: "only the guild master can write the cutover" };
+  function migCall(name, a, b) {
+    mig = call(name, a, b);
+    migMsg = mig.ok === false ? "Not allowed: " + (MIG_WHY[mig.why] || mig.why) : "";
+    renderMig();
+  }
+  const tick = () => new Promise((r) => setTimeout(r, 30));
+  async function runMigEval(mode) {
+    const seeds = mode === "many" ? [2, 3, 4, 5, 6, 7, 8, 9] : [1];
+    const runs = [];
+    migEval = null; migMut = null;
+    for (const sd of seeds) {
+      migBusy = "Running guild " + (runs.length + 1) + " of " + seeds.length + "&hellip;";
+      renderMig();
+      await tick();
+      runs.push(call("mig_eval_one", sd, mode === "many" && sd % 2 === 0 ? 1 : 0));
+    }
+    migEval = { mode, runs }; migBusy = ""; renderMig();
+  }
+  async function runMigMut() {
+    migEval = null; migMut = null; migBusy = "Breaking the strategy three ways, one at a time&hellip;"; renderMig();
+    await tick();
+    migMut = call("mig_mutations").results; migBusy = ""; renderMig();
+  }
+
+  // Is everyone in agreement, and what should the person try next?
+  function migVerdict() {
+    const ps = mig.players, olds = ps.filter((p) => p.release === "old"), news = ps.filter((p) => p.release !== "old");
+    const frozen = ps.filter((p) => p.frozen), behind = ps.filter((p) => p.status !== "in sync");
+    if (!mig.migrated) {
+      const agree = !behind.length;
+      return { cls: agree ? "good" : "warn", head: agree ? "Everyone shares one ledger, still in format 2" : "Not the same yet",
+        text: (agree ? "" : "Some players are catching up: " + behind.map((p) => esc(p.name)).join(", ") + ". ") +
+          news.length + " player(s) run the new release and " + olds.length + " run the old one, and they all read and write the same entries. Next: write a few entries as the guild master (new release) and as Off (old release), then press <b>Move the ledger to format 3</b>." };
+    }
+    const lines = [];
+    lines.push("The ledger is in <b>format 3</b>. It was cut over with " + mig.cutover.events + " entries before the change (digest <code>" + esc(mig.cutover.digest) + "</code>).");
+    const checked = news.filter((p) => p.verified === true).map((p) => esc(p.name));
+    if (checked.length) lines.push(checked.join(", ") + " replayed the old history themselves and got the same digest.");
+    if (olds.length) lines.push(olds.map((p) => esc(p.name)).join(", ") + (olds.length > 1 ? " are" : " is") + " still on the old release: they can't read format 3, were told to update, and their own ledger stays in format 2. Next: have Off write an entry (it will be recorded as stale), then update them.");
+    else lines.push("Everyone is on the new release. Next: let a client with a wrong conversion join and watch it refuse to write.");
+    if (frozen.length) lines.push("<b>" + frozen.map((p) => esc(p.name)).join(", ") + " refused to write:</b> its replay of the old history did not match the cutover, so it stopped rather than disagree with the guild.");
+    return { cls: frozen.length ? "warn" : "good", head: "Format 3 is in force", text: lines.join(" ") };
+  }
+
+  function renderMig() {
+    if (!mig || tab !== "mig") return;
+    const cls = { "in sync": "good", behind: "warn" };
+    const RELEASE = { old: "old release: reads format 2", new: "new release: reads formats 2 and 3", wrong: "new release with a WRONG conversion" };
+    const players = mig.players.map((p) => {
+      const cl = p.frozen ? "bad" : cls[p.status];
+      const notes = [];
+      if (p.verified === true) notes.push('<div class="small" style="color:var(--good)">&#10003; replayed the old history and got the cutover\'s digest</div>');
+      if (p.frozen) notes.push('<div class="small" style="color:var(--bad)">FROZEN: its replay of the old history does not match the cutover, so it refuses to write</div>');
+      if (p.unreadable) notes.push('<div class="small" style="color:var(--warn)">told: the ledger moved to format ' + p.unreadable + ", which this release can't read. Update to see new entries.</div>");
+      if (p.stale) notes.push('<div class="small" style="color:var(--warn)">' + p.stale + " entr" + (p.stale === 1 ? "y" : "ies") + " written in the old format after the cutover: recorded as stale, not applied</div>");
+      const buttons = [];
+      if (p.role !== "raider") {
+        buttons.push('<button data-act="mig-write" data-a="' + p.name + '" data-b="member"' + (busy() ? " disabled" : "") + ' title="Writes one entry in ' + p.name + "'s own copy: a new member with no position stated. In format 2 that means the bottom of the list; in format 3 it means the top. The new release spells its default out so both releases read it the same.\">Add a member</button>");
+        buttons.push('<button data-act="mig-write" data-a="' + p.name + '" data-b="award"' + (busy() ? " disabled" : "") + ' title="Writes one entry: the player at the top of the list wins an item and drops to the bottom. The new release writes the fields winner and recipient (format 3); the old one writes member and to (format 2).">Award an item</button>');
+      }
+      if (p.release === "old") buttons.push('<button data-act="mig-update" data-a="' + p.name + '"' + (busy() ? " disabled" : "") + ' title="This player installs the new release: same saved ledger, new code. They read formats 2 and 3 and catch up.">Update to the new release</button>');
+      return '<div class="card peer ' + cl + '"><div class="row spread"><b>' + esc(p.name) + '</b><span class="pill ' + cl + '">' + (p.frozen ? "frozen" : p.status) + "</span></div>" +
+        '<div class="small muted">' + esc(p.role) + " &middot; " + RELEASE[p.release] + "</div>" +
+        '<div class="small muted">ledger format ' + p.format + " &middot; " + p.events + " entries &middot; fingerprint <code>" + esc(p.head) + "</code></div>" +
+        '<ul class="mini">' + p.top.map((n, i) => "<li>" + (i + 1) + ". " + esc(n) + "</li>").join("") + (p.members > p.top.length ? "<li>&hellip; " + p.members + " on the list</li>" : "") + "</ul>" +
+        notes.join("") + (buttons.length ? '<div class="row" style="margin-top:8px">' + buttons.join("") + "</div>" : "") + "</div>";
+    }).join("");
+    const v = migVerdict();
+    const pct = (x) => Math.round(x * 100);
+    const netBtn = (label, drop, dup, tip) => '<button data-act="mig-net" data-a="' + drop + '" data-b="' + dup + '" title="' + esc(tip) + '" class="' + (pct(mig.drop) === pct(drop) && pct(mig.dup) === pct(dup) ? "sel" : "") + '">' + label + "</button>";
+    const cardRows = (card) => card.map((c) => '<div class="small" style="margin:3px 0;color:var(--' + (c.ok ? "good" : "bad") + ')">' + (c.ok ? "&#10003; " : "&#10007; ") + esc(c.name) + (c.detail ? ' <span class="muted">(' + esc(c.detail) + ")</span>" : "") + "</div>").join("");
+    let result = "";
+    if (migEval) {
+      const total = migEval.runs.reduce((n, r) => n + r.card.length, 0), held = migEval.runs.reduce((n, r) => n + r.card.filter((c) => c.ok).length, 0);
+      const ok = held === total;
+      result = '<div class="card ' + (ok ? "good" : "bad") + '" style="margin:10px 0 0"><h2>' + (ok ? "Passed: " : "Failed: ") + held + " of " + total + " checks held" +
+        (migEval.mode === "many" ? " across " + migEval.runs.length + " random guilds (half on a network that drops and repeats messages)" : "") + "</h2>" +
+        (migEval.mode === "many"
+          ? migEval.runs.map((r) => '<div class="small" style="margin:3px 0;color:var(--' + (r.card.every((c) => c.ok) ? "good" : "bad") + ')">' + (r.card.every((c) => c.ok) ? "&#10003; " : "&#10007; ") + "guild " + r.seed + (r.lossy ? " (lossy network)" : " (clean network)") + ": " + r.card.filter((c) => c.ok).length + " of " + r.card.length + " held</div>" +
+              r.card.filter((c) => !c.ok).map((c) => '<div class="small" style="margin:2px 0 2px 16px;color:var(--bad)">&#10007; ' + esc(c.name) + "</div>").join("")).join("")
+          : cardRows(migEval.runs[0].card) + '<div class="small muted" style="margin-top:6px">' + migEval.runs[0].events + " entries in the history; the cutover reached every new client in " + migEval.runs[0].cutoverSeconds + " s; " + migEval.runs[0].stale + " stale write(s) recorded; the old releases caught up in " + migEval.runs[0].lateSeconds + " s after updating.</div>") + "</div>";
+    }
+    if (migMut) {
+      const ok = migMut.every((m) => m.caught);
+      result = '<div class="card ' + (ok ? "good" : "bad") + '" style="margin:10px 0 0"><h2>' + (ok ? "Passed: the evaluation noticed every break" : "Failed: something slipped through") + "</h2>" +
+        migMut.map((m) => '<div class="small" style="margin:3px 0;color:var(--' + (m.caught ? "good" : "bad") + ')">' + (m.caught ? "&#10003; noticed: " : "&#10007; NOT noticed: ") + esc(m.name) + ' <span class="muted">(' + esc(m.detail) + ")</span></div>").join("") + "</div>";
+    }
+    if (migBusy) result = '<div class="card" style="margin:10px 0 0"><div>' + migBusy + "</div></div>";
+    $("#mig").innerHTML =
+      '<p class="sub">A ledger can never be rewritten: every entry keeps the format it was written in, so every hash still verifies however old it is. When the rules change, a new release learns to <b>read</b> the old format, and the guild master <b>cuts the ledger over</b> with one entry. This lab simulates that with a <b>hypothetical format 3</b> (it does not exist): award entries rename their fields, and a new member with no stated position goes to the <b>top</b> instead of the bottom. Five players, real engines, a simulated network.</p>' +
+      '<div class="card verdict ' + v.cls + '"><h2>' + (v.cls === "good" ? "&#10003; " : "&#9203; ") + v.head + "</h2><div>" + v.text + "</div></div>" +
+      '<div class="peers">' + players + "</div>" +
+      '<div class="card"><h2>Do something</h2>' +
+        '<div class="small muted">Each button acts on the players above. Write entries at the guild master (GM, new release) and at Off (an officer still on the old release) with the buttons on their cards. Raiders can\'t write: only the guild master and officers can.</div>' +
+        '<div class="small" style="margin:10px 0 3px"><b>The cutover</b> &mdash; the guild master writes one entry that records exactly which entries are before the change and the standings they produce. Every player on the new release replays that history themselves and checks they get the same answer. Players on the old release can\'t read it: they are told to update, and their own ledger stays in format 2.</div><div class="row">' +
+          '<button class="primary" data-act="mig-migrate"' + (busy() || mig.migrated ? " disabled" : "") + ' title="The guild master moves the ledger to format 3.">Move the ledger to format 3</button></div>' +
+        '<div class="small" style="margin:10px 0 3px"><b>A wrong conversion</b> &mdash; a client joins whose conversion of old entries is wrong (it forgets that an old "no position" meant the bottom). It replays the history, gets a different answer from the cutover\'s, and must refuse to write.</div><div class="row">' +
+          '<button data-act="mig-wrong"' + (busy() ? " disabled" : "") + '>Join with a wrong conversion</button><button data-act="mig-reset" title="Back to five players sharing a format 2 ledger">Reset the lab</button></div>' +
+        '<div class="small" style="margin:10px 0 3px"><b>The network</b> &mdash; messages can be thrown away or delivered twice; the players still end up agreeing.</div><div class="row">' +
+          netBtn("Healthy", 0, 0, "Every message arrives once") + netBtn("Lossy", 0.2, 0.2, "1 in 5 messages is thrown away and 1 in 5 arrives twice") +
+          '<button data-act="labToggle" title="Pause or run the simulated clock. Messages only travel while it runs.">' + (labRunning ? "Pause the clock" : "Run the clock") + "</button>" +
+          [1, 4, 16].map((s) => '<button data-act="speed" data-a="' + s + '" class="' + (speed === s ? "sel" : "") + '">' + s + "x</button>").join("") +
+          '<span class="small muted">Clock ' + mig.time.toFixed(0) + " s &middot; " + mig.inFlight + " messages travelling</span></div>" +
+        (migMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(migMsg) + "</div>" : "") + "</div>" +
+      '<div class="card"><h2>Checks: score the strategy</h2><div class="small muted" style="margin-bottom:6px">These run a whole migration for you on separate guilds (they do not touch the players above): a mixed guild with a random history, the cutover, writes after it, a client with a wrong conversion, and the updates. Each says what it expected and whether it held. <b>Prove the evaluation can fail</b> breaks the strategy three ways on purpose and checks the scoring notices each.</div>' +
+        '<div class="row"><button class="primary" data-act="mig-eval" data-a="one"' + (migBusy ? " disabled" : "") + '>Run the evaluation (one guild)</button><button data-act="mig-eval" data-a="many"' + (migBusy ? " disabled" : "") + ' title="Eight random guilds, half on a network that drops and repeats messages. Takes a little while.">Run it over 8 random guilds</button><button data-act="mig-mut"' + (migBusy ? " disabled" : "") + '>Prove the evaluation can fail</button></div>' + result + "</div>" +
+      '<div class="layout" style="grid-template-columns: 1fr 1fr"><div class="card"><h2>What happened</h2><div class="log">' +
+        (mig.log.length ? mig.log.slice().reverse().map((l) => "<div><span class=\"muted small\">" + l.t.toFixed(0) + "s</span> " + esc(l.text) + "</div>").join("") : '<span class="muted small">Nothing yet.</span>') + "</div></div>" +
+      '<div class="card"><h2>What the words mean</h2>' +
+        '<p class="hint"><b>Format.</b> The shape and meaning of the entries in the ledger. Every entry stays in the format it was written in, for ever.</p>' +
+        '<p class="hint"><b>Old and new release.</b> A new release can read formats 2 and 3. Until the cutover it still writes format 2, so old and new players agree.</p>' +
+        '<p class="hint"><b>Conversion (upcaster).</b> How a new release reads an old entry as the new format, keeping its old meaning (an old "no position" stays the bottom).</p>' +
+        '<p class="hint"><b>Cutover.</b> One entry from the guild master. After it entries must be in format 3; an entry still in format 2 is recorded as <b>stale</b>, never silently applied.</p>' +
+        '<p class="hint"><b>Digest.</b> A short code for the standings the old history produces. Every new client recomputes it; a client that gets a different one is <b>frozen</b>.</p></div></div>';
+  }
+  const busy = () => !!migBusy;
+
   function showTab(t) {
     tab = t;
     $("#app").hidden = t !== "loot";
     $("#lab").hidden = t !== "lab";
+    $("#mig").hidden = t !== "mig";
     $("#tab-loot").classList.toggle("on", t === "loot");
     $("#tab-lab").classList.toggle("on", t === "lab");
+    $("#tab-mig").classList.toggle("on", t === "mig");
     if (t === "lab") { if (!checks.length) checks = call("lab_checks").checks; labCall("lab_state"); }
+    if (t === "mig") migCall("mig_state");
   }
 
   // Buttons act when pressed, not when released: the page redraws several times a second, and a button replaced
@@ -585,13 +714,21 @@
       case "lab-restrict": labCall("lab_restrict", a, b); return;
       case "lab-join": labCall("lab_join"); return;
       case "lab-reset": labCall("lab_reset"); return;
+      case "mig-write": migCall("mig_write", a, b); return;
+      case "mig-migrate": migCall("mig_migrate"); return;
+      case "mig-update": migCall("mig_update", a); return;
+      case "mig-wrong": migCall("mig_wrong"); return;
+      case "mig-net": migCall("mig_net", a, b); return;
+      case "mig-reset": migEval = null; migMut = null; migCall("mig_reset"); return;
+      case "mig-eval": runMigEval(a); return;
+      case "mig-mut": runMigMut(); return;
       case "lab-check": labCall("lab_check", a); return;
       case "scenario": seed = 1; mlChoice = "You"; start(a); break;
       case "again": seed += 1; start(current); break;
       case "next": { const i = scenarios.findIndex((s) => s.id === current); seed = 1; mlChoice = "You"; start(scenarios[(i + 1) % scenarios.length].id); break; }
       case "toggle": started = true; running = !running; render(); renderLab(); break;
-      case "labToggle": labRunning = !labRunning; render(); renderLab(); break;
-      case "speed": speed = Number(a); render(); renderLab(); break;
+      case "labToggle": labRunning = !labRunning; render(); renderLab(); renderMig(); break;
+      case "speed": speed = Number(a); render(); renderLab(); renderMig(); break;
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": ask("Why are you asking to be eligible for this item? (Your reason goes in the record.)", true, "Ask").then((reason) => { if (reason) act("eligible", a, reason); }); break;
@@ -655,6 +792,7 @@
 
   setInterval(() => {
     if (tab === "lab") { if (labRunning && lab) labCall("lab_advance", speed * 0.25); return; }
+    if (tab === "mig") { if (labRunning && mig && !migBusy) migCall("mig_advance", speed * 0.25); return; }
     if (!st || !running || ["review", "done", "cancelled"].indexOf(st.phase) >= 0) return;
     st = call("advance", speed * 0.25);
     updateMoved();
