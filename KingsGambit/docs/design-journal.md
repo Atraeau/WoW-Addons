@@ -1614,6 +1614,30 @@ with `confirm` stubbed to yes it worked.
   future native dialog fails the lesson. This is the check that was missing: the earlier driver stubbed the dialogs to
   "yes", which hid the problem. Checked in the pane with real clicks.
 
+### Simulator: the sync lab says what each control does, and tests itself (2026-11-01)
+
+Asked for by the guild leader: it wasn't clear what "split" or the "lost" and "duplicated" percentages meant, or what to do
+to see that the sync works.
+
+- **Every control is explained where it sits**, in words that don't assume the sync's vocabulary:
+  - **Split** became "Cut Aldric off" and "Cut in half": players only hear their own side, and every message across the line is
+    discarded (the page now says so). **Reconnect** doesn't replay lost messages; players notice what's missing at their next
+    heartbeat and ask.
+  - **Lost** became "Thrown away" (None / 1 in 5 / 2 in 5): that share of all messages is destroyed in transit.
+    **Duplicated** became "Delivered twice" (Never / Half of them): a repeat must change nothing.
+  - **Restrict** became **Mute**: the player's addon can't send (as in a boss fight), what they write waits in a queue.
+  - **+ member / + award** became "Add a raider" / "Award an item", each with a tooltip saying it writes one entry at that
+    player only, until the network carries it. The figures line says what each number is. A short glossary covers ledger,
+    fingerprint, own chain, heartbeat and muted.
+- **A verdict banner says whether everyone has the same ledger**, and when not, why: the split, who is muted, the loss rate,
+  or "still on their way". It also says what will fix it.
+- **Checks: run a test.** Five buttons (split and reconnect, lose 2 in 5, deliver half twice, mute then unmute, a late player)
+  each reset the lab, do a fixed set of the things above, let the clock run and report each expectation with a tick or a cross
+  and the numbers (events per player, seconds to converge, messages really lost or duplicated). They judge by the same rule as
+  the banner: same fingerprint everywhere and nothing waiting to send. The checks are in `api.lua` (`lab_check`), so they
+  drive the same engines the buttons do.
+- **Guarded in CI:** the smoke driver opens the lab, runs all five and fails the build if any doesn't pass.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

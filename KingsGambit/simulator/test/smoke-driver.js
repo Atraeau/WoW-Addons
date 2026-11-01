@@ -155,5 +155,24 @@ async () => {
     }
     if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
   }
+  // The sync lab: every scripted check must pass (they judge themselves: see lab_check in api.lua)
+  {
+    const where = "[sync lab] ";
+    const before = errors.length;
+    fire(btn("tab", "Sync lab"));
+    await sleep(500);
+    const ids = buttons().filter((b) => b.dataset.act === "lab-check").map((b) => b.dataset.a);
+    if (ids.length < 5) problems.push(where + "expected at least 5 checks, found " + ids.length);
+    for (const id of ids) {
+      fire(buttons().find((b) => b.dataset.act === "lab-check" && b.dataset.a === id));
+      await sleep(300);
+      const card = [...document.querySelectorAll("#lab .card")].find((c) => /^(Passed|Failed)/.test(c.querySelector("h2") ? c.querySelector("h2").textContent : ""));
+      if (!card) { problems.push(where + id + ": no result shown"); continue; }
+      const title = card.querySelector("h2").textContent;
+      if (!/^Passed/.test(title)) problems.push(where + id + ": " + card.innerText.replace(/\n+/g, " | ").slice(0, 500));
+      else played.push("sync lab, " + title);
+    }
+    if (errors.length > before) problems.push(where + errors.slice(before).join("; "));
+  }
   return { problems, played, errors };
 }

@@ -561,7 +561,7 @@ local function labReset()
     lab.counter = 5
     lab.net:advance(4)
     lab.log = {}
-    labLog("Four players are in sync. Try splitting the network, then writing at both ends.")
+    labLog("Four players start with the same ledger. Try a check below, or break the network yourself and write at different players.")
 end
 
 local function labState()
@@ -620,12 +620,12 @@ function api.lab_write(i, kind)
     local ev, err
     if kind == "member" then
         ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter .. "-Realm" })
-        if ev then labLog(p.name .. " added a member") end
+        if ev then labLog(p.name .. " added a raider to the list (written only in " .. p.name .. "'s copy until the network carries it)") end
     else
         local top = chain and chain.state.order[1]
         if not top then return labState() end
         ev, err = p.engine:Append("main", "Award", { member = top, item = "Item " .. lab.counter })
-        if ev then labLog(p.name .. " gave an item to " .. short(top)) end
+        if ev then labLog(p.name .. " awarded an item to " .. short(top) .. " (written only in " .. p.name .. "'s copy until the network carries it)") end
     end
     local s = labState()
     if not ev then s.error = tostring(err) end
@@ -646,14 +646,14 @@ function api.lab_partition(spec)
     end
     lab.net:partition(groups)
     lab.groups = table.concat(desc, "  |  ")
-    labLog("Network split: " .. lab.groups)
+    labLog("The network was split: " .. lab.groups .. ". Players can only hear those in their own group; messages across the line are discarded.")
     return labState()
 end
 
 function api.lab_heal()
     if not lab then labReset() end
     lab.net:heal(); lab.groups = nil
-    labLog("The network healed. Watch the heads converge.")
+    labLog("The network was reconnected. Within a few seconds the players' heartbeats show what each is missing, and they ask each other for it.")
     return labState()
 end
 
@@ -661,7 +661,7 @@ function api.lab_net(drop, dup)
     if not lab then labReset() end
     lab.net.dropRate = tonumber(drop) or 0
     lab.net.duplicateRate = tonumber(dup) or 0
-    labLog(("Network: %d%% of messages lost, %d%% duplicated"):format(lab.net.dropRate * 100, lab.net.duplicateRate * 100))
+    labLog(("Network now: %d%% of messages are thrown away in transit, %d%% are delivered twice"):format(lab.net.dropRate * 100, lab.net.duplicateRate * 100))
     return labState()
 end
 
@@ -671,15 +671,145 @@ function api.lab_restrict(i, flag)
     if not p then return labState() end
     p.restricted = (flag == "1")
     p.client:setRestricted(p.restricted)
-    labLog(p.name .. (p.restricted and " can no longer send addon messages (like during a boss fight)" or " can send again"))
+    labLog(p.name .. (p.restricted and " is muted: their addon can't send messages (as during a boss fight); what they write waits in their queue" or " is unmuted: their queued messages go out now"))
     return labState()
 end
 
 function api.lab_join()
     if not lab then labReset() end
     local p = labAddPeer()
-    if p then labLog(p.name .. " logged in with no data and will catch up") end
+    if p then labLog(p.name .. " logged in with an empty ledger. They will ask the others for everything.") end
     return labState()
+end
+
+---------------------------------------------------------------- sync lab: scripted checks
+-- Each check resets the lab, does a fixed set of things a person could do with the controls, lets the simulated clock run, and
+-- judges the result by the same rule the page shows: everyone has the same fingerprint and nobody has anything waiting to send.
+local function labConverged()
+    local fp
+    for _, p in ipairs(lab.peers) do
+        local f = p.engine:Fingerprint() or "none"
+        if fp and f ~= fp then return false end
+        fp = f
+        if p.sync:status().pending > 0 then return false end
+    end
+    return true
+end
+local function labEventCounts()
+    local out = {}
+    for i, p in ipairs(lab.peers) do
+        local n = 0
+        for _, c in pairs(p.engine.store.chains) do n = n + #c.events end
+        out[i] = n
+    end
+    return out
+end
+local function allEqual(list, want)
+    for _, n in ipairs(list) do if n ~= want then return false end end
+    return true
+end
+local function labOrphanCount()
+    local n = 0
+    for _, p in ipairs(lab.peers) do
+        for _, o in ipairs(p.engine.db.orphans or {}) do n = n + #o.events end
+    end
+    return n
+end
+
+local CHECKS = {
+    { id = "split", title = "Split the group, write on both sides, reconnect" },
+    { id = "lost", title = "Lose 2 in 5 messages on the way" },
+    { id = "dup", title = "Deliver half the messages twice" },
+    { id = "mute", title = "Mute a player (boss fight), then unmute" },
+    { id = "late", title = "A late player logs in with nothing" },
+}
+
+function api.lab_checks() return { checks = CHECKS } end
+
+function api.lab_check(id)
+    labReset()
+    local steps, ok = {}, true
+    local function step(text) steps[#steps + 1] = { text = text } end
+    local function expect(text, cond, detail)
+        steps[#steps + 1] = { text = text, pass = cond and true or false, detail = detail }
+        if not cond then ok = false end
+    end
+    -- let the clock run until everyone agrees (at most `limit` simulated seconds); how long it took
+    local function settle(limit)
+        local t = 0
+        while t < limit and not labConverged() do lab.net:advance(1); t = t + 1 end
+        return t, labConverged()
+    end
+    local base = labEventCounts()[1]
+    local title
+    for _, c in ipairs(CHECKS) do if c.id == id then title = c.title end end
+
+    if id == "split" then
+        step("Cut Aldric off from the other three")
+        api.lab_partition("1|234")
+        step("Aldric awards 2 items (only he can see them)")
+        api.lab_write(1, "award"); api.lab_write(1, "award")
+        step("Cass adds 3 raiders (only Brann, Cass and Dara can see them)")
+        for _ = 1, 3 do api.lab_write(3, "member") end
+        lab.net:advance(15)
+        expect("While the group is cut in two, the two sides disagree", not labConverged(),
+            "Aldric has " .. labEventCounts()[1] .. " events, the others " .. labEventCounts()[3])
+        step("Reconnect")
+        api.lab_heal()
+        local t, done = settle(60)
+        expect("After reconnecting, all four players have the same ledger", done, done and ("took " .. t .. (t == 1 and " simulated second" or " simulated seconds")) or "still different after 60 s")
+        expect("Nobody lost anything: every player has all " .. (base + 5) .. " events", allEqual(labEventCounts(), base + 5), table.concat(labEventCounts(), ", ") .. " events")
+        expect("Nothing was set aside: each player writes on their own chain, so the two sides never conflicted", labOrphanCount() == 0)
+    elseif id == "lost" then
+        step("Throw away 2 in 5 messages in transit")
+        api.lab_net(0.4, 0)
+        step("Aldric, Brann and Cass each write 2 entries")
+        for _, i in ipairs { 1, 2, 3 } do api.lab_write(i, "member"); api.lab_write(i, "award") end
+        local t, done = settle(120)
+        expect("Messages really were lost on the way", lab.net.stats.dropped > 0, lab.net.stats.dropped .. " lost")
+        expect("Even so, all four players end with the same ledger (they notice gaps in each other's heartbeats and ask again)", done, done and ("took " .. t .. (t == 1 and " simulated second" or " simulated seconds")) or "still different after 120 s")
+        expect("Every player has all " .. (base + 6) .. " events", allEqual(labEventCounts(), base + 6), table.concat(labEventCounts(), ", ") .. " events")
+        api.lab_net(0, 0)
+    elseif id == "dup" then
+        step("Deliver half of all messages twice")
+        api.lab_net(0, 0.5)
+        step("Aldric, Brann and Cass each write 1 entry")
+        for _, i in ipairs { 1, 2, 3 } do api.lab_write(i, "member") end
+        local t, done = settle(60)
+        expect("Messages really were delivered twice", lab.net.stats.duplicated > 0, lab.net.stats.duplicated .. " duplicated")
+        expect("All four players have the same ledger", done, done and ("took " .. t .. (t == 1 and " simulated second" or " simulated seconds")) or "still different after 60 s")
+        expect("A repeated message did nothing: every player has exactly " .. (base + 3) .. " events, none counted twice", allEqual(labEventCounts(), base + 3), table.concat(labEventCounts(), ", ") .. " events")
+        api.lab_net(0, 0)
+    elseif id == "mute" then
+        step("Mute Aldric: his addon may not send messages, as during a boss fight")
+        api.lab_restrict(1, "1")
+        step("Aldric awards 2 items")
+        api.lab_write(1, "award"); api.lab_write(1, "award")
+        lab.net:advance(15)
+        local counts = labEventCounts()
+        expect("While muted, Aldric's entries stay with him: the others still have " .. base .. " events", counts[2] == base and counts[3] == base and counts[4] == base, table.concat(counts, ", ") .. " events")
+        expect("His messages are queued, waiting to be sent", lab.peers[1].sync:status().pending > 0, lab.peers[1].sync:status().pending .. " waiting")
+        step("Unmute Aldric")
+        api.lab_restrict(1, "0")
+        local t, done = settle(60)
+        expect("Once he can send again, all four players have the same ledger", done, done and ("took " .. t .. (t == 1 and " simulated second" or " simulated seconds")) or "still different after 60 s")
+        expect("Every player has all " .. (base + 2) .. " events", allEqual(labEventCounts(), base + 2), table.concat(labEventCounts(), ", ") .. " events")
+    elseif id == "late" then
+        step("Brann awards an item and Dara adds 2 raiders")
+        api.lab_write(2, "award"); api.lab_write(4, "member"); api.lab_write(4, "member")
+        settle(60)
+        step("A fifth player logs in with an empty ledger")
+        api.lab_join()
+        expect("The new player starts with nothing", labEventCounts()[5] == 0, labEventCounts()[5] .. " events")
+        local t, done = settle(60)
+        expect("They catch up from the others and end with the same ledger", done, done and ("took " .. t .. (t == 1 and " simulated second" or " simulated seconds")) or "still different after 60 s")
+        expect("They have all " .. (base + 3) .. " events, like everyone else", allEqual(labEventCounts(), base + 3), table.concat(labEventCounts(), ", ") .. " events")
+    else
+        return { error = "no such check: " .. tostring(id) }
+    end
+    local s = labState()
+    s.check = { id = id, title = title, ok = ok, steps = steps }
+    return s
 end
 
 -- JS entry point: window.KG(name, a, b, c) -> JSON string.
