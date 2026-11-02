@@ -2,9 +2,9 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local Standings, ItemFit, Loot, Ledger, Version, Tokens, Requests
-local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Version", "Tokens?", "Requests?" }, function(d)
-    Standings, ItemFit, Loot, Ledger, Version, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Version, d.Tokens, d.Requests
+local Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests
+local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Version", "Identity", "Tokens?", "Requests?" }, function(d)
+    Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Version, d.Identity, d.Tokens, d.Requests
 end)
 
 local WHY = {
@@ -108,7 +108,7 @@ function M.New(ctx)
     end
 
     local function name(n) return n and (client:normalize(n)) end
-    local function short(n) return n and (n:gsub("%-.*$", "")) end
+    local function short(n) return n and Identity.Display(n) end -- a character's name as a person reads it: "First Last"
     local function list(id) return engine:Get(id or "main") end
 
     -- Master Looters of the raids open now, as text.
@@ -1102,7 +1102,7 @@ function M.New(ctx)
         table.sort(ids)
         for _, cid in ipairs(ids) do
             local chain = engine.store.chains[cid]
-            out(("  %s: %d events, head %s"):format(short(cid), #chain.events, chain.head:sub(1, 8)))
+            out(("  %s: %d events, head %s"):format(short(chain.author or cid), #chain.events, chain.head:sub(1, 8)))
         end
         for id, p in pairs(engine.problems) do out(("  %s: FAILED verification at event %s (%s)"):format(id, tostring(p.index), tostring(p.reason))) end
         local conflicts = engine:Conflicts()
@@ -1212,8 +1212,21 @@ function M.New(ctx)
         end)
     end
 
+    -- Everyone the addon knows by name: on a list, in the raid, in the guild. A command names a character as one word (Aldric_Stormwind or "Aldric
+    -- Stormwind"); and so a person doesn't have to, two words that make a known name are joined (see Identity.JoinNames).
+    local function knownNames()
+        local known = {}
+        for id, chain in pairs(engine:View().lists) do
+            for who in pairs(chain.members) do known[who] = true end
+        end
+        for _, m in ipairs(client:roster()) do known[m.name] = true end
+        for _, m in ipairs(client:guildRoster()) do known[m.name] = true end
+        return known
+    end
+
     function c.handle(msg)
-        local cmd, args = (msg or ""):match("^%s*(%S*)%s*(.-)%s*$")
+        msg = Identity.JoinNames(msg or "", knownNames())
+        local cmd, args = msg:match("^%s*(%S*)%s*(.-)%s*$")
         cmd = cmd:lower()
         if cmd == "" or cmd == "show" then cmd = "standings" end
         local fn = cmds[cmd]

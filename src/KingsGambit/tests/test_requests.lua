@@ -33,14 +33,14 @@ local function guild(netOpts)
         local engine = Engine.New(client)
         local sync = Sync.New(engine, { heartbeat = 10, firstHeartbeat = 1, firstJitter = 1 })
         net:attach(client); sync:start()
-        local nd = { name = n, full = n .. "-Realm", client = client, engine = engine, sync = sync }
+        local nd = { name = n, full = n, client = client, engine = engine, sync = sync }
         nd.requests = Requests.New(sync, engine)
         if n == "Looter" then nd.host = LootNet.NewHost(sync, engine) else nd.player = LootNet.NewPlayer(sync) end
         nd.cmd = Commands.New({ client = client, engine = engine, sync = sync, host = nd.host, player = nd.player, requests = nd.requests })
         return nd
     end
     for i, n in ipairs(NAMES) do
-        local client = MockClient.New({ name = n, realm = "Realm", seed = i * 31 })
+        local client = MockClient.New({ name = n, seed = i * 31 })
         client:setRaid(NAMES, { leader = "GM", lootMethod = "master", masterLooter = "Looter" })
         w.nodes[n] = build(n, client)
         w[n] = w.nodes[n]
@@ -61,7 +61,7 @@ local function guild(netOpts)
     return w
 end
 
-local function order(nd) return (table.concat(nd.engine:Get("main").state.order, ","):gsub("%-Realm", "")) end
+local function order(nd) return (table.concat(nd.engine:Get("main").state.order, ",")) end
 local function everyone(w, fn) for _, n in ipairs(NAMES) do fn(w.nodes[n]) end end
 local function openRaid(w)
     w.Off.cmd.handle("raid open Looter 4")
@@ -108,7 +108,7 @@ test("an officer's request, accepted: the change carries who asked and why, on e
     w.net:advance(3)
     everyone(w, function(nd) eq(order(nd), "Cass,Aldric,Brann,Looter", nd.name) end)
     local ev = w.GM.engine:Get("main").events[#w.GM.engine:Get("main").events]
-    eq(ev.type, "MovePlayer"); eq(ev.author, "Looter-Realm"); eq(ev.data.requestedBy, "Off-Realm")
+    eq(ev.type, "MovePlayer"); eq(ev.author, "Looter"); eq(ev.data.requestedBy, "Off")
     eq(ev.data.reason, "she was skipped by mistake")
     assert(text(w.Off):find("Looter accepted your request: Looter moved Cass to top, at the request of Off"), text(w.Off))
     assert(text(w.Cass):find("The list changed for you"), text(w.Cass))
@@ -134,7 +134,7 @@ end)
 test("the wrong winner: undo the award, then record the right one, both at the raider's request", function()
     local w = guild(); openRaid(w)
     -- The Master Looter gave the item to Brann, but Aldric (higher) had bid need and was missed.
-    assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Gauntlets" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Brann", item = "Gauntlets" }))
     w.net:advance(2)
     eq(order(w.Aldric), "Aldric,Cass,Looter,Brann")
     w.Aldric.cmd.handle("request undo Brann I bid need and I'm above him")
@@ -151,8 +151,8 @@ end)
 
 test("an earlier award can be undone on request, leaving the later ones alone", function()
     local w = guild(); openRaid(w)
-    assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Belt" }))
-    assert(w.Looter.engine:Append("main", "Award", { member = "Cass-Realm", item = "Ring" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Brann", item = "Belt" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Cass", item = "Ring" }))
     w.net:advance(2)
     w.Off.cmd.handle("request undo Brann wrong person")
     w.net:advance(2); w.Looter.cmd.handle("accept 1"); w.net:advance(3)
@@ -161,8 +161,8 @@ end)
 
 test("an undo that can't be done any more stays waiting, and is declined with a reason", function()
     local w = guild(); openRaid(w)
-    assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Belt" }))
-    assert(w.Looter.engine:Append("main", "Award", { member = "Cass-Realm", item = "Ring" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Brann", item = "Belt" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Cass", item = "Ring" }))
     w.net:advance(2)
     w.Looter.cmd.handle("move Aldric bottom he asked to be last") -- the Master Looter's own manual move
     w.Off.cmd.handle("request undo Brann wrong person")
@@ -180,14 +180,14 @@ end)
 
 test("a gift correction moves nobody: it records where the item really went", function()
     local w = guild(); openRaid(w)
-    assert(w.Looter.engine:Append("main", "Award", { member = "Brann-Realm", item = "Cloak" }))
+    assert(w.Looter.engine:Append("main", "Award", { member = "Brann", item = "Cloak" }))
     w.net:advance(2)
     w.Brann.cmd.handle("request gift Brann Cass I traded it to her, I meant to gift it")
     w.net:advance(2); w.Looter.cmd.handle("accept 1"); w.net:advance(3)
     local s = w.GM.engine:Get("main").state
     local award
     for _, a in pairs(s.awards) do award = a end
-    eq(award.to, "Cass-Realm"); eq(order(w.GM), "Aldric,Cass,Looter,Brann", "positions unchanged")
+    eq(award.to, "Cass"); eq(order(w.GM), "Aldric,Cass,Looter,Brann", "positions unchanged")
 end)
 
 H.section("Disputes: things that go wrong")
@@ -237,10 +237,10 @@ test("a request needs a reason, and nobody can flood the Master Looter or speak 
     eq(#w.Looter.requests:pending(), 3, "three at a time per player")
     assert(text(w.Aldric):find("you already have 3 requests waiting"), text(w.Aldric))
     -- A request that claims to come from someone else (its id names another player) is ignored.
-    w.Brann.sync:send({ t = "QR", rid = "Off-Realm:1:1", kind = "remove", member = "Cass-Realm", reason = "forged" }, "WHISPER", "Looter-Realm")
+    w.Brann.sync:send({ t = "QR", rid = "Off:1:1", kind = "remove", member = "Cass", reason = "forged" }, "WHISPER", "Looter")
     w.net:advance(2)
     eq(#w.Looter.requests:pending(), 3)
-    for _, p in ipairs(w.Looter.requests:pending()) do eq(p.by, "Aldric-Realm") end
+    for _, p in ipairs(w.Looter.requests:pending()) do eq(p.by, "Aldric") end
 end)
 
 H.section("Disputes: ending a raid")
@@ -265,7 +265,7 @@ test("an officer revokes a Master Looter: their later writes are refused everywh
     w.Off.cmd.handle("raid revoke Looter"); w.net:advance(3)
     assert(text(w.Off):find("Looter is no longer Master Looter"), text(w.Off))
     everyone(w, function(nd) eq(#nd.engine:ActiveRaids(), 0, nd.name) end)
-    local ev, why = w.Looter.engine:Append("main", "Award", { member = "Aldric-Realm", item = "X" })
+    local ev, why = w.Looter.engine:Append("main", "Award", { member = "Aldric", item = "X" })
     eq(ev, nil); eq(why, "expired")
 end)
 
@@ -303,7 +303,7 @@ test("accepted: the class may bid on the item from now on, recorded with who ask
         assert(rule, nd.name .. " has the rule"); eq(table.concat(rule.classes, ","), "PRIEST,WARRIOR", nd.name)
     end)
     local ev = w.GM.engine.store.byId[w.GM.engine:ItemRule(19999).id]
-    eq(ev.data.requestedBy, "Aldric-Realm"); eq(ev.data.spec, "Protection"); eq(ev.data.reason, "the set bonus is worth it for my tanking")
+    eq(ev.data.requestedBy, "Aldric"); eq(ev.data.spec, "Protection"); eq(ev.data.reason, "the set bonus is worth it for my tanking")
     assert(text(w.Aldric):find("Looter accepted your request"), text(w.Aldric))
     clear(w.Brann); w.Brann.cmd.handle("history 2")
     assert(text(w.Brann):find("Looter set who may bid on Robe of the Faithful: Priest, Warrior, at the request of Aldric"), text(w.Brann))
@@ -318,7 +318,7 @@ test("declined: recorded in the ledger with the reason, and nothing changes", fu
     everyone(w, function(nd)
         eq(nd.engine:ItemRule(19999), nil, nd.name)
         local d = nd.engine:View().declined[1]
-        eq(d.data.kind, "eligible"); eq(d.data.item, 19999); eq(d.data.class, "WARRIOR"); eq(d.data.requestedBy, "Aldric-Realm")
+        eq(d.data.kind, "eligible"); eq(d.data.item, 19999); eq(d.data.class, "WARRIOR"); eq(d.data.requestedBy, "Aldric")
     end)
     assert(text(w.Aldric):find("Looter declined your request to let Warriors bid on Robe of the Faithful: priests first"), text(w.Aldric))
 end)
@@ -350,9 +350,9 @@ test("eligibility follows armor type: a plate item is for plate wearers; a class
     local num = {}
     for _, p in ipairs(w.Looter.requests:pending()) do num[p.by] = p.num end
     eq(w.Looter.requests:pending()[1].class ~= nil, true, "the request carries the requester's class")
-    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Brann-Realm"])
+    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Brann"])
     assert(text(w.Looter):find("that class can't wear or wield that item"), text(w.Looter))
-    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Aldric-Realm"])
+    clear(w.Looter); w.Looter.cmd.handle("accept " .. num["Aldric"])
     assert(text(w.Looter):find("isn't restricted to classes") or text(w.Looter):find("may already bid"), text(w.Looter))
 end)
 
@@ -366,14 +366,14 @@ test("only the raid's Master Looter designates the disenchanter; it is on the re
     assert(text(w.Looter):find("No disenchanter is designated"), text(w.Looter))
     w.Looter.cmd.handle("disenchanter Aldric"); assert(text(w.Looter):find("Aldric disenchants"), text(w.Looter))
     assert(settle(w))
-    eq(w.Looter.engine:RaidDisenchanter(), "Aldric-Realm")
+    eq(w.Looter.engine:RaidDisenchanter(), "Aldric")
     w.Off.cmd.handle("disenchanter"); assert(text(w.Off):find("Aldric disenchants for raid"), text(w.Off))
     w.Brann.cmd.handle("history 3"); assert(text(w.Brann):find("Looter chose Aldric to disenchant"), text(w.Brann))
     -- it can be changed during the raid; the latest choice stands, and every peer agrees
     w.Looter.cmd.handle("disenchanter Cass"); assert(settle(w))
-    eq(w.Looter.engine:RaidDisenchanter(), "Cass-Realm"); eq(#w.Looter.engine:Conflicts(), 0)
+    eq(w.Looter.engine:RaidDisenchanter(), "Cass"); eq(#w.Looter.engine:Conflicts(), 0)
     -- a forged designation by someone else is refused by the ledger
-    local ev, err = w.Aldric.engine:Write("SetDisenchanter", { raid = w.Looter.engine:ActiveRaids()[1].id, name = "Aldric-Realm" })
+    local ev, err = w.Aldric.engine:Write("SetDisenchanter", { raid = w.Looter.engine:ActiveRaids()[1].id, name = "Aldric" })
     assert(not ev and err == "notml", tostring(err))
 end)
 test("loot cannot be started until a disenchanter is designated; then unwanted loot goes to them", function()
@@ -392,7 +392,7 @@ test("loot cannot be started until a disenchanter is designated; then unwanted l
     L.cmd.handle("disenchanter Brann")
     L.cmd.handle("loot")
     assert(text(L):find("Loot session started"), text(L))
-    eq(L.host.session.deHandler, "Brann-Realm")
+    eq(L.host.session.deHandler, "Brann")
     end)
     Loot.NewSession = wrapped
     assert(ok, err)
@@ -407,8 +407,8 @@ test("a session started with nobody designated is refused by the engine itself",
     w.Looter.cmd.handle("disenchanter Cass")
     local s2 = H.rawNewSession(w.Looter.engine)
     assert(s2:start({ { link = "item:1" } }))
-    eq(s2.deHandler, "Cass-Realm")
+    eq(s2.deHandler, "Cass")
     -- an explicit choice in the session's own settings also counts (tests, the simulator)
-    assert(H.rawNewSession(w.Looter.engine, { deHandler = "Brann-Realm" }):start({ { link = "item:1" } }))
+    assert(H.rawNewSession(w.Looter.engine, { deHandler = "Brann" }):start({ { link = "item:1" } }))
     assert(Loot)
 end)

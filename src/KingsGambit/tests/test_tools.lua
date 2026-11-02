@@ -13,13 +13,13 @@ local function events(db)
 end
 
 local function savedFile(mutate)
-    local client = MockClient.New({ name = "Raidlead", realm = "Realm" })
+    local client = MockClient.New({ name = "Raidlead" })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for _, n in ipairs { "Aldric", "Brann", "Cass" } do engine:Append("main", "AddMember", { member = n .. "-Realm", class = "MAGE" }) end
+    for _, n in ipairs { "Aldric", "Brann", "Cass" } do engine:Append("main", "AddMember", { member = n, class = "MAGE" }) end
     client:advance(60)
-    engine:Append("main", "Award", { member = "Aldric-Realm", item = "Gauntlets of the Ashen Vow" })
-    engine:Append("main", "Pass", { member = "Cass-Realm", item = "Gauntlets of the Ashen Vow", kind = "upgrade" })
+    engine:Append("main", "Award", { member = "Aldric", item = "Gauntlets of the Ashen Vow" })
+    engine:Append("main", "Pass", { member = "Cass", item = "Gauntlets of the Ashen Vow", kind = "upgrade" })
     local db = client:storage().account
     if mutate then mutate(db) end
     local path = (os.getenv("TEMP") or os.getenv("TMPDIR") or ".") .. "/kg-test-" .. tostring(os.time()) .. tostring(math.random(1e6)) .. ".lua"
@@ -39,7 +39,7 @@ test("a good ledger file verifies", function()
     os.remove(path)
 end)
 test("a tampered ledger file is caught, with the event number", function()
-    local path = savedFile(function(db) events(db)[6].data.member = "Cass-Realm" end)
+    local path = savedFile(function(db) events(db)[6].data.member = "Cass" end)
     local db = assert(audit.loadSaved(path))
     local results = audit.verify(db, mods)
     assert(not results[1].ok); eq(results[1].reason, "badhash"); eq(results[1].index, 6)
@@ -55,7 +55,7 @@ test("standings come out in order with wins and last win", function()
     os.remove(path)
 end)
 test("standings refuse a ledger that does not verify", function()
-    local path = savedFile(function(db) events(db)[4].data.member = "Evil-Realm" end)
+    local path = savedFile(function(db) events(db)[4].data.member = "Evil" end)
     local rows, why = audit.standings(assert(audit.loadSaved(path)), mods, "main")
     eq(rows, nil); assert(why:find("does not verify"), why)
     os.remove(path)

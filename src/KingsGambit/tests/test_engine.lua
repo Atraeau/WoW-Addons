@@ -3,7 +3,7 @@ local H = ...
 local SK, test, eq = H.SK, H.test, H.eq
 local MockClient, Engine, Ledger = SK.modules.MockClient, SK.modules.Engine, SK.modules.Ledger
 
-local function newClient(name) return MockClient.New({ name = name or "Raidlead", realm = "Realm" }) end
+local function newClient(name) return MockClient.New({ name = name or "Raidlead" }) end
 local function myEvents(engine) return engine.store.chains[engine:MyChain()].events end
 local function savedEvents(client, engine) return client:storage().account.ledger.chains[engine:MyChain()].events end
 
@@ -13,11 +13,11 @@ test("the first list founds the ledger; events carry the Client's identity and c
     local e = Engine.New(h)
     assert(e:CreateList("main", "Main"))
     assert(e:LedgerId(), "a Genesis was written first")
-    eq(e:View().auth.gm, "Raidlead-Realm")
+    eq(e:View().auth.gm, "Raidlead")
     h:advance(30)
-    local ev = assert(e:Append("main", "AddMember", { member = "Aldric-Realm" }))
-    eq(ev.author, "Raidlead-Realm"); eq(ev.ts, h:serverTime()); eq(ev.seq, 3); eq(ev.chain, e:MyChain())
-    assert(ev.chain:match("^Raidlead%-Realm#%x%x%x%x%x%x%x%x$"))
+    local ev = assert(e:Append("main", "AddMember", { member = "Aldric" }))
+    eq(ev.author, "Raidlead"); eq(ev.ts, h:serverTime()); eq(ev.seq, 3); eq(ev.chain, e:MyChain())
+    assert(ev.chain:match("^Raidlead%#%x%x%x%x%x%x%x%x$"))
     local _, err = e:CreateList("main", "Again"); eq(err, "exists")
     local _, err2 = e:Append("nope", "AddMember", {}); eq(err2, "nolist")
 end)
@@ -32,25 +32,25 @@ test("a rebuilt engine restores the same ledger from storage (simulated /reload)
     local h = newClient()
     local e = Engine.New(h)
     e:CreateList("main", "Main")
-    for _, n in ipairs { "A-Realm", "B-Realm", "C-Realm" } do e:Append("main", "AddMember", { member = n }) end
-    e:Append("main", "Award", { member = "A-Realm", item = "Sword" })
+    for _, n in ipairs { "A", "B", "C" } do e:Append("main", "AddMember", { member = n }) end
+    e:Append("main", "Award", { member = "A", item = "Sword" })
     local fp, chain = e:Fingerprint(), e:MyChain()
     h:reload()
     local e2 = Engine.New(h)
     eq(e2:Fingerprint(), fp); eq(e2:MyChain(), chain, "the same character keeps its chain")
-    eq(table.concat(e2:Get("main").state.order, ","), "B-Realm,C-Realm,A-Realm")
-    eq(assert(e2:Append("main", "AddMember", { member = "D-Realm" })).seq, 7)
+    eq(table.concat(e2:Get("main").state.order, ","), "B,C,A")
+    eq(assert(e2:Append("main", "AddMember", { member = "D" })).seq, 7)
 end)
 test("a tampered chain is reported and left untouched in storage", function()
     local h = newClient()
     local e = Engine.New(h)
-    e:CreateList("main", "Main"); e:Append("main", "AddMember", { member = "A-Realm" })
-    savedEvents(h, e)[3].data.member = "Evil-Realm"
+    e:CreateList("main", "Main"); e:Append("main", "AddMember", { member = "A" })
+    savedEvents(h, e)[3].data.member = "Evil"
     h:reload()
     local e2 = Engine.New(h)
     local p = e2.problems[e:MyChain()]
     eq(p.reason, "badhash"); eq(p.index, 3)
-    eq(savedEvents(h, e)[3].data.member, "Evil-Realm", "storage must not be repaired silently")
+    eq(savedEvents(h, e)[3].data.member, "Evil", "storage must not be repaired silently")
     assert(#h.printed >= 1)
 end)
 test("engines are isolated (no shared module state)", function()
@@ -65,7 +65,7 @@ test("two characters on one account write on two chains", function()
     local e = Engine.New(h)
     e:CreateList("main", "Main")
     local first = e:MyChain()
-    local h2 = MockClient.New({ name = "Main", realm = "Realm" })
+    local h2 = MockClient.New({ name = "Main" })
     h2.storage = h.storage -- same account-wide SavedVariables
     local e2 = Engine.New(h2)
     assert(e2:MyChain() ~= first)
@@ -74,17 +74,17 @@ end)
 test("an event that arrives late slots into its place", function()
     local a = Engine.New(newClient("GM"))
     a:CreateList("main", "Main")
-    a:Write("SetOfficers", { names = { "Off-Realm" } })
-    for _, n in ipairs { "A-Realm", "B-Realm", "C-Realm" } do a:Append("main", "AddMember", { member = n }) end
+    a:Write("SetOfficers", { names = { "Off" } })
+    for _, n in ipairs { "A", "B", "C" } do a:Append("main", "AddMember", { member = n }) end
     local bClient = newClient("Off")
     local b = Engine.New(bClient)
     for _, ev in ipairs(Ledger.Merged(a.store)) do assert(b:Receive(ev)) end
     eq(b:Fingerprint(), a:Fingerprint())
-    local late = assert(b:Append("main", "Award", { member = "B-Realm", item = "X" }))
+    local late = assert(b:Append("main", "Award", { member = "B", item = "X" }))
     a.client:advance(100)
-    a:Append("main", "Award", { member = "A-Realm", item = "Y" })
+    a:Append("main", "Award", { member = "A", item = "Y" })
     assert(a:Receive(late)) -- sorts before A's award: the view is replayed
-    eq(table.concat(a:Get("main").state.order, ","), "C-Realm,B-Realm,A-Realm")
+    eq(table.concat(a:Get("main").state.order, ","), "C,B,A")
 end)
 
 H.section("Engine: large ledgers verify in the background")
@@ -92,7 +92,7 @@ local function bigStorage(n)
     local client = newClient()
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for i = 1, n do assert(engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm" })) end
+    for i = 1, n do assert(engine:Append("main", "AddMember", { member = "M" .. i })) end
     return client, engine
 end
 test("a large chain loads at once with usable standings, and verifies in slices", function()
@@ -106,7 +106,7 @@ test("a large chain loads at once with usable standings, and verifies in slices"
 end)
 test("a tampered event in a large chain is caught by the background check", function()
     local client, first = bigStorage(60)
-    savedEvents(client, first)[45].data.member = "Evil-Realm"
+    savedEvents(client, first)[45].data.member = "Evil"
     client:reload()
     local e = Engine.New(client, { syncVerifyLimit = 10, verifyBatch = 8 })
     assert(e:Get("main"), "it loads first (links and rules still hold)")
@@ -115,7 +115,7 @@ test("a tampered event in a large chain is caught by the background check", func
     client:advance(1)
     eq(e:Get("main"), nil, "the chain is taken out of use"); eq(e.problems[first:MyChain()].index, 45)
     eq(corrupt, first:MyChain())
-    eq(savedEvents(client, first)[45].data.member, "Evil-Realm", "saved data is left alone")
+    eq(savedEvents(client, first)[45].data.member, "Evil", "saved data is left alone")
 end)
 test("structural damage in a large chain is caught immediately", function()
     local client, first = bigStorage(60)

@@ -4,8 +4,8 @@
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
 -- Design: docs/client-interface.md
 local _, SK = ...
-local Hash, Client
-local M = SK:NewModule("MockClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
+local Hash, Client, Identity
+local M = SK:NewModule("MockClient", { "Hash", "Client", "Identity" }, function(d) Hash, Client, Identity = d.Hash, d.Client, d.Identity end)
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 local PM_MOD = 2147483647 -- Park-Miller: state * 16807 stays below 2^53, so it is exact
@@ -24,15 +24,11 @@ local function copyList(t)
     return out
 end
 
--- opts: name, realm, seed, clock (start of now()), unix (start of serverTime()).
+-- opts: name (a character's name: "First Last", "First_Last" or a single name for a test; there are no realms), seed, clock (start of now()),
+-- unix (start of serverTime()).
 function M.New(opts)
     opts = opts or {}
-    local realm = opts.realm or "Realm"
-    local function normalize(name)
-        if type(name) ~= "string" or name == "" then return nil end
-        if name:find("-", 1, true) then return name end
-        return name .. "-" .. realm
-    end
+    local function normalize(name) return Identity.Normalize(name) end
 
     local clock = opts.clock or 1000
     local clock0, unix0 = clock, opts.unix or 1760000000
@@ -220,7 +216,7 @@ function M.New(opts)
 
     function h:lootMethod() return S.lootMethod end
     function h:isMasterLooter() return S.lootMethod == "master" and S.masterLooter == S.me end
-    -- Who the Master Looter is (Name-Realm), or nil when the loot method is not master looter.
+    -- Who the Master Looter is (an identity), or nil when the loot method is not master looter.
     function h:masterLooter() return S.lootMethod == "master" and S.masterLooter or nil end
 
     local function openSlots()

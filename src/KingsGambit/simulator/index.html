@@ -319,6 +319,114 @@ function M.Decode(s)
 end
 
 end; chunk("KingsGambit", SK) end
+-- ===== Identity.lua =====
+do local chunk = function(...)
+-- King's Gambit: who a character IS. Pure Lua. Keep this file Lua 5.1-safe.
+--
+-- A character is identified by FIRST and LAST name. There are no realms in WoW: Forever, so the pair is the identity (the guild leader: the union
+-- of the two is unique), and it takes the place `Name-Realm` had. Everything in the ledger and the addon holds this one canonical string, never
+-- the game's own text, so the rest of the code never has to know how the game spells a name:
+--
+--   canonical   "First_Last"   the two names joined by "_". No spaces (commands split on spaces), no hyphen (it used to mean a realm).
+--   display     "First Last"   what a person reads and types.
+--
+-- The game's own full-name string has a SURNAME SEPARATOR between the two names, and the exported API describes it only as "the character surname
+-- separator" (C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator). We do not hard-code what it is. The client learns it from the game itself by
+-- comparing a name with that function's result (LearnSeparator), and Normalize splits on it, on whitespace, on "-" and on "_".
+--
+-- ASSUMPTIONS TO CONFIRM IN THE LIVE GAME (they are all in the real client, RealClient.lua, and the in-game `/gambit check` prints the raw values):
+--   * which API returns the full name with the surname intact (UnitNameUnmodified is preferred: ShouldDisplaySurname() suggests UnitName can leave the
+--     surname out depending on a player's settings, which would make one character look like two);
+--   * that the second return value ("server") is empty, since there are no realms.
+-- Names are never parsed anywhere else in the addon.
+local _, SK = ...
+local M = SK:NewModule("Identity")
+
+M.SEP = "_"
+
+-- Split a raw name into its parts: on whitespace, "-", "_" and any extra separator strings the game uses (see LearnSeparator).
+local function parts(raw, extra)
+    if type(raw) ~= "string" then return {} end
+    for _, sep in ipairs(extra or {}) do
+        if sep ~= "" then
+            local from = 1
+            while true do
+                local a, b = raw:find(sep, from, true)
+                if not a then break end
+                raw = raw:sub(1, a - 1) .. " " .. raw:sub(b + 1)
+                from = a + 1
+            end
+        end
+    end
+    local out = {}
+    for token in raw:gmatch("[^%s%-_]+") do out[#out + 1] = token end
+    return out
+end
+
+-- The canonical identity for a name as the game, a person or an old record spells it, or nil if there is nothing in it.
+-- extra (optional): a list of separator strings learned from the game.
+function M.Normalize(raw, extra)
+    local p = parts(raw, extra)
+    if #p == 0 then return nil end
+    return table.concat(p, M.SEP)
+end
+
+-- "First Last": what a person reads. Single names (development and tests) are shown as they are.
+function M.Display(id)
+    if type(id) ~= "string" then return id end
+    return (id:gsub(M.SEP, " "))
+end
+
+-- The first name, and the last name (nil when there is only one name).
+function M.First(id) return type(id) == "string" and id:match("^([^" .. M.SEP .. "]+)") or nil end
+function M.Last(id) return type(id) == "string" and id:match("^[^" .. M.SEP .. "]+" .. M.SEP .. "(.+)$") or nil end
+
+-- A key for comparing or looking up names without regard to capitals (a person typing "aldric stormwind").
+function M.Key(id) return type(id) == "string" and id:lower() or nil end
+
+function M.Equal(a, b) return a ~= nil and b ~= nil and M.Key(a) == M.Key(b) end
+
+-- Is it a canonical identity (no spaces, hyphens or empty parts)?
+function M.Valid(id)
+    return type(id) == "string" and id ~= "" and not id:find("[%s%-]") and not id:find("^" .. M.SEP) and not id:find(M.SEP .. "$")
+        and not id:find(M.SEP .. M.SEP, 1, true)
+end
+
+-- Learn the game's surname separator. `full` is a full name as the game spells it, `linked` is what
+-- C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator(full) returns: they differ exactly at the separator. Returns the separator in `full`
+-- and the one it was replaced with, or nil if the name has no surname separator.
+function M.LearnSeparator(full, linked)
+    if type(full) ~= "string" or type(linked) ~= "string" or full == linked then return nil end
+    local p = 0
+    while p < #full and p < #linked and full:byte(p + 1) == linked:byte(p + 1) do p = p + 1 end
+    local q = 0
+    while q < #full - p and q < #linked - p and full:byte(#full - q) == linked:byte(#linked - q) do q = q + 1 end
+    local sep, link = full:sub(p + 1, #full - q), linked:sub(p + 1, #linked - q)
+    if sep == "" then return nil end
+    return sep, link
+end
+
+-- Find the command-line words that name `known` characters and join each pair into one word, so `gift Aldric Stormwind Brann Ironforge` works without
+-- quotes. `line` is the raw text, `known` a set of canonical identities. Quoted names ("Aldric Stormwind") are joined first. Only the first
+-- few words are looked at (names come first in a command; a free-text reason after them is left alone).
+function M.JoinNames(line, known)
+    line = line:gsub('"([^"]+)"', function(q) return (M.Normalize(q) or q) end)
+    local keys = {}
+    for id in pairs(known or {}) do keys[M.Key(id)] = true end
+    local words, out, i = {}, {}, 1
+    for w in line:gmatch("%S+") do words[#words + 1] = w end
+    while i <= #words do
+        local joined = i <= 5 and words[i + 1] and M.Normalize(words[i] .. " " .. words[i + 1])
+        if joined and keys[M.Key(joined)] then
+            out[#out + 1] = joined; i = i + 2
+        else
+            out[#out + 1] = words[i]; i = i + 1
+        end
+    end
+    return table.concat(out, " ")
+end
+
+end; chunk("KingsGambit", SK) end
 -- ===== Version.lua =====
 do local chunk = function(...)
 -- King's Gambit: the addon's version, read the way Semantic Versioning (https://semver.org) says to, and who may work with whom.
@@ -1725,8 +1833,8 @@ do local chunk = function(...)
 -- methods below. Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
 -- Design: docs/client-interface.md
 local _, SK = ...
-local Hash, Client
-local M = SK:NewModule("MockClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
+local Hash, Client, Identity
+local M = SK:NewModule("MockClient", { "Hash", "Client", "Identity" }, function(d) Hash, Client, Identity = d.Hash, d.Client, d.Identity end)
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 local PM_MOD = 2147483647 -- Park-Miller: state * 16807 stays below 2^53, so it is exact
@@ -1745,15 +1853,11 @@ local function copyList(t)
     return out
 end
 
--- opts: name, realm, seed, clock (start of now()), unix (start of serverTime()).
+-- opts: name (a character's name: "First Last", "First_Last" or a single name for a test; there are no realms), seed, clock (start of now()),
+-- unix (start of serverTime()).
 function M.New(opts)
     opts = opts or {}
-    local realm = opts.realm or "Realm"
-    local function normalize(name)
-        if type(name) ~= "string" or name == "" then return nil end
-        if name:find("-", 1, true) then return name end
-        return name .. "-" .. realm
-    end
+    local function normalize(name) return Identity.Normalize(name) end
 
     local clock = opts.clock or 1000
     local clock0, unix0 = clock, opts.unix or 1760000000
@@ -1941,7 +2045,7 @@ function M.New(opts)
 
     function h:lootMethod() return S.lootMethod end
     function h:isMasterLooter() return S.lootMethod == "master" and S.masterLooter == S.me end
-    -- Who the Master Looter is (Name-Realm), or nil when the loot method is not master looter.
+    -- Who the Master Looter is (an identity), or nil when the loot method is not master looter.
     function h:masterLooter() return S.lootMethod == "master" and S.masterLooter or nil end
 
     local function openSlots()
@@ -3790,8 +3894,8 @@ do local chunk = function(...)
 --                                 recorded with the reason. Eligibility is by class (what the game can check); the
 --                                 requester's spec is part of the record.
 local _, SK = ...
-local Standings, ItemFit
-local M = SK:NewModule("Requests", { "Standings", "ItemFit" }, function(d) Standings, ItemFit = d.Standings, d.ItemFit end)
+local Standings, ItemFit, Identity
+local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity" }, function(d) Standings, ItemFit, Identity = d.Standings, d.ItemFit, d.Identity end)
 
 M.LIST = "main"
 M.MAX_REASON = 200
@@ -3799,7 +3903,7 @@ M.MAX_PENDING_PER_PLAYER = 3
 M.RETRY_SECONDS, M.MAX_TRIES = 4, 5
 
 local function isName(v) return type(v) == "string" and v ~= "" end
-local function short(n) return n and (n:gsub("%-.*$", "")) end
+local function short(n) return n and Identity.Display(n) end
 
 local POSITIONS = { top = true, bottom = true }
 local function isPos(p) return POSITIONS[p] or (tonumber(p) ~= nil and tonumber(p) >= 1 and tonumber(p) % 1 == 0) end
@@ -5437,9 +5541,9 @@ do local chunk = function(...)
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Identity, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -5453,7 +5557,7 @@ local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WA
 local Sim = {}
 Sim.__index = Sim
 
-local function short(name) return (name:gsub("%-.*$", "")) end
+local function short(name) return Identity.Display(name) end
 
 -- opts: seed, learner (default "You"), members (array of names, or of { name, class, role, spec, offSpec };
 --       top of the list first), learnerPosition ("last" default, "first", or "random": the Master Looter is a
@@ -5465,7 +5569,7 @@ function M.NewRaid(opts)
     -- The Master Looter's addon is the one that runs the session, so the simulated client is theirs: the learner by
     -- default, or another raider (a bot runs the loot, and the learner plays a raider).
     local ml = opts.masterLooter or learner
-    local client = MockClient.New({ name = ml, realm = "Realm", seed = opts.seed or 1 })
+    local client = MockClient.New({ name = ml, seed = opts.seed or 1 })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
 
@@ -5492,7 +5596,7 @@ function M.NewRaid(opts)
         names[i] = n
         roster[i] = { name = n, class = class }
         info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
-        engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
+        engine:Append("main", "AddMember", { member = n, class = class })
     end
     -- There is always a raid leader, who is not necessarily the Master Looter: by default the first raider who is
     -- neither the learner nor the Master Looter (a person can't be both unless nobody else is there).
@@ -5517,11 +5621,11 @@ function M.NewRaid(opts)
 
     -- The learner is the Master Looter of this raid, and designates who disenchants (a record in the ledger, as in
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
-    assert(engine:Write("Elevate", { raid = "sim", ml = ml .. "-Realm", minutes = 24 * 60 }))
-    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) .. "-Realm" }))
+    assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
+    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
 
     return setmetatable({
-        client = client, engine = engine, names = names, learner = learner .. "-Realm", ml = ml .. "-Realm",
+        client = client, engine = engine, names = names, learner = learner, ml = ml,
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
@@ -5533,7 +5637,7 @@ function Sim:disenchanterName() return (self.engine:RaidDisenchanter()) end
 function Sim:setDisenchanter(name)
     name = self.client:normalize(name)
     local known = false
-    for _, n in ipairs(self.names) do if n .. "-Realm" == name then known = true end end
+    for _, n in ipairs(self.names) do if n == name then known = true end end
     if not known then return false, "notinraid" end
     local ev, err = self.engine:Write("SetDisenchanter", { raid = "sim", name = name })
     if not ev then return false, err end
@@ -6027,7 +6131,8 @@ do local chunk = function(...)
 -- must be true afterward. The test suite runs every scenario against the real engine, so the
 -- lessons can never drift from the rules. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local M = SK:NewModule("Scenarios")
+local Identity
+local M = SK:NewModule("Scenarios", { "Identity" }, function(d) Identity = d.Identity end)
 
 -- Top of the list first; You are last. Each has a class, because the loot rules go by class: the item has to be
 -- one their class can wear or wield (and the gloves below are for warriors only).
@@ -6048,7 +6153,7 @@ local function lastEvent(sim, listId, type_)
     return found
 end
 
-local function short(name) return name and (name:gsub("%-.*$", "")) end
+local function short(name) return name and Identity.Display(name) end
 
 M.list = {
     {
@@ -6148,7 +6253,7 @@ M.list = {
             local want = {}
             for _, n in ipairs(seeded) do if n ~= winner then want[#want + 1] = n end end
             want[#want + 1] = winner
-            local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ","):gsub("%-Realm", "")
+            local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ",")
             local award = lastEvent(sim, "off", "Award")
             local ok = #seeded == 7 and award ~= nil and short(award.data.member) == winner
                 and main == "Aldric,Brann,Cass,Dara,Eira,Fenn,You" and off == table.concat(want, ",")
@@ -6220,7 +6325,7 @@ M.list = {
         end,
         after = function(sim)
             local award = lastEvent(sim, "main", "Award")
-            assert(sim.engine:Append("main", "Award", { member = "Dara-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+            assert(sim.engine:Append("main", "Award", { member = "Dara", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
         end,
         expect = function(sim)
             local want = "Aldric,Brann,Cass,Eira,Fenn,You,Dara"
@@ -6343,7 +6448,7 @@ do
         end,
         after = function(sim)
             local award = assert(blade(sim))
-            assert(sim.engine:Append("main", "Award", { member = "Hale-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+            assert(sim.engine:Append("main", "Award", { member = "Hale", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
         end,
         expect = function(sim)
             local last = lastEvent(sim, "main", "Award")
@@ -6453,12 +6558,12 @@ end
 -- A player: their own client, engine and sync, running the code `rules` describes. build = the addon version they report.
 function Lab.node(w, name, rules, build, client)
     seedCounter = seedCounter + 1
-    client = client or MockClient.New({ name = name, realm = "Realm", seed = seedCounter * 53 })
+    client = client or MockClient.New({ name = name, seed = seedCounter * 53 })
     client:setAddonVersion(build or "0.2.0+1")
     local engine = Engine.New(client, { rules = rules })
     local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
     w.net:attach(client); sync:start()
-    local nd = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, rules = rules, unreadable = {} }
+    local nd = { name = name, full = name, client = client, engine = engine, sync = sync, rules = rules, unreadable = {} }
     sync:on("unreadable", function(e) nd.unreadable[#nd.unreadable + 1] = e end)
     w.nodes[name] = nd
     return nd
@@ -6471,7 +6576,7 @@ function Lab.update(w, name, rules)
     return Lab.node(w, name, rules, "0.2.0+2", old.client)
 end
 
-local function order(nd) local c = nd.engine:Get("main"); return c and (table.concat(c.state.order, ","):gsub("%-Realm", "")) or "none" end
+local function order(nd) local c = nd.engine:Get("main"); return c and (table.concat(c.state.order, ",")) or "none" end
 local function fp(nd) return nd.engine:Fingerprint() or "none" end
 Lab.order, Lab.fp = order, fp
 
@@ -6517,8 +6622,8 @@ function Lab.evaluate(seed, lossy)
     -- who runs what: the guild master and two raiders are on the new release; an officer and a raider have not updated yet
     local gm, cass, dara = Lab.node(w, "GM", rules3), Lab.node(w, "Cass", rules3), Lab.node(w, "Dara", rules3)
     local off, eira = Lab.node(w, "Off", Migrations.Default), Lab.node(w, "Eira", Migrations.Default)
-    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off-Realm" } }))
-    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm", to = "bottom" })) end
+    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
+    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i, to = "bottom" })) end
     settle(w, { "GM", "Cass", "Dara", "Off", "Eira" })
 
     -- history, written by the new release (GM) and the old one (Off) alike
@@ -6542,8 +6647,8 @@ function Lab.evaluate(seed, lossy)
         local pick = names[rnd(#names)]
         local isNew = nd.rules.current >= 3
         local op = rnd(7)
-        if op == 1 then return nd.engine:Append("main", "AddMember", { member = "N" .. n .. "-Realm" })                  -- no position: format 2 bottom, format 3 top
-        elseif op == 2 then return nd.engine:Append("main", "AddMember", { member = "N" .. n .. "-Realm", to = rnd(2) == 1 and "top" or "bottom" })
+        if op == 1 then return nd.engine:Append("main", "AddMember", { member = "N" .. n })                  -- no position: format 2 bottom, format 3 top
+        elseif op == 2 then return nd.engine:Append("main", "AddMember", { member = "N" .. n, to = rnd(2) == 1 and "top" or "bottom" })
         elseif op == 3 or op == 4 then
             local data = isNew and { winner = pick, item = "I" .. n } or { member = pick, item = "I" .. n }
             return nd.engine:Append("main", "Award", data)
@@ -6562,7 +6667,7 @@ function Lab.evaluate(seed, lossy)
     end
     -- The one case a wrong upcaster of this change breaks is a member added with NO position by the old release (format 2: the bottom). The digest
     -- only proves the history it covers, so make sure this one does, and that nothing later moves them: a migration is only as well tested as its corpus.
-    assert(off.engine:Append("main", "AddMember", { member = "Legacy-Realm" }))
+    assert(off.engine:Append("main", "AddMember", { member = "Legacy" }))
     local t0, converged = settle(w, { "GM", "Cass", "Dara", "Off", "Eira" })
     mark("before the cutover everyone, old release and new, ends with the same ledger", converged, "settled in " .. t0 .. " s")
     local before = {}
@@ -6608,12 +6713,12 @@ function Lab.evaluate(seed, lossy)
     mark("and its own ledger and standings are untouched", order(eira) == before.Eira and #eira.engine:Conflicts() == 0)
 
     -- life after: the new release writes format 3 (a new member with no position goes to the top); the unupdated officer writes format 2
-    assert(gm.engine:Append("main", "AddMember", { member = "Newcomer-Realm" }))
+    assert(gm.engine:Append("main", "AddMember", { member = "Newcomer" }))
     local winner = (order(gm):gsub("^[^,]+,", "")):match("^[^,]+")
-    assert(gm.engine:Append("main", "Award", { winner = winner .. "-Realm", item = "After" }))
+    assert(gm.engine:Append("main", "Award", { winner = winner, item = "After" }))
     local staleWrites = 0
     for i = 1, 2 do
-        if off.engine:Append("main", "MovePlayer", { member = "M" .. i .. "-Realm", to = "top", reason = "old release, after the cutover" }) then staleWrites = staleWrites + 1 end
+        if off.engine:Append("main", "MovePlayer", { member = "M" .. i, to = "top", reason = "old release, after the cutover" }) then staleWrites = staleWrites + 1 end
     end
     settle(w, newNames)
     -- the old release (Eira) hears of the cutover when the entry reaches her: wait for it (a lossy network drops and repeats messages)
@@ -6637,7 +6742,7 @@ function Lab.evaluate(seed, lossy)
     local fenn = Lab.node(w, "Fenn", Lab.rules("forgetdefault"))
     waitFor(w, function() return fenn.engine:Frozen() ~= nil end, 400)
     mark("a client whose upcaster disagrees with the migration notices (its replay does not match the digest)", fenn.engine:Frozen() ~= nil and fenn.engine:Frozen().reason == "migrationmismatch")
-    local ev, werr = fenn.engine:Append("main", "Pass", { member = "M1-Realm", item = "x" })
+    local ev, werr = fenn.engine:Append("main", "Pass", { member = "M1", item = "x" })
     mark("and refuses to write rather than writing something the guild would not agree with", ev == nil and werr == "frozen", tostring(werr))
     mark("while the correct clients are unaffected", gm.engine:Frozen() == nil and cass.engine:Frozen() == nil)
 
@@ -6648,7 +6753,7 @@ function Lab.evaluate(seed, lossy)
     mark("when the old releases update they catch up from the same saved ledger and everyone converges", convAll, "settled in " .. tl .. " s")
     mark("on the same standings", order(w.nodes.Off) == order(gm) and order(w.nodes.Eira) == order(gm))
     mark("with the same record of what was stale", #w.nodes.Off.engine:Conflicts() == #gm.engine:Conflicts() and w.nodes.Eira.engine:Format() == 3 and w.nodes.Off.engine:Format() == 3)
-    local late = w.nodes.Off.engine:Append("main", "Award", { winner = "M3-Realm", item = "Updated" })
+    local late = w.nodes.Off.engine:Append("main", "Award", { winner = "M3", item = "Updated" })
     mark("and the updated officer can write again, in format 3", late ~= nil and late.v == 3)
     stats.lateSeconds = tl
     return card, stats
@@ -6713,8 +6818,8 @@ function Lab.New()
         L.w, L.log, L.counter = w, {}, 0
         local gm = Lab.node(w, "GM", rules3)
         Lab.node(w, "Off", Migrations.Default); Lab.node(w, "Cass", rules3); Lab.node(w, "Dara", rules3); Lab.node(w, "Eira", Migrations.Default)
-        assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off-Realm" } }))
-        for i = 1, MEMBERS do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm", to = "bottom" })) end
+        assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
+        for i = 1, MEMBERS do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i, to = "bottom" })) end
         settle(w, { "GM", "Off", "Cass", "Dara", "Eira" })
         w.net:advance(2)
         L.log = {}
@@ -6732,7 +6837,7 @@ function Lab.New()
         local ev, err, text
         if kind == "member" then
             local who = "N" .. L.counter
-            ev, err = nd.engine:Append("main", "AddMember", { member = who .. "-Realm" })
+            ev, err = nd.engine:Append("main", "AddMember", { member = who })
             if ev then
                 if nd.rules.current >= 3 and fmt < 3 then
                     text = ("%s added %s with no position. The ledger is still in format 2, so the new release wrote its own default, the top, as an explicit entry: %s is at the top for everyone."):format(name, who, who)
@@ -6747,7 +6852,7 @@ function Lab.New()
             if not top then return false, "nolist" end
             local data = nd.rules.current >= 3 and { winner = top, item = "Item " .. L.counter } or { member = top, item = "Item " .. L.counter }
             ev, err = nd.engine:Append("main", "Award", data)
-            if ev then text = ("%s awarded Item %d to %s, written in format %d (%s)."):format(name, L.counter, (top:gsub("%-Realm", "")), ev.v,
+            if ev then text = ("%s awarded Item %d to %s, written in format %d (%s)."):format(name, L.counter, (top), ev.v,
                 nd.rules.current >= 3 and "the new release's fields are winner and recipient" or "the old release's fields are member and to") end
         end
         if not ev then return false, err end
@@ -6806,7 +6911,7 @@ function Lab.New()
             local nd = w.nodes[nm]
             local view = nd.engine:View()
             local top = {}
-            for i, who in ipairs(view.lists.main and view.lists.main.order or {}) do if i <= 6 then top[i] = (who:gsub("%-Realm", "")) end end
+            for i, who in ipairs(view.lists.main and view.lists.main.order or {}) do if i <= 6 then top[i] = (who) end end
             local stale, other = 0, 0
             for _, c in ipairs(nd.engine:Conflicts()) do if c.reason == "staleformat" then stale = stale + 1 else other = other + 1 end end
             local events = 0
@@ -6879,7 +6984,7 @@ local function encode(v)
     return "null"
 end
 
-local function short(name) return name and (name:gsub("%-.*$", "")) end
+local function short(name) return name and S.Identity.Display(name) end
 
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
@@ -7366,13 +7471,13 @@ local function labAddPeer()
     local name = lab.names[i]
     if not name then return false end
     local net = lab.net
-    local client = S.MockClient.New({ name = name, realm = "Realm", seed = 1000 + i,
+    local client = S.MockClient.New({ name = name, seed = 1000 + i,
         clock = 1000 + net.time, unix = 1760000000 + math.floor(net.time) })
     local engine = S.Engine.New(client)
     local sync = S.Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
     net:attach(client)
     sync:start()
-    local peer = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, restricted = false }
+    local peer = { name = name, full = name, client = client, engine = engine, sync = sync, restricted = false }
     sync:on("forkResolved", function(p)
         if p.winner == "theirs" then
             labLog(name .. " found a fork at event " .. p.at .. " and switched to the longer chain; " .. p.orphaned .. " of their own events were set aside for review")
@@ -7391,9 +7496,9 @@ local function labReset()
     local a = lab.peers[1]
     a.engine:CreateList("main", "Main")
     local officers = {}
-    for _, n in ipairs(lab.names) do officers[#officers + 1] = n .. "-Realm" end
+    for _, n in ipairs(lab.names) do officers[#officers + 1] = n end
     a.engine:Write("SetOfficers", { names = officers })
-    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
+    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i }) end
     lab.counter = 5
     lab.net:advance(4)
     lab.log = {}
@@ -7455,7 +7560,7 @@ function api.lab_write(i, kind)
     lab.counter = lab.counter + 1
     local ev, err
     if kind == "member" then
-        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter .. "-Realm" })
+        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter })
         if ev then labLog(p.name .. " added a raider to the list (written only in " .. p.name .. "'s copy until the network carries it)") end
     else
         local top = chain and chain.state.order[1]

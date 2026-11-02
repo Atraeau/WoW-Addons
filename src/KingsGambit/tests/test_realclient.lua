@@ -6,6 +6,7 @@ local SK, test, eq = H.SK, H.test, H.eq
 local Client, RealClient, Hash = SK.modules.Client, SK.modules.RealClient, SK.modules.Hash
 
 local SECRET = {} -- stands in for a Secret Value
+local SEP = "\194\183" -- what the stub game puts between a first and a last name (the real one is learned from the game, see Identity.lua)
 
 local function newEnv(over)
     local E = { frames = {}, given = {}, chat = {}, printed = {}, restricted = false, lockdown = false }
@@ -15,13 +16,14 @@ local function newEnv(over)
     E.C_Timer = { NewTimer = function(_, fn) return { fn = fn, Cancel = function(s) s.cancelled = true end } end,
         NewTicker = function(_, fn) return { fn = fn, Cancel = function(s) s.cancelled = true end } end }
     E.GetNormalizedRealmName = function() return "Realm" end
+    E.C_NameUtil = { ReplaceSurnameSeparatorWithLinkSeparator = function(n) return (n:gsub(SEP, "~")) end }
     E.UnitFullName = function(unit) if unit == "player" then return "Raidlead", "" end end
     E.IsInRaid = function() return true end
     E.IsInGroup = function() return true end
     E.GetNumGroupMembers = function() return 3 end
     local raid = { { "Raidlead", 2, 1, 80, "Warrior", "WARRIOR", "Zone", true },
         { "Mirel", 1, 1, 80, "Priest", "PRIEST", "Zone", true },
-        { "Brann-Other", 0, 2, 80, "Paladin", "PALADIN", "Zone", false } }
+        { "Brann" .. SEP .. "Ironforge", 0, 2, 80, "Paladin", "PALADIN", "Zone", false } }
     E.GetRaidRosterInfo = function(i) return (table.unpack or unpack)(raid[i]) end
     E.Enum = {
         LootMethod = { Freeforall = 0, Master = 2, Group = 3, NeedBeforeGreed = 4, Personal = 5 },
@@ -38,7 +40,7 @@ local function newEnv(over)
     E.GetLootSlotType = function(slot) return E.loot[slot].link and 1 or 2 end
     E.GetLootSlotLink = function(slot) return E.loot[slot] and E.loot[slot].link end
     E.GetLootSlotInfo = function(slot) return "icon", "name", 1, nil, E.loot[slot].q end
-    local cands = { "Raidlead", "Mirel", "Brann-Other" }
+    local cands = { "Raidlead", "Mirel", "Brann" .. SEP .. "Ironforge" }
     E.GetMasterLootCandidate = function(_, i) return cands[i] end
     E.GiveMasterLoot = function(slot, index) E.given[#E.given + 1] = { slot = slot, index = index } end
     E.C_ChatInfo = {
@@ -91,16 +93,38 @@ test("time passes straight through; serverTime is an integer", function()
     eq(c:now(), 123.5); eq(c:serverTime(), 1760000000)
     local t = c:after(1, function() end); c:cancel(t); assert(t.cancelled)
 end)
-test("me and normalize add the realm, with a spaced-realm fallback", function()
+test("identity: first and last name, the fullest name wins, and the surname separator is learned from the game", function()
     local c = newClient()
-    eq(c:me(), "Raidlead-Realm"); eq(c:normalize("Aldric"), "Aldric-Realm"); eq(c:normalize("Aldric-Other"), "Aldric-Other")
-    local c2 = newClient(function(E) E.GetNormalizedRealmName = nil; E.GetRealmName = function() return "Some Realm" end end)
-    eq(c2:normalize("Aldric"), "Aldric-SomeRealm")
+    eq(c:me(), "Raidlead"); eq(c:normalize("Aldric"), "Aldric"); eq(c:normalize("Aldric Stormwind"), "Aldric_Stormwind")
+    -- UnitNameUnmodified carries the surname; UnitFullName and UnitName leave it out (ShouldDisplaySurname can do that): the identity must not depend on it
+    local c2 = newClient(function(E)
+        E.UnitNameUnmodified = function() return "Aldric" .. SEP .. "Stormwind", "" end
+        E.UnitFullName = function() return "Aldric", "" end
+        E.UnitName = function() return "Aldric", "" end
+    end)
+    eq(c2:me(), "Aldric_Stormwind", "the answer with the most parts wins")
+    eq(c2:normalize("Brann" .. SEP .. "Ironforge"), "Brann_Ironforge", "the separator the game uses was learned from its own link function")
+    eq(c2:normalize("brann ironforge"), "brann_ironforge")
+    -- a game with no separator function still works: whitespace, hyphen and underscore separate the names
+    local c3 = newClient(function(E) E.C_NameUtil = nil; E.UnitFullName = function() return "Aldric Stormwind", "" end end)
+    eq(c3:me(), "Aldric_Stormwind")
+    -- there are no realms: whatever the "server" return says is not part of the name
+    local c4 = newClient(function(E) E.UnitFullName = function() return "Aldric Stormwind", "SomeServer" end end)
+    eq(c4:me(), "Aldric_Stormwind")
+end)
+test("the probe prints what the game says about names, for the in-game field test", function()
+    local c = newClient(function(E)
+        E.UnitNameUnmodified = function() return "Aldric" .. SEP .. "Stormwind", "" end
+        E.ShouldDisplaySurname = function() return false end
+    end)
+    local text = table.concat(c:nameProbe(), "\n")
+    assert(text:find("UnitNameUnmodified", 1, true) and text:find("ShouldDisplaySurname = false", 1, true) and text:find("learned separator", 1, true), text)
+    assert(text:find("identity = Aldric_Stormwind", 1, true), text)
 end)
 test("raid roster is translated (names, class token, ranks, online)", function()
     local c = newClient()
     local r = c:roster()
-    eq(#r, 3); eq(r[1].name, "Raidlead-Realm"); eq(r[1].rank, 2); eq(r[2].class, "PRIEST"); eq(r[3].name, "Brann-Other")
+    eq(#r, 3); eq(r[1].name, "Raidlead"); eq(r[1].rank, 2); eq(r[2].class, "PRIEST"); eq(r[3].name, "Brann_Ironforge")
     eq(r[3].online, false); eq(r[3].subgroup, 2)
     eq(c:rankOf("Mirel"), 1); eq(c:rankOf("Nobody"), nil)
     assert(c:inRaid() and c:inGroup())
@@ -114,13 +138,13 @@ test("party (non-raid) roster is built from unit tokens", function()
     local c = newClient(function(E)
         E.IsInRaid = function() return false end
         E.UnitExists = function(u) return u == "player" or u == "party1" end
-        E.UnitFullName = function(u) if u == "player" then return "Raidlead", "" end; return "Mirel", "Other" end
+        E.UnitFullName = function(u) if u == "player" then return "Raidlead", "" end; return "Mirel" .. SEP .. "Stormwind", "" end
         E.UnitClass = function(u) return "x", u == "player" and "WARRIOR" or "PRIEST" end
         E.UnitIsGroupLeader = function(u) return u == "player" end
         E.UnitIsConnected = function() return true end
     end)
     local r = c:roster()
-    eq(#r, 2); eq(r[1].rank, 2); eq(r[2].name, "Mirel-Other"); eq(r[2].class, "PRIEST")
+    eq(#r, 2); eq(r[1].rank, 2); eq(r[2].name, "Mirel_Stormwind"); eq(r[2].class, "PRIEST")
 end)
 test("lootMethod maps the enum to a lowercase name; isMasterLooter follows the client", function()
     local c, E = newClient()
@@ -130,19 +154,19 @@ end)
 
 test("masterLooter names the looter from the raid index, and is nil when not master looter", function()
     local c, E = newClient()
-    eq(c:masterLooter(), "Raidlead-Realm", "stub: raid index 1 is Raidlead")
+    eq(c:masterLooter(), "Raidlead", "stub: raid index 1 is Raidlead")
     E.lootMethodId = 3; eq(c:masterLooter(), nil)
     local party = newClient(function(X)
         X.IsInRaid = function() return false end
         X.C_PartyInfo = { GetLootMethod = function() return 2, 2, nil end }
-        X.UnitFullName = function(u) if u == "party2" then return "Mirel", "Other" end; return "Raidlead", "" end
+        X.UnitFullName = function(u) if u == "party2" then return "Mirel" .. SEP .. "Stormwind", "" end; return "Raidlead", "" end
     end)
-    eq(party:masterLooter(), "Mirel-Other")
+    eq(party:masterLooter(), "Mirel_Stormwind")
     local me = newClient(function(X)
         X.IsInRaid = function() return false end
         X.C_PartyInfo = { GetLootMethod = function() return 2, 0, nil end }
     end)
-    eq(me:masterLooter(), "Raidlead-Realm", "party id 0 is the player")
+    eq(me:masterLooter(), "Raidlead", "party id 0 is the player")
 end)
 
 H.section("RealClient: loot")
@@ -153,7 +177,7 @@ test("loot window: only item slots, parsed item ids, candidates normalized", fun
     c:on("loot.opened", function(p) opened = p.slots end)
     fire(E, "LOOT_OPENED")
     eq(#opened, 2); eq(opened[1].slot, 1); eq(opened[1].itemId, 1001); eq(opened[2].slot, 3); eq(opened[2].quality, 4)
-    eq(table.concat(c:candidates(1), ","), "Raidlead-Realm,Mirel-Realm,Brann-Other")
+    eq(table.concat(c:candidates(1), ","), "Raidlead,Mirel,Brann_Ironforge")
     local _, why = c:candidates(2); eq(why, "gone")
 end)
 test("give maps a name to the candidate index and reports failures", function()
@@ -161,7 +185,7 @@ test("give maps a name to the candidate index and reports failures", function()
     local _, early = c:give(1, "Mirel"); eq(early, "gone", "window not open yet")
     fire(E, "LOOT_OPENED")
     assert(c:give(1, "Mirel")); eq(E.given[1].slot, 1); eq(E.given[1].index, 2)
-    assert(c:give(3, "Brann-Other")); eq(E.given[2].index, 3)
+    assert(c:give(3, "Brann_Ironforge")); eq(E.given[2].index, 3)
     local _, a = c:give(1, "Nobody"); eq(a, "notcandidate")
     E.lootMethodId = 3
     local _, b = c:give(1, "Mirel"); eq(b, "notml")
@@ -224,8 +248,8 @@ test("incoming addon messages and whispers are normalized; secret senders are dr
     fire(E, "CHAT_MSG_ADDON", "KG", "payload", "RAID", "Mirel", "Raidlead")
     fire(E, "CHAT_MSG_ADDON", "KG", "payload", "RAID", SECRET, "Raidlead")
     fire(E, "CHAT_MSG_WHISPER", "need", "Tavi")
-    eq(#got, 1); eq(got[1].sender, "Mirel-Realm"); eq(got[1].channel, "RAID"); eq(got[1].payload, "payload")
-    eq(#w, 1); eq(w[1].sender, "Tavi-Realm")
+    eq(#got, 1); eq(got[1].sender, "Mirel"); eq(got[1].channel, "RAID"); eq(got[1].payload, "payload")
+    eq(#w, 1); eq(w[1].sender, "Tavi")
 end)
 test("whisper and announce use SendChatMessage, and report lockdown", function()
     local c, E = newClient()
@@ -263,9 +287,9 @@ test("a completed trade is reported with the items", function()
     c:on("trade.closed", function(p) closed = p end)
     c:on("trade.changed", function(p) changed = p end)
     fire(E, "TRADE_SHOW"); fire(E, "TRADE_PLAYER_ITEM_CHANGED", 1)
-    eq(changed.trade.partner, "Aldric-Realm"); eq(#changed.trade.give, 1); eq(c:trade().partner, "Aldric-Realm")
+    eq(changed.trade.partner, "Aldric"); eq(#changed.trade.give, 1); eq(c:trade().partner, "Aldric")
     fire(E, "UI_INFO_MESSAGE", 1, "Trade complete."); fire(E, "TRADE_CLOSED")
-    assert(closed.completed); eq(closed.partner, "Aldric-Realm"); eq(#closed.gave, 1); eq(c:trade(), nil)
+    assert(closed.completed); eq(closed.partner, "Aldric"); eq(#closed.gave, 1); eq(c:trade(), nil)
     fire(E, "TRADE_SHOW"); fire(E, "TRADE_CLOSED"); eq(closed.completed, false)
 end)
 test("the frame registers events and records any the client refuses", function()
@@ -287,15 +311,15 @@ end)
 H.section("RealClient: the raid leader and setting the loot method")
 test("leader() is the raid's rank-2 member", function()
     local c = newClient()
-    eq(c:leader(), "Raidlead-Realm")
+    eq(c:leader(), "Raidlead")
 end)
 test("setLootMethod calls C_PartyInfo.SetLootMethod with the enum, naming a same-realm Master Looter plainly", function()
     local c, E = newClient()
     local calls = {}
     E.C_PartyInfo.IsLootMethodAvailable = function() return true end
     E.C_PartyInfo.SetLootMethod = function(method, who) calls[#calls + 1] = { method, who }; return true end
-    assert(c:setLootMethod("master", "Mirel-Realm")); eq(calls[1][1], 2); eq(calls[1][2], "Mirel", "same realm: a plain name")
-    assert(c:setLootMethod("master", "Brann-Other")); eq(calls[2][2], "Brann-Other", "another realm: Name-Realm")
+    assert(c:setLootMethod("master", "Mirel")); eq(calls[1][1], 2); eq(calls[1][2], "Mirel", "same realm: a plain name")
+    assert(c:setLootMethod("master", "Brann_Ironforge")); eq(calls[2][2], "Brann" .. SEP .. "Ironforge", "the game gets its own spelling of the name back")
     assert(c:setLootMethod("master")); eq(calls[3][2], "Raidlead", "no name: this player")
     assert(c:setLootMethod("group")); eq(calls[4][1], 3); eq(calls[4][2], nil)
     local ok, why = c:setLootMethod("frobnicate"); assert(not ok); eq(why, "badmethod")

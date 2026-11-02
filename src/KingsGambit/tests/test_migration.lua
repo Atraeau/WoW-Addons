@@ -54,9 +54,9 @@ end)
 
 test("downcasting writes the old format, and round-trips what the old format can express", function()
     local rules = makeRules3()
-    local award = { v = 3, type = "Award", list = "main", data = { winner = "A-Realm", item = "X", recipient = "B-Realm" } }
+    local award = { v = 3, type = "Award", list = "main", data = { winner = "A", item = "X", recipient = "B" } }
     local down = Migrations.Down(rules, award, 2)
-    eq(down.v, 2); eq(down.data.member, "A-Realm"); eq(down.data.to, "B-Realm"); eq(down.data.winner, nil)
+    eq(down.v, 2); eq(down.data.member, "A"); eq(down.data.to, "B"); eq(down.data.winner, nil)
     local back = Migrations.Up(rules, down)
     assert(deepEqual(back.data, award.data), "up(down(x)) == x")
     eq(Migrations.Down(rules, { v = 3, type = "AddMember", list = "main", data = { member = "Z" } }, 2).data.to, "top", "format 3's default is written down for format-2 readers")
@@ -143,17 +143,17 @@ test("only the guild master can migrate, only to the next format, only once, and
     local w = { net = net, nodes = {} }
     local rules3 = makeRules3()
     local gm, off = node(w, "GM", rules3), node(w, "Off", rules3)
-    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off-Realm" } })); net:advance(5)
+    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } })); net:advance(5)
     eq(select(2, off.engine:Migrate(3, "not the guild master")), "notguildmaster")
     eq(select(2, gm.engine:Migrate(4, "too far")), "badmigrate"); eq(select(2, gm.engine:Migrate(2, "backwards")), "badmigrate")
     local ev, why = gm.engine:Migrate(3, ""); eq(ev, nil)
     assert(gm.engine:Migrate(3, "the first one"))
     eq(select(2, gm.engine:Migrate(3, "again")), "badmigrate", "the ledger is already in format 3")
-    local old = Engine.New(MockClient.New({ name = "Old", realm = "Realm", seed = 5 }), { rules = Migrations.Default })
+    local old = Engine.New(MockClient.New({ name = "Old", seed = 5 }), { rules = Migrations.Default })
     eq(select(2, old:Migrate(3, "this build can't write format 3")), "cantwrite")
     -- a forged cutover: not from the guild master, or with a cut or digest that doesn't hold
     net:advance(5)
-    local forged = Ledger.Build(off.engine.store, off.engine:MyChain(), "Off-Realm", "Migrate", { from = 2, to = 3, cut = {}, digest = "x", reason = "forged" }, off.client:serverTime() + 100, nil, 3)
+    local forged = Ledger.Build(off.engine.store, off.engine:MyChain(), "Off", "Migrate", { from = 2, to = 3, cut = {}, digest = "x", reason = "forged" }, off.client:serverTime() + 100, nil, 3)
     local status = Ledger.Receive(off.engine.store, forged)
     assert(status == "appended"); off.engine:rebuild()
     local conflict

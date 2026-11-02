@@ -37,20 +37,20 @@ local function run(seed)
     local peers, names = {}, {}
     for i = 1, count do
         local name = "P" .. i
-        local client = MockClient.New({ name = name, realm = "Realm", seed = seed * 31 + i })
+        local client = MockClient.New({ name = name, seed = seed * 31 + i })
         local engine = Engine.New(client)
         local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
         net:attach(client)
         sync:start()
-        peers[i] = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync }
-        names[i] = name .. "-Realm"
+        peers[i] = { name = name, full = name, client = client, engine = engine, sync = sync }
+        names[i] = name
     end
     local gm = peers[1]
     assert(gm.engine:CreateList("main", "Main"))
     local officers = {}
     for i = 2, count do if r() < 0.7 then officers[#officers + 1] = names[i] end end
     assert(gm.engine:Write("SetOfficers", { names = officers }))
-    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm" })) end
+    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i })) end
     net:advance(3)
 
     local counter, raids = 100, 0
@@ -73,7 +73,7 @@ local function run(seed)
         local order = chain and chain.state.order or {}
         if roll < 0.35 then
             counter = counter + 1
-            p.engine:Append("main", "AddMember", { member = "X" .. counter .. "-Realm" })
+            p.engine:Append("main", "AddMember", { member = "X" .. counter })
         elseif roll < 0.55 and #order > 0 then
             counter = counter + 1
             local data = { member = order[r(#order)], item = "Item" .. counter }

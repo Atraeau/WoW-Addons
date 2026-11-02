@@ -14,7 +14,7 @@ local function rng(seed)
 end
 
 local NAMES = {}
-for i = 1, 12 do NAMES[i] = "P" .. i .. "-Realm" end
+for i = 1, 12 do NAMES[i] = "P" .. i end
 
 local function checkInvariants(chain, label)
     local s = chain.state
@@ -65,7 +65,7 @@ end
 
 local function run(seed)
     local r = rng(seed)
-    local client = MockClient.New({ name = "Raidlead", realm = "Realm", seed = seed })
+    local client = MockClient.New({ name = "Raidlead", seed = seed })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
     local chain = engine:Get("main")

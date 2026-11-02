@@ -14,7 +14,7 @@ local function build(cfgNet)
     local seed = 0
     local function node(name)
         seed = seed + 1
-        local client = MockClient.New({ name = name, realm = "Realm", seed = seed * 17 })
+        local client = MockClient.New({ name = name, seed = seed * 17 })
         client:setRaid(ALL, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
         local engine = Engine.New(client)
         local sync = Sync.New(engine, { heartbeat = 30, firstHeartbeat = 5, firstJitter = 1 })
@@ -24,7 +24,7 @@ local function build(cfgNet)
     end
     local ml = node("ML")
     ml.engine:CreateList("main", "Main")
-    for _, n in ipairs { "Aldric", "Brann", "Cass", "Zed" } do ml.engine:Append("main", "AddMember", { member = n .. "-Realm" }) end
+    for _, n in ipairs { "Aldric", "Brann", "Cass", "Zed" } do ml.engine:Append("main", "AddMember", { member = n }) end
     world.ml, world.host = ml, LootNet.NewHost(ml.sync, ml.engine)
     for _, n in ipairs(ADDON_USERS) do
         local nd = node(n)
@@ -42,7 +42,7 @@ local function drop(world, n)
     return items
 end
 
-local function order(world) return (table.concat(world.ml.engine:Get("main").state.order, ","):gsub("%-Realm", "")) end
+local function order(world) return (table.concat(world.ml.engine:Get("main").state.order, ",")) end
 
 H.section("LootNet: the live session protocol")
 test("players receive the session, answer, and get the results", function()
@@ -63,9 +63,9 @@ test("players receive the session, answer, and get the results", function()
     assert(w.host.session:confirm())
     w.net:advance(3)
     assert(seen.result, "results reached the player")
-    eq(seen.result.awards[1].winner, "Aldric-Realm"); eq(seen.result.awards[1].tier, "main")
+    eq(seen.result.awards[1].winner, "Aldric"); eq(seen.result.awards[1].tier, "main")
     eq(order(w), "Brann,Cass,Zed,ML,Aldric")
-    eq(w.ml.client.given[1].to, "Aldric-Realm")
+    eq(w.ml.client.given[1].to, "Aldric")
 end)
 test("everyone sees everyone's answers (public by design)", function()
     local w = build()
@@ -74,7 +74,7 @@ test("everyone sees everyone's answers (public by design)", function()
     w.players.Aldric.net:bid(1, "need"); w.players.Brann.net:bid(1, "gift", "Cass")
     w.net:advance(3)
     local answers = w.players.Cass.net.session.answers
-    eq(answers["Aldric-Realm"][1].kind, "need"); eq(answers["Brann-Realm"][1].kind, "gift"); eq(answers["Brann-Realm"][1].to, "Cass-Realm")
+    eq(answers["Aldric"][1].kind, "need"); eq(answers["Brann"][1].kind, "gift"); eq(answers["Brann"][1].to, "Cass")
 end)
 test("a bid is acknowledged, and a refused bid says why", function()
     local w = build()
@@ -96,9 +96,9 @@ test("the draft is played live: turn is broadcast, the right player picks", func
     w.host.session:bid("ML", 1, "pass"); w.host.session:bid("ML", 2, "pass")
     w.host.client:whisperFrom("Zed", "pass")
     w.net:advance(2)
-    eq(w.host.session.phase, "main"); eq(w.host.session.turn.player, "Aldric-Realm")
+    eq(w.host.session.phase, "main"); eq(w.host.session.turn.player, "Aldric")
     assert(a:myTurn(), "Aldric's addon knows it is his turn"); eq(#a:myTurn().options, 2)
-    assert(not b:myTurn(), "Brann's does not"); eq(b.session.turn.player, "Aldric-Realm", "but Brann can see whose turn it is")
+    assert(not b:myTurn(), "Brann's does not"); eq(b.session.turn.player, "Aldric", "but Brann can see whose turn it is")
 
     local acks = {}
     b.on("ack", function(x) acks[#acks + 1] = x end)
@@ -117,8 +117,8 @@ test("a raider without the addon answers by whisper and gets a reply", function(
     w.net:advance(1)
     w.host.client:whisperFrom("Zed", "need")
     local reply = w.ml.client.sent[#w.ml.client.sent]
-    eq(reply.kind, "whisper"); eq(reply.target, "Zed-Realm"); assert(reply.text:find("Got it"))
-    eq(w.host.session.bids["Zed-Realm"][1].kind, "need")
+    eq(reply.kind, "whisper"); eq(reply.target, "Zed"); assert(reply.text:find("Got it"))
+    eq(w.host.session.bids["Zed"][1].kind, "need")
 end)
 test("only the Master Looter can open a session on a player's addon", function()
     local w = build()
@@ -143,11 +143,11 @@ test("a bid for a session that is not running is refused", function()
     w.players.Aldric.net.on("ack", function(a) acks[#acks + 1] = a end)
     assert(w.host:start(drop(w, 1))); w.net:advance(1)
     w.players.Aldric.net.session.sid = "stale"
-    w.players.Aldric.net.session.host = "ML-Realm"
+    w.players.Aldric.net.session.host = "ML"
     w.players.Aldric.net:bid(1, "need")
     w.net:advance(2)
     eq(#acks, 0, "the host's refusal carries a different session id, so the player ignores it")
-    eq(w.host.session.bids["Aldric-Realm"], nil)
+    eq(w.host.session.bids["Aldric"], nil)
 end)
 test("a player who joins late, or missed the start, catches up from the host's repeats", function()
     local w = build()
@@ -159,7 +159,7 @@ test("a player who joins late, or missed the start, catches up from the host's r
     w.net:advance(11)
     local s = w.players.Cass.net.session
     assert(s, "Cass picked the session up from the repeat"); eq(#s.items, 1)
-    eq(s.answers["Aldric-Realm"][1].kind, "need", "and sees the answers so far")
+    eq(s.answers["Aldric"][1].kind, "need", "and sees the answers so far")
     -- a repeat does not reset a player who already has the session
     local aldric = w.players.Aldric.net.session
     w.net:advance(11)

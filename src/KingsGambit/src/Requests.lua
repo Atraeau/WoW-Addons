@@ -27,8 +27,8 @@
 --                                 recorded with the reason. Eligibility is by class (what the game can check); the
 --                                 requester's spec is part of the record.
 local _, SK = ...
-local Standings, ItemFit
-local M = SK:NewModule("Requests", { "Standings", "ItemFit" }, function(d) Standings, ItemFit = d.Standings, d.ItemFit end)
+local Standings, ItemFit, Identity
+local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity" }, function(d) Standings, ItemFit, Identity = d.Standings, d.ItemFit, d.Identity end)
 
 M.LIST = "main"
 M.MAX_REASON = 200
@@ -36,7 +36,7 @@ M.MAX_PENDING_PER_PLAYER = 3
 M.RETRY_SECONDS, M.MAX_TRIES = 4, 5
 
 local function isName(v) return type(v) == "string" and v ~= "" end
-local function short(n) return n and (n:gsub("%-.*$", "")) end
+local function short(n) return n and Identity.Display(n) end
 
 local POSITIONS = { top = true, bottom = true }
 local function isPos(p) return POSITIONS[p] or (tonumber(p) ~= nil and tonumber(p) >= 1 and tonumber(p) % 1 == 0) end

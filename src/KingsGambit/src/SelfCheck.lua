@@ -44,6 +44,10 @@ function M.Run(client)
     end)
     probe("me()", function() return client:me() or false end)
     probe("normalize('Test')", function() return client:normalize("Test") or false end)
+    -- identity: how the game writes a character's first and last name (see Identity.lua). Paste this block when reporting what the game says.
+    if client.nameProbe then
+        for i, line in ipairs(client:nameProbe()) do probe("name " .. i, function() return line end) end
+    end
     probe("now() / serverTime()", function() return client:now() .. " / " .. client:serverTime() end)
     probe("inGroup / inRaid", function() return tostring(client:inGroup()) .. " / " .. tostring(client:inRaid()) end)
     probe("roster()", function()

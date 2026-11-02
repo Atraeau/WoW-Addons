@@ -93,7 +93,7 @@ local function run(seed)
 
     -- 3. positions: only winners moved, each to the bottom in award order
     local expect = {}
-    for i, n in ipairs(startOrder) do expect[i] = n .. "-Realm" end
+    for i, n in ipairs(startOrder) do expect[i] = n end
     for _, a in ipairs(wantMain) do moveToBottom(expect, a.member) end
     local actual = main.state.order
     eq(#actual, #expect, "main list membership unchanged")

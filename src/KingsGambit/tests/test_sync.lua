@@ -8,26 +8,26 @@ local seedCounter = 0
 local function peer(name, net, o)
     o = o or {}
     seedCounter = seedCounter + 1
-    local client = MockClient.New({ name = name, realm = "Realm", seed = seedCounter * 7919, clock = o.clock, unix = o.unix })
+    local client = MockClient.New({ name = name, seed = seedCounter * 7919, clock = o.clock, unix = o.unix })
     if o.storage then client.storage = function() return o.storage end end
     if o.raid then client:setRaid(o.raid, { leader = o.raid[1] }) end
     local engine = Engine.New(client)
     local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
     if net then net:attach(client, o.attach) end
     sync:start()
-    return { name = name .. "-Realm", client = client, engine = engine, sync = sync }
+    return { name = name, client = client, engine = engine, sync = sync }
 end
 
 local function fp(p) return p.engine:Fingerprint() or "none" end
 local function count(p) local c = p.engine:Get("main"); return c and #c.events or 0 end
-local function order(p) local c = p.engine:Get("main"); return c and (table.concat(c.state.order, ","):gsub("%-Realm", "")) or "none" end
-local function add(p, names) for _, n in ipairs(names) do assert(p.engine:Append("main", "AddMember", { member = n .. "-Realm" })) end end
+local function order(p) local c = p.engine:Get("main"); return c and (table.concat(c.state.order, ",")) or "none" end
+local function add(p, names) for _, n in ipairs(names) do assert(p.engine:Append("main", "AddMember", { member = n })) end end
 
 -- A founds the ledger and makes everyone else an officer.
 local function found(a, officers)
     assert(a.engine:CreateList("main", "Main"))
     local names = {}
-    for _, n in ipairs(officers or {}) do names[#names + 1] = n .. "-Realm" end
+    for _, n in ipairs(officers or {}) do names[#names + 1] = n end
     assert(a.engine:Write("SetOfficers", { names = names }))
 end
 
@@ -97,7 +97,7 @@ test("both sides of a split keep writing; after healing everything is merged, no
     local net = SimNetwork.New()
     local a, b = peer("A", net), peer("B", net)
     found(a, { "B" }); net:advance(3)
-    net:partition({ { "A-Realm" }, { "B-Realm" } })
+    net:partition({ { "A" }, { "B" } })
     add(a, { "X1", "X2", "X3" })
     add(b, { "Y1", "Y2", "Y3", "Y4", "Y5" })
     net:advance(10)
@@ -112,12 +112,12 @@ test("two raids at once: each Master Looter's awards reach the other almost at o
     local mla, mlb = peer("MLA", net, { raid = raid1 }), peer("MLB", net, { raid = raid2 })
     found(off)
     add(off, { "A1", "A2", "B1", "B2" })
-    assert(off.engine:Write("Elevate", { raid = "r1", ml = "MLA-Realm", minutes = 360 }))
-    assert(off.engine:Write("Elevate", { raid = "r2", ml = "MLB-Realm", minutes = 360 }))
+    assert(off.engine:Write("Elevate", { raid = "r1", ml = "MLA", minutes = 360 }))
+    assert(off.engine:Write("Elevate", { raid = "r2", ml = "MLB", minutes = 360 }))
     net:advance(5)
     same({ off, mla, mlb })
-    assert(mla.engine:Append("main", "Award", { member = "A1-Realm", item = "Helm" }))
-    assert(mlb.engine:Append("main", "Award", { member = "B1-Realm", item = "Cloak" }))
+    assert(mla.engine:Append("main", "Award", { member = "A1", item = "Helm" }))
+    assert(mlb.engine:Append("main", "Award", { member = "B1", item = "Cloak" }))
     net:advance(1)
     same({ off, mla, mlb }); eq(#off.engine:Conflicts(), 0)
     eq(order(off), "A2,B2,A1,B1")
@@ -128,18 +128,18 @@ test("parallel raids with a split network still converge, and the officer's own 
     local mla, mlb = peer("MLA", net), peer("MLB", net)
     found(off)
     add(off, { "A1", "A2", "A3", "B1", "B2", "B3" })
-    assert(off.engine:Write("Elevate", { raid = "r1", ml = "MLA-Realm", minutes = 360 }))
-    assert(off.engine:Write("Elevate", { raid = "r2", ml = "MLB-Realm", minutes = 360 }))
+    assert(off.engine:Write("Elevate", { raid = "r1", ml = "MLA", minutes = 360 }))
+    assert(off.engine:Write("Elevate", { raid = "r2", ml = "MLB", minutes = 360 }))
     net:advance(5)
-    net:partition({ { "MLA-Realm" }, { "MLB-Realm", "Off-Realm" } })
-    for _, n in ipairs { "A2", "A1", "A3" } do assert(mla.engine:Append("main", "Award", { member = n .. "-Realm", item = "x" })); net:advance(2) end
-    for _, n in ipairs { "B3", "B1" } do assert(mlb.engine:Append("main", "Award", { member = n .. "-Realm", item = "y" })); net:advance(2) end
-    local _, why = off.engine:Append("main", "AddMember", { member = "Late-Realm" })
+    net:partition({ { "MLA" }, { "MLB", "Off" } })
+    for _, n in ipairs { "A2", "A1", "A3" } do assert(mla.engine:Append("main", "Award", { member = n, item = "x" })); net:advance(2) end
+    for _, n in ipairs { "B3", "B1" } do assert(mlb.engine:Append("main", "Award", { member = n, item = "y" })); net:advance(2) end
+    local _, why = off.engine:Append("main", "AddMember", { member = "Late" })
     eq(why, "duringraid", "the officer is told, and nothing is written")
     net:heal(); net:advance(30)
     same({ off, mla, mlb }); eq(#off.engine:Conflicts(), 0)
     local raid1 = {}
-    for _, n in ipairs(off.engine:Get("main").state.order) do if n:find("^A") then raid1[#raid1 + 1] = n:gsub("%-Realm", "") end end
+    for _, n in ipairs(off.engine:Get("main").state.order) do if n:find("^A") then raid1[#raid1 + 1] = n end end
     eq(table.concat(raid1, ","), "A2,A1,A3", "raid 1's order is exactly what its own awards made it")
 end)
 
@@ -160,7 +160,7 @@ test("a large event is split into frames and reassembled", function()
     local a, b = peer("A", net), peer("B", net)
     found(a); add(a, { "X" }); net:advance(3)
     a.client:clearSent()
-    assert(a.engine:Append("main", "Award", { member = "X-Realm", item = string.rep("item-link-", 80) }))
+    assert(a.engine:Append("main", "Award", { member = "X", item = string.rep("item-link-", 80) }))
     assert(#a.client.sent > 1, "needed several frames")
     for _, m in ipairs(a.client.sent) do assert(#m.payload <= 255) end
     net:advance(3)
@@ -173,7 +173,7 @@ test("a tampered event is rejected and does not change the receiver", function()
     local before = fp(b)
     local chain = a.engine.store.chains[a.engine:MyChain()]
     local forged = { v = 2, ledger = a.engine:LedgerId(), chain = chain.id, seq = #chain.events + 1, prev = chain.head,
-        ts = 1760000100, author = "A-Realm", type = "AddMember", list = "main", data = { member = "Evil-Realm" }, id = "deadbeefdeadbeef" }
+        ts = 1760000100, author = "A", type = "AddMember", list = "main", data = { member = "Evil" }, id = "deadbeefdeadbeef" }
     a.sync:post({ t = "E", c = chain.id, n = forged.seq, events = { forged } }, "GUILD")
     net:advance(3)
     eq(fp(b), before); assert(b.sync.stats.rejected >= 1)
@@ -199,7 +199,7 @@ test("the same writer on two machines (stale data): the longer branch wins every
     local clone = peer("A", nil, { storage = copy(a.client:storage()), clock = 1000 + net.time, unix = 1760000000 + math.floor(net.time) })
     add(a, { "Real" })
     clone.client:advance(1); add(clone, { "Stale1", "Stale2", "Stale3" })
-    net:partition({ { "A-Realm" }, { "B-Realm" } })
+    net:partition({ { "A" }, { "B" } })
     net:advance(3)
     for _, ev in ipairs(clone.engine.store.chains[clone.engine:MyChain()].events) do b.engine:Receive(ev) end
     local resolved = {}
@@ -207,7 +207,7 @@ test("the same writer on two machines (stale data): the longer branch wins every
     net:heal(); net:advance(40)
     same({ a, b })
     eq(order(a):find("Stale3") ~= nil, true, "the longer branch won"); eq(order(a):find("Real"), nil)
-    eq(#a.engine.db.orphans, 1); eq(a.engine.db.orphans[1].events[1].data.member, "Real-Realm")
+    eq(#a.engine.db.orphans, 1); eq(a.engine.db.orphans[1].events[1].data.member, "Real")
     eq(resolved[1], "theirs")
 end)
 test("identical histories give identical fingerprints on independent runs (determinism)", function()

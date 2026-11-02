@@ -3,7 +3,8 @@
 -- must be true afterward. The test suite runs every scenario against the real engine, so the
 -- lessons can never drift from the rules. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local M = SK:NewModule("Scenarios")
+local Identity
+local M = SK:NewModule("Scenarios", { "Identity" }, function(d) Identity = d.Identity end)
 
 -- Top of the list first; You are last. Each has a class, because the loot rules go by class: the item has to be
 -- one their class can wear or wield (and the gloves below are for warriors only).
@@ -24,7 +25,7 @@ local function lastEvent(sim, listId, type_)
     return found
 end
 
-local function short(name) return name and (name:gsub("%-.*$", "")) end
+local function short(name) return name and Identity.Display(name) end
 
 M.list = {
     {
@@ -124,7 +125,7 @@ M.list = {
             local want = {}
             for _, n in ipairs(seeded) do if n ~= winner then want[#want + 1] = n end end
             want[#want + 1] = winner
-            local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ","):gsub("%-Realm", "")
+            local main, off = sim:orderString(), table.concat(sim.engine:Get("off").state.order, ",")
             local award = lastEvent(sim, "off", "Award")
             local ok = #seeded == 7 and award ~= nil and short(award.data.member) == winner
                 and main == "Aldric,Brann,Cass,Dara,Eira,Fenn,You" and off == table.concat(want, ",")
@@ -196,7 +197,7 @@ M.list = {
         end,
         after = function(sim)
             local award = lastEvent(sim, "main", "Award")
-            assert(sim.engine:Append("main", "Award", { member = "Dara-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+            assert(sim.engine:Append("main", "Award", { member = "Dara", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
         end,
         expect = function(sim)
             local want = "Aldric,Brann,Cass,Eira,Fenn,You,Dara"
@@ -319,7 +320,7 @@ do
         end,
         after = function(sim)
             local award = assert(blade(sim))
-            assert(sim.engine:Append("main", "Award", { member = "Hale-Realm", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
+            assert(sim.engine:Append("main", "Award", { member = "Hale", item = award.data.item, replaces = award.id, reason = "traded at the door" }))
         end,
         expect = function(sim)
             local last = lastEvent(sim, "main", "Award")

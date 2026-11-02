@@ -2,7 +2,7 @@
 -- explains what to do when it differs. Edit it on purpose, in the same commit as the change (and the TOC version, if the
 -- change starts a new line).
 return {
-    line = "0.2", -- the compatibility line: 0.2.x (MINOR is the line while MAJOR is 0; from 1.0.0 it is MAJOR)
+    line = "0.3", -- the compatibility line: 0.3.x (MINOR is the line while MAJOR is 0; from 1.0.0 it is MAJOR)
     surface = {
         ledgerFormat = 2,
         listEvents = { "AddMember", "Award", "CreateList", "Disenchant", "MovePlayer", "Pass", "RemoveMember", "Revert", "Salvage", "Transfer" },

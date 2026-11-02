@@ -43,7 +43,7 @@ local function encode(v)
     return "null"
 end
 
-local function short(name) return name and (name:gsub("%-.*$", "")) end
+local function short(name) return name and S.Identity.Display(name) end
 
 ---------------------------------------------------------------- state
 local sim, scenario, startCount = nil, nil, 0
@@ -530,13 +530,13 @@ local function labAddPeer()
     local name = lab.names[i]
     if not name then return false end
     local net = lab.net
-    local client = S.MockClient.New({ name = name, realm = "Realm", seed = 1000 + i,
+    local client = S.MockClient.New({ name = name, seed = 1000 + i,
         clock = 1000 + net.time, unix = 1760000000 + math.floor(net.time) })
     local engine = S.Engine.New(client)
     local sync = S.Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
     net:attach(client)
     sync:start()
-    local peer = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, restricted = false }
+    local peer = { name = name, full = name, client = client, engine = engine, sync = sync, restricted = false }
     sync:on("forkResolved", function(p)
         if p.winner == "theirs" then
             labLog(name .. " found a fork at event " .. p.at .. " and switched to the longer chain; " .. p.orphaned .. " of their own events were set aside for review")
@@ -555,9 +555,9 @@ local function labReset()
     local a = lab.peers[1]
     a.engine:CreateList("main", "Main")
     local officers = {}
-    for _, n in ipairs(lab.names) do officers[#officers + 1] = n .. "-Realm" end
+    for _, n in ipairs(lab.names) do officers[#officers + 1] = n end
     a.engine:Write("SetOfficers", { names = officers })
-    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i .. "-Realm" }) end
+    for i = 1, 5 do a.engine:Append("main", "AddMember", { member = "Raider" .. i }) end
     lab.counter = 5
     lab.net:advance(4)
     lab.log = {}
@@ -619,7 +619,7 @@ function api.lab_write(i, kind)
     lab.counter = lab.counter + 1
     local ev, err
     if kind == "member" then
-        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter .. "-Realm" })
+        ev, err = p.engine:Append("main", "AddMember", { member = "Raider" .. lab.counter })
         if ev then labLog(p.name .. " added a raider to the list (written only in " .. p.name .. "'s copy until the network carries it)") end
     else
         local top = chain and chain.state.order[1]

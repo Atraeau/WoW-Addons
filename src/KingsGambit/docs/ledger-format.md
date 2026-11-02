@@ -31,7 +31,7 @@ whose `seen` is invalid is skipped (`badseen`), and its key falls back to `ts`.
 | `seq` | number | Position in its chain, starting at `1`. |
 | `prev` | string | The previous event's `id` in the same chain; `0000000000000000` for the first. |
 | `ts` | number | Server time in whole seconds. Never lower than the previous event in the chain. |
-| `author` | string | `Name-Realm` of the writer. |
+| `author` | string | The writer's identity: `First_Last` (a character's first and last name; WoW: Forever has no realms). An entry keeps whatever name string it was written with, so a ledger written with older spellings still verifies. |
 | `type` | string | One of the event types in section 5. |
 | `list` | string, optional | The list a list event belongs to (`main`, `off`, ...). Absent on ledger-wide events. |
 | `data` | table | The fields for that type. |
@@ -148,7 +148,7 @@ Every event except the Genesis has `ledger = "89cf69b1d9689705"`. The text hashe
 {s6:author=s17:Guildmaster-Realm,s5:chain=s26:Guildmaster-Realm#1a2b3c4d,s4:data={s4:name=s12:Guild ledger,},s6:ledger=s0:,s3:seq=n1,s2:ts=n1760000000,s4:type=s7:Genesis,s1:v=n2,}
 ```
 
-After replay the order is `Brann-Realm`, `Aldric-Realm`, and the fingerprint is `2cc0444c8382fd78`.
+(The worked example uses the older `Name-Realm` spelling, which is just an opaque string to the ledger.) After replay the order is `Brann-Realm`, `Aldric-Realm`, and the fingerprint is `2cc0444c8382fd78`.
 
 ## 8. How peers stay in step
 
@@ -160,7 +160,7 @@ is kept (ties: the lower `id` at the split) and the other events are kept aside 
 ## 9. Saved data
 
 `KingsGambitDB` (account-wide): `schema = 2`, `ledger = { chains = { [chainId] = { events = { ... } } } }`,
-`mine = { [Name-Realm] = chainId }` (each character's own chain), `config`, and `orphans` (events kept aside by a chain
+`mine = { [identity] = chainId }` (each character's own chain), `config`, and `orphans` (events kept aside by a chain
 fork).
 
 ## Versions

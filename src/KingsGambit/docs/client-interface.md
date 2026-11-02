@@ -12,7 +12,7 @@ Status: MockClient and RealClient built; RealClient is verified against the docu
    WoW data directly.
 2. **Engine instances take a Client.** `engine = Engine.New(client)`. No module-level
    singletons, so a test (or a training session) can run many engines in one process.
-3. **Normalized, not raw.** The Client exposes our vocabulary (names as `Name-Realm`, rank
+3. **Normalized, not raw.** The Client exposes our vocabulary (names as `First_Last` identities, rank
    as 0/1/2, events with plain-table payloads), not WoW's quirks. Translating is the
    RealClient's job.
 4. **Failures are values.** Anything that can fail returns `nil, reason` (or `false, reason`).
@@ -40,8 +40,8 @@ so a Sim can disable a capability and the engine can degrade gracefully.
 | Method | Returns | Notes / real API |
 |---|---|---|
 | `addonVersion()` | string | the addon's version from its TOC (`GetAddOnMetadata`, or `C_AddOns.GetAddOnMetadata`); `"dev"` if none. The release build stamps `<version>.<build number>` |
-| `me()` | `"Name-Realm"` | `UnitFullName("player")` |
-| `normalize(name)` | `"Name-Realm"` | Adds the realm if missing; one canonical form everywhere |
+| `me()` | `"First_Last"` | the player's full name: `UnitNameUnmodified` / `UnitFullName` / `UnitName`, whichever has the most parts (see `Identity.lua`) |
+| `normalize(name)` | `"First_Last"` | one canonical identity from any spelling (spaces, hyphen, underscore, the game's surname separator); no realms exist in WoW: Forever |
 | `inGroup()` / `inRaid()` | boolean | `IsInGroup` / `IsInRaid` |
 | `roster()` | array of `{name, class, rank, online, subgroup}` | `GetRaidRosterInfo` over `GetNumGroupMembers`; rank 0 member / 1 assistant / 2 leader |
 | `rankOf(name)` | 0/1/2 or nil | Backs the proof-of-authority check (leader and assistants may write) |
@@ -52,8 +52,8 @@ so a Sim can disable a capability and the engine can degrade gracefully.
 |---|---|---|
 | `lootMethod()` | `"master"`, `"group"`, … | `GetLootMethod` |
 | `isMasterLooter()` | boolean | `IsMasterLooter` |
-| `masterLooter()` | `Name-Realm` or nil | `C_PartyInfo.GetLootMethod` (a raid index or party slot, turned into a name) |
-| `leader()` | `Name-Realm` or nil | the raid's rank-2 member (`GetRaidRosterInfo`, or `UnitIsGroupLeader` in a party). There is always one in a group |
+| `masterLooter()` | identity or nil | `C_PartyInfo.GetLootMethod` (a raid index or party slot, turned into a name) |
+| `leader()` | identity or nil | the raid's rank-2 member (`GetRaidRosterInfo`, or `UnitIsGroupLeader` in a party). There is always one in a group |
 | `setLootMethod(method, looter?)` | `true`, or `false, reason` (`nogroup`, `notleader`, `badmethod`, `badlooter`, `unavailable`, `failed`) | `C_PartyInfo.SetLootMethod(method, lootMaster)` after `IsLootMethodAvailable`. Only the leader can; the addon calls it only on the `masterloot` command |
 | `lootSlots()` | array of `{slot, link, itemId, quality, quantity}` | `GetNumLootItems`, `GetLootSlotInfo`, `GetLootSlotLink`; only while a loot window is open |
 | `candidates(slot)` | array of names | `GetMasterLootCandidate` over the candidate indexes; the Client hides the index mapping |
@@ -142,7 +142,7 @@ training scenarios use them to play the part of the world:
 
 1. **Throttling:** the Client exposes `pending()` (queue depth) so sync can pace itself. MockClient
    reports `pendingCount`, which tests can set.
-2. **Names:** `normalize` only adds the realm when it's missing. No case folding.
+2. **Names:** a character is its first and last name, written `First_Last` everywhere inside the addon and `First Last` for people. The game's own spelling is remembered and sent back exactly (whispers, loot candidates). Case is kept; comparing ignores it. See `src/Identity.lua`.
 3. **Item info:** `itemInfo(link)` may return nil until the item is cached; the Client then emits
    `item.info` (from `GET_ITEM_INFO_RECEIVED`). MockClient reproduces this with
    `setItemInfo(link, info, {delayed = true})` and `cacheItem(link)`.

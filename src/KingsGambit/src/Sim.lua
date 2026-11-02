@@ -3,9 +3,9 @@
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, ItemFit, Requests, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Identity, d.Tokens, d.MoltenCore, d.AQ40
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -19,7 +19,7 @@ local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WA
 local Sim = {}
 Sim.__index = Sim
 
-local function short(name) return (name:gsub("%-.*$", "")) end
+local function short(name) return Identity.Display(name) end
 
 -- opts: seed, learner (default "You"), members (array of names, or of { name, class, role, spec, offSpec };
 --       top of the list first), learnerPosition ("last" default, "first", or "random": the Master Looter is a
@@ -31,7 +31,7 @@ function M.NewRaid(opts)
     -- The Master Looter's addon is the one that runs the session, so the simulated client is theirs: the learner by
     -- default, or another raider (a bot runs the loot, and the learner plays a raider).
     local ml = opts.masterLooter or learner
-    local client = MockClient.New({ name = ml, realm = "Realm", seed = opts.seed or 1 })
+    local client = MockClient.New({ name = ml, seed = opts.seed or 1 })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
 
@@ -58,7 +58,7 @@ function M.NewRaid(opts)
         names[i] = n
         roster[i] = { name = n, class = class }
         info[n] = { class = class, role = role, spec = spec, offSpec = offSpec }
-        engine:Append("main", "AddMember", { member = n .. "-Realm", class = class })
+        engine:Append("main", "AddMember", { member = n, class = class })
     end
     -- There is always a raid leader, who is not necessarily the Master Looter: by default the first raider who is
     -- neither the learner nor the Master Looter (a person can't be both unless nobody else is there).
@@ -83,11 +83,11 @@ function M.NewRaid(opts)
 
     -- The learner is the Master Looter of this raid, and designates who disenchants (a record in the ledger, as in
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
-    assert(engine:Write("Elevate", { raid = "sim", ml = ml .. "-Realm", minutes = 24 * 60 }))
-    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) .. "-Realm" }))
+    assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
+    assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
 
     return setmetatable({
-        client = client, engine = engine, names = names, learner = learner .. "-Realm", ml = ml .. "-Realm",
+        client = client, engine = engine, names = names, learner = learner, ml = ml,
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
 end
@@ -99,7 +99,7 @@ function Sim:disenchanterName() return (self.engine:RaidDisenchanter()) end
 function Sim:setDisenchanter(name)
     name = self.client:normalize(name)
     local known = false
-    for _, n in ipairs(self.names) do if n .. "-Realm" == name then known = true end end
+    for _, n in ipairs(self.names) do if n == name then known = true end end
     if not known then return false, "notinraid" end
     local ev, err = self.engine:Write("SetDisenchanter", { raid = "sim", name = name })
     if not ev then return false, err end

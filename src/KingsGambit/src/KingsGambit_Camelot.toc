@@ -2,13 +2,14 @@
 ## Title: King's Gambit
 ## Notes: Transparent, tamper-evident King's Gambit raid loot ledger
 ## Author: kirk.lennstrom@gmail.com
-## Version: 0.2.0
+## Version: 0.3.0
 ## SavedVariables: KingsGambitDB
 ## SavedVariablesPerCharacter: KingsGambitCharDB
 
 Registry.lua
 Core.lua
 Hash.lua
+Identity.lua
 Version.lua
 Schemas.lua
 Migrations.lua

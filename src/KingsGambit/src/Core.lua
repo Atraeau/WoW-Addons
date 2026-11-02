@@ -15,7 +15,7 @@ function SK:Print(...)
     print("|cff66ccffGambit|r", ...)
 end
 
--- Everything is built at PLAYER_LOGIN, when the player's name, realm and group are all known.
+-- Everything is built at PLAYER_LOGIN, when the player's name and group are all known.
 local function Start()
     SK:Resolve() -- every file has loaded: hand each module what it depends on
     local M = SK.modules

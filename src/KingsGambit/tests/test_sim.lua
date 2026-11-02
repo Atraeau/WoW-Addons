@@ -54,15 +54,15 @@ test("the human learner's draft turn waits for them", function()
     assert(sim:drop({ "X", "Y" }))
     assert(sim.session:bid("You", 1, "need")); assert(sim.session:bid("You", 2, "need"))
     sim:advance(16)
-    eq(sim.session.phase, "main"); eq(sim.session.turn.player, "You-Realm", "bots wait for You; the turn does not auto-play")
+    eq(sim.session.phase, "main"); eq(sim.session.turn.player, "You", "bots wait for You; the turn does not auto-play")
     assert(sim.session:pick("You", 2))
     -- ...and like any turn, it times out if the human does nothing.
     local sim2 = Sim.NewRaid({ members = { "Aldric" }, learnerPosition = "first" })
     sim2.policies.Aldric = { bid = { ["X"] = "need", ["Y"] = "need" } }
     assert(sim2:drop({ "X", "Y" }))
     assert(sim2.session:bid("You", 1, "need")); assert(sim2.session:bid("You", 2, "need"))
-    sim2:advance(16); eq(sim2.session.turn.player, "You-Realm"); sim2:advance(21)
-    assert(not sim2.session.turn or sim2.session.turn.player ~= "You-Realm", "the unanswered turn counted as a skip")
+    sim2:advance(16); eq(sim2.session.turn.player, "You"); sim2:advance(21)
+    assert(not sim2.session.turn or sim2.session.turn.player ~= "You", "the unanswered turn counted as a skip")
 end)
 test("snapshot is plain data (no functions or cycles) ready for a UI", function()
     local sim = Sim.NewRaid({ members = { "Aldric", "Brann" } })
@@ -374,8 +374,8 @@ test("each simulated raid names a disenchanter who is not the Master Looter, and
     assert(ok)
     local de
     for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Disenchant" then de = ev end end
-    assert(de and de.data.to ~= "You-Realm" and de.data.to == sim:disenchanterName(), "the disenchanter, not You")
-    eq(Sim.NewRaid({ members = { "Solo" }, disenchanter = "Solo" }):disenchanterName(), "Solo-Realm")
+    assert(de and de.data.to ~= "You" and de.data.to == sim:disenchanterName(), "the disenchanter, not You")
+    eq(Sim.NewRaid({ members = { "Solo" }, disenchanter = "Solo" }):disenchanterName(), "Solo")
 end)
 test("the Master Looter chooses the disenchanter for the raid; the choice is recorded and used for the next hand-out", function()
     local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass" } })
@@ -384,12 +384,12 @@ test("the Master Looter chooses the disenchanter for the raid; the choice is rec
     assert(first and first ~= sim.learner)
     eq(select(2, sim:setDisenchanter("Nobody")), "notinraid", "must be someone in the raid")
     assert(sim:setDisenchanter("Brann"))
-    eq(sim:disenchanterName(), "Brann-Realm")
+    eq(sim:disenchanterName(), "Brann")
     local found
-    for _, ev in ipairs(sim.engine:View().authApplied) do if ev.type == "SetDisenchanter" and ev.data.name == "Brann-Realm" then found = ev end end
+    for _, ev in ipairs(sim.engine:View().authApplied) do if ev.type == "SetDisenchanter" and ev.data.name == "Brann" then found = ev end end
     assert(found and found.author == sim.learner, "recorded in the ledger by the Master Looter")
     assert(sim:drop({ "Crimson Shocker" })); assert(sim:runUntil("review", 100)); assert(sim.session:confirm())
-    eq(sim.session.deHandler, "Brann-Realm")
+    eq(sim.session.deHandler, "Brann")
 end)
 test("if the learner lets the ring go unclaimed, the lesson says what happened", function()
     local sc = {}
@@ -407,7 +407,7 @@ test("a salvager can gift only to someone eligible for the item; the page is tol
     local item = sim:snapshot().items[1]
     eq(table.concat(item.giftTargets, ","), "Wara", "only the warrior may have warrior gloves")
     sim.session:bid("Wara", 1, "pass"); sim.session:bid("Pria", 1, "pass"); sim.session:bid("You", 1, "pass")
-    eq(sim.session.turn.type, "claim"); eq(sim.session.turn.player, "You-Realm")
+    eq(sim.session.turn.type, "claim"); eq(sim.session.turn.player, "You")
     eq(select(2, sim.session:claimItem("You", { to = "Pria" })), "wrongclassto", "a priest can't have them")
     assert(sim.session:claimItem("You", { to = "Wara" }))
     assert(MC)
@@ -522,7 +522,7 @@ test("'the item went to someone else': the regret-trade passes; the gift, a bare
     local gsim, gsc = run(function(s)
         local a
         for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
-        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara-Realm", reason = "gift" }))
+        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara", reason = "gift" }))
     end)
     assert(gsc.todo(gsim):find("nobody moves"), tostring(gsc.todo(gsim))); assert(not gsc.expect(gsim))
     -- an undo alone restores Brann but Dara has not paid
@@ -537,14 +537,14 @@ test("'the item went to someone else': the regret-trade passes; the gift, a bare
     -- a gift tried first, then put right with the regret-trade: nothing is left to do
     local fsim, fsc = run(function(s)
         local a; for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
-        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara-Realm", reason = "gift" }))
+        assert(s.engine:Append("main", "Transfer", { award = a.id, to = "Dara", reason = "gift" }))
         base.after(s)
     end)
     eq(fsc.todo(fsim), nil, "the wrong try is not held against a correct fix"); assert(fsc.expect(fsim))
     local tsim, tsc = run(function(s)
         local a; for _, ev in ipairs(s.engine:Get("main").events) do if ev.type == "Award" then a = ev end end
         assert(s.engine:Append("main", "Revert", { target = a.id }))
-        assert(s.engine:Append("main", "Award", { member = "Dara-Realm", item = a.data.item, reason = "traded" }))
+        assert(s.engine:Append("main", "Award", { member = "Dara", item = a.data.item, reason = "traded" }))
     end)
     eq(tsc.todo(tsim), nil); local ok2, msg2 = tsc.expect(tsim); assert(ok2 and msg2:find("two steps"), msg2)
 end)
@@ -574,26 +574,26 @@ test("'the item went to someone else, after a big hand-out': the salvager-winner
     eq(rsim:orderString(), WANT); eq(rsc.todo(rsim), nil)
     local ok, msg = rsc.expect(rsim); assert(ok and msg:find("one step"), msg)
     local st = rsim.engine:Get("main").state
-    eq(st.members["Brann-Realm"].wins, 1, "only the ring is still his win")
-    eq(st.members["Hale-Realm"].wins, 1)
+    eq(st.members["Brann"].wins, 1, "only the ring is still his win")
+    eq(st.members["Hale"].wins, 1)
     eq(#events(rsim, "Award", "Quick Strike Ring"), 1, "the ring award is untouched")
     -- two steps (undo, then record Hale's win) end in the same place
     local tsim, tsc = run(function(s)
         local a = events(s, "Award", "Brutality Blade")[1]
         assert(s.engine:Append("main", "Revert", { target = a.id }))
-        assert(s.engine:Append("main", "Award", { member = "Hale-Realm", item = a.data.item, reason = "traded" }))
+        assert(s.engine:Append("main", "Award", { member = "Hale", item = a.data.item, reason = "traded" }))
     end)
     eq(tsim:orderString(), WANT); eq(tsc.todo(tsim), nil); assert(select(2, tsc.expect(tsim)):find("two steps"))
     -- a bare undo leaves Hale unpaid; a gift moves nobody
     local usim, usc = run(function(s) assert(s.engine:Append("main", "Revert", { target = events(s, "Award", "Brutality Blade")[1].id })) end)
     assert(usc.todo(usim):find("Hale"), tostring(usc.todo(usim))); assert(not usc.expect(usim))
     local gsim, gsc = run(function(s)
-        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale-Realm", reason = "gift" }))
+        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale", reason = "gift" }))
     end)
     assert(gsc.todo(gsim):find("nobody moves"), tostring(gsc.todo(gsim))); assert(not gsc.expect(gsim))
     -- a gift tried first and then put right is not held against the learner
     local fsim, fsc = run(function(s)
-        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale-Realm", reason = "gift" }))
+        assert(s.engine:Append("main", "Transfer", { award = events(s, "Award", "Brutality Blade")[1].id, to = "Hale", reason = "gift" }))
         base.after(s)
     end)
     eq(fsc.todo(fsim), nil); assert(fsc.expect(fsim))
@@ -610,7 +610,7 @@ end)
 H.section("Sim: a raider asks a bot Master Looter")
 test("when a bot is the Master Looter you ask: it accepts what can be done, naming you, and declines what can't", function()
     local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass", "Dara" }, masterLooter = "Aldric" })
-    local function award(who, item) assert(sim.engine:Append("main", "Award", { member = who .. "-Realm", item = item })) end
+    local function award(who, item) assert(sim.engine:Append("main", "Award", { member = who, item = item })) end
     award("Brann", "Sword")      -- Aldric,Cass,Dara,You,Brann
     award("Cass", "Ring")        -- Aldric,Dara,You,Brann,Cass
     -- you may not ask when you are the Master Looter, and a reason is required
@@ -624,12 +624,12 @@ test("when a bot is the Master Looter you ask: it accepts what can be done, nami
     eq(sim:orderString(), "Aldric,Brann,You,Cass,Dara", "as if Brann never won: Cass and Dara paid, in that order")
     local last
     for _, ev in ipairs(sim.engine:Get("main").events) do if ev.type == "Award" then last = ev end end
-    eq(last.data.requestedBy, "You-Realm"); eq(last.data.member, "Dara-Realm"); assert(last.data.replaces)
+    eq(last.data.requestedBy, "You"); eq(last.data.member, "Dara"); assert(last.data.replaces)
     -- asking again for the same item is declined: Brann's award is gone. The decline is in the ledger, with the reason
     local ok2, text2 = sim:ask("undo", "Brann", nil, "again")
     assert(not ok2 and text2:find("declined"), tostring(text2))
     local declined = sim.engine:View().declined[1]
-    assert(declined and declined.data.requestedBy == "You-Realm" and declined.data.declineReason:find("no award"), "recorded")
+    assert(declined and declined.data.requestedBy == "You" and declined.data.declineReason:find("no award"), "recorded")
     eq(sim:orderString(), "Aldric,Brann,You,Cass,Dara", "a declined request changes nothing")
     -- a gift moves nobody; an undo restores
     local okg = sim:ask("gift", "Cass", "Dara", "she gave it to Dara")
@@ -666,15 +666,15 @@ test("changing the loot method during a session cancels it, and nothing is recor
 end)
 test("another raider as Master Looter: their addon runs the loot and the learner plays a raider", function()
     local sim = Sim.NewRaid({ members = { "Aldric", "Brann", "Cass" }, masterLooter = "Aldric" })
-    eq(sim.client:me(), "Aldric-Realm"); eq(sim.ml, "Aldric-Realm"); assert(sim.learner ~= sim.ml)
-    assert(sim:leaderName() ~= "Aldric-Realm", "the leader is another raider")
-    assert(sim.engine:RaidDisenchanter() ~= "Aldric-Realm" or true)
+    eq(sim.client:me(), "Aldric"); eq(sim.ml, "Aldric"); assert(sim.learner ~= sim.ml)
+    assert(sim:leaderName() ~= "Aldric", "the leader is another raider")
+    assert(sim.engine:RaidDisenchanter() ~= "Aldric" or true)
     sim.autoLearner = true
     assert(sim:drop({ "Quick Strike Ring" })); assert(sim:runUntil("review", 200)); assert(sim.session:confirm())
     local awarded
     for _, ev in ipairs(sim.engine:View().applied) do if ev.type == "Award" or ev.type == "Disenchant" then awarded = ev end end
     assert(awarded, "recorded")
-    eq(awarded.author, "Aldric-Realm", "written by the Master Looter's addon, not the learner's")
+    eq(awarded.author, "Aldric", "written by the Master Looter's addon, not the learner's")
     eq(sim.engine:MayWrite(), true)
     -- the learner (a raider) answers like any raider, by name
     local sim2 = Sim.NewRaid({ members = { "Aldric", "Brann" }, masterLooter = "Aldric" })

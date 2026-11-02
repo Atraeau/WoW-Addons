@@ -111,7 +111,7 @@ test("RealClient reads stats, equip effects and the Classes line from the toolti
     eq(table.concat(st.classes, ","), "PRIEST,MAGE,WARLOCK")
 end)
 test("an item the game hasn't cached yet restricts nobody, until it is known", function()
-    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local client = MockClient.New({ name = "ML" })
     client:setItemInfo("item:5", { name = "Robe", equipLoc = "INVTYPE_CHEST", class = ARMOR, subclass = 1 }, { delayed = true })
     client:setItemStats("item:5", { stats = {}, classes = { "PRIEST" } })
     eq(ItemFit.Describe(client, "item:5"), nil)
@@ -123,13 +123,13 @@ end)
 local ROSTER = { { name = "Wara", class = "WARRIOR" }, { name = "Pria", class = "PRIEST" }, { name = "Maga", class = "MAGE" },
     { name = "ML", class = "PALADIN" } }
 local function session(itemStats, rule)
-    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local client = MockClient.New({ name = "ML" })
     client:setRaid(ROSTER, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
     client:setItemInfo("item:7", { name = "Robe", equipLoc = "INVTYPE_CHEST", class = ARMOR, subclass = 1 })
     client:setItemStats("item:7", itemStats)
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for _, m in ipairs(ROSTER) do engine:Append("main", "AddMember", { member = m.name .. "-Realm", class = m.class }) end
+    for _, m in ipairs(ROSTER) do engine:Append("main", "AddMember", { member = m.name, class = m.class }) end
     if rule then assert(engine:Write("ItemClasses", rule)) end
     local s = Loot.NewSession(engine, { bidSeconds = 0 })
     assert(s:start({ { link = "item:7" } }))
@@ -152,7 +152,7 @@ test("the salvager is not restricted: an item for priests and mages nobody wants
     local s = session({ stats = {}, classes = { "PRIEST", "MAGE" } })
     for _, n in ipairs { "Wara", "Pria", "Maga", "ML" } do assert(s:bid(n, 1, "pass")) end
     s:resolveNow()
-    eq(s.phase, "salvage"); eq(s.turn.type, "claim"); eq(s.turn.player, "ML-Realm", "the lowest is the salvager")
+    eq(s.phase, "salvage"); eq(s.turn.type, "claim"); eq(s.turn.player, "ML", "the lowest is the salvager")
     assert(s:claimItem("ML"), "a paladin may salvage a priest's robe: the salvager can take anything")
 end)
 test("nobody takes it: it goes to the disenchanter, whatever their class", function()
@@ -160,7 +160,7 @@ test("nobody takes it: it goes to the disenchanter, whatever their class", funct
     for _, n in ipairs { "Wara", "Pria", "Maga", "ML" } do assert(s:bid(n, 1, "pass")) end
     s:resolveNow()
     assert(s:decline(s.turn.player)) -- the salvager declines: no one else is asked
-    eq(s.items[1].status, "de"); eq(s.pending[1].type, "disenchant"); eq(s.pending[1].to, "ML-Realm", "the paladin Master Looter")
+    eq(s.items[1].status, "de"); eq(s.pending[1].type, "disenchant"); eq(s.pending[1].to, "ML", "the paladin Master Looter")
 end)
 test("a raider who whispers a bid for another class's item is told who it is for", function()
     local s, _, client = session({ stats = {}, classes = { "PRIEST", "MAGE" } })
@@ -170,14 +170,14 @@ test("a raider who whispers a bid for another class's item is told who it is for
 end)
 
 test("an item a class can't equip takes no need or off-spec bids from it, nor gifts to it (plate for a warlock)", function()
-    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local client = MockClient.New({ name = "ML" })
     local roster = { { name = "Lock", class = "WARLOCK" }, { name = "Wara", class = "WARRIOR" }, { name = "ML", class = "PALADIN" } }
     client:setRaid(roster, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
     client:setItemInfo("item:18861", { name = "Flamewaker Legplates", equipLoc = "INVTYPE_LEGS", class = ARMOR, subclass = 4 })
     client:setItemStats("item:18861", { stats = { str = 18, sta = 22, dodge = 1 } })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name .. "-Realm", class = m.class }) end
+    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name, class = m.class }) end
     local s = Loot.NewSession(engine, { bidSeconds = 0 })
     assert(s:start({ { link = "item:18861" } }))
     eq(select(2, s:bid("Lock", 1, "need")), "cantequip"); eq(select(2, s:bid("Lock", 1, "off")), "cantequip")
@@ -190,7 +190,7 @@ end)
 
 -- A one-handed sword of strength and agility (the Brutality Blade), for a raid of a warlock, a mage, a warrior and a rogue.
 local function blade(stats, rule)
-    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local client = MockClient.New({ name = "ML" })
     local roster = { { name = "Lock", class = "WARLOCK" }, { name = "Maga", class = "MAGE" }, { name = "Wara", class = "WARRIOR" },
         { name = "Rogu", class = "ROGUE" }, { name = "ML", class = "PALADIN" } }
     client:setRaid(roster, { leader = "ML", lootMethod = "master", masterLooter = "ML" })
@@ -198,7 +198,7 @@ local function blade(stats, rule)
     client:setItemStats("item:18832", stats)
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name .. "-Realm", class = m.class }) end
+    for _, m in ipairs(roster) do engine:Append("main", "AddMember", { member = m.name, class = m.class }) end
     if rule then assert(engine:Write("ItemClasses", rule)) end
     local s = Loot.NewSession(engine, { bidSeconds = 0 })
     assert(s:start({ { link = "item:18832" } }))
@@ -231,7 +231,7 @@ end)
 test("an eligibility request for a blade is granted as the classes it helps plus the requester", function()
     local _, engine, client = blade({ stats = { str = 9, agi = 9, crit = 1, dps = 51.6 } })
     local rule, whyNot = SK.modules.Requests.EligibleRule(engine, client, { item = "item:18832", class = "WARLOCK",
-        by = "Lock-Realm", reason = "I'd like it for the vendor price" })
+        by = "Lock", reason = "I'd like it for the vendor price" })
     assert(rule, "granted: " .. tostring(whyNot))
     local has = {}
     for _, c in ipairs(rule.classes) do has[c] = true end
@@ -251,14 +251,14 @@ end)
 test("a rule restricts even an item that names no classes, and works before the game has cached it", function()
     local s = session({ stats = {} }, { item = 7, classes = { "MAGE" }, reason = "caster trinket" })
     eq(select(2, s:bid("Pria", 1, "need")), "wrongclass")
-    local client = MockClient.New({ name = "ML", realm = "Realm" })
+    local client = MockClient.New({ name = "ML" })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
     assert(engine:Write("ItemClasses", { item = 9, classes = { "MAGE" }, reason = "x" }))
     eq(ItemFit.Describe(client, "item:9", nil, engine:ItemRule(9)).classes[1], "MAGE")
 end)
 test("a rule that isn't valid is refused by the ledger", function()
-    local client = MockClient.New({ name = "GM", realm = "Realm" })
+    local client = MockClient.New({ name = "GM" })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
     eq(select(2, engine:Write("ItemClasses", { item = 7, classes = { "DEATHKNIGHT" }, reason = "x" })), "baditemrule")
@@ -272,7 +272,7 @@ local function guild()
     local net = SimNetwork.New({ latency = 0.1, seed = 5 })
     local w = { net = net }
     for i, n in ipairs { "GM", "Off", "Maga" } do
-        local client = MockClient.New({ name = n, realm = "Realm", seed = i * 7 })
+        local client = MockClient.New({ name = n, seed = i * 7 })
         client:setRaid({ { name = "GM", class = "WARRIOR" }, { name = "Off", class = "PRIEST" }, { name = "Maga", class = "MAGE" } },
             { leader = "GM", lootMethod = "master", masterLooter = "GM" })
         local engine = Engine.New(client)
@@ -309,7 +309,7 @@ test("eligible: during a raid only its Master Looter sets rules; mistakes in the
     w.GM.client.printed = {}; w.GM.cmd.handle("eligible 123 mage"); assert(text(w.GM):find("a reason is required"), text(w.GM))
 end)
 test("a player sees who an item is for; with hints on, who it suits and how it fits them", function()
-    local client = MockClient.New({ name = "Pria", realm = "Realm" })
+    local client = MockClient.New({ name = "Pria" })
     client:setRaid({ { name = "Pria", class = "PRIEST" } }, {})
     client:setItemInfo("item:7", { name = "Robe", equipLoc = "INVTYPE_HEAD", class = ARMOR, subclass = 1 })
     client:setItemStats("item:7", { stats = ITEMS.clothHealer.stats, classes = { "PRIEST", "DRUID" } })
@@ -323,7 +323,7 @@ test("a player sees who an item is for; with hints on, who it suits and how it f
 end)
 
 test("the text interface doesn't offer a bid the session would refuse: it says why, and how to ask", function()
-    local client = MockClient.New({ name = "Pria", realm = "Realm" })
+    local client = MockClient.New({ name = "Pria" })
     client:setRaid({ { name = "Pria", class = "PRIEST" }, { name = "Wara", class = "WARRIOR" } },
         { leader = "Pria", lootMethod = "master", masterLooter = "Pria" })
     client:setItemInfo("item:1", { name = "Legplates", equipLoc = "INVTYPE_LEGS", class = ARMOR, subclass = 4 })
@@ -332,7 +332,7 @@ test("the text interface doesn't offer a bid the session would refuse: it says w
     client:setItemStats("item:2", { stats = { int = 20 }, classes = { "MAGE" } })
     local engine = Engine.New(client)
     engine:CreateList("main", "Main")
-    for _, n in ipairs { "Pria", "Wara" } do engine:Append("main", "AddMember", { member = n .. "-Realm" }) end
+    for _, n in ipairs { "Pria", "Wara" } do engine:Append("main", "AddMember", { member = n }) end
     local host = { session = Loot.NewSession(engine, { bidSeconds = 0 }), on = function() end }
     local cmd = Commands.New({ client = client, engine = engine, host = host })
     assert(host.session:start({ { link = "item:1" }, { link = "item:2" } }))
@@ -343,7 +343,7 @@ test("the text interface doesn't offer a bid the session would refuse: it says w
     local t = table.concat(client.printed, "\n")
     assert(t:find("Item 1: your class can't wear or wield it, so you can pass or gift it"), t)
     assert(t:find("Item 2: your class isn't eligible for it"), t); assert(t:find("request eligible 2 <reason>"), t)
-    eq(host.session.bids["Pria-Realm"], nil, "nothing was sent")
-    cmd.handle("gift 1 Wara"); eq(host.session.bids["Pria-Realm"][1].kind, "gift", "a priest may gift the plate to the warrior")
-    cmd.handle("pass 1"); eq(host.session.bids["Pria-Realm"][1].kind, "pass")
+    eq(host.session.bids["Pria"], nil, "nothing was sent")
+    cmd.handle("gift 1 Wara"); eq(host.session.bids["Pria"][1].kind, "gift", "a priest may gift the plate to the warrior")
+    cmd.handle("pass 1"); eq(host.session.bids["Pria"][1].kind, "pass")
 end)

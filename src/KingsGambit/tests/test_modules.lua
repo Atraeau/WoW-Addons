@@ -6,14 +6,14 @@ local test, eq = H.test, H.eq
 -- Run a few modules end to end: a list, an award, a request described, a token looked up.
 local function smoke(SK)
     local M = SK.modules
-    local client = M.MockClient.New({ name = "Raidlead", realm = "Realm" })
+    local client = M.MockClient.New({ name = "Raidlead" })
     local engine = M.Engine.New(client)
     assert(engine:CreateList("main", "Main"))
-    assert(engine:Append("main", "AddMember", { member = "A-Realm" }))
-    assert(engine:Append("main", "AddMember", { member = "B-Realm" }))
-    assert(engine:Append("main", "Award", { member = "A-Realm", item = "X" }))
-    eq(table.concat(engine:Get("main").state.order, ","), "B-Realm,A-Realm")
-    eq(M.Requests.Describe({ kind = "move", member = "A-Realm", pos = "top" }), "move A to the top")
+    assert(engine:Append("main", "AddMember", { member = "A" }))
+    assert(engine:Append("main", "AddMember", { member = "B" }))
+    assert(engine:Append("main", "Award", { member = "A", item = "X" }))
+    eq(table.concat(engine:Get("main").state.order, ","), "B,A")
+    eq(M.Requests.Describe({ kind = "move", member = "A", pos = "top" }), "move A to the top")
 end
 
 local function shuffled(list, seed)

@@ -78,12 +78,12 @@ end
 -- A player: their own client, engine and sync, running the code `rules` describes. build = the addon version they report.
 function Lab.node(w, name, rules, build, client)
     seedCounter = seedCounter + 1
-    client = client or MockClient.New({ name = name, realm = "Realm", seed = seedCounter * 53 })
+    client = client or MockClient.New({ name = name, seed = seedCounter * 53 })
     client:setAddonVersion(build or "0.2.0+1")
     local engine = Engine.New(client, { rules = rules })
     local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })
     w.net:attach(client); sync:start()
-    local nd = { name = name, full = name .. "-Realm", client = client, engine = engine, sync = sync, rules = rules, unreadable = {} }
+    local nd = { name = name, full = name, client = client, engine = engine, sync = sync, rules = rules, unreadable = {} }
     sync:on("unreadable", function(e) nd.unreadable[#nd.unreadable + 1] = e end)
     w.nodes[name] = nd
     return nd
@@ -96,7 +96,7 @@ function Lab.update(w, name, rules)
     return Lab.node(w, name, rules, "0.2.0+2", old.client)
 end
 
-local function order(nd) local c = nd.engine:Get("main"); return c and (table.concat(c.state.order, ","):gsub("%-Realm", "")) or "none" end
+local function order(nd) local c = nd.engine:Get("main"); return c and (table.concat(c.state.order, ",")) or "none" end
 local function fp(nd) return nd.engine:Fingerprint() or "none" end
 Lab.order, Lab.fp = order, fp
 
@@ -142,8 +142,8 @@ function Lab.evaluate(seed, lossy)
     -- who runs what: the guild master and two raiders are on the new release; an officer and a raider have not updated yet
     local gm, cass, dara = Lab.node(w, "GM", rules3), Lab.node(w, "Cass", rules3), Lab.node(w, "Dara", rules3)
     local off, eira = Lab.node(w, "Off", Migrations.Default), Lab.node(w, "Eira", Migrations.Default)
-    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off-Realm" } }))
-    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm", to = "bottom" })) end
+    assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
+    for i = 1, 6 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i, to = "bottom" })) end
     settle(w, { "GM", "Cass", "Dara", "Off", "Eira" })
 
     -- history, written by the new release (GM) and the old one (Off) alike
@@ -167,8 +167,8 @@ function Lab.evaluate(seed, lossy)
         local pick = names[rnd(#names)]
         local isNew = nd.rules.current >= 3
         local op = rnd(7)
-        if op == 1 then return nd.engine:Append("main", "AddMember", { member = "N" .. n .. "-Realm" })                  -- no position: format 2 bottom, format 3 top
-        elseif op == 2 then return nd.engine:Append("main", "AddMember", { member = "N" .. n .. "-Realm", to = rnd(2) == 1 and "top" or "bottom" })
+        if op == 1 then return nd.engine:Append("main", "AddMember", { member = "N" .. n })                  -- no position: format 2 bottom, format 3 top
+        elseif op == 2 then return nd.engine:Append("main", "AddMember", { member = "N" .. n, to = rnd(2) == 1 and "top" or "bottom" })
         elseif op == 3 or op == 4 then
             local data = isNew and { winner = pick, item = "I" .. n } or { member = pick, item = "I" .. n }
             return nd.engine:Append("main", "Award", data)
@@ -187,7 +187,7 @@ function Lab.evaluate(seed, lossy)
     end
     -- The one case a wrong upcaster of this change breaks is a member added with NO position by the old release (format 2: the bottom). The digest
     -- only proves the history it covers, so make sure this one does, and that nothing later moves them: a migration is only as well tested as its corpus.
-    assert(off.engine:Append("main", "AddMember", { member = "Legacy-Realm" }))
+    assert(off.engine:Append("main", "AddMember", { member = "Legacy" }))
     local t0, converged = settle(w, { "GM", "Cass", "Dara", "Off", "Eira" })
     mark("before the cutover everyone, old release and new, ends with the same ledger", converged, "settled in " .. t0 .. " s")
     local before = {}
@@ -233,12 +233,12 @@ function Lab.evaluate(seed, lossy)
     mark("and its own ledger and standings are untouched", order(eira) == before.Eira and #eira.engine:Conflicts() == 0)
 
     -- life after: the new release writes format 3 (a new member with no position goes to the top); the unupdated officer writes format 2
-    assert(gm.engine:Append("main", "AddMember", { member = "Newcomer-Realm" }))
+    assert(gm.engine:Append("main", "AddMember", { member = "Newcomer" }))
     local winner = (order(gm):gsub("^[^,]+,", "")):match("^[^,]+")
-    assert(gm.engine:Append("main", "Award", { winner = winner .. "-Realm", item = "After" }))
+    assert(gm.engine:Append("main", "Award", { winner = winner, item = "After" }))
     local staleWrites = 0
     for i = 1, 2 do
-        if off.engine:Append("main", "MovePlayer", { member = "M" .. i .. "-Realm", to = "top", reason = "old release, after the cutover" }) then staleWrites = staleWrites + 1 end
+        if off.engine:Append("main", "MovePlayer", { member = "M" .. i, to = "top", reason = "old release, after the cutover" }) then staleWrites = staleWrites + 1 end
     end
     settle(w, newNames)
     -- the old release (Eira) hears of the cutover when the entry reaches her: wait for it (a lossy network drops and repeats messages)
@@ -262,7 +262,7 @@ function Lab.evaluate(seed, lossy)
     local fenn = Lab.node(w, "Fenn", Lab.rules("forgetdefault"))
     waitFor(w, function() return fenn.engine:Frozen() ~= nil end, 400)
     mark("a client whose upcaster disagrees with the migration notices (its replay does not match the digest)", fenn.engine:Frozen() ~= nil and fenn.engine:Frozen().reason == "migrationmismatch")
-    local ev, werr = fenn.engine:Append("main", "Pass", { member = "M1-Realm", item = "x" })
+    local ev, werr = fenn.engine:Append("main", "Pass", { member = "M1", item = "x" })
     mark("and refuses to write rather than writing something the guild would not agree with", ev == nil and werr == "frozen", tostring(werr))
     mark("while the correct clients are unaffected", gm.engine:Frozen() == nil and cass.engine:Frozen() == nil)
 
@@ -273,7 +273,7 @@ function Lab.evaluate(seed, lossy)
     mark("when the old releases update they catch up from the same saved ledger and everyone converges", convAll, "settled in " .. tl .. " s")
     mark("on the same standings", order(w.nodes.Off) == order(gm) and order(w.nodes.Eira) == order(gm))
     mark("with the same record of what was stale", #w.nodes.Off.engine:Conflicts() == #gm.engine:Conflicts() and w.nodes.Eira.engine:Format() == 3 and w.nodes.Off.engine:Format() == 3)
-    local late = w.nodes.Off.engine:Append("main", "Award", { winner = "M3-Realm", item = "Updated" })
+    local late = w.nodes.Off.engine:Append("main", "Award", { winner = "M3", item = "Updated" })
     mark("and the updated officer can write again, in format 3", late ~= nil and late.v == 3)
     stats.lateSeconds = tl
     return card, stats
@@ -338,8 +338,8 @@ function Lab.New()
         L.w, L.log, L.counter = w, {}, 0
         local gm = Lab.node(w, "GM", rules3)
         Lab.node(w, "Off", Migrations.Default); Lab.node(w, "Cass", rules3); Lab.node(w, "Dara", rules3); Lab.node(w, "Eira", Migrations.Default)
-        assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off-Realm" } }))
-        for i = 1, MEMBERS do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i .. "-Realm", to = "bottom" })) end
+        assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
+        for i = 1, MEMBERS do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i, to = "bottom" })) end
         settle(w, { "GM", "Off", "Cass", "Dara", "Eira" })
         w.net:advance(2)
         L.log = {}
@@ -357,7 +357,7 @@ function Lab.New()
         local ev, err, text
         if kind == "member" then
             local who = "N" .. L.counter
-            ev, err = nd.engine:Append("main", "AddMember", { member = who .. "-Realm" })
+            ev, err = nd.engine:Append("main", "AddMember", { member = who })
             if ev then
                 if nd.rules.current >= 3 and fmt < 3 then
                     text = ("%s added %s with no position. The ledger is still in format 2, so the new release wrote its own default, the top, as an explicit entry: %s is at the top for everyone."):format(name, who, who)
@@ -372,7 +372,7 @@ function Lab.New()
             if not top then return false, "nolist" end
             local data = nd.rules.current >= 3 and { winner = top, item = "Item " .. L.counter } or { member = top, item = "Item " .. L.counter }
             ev, err = nd.engine:Append("main", "Award", data)
-            if ev then text = ("%s awarded Item %d to %s, written in format %d (%s)."):format(name, L.counter, (top:gsub("%-Realm", "")), ev.v,
+            if ev then text = ("%s awarded Item %d to %s, written in format %d (%s)."):format(name, L.counter, (top), ev.v,
                 nd.rules.current >= 3 and "the new release's fields are winner and recipient" or "the old release's fields are member and to") end
         end
         if not ev then return false, err end
@@ -431,7 +431,7 @@ function Lab.New()
             local nd = w.nodes[nm]
             local view = nd.engine:View()
             local top = {}
-            for i, who in ipairs(view.lists.main and view.lists.main.order or {}) do if i <= 6 then top[i] = (who:gsub("%-Realm", "")) end end
+            for i, who in ipairs(view.lists.main and view.lists.main.order or {}) do if i <= 6 then top[i] = (who) end end
             local stale, other = 0, 0
             for _, c in ipairs(nd.engine:Conflicts()) do if c.reason == "staleformat" then stale = stale + 1 else other = other + 1 end end
             local events = 0

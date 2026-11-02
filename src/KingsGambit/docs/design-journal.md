@@ -1826,6 +1826,29 @@ Asked for by the guild leader: a way to try the migration strategy in the simula
   fails can no longer leave the lab stuck busy.
 - **Guarded in CI:** the smoke driver walks a cutover with the buttons, expects the wrong client to freeze, and requires the evaluation and the "can it fail" check to pass.
 
+### Decision: a character is identified by first and last name, not Name-Realm (2026-11-02)
+
+**Decided by the guild leader:** WoW: Forever has no realms. A character has a first and a last name, the pair is unique, and it takes the place `Name-Realm` had. The game is
+not released until Nov 4, so there is no real ledger to preserve and no migration: names are opaque strings to the ledger, so the golden format-2 ledger (written with
+`Name-Realm`) still loads and replays unchanged.
+
+- **One module knows what a name is** (`src/Identity.lua`). The canonical identity is `First_Last` (joined by `_`: no spaces, because commands split on spaces, and no hyphen, because
+  `short()` used to cut a name at it and would have conflated two characters sharing a first name). People read and type `First Last`. Nothing else in the addon parses a name.
+- **The fetch is isolated in the real client**, because the guild leader knows the names exist but not how the API returns them. The exported API (Interface 16001) shows only hints:
+  `C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator(fullName)` ("replaces the character surname separator with a link separator in a full name string"),
+  `ShouldDisplaySurname()`, `UnitNameUnmodified`, `UnitFullName`, `UnitName` (each returns a name and a "server"). So:
+  - **Which source:** the client asks `UnitNameUnmodified`, `UnitFullName` and `UnitName` and takes the answer with the **most parts**. `ShouldDisplaySurname` suggests `UnitName`
+    can leave the surname out depending on a player's own settings, which would make one character look like two to everyone else; an identity must not depend on a display setting.
+  - **The separator is learned, not assumed:** comparing a name with `ReplaceSurnameSeparatorWithLinkSeparator` of it shows exactly which bytes the game uses between the names.
+    Splitting also accepts whitespace, `-` and `_`, so the code works if that function is missing.
+  - **The "server" return is ignored**: there are no realms.
+  - **Names sent back to the game** (whispers, the loot-method target, loot candidates) use the spelling the game gave us (remembered per identity), else the display form with the learned separator.
+- **To confirm in the live game** (Nov 4): run `/gambit check`; it prints, for the player, each name API's raw return, `ShouldDisplaySurname`, the bytes of the chosen name, its link form,
+  the learned separator and the resulting identity. If anything differs from the assumptions above, the fix is in `RealClient`'s name block and `Identity.lua` only.
+- **Typing names:** a command takes one word per name: `Aldric_Stormwind`, or `"Aldric Stormwind"` in quotes. Two words that make a name the addon knows (on a list, in the raid or the
+  guild) are joined automatically, so `gift Aldric Stormwind Brann Ironforge` works; only the first few words are looked at, so a free-text reason is never rewritten.
+- **Version line 0.3:** what every name in the ledger and every addon message means changed, so players on 0.2.x and 0.3.x are not compatible (the compatibility baseline's line is 0.3).
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

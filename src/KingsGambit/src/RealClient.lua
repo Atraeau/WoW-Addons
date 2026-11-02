@@ -7,8 +7,8 @@
 -- unverified assumptions to confirm in the dungeon field test.
 -- Keep this file Lua 5.1-safe (no `//`, no bitwise operators).
 local _, SK = ...
-local Hash, Client
-local M = SK:NewModule("RealClient", { "Hash", "Client" }, function(d) Hash, Client = d.Hash, d.Client end)
+local Hash, Client, Identity
+local M = SK:NewModule("RealClient", { "Hash", "Client", "Identity" }, function(d) Hash, Client, Identity = d.Hash, d.Client, d.Identity end)
 
 local CHANNELS = { RAID = true, PARTY = true, GUILD = true, WHISPER = true }
 
@@ -31,24 +31,59 @@ function M.New(opts)
         return v
     end
 
-    local realmCache
-    local function realm()
-        if realmCache then return realmCache end
-        local r = E.GetNormalizedRealmName and E.GetNormalizedRealmName()
-        if not r or r == "" then
-            r = (E.GetRealmName and E.GetRealmName() or ""):gsub("[%s%-']", "")
-        end
-        if r and r ~= "" then realmCache = r end
-        return r
+    ---------------------------------------------------------------- who a character is (see Identity.lua)
+    -- There are no realms: a character is its first and last name. Every name that comes from the game is turned into the canonical identity here, once,
+    -- and every name sent back is turned into the game's own spelling. Nothing else in the addon knows how the game writes a name.
+    local seps = {}   -- the separator strings the game puts between first and last name, learned from the game (Identity.LearnSeparator)
+    local rawOf = {}  -- canonical identity -> the game's own spelling of it, for sending names back
+    local function learn(raw)
+        local api = E.C_NameUtil and E.C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator
+        if not api then return end
+        local ok, linked = pcall(api, raw)
+        if not ok then return end
+        local sep = Identity.LearnSeparator(raw, linked)
+        if not sep then return end
+        for _, known in ipairs(seps) do if known == sep then return end end
+        seps[#seps + 1] = sep
     end
-
+    -- a name as a person types it, or as an old record spells it: no memory of how the game wrote it
     local function normalize(name)
         name = safe(name)
         if type(name) ~= "string" or name == "" then return nil end
-        if name:find("-", 1, true) then return name end
-        local r = realm()
-        if not r or r == "" then return name end
-        return name .. "-" .. r
+        return Identity.Normalize(name, seps)
+    end
+    -- a name the GAME gave us: remember its spelling so we can send it back exactly
+    local function fromGame(raw)
+        raw = safe(raw)
+        if type(raw) ~= "string" or raw == "" then return nil end
+        learn(raw)
+        local id = Identity.Normalize(raw, seps)
+        if id and rawOf[id] == nil then rawOf[id] = raw end
+        return id
+    end
+    -- the game's spelling of an identity: as it gave it to us, else the display form with the learned separator
+    local function toGame(id)
+        if type(id) ~= "string" then return id end
+        return rawOf[id] or (id:gsub(Identity.SEP, seps[1] or " "))
+    end
+    -- A unit's full name. UnitNameUnmodified is preferred and the answer with the most parts wins: ShouldDisplaySurname() suggests UnitName can leave
+    -- the surname out depending on a player's own display settings, and an identity must not depend on that. FIELD: confirm in the game which of these
+    -- carries the surname (the `/gambit check` self-check prints all three).
+    local NAME_SOURCES = { "UnitNameUnmodified", "UnitFullName", "UnitName" }
+    local function unitName(unit)
+        local best, bestParts
+        for _, fn in ipairs(NAME_SOURCES) do
+            if E[fn] then
+                local ok, name = pcall(E[fn], unit)
+                name = ok and safe(name)
+                if type(name) == "string" and name ~= "" then
+                    learn(name)
+                    local n = #(Identity.Normalize(name, seps) or ""):gsub("[^" .. Identity.SEP .. "]", "") + 1
+                    if not best or n > bestParts then best, bestParts = name, n end
+                end
+            end
+        end
+        return best
     end
 
     local c = {
@@ -80,15 +115,32 @@ function M.New(opts)
         return (type(v) == "string" and v ~= "") and v or "dev"
     end
 
-    function c:me()
-        local name, server = E.UnitFullName("player")
-        name = safe(name)
-        if not name then return nil end
-        if not server or server == "" then server = realm() end
-        return (server and server ~= "") and (name .. "-" .. server) or name
-    end
+    function c:me() return fromGame(unitName("player")) end
 
     function c:normalize(name) return normalize(name) end
+    -- What the game says about names, raw, for the in-game self-check (`/gambit check`): it is how the real names get confirmed.
+    function c:nameProbe()
+        local out = {}
+        for _, fn in ipairs(NAME_SOURCES) do
+            if E[fn] then
+                local ok, a, b = pcall(E[fn], "player")
+                out[#out + 1] = fn .. " = " .. (ok and (("%q, %q"):format(tostring(safe(a)), tostring(safe(b)))) or "error")
+            else
+                out[#out + 1] = fn .. " = (not available)"
+            end
+        end
+        local name = unitName("player")
+        out[#out + 1] = "ShouldDisplaySurname = " .. tostring(E.ShouldDisplaySurname and E.ShouldDisplaySurname())
+        if name and E.C_NameUtil and E.C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator then
+            local ok, linked = pcall(E.C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator, name)
+            local hex = {}
+            for i = 1, #name do hex[#hex + 1] = ("%02x"):format(name:byte(i)) end
+            out[#out + 1] = ("chosen full name %q (bytes %s) -> link form %q"):format(name, table.concat(hex, " "), tostring(ok and linked))
+            out[#out + 1] = "learned separator(s): " .. (#seps > 0 and ("%q"):format(table.concat(seps, " | ")) or "none")
+        end
+        out[#out + 1] = "identity = " .. tostring(self:me())
+        return out
+    end
     function c:inGroup() return E.IsInGroup() and true or false end
     function c:inRaid() return E.IsInRaid() and true or false end
 
@@ -98,7 +150,7 @@ function M.New(opts)
         if E.IsInRaid() then
             for i = 1, E.GetNumGroupMembers() do
                 local name, rank, subgroup, _, _, fileName, _, online = E.GetRaidRosterInfo(i)
-                name = normalize(name)
+                name = fromGame(name)
                 if name then
                     out[#out + 1] = { name = name, class = fileName, rank = rank or 0,
                         online = online and true or false, subgroup = subgroup or 1 }
@@ -108,10 +160,8 @@ function M.New(opts)
             local units = { "player", "party1", "party2", "party3", "party4" }
             for _, unit in ipairs(units) do
                 if E.UnitExists(unit) then
-                    local name, server = E.UnitFullName(unit)
-                    name = safe(name)
+                    local name = fromGame(unitName(unit))
                     if name then
-                        if server and server ~= "" then name = name .. "-" .. server else name = normalize(name) end
                         local _, fileName = E.UnitClass(unit)
                         out[#out + 1] = { name = name, class = fileName,
                             rank = E.UnitIsGroupLeader(unit) and 2 or 0,
@@ -142,7 +192,7 @@ function M.New(opts)
         if not (E.IsInGuild and E.IsInGuild()) then return out end
         for i = 1, E.GetNumGuildMembers() do
             local name, _, _, _, _, _, _, _, online, _, fileName = E.GetGuildRosterInfo(i)
-            name = normalize(name)
+            name = fromGame(name)
             if name then out[#out + 1] = { name = name, class = fileName, online = online and true or false } end
         end
         return out
@@ -165,7 +215,7 @@ function M.New(opts)
 
     -- Change the loot method (only the leader can: the game refuses anyone else). For "master", `looter` names the Master
     -- Looter (default: this player). Returns true, or false + a reason: notleader, badmethod, unavailable, failed.
-    -- FIELD: confirm the lootMaster argument takes a plain name for a same-realm player and Name-Realm otherwise.
+    -- FIELD: confirm the lootMaster argument takes the game's own spelling of the name (we send back exactly what the game gave us).
     function c:setLootMethod(method, looter)
         if self:leader() ~= self:me() then return false, "notleader" end
         local enumValue
@@ -180,10 +230,7 @@ function M.New(opts)
         if api.IsLootMethodAvailable and not api.IsLootMethodAvailable(enumValue) then return false, "unavailable" end
         local ok
         if method == "master" then
-            local who = normalize(looter or self:me())
-            local name, realm = who:match("^(.-)%-(.+)$")
-            local mine = self:me():match("%-(.+)$")
-            ok = api.SetLootMethod(enumValue, (realm and realm == mine) and name or who)
+            ok = api.SetLootMethod(enumValue, toGame(normalize(looter) or self:me()))
         else
             ok = api.SetLootMethod(enumValue)
         end
@@ -208,15 +255,11 @@ function M.New(opts)
         local _, partyId, raidId = E.C_PartyInfo.GetLootMethod()
         if E.IsInRaid() and raidId then
             local name = E.GetRaidRosterInfo(raidId)
-            return normalize(name)
+            return fromGame(name)
         elseif partyId == 0 then
             return self:me()
         elseif partyId then
-            local name, server = E.UnitFullName("party" .. partyId)
-            name = safe(name)
-            if not name then return nil end
-            if server and server ~= "" then return name .. "-" .. server end
-            return normalize(name)
+            return fromGame(unitName("party" .. partyId))
         end
     end
 
@@ -246,7 +289,7 @@ function M.New(opts)
         for i = 1, 40 do
             local name = E.GetMasterLootCandidate(slot, i)
             if name then
-                out[#out + 1] = { index = i, name = normalize(name) }
+                out[#out + 1] = { index = i, name = fromGame(name) }
             end
         end
         return out
@@ -401,7 +444,7 @@ function M.New(opts)
         if not CHANNELS[channel] then return false, "badchannel" end
         if channel == "WHISPER" and not target then return false, "notarget" end
         if restricted() then return false, "restricted" end
-        local result = E.C_ChatInfo.SendAddonMessage(prefix, payload, channel, target)
+        local result = E.C_ChatInfo.SendAddonMessage(prefix, payload, channel, channel == "WHISPER" and toGame(target) or target)
         local name = enumName(E.Enum and E.Enum.SendAddonMessageResult, result)
         if result == true or result == nil or name == "Success" then return true end
         local reason = (name or tostring(result)):lower()
@@ -416,7 +459,7 @@ function M.New(opts)
         if E.C_ChatInfo.InChatMessagingLockdown and E.C_ChatInfo.InChatMessagingLockdown() then
             return false, "restricted"
         end
-        E.C_ChatInfo.SendChatMessage(text, "WHISPER", nil, name)
+        E.C_ChatInfo.SendChatMessage(text, "WHISPER", nil, toGame(name))
         return true
     end
 
@@ -522,13 +565,13 @@ function M.New(opts)
     function handlers.CHAT_MSG_ADDON(prefix, text, channel, sender)
         sender, text = safe(sender), safe(text)
         if not (sender and text) then return end
-        bus.emit("comms.received", { prefix = prefix, payload = text, channel = channel, sender = normalize(sender) })
+        bus.emit("comms.received", { prefix = prefix, payload = text, channel = channel, sender = fromGame(sender) })
     end
 
     function handlers.CHAT_MSG_WHISPER(text, sender)
         sender, text = safe(sender), safe(text)
         if not (sender and text) then return end
-        bus.emit("whisper.received", { sender = normalize(sender), text = text })
+        bus.emit("whisper.received", { sender = fromGame(sender), text = text })
     end
 
     function handlers.ENCOUNTER_END(id, name, _, _, success)
@@ -549,8 +592,7 @@ function M.New(opts)
     -- FIELD: confirm trade event order and that UI_INFO_MESSAGE reports completion.
     function handlers.TRADE_SHOW()
         tradeActive, tradeCompleted = true, false
-        local who = E.UnitFullName and E.UnitFullName("NPC")
-        tradePartner = normalize(who)
+        tradePartner = fromGame(unitName("NPC"))
     end
     function handlers.TRADE_ACCEPT_UPDATE() bus.emit("trade.changed", { trade = c:trade() }) end
     function handlers.TRADE_PLAYER_ITEM_CHANGED() bus.emit("trade.changed", { trade = c:trade() }) end
