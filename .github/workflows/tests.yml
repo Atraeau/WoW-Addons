@@ -5,6 +5,8 @@ name: tests
 #
 #   lua      King's Gambit's test suite (pure Lua, no game needed). On a pull request it also fails if the committed simulator
 #            page is out of date.
+#   lua51    the ledger under the GAME'S Lua (5.1) and LuaJIT: the hash, the worked example and every golden ledger. The suite itself
+#            runs on a newer Lua, so this is what proves a hash or a replay holds in game.
 #   page     builds King's Gambit's simulator page, syntax-checks its JavaScript, and plays every lesson in headless
 #            Chromium, served in pieces like a slow connection.
 #   addons   tests the build tool, builds every addon and checks what ships, and keeps the zips as a download on the run.
@@ -57,6 +59,23 @@ jobs:
             echo "::error::the simulator page (simulator/index.html, and the published copy docs/kings-gambit/index.html) is out of date. Run, in src/KingsGambit/: lua scripts/build-simulator.lua"
             exit 1
           }
+
+  lua51:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/KingsGambit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the game's Lua (5.1) and LuaJIT
+        run: sudo apt-get update && sudo apt-get install -y lua5.1 luajit
+
+      - name: The golden ledgers replay under Lua 5.1
+        run: lua5.1 tests/lua51_golden.lua
+
+      - name: ...and under LuaJIT
+        run: luajit tests/lua51_golden.lua
 
   page:
     runs-on: ubuntu-latest
@@ -146,7 +165,7 @@ jobs:
           echo "Rebuilt, pushed and asked Pages to redeploy."
 
   release:
-    needs: [lua, page, addons]
+    needs: [lua, lua51, page, addons]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

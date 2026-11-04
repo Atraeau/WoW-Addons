@@ -1849,6 +1849,23 @@ not released until Nov 4, so there is no real ledger to preserve and no migratio
   guild) are joined automatically, so `gift Aldric Stormwind Brann Ironforge` works; only the first few words are looked at, so a free-text reason is never rewritten.
 - **Version line 0.3:** what every name in the ledger and every addon message means changed, so players on 0.2.x and 0.3.x are not compatible (the compatibility baseline's line is 0.3).
 
+### Fixed: an older release over a newer ledger lost the whole ledger; and the ledger is now checked under the game's Lua (2026-11-04)
+
+Found by probing the real loader while asked what else could break backward compatibility.
+
+- **The bug.** A saved ledger with one entry in a format the loaded build can't read (the usual way: a newer release saved it, then an older one was installed over it, e.g. a
+  rollback from CurseForge) made `LoadStore` drop that writer's *whole* chain. If it was the guild master's chain the genesis went with it and every other chain failed with "no ledger":
+  0 of 42 events survived in the probe. An unreadable format is not damage, it is a ledger that has moved on.
+- **The fix.** For `badversion` the readable entries before the unreadable one are kept, and the chain is marked `ahead` (with the format found). The engine then shows the ledger as of the last
+  entry it can read, says so once ("this ledger has entries in a newer format... nothing was lost: update"), and **pauses all writing** (`ahead`): a write would build on a truncated view and could fork the
+  player's own chain. It also **never writes an ahead chain back to disk**: the load path used to re-save every loaded chain, which would have deleted the unreadable entries. Real tampering (`badhash` and the
+  like) is still dropped whole. When the player updates, the same saved data loads in full (tested end to end with the simulated format 3).
+- **Lua 5.1.** The game runs Lua 5.1 (every number a double); the suite runs on a newer Lua. `tests/lua51_golden.lua` is a standalone, plain-5.1 script that checks the hash goldens, the canonical text
+  of numbers (1 and 1.0, values past 2^31), the documented worked example and every published format's golden ledger (load, verify every hash, replay to the frozen standings, validate every entry
+  against its schema). CI runs it under `lua5.1`, `luajit` and the newer Lua, and the release waits for it.
+- **Still open from the same review:** rule changes are format changes (a frozen corpus of random ledgers would guard them), names can change (an alias mechanism), enumerations are closed (class tokens),
+  items are recorded as link text, the cutover is irreversible, `acct.schema` is overwritten unconditionally, no checkpoint/lineage yet, no transport codec id.
+
 ### Scaling: measured, not guessed (2026-10-28)
 
 Measured with plain Lua 5.4 on a development machine (the game's Lua is slower, so treat these as

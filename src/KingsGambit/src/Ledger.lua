@@ -156,6 +156,11 @@ end
 -- Load saved chains, verifying links, times and (for chains up to verifyLimit events) hashes. The Genesis
 -- chain goes first. saved = { chains = { [chainId] = { events = {...} } } }.
 -- Returns store, problems ({ [chainId] = {reason, index} }), lazy ({ [chainId] = chain } still to hash-check).
+--
+-- A chain that fails verification is dropped whole (it may have been tampered with). One exception: an entry in a format this build can't read
+-- ("badversion") is not damage, it is a ledger that has moved on (saved by a newer release, then this older one was installed over it). Then the
+-- readable entries before it are KEPT, so the ledger is still there as of that point, and the problem is marked `ahead = true` with the `format`
+-- found. The caller must not write that chain back (the unreadable entries are still in the saved data) and should not write at all until updated.
 function M.LoadStore(saved, verifyLimit, rules)
     local store, problems, lazy = M.NewStore(rules), {}, {}
     local chains = (saved and saved.chains) or {}
@@ -177,12 +182,16 @@ function M.LoadStore(saved, verifyLimit, rules)
             local status, err = M.Receive(store, ev, fast)
             if status == "appended" and ev.chain ~= cid then status, err = nil, "badchain" end
             if status ~= "appended" then
-                problems[cid] = { reason = err or status, index = i }
-                M.DropChain(store, cid)
+                if err == "badversion" then
+                    problems[cid] = { reason = "badversion", index = i, ahead = true, format = type(ev) == "table" and ev.v or nil }
+                else
+                    problems[cid] = { reason = err or status, index = i }
+                    M.DropChain(store, cid)
+                end
                 break
             end
         end
-        if fast and not problems[cid] and store.chains[cid] then
+        if fast and not (problems[cid] and not problems[cid].ahead) and store.chains[cid] then
             store.chains[cid].verified = 0
             lazy[cid] = store.chains[cid]
         end

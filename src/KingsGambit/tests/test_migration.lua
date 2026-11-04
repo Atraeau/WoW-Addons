@@ -198,3 +198,64 @@ test("the lab's world walks through a migration: write, cut over, a stale write,
     eq(select(2, L:joinWrong()), "alreadyjoined")
     assert(#L:state().log > 6, "what happened is recorded in words")
 end)
+
+H.section("Migration: an older release over a newer ledger (a rollback) loses nothing")
+test("an entry in a format this build can't read hides nothing before it: the readable part of the ledger is kept", function()
+    local saved = deepCopy(golden.ledger)
+    local chain = saved.chains["GM#00000001"].events
+    local last = chain[#chain]
+    local future = { v = 3, ledger = last.ledger, chain = last.chain, seq = last.seq + 1, prev = last.id, ts = last.ts + 10, author = last.author,
+        type = "Pass", list = "main", data = { member = "A-Realm", item = "x" } }
+    future.id = Ledger.EventId(future)
+    chain[#chain + 1] = future
+    local store, problems = Ledger.LoadStore(saved)
+    local p = problems["GM#00000001"]
+    assert(p and p.reason == "badversion" and p.ahead and p.format == 3 and p.index == #chain, "marked as ahead, not as damage")
+    local n = 0
+    for _, c in pairs(store.chains) do n = n + #c.events end
+    eq(n, 41, "every readable entry is kept (the whole golden ledger)")
+    assert(store.id, "the ledger itself is still there")
+    local view = Ledger.View(store)
+    eq(#view.conflicts, 0)
+    for id, want in pairs(golden.expect.lists) do eq(table.concat(view.lists[id].order, ","), table.concat(want.order, ","), "standings of " .. id) end
+    -- real damage is still dropped whole
+    local tampered = deepCopy(golden.ledger)
+    tampered.chains["GM#00000001"].events[5].data.member = "Evil"
+    local store2, problems2 = Ledger.LoadStore(tampered)
+    assert(problems2["GM#00000001"] and not problems2["GM#00000001"].ahead and not store2.chains["GM#00000001"], "tampering is not the same as a newer format")
+    -- and when the FIRST entry is unreadable there is nothing to keep, but nothing is dropped as damage
+    local first = deepCopy(golden.ledger)
+    first.chains["GM#00000001"].events[1].v = 3
+    local _, problems3 = Ledger.LoadStore(first)
+    assert(problems3["GM#00000001"] and problems3["GM#00000001"].ahead and problems3["GM#00000001"].index == 1)
+end)
+
+test("an older release over a newer ledger shows what it can read, says so, refuses to write and never overwrites the saved data; updating brings everything back", function()
+    local w = Lab.world({ latency = 0.1, seed = 11 })
+    local gm = Lab.node(w, "GM", makeRules3())
+    assert(gm.engine:CreateList("main", "Main"))
+    for i = 1, 3 do assert(gm.engine:Append("main", "AddMember", { member = "M" .. i, to = "bottom" })) end
+    assert(gm.engine:Migrate(3, "rollback test"))
+    local gmCid = gm.engine:MyChain()
+    local saved = deepCopy(gm.client:storage().account.ledger)
+    local total = #saved.chains[gmCid].events
+    -- the player's machine: an older release (format 2 only) is installed over the newer one's saved data
+    local client = MockClient.New({ name = "Old", seed = 9 })
+    client:storage().account.ledger = saved
+    local old = Engine.New(client, { rules = Migrations.Default })
+    assert(old:Ahead()[gmCid], "the chain is marked ahead"); eq(old:Ahead()[gmCid].format, 3)
+    eq(table.concat(old:Get("main").state.order, ","), "M1,M2,M3", "the readable ledger is there")
+    assert(table.concat(client.printed, "\n"):find("newer format", 1, true), "it says so: " .. table.concat(client.printed, "\n"))
+    eq(#client:storage().account.ledger.chains[gmCid].events, total, "the saved data still holds every entry, including the unreadable one")
+    local ev, why = old:Append("main", "Pass", { member = "M1", item = "x" })
+    eq(ev, nil); eq(why, "ahead", "writing is paused rather than building on a truncated view")
+    -- it is told through the commands too
+    local cmd = SK.modules.Commands.New({ client = client, engine = old })
+    client.printed = {}; cmd.handle("migrate status")
+    assert(table.concat(client.printed, "\n"):find("newer format", 1, true), table.concat(client.printed, "\n"))
+    -- the player updates: the same saved data, a release that reads format 3
+    local updated = Engine.New(client, { rules = makeRules3() })
+    eq(next(updated:Ahead()), nil, "nothing is ahead any more"); eq(updated:Format(), 3); eq(updated:Frozen(), nil)
+    eq(#client:storage().account.ledger.chains[gmCid].events, total, "still every entry")
+    eq(table.concat(updated:Get("main").state.order, ","), "M1,M2,M3")
+end)

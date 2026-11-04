@@ -23,6 +23,7 @@ local WHY = {
     expired = "your raid has ended, and with it your right to write to the list",
     notofficer = "only an officer can do that", notguildmaster = "only the guild master can do that",
     -- ledger formats (see Migrations.lua)
+    ahead = "this ledger has entries in a newer format than this version can read, so writing is paused: update King's Gambit (nothing was lost)",
     frozen = "this client could not reproduce the last migration, so it will not write (it would not agree with everyone else): update King's Gambit",
     badmigrate = "the next format is the current one plus one", cantwrite = "this version does not know that format yet: update King's Gambit first",
     wrongformat = "the ledger is not in the format that migration starts from", unrepresentable = "that can't be written in the ledger's current format until it is migrated",
@@ -173,6 +174,7 @@ function M.New(ctx)
         end
         local readable = engine:Readable()
         out(("The ledger is in format %d. This version reads format%s %s."):format(fmt, #readable > 1 and "s" or "", table.concat(readable, ", ")))
+        if next(engine:Ahead()) then out("This ledger has entries in a newer format than this version can read: you see it as of the last entry you can read, and writing is paused. Update King's Gambit.") end
         local frozen = engine:Frozen()
         if frozen then out(("This client could not reproduce the migration to format %d (it got a different result from the guild master's), so it will not write. Update King's Gambit."):format(frozen.to)) end
         local nextFormat = fmt + 1

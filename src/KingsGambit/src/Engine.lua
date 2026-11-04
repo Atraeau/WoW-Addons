@@ -25,10 +25,24 @@ function M.New(client, opts)
     local e = setmetatable({ client = client, db = acct, hooks = {}, problems = {}, rules = rules,
         verifyBatch = (opts and opts.verifyBatch) or 100 }, Engine)
     local store, problems, lazy = Ledger.LoadStore(acct.ledger, (opts and opts.syncVerifyLimit) or 2000, rules)
-    e.store, e.problems, e.verifying = store, problems, lazy
-    for cid, chain in pairs(store.chains) do acct.ledger.chains[cid] = { events = chain.events } end
+    e.store, e.verifying = store, lazy
+    -- a chain with entries in a newer format is `ahead`: shown as far as this build can read it, never written back (the saved data keeps the rest)
+    e.ahead = {}
+    for cid, p in pairs(problems) do
+        if p.ahead then e.ahead[cid] = { format = p.format, index = p.index }; problems[cid] = nil end
+    end
+    e.problems = problems
+    for cid, chain in pairs(store.chains) do
+        if not e.ahead[cid] then acct.ledger.chains[cid] = { events = chain.events } end
+    end
     for cid, p in pairs(problems) do
         client:print(("chain '%s' failed verification at event %s: %s (left untouched in saved data)"):format(cid, tostring(p.index), tostring(p.reason)))
+    end
+    if next(e.ahead) then
+        local formats = {}
+        for _, a in pairs(e.ahead) do formats[#formats + 1] = tostring(a.format or "?") end
+        client:print(("King's Gambit: this ledger has entries in a newer format (%s) than this version can read (it reads %s). You are seeing it as of the last entry this version can read, and writing is paused. Nothing was lost: update King's Gambit."):format(
+            table.concat(formats, ", "), table.concat(Migrations.Readable(rules), ", ")))
     end
     e:rebuild()
     if next(lazy) then e.verifyTimer = client:every(0.05, function() e:verifyTick() end) end
@@ -62,6 +76,8 @@ function Engine:Fingerprint() return self.fingerprint end
 -- The format the ledger is in now (what a new entry is written in), and whether this client has refused to write because it can't reproduce
 -- a migration (see Ledger.VerifyMigrations): { reason, migration, to, expected, got } or nil.
 function Engine:Format() return self.view.auth.format end
+-- The chains whose saved entries include a format this build can't read: { [chainId] = { format, index } }. Empty when everything loaded.
+function Engine:Ahead() return self.ahead end
 -- The ledger formats this build can read, lowest first (advertised in heartbeats so the guild master can see who is ready).
 function Engine:Readable() return Migrations.Readable(self.rules) end
 function Engine:Frozen() return self.view.frozen end
@@ -153,6 +169,7 @@ function Engine:nextTs(cid)
 end
 
 function Engine:persist(cid)
+    if self.ahead[cid] then return end -- the saved chain has entries this build can't read: never overwrite it with the readable part
     local chain = self.store.chains[cid]
     if chain then self.db.ledger.chains[cid] = { events = chain.events } end
 end
@@ -163,6 +180,7 @@ end
 function Engine:Write(type_, data, list, format)
     if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
     if self.view.frozen then return nil, "frozen" end
+    if next(self.ahead) then return nil, "ahead" end -- see Ledger.LoadStore: writing now would build on a truncated view
     local fmt = format or self.view.auth.format
     if fmt ~= self.rules.current then
         -- the code builds entries in its newest shape; the ledger may still be in an older format: write that one
