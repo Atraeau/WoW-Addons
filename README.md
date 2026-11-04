@@ -4,8 +4,8 @@ A development environment for building **multiple** World of Warcraft addons aga
 **WoW: Forever** (codename *Camelot*, product `wow_classic_beta`, **Interface `16001`** —
 a modern **12.0**-based engine), plus a generated reference for that client's whole API.
 
-Each addon lives under [`src/`](src); one deploy script junction-links them into the live
-game, so you edit here and the game reads your source directly — no copying per change.
+Each addon lives under [`src/`](src). One build turns each into exactly the files the game loads, and one deploy
+script junction-links those builds into the live game, so a rebuild (or `-Watch`) is all it takes after an edit.
 
 **📖 Live API reference:** https://atraeau.github.io/WoW-Addons/ — searchable, browsable, and
 machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Addons/api.json)).
@@ -50,7 +50,7 @@ its TOC loads.
   [UI sketch](src/KingsGambit/docs/ui-sketch.html)
 - Try it: the [live simulator](https://atraeau.github.io/WoW-Addons/kings-gambit/) (or open
   [`src/KingsGambit/simulator/index.html`](src/KingsGambit/simulator/README.md)): the real engine over a simulated raid, with
-  training scenarios and a sync lab
+  training scenarios, a sync lab and a migration lab
 - Audit: [`src/KingsGambit/tools/`](src/KingsGambit/tools/README.md): verify a saved ledger and print standings/history without the game
 - Tests: `cd src/KingsGambit && lua tests/run.lua` (Lua 5.4); CI runs them on every push
 - In game: `/gambit check` probes the live client and saves the results for review
@@ -105,8 +105,8 @@ Regenerate it (and the LSP definitions) any time — see [`docs/README.md`](docs
 .\scripts\deploy.ps1 -Name MyAddon
 ```
 
-Edit any `.lua`, then `/reload` in game to pick up changes — no redeploy needed, the
-folders are linked.
+After editing a `.lua`, rebuild (`.\scripts\deploy.ps1 -Name X`, or leave `-Watch` running) and `/reload` in game. The
+game folders are junctions to the build, so nothing needs copying.
 
 On macOS or Linux, `scripts/deploy.sh` does the same job with symlinks and takes the
 same options (`--name X`, `--copy`, `--clean`). Point it at the game with a local

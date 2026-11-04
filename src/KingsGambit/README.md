@@ -4,7 +4,7 @@ Raid loot by King's Gambit (a Suicide Kings derivative) on a transparent, tamper
 WoW: Forever (Interface 16001). Named for the chess gambit, a deliberate sacrifice of position for advantage.
 
 Everything about King's Gambit lives in this folder, so it can move to its own repository unchanged
-(`git subtree split --prefix=KingsGambit`).
+(`git subtree split --prefix=src/KingsGambit`).
 
 | Path | What's there |
 | --- | --- |
@@ -26,8 +26,8 @@ lua tests/run.lua
 lua scripts/build-simulator.lua
 ```
 
-To run the simulator, open the page it builds (it needs no network). It is also published at <https://atraeau.github.io/WoW-Addons/kings-gambit/>.
-After changing the engine, rebuild it with the command above first:
+To run the simulator locally, open the page the build above writes (it needs no network). After changing the engine, rebuild it first.
+The same page is published at <https://atraeau.github.io/WoW-Addons/kings-gambit/>.
 
 ```bash
 start simulator/index.html

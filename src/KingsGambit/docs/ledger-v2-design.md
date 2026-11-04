@@ -1,6 +1,6 @@
 # King's Gambit — Ledger v2: one chain per writer
 
-*Design for review. Status: **agreed 2026-10-29, being built.** Replaces the single shared chain and its
+*Design for review. Status: **agreed 2026-10-29, built.** Replaces the single shared chain and its
 "longer chain wins" fork rule. Background: the decision of 2026-10-29 in the
 [design journal](design-journal.md).*
 
@@ -21,7 +21,8 @@ everyone.
 
 - Each writer keeps **their own append-only, hash-chained log** (a *chain*). Nobody else ever appends to it, so a
   chain can't fork (except in one rare case, section 7).
-- A chain's id is `Name-Realm#epoch`, where `epoch` is 8 random hex characters chosen when the chain starts. If
+- A chain's id is `<author>#epoch` (the author is `First_Last`; it was `Name-Realm` when this was designed, and the ledger treats it
+  as an opaque string either way), where `epoch` is 8 random hex characters chosen when the chain starts. If
   a writer loses their saved data and starts over, that is a **new chain**, not a conflicting copy of the old one.
 - One chain carries events for **all lists** (`main`, `off`, ...); each event names its list.
 - The whole ledger has a **ledger id**: the hash of its first event (the genesis, section 4). Events from a different

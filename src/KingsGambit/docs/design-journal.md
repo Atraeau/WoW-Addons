@@ -7,7 +7,7 @@ decisions we made, the alternatives we weighed, and why we landed where we did.
 It exists so the work can be **resumed** without re-deriving everything, and so
 the guild can **audit** how each rule came to be.*
 
-**Status:** the engine, sync, loot session, disputes, item fit and simulator are built and tested (427 tests passing); no UI frames yet (the text interface is complete), and nothing has been field-tested in the game. Last updated **2026-10-30**.
+**Status:** the engine, sync, loot session, disputes, item fit and simulator are built and tested (570 tests passing, plus the ledger under Lua 5.1 and LuaJIT in CI); no UI frames yet (the text interface is complete), and nothing has been field-tested in the game. Last updated **2026-11-04**.
 **Companion docs:** [manifesto.md](manifesto.md) (values & principles) · the full
 design plan (`structured-napping-pancake.md`, user-level `.claude/plans`) ·
 API ground truth at <https://atraeau.github.io/WoW-Addons/>.
@@ -1865,6 +1865,15 @@ Found by probing the real loader while asked what else could break backward comp
   against its schema). CI runs it under `lua5.1`, `luajit` and the newer Lua, and the release waits for it.
 - **Still open from the same review:** rule changes are format changes (a frozen corpus of random ledgers would guard them), names can change (an alias mechanism), enumerations are closed (class tokens),
   items are recorded as link text, the cutover is irreversible, `acct.schema` is overwritten unconditionally, no checkpoint/lineage yet, no transport codec id.
+
+### Docs review: wording, flow and links (2026-11-04)
+
+No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
+work: the root README still said the game reads source directly (it reads the build, so a rebuild or `-Watch` is needed); the KingsGambit README's
+`git subtree split` prefix lacked `src/`; the simulator README said CI only fails on out-of-date pages (a push to `main` now rebuilds and commits it);
+the docs index and root README listed a sync lab but not the migration lab; `ledger-v2-design.md` still said "being built" and `Name-Realm`; this
+journal's status line carried an old test count. The player guide gained the section "Who is asked about an item" for stat-affinity eligibility (decided
+earlier: the 15% threshold, and a gift only checks the destination), which it had never described.
 
 ### Scaling: measured, not guessed (2026-10-28)
 

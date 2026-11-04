@@ -35,5 +35,6 @@ lua scripts/build-simulator.lua
 
 GitHub Pages serves the repository's `docs/` folder, so the build also writes the page to
 `docs/kings-gambit/index.html` (when this folder sits inside the WoW-Addons repository), which is the URL above.
-Commit both copies together; CI (`.github/workflows/tests.yml`) fails if either is out of date. If King's Gambit moves
+Commit both copies together. CI (`.github/workflows/tests.yml`) fails a pull request if either is out of date, and on a push
+to `main` rebuilds the page itself and commits it back if it changed. If King's Gambit moves
 to its own repository, give the build the folder to publish into: `lua scripts/build-simulator.lua <folder>`.

@@ -8,13 +8,13 @@ A raid loot system for WoW: Forever, derived from Suicide Kings, with a shared l
 | [rationale.md](rationale.md) | The player guide: how loot works, every rule and why, and a walkthrough for the Master Looter. |
 | [design-journal.md](design-journal.md) | Every design decision, the alternatives we weighed, and the open questions. The audit trail. |
 | [ledger-format.md](ledger-format.md) | The exact record format, precise enough to verify a ledger with your own code. |
-| [ledger-v2-design.md](ledger-v2-design.md) | One chain per writer, so two raids can run at once (agreed, being built). |
+| [ledger-v2-design.md](ledger-v2-design.md) | Why the ledger is one chain per writer, so two raids can run at once (built). |
 | [client-interface.md](client-interface.md) | How the engine talks to the game (and how we fake the game for tests and training). |
 | [ui-sketch.html](ui-sketch.html) | A rough sketch of the planned screens. Open it in a browser. |
 
 Also in the repository:
 
-- [`simulator/`](../simulator/README.md): the real engine over a simulated raid, in a browser, with training scenarios and a sync lab.
+- [`simulator/`](../simulator/README.md): the real engine over a simulated raid, in a browser, with training scenarios, a sync lab and a migration lab.
 - [`tools/`](../tools/README.md): verify a saved ledger and print standings and history, without the game.
 - [`tests/`](../tests/): the test suite (`lua tests/run.lua`).
-- [`src/`](../src/): the addon.
+- [`src/`](../src/): the addon's game files.

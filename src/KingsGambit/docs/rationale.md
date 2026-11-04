@@ -42,6 +42,16 @@ the bottom.
 **Why:** One rule, applied the same way every time, is easy to follow and hard to
 game. Nobody has to argue about who "deserves" it.
 
+### Who is asked about an item
+Only players who could actually use it. The addon checks that the item is equippable by your class, and also that it carries
+enough of the stats your class and spec value (a warlock is not asked about a blade made of strength and agility). The
+threshold is generous (15% of the item's stat weight), because a small upgrade is still a choice you may want to make. An
+officer can override the default for an item, and the override is a visible entry in the record. The same check applies to a
+*gift*: it only requires that the person receiving the item is eligible, never the giver.
+
+**Why:** Asking everyone about everything buries the real decisions. Eligibility is a filter on who is asked; it never
+decides who wins.
+
 ### Several items at once (the draft)
 When a boss drops multiple items, the top remaining needer picks any
 available item, claims it, and drops to the bottom; then the next player up picks.
