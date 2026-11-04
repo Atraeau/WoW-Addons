@@ -2,10 +2,10 @@
 
 *King's Gambit is derived from the classic Suicide Kings strategy and named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
 
-*We are uncovering better ways of sharing raid loot by doing it together.*
-Through this work we have come to value:
+Through years of experience distributing loot in World of Warcraft from Vanilla, to Classic, SoD and now Forever, we have come to value:
 
 ### In‑the‑moment decisions — over — plans made before the raid
+
 For many of us, the live call when something drops is a big part of the fun — so we skip wishlists,
 drop‑table homework, and decisions locked in beforehand.
 
@@ -14,7 +14,7 @@ We'd rather each player judge what a drop is worth to them and make their own ca
 council, officers, or an algorithm deciding for them.
 
 ### Earned turns — over — luck of the roll
-We'd rather loot distribute evenly across everyone who shows up than leave it to pure chance — which
+We'd rather loot distribute evenly across everyone who shows up rather than leaving it to pure chance — which
 often produces hot and cold rollers, and that just feels bad.
 
 ### Transparency and social trust — over — rules enforced by penalty
@@ -25,7 +25,7 @@ policing it with automatic penalties.
 We aim for it to be **hard to be unfair and easy to be fair** — the rules carry the weight, so loot
 runs with less debate and drama.
 
-> That is: while there is real value in the items on the right, **we value the items on the left more.**
+> That is: while there is often value in the items on the right, **we value the items on the left more.**
 
 ---
 
