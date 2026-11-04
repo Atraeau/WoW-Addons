@@ -26,10 +26,20 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true }
+    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
+    SetRaidList = true, SetListPolicy = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
+
+-- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
+-- split across two of them: `off` for main, `<id>-off` for any other. A list id is lower-case letters, digits and `_` (the `-` is how an
+-- off-spec list is named, and `off` is taken).
+M.MAIN = "main"
+function M.OffList(listId) return listId == M.MAIN and "off" or (listId .. "-off") end
+function M.ValidListId(id)
+    return type(id) == "string" and #id <= 24 and id:match("^[a-z0-9_]+$") ~= nil and id ~= "off"
+end
 
 local function eventId(ev)
     return Hash.Sum(ev.prev .. "|" .. Hash.Canon({
@@ -240,7 +250,7 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {} }
+    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
 end
 
 local function snapshotOfficers(a)
@@ -288,15 +298,32 @@ local function activeRaids(a, e)
     return out
 end
 
+-- The list a raid plays on, as of event e: the one an officer named when opening it, or `main` if none was named (a raid opened
+-- under the one-list-per-raid policy has no default: nil until one is named).
+local function raidListAt(r, e)
+    if r.listEv and byTs(r.listEv, e) then return r.list end
+    if r.dedicated then return nil end
+    return M.MAIN
+end
+
 -- May `author` write an ordinary (list or Declined) event `e`?
 local function mayWrite(a, author, e)
     local t = e
     local officer, gm = isOfficerAt(a, author, t)
     if not gm then return nil, "noledger" end
     local active = activeRaids(a, t)
+    local refused
     for _, r in ipairs(active) do
-        if r.ml == author then return true end
+        if r.ml == author then
+            -- a Master Looter writes only to the list their raid plays on (and its off-spec list); entries that are not about a list are fine
+            local want = raidListAt(r, e)
+            if e.list == nil then return true end
+            if want == nil then refused = refused or "nolistchosen"
+            elseif e.list == want or e.list == M.OffList(want) then return true
+            else refused = refused or "wronglist" end
+        end
     end
+    if refused then return nil, refused end
     if officer then
         if #active == 0 then return true end
         return nil, "duringraid"
@@ -368,8 +395,29 @@ function auth.Elevate(a, ev, d)
         return function() if untilT > r.expires then r.expires = untilT end end
     end
     return function()
-        a.raids[d.raid] = { id = d.raid, ml = d.ml, start = ev.ts, startEv = ev, expires = untilT, by = ev.author }
+        -- `dedicated` is the policy in effect when the raid opened, and it stays: a later change doesn't rewrite this raid
+        a.raids[d.raid] = { id = d.raid, ml = d.ml, start = ev.ts, startEv = ev, expires = untilT, by = ev.author,
+            dedicated = (a.policy == "perraid") or nil }
     end
+end
+
+-- The guild master's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
+-- "perraid" (every raid opened from now on must name a list of its own, and may not use main).
+function auth.SetListPolicy(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if d.mode ~= "choose" and d.mode ~= "perraid" then return nil, "badpolicy" end
+    return function() a.policy = d.mode end
+end
+
+-- An officer names the list a raid plays on. The first one stands: a raid never changes list part-way through.
+function auth.SetRaidList(a, ev, d)
+    if not isOfficerNow(a, ev.author) then return nil, "notofficer" end
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev) then return nil, "notactive" end
+    if not M.ValidListId(d.list) then return nil, "badlistid" end
+    if r.listEv then return nil, "listset" end
+    if r.dedicated and d.list == M.MAIN then return nil, "needsownlist" end
+    return function() r.list, r.listEv = d.list, ev end
 end
 
 function auth.Revoke(a, ev, d)

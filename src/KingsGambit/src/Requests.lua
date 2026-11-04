@@ -312,10 +312,11 @@ function M.New(sync, engine)
             if not data then return nil, err end
             ev, why = engine:Write("ItemClasses", data)
         else
-            local list = engine:Get(M.LIST)
+            local listId = engine:RaidList() or M.LIST -- the list the Master Looter's raid plays on
+            local list = engine:Get(listId)
             local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
             if not type_ then return nil, data end
-            ev, why = engine:Append(M.LIST, type_, data)
+            ev, why = engine:Append(listId, type_, data)
         end
         if not ev then return nil, why end
         table.remove(mine.pending, i)

@@ -633,6 +633,9 @@ FORMATS[2] = {
         ItemSuits = { list = false, data = { item = "int!", roles = "roles!", reason = "name!" } },
         -- the cutover to a new format (see Migrations.lua): written by the guild master, in the NEW format
         Migrate = { list = false, data = { from = "int!", to = "int!", cut = "table!", digest = "name!", reason = "name!" } },
+        -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")
+        SetRaidList = { list = false, data = { raid = "name!", list = "name!" } },
+        SetListPolicy = { list = false, data = { mode = "name!" } },
     },
 }
 M.FORMATS = FORMATS
@@ -1165,10 +1168,20 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true }
+    RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
+    SetRaidList = true, SetListPolicy = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
+
+-- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
+-- split across two of them: `off` for main, `<id>-off` for any other. A list id is lower-case letters, digits and `_` (the `-` is how an
+-- off-spec list is named, and `off` is taken).
+M.MAIN = "main"
+function M.OffList(listId) return listId == M.MAIN and "off" or (listId .. "-off") end
+function M.ValidListId(id)
+    return type(id) == "string" and #id <= 24 and id:match("^[a-z0-9_]+$") ~= nil and id ~= "off"
+end
 
 local function eventId(ev)
     return Hash.Sum(ev.prev .. "|" .. Hash.Canon({
@@ -1379,7 +1392,7 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {} }
+    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
 end
 
 local function snapshotOfficers(a)
@@ -1427,15 +1440,32 @@ local function activeRaids(a, e)
     return out
 end
 
+-- The list a raid plays on, as of event e: the one an officer named when opening it, or `main` if none was named (a raid opened
+-- under the one-list-per-raid policy has no default: nil until one is named).
+local function raidListAt(r, e)
+    if r.listEv and byTs(r.listEv, e) then return r.list end
+    if r.dedicated then return nil end
+    return M.MAIN
+end
+
 -- May `author` write an ordinary (list or Declined) event `e`?
 local function mayWrite(a, author, e)
     local t = e
     local officer, gm = isOfficerAt(a, author, t)
     if not gm then return nil, "noledger" end
     local active = activeRaids(a, t)
+    local refused
     for _, r in ipairs(active) do
-        if r.ml == author then return true end
+        if r.ml == author then
+            -- a Master Looter writes only to the list their raid plays on (and its off-spec list); entries that are not about a list are fine
+            local want = raidListAt(r, e)
+            if e.list == nil then return true end
+            if want == nil then refused = refused or "nolistchosen"
+            elseif e.list == want or e.list == M.OffList(want) then return true
+            else refused = refused or "wronglist" end
+        end
     end
+    if refused then return nil, refused end
     if officer then
         if #active == 0 then return true end
         return nil, "duringraid"
@@ -1507,8 +1537,29 @@ function auth.Elevate(a, ev, d)
         return function() if untilT > r.expires then r.expires = untilT end end
     end
     return function()
-        a.raids[d.raid] = { id = d.raid, ml = d.ml, start = ev.ts, startEv = ev, expires = untilT, by = ev.author }
+        -- `dedicated` is the policy in effect when the raid opened, and it stays: a later change doesn't rewrite this raid
+        a.raids[d.raid] = { id = d.raid, ml = d.ml, start = ev.ts, startEv = ev, expires = untilT, by = ev.author,
+            dedicated = (a.policy == "perraid") or nil }
     end
+end
+
+-- The guild master's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
+-- "perraid" (every raid opened from now on must name a list of its own, and may not use main).
+function auth.SetListPolicy(a, ev, d)
+    if ev.author ~= a.gm then return nil, "notguildmaster" end
+    if d.mode ~= "choose" and d.mode ~= "perraid" then return nil, "badpolicy" end
+    return function() a.policy = d.mode end
+end
+
+-- An officer names the list a raid plays on. The first one stands: a raid never changes list part-way through.
+function auth.SetRaidList(a, ev, d)
+    if not isOfficerNow(a, ev.author) then return nil, "notofficer" end
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev) then return nil, "notactive" end
+    if not M.ValidListId(d.list) then return nil, "badlistid" end
+    if r.listEv then return nil, "listset" end
+    if r.dedicated and d.list == M.MAIN then return nil, "needsownlist" end
+    return function() r.list, r.listEv = d.list, ev end
 end
 
 function auth.Revoke(a, ev, d)
@@ -2385,6 +2436,27 @@ function Engine:RaidDisenchanter()
         if r.ml == me then return r.disenchanter, r end
     end
 end
+-- The list the raid this character is Master Looter of plays on, then that raid; nil, raid when the guild requires a list of its own per
+-- raid and none has been named yet; nil, nil when this character is not running a raid.
+function Engine:RaidList()
+    local me = self.client:me()
+    for _, r in ipairs(self:ActiveRaids()) do
+        if r.ml == me then
+            if r.listEv then return r.list, r end
+            if not r.dedicated then return Ledger.MAIN, r end
+            return nil, r
+        end
+    end
+end
+-- The list a raid plays on, whoever is asking: its named list, `main` if none was named and the guild doesn't require one, else nil.
+function Engine:ListOfRaid(r)
+    if r.listEv then return r.list end
+    if not r.dedicated then return Ledger.MAIN end
+end
+-- How the guild picks a raid's list: "choose" (main unless an officer names another) or "perraid" (every raid names a list of its own).
+function Engine:ListPolicy() return self.view.auth.policy end
+-- The off-spec list that goes with a list.
+function Engine:OffListOf(listId) return Ledger.OffList(listId) end
 function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
 function Engine:MayWrite(name, t)
     return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())
@@ -2511,6 +2583,24 @@ function Engine:CreateList(listId, name)
     if self.view.lists[listId] then return nil, "exists" end
     local ev, err = self:Write("CreateList", { name = name or listId }, listId)
     if not ev then return nil, err end
+    return self:Get(listId)
+end
+
+-- Make sure list `listId` exists: if not, create it and seed it with the order of `main` (so "who has waited longest" carries over; wins and
+-- passes start level). The raid's Master Looter does this when the first session starts, so an officer opening a raid never has to write to a
+-- list while another raid is running. Returns the list, or nil + reason.
+function Engine:EnsureList(listId, name)
+    local have = self:Get(listId)
+    if have then return have end
+    local made, err = self:CreateList(listId, name or listId)
+    if not made then return nil, err end
+    local main = self:Get(Ledger.MAIN)
+    if main then
+        for _, who in ipairs(main.state.order) do
+            local ok, why = self:Append(listId, "AddMember", { member = who, class = main.state.members[who].class })
+            if not ok then return nil, why end
+        end
+    end
     return self:Get(listId)
 end
 
@@ -2968,8 +3058,8 @@ local Tokens, ItemFit
 local M = SK:NewModule("Loot", { "ItemFit", "Tokens?" }, function(d) Tokens, ItemFit = d.Tokens, d.ItemFit end)
 
 local DEFAULTS = {
-    listId = "main",
-    offListId = "off",
+    listId = nil,        -- the list the raid plays on: normally the one its raid named (the engine knows), else main
+    offListId = nil,     -- ... and its off-spec list (derived from it)
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
@@ -3076,6 +3166,13 @@ end
 function Session:start(items)
     if self.phase ~= "idle" then return false, "started" end
     local cfg = self.cfg
+    if not cfg.listId then
+        local named, raid = self.engine:RaidList()
+        if raid and not named then return false, "nolistchosen" end
+        cfg.listId = named or "main"
+    end
+    cfg.offListId = cfg.offListId or self.engine:OffListOf(cfg.listId)
+    if cfg.listId ~= "main" and not self.engine:Get(cfg.listId) then self.engine:EnsureList(cfg.listId) end
     local main = self.engine:Get(cfg.listId)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end
@@ -4206,10 +4303,11 @@ function M.New(sync, engine)
             if not data then return nil, err end
             ev, why = engine:Write("ItemClasses", data)
         else
-            local list = engine:Get(M.LIST)
+            local listId = engine:RaidList() or M.LIST -- the list the Master Looter's raid plays on
+            local list = engine:Get(listId)
             local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
             if not type_ then return nil, data end
-            ev, why = engine:Append(M.LIST, type_, data)
+            ev, why = engine:Append(listId, type_, data)
         end
         if not ev then return nil, why end
         table.remove(mine.pending, i)

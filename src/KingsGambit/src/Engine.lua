@@ -124,6 +124,27 @@ function Engine:RaidDisenchanter()
         if r.ml == me then return r.disenchanter, r end
     end
 end
+-- The list the raid this character is Master Looter of plays on, then that raid; nil, raid when the guild requires a list of its own per
+-- raid and none has been named yet; nil, nil when this character is not running a raid.
+function Engine:RaidList()
+    local me = self.client:me()
+    for _, r in ipairs(self:ActiveRaids()) do
+        if r.ml == me then
+            if r.listEv then return r.list, r end
+            if not r.dedicated then return Ledger.MAIN, r end
+            return nil, r
+        end
+    end
+end
+-- The list a raid plays on, whoever is asking: its named list, `main` if none was named and the guild doesn't require one, else nil.
+function Engine:ListOfRaid(r)
+    if r.listEv then return r.list end
+    if not r.dedicated then return Ledger.MAIN end
+end
+-- How the guild picks a raid's list: "choose" (main unless an officer names another) or "perraid" (every raid names a list of its own).
+function Engine:ListPolicy() return self.view.auth.policy end
+-- The off-spec list that goes with a list.
+function Engine:OffListOf(listId) return Ledger.OffList(listId) end
 function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
 function Engine:MayWrite(name, t)
     return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())
@@ -250,6 +271,24 @@ function Engine:CreateList(listId, name)
     if self.view.lists[listId] then return nil, "exists" end
     local ev, err = self:Write("CreateList", { name = name or listId }, listId)
     if not ev then return nil, err end
+    return self:Get(listId)
+end
+
+-- Make sure list `listId` exists: if not, create it and seed it with the order of `main` (so "who has waited longest" carries over; wins and
+-- passes start level). The raid's Master Looter does this when the first session starts, so an officer opening a raid never has to write to a
+-- list while another raid is running. Returns the list, or nil + reason.
+function Engine:EnsureList(listId, name)
+    local have = self:Get(listId)
+    if have then return have end
+    local made, err = self:CreateList(listId, name or listId)
+    if not made then return nil, err end
+    local main = self:Get(Ledger.MAIN)
+    if main then
+        for _, who in ipairs(main.state.order) do
+            local ok, why = self:Append(listId, "AddMember", { member = who, class = main.state.members[who].class })
+            if not ok then return nil, why end
+        end
+    end
     return self:Get(listId)
 end
 

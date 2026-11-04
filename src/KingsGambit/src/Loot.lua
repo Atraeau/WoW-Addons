@@ -14,8 +14,8 @@ local Tokens, ItemFit
 local M = SK:NewModule("Loot", { "ItemFit", "Tokens?" }, function(d) Tokens, ItemFit = d.Tokens, d.ItemFit end)
 
 local DEFAULTS = {
-    listId = "main",
-    offListId = "off",
+    listId = nil,        -- the list the raid plays on: normally the one its raid named (the engine knows), else main
+    offListId = nil,     -- ... and its off-spec list (derived from it)
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
@@ -122,6 +122,13 @@ end
 function Session:start(items)
     if self.phase ~= "idle" then return false, "started" end
     local cfg = self.cfg
+    if not cfg.listId then
+        local named, raid = self.engine:RaidList()
+        if raid and not named then return false, "nolistchosen" end
+        cfg.listId = named or "main"
+    end
+    cfg.offListId = cfg.offListId or self.engine:OffListOf(cfg.listId)
+    if cfg.listId ~= "main" and not self.engine:Get(cfg.listId) then self.engine:EnsureList(cfg.listId) end
     local main = self.engine:Get(cfg.listId)
     if not main then return false, "nolist" end
     if #items == 0 then return false, "noitems" end

@@ -1866,6 +1866,34 @@ Found by probing the real loader while asked what else could break backward comp
 - **Still open from the same review:** rule changes are format changes (a frozen corpus of random ledgers would guard them), names can change (an alias mechanism), enumerations are closed (class tokens),
   items are recorded as link text, the cutover is irreversible, `acct.schema` is overwritten unconditionally, no checkpoint/lineage yet, no transport codec id.
 
+### Decision: a raid chooses its list when it opens, and the guild master can require a list of its own per raid (2026-11-04)
+
+*Settles the open "list scope" item from 2026-10-29 (see "Tokens, readiness, materials, and list scope"). Decided by the guild leader.*
+
+- **A raid has a list.** When an officer opens a raid they can name the list it plays on (`raid open <Master Looter> [hours] [list <id>]`);
+  the default is `main`. Naming a list that doesn't exist yet is how a new one is made (say `20man`). `raid list <id>` sets it right after
+  opening if it wasn't named then. In the ledger this is a new authority entry, `SetRaidList {raid, list}`, written by an officer.
+  **The first one stands.** A raid never changes list part-way through; if it was the wrong one, revoke the raid and open it again.
+  (We chose this over "the latest stands", as the disenchanter does, because the whole point is that loot can't land on the wrong list.)
+- **The guild master can make it one list per raid.** `raid policy perraid` (a new authority entry, `SetListPolicy {mode}`; the other value is
+  `choose`, the default) means every raid opened from then on **must** name a list of its own and may not use `main`, and its Master
+  Looter can't write anything until it has one. So two guilds' officers can't drift apart: everyone who runs a raid gets the same rule, and it
+  is enforced by every client's replay, not by habit. The policy a raid was opened under is the one it keeps, so changing the policy later
+  never rewrites an earlier raid.
+- **Enforcement, not just a default.** While a raid is active, its Master Looter may only write list entries to the raid's list and its
+  off-spec list. The off-spec list is derived, `off` for `main` and `<id>-off` otherwise, so there is nothing more to choose and no way to
+  split a raid across two off-spec lists. Officers outside a raid are unrestricted (that is how mistakes are fixed), and their manual
+  commands take a working list (`list use <id>`, default `main`).
+- **A new list is seeded from `main`'s order** (the decision of 2026-10-29: "who has waited longest" carries over), by the raid's Master
+  Looter when the first session starts, so an officer opening a raid never needs to write to a list while another raid is running.
+  Wins and passes are not carried over; the new list starts level.
+- **List ids** are lower-case letters, digits and `_`, up to 24 characters, and not `off` (a hyphen is how an off-spec list is named).
+- **It is a ledger change, so a new compatibility line:** two new entry types, a stricter rule on what a Master Looter may write. Version
+  0.4.0. The ledger format number does not change (new entry types were added to format 2 before: `Migrate`), and no old entry changes meaning.
+- **Documentation:** a new guild-master guide (`docs/guild-master.md`) lists every option the guild master has and what each is for.
+- **Left for later:** a lesson in the simulator for choosing a list; per-raid-kind defaults (a raid *named* "Naxxramas" always getting the
+  `naxx` list) if choosing by hand proves error-prone.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

@@ -83,10 +83,12 @@ its `ts` is before `expires`, and it comes before the `RaidClose` or `Revoke` th
 
 A list event, `Declined`, `ItemClasses` or `ItemSuits` is allowed when:
 
-- its author is the Master Looter of a raid active for it, or
+- its author is the Master Looter of a raid active for it **and**, if it is about a list, that list is the raid's list or the raid's off-spec list
+  (see `SetRaidList`; a raid with none named plays on `main`), or
 - its author was an officer (or the guild master) when it was written and **no** raid is active for it.
 
-Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
+Otherwise it is skipped (`duringraid`, `expired`, `notauthorized`, `wronglist`, or `nolistchosen` when the guild requires a raid to have a list of its
+own and none is named yet). A raid's off-spec list is `off` for the list `main` and `<list>-off` for any other.
 
 ### Ledger-wide events (no `list`)
 
@@ -99,6 +101,8 @@ Otherwise it is skipped (`duringraid`, `expired` or `notauthorized`).
 | `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
 | `SetDisenchanter` | `raid`, `name` | By the raid's Master Looter, while the raid is active. Designates who disenchants what nobody wants, for that raid. The latest choice stands. Loot is not handed out until one is set. |
+| `SetRaidList` | `raid`, `list` | By an officer, for an active raid: the list the raid plays on. **The first one stands** (`listset` after that). `list` is lower-case letters, digits and `_`, up to 24, not `off` (`badlistid`); under the per-raid policy it can't be `main` (`needsownlist`). A list that does not exist yet is created by the raid's Master Looter, in the order of `main`, when the first session starts. |
+| `SetListPolicy` | `mode` (`choose` or `perraid`) | By the guild master only (`badpolicy` otherwise). `perraid`: every raid opened **after** this entry must have a list of its own, and is a `dedicated` raid for good; `choose` (the default) lets a raid play on `main`. Changing it never changes a raid already open. |
 | `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
 | `Migrate` | `from`, `to`, `cut`, `digest`, `reason` | The cutover to a new format (see "Migrating the ledger"). By the guild master only, written in the NEW format (`v == to`), `to == from + 1`, `from` the ledger's current format. `cut` is `{ [chain] = n }`: how many events of each chain are before the change. `digest` is the standings those events produce. |
 | `ItemSuits` | `item` (item id), `roles` (tank, melee, hunter, caster, healer; empty = back to the heuristic), `reason`, `name?` | An officer's override of who an item suits (a suggestion, not a rule). |

@@ -17,6 +17,12 @@ local WHY = {
     norecipient = "no one was named to receive it",
     notmasterloot = "the loot method is not Master Looter (the raid leader sets it: masterloot)",
     notml = "you are not the raid's Master Looter",
+    -- which list a raid plays on
+    nolistchosen = "this raid has no list yet: the guild requires one list of its own per raid (an officer names it: raid list <id>)",
+    wronglist = "during a raid its Master Looter writes only to the raid's own list",
+    listset = "this raid already has its list; a raid never changes list part-way. If it was the wrong one, revoke the raid and open it again",
+    needsownlist = "the guild requires each raid to have a list of its own, so it can't be main",
+    badlistid = "a list id is lower-case letters, digits and _ (up to 24), and not 'off'", badpolicy = "the policy is choose or perraid",
     nodisenchanter = "no disenchanter is designated for this raid yet. Choose who disenchants what nobody wants: disenchanter <name>",
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
@@ -71,12 +77,15 @@ local HELP = {
     "                                  give it up (counts as a pass)",
     "  override                        Master Looter: the gift winner won't say who gets it; count it as their pass",
     "  raid                            who is Master Looter of the raids that are open",
-    "  raid open [name] [hours]        open a raid with a Master Looter (officers; default: the loot master, 4 h)",
+    "  raid open [name] [hours] [list <id>]   open a raid with a Master Looter (officers; default: the loot master, 4 h, list main)",
+    "  raid list [<id>]                name the list the open raid plays on (once; officers), or show it",
+    "  raid policy [choose|perraid]    guild master: how raids pick their list (perraid = each raid must have a list of its own)",
+    "  list use [<id>|main]            the list your add, move, award and undo commands change (default: your raid's list, else main)",
     "  raid close [anyway]             end your raid (its Master Looter)    raid extend [hours]   raid revoke [name]",
     "  masterloot [name]               raid leader: set the loot method to Master Looter, naming the looter (default: you)",
     "  disenchanter [name]             choose who disenchants what nobody wants, for your raid (its Master Looter);",
     "                                  required before loot can be handed out. Without a name: who it is.",
-    "  officers [set <names...>]       who are officers (the guild master sets them)",
+    "  officers [set <names...>]       who are officers (the guild master sets them; see docs/guild-master.md)",
     "  request move <name> <top|bottom|N> <reason>     ask the Master Looter to change the list during a raid;",
     "  request undo|remove <name> <reason>             also: add <name> [pos] <reason>, award <name> <item> <reason>,",
     "  request trade <name> <to> <reason>              (the item they won went to someone else: restore them, <to> pays)",
@@ -110,7 +119,10 @@ function M.New(ctx)
 
     local function name(n) return n and (client:normalize(n)) end
     local function short(n) return n and Identity.Display(n) end -- a character's name as a person reads it: "First Last"
-    local function list(id) return engine:Get(id or "main") end
+    -- The list manual commands change: one named with `list use`, else the list the raid this character is Master Looter of plays on, else main.
+    local working
+    local function cur() return working or engine:RaidList() or "main" end
+    local function list(id) return engine:Get(id or cur()) end
 
     -- Master Looters of the raids open now, as text.
     local function mls()
@@ -217,7 +229,7 @@ function M.New(ctx)
 
     function cmds.standings(args)
         local id, n = args:match("^(%S*)%s*(%d*)$")
-        id = (id ~= "" and id) or "main"
+        id = (id ~= "" and id) or cur()
         local chain = list(id)
         if not chain then return out("No list called '" .. id .. "'. Create one with: create " .. id) end
         local order = chain.state.order
@@ -226,6 +238,16 @@ function M.New(ctx)
             local m = chain.state.members[order[i]]
             out(("%2d. %s%s  (wins %d)"):format(i, short(order[i]), order[i] == client:me() and "  <- you" or "", m.wins))
         end
+    end
+
+    -- Which list add, move, award, undo... change. `list use <id>` picks one (officers fixing a past raid's list); `list use` goes back to the default.
+    function cmds.list(args)
+        local sub, id = args:match("^(%S*)%s*(%S*)$")
+        if sub:lower() ~= "use" then return out(("Lists: %s. Working on: %s. Choose with: list use <id>"):format(table.concat(engine:Lists(), ", "), cur())) end
+        if id == "" then working = nil; return out("Working on " .. cur() .. " (the default).") end
+        if not engine:Get(id) then return out("No list called '" .. id .. "'. Lists: " .. table.concat(engine:Lists(), ", ")) end
+        working = id
+        out("Working on " .. id .. ": add, move, award, undo and the like change that list now.")
     end
 
     function cmds.create(args)
@@ -241,22 +263,22 @@ function M.New(ctx)
         if not who then return out("add <name> [top|bottom|N]") end
         local data = { member = name(who) }
         if pos ~= "" then
-            local where, err = c.where("main", pos, nil)
+            local where, err = c.where(cur(), pos, nil)
             if not where then return out(err) end
             for k, v in pairs(where) do data[k] = v end
         end
-        local ev = append("main", "AddMember", data, ("add %s %s<reason>"):format(who, pos ~= "" and (pos .. " ") or ""))
+        local ev = append(cur(), "AddMember", data, ("add %s %s<reason>"):format(who, pos ~= "" and (pos .. " ") or ""))
         if ev then out(short(data.member) .. " added.") end
     end
 
     function cmds.remove(args)
         local who, reason = args:match("^(%S+)%s*(.-)$")
         if not who then return out("remove <name> [reason]") end
-        local chain = list("main")
+        local chain = list(cur())
         local was = chain and Standings.Position(chain.state, name(who))
         local data = { member = name(who) }
         if reason ~= "" then data.reason = reason end
-        local ev = append("main", "RemoveMember", data, ("remove %s <reason>"):format(who))
+        local ev = append(cur(), "RemoveMember", data, ("remove %s <reason>"):format(who))
         if ev then
             out(short(name(who)) .. " removed." .. (was and (" They were at place %d: to put them back, add %s %d"):format(was, short(name(who)), was) or ""))
         end
@@ -265,20 +287,20 @@ function M.New(ctx)
     function cmds.move(args)
         local who, pos, reason = args:match("^(%S+)%s+(%S+)%s+(.+)$")
         if not who then return out("move <name> <top|bottom|N> <reason>  (a reason is required and is part of the record)") end
-        local where, err = c.where("main", pos, name(who))
+        local where, err = c.where(cur(), pos, name(who))
         if not where then return out(err) end
         local data = { member = name(who), reason = reason }
         for k, v in pairs(where) do data[k] = v end
-        local chain = list("main")
+        local chain = list(cur())
         local was = chain and Standings.Position(chain.state, name(who))
-        local ev = append("main", "MovePlayer", data, ("move %s %s %s"):format(who, pos, reason))
+        local ev = append(cur(), "MovePlayer", data, ("move %s %s %s"):format(who, pos, reason))
         if ev then
             out(short(name(who)) .. " moved (was place " .. tostring(was or "?") .. "; to undo this: move " .. short(name(who)) .. " " .. tostring(was or "?") .. " <reason>). The correction is recorded with your reason.")
         end
     end
 
     function cmds.undo(args)
-        local chain = list("main")
+        local chain = list(cur())
         local stack = chain and chain.state.undo[engine:MyChain()]
         if not (stack and #stack > 0) then
             out("Nothing can be undone (only awards you made, and only until you move the list by hand).")
@@ -315,7 +337,7 @@ function M.New(ctx)
             if #stack > 1 and #words == 0 then out("To undo an earlier one instead: undo <name>") end
             return out(("To go ahead: undo %s yes"):format(#words > 0 and short(target.member) or ""):gsub("  ", " "))
         end
-        local ev = append("main", "Revert", { target = target.id })
+        local ev = append(cur(), "Revert", { target = target.id })
         if ev then out(("%s's award of %s was undone and %s went back up the list. The undo is recorded in the history."):format(
             short(target.member), a and tostring(a.item) or "?", short(target.member))) end
     end
@@ -330,12 +352,12 @@ function M.New(ctx)
         local link, reason = more:match("^(|c.-|r)%s+(.+)$")
         if not link then link, reason = more:match("^(%S+)%s+(.+)$") end
         if not link then return out(usage) end
-        local chain = list("main")
+        local chain = list(cur())
         local member = name(who)
         if chain and not (chain.state.members[member] and chain.state.members[member].active) then
             return out(("%s is not on the list, so they cannot be awarded anything. Add them first: add %s"):format(short(member), short(member)))
         end
-        local ev = append("main", "Award", { member = member, item = link, reason = reason }, ("award %s %s %s"):format(who, link, reason))
+        local ev = append(cur(), "Award", { member = member, item = link, reason = reason }, ("award %s %s %s"):format(who, link, reason))
         if ev then
             out(("Recorded: %s won %s and moves to the bottom. The reason is in the history."):format(short(member), link))
         end
@@ -348,7 +370,7 @@ function M.New(ctx)
         local usage = "trade <name> <to> <reason>  (the item <name> last won went to <to>: <name> is restored, <to> moves to the bottom)"
         local who, to, reason = args:match("^(%S+)%s+(%S+)%s+(.+)$")
         if not who then return out(usage) end
-        local chain = list("main")
+        local chain = list(cur())
         local st = chain and chain.state
         local mine = {}
         for _, e in ipairs(st and st.undo[engine:MyChain()] or {}) do mine[#mine + 1] = e end
@@ -362,7 +384,7 @@ function M.New(ctx)
         if not (st.members[toName] and st.members[toName].active) then
             return out(("%s is not on the list. Add them first: add %s"):format(short(toName), short(toName)))
         end
-        local ev = append("main", "Award", { member = toName, item = a.item, replaces = winner.id, reason = reason },
+        local ev = append(cur(), "Award", { member = toName, item = a.item, replaces = winner.id, reason = reason },
             ("trade %s %s %s"):format(who, to, reason))
         if ev then
             out(("Recorded: %s's %s went to %s. %s is back in their place and %s moves to the bottom."):format(short(name(who)), tostring(a.item), short(toName), short(name(who)), short(toName)))
@@ -376,13 +398,13 @@ function M.New(ctx)
         local who, action = args:match("^(%S+)%s+(%S+)%s*$")
         if not who then return out(usage) end
         action = action:lower()
-        local st = list("main") and list("main").state
+        local st = list(cur()) and list(cur()).state
         local best, bestId
         for id, a in pairs(st and st.awards or {}) do
             if a.member == name(who) and not a.reverted and (not best or a.ts > best.ts or (a.ts == best.ts and id > bestId)) then best, bestId = a, id end
         end
         if not best then return out(("%s has no award on the list to note."):format(short(name(who)))) end
-        local ev = append("main", "Salvage", { award = bestId, action = action, member = best.member }, ("salvaged %s %s"):format(who, action))
+        local ev = append(cur(), "Salvage", { award = bestId, action = action, member = best.member }, ("salvaged %s %s"):format(who, action))
         if ev then out(("Noted: %s %s %s. The list is unchanged."):format(short(name(who)), ({ keep = "kept", gift = "gave away", sell = "sold",
             disenchant = "disenchanted", bank = "banked" })[action] or action, tostring(best.item))) end
     end
@@ -621,7 +643,7 @@ function M.New(ctx)
         if s then rows = s:readiness(item) or {}
         elseif ctx.player and ctx.player.session then
             local answers = ctx.player.session.answers
-            local main = list("main")
+            local main = list(cur())
             for _, n in ipairs(main and main.state.order or {}) do
                 local a = answers[n] and answers[n][item]
                 if a and a.kind ~= "pass" then rows[#rows + 1] = { player = n, kind = a.kind, ready = a.ready } end
@@ -705,20 +727,62 @@ function M.New(ctx)
             return
         end
         for _, r in ipairs(raids) do
-            out(("Raid %s: %s is Master Looter for %d more minute(s) (opened by %s). Only they write to the list."):format(
-                r.id, short(r.ml), minutesLeft(r), short(r.by)))
+            local l = engine:ListOfRaid(r)
+            out(("Raid %s: %s is Master Looter for %d more minute(s) (opened by %s), on the %s list. Only they write to it."):format(
+                r.id, short(r.ml), minutesLeft(r), short(r.by), l or "(none yet: raid list <id>)"))
         end
     end
     function raid.open(args)
-        local who, hours = args:match("^(%a[^%s]*)%s*(%S*)$")
-        if not who then hours = args:match("^(%S*)$") end
+        local listId = args:match("%f[%w]list%s+(%S+)")
+        args = args:gsub("%s*%f[%w]list%s+%S+", "")
+        local who, hours = args:match("^%s*(%a[^%s]*)%s*(%S*)$")
+        if not who then hours = args:match("^%s*(%S*)$") end
         if not engine:IsOfficer() then return out("Only an officer can open a raid.") end
+        if listId and not Ledger.ValidListId(listId) then return out("Not opened: " .. why("badlistid")) end
+        if listId == "main" and engine:ListPolicy() == "perraid" then return out("Not opened: " .. why("needsownlist")) end
+        if not listId and engine:ListPolicy() == "perraid" then
+            return out("Not opened: the guild requires a list of its own for each raid. Name it: raid open <Master Looter> [hours] list <id>")
+        end
         local ml = who and name(who) or client:masterLooter() or client:me()
         local h = tonumber(hours ~= "" and hours or nil) or 4
         local id = ("%s-%d"):format(short(ml), client:serverTime())
-        if writeAuthority("Elevate", { raid = id, ml = ml, minutes = math.floor(h * 60) }) then
-            out(("Raid open: %s is Master Looter for %s hour(s). Until it is closed, only they write to the list;"):format(short(ml), h))
-            out("everyone else, officers included, sends them requests (request ...). Close it with: raid close")
+        if not writeAuthority("Elevate", { raid = id, ml = ml, minutes = math.floor(h * 60) }) then return end
+        if listId and not writeAuthority("SetRaidList", { raid = id, list = listId }) then
+            out(("The raid is open, but its list was not set. Set it now: raid list %s"):format(listId))
+        end
+        out(("Raid open: %s is Master Looter for %s hour(s), on the %s list. Until it is closed, only they write to the list;"):format(short(ml), h, listId or "main"))
+        out("everyone else, officers included, sends them requests (request ...). Close it with: raid close")
+        if listId then out("A list that doesn't exist yet is created, in the order of main, when the first session starts.") end
+    end
+    -- Name the list the open raid plays on (once), or show it.
+    function raid.list(args)
+        local raids = engine:ActiveRaids()
+        if args == "" then
+            if #raids == 0 then return out("No raid is open.") end
+            for _, r in ipairs(raids) do
+                local l = engine:ListOfRaid(r)
+                out(("Raid %s plays on the %s list%s."):format(r.id, l or "(none yet)", r.listEv and "" or (l and " (the default)" or ": the guild requires one, name it: raid list <id>")))
+            end
+            return
+        end
+        if not engine:IsOfficer() then return out("Only an officer can name a raid's list.") end
+        local r = findRaid(nil)
+        if not r then return out("Which raid? More than one is open, or none: close the others or name the Master Looter first.") end
+        if writeAuthority("SetRaidList", { raid = r.id, list = args }) then
+            out(("Raid %s plays on the %s list. It cannot change any more."):format(r.id, args))
+        end
+    end
+    -- The guild master's rule for how raids pick their list.
+    function raid.policy(args)
+        local a = engine:View().auth
+        if args == "" then
+            return out(a.policy == "perraid" and "Policy: every raid must have a list of its own (perraid). Change it: raid policy choose"
+                or "Policy: a raid plays on main unless an officer names another list (choose). Require one list per raid: raid policy perraid")
+        end
+        args = args:lower()
+        if writeAuthority("SetListPolicy", { mode = args }) then
+            out(args == "perraid" and "From now on every raid must be opened with a list of its own (and can't use main). Raids already open are not changed."
+                or "Raids play on main unless an officer names another list. Raids already open are not changed.")
         end
     end
     function raid.extend(args)
@@ -775,7 +839,7 @@ function M.New(ctx)
     function cmds.raid(args)
         local sub, rest = args:match("^(%S*)%s*(.-)$")
         local fn = raid[sub ~= "" and sub:lower() or "show"]
-        if not fn then return out("raid [open [name] [hours] | close | extend [name] [hours] | revoke [name]]") end
+        if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | close | extend [name] [hours] | revoke [name]]") end
         fn(rest)
     end
 
@@ -948,11 +1012,11 @@ function M.New(ctx)
         local n = tonumber(args) or 10
         local rows = {}
         for _, ev in ipairs(engine:View().applied) do
-            if ev.list == "main" or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits" then rows[#rows + 1] = ev end
+            if ev.list == cur() or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits" then rows[#rows + 1] = ev end
         end
         -- who disenchants is a raid decision, not a list change, but it belongs in the same history
         for _, ev in ipairs(engine:View().authApplied) do
-            if ev.type == "SetDisenchanter" then rows[#rows + 1] = ev end
+            if ev.type == "SetDisenchanter" or ev.type == "SetRaidList" or ev.type == "SetListPolicy" then rows[#rows + 1] = ev end
         end
         local order = {}
         for i, ev in ipairs(rows) do order[ev] = i end

@@ -82,6 +82,9 @@ FORMATS[2] = {
         ItemSuits = { list = false, data = { item = "int!", roles = "roles!", reason = "name!" } },
         -- the cutover to a new format (see Migrations.lua): written by the guild master, in the NEW format
         Migrate = { list = false, data = { from = "int!", to = "int!", cut = "table!", digest = "name!", reason = "name!" } },
+        -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")
+        SetRaidList = { list = false, data = { raid = "name!", list = "name!" } },
+        SetListPolicy = { list = false, data = { mode = "name!" } },
     },
 }
 M.FORMATS = FORMATS
