@@ -585,6 +585,14 @@ function M.New(ctx)
         local rule, suits = ItemFit.Rules(engine, link)
         return ItemFit.Describe(client, link, Tokens and Tokens.Find(link), rule, suits)
     end
+    -- May this player bid need or off-spec on item n of the running session? (The window greys those buttons out when not.)
+    -- Returns true, or false and why (cantequip, nostats, wrongclass).
+    function c.mayHave(item)
+        local link = linkOf(item)
+        if not link then return true end
+        return Loot.MayHave(myFit(link), myClass())
+    end
+
     -- "  [for: Priest, Mage]" when the item is restricted, plus suggestions when this player wants hints.
     function c.itemNote(link)
         local fit = myFit(link)

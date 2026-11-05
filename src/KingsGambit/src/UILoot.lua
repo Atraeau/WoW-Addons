@@ -9,12 +9,12 @@ local M = SK:NewModule("UILoot", { "Identity", "Sim?" }, function(d) Identity, S
 M.MAX_ITEMS = 8
 
 local PHASES = {
-    bidding = "Bidding is open: answer for each item",
+    bidding = "Bidding is open",
     main = "Main-spec draft",
     off = "Off-spec draft",
     gift = "Gift draft",
     salvage = "Salvage: items nobody wanted",
-    review = "Review: the Master Looter confirms to hand the loot out",
+    review = "Review: confirm to hand the loot out",
     done = "Finished",
     cancelled = "Cancelled: nothing was recorded",
 }
@@ -96,6 +96,11 @@ function M.Model(ctx)
                     if a.item == row.id then row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier end
                 end
             end
+            row.canBid, row.whyNot = true, nil
+            if ctx.commands and ctx.commands.mayHave then
+                local ok, whyNot = ctx.commands.mayHave(row.id)
+                if ok == false then row.canBid, row.whyNot = false, whyNot end
+            end
             out.items[#out.items + 1] = row
         end
     end
@@ -139,9 +144,9 @@ function M.Build(parent, ui)
     f:SetAllPoints()
 
     f.status = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    f.status:SetPoint("TOPLEFT", 4, 0); f.status:SetWidth(370); f.status:SetJustifyH("LEFT")
+    f.status:SetPoint("TOPLEFT", 4, 0); f.status:SetWidth(370); f.status:SetJustifyH("LEFT"); f.status:SetWordWrap(false)
     f.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    f.note:SetPoint("TOPLEFT", 4, -20); f.note:SetWidth(370); f.note:SetJustifyH("LEFT"); f.note:SetWordWrap(true)
+    f.note:SetPoint("TOPLEFT", 4, -20); f.note:SetWidth(370); f.note:SetHeight(24); f.note:SetJustifyH("LEFT"); f.note:SetJustifyV("TOP"); f.note:SetWordWrap(true)
 
     f.rows = {}
     for i = 1, M.MAX_ITEMS do
@@ -228,7 +233,7 @@ function M.Refresh(f, ctx, ui)
         f.note:SetText(practice and (m.night and m.night.nextBoss) and ("Next boss: " .. m.night.nextBoss .. ((m.night.held > 0) and (".  Held loot: " .. m.night.held) or "")) or
             "A session starts when the Master Looter opens the loot window on a boss and starts it.")
     else
-        f.status:SetText(m.phaseText .. (m.seconds and m.active and (("   (%ds)"):format(m.seconds)) or ""))
+        f.status:SetText(m.phaseText .. (m.seconds and m.seconds > 0 and m.active and (("   (%ds)"):format(m.seconds)) or ""))
         local bits = {}
         if m.answered then bits[#bits + 1] = ("%d of %d answered"):format(m.answered, m.eligible) end
         if m.mode == "ml" and m.eligibleMe == false and m.active then bits[#bits + 1] = "you are not in this session's roster" end
@@ -243,13 +248,16 @@ function M.Refresh(f, ctx, ui)
             row.id = it.id
             row.tip = it.tip
             local label = ("%d. %s"):format(i, M.Display(it.link, it.tip))
-            if it.status == "awarded" then label = label .. ("   -> %s%s"):format(it.winner or "?", it.to and (" (for " .. it.to .. ")") or "")
+            if it.status ~= "awarded" and it.canBid == false then label = label .. "   |cff999999(not for your class: pass or gift)|r" end
+            if it.status == "awarded" then label = label .. ("   -> %s%s"):format(it.winner or "?", (it.to and it.to ~= it.winner) and (" (for " .. it.to .. ")") or "")
             elseif it.status == "de" then label = label .. "   -> disenchanted" end
             row.text:SetText(label); row.text:Show(); row.hit:Show()
             local open = m.active and (it.status == nil or it.status == "open") and m.phase == "bidding"
             for j, a in ipairs(ANSWERS) do
                 row.buttons[j]:SetText((it.mine == a[3]) and ("[" .. a[2] .. "]") or a[2])
                 setShown(row.buttons[j], open)
+                -- need and off-spec are for items your class may have; pass and gift are always open
+                if (a[1] == "need" or a[1] == "off") and row.buttons[j].SetEnabled then row.buttons[j]:SetEnabled(it.canBid ~= false) end
             end
         else
             row.text:Hide(); row.hit:Hide()

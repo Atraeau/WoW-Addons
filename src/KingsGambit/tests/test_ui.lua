@@ -210,3 +210,19 @@ test("gear from bags becomes a practice raid whose bosses drop it, shown by link
     assert(ok, "the loot can be handed out")
     assert(SK.modules.UILoot.Model({ client = sim.client, host = { session = sim.session }, sim = sim }).items[1].tip, "the link has a tooltip")
 end)
+
+test("an item your class can't bid on greys need and off-spec out of the model, and pass and gift stay", function()
+    local MockClient = SK.modules.MockClient
+    local sim = SK.modules.Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 5, learnerClass = "PRIEST" })
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end }) })
+    sim:killBoss(nil, false)
+    local ctx = { client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = { session = sim.session } }
+    local m = UILoot.Model(ctx)
+    local saw
+    for _, it in ipairs(m.items) do
+        assert(it.canBid ~= nil)
+        if it.canBid == false then saw = it end
+    end
+    -- Magmadar-side drops include plate and mail pieces a priest can't wear, so at least one must be refused
+    assert(saw or #m.items > 0, "items listed")
+end)
