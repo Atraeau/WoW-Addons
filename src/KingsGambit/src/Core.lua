@@ -35,7 +35,7 @@ local function Start()
     end
     local lists = 0
     for _ in pairs(engine.view.lists) do lists = lists + 1 end
-    SK:Print(("ready: %d list(s). Type /gambit help."):format(lists))
+    SK:Print(("ready: %d list(s). Type /gambit to open the window, or /gambit help."):format(lists))
 end
 
 local frame = CreateFrame("Frame")
@@ -52,6 +52,12 @@ SLASH_KINGSGAMBIT1 = "/gambit"
 SLASH_KINGSGAMBIT2 = "/kg"
 SlashCmdList["KINGSGAMBIT"] = function(msg)
     if not SK.commands then SK:Print("not started yet (or it failed to start; see the earlier message)"); return end
+    -- `/gambit` alone opens the window; with the game's frame functions missing (or if it fails) the standings are printed as before.
+    if (msg or ""):match("^%s*$") and SK.modules.UI and SK.modules.UI.Toggle then
+        local ok, shown = pcall(SK.modules.UI.Toggle, SK.modules.UI)
+        if ok and shown then return end
+        if not ok then SK:Print("the window failed to open: " .. tostring(shown)) end
+    end
     local ok, err = pcall(SK.commands.handle, msg)
     if not ok then SK:Print("error: " .. tostring(err)) end
 end

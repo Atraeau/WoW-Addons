@@ -252,3 +252,19 @@ test("a mismatch between the game's Master Looter and the open raid is pointed o
     clear(client); cmd.handle("raid")
     assert(text(client):find("the game's Master Looter is Aldric, but the open raid names Looter"), text(client))
 end)
+
+H.section("The window's model")
+test("the window shows the list the viewer's raid plays on, in order, with the viewer marked", function()
+    local SK, eq = H.SK, H.eq
+    local MockClient, Engine, UI = SK.modules.MockClient, SK.modules.Engine, SK.modules.UI
+    local client = MockClient.New({ name = "Raidlead" })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    for _, n in ipairs { "Raidlead", "B", "C" } do engine:Append("main", "AddMember", { member = n, class = "WARRIOR" }) end
+    local m = UI.Model(engine, client)
+    eq(m.list, "main"); eq(m.total, 3); eq(#m.rows, 3); eq(m.rows[1].name, "Raidlead"); eq(m.rows[1].mine, true); eq(m.rows[2].mine, false)
+    eq(UI.Model(engine, client, "nope").total, 0, "a list that doesn't exist shows nothing, not an error")
+    for i = 1, 40 do engine:Append("main", "AddMember", { member = "P" .. i, class = "MAGE" }) end
+    m = UI.Model(engine, client, "main", 99)
+    eq(m.pages, 3); eq(m.page, 3, "a page past the end is the last page"); eq(#m.rows, 13)
+end)

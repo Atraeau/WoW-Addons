@@ -62,7 +62,7 @@ local function why(w) return WHY[w] or tostring(w) end
 
 -- One command per line, no columns: the game's chat font is not monospaced, so padded columns never line up.
 local HELP = {
-    "King's Gambit commands (<> required, [] optional):",
+    "King's Gambit: type /gambit to open the window. Commands (<> required, [] optional):",
     "Everyone",
     "  standings [list] [N] - show a list (default: yours, top 20)",
     "  need|off|pass <item#> - answer for an item",

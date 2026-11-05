@@ -1894,6 +1894,18 @@ Found by probing the real loader while asked what else could break backward comp
 - **Left for later:** a lesson in the simulator for choosing a list; per-raid-kind defaults (a raid *named* "Naxxramas" always getting the
   `naxx` list) if choosing by hand proves error-prone.
 
+### Decision: `/gambit` opens a window; the commands stay (2026-11-05)
+
+The addon has been command-only, and `/gambit help` is now a long list. Most players will never read it, so **typing `/gambit` with nothing after it
+opens the King's Gambit window** (it used to print the standings). `/gambit help` still lists the commands, and every command keeps working:
+the window is a second way to do the same things, built on the same engine calls, so the ledger and its rules are unchanged (no new events, no
+compatibility change).
+
+Built in stages, each tested in the game before the next: (1) the window itself with the standings, and a way to switch lists; (2) the bid
+popup for a running loot session (need / off-spec / pass / gift, and the draft and salvage turns); (3) the officer actions (add, move, award,
+undo, raid open and its list, requests). A window can only be checked in the game, so the tests cover what it would show (the model behind
+it) and that it builds against a stand-in for the game's frame functions; how it looks is confirmed by looking at it.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
