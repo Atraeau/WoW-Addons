@@ -1970,14 +1970,16 @@ intention. In Standings, Up, Down, Top, Bottom, a typed place number and draggin
 the place they would take, marked as moving); nothing is written. **Apply move** then writes a single `move` entry, with the reason, and *Cancel* drops the
 preview. One intention, one entry, one reason. (Remove and Award stay immediate: each is one entry already.)
 
-**An item is chosen from what you hold.** The "Record a win" form's item is a dropdown, not a typed link: the items in the open loot window plus the tradeable
-items in the bags (not soulbound, or still inside the loot-trade window the tooltip reports), so a win can't be recorded for an item the Master Looter doesn't
-have. Shift-clicking an item (from chat, the bags or the loot window) while a form with an item is open fills that field, so no link is ever typed; for
-Record a win it is taken only if it is one of the items held, otherwise the output line says so. (The typed `award` command is unchanged: it still takes any item, for the corrections the form isn't meant for.)
+**An item is chosen, never typed.** The "Record a win" form's item is a dropdown of what the Master Looter holds: the open loot window plus the tradeable
+items in the bags (not soulbound, or still inside the loot-trade window the tooltip reports). A win to correct, though, is often for an item that has already gone
+to someone else's bags, so shift-clicking an item link from chat (or the bags, or the loot window) while a form with an item is open fills that field, so no link is
+ever typed; for Record a win a held item is matched by id and any other item is taken as it is, shown in the dropdown as "shift-clicked". (The typed `award`
+command is unchanged: it still takes any item.)
 
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
-master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
-The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.
+master and me), chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. A form only composes the
+command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows what the last command said, so a refusal ("only the
+raid's Master Looter can...") is read where the button was, not in the chat window.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

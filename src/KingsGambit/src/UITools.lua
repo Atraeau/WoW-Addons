@@ -32,7 +32,7 @@ M.GROUPS = {
         { id = "add", label = "Add a player", help = "Add one player (the Standings tab adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
         { id = "remove", label = "Remove a player", help = "Take a player off the list. They can be put back at the same place.", fields = { F("name", "Player", { name = true }), F("reason", "Reason", { optional = true }) }, cmd = { "remove", "@name", "@reason" } },
         { id = "move", label = "Move a player", help = "A reason is required: it is part of the record.", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place"), F("reason", "Reason") }, cmd = { "move", "@name", "@pos", "@reason" } },
-        { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner). The item is chosen from what you actually hold: tradeable items in your bags, and the open loot window.", fields = { F("name", "Winner", { name = true }), F("item", "Item you hold", { source = "items" }), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
+        { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner). Choose the item from what you hold (tradeable items in your bags, the open loot window), or shift-click any item link, for instance one from chat: the item may already be in someone else's bags.", fields = { F("name", "Winner", { name = true }), F("item", "Item (held, or shift-click one)", { source = "items", link = true }), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
         { id = "undo", label = "Undo the last award", help = "Reverses your latest award. It asks first; this button confirms.", fields = {}, cmd = { "undo yes" } },
         { id = "trade", label = "Item went elsewhere", help = "Master Looter: the item went to someone else. The winner is restored, the other player moves to the bottom.", fields = { F("name", "Winner", { name = true }), F("to", "Who has it", { name = true }), F("reason", "Reason") }, cmd = { "trade", "@name", "@to", "@reason" } },
         { id = "salvaged", label = "Note a salvager", help = "For the record only: what a salvager did with their item.", fields = { F("name", "Salvager", { name = true }), F("what", "keep, gift, sell, disenchant or bank") }, cmd = { "salvaged", "@name", "@what" } },
@@ -233,7 +233,11 @@ function M.OnItemLink(f, ui, link)
                     return true
                 end
             end
-            if ui.Say then ui.Say("You don't hold that item: it isn't in your bags (tradeable) or the open loot window, so a win can't be recorded for it.") end
+            -- not one you hold: it may be in someone else's bags (a win to correct after a hand-out), so it is taken as it is
+            f.picked[i] = link
+            f.extra = f.extra or {}
+            f.extra[i] = link
+            ui:Refresh()
             return true
         elseif fld.link then
             f.boxes[i]:SetText(link)
@@ -245,7 +249,7 @@ end
 
 local function chooseAction(f, ui, a)
     f.action = a and a.id or nil
-    f.picked = {}
+    f.picked, f.extra = {}, {}
     for _, box in ipairs(f.boxes) do box:SetText("") end
     if a and f.ctx and ui.selected then
         for j, fld in ipairs(a.fields) do
@@ -356,6 +360,13 @@ function M.Build(parent, ui)
                 if root.SetScrollMode then root:SetScrollMode(260) end
                 if fld.source == "items" then
                     local items, stats = M.Items(f.ctx)
+                    -- an item shift-clicked into this field that isn't held is listed too, so the choice shows
+                    local extra = f.extra and f.extra[i]
+                    if extra then
+                        local dup = false
+                        for _, it in ipairs(items) do if sameItem(it.link, extra) then dup = true end end
+                        if not dup then table.insert(items, 1, { link = extra, where = "shift-clicked" }) end
+                    end
                     if #items == 0 and root.CreateTitle then
                         local why = "Nothing to choose: carry the item (tradeable), or open its loot window."
                         if stats and not stats.unavailable then
