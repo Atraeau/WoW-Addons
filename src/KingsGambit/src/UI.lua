@@ -130,6 +130,7 @@ local function nextList(lists, current)
 end
 
 local TABS = { { "standings", "Standings" }, { "loot", "Loot" }, { "tools", "Tools" } }
+local SORTS = { { "pos", "#" }, { "name", "Name" }, { "class", "Class" }, { "wins", "Wins" } }
 
 local function setShown(frame, on) if on then frame:Show() else frame:Hide() end end
 
@@ -138,13 +139,20 @@ function M:Refresh()
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
     w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" or "")
+    if w.tabSystem then
+        for i, t in ipairs(TABS) do if t[1] == M.tab then w.tabSystem:SetTabVisuallySelected(i) end end
+    end
     if w.practiceCheck then w.practiceCheck:SetChecked(M.practice ~= nil) end
     if w.practiceButton then w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode") end
     -- The group size only means something inside practice mode.
     setShown(w.sizeButton, M.practice ~= nil)
-    w.sizeButton:SetText("Practice group: " .. M.size)
+    if w.sizeButton.GenerateMenu then
+        if w.shownSize ~= M.size then w.shownSize = M.size; w.sizeButton:GenerateMenu() end
+    else
+        w.sizeButton:SetText("Practice group: " .. M.size)
+    end
     for _, t in ipairs(TABS) do
-        w.tabButtons[t[1]]:SetEnabled(M.tab ~= t[1])
+        if w.tabButtons[t[1]] then w.tabButtons[t[1]]:SetEnabled(M.tab ~= t[1]) end
         setShown(w.pages[t[1]], M.tab == t[1])
     end
     w.output:SetText(M.OutputText())
@@ -156,6 +164,10 @@ function M:Refresh()
     p.listButton:SetText(model.list)
     p.raidText:SetText(model.raid and ("Your raid plays on: " .. (model.raidList or "(no list chosen yet)")) or "No raid open for you")
     p.countText:SetText(("%d on the list"):format(model.total))
+    for i, c in ipairs(SORTS) do
+        p.headers[i].text:SetText(c[2] .. ((M.sortKey == c[1]) and (M.sortDesc and "  v" or "  ^") or ""))
+    end
+    if p.listDrop and p.shownList ~= model.list then p.shownList = model.list; p.listDrop:GenerateMenu() end
     M.FillRows(p, model.rows)
     local hasList = #model.lists > 0
     setShown(p.startButton, not hasList)
@@ -180,30 +192,61 @@ local function classColour(class)
 end
 local function className(class) return class and (class:sub(1, 1) .. class:sub(2):lower()) or "" end
 
--- One line per player in the scrolling table; lines are made as needed and reused.
+-- Fill one row (a Button) with a player: made once, reused by the scroll box as it scrolls.
+function M.InitRow(row, r)
+    if not row.cells then
+        row.cells = {}
+        for c = 1, 4 do
+            local fs = row:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+            fs:SetPoint("LEFT", COLS_X[c], 0)
+            fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
+            fs:SetWidth(c == 2 and 150 or (c == 3 and 96 or 40))
+            row.cells[c] = fs
+        end
+    end
+    row.cells[1]:SetText(tostring(r.pos))
+    row.cells[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or ""))
+    row.cells[3]:SetText(className(r.class))
+    row.cells[4]:SetText(tostring(r.wins))
+end
+
+-- The rows in the order chosen by a column header (the list's own order unless one was clicked).
+function M.Sorted(rows)
+    local key, desc = M.sortKey, M.sortDesc
+    if not key or key == "pos" and not desc then return rows end
+    local out = {}
+    for i, r in ipairs(rows) do out[i] = r end
+    table.sort(out, function(a, b)
+        local x, y = a[key], b[key]
+        if key == "name" or key == "class" then x, y = tostring(x or ""):lower(), tostring(y or ""):lower() end
+        if x == y then return a.pos < b.pos end
+        if desc then return x > y end
+        return x < y
+    end)
+    return out
+end
+
+-- One line per player in the scrolling table.
 function M.FillRows(p, rows)
+    rows = M.Sorted(rows)
+    if p.scrollBox then
+        local data = CreateDataProvider()
+        for _, r in ipairs(rows) do data:Insert(r) end
+        p.scrollBox:SetDataProvider(data, ScrollBoxConstants and ScrollBoxConstants.RetainScrollPosition)
+        return
+    end
     for i, r in ipairs(rows) do
         local line = p.lines[i]
         if not line then
-            line = {}
-            for c = 1, 4 do
-                local fs = p.child:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-                fs:SetPoint("TOPLEFT", COLS_X[c], -(i - 1) * ROW_H)
-                fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
-                fs:SetWidth(c == 2 and 150 or (c == 3 and 96 or 40))
-                line[c] = fs
-            end
+            line = CreateFrame("Frame", nil, p.child)
+            line:SetSize(340, ROW_H)
+            line:SetPoint("TOPLEFT", 0, -(i - 1) * ROW_H)
             p.lines[i] = line
         end
-        line[1]:SetText(tostring(r.pos))
-        line[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or ""))
-        line[3]:SetText(className(r.class))
-        line[4]:SetText(tostring(r.wins))
-        for c = 1, 4 do line[c]:Show() end
+        M.InitRow(line, r)
+        line:Show()
     end
-    for i = #rows + 1, #p.lines do
-        for c = 1, 4 do p.lines[i][c]:Hide() end
-    end
+    for i = #rows + 1, #p.lines do p.lines[i]:Hide() end
     p.child:SetHeight(math.max(#rows * ROW_H, 1))
 end
 
@@ -219,29 +262,73 @@ function M:BuildStandings(parent)
     p:SetAllPoints()
     local lbl = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     lbl:SetPoint("TOPLEFT", 4, 0); lbl:SetText("List:")
-    p.listButton = button(p, "main", 120)
-    p.listButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
-    p.listButton:SetScript("OnClick", function()
-        local e = M.Ctx().engine
-        M.list = nextList(e:Lists(), M.list or e:RaidList() or "main"); M:Refresh()
-    end)
+    local okDrop, drop = pcall(CreateFrame, "DropdownButton", nil, p, "WowStyle1DropdownTemplate")
+    if okDrop and drop then
+        drop:SetWidth(130)
+        drop:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
+        drop:SetupMenu(function(_, root)
+            local e = M.Ctx().engine
+            local current = M.list or e:RaidList() or "main"
+            for _, id in ipairs(e:Lists()) do
+                root:CreateRadio(id, function() return current == id end, function() M.list = id; M:Refresh() end)
+            end
+        end)
+        p.listDrop = drop
+        p.listButton = { SetText = function() end }
+    else
+        p.listButton = button(p, "main", 120)
+        p.listButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
+        p.listButton:SetScript("OnClick", function()
+            local e = M.Ctx().engine
+            M.list = nextList(e:Lists(), M.list or e:RaidList() or "main"); M:Refresh()
+        end)
+    end
     p.raidText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.raidText:SetPoint("LEFT", p.listButton, "RIGHT", 10, 0)
 
-    -- A scrolling table like the game's own rosters: column headers, then one row per player, class-coloured, scrolled with the wheel.
-    local COLS = { { "#", 4 }, { "Name", 36 }, { "Class", 190 }, { "Wins", 290 } }
-    for _, c in ipairs(COLS) do
-        local h = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        h:SetPoint("TOPLEFT", c[2], -30); h:SetText(c[1])
+    -- A scrolling table like the game's own rosters: an inset panel, clickable column headers (click to sort, again to reverse), and the game's
+    -- scroll box with its scroll bar. If this client's scroll box can't be built, the older scroll frame does the same job.
+    local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
+    if okInset and inset then
+        inset:SetPoint("TOPLEFT", -2, -28); inset:SetPoint("BOTTOMRIGHT", 2, 52)
     end
-    local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
-    if not ok or not scroll then scroll = CreateFrame("ScrollFrame", nil, p) end
-    scroll:SetPoint("TOPLEFT", 0, -46)
-    scroll:SetPoint("BOTTOMRIGHT", -26, 56)
-    p.child = CreateFrame("Frame", nil, scroll)
-    p.child:SetSize(340, 1)
-    scroll:SetScrollChild(p.child)
-    p.scroll, p.lines = scroll, {}
+    p.headers = {}
+    for i, c in ipairs(SORTS) do
+        local h = CreateFrame("Button", nil, p)
+        h:SetSize(i == 2 and 150 or 70, 16)
+        h:SetPoint("TOPLEFT", COLS_X[i], -30)
+        h.text = h:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        h.text:SetPoint("LEFT")
+        h.text:SetText(c[2])
+        h:SetScript("OnClick", function()
+            if M.sortKey == c[1] then M.sortDesc = not M.sortDesc else M.sortKey, M.sortDesc = c[1], false end
+            M:Refresh()
+        end)
+        p.headers[i] = h
+    end
+    local okBox = pcall(function()
+        local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
+        local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
+        box:SetPoint("TOPLEFT", 4, -50)
+        box:SetPoint("BOTTOMRIGHT", -22, 56)
+        bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
+        bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
+        local view = CreateScrollBoxListLinearView()
+        view:SetElementExtent(ROW_H)
+        view:SetElementInitializer("Button", M.InitRow)
+        ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
+        p.scrollBox, p.scrollBar = box, bar
+    end)
+    if not okBox then
+        local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
+        if not ok or not scroll then scroll = CreateFrame("ScrollFrame", nil, p) end
+        scroll:SetPoint("TOPLEFT", 4, -50)
+        scroll:SetPoint("BOTTOMRIGHT", -26, 56)
+        p.child = CreateFrame("Frame", nil, scroll)
+        p.child:SetSize(340, 1)
+        scroll:SetScrollChild(p.child)
+        p.scroll, p.lines = scroll, {}
+    end
     p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.countText:SetPoint("BOTTOMLEFT", 4, 4)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -302,21 +389,42 @@ function M:Build()
         w.practiceButton:SetScript("OnClick", function() togglePractice(not M.practice) end)
     end
     -- How many players the simulated group has (a 5-player party up to a 40-player raid). Changing it restarts practice.
-    w.sizeButton = button(w, "Practice group: 40", 170)
-    w.sizeButton:SetPoint("TOPLEFT", 150, -48)
-    w.sizeButton:SetScript("OnClick", function()
-        for i, n in ipairs(M.SIZES) do
-            if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end
-        end
-        if M.practice then M:StartPractice() end
-    end)
+    local okSize, sizeDrop = pcall(CreateFrame, "DropdownButton", nil, w, "WowStyle1DropdownTemplate")
+    if okSize and sizeDrop then
+        sizeDrop:SetWidth(150)
+        sizeDrop:SetPoint("TOPLEFT", 150, -48)
+        sizeDrop:SetupMenu(function(_, root)
+            for _, n in ipairs(M.SIZES) do
+                root:CreateRadio(("Group of %d"):format(n), function() return M.size == n end, function() M.size = n; if M.practice then M:StartPractice() end end)
+            end
+        end)
+        w.sizeButton = sizeDrop
+    else
+        w.sizeButton = button(w, "Practice group: 40", 170)
+        w.sizeButton:SetPoint("TOPLEFT", 150, -48)
+        w.sizeButton:SetScript("OnClick", function()
+            for i, n in ipairs(M.SIZES) do
+                if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end
+            end
+            if M.practice then M:StartPractice() end
+        end)
+    end
 
+    -- Tabs hang along the bottom edge of the window, as the game's own windows have them; plain buttons along the top if the tab system isn't there.
     w.tabButtons = {}
-    for i, t in ipairs(TABS) do
-        local b = button(w, t[2], 100, 24)
-        b:SetPoint("TOPLEFT", 16 + (i - 1) * 104, -80)
-        b:SetScript("OnClick", function() M.tab = t[1]; M:Refresh() end)
-        w.tabButtons[t[1]] = b
+    local okTabs, tabs = pcall(CreateFrame, "Frame", nil, w, "TabSystemTemplate")
+    if okTabs and tabs and tabs.AddTab then
+        tabs:SetPoint("TOPLEFT", w, "BOTTOMLEFT", 12, 2)
+        tabs:SetTabSelectedCallback(function(id) M.tab = TABS[id][1]; M:Refresh() end)
+        for _, t in ipairs(TABS) do tabs:AddTab(t[2]) end
+        w.tabSystem = tabs
+    else
+        for i, t in ipairs(TABS) do
+            local b = button(w, t[2], 100, 24)
+            b:SetPoint("TOPLEFT", 16 + (i - 1) * 104, -80)
+            b:SetScript("OnClick", function() M.tab = t[1]; M:Refresh() end)
+            w.tabButtons[t[1]] = b
+        end
     end
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 16, -112)

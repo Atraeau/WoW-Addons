@@ -62,6 +62,12 @@ end
 test("the window builds and refreshes on every tab, in practice and out, without errors", function()
     local saved = { CreateFrame = _G.CreateFrame, UIParent = _G.UIParent, UISpecialFrames = _G.UISpecialFrames }
     _G.CreateFrame, _G.UIParent, _G.UISpecialFrames = function() return frame() end, frame(), {}
+    local shown = {}
+    local g = { CreateScrollBoxListLinearView = _G.CreateScrollBoxListLinearView, ScrollUtil = _G.ScrollUtil, CreateDataProvider = _G.CreateDataProvider, ScrollBoxConstants = _G.ScrollBoxConstants }
+    _G.CreateScrollBoxListLinearView = function() return frame() end
+    _G.ScrollUtil = { InitScrollBoxListWithScrollBar = function() end }
+    _G.CreateDataProvider = function() return { Insert = function(_, r) shown[#shown + 1] = r end } end
+    _G.ScrollBoxConstants = { RetainScrollPosition = 1 }
     local client = SK.modules.MockClient.New({ name = "Me" })
     local engine = SK.modules.Engine.New(client)
     local old = { client = SK.client, engine = SK.engine, commands = SK.commands, host = SK.host, player = SK.player }
@@ -81,6 +87,8 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:LeavePractice()
     end)
     _G.CreateFrame, _G.UIParent, _G.UISpecialFrames = saved.CreateFrame, saved.UIParent, saved.UISpecialFrames
+    for k, v in pairs(g) do _G[k] = v end
+    _G.CreateScrollBoxListLinearView, _G.ScrollUtil, _G.CreateDataProvider, _G.ScrollBoxConstants = g.CreateScrollBoxListLinearView, g.ScrollUtil, g.CreateDataProvider, g.ScrollBoxConstants
     SK.client, SK.engine, SK.commands, SK.host, SK.player = old.client, old.engine, old.commands, old.host, old.player
     UI.window, UI.practice = nil, nil
     assert(ok, tostring(err))
@@ -124,4 +132,25 @@ test("a command run from the window is shown at its foot, and a refusal says why
     SK.client, SK.engine, SK.commands, SK.host, SK.player = saved.client, saved.engine, saved.commands, saved.host, saved.player
     assert(UI.OutputText():find("> history", 1, true), UI.OutputText())
     assert(#UI.log >= 2, "the command's answer was captured")
+end)
+
+H.section("Window: the standings table")
+test("columns sort on a header click and again to reverse; the list's own order is the default; a row fills from a player", function()
+    local rows = { { pos = 1, name = "Cara", class = "MAGE", wins = 2 }, { pos = 2, name = "Abe", class = "WARRIOR", wins = 0 }, { pos = 3, name = "Bea", class = "DRUID", wins = 5 } }
+    UI.sortKey, UI.sortDesc = nil, false
+    eq(UI.Sorted(rows)[1].name, "Cara", "list order by default")
+    UI.sortKey = "name"; eq(UI.Sorted(rows)[1].name, "Abe")
+    UI.sortDesc = true; eq(UI.Sorted(rows)[1].name, "Cara")
+    UI.sortKey, UI.sortDesc = "wins", true; eq(UI.Sorted(rows)[1].name, "Bea")
+    UI.sortKey, UI.sortDesc = "class", false; eq(UI.Sorted(rows)[1].name, "Bea", "DRUID sorts first")
+    UI.sortKey, UI.sortDesc = nil, false
+    local texts = {}
+    local row = setmetatable({}, { __index = function(_, k)
+        if k == "CreateFontString" then return function() local fs = {}; return setmetatable(fs, { __index = function(_, m)
+            if m == "SetText" then return function(_, t) fs.t = t end end
+            return function() end end }) end end
+    end })
+    UI.InitRow(row, { pos = 7, name = "Ann", class = "MAGE", wins = 3, mine = true })
+    eq(row.cells[1].t, "7"); eq(row.cells[3].t, "Mage"); eq(row.cells[4].t, "3")
+    assert(row.cells[2].t:find("Ann", 1, true) and row.cells[2].t:find("(you)", 1, true), row.cells[2].t)
 end)
