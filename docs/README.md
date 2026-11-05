@@ -13,7 +13,10 @@ any external assumption.
    /reload         (SavedVariables only flush to disk on reload/logout)
    ```
    This writes `WTF/Account/<acct>/SavedVariables/WowApiExport.lua`, containing a
-   base64-encoded JSON payload (`WowApiExportB64`) plus a human-readable Lua table.
+   base64-encoded JSON payload (`WowApiExportB64`) plus a human-readable Lua table. From
+   addon version 0.2.0 it also holds the client's console commands and CVars (with their
+   values and defaults); `.\scripts\generate-console-docs.ps1` turns those into
+   [`docs/console-commands.md`](console-commands.md) (once generated).
 
 2. **Generate the Markdown** — from the repo root:
    ```powershell

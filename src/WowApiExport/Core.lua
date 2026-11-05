@@ -198,6 +198,39 @@ local function ExtractGlobals()
 end
 
 --------------------------------------------------------------------------------
+-- The console commands and CVars (what the in-game console lists and searches)
+--------------------------------------------------------------------------------
+local function ExtractConsole()
+	local out = {}
+	if not ConsoleGetAllCommands then return out end
+	local function names(enum)
+		local map = {}
+		for k, v in pairs(enum or {}) do map[v] = k end
+		return map
+	end
+	local catNames = names(Enum and Enum.ConsoleCategory)
+	local typeNames = names(Enum and Enum.ConsoleCommandType)
+	local ok, list = pcall(ConsoleGetAllCommands)
+	if not ok or type(list) ~= "table" then return out end
+	for _, c in ipairs(list) do
+		local entry = {
+			command = c.command,
+			help = c.help,
+			category = catNames[c.category] or c.category,
+			commandType = typeNames[c.commandType] or c.commandType,
+		}
+		if type(c.scriptContents) == "string" and c.scriptContents ~= "" then entry.script = c.scriptContents end
+		-- A CVar's current and default values (the command's own name is the CVar's).
+		if type(c.command) == "string" and C_CVar and C_CVar.GetCVarInfo then
+			local ok2, value, default = pcall(C_CVar.GetCVarInfo, c.command)
+			if ok2 and value ~= nil then entry.value, entry.default = value, default end
+		end
+		out[#out + 1] = entry
+	end
+	return out
+end
+
+--------------------------------------------------------------------------------
 -- Build the export
 --------------------------------------------------------------------------------
 local function Build()
@@ -217,6 +250,7 @@ local function Build()
 		},
 		systems = systems,
 		globals = ExtractGlobals(),
+		consoleCommands = ExtractConsole(),
 	}
 
 	-- Count functions/events for a quick summary.
@@ -229,6 +263,7 @@ local function Build()
 	data.meta.functionCount = fnCount
 	data.meta.eventCount = evCount
 	data.meta.tableCount = tbCount
+	data.meta.consoleCommandCount = #data.consoleCommands
 
 	WowApiExportDB = data
 
@@ -246,7 +281,7 @@ local function Build()
 
 	print(("|cff33ff99WowApiExport|r  interface %s, build %s"):format(tostring(interface), tostring(build)))
 	if hasDocs then
-		print(("   %d systems, %d functions, %d events, %d tables"):format(#systems, fnCount, evCount, tbCount))
+		print(("   %d systems, %d functions, %d events, %d tables, %d console commands"):format(#systems, fnCount, evCount, tbCount, #data.consoleCommands))
 	else
 		print("   |cffff4040APIDocumentation not found|r on this client -- only the raw _G inventory was captured.")
 	end
