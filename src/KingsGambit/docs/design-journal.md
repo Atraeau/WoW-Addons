@@ -1929,6 +1929,18 @@ Removing and moving someone stay commands for now (they need a reason, which is 
 Practice mode gets a simulated guild too (the raid's players plus guild members who are not in the group, some offline), so this button can
 be tried without a real guild.
 
+### Decision: every feature gets a button, and a button is a command (2026-11-05)
+
+The goal is that nothing needs typing. The window grows a tab for each kind of user (Standings, Loot, then Officers and Guild master), and
+**every button runs the same command a player would type** (`need 1`, `pass 2`, `pick 1`, `resolve`, `confirm`, `addall`...). The window adds no
+rule of its own, so the ledger, the messages and who may do what are exactly as with commands, and a button can never do something a command
+could not. The commands stay as the fallback and for scripting.
+
+The Loot tab shows the running session (the one this machine runs as Master Looter, or the one it is answering): each item with
+Need / Off-spec / Pass / Gift buttons and your answer marked, the phase and the time left, the turn prompts (pick, claim, who gets a gift), and the Master
+Looter's Resolve / +30 s / Confirm / Cancel. It opens by itself when a session starts. In practice mode it adds Next boss, Hand out the held loot
+and Wait, driving the same simulation as the website.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
