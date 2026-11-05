@@ -136,6 +136,11 @@ local function button(parent, text, w, h)
     return b
 end
 
+local function setShown(frame, on)
+    local now = frame.IsShown and frame:IsShown()
+    if on and not now then frame:Show() elseif not on and now then frame:Hide() end
+end
+
 local ANSWERS = { { "need", "Need", "need" }, { "off", "Off-spec", "off" }, { "pass", "Pass", "pass" }, { "gift", "Gift", "gift" } }
 
 -- ui: the window module (it supplies the context and a Refresh). Returns the content frame.
@@ -191,7 +196,7 @@ function M.Build(parent, ui)
 
     -- your turn
     f.turn = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    f.turn:SetPoint("BOTTOMLEFT", 4, 92); f.turn:SetWidth(370); f.turn:SetJustifyH("LEFT")
+    f.turn:SetPoint("BOTTOMLEFT", 4, 100); f.turn:SetWidth(370); f.turn:SetJustifyH("LEFT")
     f.turnButtons = {}
     for i = 1, 6 do
         local b = button(f, "", 62, 22)
@@ -207,7 +212,7 @@ function M.Build(parent, ui)
     -- Who gets a gift you won: chosen from the group (typing a name stays only as the fallback). It sits left of the Give, Keep and Withdraw buttons.
     local okDrop, drop = pcall(CreateFrame, "DropdownButton", nil, f, "WowStyle1DropdownTemplate")
     if okDrop and drop and drop.SetupMenu then
-        drop:SetWidth(136); drop:SetPoint("BOTTOMLEFT", 4, 65)
+        drop:SetWidth(136); drop:SetPoint("BOTTOMLEFT", 4, 63)
         drop:SetDefaultText("Choose a player")
         drop:SetupMenu(function(_, root)
             local ctx = f.ctx
@@ -256,7 +261,6 @@ function M.Build(parent, ui)
     return f
 end
 
-local function setShown(frame, on) if on then frame:Show() else frame:Hide() end end
 
 function M.Refresh(f, ctx, ui)
     local m = M.Model(ctx)
@@ -301,9 +305,9 @@ function M.Refresh(f, ctx, ui)
     end
     f.more:SetText(m.hidden > 0 and (("(and %d more items: use the need/off/pass commands for them)"):format(m.hidden)) or "")
     -- your turn
-    for _, b in ipairs(f.turnButtons) do b:Hide() end
-    f.recipient:Hide()
-    if f.recipientDrop then f.recipientDrop:Hide() end
+    -- What is shown follows the turn. Frames are only shown or hidden when that changes: hiding and re-showing every second would close an
+    -- open dropdown and make everything jump.
+    local want = {}
     f.ctx = ctx
     local t = m.turn
     if not t then
@@ -315,23 +319,23 @@ function M.Refresh(f, ctx, ui)
             n = n + 1
             if n <= 5 then
                 local b = f.turnButtons[n]
-                b:SetText("Item " .. id); b:SetScript("OnClick", function() ui:Command("pick " .. id) end); b:Show()
+                b:SetText("Item " .. id); b:SetScript("OnClick", function() ui:Command("pick " .. id) end); want[b] = true
             end
         end
         local b = f.turnButtons[6]
-        b:SetText("Skip"); b:SetScript("OnClick", function() ui:Command("skip") end); b:Show()
+        b:SetText("Skip"); b:SetScript("OnClick", function() ui:Command("skip") end); want[b] = true
     elseif t.type == "claim" then
         f.turn:SetText("Salvage: do you want " .. (t.itemLink or "this item") .. "? (declining sends it to the disenchanter)")
         local b1, b2 = f.turnButtons[1], f.turnButtons[2]
-        b1:SetText("Claim"); b1:SetScript("OnClick", function() ui:Command("claim") end); b1:Show()
-        b2:SetText("Decline"); b2:SetScript("OnClick", function() ui:Command("decline") end); b2:Show()
+        b1:SetText("Claim"); b1:SetScript("OnClick", function() ui:Command("claim") end); want[b1] = true
+        b2:SetText("Decline"); b2:SetScript("OnClick", function() ui:Command("decline") end); want[b2] = true
     elseif t.type == "recipient" then
         f.turn:SetText("You won " .. (t.itemLink or "a gift") .. ". Who gets it? Choose a player, keep it, or withdraw (counts as a pass).")
         if f.recipientDrop then
             if f.recipientShown ~= tostring(f.recipientPick) then f.recipientShown = tostring(f.recipientPick); f.recipientDrop:GenerateMenu() end
-            f.recipientDrop:Show()
+            want[f.recipientDrop] = true
         else
-            f.recipient:Show()
+            want[f.recipient] = true
         end
         -- the three buttons sit right of the dropdown (or of the box)
         local b1, b2, b3 = f.turnButtons[4], f.turnButtons[5], f.turnButtons[6]
@@ -339,10 +343,13 @@ function M.Refresh(f, ctx, ui)
             if f.recipientDrop and not f.recipientPick then return ui.Say("Choose who gets it from the dropdown first.") end
             local n = f.recipientDrop and f.recipientPick or (f.recipient:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
             if n and n ~= "" then ui:Command("recipient " .. n); f.recipientPick = nil; f.recipient:SetText("") end
-        end); b1:Show()
-        b2:SetText("Keep"); b2:SetScript("OnClick", function() ui:Command("keep") end); b2:Show()
-        b3:SetText("Withdraw"); b3:SetScript("OnClick", function() ui:Command("withdraw yes") end); b3:Show()
+        end); want[b1] = true
+        b2:SetText("Keep"); b2:SetScript("OnClick", function() ui:Command("keep") end); want[b2] = true
+        b3:SetText("Withdraw"); b3:SetScript("OnClick", function() ui:Command("withdraw yes") end); want[b3] = true
     end
+    for _, tb in ipairs(f.turnButtons) do setShown(tb, want[tb]) end
+    setShown(f.recipient, want[f.recipient])
+    if f.recipientDrop then setShown(f.recipientDrop, want[f.recipientDrop]) end
     -- the Master Looter's controls, and the way in
     local ml = m.mode == "ml"
     for cmd, b in pairs(f.mlButtons) do
