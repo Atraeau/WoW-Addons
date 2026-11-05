@@ -4,7 +4,7 @@
 -- exactly the same as with commands.
 --
 -- Two halves, so most of it can be tested without the game:
---   M.Model(engine, client, listId, page)  pure: what the Standings tab shows (rows, paging, lists, the raid and its list)
+--   M.Model(engine, client, listId)        pure: what the Standings tab shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
 local Identity, Sim, Commands, UILoot, UITools
@@ -12,14 +12,12 @@ local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UIToo
     Identity, Sim, Commands, UILoot, UITools = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools
 end)
 
-local ROWS = 14
-
--- What the window shows for one list. listId nil = the list the viewer's raid plays on, else main.
-function M.Model(engine, client, listId, page)
+-- What the window shows for one list (every row; the window scrolls). listId nil = the list the viewer's raid plays on, else main.
+function M.Model(engine, client, listId)
     local lists = engine:Lists()
     local raidList, raid = engine:RaidList()
     local id = listId or raidList or "main"
-    local model = { missing = 0, lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, page = 1, pages = 1, total = 0 }
+    local model = { missing = 0, lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, total = 0 }
     local chain = engine:Get(id)
     if not chain then return model end
     local order = chain.state.order
@@ -30,9 +28,7 @@ function M.Model(engine, client, listId, page)
             if m.name and not seen[m.name] and not chain.state.members[m.name] then seen[m.name] = true; model.missing = model.missing + 1 end
         end
     end
-    model.pages = math.max(1, math.ceil(#order / ROWS))
-    model.page = math.min(math.max(page or 1, 1), model.pages)
-    for i = (model.page - 1) * ROWS + 1, math.min(#order, model.page * ROWS) do
+    for i = 1, #order do
         local who = order[i]
         local m = chain.state.members[who]
         model.rows[#model.rows + 1] = { pos = i, name = Identity.Display(who), who = who, wins = m.wins or 0,
@@ -69,13 +65,13 @@ function M:StartPractice()
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host })
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host }
-    M.list, M.page = nil, 1
+    M.list = nil
     M:Refresh()
 end
 
 function M:LeavePractice()
     M.practice = nil
-    M.list, M.page = nil, 1
+    M.list = nil
     M:Refresh()
 end
 
@@ -142,7 +138,8 @@ function M:Refresh()
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
     w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" or "")
-    w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode")
+    if w.practiceCheck then w.practiceCheck:SetChecked(M.practice ~= nil) end
+    if w.practiceButton then w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode") end
     -- The group size only means something inside practice mode.
     setShown(w.sizeButton, M.practice ~= nil)
     w.sizeButton:SetText("Practice group: " .. M.size)
@@ -154,20 +151,12 @@ function M:Refresh()
     if M.tab == "loot" then return UILoot.Refresh(w.pages.loot, ctx, M) end
     if M.tab == "tools" then return UITools.Refresh(w.pages.tools, ctx, M) end
     local p = w.pages.standings
-    local model = M.Model(ctx.engine, ctx.client, self.list, self.page)
-    self.list, self.page = model.list, model.page
+    local model = M.Model(ctx.engine, ctx.client, self.list)
+    self.list = model.list
     p.listButton:SetText(model.list)
     p.raidText:SetText(model.raid and ("Your raid plays on: " .. (model.raidList or "(no list chosen yet)")) or "No raid open for you")
-    p.pageText:SetText(("Page %d of %d  (%d on the list)"):format(model.page, model.pages, model.total))
-    for i = 1, ROWS do
-        local row, r = p.rows[i], model.rows[i]
-        if r then
-            row:SetText(("%2d.  %s%s    wins %d"):format(r.pos, r.name, r.mine and "   <- you" or "", r.wins))
-            row:Show()
-        else
-            row:Hide()
-        end
-    end
+    p.countText:SetText(("%d on the list"):format(model.total))
+    M.FillRows(p, model.rows)
     local hasList = #model.lists > 0
     setShown(p.startButton, not hasList)
     setShown(p.addAllButton, hasList and model.missing > 0)
@@ -179,6 +168,43 @@ function M:Refresh()
     else
         p.message:Hide()
     end
+end
+
+local ROW_H = 18
+local COLS_X = { 4, 36, 190, 290 }
+
+local function classColour(class)
+    local c = RAID_CLASS_COLORS and class and RAID_CLASS_COLORS[class]
+    if not c then return "|cffffffff" end
+    return ("|cff%02x%02x%02x"):format(math.floor(c.r * 255 + 0.5), math.floor(c.g * 255 + 0.5), math.floor(c.b * 255 + 0.5))
+end
+local function className(class) return class and (class:sub(1, 1) .. class:sub(2):lower()) or "" end
+
+-- One line per player in the scrolling table; lines are made as needed and reused.
+function M.FillRows(p, rows)
+    for i, r in ipairs(rows) do
+        local line = p.lines[i]
+        if not line then
+            line = {}
+            for c = 1, 4 do
+                local fs = p.child:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+                fs:SetPoint("TOPLEFT", COLS_X[c], -(i - 1) * ROW_H)
+                fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
+                fs:SetWidth(c == 2 and 150 or (c == 3 and 96 or 40))
+                line[c] = fs
+            end
+            p.lines[i] = line
+        end
+        line[1]:SetText(tostring(r.pos))
+        line[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or ""))
+        line[3]:SetText(className(r.class))
+        line[4]:SetText(tostring(r.wins))
+        for c = 1, 4 do line[c]:Show() end
+    end
+    for i = #rows + 1, #p.lines do
+        for c = 1, 4 do p.lines[i][c]:Hide() end
+    end
+    p.child:SetHeight(math.max(#rows * ROW_H, 1))
 end
 
 local function button(parent, text, w, h)
@@ -197,18 +223,27 @@ function M:BuildStandings(parent)
     p.listButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
     p.listButton:SetScript("OnClick", function()
         local e = M.Ctx().engine
-        M.list = nextList(e:Lists(), M.list or e:RaidList() or "main"); M.page = 1; M:Refresh()
+        M.list = nextList(e:Lists(), M.list or e:RaidList() or "main"); M:Refresh()
     end)
     p.raidText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.raidText:SetPoint("LEFT", p.listButton, "RIGHT", 10, 0)
 
-    p.rows = {}
-    for i = 1, ROWS do
-        local f = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-        f:SetPoint("TOPLEFT", 8, -34 - (i - 1) * 22)
-        f:SetJustifyH("LEFT"); f:SetWidth(360); f:SetWordWrap(false)
-        p.rows[i] = f
+    -- A scrolling table like the game's own rosters: column headers, then one row per player, class-coloured, scrolled with the wheel.
+    local COLS = { { "#", 4 }, { "Name", 36 }, { "Class", 190 }, { "Wins", 290 } }
+    for _, c in ipairs(COLS) do
+        local h = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        h:SetPoint("TOPLEFT", c[2], -30); h:SetText(c[1])
     end
+    local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
+    if not ok or not scroll then scroll = CreateFrame("ScrollFrame", nil, p) end
+    scroll:SetPoint("TOPLEFT", 0, -46)
+    scroll:SetPoint("BOTTOMRIGHT", -26, 56)
+    p.child = CreateFrame("Frame", nil, scroll)
+    p.child:SetSize(340, 1)
+    scroll:SetScrollChild(p.child)
+    p.scroll, p.lines = scroll, {}
+    p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.countText:SetPoint("BOTTOMLEFT", 4, 4)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     p.message:SetPoint("TOPLEFT", 8, -34); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
 
@@ -223,12 +258,6 @@ function M:BuildStandings(parent)
     p.addAllButton:SetPoint("BOTTOMLEFT", 4, 30)
     p.addAllButton:SetScript("OnClick", function() M:Command("addall") end)
 
-    local prev, nxt = button(p, "<", 30), button(p, ">", 30)
-    prev:SetPoint("BOTTOMLEFT", 4, 2); nxt:SetPoint("LEFT", prev, "RIGHT", 4, 0)
-    p.pageText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    p.pageText:SetPoint("LEFT", nxt, "RIGHT", 10, 0)
-    prev:SetScript("OnClick", function() M.page = (M.page or 1) - 1; M:Refresh() end)
-    nxt:SetScript("OnClick", function() M.page = (M.page or 1) + 1; M:Refresh() end)
     return p
 end
 
@@ -258,14 +287,23 @@ function M:Build()
     w.subtitle = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     w.subtitle:SetPoint("TOPLEFT", 16, -32)
 
-    w.practiceButton = button(w, "Practice", 110)
-    w.practiceButton:SetPoint("TOPLEFT", 16, -50)
-    w.practiceButton:SetScript("OnClick", function()
-        if M.practice then M:LeavePractice() else M:StartPractice() end
-    end)
+    -- Practice mode is a checkbox, like the game's own "show offline members": ticked, everything here runs on a simulated raid and guild.
+    local function togglePractice(on) if on then M:StartPractice() else M:LeavePractice() end end
+    local okc, check = pcall(CreateFrame, "CheckButton", nil, w, "UICheckButtonTemplate")
+    if okc and check then
+        check:SetPoint("TOPLEFT", 12, -46)
+        check:SetScript("OnClick", function(self) togglePractice(self:GetChecked() and true or false) end)
+        w.practiceCheck = check
+        local label = w:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        label:SetPoint("LEFT", check, "RIGHT", 2, 1); label:SetText("Practice mode")
+    else
+        w.practiceButton = button(w, "Practice mode", 120)
+        w.practiceButton:SetPoint("TOPLEFT", 16, -50)
+        w.practiceButton:SetScript("OnClick", function() togglePractice(not M.practice) end)
+    end
     -- How many players the simulated group has (a 5-player party up to a 40-player raid). Changing it restarts practice.
-    w.sizeButton = button(w, "Group: 40", 170)
-    w.sizeButton:SetPoint("LEFT", w.practiceButton, "RIGHT", 6, 0)
+    w.sizeButton = button(w, "Practice group: 40", 170)
+    w.sizeButton:SetPoint("TOPLEFT", 150, -48)
     w.sizeButton:SetScript("OnClick", function()
         for i, n in ipairs(M.SIZES) do
             if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end

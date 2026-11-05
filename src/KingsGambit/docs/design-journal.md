@@ -1940,6 +1940,10 @@ The Loot tab shows the running session (the one this machine runs as Master Loot
 Need / Off-spec / Pass / Gift buttons and your answer marked, the phase and the time left, the turn prompts (pick, claim, who gets a gift), and the Master
 Looter's Resolve / +30 s / Confirm / Cancel. It opens by itself when a session starts. In practice mode it adds Next boss, Hand out the held loot
 and Wait, driving the same simulation as the website.
+**Layout follows the game's own rosters** (the guild and raid windows): a scrolling table with column headers (#, Name, Class, Wins) and
+class-coloured names, scrolled with the wheel, in place of pages with next and previous buttons; and *Practice mode* is a checkbox
+(like "show offline members"), with the practice group size beside it only while it is ticked.
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

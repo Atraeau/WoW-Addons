@@ -50,7 +50,7 @@ local function frame()
     local nothing = { TitleText = true, SetBackdrop = true }
     return setmetatable(f, { __index = function(self, k)
         if nothing[k] then return nil end
-        if type(k) ~= "string" then return nil end
+        if type(k) ~= "string" or not k:match("^%u") then return nil end -- fields (lower case) are nil, as on a real frame
         if k == "IsShown" then return function() return self.shown ~= false end end
         if k == "Hide" then return function() self.shown = false end end
         if k == "Show" then return function() self.shown = true end end
