@@ -59,11 +59,14 @@ function M:Refresh()
         end
     end
     w.startButton:SetShown(#model.lists == 0)
+    local hasList = #model.lists > 0
+    w.addBox:SetShown(hasList); w.addButton:SetShown(hasList); w.groupButton:SetShown(hasList)
     if model.total == 0 then
-        w.rows[1]:SetText(#model.lists == 0
-            and "No lists yet. The guild master starts the ledger with the button below."
-            or "(nothing on this list yet)")
-        w.rows[1]:Show()
+        w.message:SetText(#model.lists == 0 and "No lists yet. The guild master starts the ledger with the button below."
+            or "Nobody is on this list yet. Add players below.")
+        w.message:Show()
+    else
+        w.message:Hide()
     end
 end
 
@@ -112,9 +115,11 @@ function M:Build()
     for i = 1, ROWS do
         local f = w:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
         f:SetPoint("TOPLEFT", 20, -90 - (i - 1) * 22)
-        f:SetJustifyH("LEFT")
+        f:SetJustifyH("LEFT"); f:SetWidth(340); f:SetWordWrap(false)
         w.rows[i] = f
     end
+    w.message = w:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    w.message:SetPoint("TOPLEFT", 20, -90); w.message:SetWidth(340); w.message:SetJustifyH("LEFT"); w.message:Hide()
 
     -- First run: the guild master founds the ledger (the same as `create main`; the ledger records who did it as the guild master).
     w.startButton = button(w, "Start the ledger", 160, 26)
@@ -124,6 +129,27 @@ function M:Build()
         M.list = "main"; M:Refresh()
     end)
     w.startButton:Hide()
+
+    -- Adding players: by name, or everyone in your group who isn't on the list yet (the same as `add <name>`, one at a time).
+    w.addBox = CreateFrame("EditBox", nil, w, "InputBoxTemplate")
+    w.addBox:SetSize(130, 22); w.addBox:SetPoint("BOTTOMLEFT", 22, 50); w.addBox:SetAutoFocus(false)
+    w.addButton = button(w, "Add", 50)
+    w.addButton:SetPoint("LEFT", w.addBox, "RIGHT", 6, 0)
+    local function addName()
+        local n = (w.addBox:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
+        if n ~= "" then SK.commands.handle("add " .. n); w.addBox:SetText(""); M:Refresh() end
+    end
+    w.addButton:SetScript("OnClick", addName)
+    w.addBox:SetScript("OnEnterPressed", addName)
+    w.groupButton = button(w, "Add my group", 110)
+    w.groupButton:SetPoint("LEFT", w.addButton, "RIGHT", 10, 0)
+    w.groupButton:SetScript("OnClick", function()
+        local chain = SK.engine:Get(M.list or SK.engine:RaidList() or "main")
+        for _, m in ipairs(SK.client:roster()) do
+            if not (chain and chain.state.members[m.name]) then SK.commands.handle("add " .. m.name) end
+        end
+        M:Refresh()
+    end)
 
     local prev, nxt, refresh = button(w, "<", 30), button(w, ">", 30), button(w, "Refresh", 70)
     prev:SetPoint("BOTTOMLEFT", 16, 14); nxt:SetPoint("LEFT", prev, "RIGHT", 4, 0)
