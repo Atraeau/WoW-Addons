@@ -67,6 +67,12 @@ function Esc([string]$text) {
     if ([string]::IsNullOrEmpty($text)) { return '' }
     return (($text -replace '\|', '\|') -replace "\r?\n", ' ').Trim()
 }
+# A Markdown code span; a value that contains a backtick (the console key) needs a longer fence.
+function Code([string]$text) {
+    $t = Esc $text
+    if ($t.Contains([string][char]96)) { return '`` ' + $t + ' ``' }
+    return '`' + $t + '`'
+}
 function Cell([string]$text) {
     $t = Esc $text
     if ($t.Length -eq 0) { return '' }
@@ -97,9 +103,9 @@ foreach ($g in $byCategory) {
     [void]$sb.AppendLine('| Command | Type | Value | Default | Help |')
     [void]$sb.AppendLine('|---|---|---|---|---|')
     foreach ($c in ($g.Group | Sort-Object { [string]$_.command })) {
-        $cmd = '`' + (Esc $c.command) + '`'
-        $value = if ($null -ne $c.value -and "$($c.value)" -ne '') { '`' + (Esc "$($c.value)") + '`' } else { '' }
-        $default = if ($null -ne $c.default -and "$($c.default)" -ne '') { '`' + (Esc "$($c.default)") + '`' } else { '' }
+        $cmd = Code $c.command
+        $value = if ($null -ne $c.value -and "$($c.value)" -ne '') { Code "$($c.value)" } else { '' }
+        $default = if ($null -ne $c.default -and "$($c.default)" -ne '') { Code "$($c.default)" } else { '' }
         [void]$sb.AppendLine("| $cmd | $(Cell ([string]$c.commandType)) | $value | $default | $(Cell $c.help) |")
     }
     [void]$sb.AppendLine('')
