@@ -3,8 +3,8 @@
 -- a player would type (need 1, pass 2, pick 1, resolve...), so the rules, the messages and the ledger are exactly the same as with commands;
 -- the Master Looter's own session and a player's view of someone else's are both read from the same place the commands read.
 local _, SK = ...
-local Identity, Sim
-local M = SK:NewModule("UILoot", { "Identity", "Sim?" }, function(d) Identity, Sim = d.Identity, d.Sim end)
+local Identity, Sim, Tips
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips" }, function(d) Identity, Sim, Tips = d.Identity, d.Sim, d.UITips end)
 
 M.MAX_ITEMS = 8
 
@@ -177,6 +177,11 @@ function M.Build(parent, ui)
             local b = button(f, a[2], 66, 20)
             b:SetPoint("TOPLEFT", 4 + (j - 1) * 70, y - 15)
             b:SetScript("OnClick", function() ui:Command(("%s %d"):format(a[1], row.id or i)) end)
+            Tips.Attach(b, a[1], function()
+                if (a[1] == "need" or a[1] == "off") and row.canBid == false then
+                    return "Unavailable for this item: your class can't have it (or its stats don't help your class). You can pass, or gift it."
+                end
+            end)
             row.buttons[j] = b
         end
         f.rows[i] = row
@@ -191,6 +196,12 @@ function M.Build(parent, ui)
     for i = 1, 6 do
         local b = button(f, "", 70, 22)
         b:SetPoint("BOTTOMLEFT", 4 + (i - 1) * 74, 66)
+        Tips.Attach(b, function()
+            local label = b:GetText() or ""
+            local id = label:find("^Item") and "pick" or ({ Skip = "skip", Claim = "claim", Decline = "decline", Give = "give", Keep = "keep", Withdraw = "withdraw" })[label]
+            local t = id and Tips.TEXT[id]
+            if t then return t[1], t[2] end
+        end)
         f.turnButtons[i] = b
     end
     f.recipient = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
@@ -203,22 +214,27 @@ function M.Build(parent, ui)
         local b = button(f, m[1], 86, 22)
         b:SetPoint("BOTTOMLEFT", 4 + (i - 1) * 90, 38)
         b:SetScript("OnClick", function() ui:Command(m[2]) end)
+        Tips.Attach(b, (m[2]:gsub(" 30$", "")))
         f.mlButtons[m[2]] = b
     end
     f.startButton = button(f, "Start from the loot window", 180, 22)
     f.startButton:SetPoint("BOTTOMLEFT", 4, 38)
     f.startButton:SetScript("OnClick", function() ui:Command("loot") end)
+    Tips.Attach(f.startButton, "start")
 
     -- practice only
     f.nextBoss = button(f, "Next boss", 140, 22)
     f.nextBoss:SetPoint("BOTTOMLEFT", 4, 8)
     f.nextBoss:SetScript("OnClick", function() ui:PracticeKill() end)
+    Tips.Attach(f.nextBoss, "kill")
     f.handOut = button(f, "Hand out the loot", 130, 22)
     f.handOut:SetPoint("LEFT", f.nextBoss, "RIGHT", 6, 0)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
+    Tips.Attach(f.handOut, "handout")
     f.wait = button(f, "Wait 10 s", 76, 22)
     f.wait:SetPoint("LEFT", f.handOut, "RIGHT", 6, 0)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
+    Tips.Attach(f.wait, "wait")
     return f
 end
 
@@ -251,6 +267,7 @@ function M.Refresh(f, ctx, ui)
             if it.status ~= "awarded" and it.canBid == false then label = label .. "   |cff999999(not for your class: pass or gift)|r" end
             if it.status == "awarded" then label = label .. ("   -> %s%s"):format(it.winner or "?", (it.to and it.to ~= it.winner) and (" (for " .. it.to .. ")") or "")
             elseif it.status == "de" then label = label .. "   -> disenchanted" end
+            row.canBid = it.canBid
             row.text:SetText(label); row.text:Show(); row.hit:Show()
             local open = m.active and (it.status == nil or it.status == "open") and m.phase == "bidding"
             for j, a in ipairs(ANSWERS) do

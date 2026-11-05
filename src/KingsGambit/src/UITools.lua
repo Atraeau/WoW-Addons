@@ -2,7 +2,8 @@
 -- Keep this file Lua 5.1-safe. A form only COMPOSES the command a person would have typed (Compose, pure and tested) and runs it, so a form can
 -- never do what the command could not, and the commands' own checks and messages apply unchanged.
 local _, SK = ...
-local M = SK:NewModule("UITools")
+local Tips
+local M = SK:NewModule("UITools", { "UITips" }, function(d) Tips = d.UITips end)
 
 -- Field: key, label, optional (may be left empty), default, name (a character: spaces become the First_Last form).
 -- cmd: pieces joined by spaces. "@key" is the field's text; a { ... } piece is dropped when its fields are empty.
@@ -256,6 +257,7 @@ function M.Build(parent, ui)
     end
     f.run = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     f.run:SetSize(100, 24); f.run:SetText("Do it")
+    Tips.Attach(f.run, "dothis")
     f.run:SetPoint("TOPLEFT", 4, -172 - MAX_FIELDS * 32 - 6)
     f.problem = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.problem:SetPoint("LEFT", f.run, "RIGHT", 10, 0)

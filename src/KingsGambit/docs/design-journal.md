@@ -1962,6 +1962,9 @@ a Master Looter or disenchanter, the group). Choosing a player in Standings pre-
 box under the table is required for moves. The controls under the table are always there but greyed out for someone who may not change the list (not an officer, and not the Master Looter inside a raid: the same
 check the engine makes), with a line saying why, so a missing permission reads as a permission and not as a missing feature. Typing a name stays only where there is nothing to pick from (the plain-frame fallback, and "set the officers").
 
+Every button has a tooltip that says in full what it does: the rule behind it, what it costs a player's place, who may use it (`UITips`).
+A greyed-out button's tooltip also says why (no permission, nobody selected, your class can't have the item), so a disabled control is never a mystery.
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

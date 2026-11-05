@@ -34,4 +34,5 @@ Sim.lua
 Scenarios.lua
 UI.lua
 UILoot.lua
+UITips.lua
 UITools.lua

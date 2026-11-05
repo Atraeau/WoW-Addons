@@ -7,9 +7,9 @@
 --   M.Model(engine, client, listId)        pure: what the Standings tab shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools
+local Identity, Sim, Commands, UILoot, UITools, Tips
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools, Tips = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips
 end)
 
 local function say(text)
@@ -240,6 +240,7 @@ function M:Refresh()
         or "Click a player in the list to act on them.")
     -- everyone sees the controls; only someone who may write can use them
     local may = model.mayWrite
+    M.may = may
     setShown(p.hint, not may)
     if p.reason.SetEnabled then p.reason:SetEnabled(may) end
     for _, b in ipairs(p.actionButtons) do b:SetEnabled(may and selectedRow ~= nil) end
@@ -355,6 +356,7 @@ function M:BuildStandings(parent)
             end
         end)
         p.listDrop = drop
+        Tips.Attach(drop, "listpick")
         p.listButton = drop -- (the dropdown shows the chosen list itself)
     else
         p.listButton = button(p, "main", 120)
@@ -386,6 +388,7 @@ function M:BuildStandings(parent)
             if M.sortKey == c[1] then M.sortDesc = not M.sortDesc else M.sortKey, M.sortDesc = c[1], false end
             M:Refresh()
         end)
+        Tips.Attach(h, "sort")
         p.headers[i] = h
     end
     local okBox = pcall(function()
@@ -421,6 +424,7 @@ function M:BuildStandings(parent)
     p.startButton:SetPoint("TOP", 0, -130)
     p.startButton:SetScript("OnClick", function() M:Command("create main Main"); M.list = "main"; M:Refresh() end)
     p.startButton:Hide()
+    Tips.Attach(p.startButton, "startledger")
 
     -- Act on the player selected above: a reason (required for a move: it goes in the record), then where to move them, remove them, or record a win.
     p.selText = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -461,6 +465,10 @@ function M:BuildStandings(parent)
         local b = button(p, a[1], 56, 22)
         b:SetPoint("BOTTOMLEFT", 6 + (i - 1) * 60, 52)
         b:SetScript("OnClick", a[2])
+        Tips.Attach(b, ({ "top", "up", "down", "bottom", "remove", "award" })[i], function()
+            if M.may == false then return "You can't use this: only officers, and a raid's Master Looter, can change the list." end
+            if not M.selected then return "Select a player in the list first." end
+        end)
         p.actionButtons[i] = b
     end
 
@@ -468,6 +476,9 @@ function M:BuildStandings(parent)
     p.addAllButton = button(p, "Add from your group and guild", 260, 24)
     p.addAllButton:SetPoint("BOTTOMLEFT", 4, 24)
     p.addAllButton:SetScript("OnClick", function() M:Command("addall") end)
+    Tips.Attach(p.addAllButton, "addall", function()
+        if M.may == false then return "You can't use this: only officers, and a raid's Master Looter, can change the list." end
+    end)
 
     return p
 end
@@ -506,12 +517,14 @@ function M:Build()
         check:SetPoint("TOPLEFT", 12, -46)
         check:SetScript("OnClick", function(self) togglePractice(self:GetChecked() and true or false) end)
         w.practiceCheck = check
+        Tips.Attach(check, "practice")
         local label = w:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         label:SetPoint("LEFT", check, "RIGHT", 2, 1); label:SetText("Practice mode")
     else
         w.practiceButton = button(w, "Practice mode", 120)
         w.practiceButton:SetPoint("TOPLEFT", 16, -50)
         w.practiceButton:SetScript("OnClick", function() togglePractice(not M.practice) end)
+        Tips.Attach(w.practiceButton, "practice")
     end
     -- How many players the simulated group has (a 5-player party up to a 40-player raid). Changing it restarts practice.
     local okSize, sizeDrop = pcall(CreateFrame, "DropdownButton", nil, w, "WowStyle1DropdownTemplate")
@@ -524,6 +537,7 @@ function M:Build()
             end
         end)
         w.sizeButton = sizeDrop
+        Tips.Attach(sizeDrop, "practicesize")
     else
         w.sizeButton = button(w, "Practice group: 40", 170)
         w.sizeButton:SetPoint("TOPLEFT", 150, -48)

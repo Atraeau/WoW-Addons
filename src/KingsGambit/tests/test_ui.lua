@@ -244,3 +244,26 @@ test("player fields offer the players it could be, and Up and Down move a player
     eq(sim.engine:Get("main").state.order[2], who, "and back up one")
     assert(UI.Model(sim.engine, sim.client, "main").mayWrite == true, "the founder may write")
 end)
+
+H.section("Window: tooltips")
+test("every button has a tooltip with a title and an explanation, and a greyed-out one can say why", function()
+    local Tips = SK.modules.UITips
+    for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
+        "kill", "handout", "wait", "practice", "practicesize", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
+        local title, text = Tips.Resolve(id)
+        assert(title and title ~= "" and text and #text > 30, "tooltip text for " .. id)
+    end
+    eq(Tips.Resolve(function() return "T", "x" end), "T")
+    local entered
+    local frame = setmetatable({}, { __index = function(_, k)
+        if k == "HookScript" then return function(_, event, fn) if event == "OnEnter" then entered = fn end end end
+        return function() end end })
+    Tips.Attach(frame, "need", function() return "because" end)
+    assert(entered, "the hover script was installed")
+    local lines = {}
+    local saved = _G.GameTooltip
+    _G.GameTooltip = setmetatable({}, { __index = function(_, k) return function(_, a, b) if k == "AddLine" or k == "SetText" then lines[#lines + 1] = a end end end })
+    entered(frame)
+    _G.GameTooltip = saved
+    assert(lines[1] == "Need (main spec)" and lines[#lines]:find("because", 1, true), table.concat(lines, "|"))
+end)
