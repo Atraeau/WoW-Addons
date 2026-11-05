@@ -321,3 +321,33 @@ test("the Record a win form offers the open loot window and the tradeable bag it
     sim:killBoss(nil, true)
     assert(#UITools.Items({ client = sim.client, sim = sim }) > 0, "held practice loot can be chosen")
 end)
+
+H.section("Window: shift-clicking an item into a form")
+test("a shift-clicked item fills the form's item field; for Record a win only an item you hold is taken", function()
+    local client = SK.modules.MockClient.New({ name = "Me" })
+    local held = "|cff0070dd|Hitem:2000::::::::|h[Some Cloak]|h|r"
+    local other = "|cffa335ee|Hitem:3000::::::::|h[Not Mine]|h|r"
+    local says = {}
+    local ui = { Say = function(t) says[#says + 1] = t end, Refresh = function() end }
+    local function page(actionId)
+        local boxes = {}
+        for i = 1, 4 do boxes[i] = { SetText = function(self, t) self.text = t end } end
+        return { action = actionId, picked = {}, boxes = boxes, IsVisible = function() return true end,
+            ctx = { client = client, bagLinks = function() return { held } end } }
+    end
+    UITools.focus = nil
+    -- a class rule: the link goes into the item box
+    local f = page("eligible")
+    assert(UITools.OnItemLink(f, ui, other)); eq(f.boxes[1].text, other)
+    -- record a win: only the item you hold
+    f = page("award")
+    assert(UITools.OnItemLink(f, ui, other), "handled (and refused)")
+    eq(f.picked[2], nil); assert(says[1] and says[1]:find("don't hold"), says[1])
+    assert(UITools.OnItemLink(f, ui, "|cff0070dd|Hitem:2000::::::::60|h[Some Cloak]|h|r"))
+    eq(f.picked[2], held, "the same item (by id) is taken, as the bag's own link")
+    -- an action with no item, a hidden tab, plain text: not taken
+    eq(UITools.OnItemLink(page("move"), ui, other), false)
+    eq(UITools.OnItemLink(page("eligible"), ui, "just text"), false)
+    local hidden = page("eligible"); hidden.IsVisible = function() return false end
+    eq(UITools.OnItemLink(hidden, ui, other), false)
+end)

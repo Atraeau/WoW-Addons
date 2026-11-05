@@ -38,10 +38,10 @@ M.GROUPS = {
         { id = "salvaged", label = "Note a salvager", help = "For the record only: what a salvager did with their item.", fields = { F("name", "Salvager", { name = true }), F("what", "keep, gift, sell, disenchant or bank") }, cmd = { "salvaged", "@name", "@what" } },
     } },
     { id = "rules", title = "Rules and requests", actions = {
-        { id = "eligible", label = "Class rule for an item", help = "Officers. Which classes may bid on an item before it drops (a token, a set piece). 'any' removes the restriction.", fields = { F("item", "Item (link or id)"), F("classes", "Classes, or any"), F("reason", "Reason") }, cmd = { "eligible", "@item", "@classes", "@reason" } },
-        { id = "eligibles", label = "Show class rules", help = "The rule for one item, or every rule.", fields = { F("item", "Item (empty = all)", { optional = true }) }, cmd = { "eligible", "@item" } },
-        { id = "suits", label = "Who an item suits", help = "Officers. Override the addon's stat check: tank, melee, hunter, caster, healer, or auto.", fields = { F("item", "Item (link or id)"), F("roles", "Roles, or auto"), F("reason", "Reason") }, cmd = { "suits", "@item", "@roles", "@reason" } },
-        { id = "reqelig", label = "Request: let my class bid", help = "Ask for your class to be allowed to bid on an item, from now on.", fields = { F("item", "Item (link or id)"), F("reason", "Reason") }, cmd = { "request eligible", "@item", "@reason" } },
+        { id = "eligible", label = "Class rule for an item", help = "Officers. Which classes may bid on an item before it drops (a token, a set piece). 'any' removes the restriction.", fields = { F("item", "Item (shift-click one)", { link = true }), F("classes", "Classes, or any"), F("reason", "Reason") }, cmd = { "eligible", "@item", "@classes", "@reason" } },
+        { id = "eligibles", label = "Show class rules", help = "The rule for one item, or every rule.", fields = { F("item", "Item (shift-click one; empty = all)", { optional = true, link = true }) }, cmd = { "eligible", "@item" } },
+        { id = "suits", label = "Who an item suits", help = "Officers. Override the addon's stat check: tank, melee, hunter, caster, healer, or auto.", fields = { F("item", "Item (shift-click one)", { link = true }), F("roles", "Roles, or auto"), F("reason", "Reason") }, cmd = { "suits", "@item", "@roles", "@reason" } },
+        { id = "reqelig", label = "Request: let my class bid", help = "Ask for your class to be allowed to bid on an item, from now on.", fields = { F("item", "Item (shift-click one)", { link = true }), F("reason", "Reason") }, cmd = { "request eligible", "@item", "@reason" } },
         { id = "request", label = "Request a list change", help = "Ask the Master Looter during a raid. Kind: move, undo, remove, add, award, trade or gift; then its details as the command takes them.", fields = { F("kind", "Kind"), F("details", "Details (player, place, reason...)") }, cmd = { "request", "@kind", "@details" } },
         { id = "requests", label = "Waiting requests", help = "Waiting requests and recent decisions.", fields = {}, cmd = { "requests" } },
         { id = "accept", label = "Accept a request", help = "Master Looter.", fields = { F("n", "Request number") }, cmd = { "accept", "@n" } },
@@ -193,6 +193,37 @@ local function dropdown(parent, width)
     if ok and d and d.SetupMenu then d:SetWidth(width); return d end
 end
 
+local function sameItem(a, b)
+    return a == b or (a:match("item:(%d+)") ~= nil and a:match("item:(%d+)") == b:match("item:(%d+)"))
+end
+
+-- An item link was shift-clicked somewhere. If the Tools form for an action with an item is open, the item goes into that field (a typed box
+-- that has the cursor takes it first); where the item must be one you hold, it is only taken if you do. Returns true if the form took it.
+function M.OnItemLink(f, ui, link)
+    if type(link) ~= "string" or not link:find("|Hitem:", 1, true) then return false end
+    if M.focus and M.focus.Insert then M.focus:Insert(link); return true end
+    if not (f and f.IsVisible and f:IsVisible()) then return false end
+    local action = f.action and M.Find(f.action)
+    if not action then return false end
+    for i, fld in ipairs(action.fields) do
+        if fld.source == "items" then
+            for _, it in ipairs(M.Items(f.ctx)) do
+                if sameItem(it.link, link) then
+                    f.picked[i] = it.link
+                    ui:Refresh()
+                    return true
+                end
+            end
+            if ui.Say then ui.Say("You don't hold that item: it isn't in your bags (tradeable) or the open loot window, so a win can't be recorded for it.") end
+            return true
+        elseif fld.link then
+            f.boxes[i]:SetText(link)
+            return true
+        end
+    end
+    return false
+end
+
 local function chooseAction(f, ui, a)
     f.action = a and a.id or nil
     f.picked = {}
@@ -212,10 +243,20 @@ end
 
 function M.Build(parent, ui)
     local f = CreateFrame("Frame", nil, parent)
-    -- Shift-clicking an item (in the bags, the loot window, a chat link) while a form box has the cursor puts the link in that box.
+    -- Shift-clicking an item (in the bags, the loot window, a chat link) fills the open form's item field.
+    M.frame, M.ui = f, ui
     if hooksecurefunc and not M.hooked then
         M.hooked = true
-        local function insert(link) if M.focus and type(link) == "string" then M.focus:Insert(link) end end
+        local function insert(link)
+            if M.OnItemLink(M.frame, M.ui, link) then
+                -- the game also opened the chat box with the link in it: put that away, if it holds nothing but the link
+                local get = ChatEdit_GetActiveWindow
+                local box = get and get()
+                if box and box.GetText and box:GetText() == link and ChatEdit_DeactivateChat then
+                    box:SetText(""); pcall(ChatEdit_DeactivateChat, box)
+                end
+            end
+        end
         pcall(hooksecurefunc, "ChatEdit_InsertLink", insert)
     end
     f:SetAllPoints()
