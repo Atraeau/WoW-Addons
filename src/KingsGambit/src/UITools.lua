@@ -63,13 +63,18 @@ M.GROUPS = {
 
 local function trim(s) return (tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")) end
 
+-- An item link in a form field becomes "item:ID".
+function M.PlainLinks(text)
+    return (tostring(text or ""):gsub("|c%x%x%x%x%x%x%x%x|Hitem:(%d+)[^|]*|h%[.-%]|h|r", "item:%1"):gsub("|Hitem:(%d+)[^|]*|h%[.-%]|h", "item:%1"))
+end
+
 -- The command text for an action and the values typed, or nil and what is missing.
 function M.Compose(action, values)
     values = values or {}
     local v, fields = {}, {}
     for _, f in ipairs(action.fields) do
         fields[f.key] = f
-        local text = trim(values[f.key])
+        local text = trim(M.PlainLinks(values[f.key]))
         if f.name then text = text:gsub("%s+", "_") end
         v[f.key] = text
         if text == "" and not f.optional then return nil, f.label end
@@ -117,6 +122,12 @@ local MAX_ACTIONS, MAX_FIELDS = 12, 4
 
 function M.Build(parent, ui)
     local f = CreateFrame("Frame", nil, parent)
+    -- Shift-clicking an item (in the bags, the loot window, a chat link) while a form box has the cursor puts the link in that box.
+    if hooksecurefunc and not M.hooked then
+        M.hooked = true
+        local function insert(link) if M.focus and type(link) == "string" then M.focus:Insert(link) end end
+        pcall(hooksecurefunc, "ChatEdit_InsertLink", insert)
+    end
     f:SetAllPoints()
     f.group, f.action = M.GROUPS[1].id, nil
 
@@ -144,6 +155,8 @@ function M.Build(parent, ui)
         f.labels[i]:SetPoint("TOPLEFT", 4, y); f.labels[i]:SetWidth(150); f.labels[i]:SetJustifyH("LEFT")
         local box = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         box:SetSize(210, 20); box:SetPoint("TOPLEFT", 164, y + 4); box:SetAutoFocus(false)
+        box:SetScript("OnEditFocusGained", function(self) M.focus = self end)
+        box:SetScript("OnEditFocusLost", function(self) if M.focus == self then M.focus = nil end end)
         f.boxes[i] = box
     end
     f.run = button(f, "Do it", 100, 24)

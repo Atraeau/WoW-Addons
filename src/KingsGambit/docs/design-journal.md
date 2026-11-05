@@ -1946,6 +1946,10 @@ sorts by that column, again reverses; the list's own order is the default, becau
 dropdowns; the tabs hang along the bottom edge of the window; *Practice mode* is a checkbox (like "show offline members"). Each piece falls back to a
 plainer one built from basic frames if a template is missing in this client, so the window works either way.
 
+Items are links, not text: each item in the Loot tab shows the game's own link, hovering shows its tooltip, shift-click puts the link in chat and
+control-click tries it on, as anywhere else in the game (simulated drops in practice use their real item ids, so the tooltips work there too). In the Tools forms,
+shift-clicking an item while a box has the cursor inserts its link, and a link in a field is turned into `item:ID` before the command is composed (a link contains spaces).
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

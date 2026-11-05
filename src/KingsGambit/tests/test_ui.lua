@@ -160,3 +160,17 @@ test("columns sort on a header click and again to reverse; the list's own order 
     eq(row.cells[1].t, "7"); eq(row.cells[3].t, "Mage"); eq(row.cells[4].t, "3")
     assert(row.cells[2].t:find("Ann", 1, true) and row.cells[2].t:find("(you)", 1, true), row.cells[2].t)
 end)
+
+H.section("Window: item links")
+test("a simulated drop gets a tooltip id, a real link is used as it is, and a link pasted into a form becomes item:ID", function()
+    local UILoot = SK.modules.UILoot
+    local mc = SK.modules.Sim.FindItem("Earthfury Boots")
+    assert(mc, "the practice loot has real item ids")
+    eq(UILoot.TipOf("Earthfury Boots"), "item:" .. mc.id)
+    local link = "|cffa335ee|Hitem:16837::::::::60:::::|h[Helm of Might]|h|r"
+    eq(UILoot.TipOf(link), link); eq(UILoot.TipOf("nonsense item"), nil)
+    eq(UILoot.Display(link, "item:1"), link, "a real link is shown as the game gave it")
+    eq(UITools.PlainLinks("x " .. link .. " y"), "x item:16837 y")
+    local text = UITools.Compose(UITools.Find("eligible"), { item = link, classes = "WARRIOR", reason = "tier set" })
+    eq(text, "eligible item:16837 WARRIOR tier set")
+end)

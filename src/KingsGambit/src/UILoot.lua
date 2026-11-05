@@ -2,9 +2,9 @@
 -- What a loot session looks like to this player (Model, pure and tested), and the buttons that answer it. Every button runs the same command
 -- a player would type (need 1, pass 2, pick 1, resolve...), so the rules, the messages and the ledger are exactly the same as with commands;
 -- the Master Looter's own session and a player's view of someone else's are both read from the same place the commands read.
-local Identity
 local _, SK = ...
-local M = SK:NewModule("UILoot", { "Identity" }, function(d) Identity = d.Identity end)
+local Identity, Sim
+local M = SK:NewModule("UILoot", { "Identity", "Sim?" }, function(d) Identity, Sim = d.Identity, d.Sim end)
 
 M.MAX_ITEMS = 8
 
@@ -21,6 +21,25 @@ local PHASES = {
 M.PHASES = PHASES
 
 local function show(who) return who and Identity.Display(who) end
+
+-- What the game can show a tooltip for: a real item link as it came, or (in practice, where the simulated drops are named) "item:ID".
+function M.TipOf(link)
+    if type(link) ~= "string" then return nil end
+    if link:find("|Hitem:", 1, true) or link:find("^item:") then return link end
+    local it = Sim and Sim.FindItem and Sim.FindItem(link)
+    return it and ("item:" .. it.id) or nil
+end
+
+-- The coloured, clickable link for display when the game has the item in its cache; otherwise the name as given.
+function M.Display(link, tip)
+    if link and link:find("|H", 1, true) then return link end
+    local get = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+    if tip and get then
+        local _, full = get(tip)
+        if full then return full end
+    end
+    return link or "?"
+end
 
 -- The session this machine can see: the one it runs as Master Looter, else the one it is answering.
 local function sessionOf(ctx)
@@ -51,7 +70,7 @@ function M.Model(ctx)
     for i, it in ipairs(list) do
         if i > M.MAX_ITEMS then out.hidden = out.hidden + 1
         else
-            local row = { id = it.id or i, link = it.link, status = it.status }
+            local row = { id = it.id or i, link = it.link, tip = M.TipOf(it.link), status = it.status }
             if mode == "ml" then
                 local b = s.bids[me] and s.bids[me][it.id]
                 row.mine, row.mineTo = b and b.kind, b and show(b.to)
@@ -116,6 +135,24 @@ function M.Build(parent, ui)
         local y = -48 - (i - 1) * 38
         row.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         row.text:SetPoint("TOPLEFT", 4, y); row.text:SetWidth(370); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
+        -- Hover for the item's tooltip; shift-click puts the link in chat, control-click tries it on, as anywhere in the game.
+        row.hit = CreateFrame("Button", nil, f)
+        row.hit:SetSize(370, 16)
+        row.hit:SetPoint("TOPLEFT", 4, y)
+        row.hit:SetScript("OnEnter", function(self)
+            if row.tip and GameTooltip then
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:SetHyperlink(row.tip)
+                GameTooltip:Show()
+            end
+        end)
+        row.hit:SetScript("OnLeave", function() if GameTooltip then GameTooltip:Hide() end end)
+        row.hit:SetScript("OnClick", function()
+            if not row.tip then return end
+            local get = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+            local full = get and select(2, get(row.tip)) or row.tip
+            if HandleModifiedItemClick then HandleModifiedItemClick(full) end
+        end)
         row.buttons = {}
         for j, a in ipairs(ANSWERS) do
             local b = button(f, a[2], 66, 20)
@@ -154,13 +191,13 @@ function M.Build(parent, ui)
     f.startButton:SetScript("OnClick", function() ui:Command("loot") end)
 
     -- practice only
-    f.nextBoss = button(f, "Next boss", 150, 22)
+    f.nextBoss = button(f, "Next boss", 140, 22)
     f.nextBoss:SetPoint("BOTTOMLEFT", 4, 8)
     f.nextBoss:SetScript("OnClick", function() ui:PracticeKill() end)
-    f.handOut = button(f, "Hand out the held loot", 160, 22)
+    f.handOut = button(f, "Hand out the loot", 130, 22)
     f.handOut:SetPoint("LEFT", f.nextBoss, "RIGHT", 6, 0)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
-    f.wait = button(f, "Wait 10 s", 80, 22)
+    f.wait = button(f, "Wait 10 s", 76, 22)
     f.wait:SetPoint("LEFT", f.handOut, "RIGHT", 6, 0)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
     return f
@@ -190,17 +227,18 @@ function M.Refresh(f, ctx, ui)
         local row, it = f.rows[i], m.items[i]
         if it then
             row.id = it.id
-            local label = ("%d. %s"):format(i, it.link or "?")
+            row.tip = it.tip
+            local label = ("%d. %s"):format(i, M.Display(it.link, it.tip))
             if it.status == "awarded" then label = label .. ("   -> %s%s"):format(it.winner or "?", it.to and (" (for " .. it.to .. ")") or "")
             elseif it.status == "de" then label = label .. "   -> disenchanted" end
-            row.text:SetText(label); row.text:Show()
+            row.text:SetText(label); row.text:Show(); row.hit:Show()
             local open = m.active and (it.status == nil or it.status == "open") and m.phase == "bidding"
             for j, a in ipairs(ANSWERS) do
                 row.buttons[j]:SetText((it.mine == a[3]) and ("[" .. a[2] .. "]") or a[2])
                 setShown(row.buttons[j], open)
             end
         else
-            row.text:Hide()
+            row.text:Hide(); row.hit:Hide()
             for _, b in ipairs(row.buttons) do b:Hide() end
         end
     end
