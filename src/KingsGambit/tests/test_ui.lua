@@ -351,3 +351,17 @@ test("a shift-clicked item fills the form's item field; for Record a win only an
     local hidden = page("eligible"); hidden.IsVisible = function() return false end
     eq(UITools.OnItemLink(hidden, ui, other), false)
 end)
+
+test("in practice, Record a win offers the practice gear even before any boss has died", function()
+    local gear = {}
+    for i, loc in ipairs { "INVTYPE_FEET", "INVTYPE_HAND", "INVTYPE_CHEST" } do
+        gear[i] = { id = 5000 + i, link = ("|cff1eff00|Hitem:%d::::::::|h[Practice %d]|h|r"):format(5000 + i, i), equipLoc = loc, class = 4, subclass = 1, stats = { sta = 3 } }
+    end
+    local sim = SK.modules.Sim.NewPractice(gear, { learner = "Me", seed = 1, size = 5 })
+    local items = UITools.Items({ client = sim.client, sim = sim })
+    eq(#items, 3, "all three practice pieces are offered, with no session running")
+    eq(items[1].where, "practice gear")
+    -- and the bag scan reports how many items it saw, for a clearer empty menu
+    local _, stats = UITools.BagLinks()
+    assert(stats and stats.unavailable, "no bags outside the game")
+end)

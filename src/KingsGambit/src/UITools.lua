@@ -132,9 +132,9 @@ local function isPick(fld) return fld.name or fld.source == "items" end
 
 -- The tradeable items in the bags: not soulbound, or soulbound with the loot-trade window still open (the tooltip says so). Game only.
 function M.BagLinks()
-    local out = {}
+    local out, stats = {}, { seen = 0, bound = 0, tradeable = 0 }
     local C = C_Container
-    if not (C and C.GetContainerNumSlots and C.GetContainerItemInfo) then return out end
+    if not (C and C.GetContainerNumSlots and C.GetContainerItemInfo) then stats.unavailable = true; return out, stats end
     local pattern = BIND_TRADE_TIME_REMAINING and ("^" .. BIND_TRADE_TIME_REMAINING:gsub("([%(%)%.%+%-%*%?%[%]%^%$])", "%%%1"):gsub("%%%%s", ".+") .. "$")
     local function tradeWindow(bag, slot)
         if not (pattern and C_TooltipInfo and C_TooltipInfo.GetBagItem) then return false end
@@ -148,10 +148,17 @@ function M.BagLinks()
     for bag = 0, 5 do
         for slot = 1, (C.GetContainerNumSlots(bag) or 0) do
             local info = C.GetContainerItemInfo(bag, slot)
-            if info and info.hyperlink and (not info.isBound or tradeWindow(bag, slot)) then out[#out + 1] = info.hyperlink end
+            if info and info.hyperlink then
+                stats.seen = stats.seen + 1
+                if info.isBound then stats.bound = stats.bound + 1 end
+                if not info.isBound or tradeWindow(bag, slot) then
+                    stats.tradeable = stats.tradeable + 1
+                    out[#out + 1] = info.hyperlink
+                end
+            end
         end
     end
-    return out
+    return out, stats
 end
 
 -- The items a record of a win could be for: what is in the open loot window, and the tradeable items in the bags (in practice, the practice
@@ -165,15 +172,27 @@ function M.Items(ctx)
         seen[key] = true
         out[#out + 1] = { link = link, where = where }
     end
+    local stats
     for _, slot in ipairs(ctx.client:lootSlots() or {}) do add(slot.link, "loot window") end
     if ctx.sim then
+        -- practice: the loot the practice raid has dropped, and the gear it is made of (that is "held" here)
         local session = ctx.sim.session
         for _, it in ipairs(session and session.items or {}) do add(it.link, "practice loot") end
         for _, h in ipairs(ctx.sim.held or {}) do add(h.item and h.item.name, "held practice loot") end
+        local raidItems = ctx.sim.raid and ctx.sim.raid.items or {}
+        local ids = {}
+        for id in pairs(raidItems) do ids[#ids + 1] = id end
+        table.sort(ids)
+        for _, id in ipairs(ids) do
+            local name = raidItems[id].name
+            if type(name) == "string" and name:find("|Hitem:", 1, true) then add(name, "practice gear") end
+        end
     elseif ctx.bagLinks then
-        for _, link in ipairs(ctx.bagLinks()) do add(link, "bags") end
+        local links
+        links, stats = ctx.bagLinks()
+        for _, link in ipairs(links) do add(link, "bags") end
     end
-    return out
+    return out, stats
 end
 
 function M.Find(id)
@@ -336,8 +355,14 @@ function M.Build(parent, ui)
                 if not (fld and f.ctx) then return end
                 if root.SetScrollMode then root:SetScrollMode(260) end
                 if fld.source == "items" then
-                    local items = M.Items(f.ctx)
-                    if #items == 0 and root.CreateTitle then root:CreateTitle("Nothing to choose: carry the item (tradeable), or open its loot window") end
+                    local items, stats = M.Items(f.ctx)
+                    if #items == 0 and root.CreateTitle then
+                        local why = "Nothing to choose: carry the item (tradeable), or open its loot window."
+                        if stats and not stats.unavailable then
+                            why = why .. ("  (Your bags: %d items, %d soulbound, %d tradeable.)"):format(stats.seen, stats.bound, stats.tradeable)
+                        end
+                        root:CreateTitle(why)
+                    end
                     for _, it in ipairs(items) do
                         root:CreateRadio(it.link .. "  |cff999999(" .. it.where .. ")|r", function() return f.picked[i] == it.link end, function() f.picked[i] = it.link end)
                     end
