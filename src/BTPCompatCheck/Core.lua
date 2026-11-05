@@ -1,7 +1,7 @@
 -- BTPCompatCheck
 -- Ground-truth API probe: asks the RUNNING client which globals/methods exist,
 -- instead of trusting external assumptions about "retail vs classic".
--- Resolves dotted paths from _G and prints OK / MISSING.  Run /btpcheck any time.
+-- Resolves dotted paths from _G and prints OK / MISSING.  It only runs when you type /btpcheck (it used to print at every login).
 local addonName, ns = ...
 
 local CHECKS = {
@@ -51,12 +51,6 @@ local function RunReport()
 		end
 	end
 end
-
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_LOGIN")
-frame:SetScript("OnEvent", function()
-	C_Timer.After(1, RunReport)
-end)
 
 SLASH_BTPCHECK1 = "/btpcheck"
 SlashCmdList["BTPCHECK"] = RunReport
