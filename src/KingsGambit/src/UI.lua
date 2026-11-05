@@ -46,7 +46,7 @@ end
 -- in-memory ledger: nothing in it is saved, sent to anyone, or mixed with the real one.
 function M.Ctx()
     if M.practice then return M.practice end
-    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player }
+    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks }
 end
 
 M.SIZES = { 5, 10, 20, 40 }

@@ -1970,6 +1970,10 @@ intention. In Standings, Up, Down, Top, Bottom, a typed place number and draggin
 the place they would take, marked as moving); nothing is written. **Apply move** then writes a single `move` entry, with the reason, and *Cancel* drops the
 preview. One intention, one entry, one reason. (Remove and Award stay immediate: each is one entry already.)
 
+**An item is chosen from what you hold.** The "Record a win" form's item is a dropdown, not a typed link: the items in the open loot window plus the tradeable
+items in the bags (not soulbound, or still inside the loot-trade window the tooltip reports), so a win can't be recorded for an item the Master Looter doesn't
+have. (The typed `award` command is unchanged: it still takes any item, for the corrections the form isn't meant for.)
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

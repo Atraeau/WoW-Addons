@@ -32,7 +32,7 @@ M.GROUPS = {
         { id = "add", label = "Add a player", help = "Add one player (the Standings tab adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
         { id = "remove", label = "Remove a player", help = "Take a player off the list. They can be put back at the same place.", fields = { F("name", "Player", { name = true }), F("reason", "Reason", { optional = true }) }, cmd = { "remove", "@name", "@reason" } },
         { id = "move", label = "Move a player", help = "A reason is required: it is part of the record.", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place"), F("reason", "Reason") }, cmd = { "move", "@name", "@pos", "@reason" } },
-        { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner).", fields = { F("name", "Winner", { name = true }), F("item", "Item (link or id)"), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
+        { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner). The item is chosen from what you actually hold: tradeable items in your bags, and the open loot window.", fields = { F("name", "Winner", { name = true }), F("item", "Item you hold", { source = "items" }), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
         { id = "undo", label = "Undo the last award", help = "Reverses your latest award. It asks first; this button confirms.", fields = {}, cmd = { "undo yes" } },
         { id = "trade", label = "Item went elsewhere", help = "Master Looter: the item went to someone else. The winner is restored, the other player moves to the bottom.", fields = { F("name", "Winner", { name = true }), F("to", "Who has it", { name = true }), F("reason", "Reason") }, cmd = { "trade", "@name", "@to", "@reason" } },
         { id = "salvaged", label = "Note a salvager", help = "For the record only: what a salvager did with their item.", fields = { F("name", "Salvager", { name = true }), F("what", "keep, gift, sell, disenchant or bank") }, cmd = { "salvaged", "@name", "@what" } },
@@ -126,6 +126,55 @@ function M.Players(ctx, source, listId)
 end
 
 local function shown(name) return (tostring(name):gsub("_", " ")) end
+
+-- Something to choose from rather than type: a player, or an item you hold.
+local function isPick(fld) return fld.name or fld.source == "items" end
+
+-- The tradeable items in the bags: not soulbound, or soulbound with the loot-trade window still open (the tooltip says so). Game only.
+function M.BagLinks()
+    local out = {}
+    local C = C_Container
+    if not (C and C.GetContainerNumSlots and C.GetContainerItemInfo) then return out end
+    local pattern = BIND_TRADE_TIME_REMAINING and ("^" .. BIND_TRADE_TIME_REMAINING:gsub("([%(%)%.%+%-%*%?%[%]%^%$])", "%%%1"):gsub("%%%%s", ".+") .. "$")
+    local function tradeWindow(bag, slot)
+        if not (pattern and C_TooltipInfo and C_TooltipInfo.GetBagItem) then return false end
+        local ok, data = pcall(C_TooltipInfo.GetBagItem, bag, slot)
+        if not (ok and data and data.lines) then return false end
+        for _, line in ipairs(data.lines) do
+            if type(line.leftText) == "string" and line.leftText:find(pattern) then return true end
+        end
+        return false
+    end
+    for bag = 0, 5 do
+        for slot = 1, (C.GetContainerNumSlots(bag) or 0) do
+            local info = C.GetContainerItemInfo(bag, slot)
+            if info and info.hyperlink and (not info.isBound or tradeWindow(bag, slot)) then out[#out + 1] = info.hyperlink end
+        end
+    end
+    return out
+end
+
+-- The items a record of a win could be for: what is in the open loot window, and the tradeable items in the bags (in practice, the practice
+-- raid's loot). An item you don't hold can't be chosen. Each: { link, where }.
+function M.Items(ctx)
+    local out, seen = {}, {}
+    local function add(link, where)
+        if type(link) ~= "string" then return end
+        local key = link:match("item:(%d+)") or link
+        if seen[key] then return end
+        seen[key] = true
+        out[#out + 1] = { link = link, where = where }
+    end
+    for _, slot in ipairs(ctx.client:lootSlots() or {}) do add(slot.link, "loot window") end
+    if ctx.sim then
+        local session = ctx.sim.session
+        for _, it in ipairs(session and session.items or {}) do add(it.link, "practice loot") end
+        for _, h in ipairs(ctx.sim.held or {}) do add(h.item and h.item.name, "held practice loot") end
+    elseif ctx.bagLinks then
+        for _, link in ipairs(ctx.bagLinks()) do add(link, "bags") end
+    end
+    return out
+end
 
 function M.Find(id)
     for _, g in ipairs(M.GROUPS) do
@@ -245,6 +294,14 @@ function M.Build(parent, ui)
                 local fld = action and action.fields[i]
                 if not (fld and f.ctx) then return end
                 if root.SetScrollMode then root:SetScrollMode(260) end
+                if fld.source == "items" then
+                    local items = M.Items(f.ctx)
+                    if #items == 0 and root.CreateTitle then root:CreateTitle("Nothing to choose: carry the item (tradeable), or open its loot window") end
+                    for _, it in ipairs(items) do
+                        root:CreateRadio(it.link .. "  |cff999999(" .. it.where .. ")|r", function() return f.picked[i] == it.link end, function() f.picked[i] = it.link end)
+                    end
+                    return
+                end
                 if fld.optional then
                     root:CreateRadio("(nobody)", function() return f.picked[i] == nil end, function() f.picked[i] = nil end)
                 end
@@ -266,7 +323,7 @@ function M.Build(parent, ui)
         if not action then return end
         local values = {}
         for i, fld in ipairs(action.fields) do
-            if fld.name and f.drops[i] then values[fld.key] = f.picked[i] else values[fld.key] = f.boxes[i]:GetText() end
+            if isPick(fld) and f.drops[i] then values[fld.key] = f.picked[i] else values[fld.key] = f.boxes[i]:GetText() end
         end
         local text, missing = M.Compose(action, values)
         if not text then f.problem:SetText("Needed: " .. tostring(missing)); return end
@@ -314,8 +371,9 @@ function M.Refresh(f, ctx, ui)
         local fld = action.fields[i]
         if fld then
             f.labels[i]:SetText(fld.label .. (fld.optional and " (optional)" or "")); f.labels[i]:Show()
-            if fld.name and f.drops[i] then
+            if isPick(fld) and f.drops[i] then
                 f.boxes[i]:Hide(); f.drops[i]:Show()
+                f.drops[i]:SetDefaultText(fld.source == "items" and "Choose an item you hold" or "Choose a player")
                 -- keep the shown choice in step with what is picked (the menu is rebuilt when the action or the pick changes)
                 local key = tostring(f.picked[i])
                 if f.drops[i].shownPick ~= key then f.drops[i].shownPick = key; f.drops[i]:GenerateMenu() end

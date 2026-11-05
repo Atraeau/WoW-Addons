@@ -304,3 +304,20 @@ test("Up, Down, a typed place and a drop only stage a move; Apply writes exactly
     UI.DropOn({ pos = 1 }) -- (Stage refreshes the window: no window here, so only the state matters)
     UI.practice, UI.selected, UI.pending, UI.dragging = saved.practice, saved.selected, saved.pending, nil
 end)
+
+H.section("Window: Award only offers items you hold")
+test("the Record a win form offers the open loot window and the tradeable bag items, nothing else, and composes the chosen link", function()
+    local client = SK.modules.MockClient.New({ name = "Me" })
+    client:dropLoot({ { link = "|cffa335ee|Hitem:16837::::::::|h[Earthfury Boots]|h|r" } })
+    local bag = "|cff0070dd|Hitem:2000::::::::|h[Some Cloak]|h|r"
+    local items = UITools.Items({ client = client, bagLinks = function() return { bag, "|cffa335ee|Hitem:16837::::::::|h[Earthfury Boots]|h|r" } end })
+    eq(#items, 2, "the loot window's item and the bag item, once each")
+    eq(items[1].where, "loot window"); eq(items[2].where, "bags")
+    local text = UITools.Compose(UITools.Find("award"), { name = "Ann", item = items[2].link, reason = "failed hand-out" })
+    eq(text, "award Ann item:2000 failed hand-out")
+    eq(#UITools.Items({ client = SK.modules.MockClient.New({ name = "Me" }), bagLinks = function() return {} end }), 0, "nothing held, nothing to choose")
+    -- practice: the practice raid's loot
+    local sim = SK.modules.Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 5 })
+    sim:killBoss(nil, true)
+    assert(#UITools.Items({ client = sim.client, sim = sim }) > 0, "held practice loot can be chosen")
+end)
