@@ -65,6 +65,15 @@ function M:StartPractice()
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host })
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host }
+    -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
+    local total, unknown = 0, 0
+    for id in pairs(sim.raid and sim.raid.items or {}) do
+        total = total + 1
+        if not UILoot.KnownToGame(id) then unknown = unknown + 1 end
+    end
+    if unknown > 0 then
+        SK:Print(("Practice: %d of the %d %s items aren't in this game's item data yet, so they show as plain names without a tooltip."):format(unknown, total, sim.raid.name or "raid"))
+    end
     M.list = nil
     M:Refresh()
 end

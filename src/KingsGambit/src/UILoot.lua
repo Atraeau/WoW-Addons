@@ -22,12 +22,22 @@ M.PHASES = PHASES
 
 local function show(who) return who and Identity.Display(who) end
 
+-- Does this game have an item with that id at all? (Its static item data, not the server's: true for any real item, cached or not.)
+-- Without the function to ask, assume yes.
+function M.KnownToGame(id)
+    local instant = (C_Item and C_Item.GetItemInfoInstant) or GetItemInfoInstant
+    if not instant then return true end
+    local ok, known = pcall(instant, id)
+    return ok and known ~= nil
+end
+
 -- What the game can show a tooltip for: a real item link as it came, or (in practice, where the simulated drops are named) "item:ID".
 function M.TipOf(link)
     if type(link) ~= "string" then return nil end
     if link:find("|Hitem:", 1, true) or link:find("^item:") then return link end
     local it = Sim and Sim.FindItem and Sim.FindItem(link)
-    return it and ("item:" .. it.id) or nil
+    if it and M.KnownToGame(it.id) then return "item:" .. it.id end
+    return nil
 end
 
 -- The link to show: the game's own when it has the item cached, else (and the game is asked to load the item, so a moment later) a link made from the
