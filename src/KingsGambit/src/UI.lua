@@ -16,11 +16,18 @@ function M.Model(engine, client, listId, page)
     local lists = engine:Lists()
     local raidList, raid = engine:RaidList()
     local id = listId or raidList or "main"
-    local model = { lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, page = 1, pages = 1, total = 0 }
+    local model = { missing = 0, lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, page = 1, pages = 1, total = 0 }
     local chain = engine:Get(id)
     if not chain then return model end
     local order = chain.state.order
     model.total = #order
+    model.missing = 0
+    local seen = {}
+    for _, source in ipairs { client:roster(), client:guildRoster() } do
+        for _, m in ipairs(source) do
+            if m.name and not seen[m.name] and not chain.state.members[m.name] then seen[m.name] = true; model.missing = model.missing + 1 end
+        end
+    end
     model.pages = math.max(1, math.ceil(#order / ROWS))
     model.page = math.min(math.max(page or 1, 1), model.pages)
     for i = (model.page - 1) * ROWS + 1, math.min(#order, model.page * ROWS) do
@@ -46,6 +53,14 @@ function M:StartPractice()
     if not (Sim and Commands) then return end
     local me = SK.client:me()
     local sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size })
+    -- A simulated guild: the raid's players, and others who are not in the group (some offline).
+    local guild = {}
+    for _, m in ipairs(sim.client:roster()) do guild[#guild + 1] = { name = m.name, class = m.class } end
+    local classes = { "WARRIOR", "MAGE", "ROGUE", "PRIEST", "HUNTER", "WARLOCK", "DRUID", "PALADIN" }
+    for i, n in ipairs { "Oswin", "Perrin", "Rook", "Sabine", "Tamsin", "Ulric", "Vesna", "Wick", "Yorick", "Zora", "Alder", "Bexley" } do
+        guild[#guild + 1] = { name = n, class = classes[(i - 1) % #classes + 1], online = i % 3 ~= 0 }
+    end
+    sim.client:setGuild(guild)
     sim.client.print = function(_, text) print("|cffffaa00Practice|r", text) end
     local commands = Commands.New({ client = sim.client, engine = sim.engine })
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim }
@@ -90,10 +105,11 @@ function M:Refresh()
     end
     w.startButton:SetShown(#model.lists == 0)
     local hasList = #model.lists > 0
-    w.addBox:SetShown(hasList); w.addButton:SetShown(hasList); w.groupButton:SetShown(hasList)
+    w.addAllButton:SetShown(hasList and model.missing > 0)
+    w.addAllButton:SetText(("Add %d from your group and guild"):format(model.missing))
     if model.total == 0 then
         w.message:SetText(#model.lists == 0 and "No lists yet. The guild master starts the ledger with the button below."
-            or "Nobody is on this list yet. Add players below.")
+            or "Nobody is on this list yet. Players in your group and guild can be added with the button below.")
         w.message:Show()
     else
         w.message:Hide()
@@ -161,27 +177,14 @@ function M:Build()
     end)
     w.startButton:Hide()
 
-    -- Adding players: by name, or everyone in your group who isn't on the list yet (the same as `add <name>`, one at a time).
-    w.addBox = CreateFrame("EditBox", nil, w, "InputBoxTemplate")
-    w.addBox:SetSize(130, 22); w.addBox:SetPoint("BOTTOMLEFT", 22, 50); w.addBox:SetAutoFocus(false)
-    w.addButton = button(w, "Add", 50)
-    w.addButton:SetPoint("LEFT", w.addBox, "RIGHT", 6, 0)
-    local function addName()
-        local n = (w.addBox:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
-        if n ~= "" then M.Ctx().commands.handle("add " .. n); w.addBox:SetText(""); M:Refresh() end
-    end
-    w.addButton:SetScript("OnClick", addName)
-    w.addBox:SetScript("OnEnterPressed", addName)
-    w.groupButton = button(w, "Add my group", 110)
-    w.groupButton:SetPoint("LEFT", w.addButton, "RIGHT", 10, 0)
-    w.groupButton:SetScript("OnClick", function()
-        local ctx = M.Ctx()
-        local chain = ctx.engine:Get(M.list or ctx.engine:RaidList() or "main")
-        for _, m in ipairs(ctx.client:roster()) do
-            if not (chain and chain.state.members[m.name]) then ctx.commands.handle("add " .. m.name) end
-        end
+    -- Fill the list from the group and the guild: the same as `addall`.
+    w.addAllButton = button(w, "Add from your group and guild", 260, 24)
+    w.addAllButton:SetPoint("BOTTOMLEFT", 20, 48)
+    w.addAllButton:SetScript("OnClick", function()
+        M.Ctx().commands.handle("addall")
         M:Refresh()
     end)
+
 
     w.practiceButton = button(w, "Practice", 110)
     w.practiceButton:SetPoint("TOPLEFT", 16, -86)

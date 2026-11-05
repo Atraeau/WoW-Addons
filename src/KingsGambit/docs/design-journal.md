@@ -1918,6 +1918,17 @@ the whole time (orange, "PRACTICE"), practice output is printed in chat with a "
 ledger exactly as it was. The window code reads its engine, client and commands from one context, which is the real one or the practice one,
 so every window built later (the bid popup, the officer actions) works in practice with no extra code.
 
+### Decision: the window fills the list from the group and the guild, not from typed names (2026-11-05)
+
+A first window had a box to type a name and an Add button. Nobody wants to type names: the people who should be on the list are the ones in the
+group or the guild. So the window has **one button**, "Add N from your group and guild", where N is how many of them are not on the list yet,
+and it appears only when N is more than 0. It writes the same `AddMember` events as the `add` command (with each player's class), so the same
+rule applies: an officer outside a raid, or the raid's Master Looter inside one; anyone else is told why not. The command form is `addall`.
+Removing and moving someone stay commands for now (they need a reason, which is part of the record).
+
+Practice mode gets a simulated guild too (the raid's players plus guild members who are not in the group, some offline), so this button can
+be tried without a real guild.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

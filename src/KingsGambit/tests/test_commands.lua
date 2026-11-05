@@ -279,3 +279,20 @@ test("practice raids can be any size from a 5-player party to 40, and the practi
     local UI = SK.modules.UI
     eq(UI.Ctx().engine, SK.engine, "without practice the window uses the real engine")
 end)
+
+test("addall puts everyone in the group and the guild on the list, with their classes, and the window counts who is missing", function()
+    local SK, eq = H.SK, H.eq
+    local client = SK.modules.MockClient.New({ name = "Raidlead" })
+    local engine = SK.modules.Engine.New(client)
+    local cmd = SK.modules.Commands.New({ client = client, engine = engine })
+    engine:CreateList("main", "Main")
+    client:setRaid({ { name = "Raidlead", class = "PALADIN" }, { name = "Ann", class = "MAGE" } }, { leader = "Raidlead" })
+    client:setGuild({ { name = "Ann", class = "MAGE" }, { name = "Bob", class = "ROGUE", online = false } })
+    eq(SK.modules.UI.Model(engine, client, "main").missing, 3)
+    cmd.handle("addall")
+    local members = engine:Get("main").state.members
+    eq(members.Bob.class, "ROGUE"); eq(members.Ann.class, "MAGE"); eq(members.Raidlead.class, "PALADIN")
+    eq(SK.modules.UI.Model(engine, client, "main").missing, 0)
+    client.printed = {}; cmd.handle("addall")
+    assert(table.concat(client.printed, " "):find("already on the list"))
+end)

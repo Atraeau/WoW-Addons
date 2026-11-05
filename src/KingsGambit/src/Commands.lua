@@ -99,6 +99,7 @@ local HELP = {
     "  list use [<id>|main] - the list add, move, award and undo change",
     "  create <list> [name] - create a list",
     "  add <name> [top|bottom|N] - add a player to the list",
+    "  addall - add everyone in your group and guild who isn't on the list",
     "  remove <name> - take a player off the list",
     "  move <name> <top|bottom|N> <reason>",
     "  award <name> <item> <reason> - record a win the session didn't",
@@ -275,6 +276,27 @@ function M.New(ctx)
         end
         local ev = append(cur(), "AddMember", data, ("add %s %s<reason>"):format(who, pos ~= "" and (pos .. " ") or ""))
         if ev then out(short(data.member) .. " added.") end
+    end
+
+    -- Everyone in the group and the guild who is not on the list yet, with their classes (the window's button).
+    function cmds.addall()
+        local id = cur()
+        local chain = list(id)
+        if not chain then return out("No list called '" .. id .. "'. Create one with: create " .. id) end
+        local seen, added = {}, 0
+        for _, source in ipairs { client:roster(), client:guildRoster() } do
+            for _, m in ipairs(source) do
+                if m.name and not seen[m.name] and not chain.state.members[m.name] then
+                    seen[m.name] = true
+                    local ev, err = engine:Append(id, "AddMember", { member = m.name, class = m.class })
+                    if not ev then
+                        return out(("Added %d, then stopped: %s"):format(added, why(err)))
+                    end
+                    added = added + 1
+                end
+            end
+        end
+        out(added == 0 and "Everyone in your group and guild is already on the list." or ("Added %d to %s."):format(added, id))
     end
 
     function cmds.remove(args)
