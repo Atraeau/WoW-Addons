@@ -291,13 +291,13 @@ function M:BuildStandings(parent)
     -- scroll box with its scroll bar. If this client's scroll box can't be built, the older scroll frame does the same job.
     local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
     if okInset and inset then
-        inset:SetPoint("TOPLEFT", -2, -28); inset:SetPoint("BOTTOMRIGHT", 2, 52)
+        inset:SetPoint("TOPLEFT", -2, -26); inset:SetPoint("BOTTOMRIGHT", 2, 52)
     end
     p.headers = {}
     for i, c in ipairs(SORTS) do
         local h = CreateFrame("Button", nil, p)
         h:SetSize(i == 2 and 150 or 70, 16)
-        h:SetPoint("TOPLEFT", COLS_X[i], -30)
+        h:SetPoint("TOPLEFT", COLS_X[i] + 6, -31)
         h.text = h:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         h.text:SetPoint("LEFT")
         h.text:SetText(c[2])
@@ -333,11 +333,11 @@ function M:BuildStandings(parent)
     p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.countText:SetPoint("BOTTOMLEFT", 4, 4)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    p.message:SetPoint("TOPLEFT", 8, -34); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
+    p.message:SetPoint("TOPLEFT", 14, -64); p.message:SetWidth(330); p.message:SetJustifyH("LEFT"); p.message:Hide()
 
     -- First run: the guild master founds the ledger (the same as `create main`; the ledger records who did it as the guild master).
     p.startButton = button(p, "Start the ledger", 160, 26)
-    p.startButton:SetPoint("TOP", 0, -90)
+    p.startButton:SetPoint("TOP", 0, -130)
     p.startButton:SetScript("OnClick", function() M:Command("create main Main"); M.list = "main"; M:Refresh() end)
     p.startButton:Hide()
 
@@ -354,7 +354,7 @@ function M:Build()
     local ok, w = pcall(CreateFrame, "Frame", "KingsGambitWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
     M.building = w -- (hidden again if building the rest fails, so a half-built window is never left on screen)
-    w:SetSize(420, 690)
+    w:SetSize(420, 640)
     w:SetPoint("CENTER")
     w:SetFrameStrata("DIALOG")
     w:SetMovable(true); w:EnableMouse(true)
