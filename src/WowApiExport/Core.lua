@@ -4,7 +4,7 @@
 -- This is the authoritative, client-confirmed API surface -- no external assumptions.
 --
 -- Usage:
---   1. Log in with this addon enabled (it auto-builds on login), or run /apiexport.
+--   1. Run /apiexport (or /wowapiexport) when you want a fresh dump. It does not run at login.
 --   2. /reload   (SavedVariables are only flushed to disk on reload/logout)
 --   3. Read WTF/Account/<acct>/SavedVariables/WowApiExport.lua
 --
@@ -253,11 +253,7 @@ local function Build()
 	print("   Now type |cffffd100/reload|r to flush SavedVariables to disk.")
 end
 
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_LOGIN")
-frame:SetScript("OnEvent", function()
-	C_Timer.After(2, Build)
-end)
-
+-- It only runs when asked: it takes a moment and rewrites a large saved variable, so it is not done at every login.
 SLASH_APIEXPORT1 = "/apiexport"
+SLASH_APIEXPORT2 = "/wowapiexport"
 SlashCmdList["APIEXPORT"] = Build

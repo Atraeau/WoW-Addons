@@ -9,7 +9,7 @@ any external assumption.
 
 1. **Export from the client** — in game, with the `WowApiExport` addon enabled:
    ```
-   /apiexport      (it also runs automatically on login)
+   /apiexport      (or /wowapiexport; it only runs when you type it)
    /reload         (SavedVariables only flush to disk on reload/logout)
    ```
    This writes `WTF/Account/<acct>/SavedVariables/WowApiExport.lua`, containing a
