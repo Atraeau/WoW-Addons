@@ -238,11 +238,11 @@ function M:Refresh()
     if not selectedRow then M.selected = nil end
     p.selText:SetText(selectedRow and ("Selected: " .. selectedRow.name .. "  (place " .. selectedRow.pos .. " of " .. model.total .. ")")
         or "Click a player in the list to act on them.")
-    for _, b in ipairs(p.actionButtons) do b:SetEnabled(selectedRow ~= nil) end
-    -- only someone who may write sees the controls
+    -- everyone sees the controls; only someone who may write can use them
     local may = model.mayWrite
-    setShown(p.barLabel, may); setShown(p.reason, may); setShown(p.hint, not may)
-    for _, b in ipairs(p.actionButtons) do setShown(b, may) end
+    setShown(p.hint, not may)
+    if p.reason.SetEnabled then p.reason:SetEnabled(may) end
+    for _, b in ipairs(p.actionButtons) do b:SetEnabled(may and selectedRow ~= nil) end
     local hasList = #model.lists > 0
     setShown(p.startButton, not hasList)
     setShown(p.addAllButton, hasList and model.missing > 0)
@@ -372,7 +372,7 @@ function M:BuildStandings(parent)
     -- scroll box with its scroll bar. If this client's scroll box can't be built, the older scroll frame does the same job.
     local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
     if okInset and inset then
-        inset:SetPoint("TOPLEFT", -2, -26); inset:SetPoint("BOTTOMRIGHT", 2, 124)
+        inset:SetPoint("TOPLEFT", -2, -26); inset:SetPoint("BOTTOMRIGHT", 2, 142)
     end
     p.headers = {}
     for i, c in ipairs(SORTS) do
@@ -392,7 +392,7 @@ function M:BuildStandings(parent)
         local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
         local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
         box:SetPoint("TOPLEFT", 4, -50)
-        box:SetPoint("BOTTOMRIGHT", -22, 128)
+        box:SetPoint("BOTTOMRIGHT", -22, 146)
         bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
         bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
         local view = CreateScrollBoxListLinearView()
@@ -405,7 +405,7 @@ function M:BuildStandings(parent)
         local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
         if not ok or not scroll then scroll = CreateFrame("ScrollFrame", nil, p) end
         scroll:SetPoint("TOPLEFT", 4, -50)
-        scroll:SetPoint("BOTTOMRIGHT", -26, 128)
+        scroll:SetPoint("BOTTOMRIGHT", -26, 146)
         p.child = CreateFrame("Frame", nil, scroll)
         p.child:SetSize(340, 1)
         scroll:SetScrollChild(p.child)
@@ -428,10 +428,10 @@ function M:BuildStandings(parent)
     local rl = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     rl:SetPoint("BOTTOMLEFT", 6, 82); rl:SetText("Reason:")
     p.barLabel = rl
-    -- Someone who may not change the list (not an officer, and not the raid's Master Looter) sees this instead of the buttons.
+    -- Someone who may not change the list (not an officer, and not the raid's Master Looter) still sees the buttons, greyed out, and this line saying why.
     p.hint = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    p.hint:SetPoint("BOTTOMLEFT", 6, 56); p.hint:SetWidth(360); p.hint:SetHeight(44); p.hint:SetJustifyH("LEFT"); p.hint:SetJustifyV("TOP"); p.hint:SetWordWrap(true)
-    p.hint:SetText("Only officers, and the Master Looter of a raid, can change the list. During a raid you can ask the Master Looter: Tools, then Rules and requests.")
+    p.hint:SetPoint("BOTTOMLEFT", 6, 126); p.hint:SetWidth(360); p.hint:SetJustifyH("LEFT"); p.hint:SetWordWrap(false)
+    p.hint:SetText("|cffff8040You can't change the list: only officers, and a raid's Master Looter, can. Ask via Tools.|r")
     p.reason = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
     p.reason:SetSize(290, 20); p.reason:SetPoint("BOTTOMLEFT", 56, 78); p.reason:SetAutoFocus(false)
     p.actionButtons = {}
