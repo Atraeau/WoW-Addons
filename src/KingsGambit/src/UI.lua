@@ -9,7 +9,7 @@ local _, SK = ...
 local Identity, Sim, Commands
 local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?" }, function(d) Identity, Sim, Commands = d.Identity, d.Sim, d.Commands end)
 
-local ROWS = 15
+local ROWS = 14
 
 -- What the window shows for one list. listId nil = the list the viewer's raid plays on, else main.
 function M.Model(engine, client, listId, page)
@@ -77,7 +77,7 @@ function M:Refresh()
     if M.practice then sub = "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" end
     w.subtitle:SetText(sub)
     w.practiceButton:SetText(M.practice and "Leave practice" or "Practice")
-    w.sizeButton:SetText((M.practice and "Group: " or "Practice group: ") .. M.size)
+    w.sizeButton:SetText((M.practice and "Group: " or "Practice with: ") .. M.size)
     w.pageText:SetText(("Page %d of %d  (%d on the list)"):format(model.page, model.pages, model.total))
     for i = 1, ROWS do
         local row, r = w.rows[i], model.rows[i]
@@ -111,7 +111,7 @@ function M:Build()
     -- BasicFrameTemplateWithInset gives a title bar and close button; fall back to a plain frame if this client lacks it.
     local ok, w = pcall(CreateFrame, "Frame", "KingsGambitWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
-    w:SetSize(380, 470)
+    w:SetSize(380, 500)
     w:SetPoint("CENTER")
     w:SetFrameStrata("DIALOG")
     w:SetMovable(true); w:EnableMouse(true)
@@ -145,16 +145,16 @@ function M:Build()
     w.rows = {}
     for i = 1, ROWS do
         local f = w:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-        f:SetPoint("TOPLEFT", 20, -90 - (i - 1) * 22)
+        f:SetPoint("TOPLEFT", 20, -122 - (i - 1) * 22)
         f:SetJustifyH("LEFT"); f:SetWidth(340); f:SetWordWrap(false)
         w.rows[i] = f
     end
     w.message = w:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    w.message:SetPoint("TOPLEFT", 20, -90); w.message:SetWidth(340); w.message:SetJustifyH("LEFT"); w.message:Hide()
+    w.message:SetPoint("TOPLEFT", 20, -122); w.message:SetWidth(340); w.message:SetJustifyH("LEFT"); w.message:Hide()
 
     -- First run: the guild master founds the ledger (the same as `create main`; the ledger records who did it as the guild master).
     w.startButton = button(w, "Start the ledger", 160, 26)
-    w.startButton:SetPoint("TOP", 0, -130)
+    w.startButton:SetPoint("TOP", 0, -170)
     w.startButton:SetScript("OnClick", function()
         M.Ctx().commands.handle("create main Main")
         M.list = "main"; M:Refresh()
@@ -184,14 +184,14 @@ function M:Build()
     end)
 
     w.practiceButton = button(w, "Practice", 110)
-    w.practiceButton:SetPoint("TOPRIGHT", -16, -54)
+    w.practiceButton:SetPoint("TOPLEFT", 16, -86)
     w.practiceButton:SetScript("OnClick", function()
         if M.practice then M:LeavePractice() else M:StartPractice() end
     end)
 
     -- How many players the simulated group has (a 5-player party up to a 40-player raid). Changing it restarts practice.
-    w.sizeButton = button(w, "Group: 40", 130)
-    w.sizeButton:SetPoint("RIGHT", w.practiceButton, "LEFT", -6, 0)
+    w.sizeButton = button(w, "Group: 40", 170)
+    w.sizeButton:SetPoint("LEFT", w.practiceButton, "RIGHT", 6, 0)
     w.sizeButton:SetScript("OnClick", function()
         for i, n in ipairs(M.SIZES) do
             if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end

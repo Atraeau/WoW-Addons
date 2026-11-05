@@ -266,7 +266,7 @@ test("the window shows the list the viewer's raid plays on, in order, with the v
     eq(UI.Model(engine, client, "nope").total, 0, "a list that doesn't exist shows nothing, not an error")
     for i = 1, 40 do engine:Append("main", "AddMember", { member = "P" .. i, class = "MAGE" }) end
     m = UI.Model(engine, client, "main", 99)
-    eq(m.pages, 3); eq(m.page, 3, "a page past the end is the last page"); eq(#m.rows, 13)
+    eq(m.pages, 4); eq(m.page, 4, "a page past the end is the last page"); eq(#m.rows, 1)
 end)
 
 test("practice raids can be any size from a 5-player party to 40, and the practice engine is separate from the real one", function()
