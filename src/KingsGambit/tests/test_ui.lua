@@ -85,3 +85,43 @@ test("the window builds and refreshes on every tab, in practice and out, without
     UI.window, UI.practice = nil, nil
     assert(ok, tostring(err))
 end)
+
+H.section("Window: the Tools forms")
+local UITools = SK.modules.UITools
+test("a form composes the command a person would type, and says what is missing", function()
+    local a = UITools.Find("raidopen")
+    eq(UITools.Compose(a, { ml = "Aldric Stormwind", hours = "4", list = "naxx" }), "raid open Aldric_Stormwind 4 list naxx")
+    eq(UITools.Compose(a, { ml = "Aldric" }), "raid open Aldric", "optional fields are left out, with their keyword")
+    local mv = UITools.Find("move")
+    eq(UITools.Compose(mv, { name = "Ann Lee", pos = "top", reason = "fixed a mistake" }), "move Ann_Lee top fixed a mistake")
+    local text, missing = UITools.Compose(mv, { name = "Ann", pos = "top" })
+    eq(text, nil); eq(missing, "Reason")
+    eq(UITools.Compose(UITools.Find("undo"), {}), "undo yes")
+    eq(UITools.Compose(UITools.Find("eligibles"), {}), "eligible", "an empty optional field gives the bare command")
+end)
+
+test("every form's command is a command that exists, and every action has a unique id", function()
+    local client = SK.modules.MockClient.New({ name = "Me" })
+    local cmd = Commands.New({ client = client, engine = SK.modules.Engine.New(client) })
+    local seen = {}
+    for _, g in ipairs(UITools.GROUPS) do
+        assert(#g.actions <= 12, g.title .. " has more actions than the window shows")
+        for _, a in ipairs(g.actions) do
+            assert(not seen[a.id], "duplicate action " .. a.id); seen[a.id] = true
+            assert(#a.fields <= 4, a.id .. " has more fields than the window shows")
+            assert(cmd.commands[a.cmd[1]:match("^(%S+)")], a.id .. " runs a command that doesn't exist: " .. a.cmd[1])
+        end
+    end
+end)
+
+test("a command run from the window is shown at its foot, and a refusal says why", function()
+    local client = SK.modules.MockClient.New({ name = "Me" })
+    local engine = SK.modules.Engine.New(client)
+    local saved = { client = SK.client, engine = SK.engine, commands = SK.commands, host = SK.host, player = SK.player }
+    SK.client, SK.engine, SK.commands, SK.host, SK.player = client, engine, Commands.New({ client = client, engine = engine }), nil, nil
+    UI.practice = nil
+    UI:Command("history")
+    SK.client, SK.engine, SK.commands, SK.host, SK.player = saved.client, saved.engine, saved.commands, saved.host, saved.player
+    assert(UI.OutputText():find("> history", 1, true), UI.OutputText())
+    assert(#UI.log >= 2, "the command's answer was captured")
+end)

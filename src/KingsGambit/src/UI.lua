@@ -7,9 +7,9 @@
 --   M.Model(engine, client, listId, page)  pure: what the Standings tab shows (rows, paging, lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot" }, function(d)
-    Identity, Sim, Commands, UILoot = d.Identity, d.Sim, d.Commands, d.UILoot
+local Identity, Sim, Commands, UILoot, UITools
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools
 end)
 
 local ROWS = 14
@@ -99,10 +99,31 @@ function M:PracticeWait(sec)
     if p then p.sim:advance(sec); M:Refresh() end
 end
 
--- A button runs the same command a player would type; the answer is printed in chat as always.
+-- What the commands have said lately, shown at the foot of the window (they still print in chat as well).
+M.log = {}
+local function remember(text)
+    M.log[#M.log + 1] = tostring(text)
+    while #M.log > 5 do table.remove(M.log, 1) end
+end
+
+-- A button runs the same command a player would type; the answer is shown at the foot of the window and printed in chat as always.
 function M:Command(text)
-    M.Ctx().commands.handle(text)
+    local ctx = M.Ctx()
+    local client = ctx.client
+    local original = client.print
+    M.log = { "> " .. text }
+    client.print = function(self, line) remember(line); return original(self, line) end
+    local ok, err = pcall(ctx.commands.handle, text)
+    client.print = original
+    if not ok then remember("error: " .. tostring(err)) end
     M:Refresh()
+end
+
+-- Lines for the output area: the newest few, each trimmed of the game's colour codes.
+function M.OutputText()
+    local lines = {}
+    for i, l in ipairs(M.log) do lines[i] = (l:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")) end
+    return table.concat(lines, "\n")
 end
 
 local function nextList(lists, current)
@@ -112,7 +133,7 @@ local function nextList(lists, current)
     return lists[1]
 end
 
-local TABS = { { "standings", "Standings" }, { "loot", "Loot" } }
+local TABS = { { "standings", "Standings" }, { "loot", "Loot" }, { "tools", "Tools" } }
 
 local function setShown(frame, on) if on then frame:Show() else frame:Hide() end end
 
@@ -127,7 +148,9 @@ function M:Refresh()
         w.tabButtons[t[1]]:SetEnabled(M.tab ~= t[1])
         setShown(w.pages[t[1]], M.tab == t[1])
     end
+    w.output:SetText(M.OutputText())
     if M.tab == "loot" then return UILoot.Refresh(w.pages.loot, ctx, M) end
+    if M.tab == "tools" then return UITools.Refresh(w.pages.tools, ctx, M) end
     local p = w.pages.standings
     local model = M.Model(ctx.engine, ctx.client, self.list, self.page)
     self.list, self.page = model.list, model.page
@@ -211,7 +234,7 @@ function M:Build()
     -- BasicFrameTemplateWithInset gives a title bar and close button; fall back to a plain frame if this client lacks it.
     local ok, w = pcall(CreateFrame, "Frame", "KingsGambitWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
-    w:SetSize(420, 600)
+    w:SetSize(420, 690)
     w:SetPoint("CENTER")
     w:SetFrameStrata("DIALOG")
     w:SetMovable(true); w:EnableMouse(true)
@@ -257,8 +280,12 @@ function M:Build()
     end
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 16, -112)
-    content:SetPoint("BOTTOMRIGHT", -16, 16)
-    w.pages = { standings = M:BuildStandings(content), loot = UILoot.Build(content, M) }
+    content:SetPoint("BOTTOMRIGHT", -16, 92)
+    w.pages = { standings = M:BuildStandings(content), loot = UILoot.Build(content, M), tools = UITools.Build(content, M) }
+    -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
+    w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    w.output:SetPoint("BOTTOMLEFT", 20, 18); w.output:SetWidth(380); w.output:SetHeight(66)
+    w.output:SetJustifyH("LEFT"); w.output:SetJustifyV("TOP"); w.output:SetWordWrap(true)
 
     -- Keep it current while it is open: the ledger changes as other players' updates arrive, and a practice raid's clock runs.
     local elapsed = 0

@@ -2,7 +2,7 @@
 local H = { passed = 0, failed = 0 }
 -- The registry first; the modules in any order (they declare their dependencies; see Registry.lua).
 H.MODULES = { "Hash", "Identity", "Version", "Schemas", "Migrations", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "ItemFit", "Loot", "SimNetwork", "Sync",
-    "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios", "UILoot", "UI" }
+    "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Sim", "Scenarios", "UILoot", "UITools", "UI" }
 function H.load(files)
     local SK = {}
     assert(loadfile("src/Registry.lua"))("KingsGambit", SK)
