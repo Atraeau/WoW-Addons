@@ -194,8 +194,8 @@ function M.Build(parent, ui)
     f.turn:SetPoint("BOTTOMLEFT", 4, 92); f.turn:SetWidth(370); f.turn:SetJustifyH("LEFT")
     f.turnButtons = {}
     for i = 1, 6 do
-        local b = button(f, "", 70, 22)
-        b:SetPoint("BOTTOMLEFT", 4 + (i - 1) * 74, 66)
+        local b = button(f, "", 62, 22)
+        b:SetPoint("BOTTOMLEFT", 4 + (i - 1) * 64, 66)
         Tips.Attach(b, function()
             local label = b:GetText() or ""
             local id = label:find("^Item") and "pick" or ({ Skip = "skip", Claim = "claim", Decline = "decline", Give = "give", Keep = "keep", Withdraw = "withdraw" })[label]
@@ -204,8 +204,26 @@ function M.Build(parent, ui)
         end)
         f.turnButtons[i] = b
     end
+    -- Who gets a gift you won: chosen from the group (typing a name stays only as the fallback). It sits left of the Give, Keep and Withdraw buttons.
+    local okDrop, drop = pcall(CreateFrame, "DropdownButton", nil, f, "WowStyle1DropdownTemplate")
+    if okDrop and drop and drop.SetupMenu then
+        drop:SetWidth(136); drop:SetPoint("BOTTOMLEFT", 4, 65)
+        drop:SetDefaultText("Choose a player")
+        drop:SetupMenu(function(_, root)
+            local ctx = f.ctx
+            if not ctx then return end
+            local me = ctx.client:me()
+            if root.SetScrollMode then root:SetScrollMode(260) end
+            for _, m in ipairs(ctx.client:roster()) do
+                if m.name ~= me then
+                    root:CreateRadio((m.name:gsub("_", " ")), function() return f.recipientPick == m.name end, function() f.recipientPick = m.name end)
+                end
+            end
+        end)
+        f.recipientDrop = drop
+    end
     f.recipient = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
-    f.recipient:SetSize(110, 20); f.recipient:SetPoint("BOTTOMLEFT", 12, 66); f.recipient:SetAutoFocus(false)
+    f.recipient:SetSize(110, 20); f.recipient:SetPoint("BOTTOMLEFT", 8, 66); f.recipient:SetAutoFocus(false)
 
     -- the Master Looter's controls
     f.mlButtons = {}
@@ -264,7 +282,7 @@ function M.Refresh(f, ctx, ui)
             row.id = it.id
             row.tip = it.tip
             local label = ("%d. %s"):format(i, M.Display(it.link, it.tip))
-            if it.status ~= "awarded" and it.canBid == false then label = label .. "   |cff999999(not for your class: pass or gift)|r" end
+            if it.status ~= "awarded" and it.canBid == false then label = label .. "   |cff999999(not for you)|r" end
             if it.status == "awarded" then label = label .. ("   -> %s%s"):format(it.winner or "?", (it.to and it.to ~= it.winner) and (" (for " .. it.to .. ")") or "")
             elseif it.status == "de" then label = label .. "   -> disenchanted" end
             row.canBid = it.canBid
@@ -285,6 +303,8 @@ function M.Refresh(f, ctx, ui)
     -- your turn
     for _, b in ipairs(f.turnButtons) do b:Hide() end
     f.recipient:Hide()
+    if f.recipientDrop then f.recipientDrop:Hide() end
+    f.ctx = ctx
     local t = m.turn
     if not t then
         f.turn:SetText("")
@@ -306,12 +326,19 @@ function M.Refresh(f, ctx, ui)
         b1:SetText("Claim"); b1:SetScript("OnClick", function() ui:Command("claim") end); b1:Show()
         b2:SetText("Decline"); b2:SetScript("OnClick", function() ui:Command("decline") end); b2:Show()
     elseif t.type == "recipient" then
-        f.turn:SetText("You won " .. (t.itemLink or "a gift") .. ". Who gets it? Type a name, keep it, or withdraw (counts as a pass).")
-        f.recipient:Show()
-        local b1, b2, b3 = f.turnButtons[2], f.turnButtons[3], f.turnButtons[4]
+        f.turn:SetText("You won " .. (t.itemLink or "a gift") .. ". Who gets it? Choose a player, keep it, or withdraw (counts as a pass).")
+        if f.recipientDrop then
+            if f.recipientShown ~= tostring(f.recipientPick) then f.recipientShown = tostring(f.recipientPick); f.recipientDrop:GenerateMenu() end
+            f.recipientDrop:Show()
+        else
+            f.recipient:Show()
+        end
+        -- the three buttons sit right of the dropdown (or of the box)
+        local b1, b2, b3 = f.turnButtons[4], f.turnButtons[5], f.turnButtons[6]
         b1:SetText("Give"); b1:SetScript("OnClick", function()
-            local n = (f.recipient:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
-            if n ~= "" then ui:Command("recipient " .. n); f.recipient:SetText("") end
+            if f.recipientDrop and not f.recipientPick then return ui.Say("Choose who gets it from the dropdown first.") end
+            local n = f.recipientDrop and f.recipientPick or (f.recipient:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
+            if n and n ~= "" then ui:Command("recipient " .. n); f.recipientPick = nil; f.recipient:SetText("") end
         end); b1:Show()
         b2:SetText("Keep"); b2:SetScript("OnClick", function() ui:Command("keep") end); b2:Show()
         b3:SetText("Withdraw"); b3:SetScript("OnClick", function() ui:Command("withdraw yes") end); b3:Show()
