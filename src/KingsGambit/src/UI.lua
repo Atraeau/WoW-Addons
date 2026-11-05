@@ -227,7 +227,6 @@ function M:Refresh()
         p.headers[i].text:SetText(c[2] .. ((M.sortKey == c[1]) and (M.sortDesc and "  v" or "  ^") or ""))
     end
     if p.listDrop and p.shownList ~= model.list then p.shownList = model.list; p.listDrop:GenerateMenu() end
-    M.FillRows(p, model.rows)
     -- the player selected, if they are on this list; the places let Up and Down work out where to move them
     M.places = {}
     local selectedRow
@@ -236,7 +235,12 @@ function M:Refresh()
         if r.who == M.selected then selectedRow = r end
     end
     if not selectedRow then M.selected = nil end
-    p.selText:SetText(selectedRow and ("Selected: " .. selectedRow.name .. "  (place " .. selectedRow.pos .. " of " .. model.total .. ")")
+    M.total = model.total
+    if M.pending and (not selectedRow or M.pending.who ~= selectedRow.who) then M.pending = nil end
+    M.FillRows(p, M.Preview(model.rows))
+    local staged = M.pending
+    p.selText:SetText(selectedRow and (staged and ("Moving " .. selectedRow.name .. " from place " .. selectedRow.pos .. " to " .. staged.to .. ": press Apply move")
+        or ("Selected: " .. selectedRow.name .. "  (place " .. selectedRow.pos .. " of " .. model.total .. ")"))
         or "Click a player in the list to act on them.")
     -- everyone sees the controls; only someone who may write can use them
     local may = model.mayWrite
@@ -244,6 +248,9 @@ function M:Refresh()
     setShown(p.hint, not may)
     if p.reason.SetEnabled then p.reason:SetEnabled(may) end
     for _, b in ipairs(p.actionButtons) do b:SetEnabled(may and selectedRow ~= nil) end
+    p.apply:SetEnabled(may and staged ~= nil); p.cancelMove:SetEnabled(may and staged ~= nil)
+    p.setPlace:SetEnabled(may and selectedRow ~= nil)
+    if p.placeBox.SetEnabled then p.placeBox:SetEnabled(may and selectedRow ~= nil) end
     local hasList = #model.lists > 0
     setShown(p.startButton, not hasList)
     setShown(p.addAllButton, hasList and model.missing > 0)
@@ -269,13 +276,23 @@ local function className(class) return class and (class:sub(1, 1) .. class:sub(2
 
 -- Fill one row (a Button) with a player: made once, reused by the scroll box as it scrolls.
 function M.InitRow(row, r)
+    row.rowData = r
     if row.SetScript then row:SetScript("OnClick", function() M.selected = r.who; M:Refresh() end) end
+    -- Drag a player onto another row to stage a move to that place (only for someone who may change the list).
+    if row.RegisterForDrag then
+        row:RegisterForDrag("LeftButton")
+        row:SetScript("OnDragStart", function() if M.may then M.dragging = r.who; M.selected = r.who end end)
+        row:SetScript("OnDragStop", function() M.DropOn(M.RowUnderCursor()) end)
+    end
     if not row.hl and row.CreateTexture then
         row.hl = row:CreateTexture(nil, "BACKGROUND")
         row.hl:SetAllPoints()
         row.hl:SetColorTexture(1, 0.82, 0, 0.2)
     end
-    if row.hl then if M.selected == r.who then row.hl:Show() else row.hl:Hide() end end
+    if row.hl then
+        if r.moving then row.hl:SetColorTexture(0.3, 0.6, 1, 0.35) else row.hl:SetColorTexture(1, 0.82, 0, 0.2) end
+        if M.selected == r.who or r.moving then row.hl:Show() else row.hl:Hide() end
+    end
     if not row.cells then
         row.cells = {}
         for c = 1, 4 do
@@ -286,10 +303,76 @@ function M.InitRow(row, r)
             row.cells[c] = fs
         end
     end
-    row.cells[1]:SetText(tostring(r.pos))
-    row.cells[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or ""))
+    row.cells[1]:SetText(tostring(r.shown or r.pos))
+    row.cells[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or "") .. (r.moving and ("  |cff66aaff(from " .. r.pos .. ")|r") or ""))
     row.cells[3]:SetText(className(r.class))
     row.cells[4]:SetText(tostring(r.wins))
+end
+
+-- A staged move: the selected player and the place they would take. Nothing is written to the ledger until it is applied.
+M.pending = nil
+
+-- The rows as they would be with the staged move done (the player shown at their new place, marked as moving).
+function M.Preview(rows)
+    local pend = M.pending
+    if not pend then return rows end
+    local rest, mover = {}, nil
+    for _, r in ipairs(rows) do
+        if r.who == pend.who then mover = r else rest[#rest + 1] = r end
+    end
+    if not mover then return rows end
+    local copy = {}
+    for k, v in pairs(mover) do copy[k] = v end
+    copy.moving = true
+    table.insert(rest, math.min(math.max(pend.to, 1), #rest + 1), copy)
+    local out = {}
+    for i, r in ipairs(rest) do
+        local c = {}
+        for k, v in pairs(r) do c[k] = v end
+        c.shown = i
+        out[i] = c
+    end
+    return out
+end
+
+-- Stage a move of the selected player to a place (it is only a preview). A place they already hold clears it.
+function M.Stage(to)
+    local who = M.selected
+    local place = who and M.places and M.places[who]
+    if not place then return end
+    to = math.floor(math.max(1, math.min(M.total or place, tonumber(to) or place)))
+    if to == place then M.pending = nil else M.pending = { who = who, to = to } end
+    M:Refresh()
+end
+
+-- The command for the staged move, or nil and what is wrong.
+function M.MoveCommand(reason)
+    local pend = M.pending
+    if not pend then return nil, "There is no staged move: pick a place for the selected player first." end
+    reason = (tostring(reason or ""):gsub("^%s+", ""):gsub("%s+$", ""))
+    if reason == "" then return nil, "A move needs a reason: it is part of the record. Type it in the Reason box." end
+    return ("move %s %d %s"):format(pend.who, pend.to, reason)
+end
+
+-- The player's row under the mouse (a drag ended there), if any.
+function M.RowUnderCursor()
+    local f = GetMouseFoci and GetMouseFoci()
+    if type(f) == "table" then f = f[1] end
+    if not f and GetMouseFocus then f = GetMouseFocus() end
+    while f do
+        if f.rowData then return f.rowData end
+        f = f.GetParent and f:GetParent() or nil
+    end
+end
+
+-- Dropping the dragged player on a row stages a move to that row's place.
+function M.DropOn(r)
+    local who = M.dragging
+    M.dragging = nil
+    if who and r then
+        M.selected = who
+        M.Stage(r.shown or r.pos)
+    end
 end
 
 -- The rows in the order chosen by a column header (the list's own order unless one was clicked).
@@ -415,7 +498,7 @@ function M:BuildStandings(parent)
         p.scroll, p.lines = scroll, {}
     end
     p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    p.countText:SetPoint("BOTTOMLEFT", 4, 4)
+    p.countText:SetPoint("BOTTOMRIGHT", -6, 6)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     p.message:SetPoint("TOPLEFT", 14, -64); p.message:SetWidth(330); p.message:SetJustifyH("LEFT"); p.message:Hide()
 
@@ -439,27 +522,23 @@ function M:BuildStandings(parent)
     p.reason = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
     p.reason:SetSize(290, 20); p.reason:SetPoint("BOTTOMLEFT", 56, 78); p.reason:SetAutoFocus(false)
     p.actionButtons = {}
-    local function selected() return M.selected end
-    local function reasonText() return (p.reason:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", "") end
-    local function move(target)
-        local who = selected(); if not who then return end
-        local reason = reasonText()
-        if reason == "" then return M.Say("A move needs a reason: it is part of the record. Type it in the Reason box.") end
-        local place = M.places and M.places[who]
-        local where = target
-        if target == "up" then where = place and math.max(1, place - 1) elseif target == "down" then where = place and (place + 1) end
-        if not where then return end
-        M:Command(("move %s %s %s"):format(who, where, reason))
+    local function trim(t) return (tostring(t or ""):gsub("^%s+", ""):gsub("%s+$", "")) end
+    local function stageBy(delta)
+        local who = M.selected
+        local place = who and M.places and M.places[who]
+        if not place then return end
+        M.Stage(((M.pending and M.pending.who == who) and M.pending.to or place) + delta)
     end
+    -- Up, Down, Top, Bottom and the place box only stage a move (a preview); Apply move records it as one entry.
     local ACTIONS = {
-        { "Top", function() move("top") end }, { "Up", function() move("up") end }, { "Down", function() move("down") end },
-        { "Bottom", function() move("bottom") end },
+        { "Top", function() M.Stage(1) end }, { "Up", function() stageBy(-1) end }, { "Down", function() stageBy(1) end },
+        { "Bottom", function() M.Stage(M.total or 1) end },
         { "Remove", function()
-            local who = selected(); if not who then return end
-            local reason = reasonText()
+            local who = M.selected; if not who then return end
+            local reason = trim(p.reason:GetText())
             M:Command(("remove %s%s"):format(who, reason ~= "" and (" " .. reason) or ""))
         end },
-        { "Award...", function() if selected() then M.OpenTool("award", selected()) end end },
+        { "Award...", function() if M.selected then M.OpenTool("award", M.selected) end end },
     }
     for i, a in ipairs(ACTIONS) do
         local b = button(p, a[1], 56, 22)
@@ -471,10 +550,38 @@ function M:BuildStandings(parent)
         end)
         p.actionButtons[i] = b
     end
+    -- Where to: a place number (or drag a player onto a row), then apply or cancel.
+    local pl = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    pl:SetPoint("BOTTOMLEFT", 6, 31); pl:SetText("To place:")
+    p.placeBox = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
+    p.placeBox:SetSize(34, 20); p.placeBox:SetPoint("BOTTOMLEFT", 62, 26); p.placeBox:SetAutoFocus(false); p.placeBox:SetMaxLetters(3)
+    p.setPlace = button(p, "Set", 40, 22)
+    p.setPlace:SetPoint("BOTTOMLEFT", 102, 25)
+    p.setPlace:SetScript("OnClick", function()
+        local n = tonumber(p.placeBox:GetText())
+        if n then M.Stage(n); p.placeBox:SetText("") end
+    end)
+    p.apply = button(p, "Apply move", 96, 22)
+    p.apply:SetPoint("BOTTOMLEFT", 150, 25)
+    p.apply:SetScript("OnClick", function()
+        local text, problem = M.MoveCommand(p.reason:GetText())
+        if not text then return M.Say(problem) end
+        M.pending = nil
+        M:Command(text)
+    end)
+    p.cancelMove = button(p, "Cancel", 60, 22)
+    p.cancelMove:SetPoint("BOTTOMLEFT", 250, 25)
+    p.cancelMove:SetScript("OnClick", function() M.pending = nil; M:Refresh() end)
+    local why = function()
+        if M.may == false then return "You can't use this: only officers, and a raid's Master Looter, can change the list." end
+    end
+    Tips.Attach(p.placeBox, "place"); Tips.Attach(p.setPlace, "place", why)
+    Tips.Attach(p.apply, "apply", function() return why() or (not M.pending and "Nothing is staged: choose a place first.") or nil end)
+    Tips.Attach(p.cancelMove, "cancelmove", why)
 
     -- Fill the list from the group and the guild: the same as `addall`.
-    p.addAllButton = button(p, "Add from your group and guild", 260, 24)
-    p.addAllButton:SetPoint("BOTTOMLEFT", 4, 24)
+    p.addAllButton = button(p, "Add from your group and guild", 240, 22)
+    p.addAllButton:SetPoint("BOTTOMLEFT", 4, 1)
     p.addAllButton:SetScript("OnClick", function() M:Command("addall") end)
     Tips.Attach(p.addAllButton, "addall", function()
         if M.may == false then return "You can't use this: only officers, and a raid's Master Looter, can change the list." end

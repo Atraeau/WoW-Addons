@@ -1965,6 +1965,11 @@ check the engine makes), with a line saying why, so a missing permission reads a
 Every button has a tooltip that says in full what it does: the rule behind it, what it costs a player's place, who may use it (`UITips`).
 A greyed-out button's tooltip also says why (no permission, nobody selected, your class can't have the item), so a disabled control is never a mystery.
 
+**A move is staged, then applied once.** The ledger records every move, so a move made one step at a time (Up, Up, Up...) left a trail of entries for one
+intention. In Standings, Up, Down, Top, Bottom, a typed place number and dragging a row onto another only change a *preview* (the selected player is shown at
+the place they would take, marked as moving); nothing is written. **Apply move** then writes a single `move` entry, with the reason, and *Cancel* drops the
+preview. One intention, one entry, one reason. (Remove and Award stay immediate: each is one entry already.)
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

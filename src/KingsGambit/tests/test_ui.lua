@@ -267,3 +267,40 @@ test("every button has a tooltip with a title and an explanation, and a greyed-o
     _G.GameTooltip = saved
     assert(lines[1] == "Need (main spec)" and lines[#lines]:find("because", 1, true), table.concat(lines, "|"))
 end)
+
+H.section("Window: staged moves")
+test("Up, Down, a typed place and a drop only stage a move; Apply writes exactly one entry", function()
+    local sim, cmd, ctx = practice(5)
+    local saved = { practice = UI.practice, selected = UI.selected, pending = UI.pending }
+    UI.practice, UI.pending = ctx, nil
+    local before = #sim.engine:Get("main").events
+    local order = sim.engine:Get("main").state.order
+    local who = order[2]
+    local model = UI.Model(sim.engine, sim.client, "main")
+    UI.selected, UI.places, UI.total, UI.may = who, {}, model.total, true
+    for _, r in ipairs(model.rows) do UI.places[r.who] = r.pos end
+    -- (the window's own Refresh needs frames; the staging logic is what is under test)
+    local function stage(to)
+        local place = UI.places[who]
+        to = math.floor(math.max(1, math.min(UI.total, to)))
+        UI.pending = (to ~= place) and { who = who, to = to } or nil
+    end
+    stage(4); stage(5); stage(4)
+    eq(UI.pending.to, 4)
+    local preview = UI.Preview(model.rows)
+    eq(preview[4].who, who, "the player is shown at the staged place"); assert(preview[4].moving); eq(preview[4].pos, 2, "and remembers where they were")
+    eq(preview[1].who, order[1]); eq(preview[2].who, order[3], "the others close up")
+    eq(#sim.engine:Get("main").events, before, "nothing was written while staging")
+    local text, problem = UI.MoveCommand("  ")
+    eq(text, nil); assert(problem:find("reason"), problem)
+    text = UI.MoveCommand("fixed after a failed hand-out")
+    eq(text, ("move %s 4 fixed after a failed hand-out"):format(who))
+    cmd.handle(text)
+    eq(sim.engine:Get("main").state.order[4], who, "applied")
+    eq(#sim.engine:Get("main").events, before + 1, "one entry for the whole move")
+    -- dropping on a row stages a move to that row's place
+    UI.pending, UI.dragging, UI.selected = nil, who, who
+    UI.places[who] = 4
+    UI.DropOn({ pos = 1 }) -- (Stage refreshes the window: no window here, so only the state matters)
+    UI.practice, UI.selected, UI.pending, UI.dragging = saved.practice, saved.selected, saved.pending, nil
+end)
