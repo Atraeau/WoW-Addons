@@ -55,6 +55,12 @@ local function frame()
         if k == "Hide" then return function() self.shown = false end end
         if k == "Show" then return function() self.shown = true end end
         if k == "GetText" then return function() return "" end end
+        -- the game refuses to anchor to something that is not a frame (a plain table), so the stand-in does too
+        if k == "SetPoint" or k == "SetAllPoints" then return function(_, ...)
+            for _, a in ipairs { ... } do
+                if type(a) == "table" and getmetatable(a) == nil then error("SetPoint: that is not a frame", 2) end
+            end
+        end end
         return function(_, ...) return frame() end
     end })
 end

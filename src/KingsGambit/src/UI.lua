@@ -161,7 +161,7 @@ function M:Refresh()
     local p = w.pages.standings
     local model = M.Model(ctx.engine, ctx.client, self.list)
     self.list = model.list
-    p.listButton:SetText(model.list)
+    if not p.listDrop then p.listButton:SetText(model.list) end
     p.raidText:SetText(model.raid and ("Your raid plays on: " .. (model.raidList or "(no list chosen yet)")) or "No raid open for you")
     p.countText:SetText(("%d on the list"):format(model.total))
     for i, c in ipairs(SORTS) do
@@ -274,7 +274,7 @@ function M:BuildStandings(parent)
             end
         end)
         p.listDrop = drop
-        p.listButton = { SetText = function() end }
+        p.listButton = drop -- (the dropdown shows the chosen list itself)
     else
         p.listButton = button(p, "main", 120)
         p.listButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
@@ -285,6 +285,7 @@ function M:BuildStandings(parent)
     end
     p.raidText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.raidText:SetPoint("LEFT", p.listButton, "RIGHT", 10, 0)
+    p.raidText:SetWidth(200); p.raidText:SetJustifyH("LEFT")
 
     -- A scrolling table like the game's own rosters: an inset panel, clickable column headers (click to sort, again to reverse), and the game's
     -- scroll box with its scroll bar. If this client's scroll box can't be built, the older scroll frame does the same job.
@@ -352,6 +353,7 @@ function M:Build()
     -- BasicFrameTemplateWithInset gives a title bar and close button; fall back to a plain frame if this client lacks it.
     local ok, w = pcall(CreateFrame, "Frame", "KingsGambitWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
+    M.building = w -- (hidden again if building the rest fails, so a half-built window is never left on screen)
     w:SetSize(420, 690)
     w:SetPoint("CENTER")
     w:SetFrameStrata("DIALOG")
@@ -453,9 +455,20 @@ function M:Build()
     return w
 end
 
+-- Build the window once; if it fails part-way the half-built frame is hidden and the error is passed on.
+function M:Window()
+    if self.window then return self.window end
+    local ok, w = pcall(self.Build, self)
+    if not ok then
+        if M.building then M.building:Hide() end
+        error(w, 0)
+    end
+    return w
+end
+
 function M:Toggle()
     if not (CreateFrame and UIParent) then return false end
-    local w = self.window or self:Build()
+    local w = self:Window()
     if w:IsShown() then w:Hide() else w:Show() end
     return true
 end
@@ -463,7 +476,7 @@ end
 -- Show the window on a tab (a loot session has started).
 function M:Open(tab)
     if not (CreateFrame and UIParent) then return end
-    local w = self.window or self:Build()
+    local w = self:Window()
     if tab then M.tab = tab end
     w:Show(); M:Refresh()
 end
