@@ -6,8 +6,8 @@
 --   M.Model(engine, client, listId, page)  pure: what the window shows (rows, paging, lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity
-local M = SK:NewModule("UI", { "Identity" }, function(d) Identity = d.Identity end)
+local Identity, Sim, Commands
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?" }, function(d) Identity, Sim, Commands = d.Identity, d.Sim, d.Commands end)
 
 local ROWS = 15
 
@@ -32,6 +32,33 @@ function M.Model(engine, client, listId, page)
     return model
 end
 
+-- The engine, client and commands the window works on: the real ones, or (in practice mode) a simulated raid's, which is a separate
+-- in-memory ledger: nothing in it is saved, sent to anyone, or mixed with the real one.
+function M.Ctx()
+    if M.practice then return M.practice end
+    return { engine = SK.engine, client = SK.client, commands = SK.commands }
+end
+
+M.SIZES = { 5, 10, 20, 40 }
+M.size = 40
+
+function M:StartPractice()
+    if not (Sim and Commands) then return end
+    local me = SK.client:me()
+    local sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size })
+    sim.client.print = function(_, text) print("|cffffaa00Practice|r", text) end
+    local commands = Commands.New({ client = sim.client, engine = sim.engine })
+    M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim }
+    M.list, M.page = nil, 1
+    M:Refresh()
+end
+
+function M:LeavePractice()
+    M.practice = nil
+    M.list, M.page = nil, 1
+    M:Refresh()
+end
+
 local function nextList(lists, current)
     for i, id in ipairs(lists) do
         if id == current then return lists[i % #lists + 1] end
@@ -42,12 +69,15 @@ end
 function M:Refresh()
     local w = self.window
     if not (w and w:IsShown()) then return end
-    local engine, client = SK.engine, SK.client
-    local model = M.Model(engine, client, self.list, self.page)
+    local ctx = M.Ctx()
+    local model = M.Model(ctx.engine, ctx.client, self.list, self.page)
     self.list, self.page = model.list, model.page
     w.listButton:SetText(model.list)
     local sub = model.raid and ("Your raid plays on: " .. (model.raidList or "(no list chosen yet)")) or "No raid open for you"
+    if M.practice then sub = "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" end
     w.subtitle:SetText(sub)
+    w.practiceButton:SetText(M.practice and "Leave practice" or "Practice")
+    w.sizeButton:SetText((M.practice and "Group: " or "Practice group: ") .. M.size)
     w.pageText:SetText(("Page %d of %d  (%d on the list)"):format(model.page, model.pages, model.total))
     for i = 1, ROWS do
         local row, r = w.rows[i], model.rows[i]
@@ -108,7 +138,8 @@ function M:Build()
     w.listButton = button(w, "main", 140)
     w.listButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
     w.listButton:SetScript("OnClick", function()
-        M.list = nextList(SK.engine:Lists(), M.list or SK.engine:RaidList() or "main"); M.page = 1; M:Refresh()
+        local e = M.Ctx().engine
+        M.list = nextList(e:Lists(), M.list or e:RaidList() or "main"); M.page = 1; M:Refresh()
     end)
 
     w.rows = {}
@@ -125,7 +156,7 @@ function M:Build()
     w.startButton = button(w, "Start the ledger", 160, 26)
     w.startButton:SetPoint("TOP", 0, -130)
     w.startButton:SetScript("OnClick", function()
-        SK.commands.handle("create main Main")
+        M.Ctx().commands.handle("create main Main")
         M.list = "main"; M:Refresh()
     end)
     w.startButton:Hide()
@@ -137,18 +168,35 @@ function M:Build()
     w.addButton:SetPoint("LEFT", w.addBox, "RIGHT", 6, 0)
     local function addName()
         local n = (w.addBox:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", ""):gsub("%s+", "_")
-        if n ~= "" then SK.commands.handle("add " .. n); w.addBox:SetText(""); M:Refresh() end
+        if n ~= "" then M.Ctx().commands.handle("add " .. n); w.addBox:SetText(""); M:Refresh() end
     end
     w.addButton:SetScript("OnClick", addName)
     w.addBox:SetScript("OnEnterPressed", addName)
     w.groupButton = button(w, "Add my group", 110)
     w.groupButton:SetPoint("LEFT", w.addButton, "RIGHT", 10, 0)
     w.groupButton:SetScript("OnClick", function()
-        local chain = SK.engine:Get(M.list or SK.engine:RaidList() or "main")
-        for _, m in ipairs(SK.client:roster()) do
-            if not (chain and chain.state.members[m.name]) then SK.commands.handle("add " .. m.name) end
+        local ctx = M.Ctx()
+        local chain = ctx.engine:Get(M.list or ctx.engine:RaidList() or "main")
+        for _, m in ipairs(ctx.client:roster()) do
+            if not (chain and chain.state.members[m.name]) then ctx.commands.handle("add " .. m.name) end
         end
         M:Refresh()
+    end)
+
+    w.practiceButton = button(w, "Practice", 110)
+    w.practiceButton:SetPoint("TOPRIGHT", -16, -54)
+    w.practiceButton:SetScript("OnClick", function()
+        if M.practice then M:LeavePractice() else M:StartPractice() end
+    end)
+
+    -- How many players the simulated group has (a 5-player party up to a 40-player raid). Changing it restarts practice.
+    w.sizeButton = button(w, "Group: 40", 130)
+    w.sizeButton:SetPoint("RIGHT", w.practiceButton, "LEFT", -6, 0)
+    w.sizeButton:SetScript("OnClick", function()
+        for i, n in ipairs(M.SIZES) do
+            if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end
+        end
+        if M.practice then M:StartPractice() else M:Refresh() end
     end)
 
     local prev, nxt, refresh = button(w, "<", 30), button(w, ">", 30), button(w, "Refresh", 70)

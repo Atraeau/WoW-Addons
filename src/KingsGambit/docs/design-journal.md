@@ -1906,6 +1906,18 @@ popup for a running loot session (need / off-spec / pass / gift, and the draft a
 undo, raid open and its list, requests). A window can only be checked in the game, so the tests cover what it would show (the model behind
 it) and that it builds against a stand-in for the game's frame functions; how it looks is confirmed by looking at it.
 
+### Decision: a practice mode inside the game's window (2026-11-05)
+
+Testing the window, and later learning the addon, should not need a real party. The simulator page already runs the real engine over a simulated
+raid (bots, Molten Core and AQ drops), and the same files ship in the addon, so the window gets a **Practice** button: it builds a
+simulated 40-player raid, with you as a member, and points the window at it instead of at the real ledger.
+
+Rules, so practice can never touch the real thing: the practice raid is a separate in-memory engine on a mock client, so it **never reads or
+writes your saved variables, never sends an addon message, and never appears in anyone else's ledger**. The window says so on a banner
+the whole time (orange, "PRACTICE"), practice output is printed in chat with a "Practice" prefix, and *Leave practice* returns to the real
+ledger exactly as it was. The window code reads its engine, client and commands from one context, which is the real one or the practice one,
+so every window built later (the bid popup, the officer actions) works in practice with no extra code.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

@@ -6081,6 +6081,13 @@ function M.NewRaidNight(data, opts)
             members[#members + 1] = { name = MC_NAMES[k], class = row[1], role = spec.role, spec = row[2], offSpec = row[3] }
         end
     end
+    -- opts.size: a smaller group (a 5-player party, a 10 or 20), keeping the class mix by taking evenly spaced raiders from the 40.
+    -- The learner is one more member, so size counts them.
+    if opts.size and opts.size - 1 < #members then
+        local want, picked = math.max(opts.size - 1, 0), {}
+        for i = 1, want do picked[i] = members[math.floor((i - 0.5) * #members / want) + 1] end
+        members = picked
+    end
     local learnerClass = opts.learnerClass or "PRIEST"
     local learnerSpec = opts.learnerSpec or (not opts.learnerClass and "Holy") or ItemFit.SPECS[learnerClass][1].name
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",

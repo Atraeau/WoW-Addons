@@ -268,3 +268,14 @@ test("the window shows the list the viewer's raid plays on, in order, with the v
     m = UI.Model(engine, client, "main", 99)
     eq(m.pages, 3); eq(m.page, 3, "a page past the end is the last page"); eq(#m.rows, 13)
 end)
+
+test("practice raids can be any size from a 5-player party to 40, and the practice engine is separate from the real one", function()
+    local SK, eq = H.SK, H.eq
+    for _, size in ipairs { 5, 10, 20, 40 } do
+        local sim = SK.modules.Sim.NewMoltenCore({ learner = "Me", seed = 1, size = size })
+        eq(#sim.client:roster(), size, "size " .. size .. " counts the learner")
+        eq(#sim.engine:Get("main").state.order, size)
+    end
+    local UI = SK.modules.UI
+    eq(UI.Ctx().engine, SK.engine, "without practice the window uses the real engine")
+end)
