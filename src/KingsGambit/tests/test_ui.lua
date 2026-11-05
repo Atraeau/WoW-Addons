@@ -181,3 +181,9 @@ test("a simulated drop gets a tooltip id, a real link is used as it is, and a li
     local text = UITools.Compose(UITools.Find("eligible"), { item = link, classes = "WARRIOR", reason = "tier set" })
     eq(text, "eligible item:16837 WARRIOR tier set")
 end)
+
+test("an item the game hasn't cached yet is still shown as a link built from its id and name", function()
+    local text = SK.modules.UILoot.Display("Earthfury Boots", "item:16837")
+    assert(text:find("|Hitem:16837", 1, true) and text:find("[Earthfury Boots]", 1, true), text)
+    eq(SK.modules.UILoot.Display("a name with no id", nil), "a name with no id")
+end)

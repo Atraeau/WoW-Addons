@@ -30,15 +30,19 @@ function M.TipOf(link)
     return it and ("item:" .. it.id) or nil
 end
 
--- The coloured, clickable link for display when the game has the item in its cache; otherwise the name as given.
+-- The link to show: the game's own when it has the item cached, else (and the game is asked to load the item, so a moment later) a link made from the
+-- id and the name, which looks and hovers like the real one.
 function M.Display(link, tip)
     if link and link:find("|H", 1, true) then return link end
+    local id = tip and tonumber(tip:match("^item:(%d+)"))
+    if not id then return link or "?" end
     local get = (C_Item and C_Item.GetItemInfo) or GetItemInfo
-    if tip and get then
+    if get then
         local _, full = get(tip)
         if full then return full end
     end
-    return link or "?"
+    if C_Item and C_Item.RequestLoadItemDataByID then pcall(C_Item.RequestLoadItemDataByID, id) end
+    return ("|cffa335ee|Hitem:%d::::::::::::|h[%s]|h|r"):format(id, link or ("item " .. id))
 end
 
 -- The session this machine can see: the one it runs as Master Looter, else the one it is answering.
