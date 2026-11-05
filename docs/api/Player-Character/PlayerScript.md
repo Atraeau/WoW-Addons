@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Player & Character](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**185** functions · **2** events · **1** types
+**190** functions · **2** events · **1** types
 
 ## Functions
 
@@ -877,6 +877,60 @@ mainhandExpertisePercent, offhandExpertisePercent, rangedExpertisePercent = GetE
 local mainhandExpertisePercent, offhandExpertisePercent, rangedExpertisePercent = GetExpertisePercent()
 ```
 
+### PlayerScript.GetGlancingBlowChance
+
+If no playerWeaponSkill value is provided, uses the skill value for the player's main hand weapon/shapeshift form.
+
+```lua
+result = GetGlancingBlowChance([playerWeaponSkill], targetDefenseSkill)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `playerWeaponSkill` | number | yes |  |
+| `targetDefenseSkill` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local result = GetGlancingBlowChance(0)
+```
+
+### PlayerScript.GetGlancingBlowPenalty
+
+If no playerWeaponSkill value is provided, uses the skill value for the player's main hand weapon/shapeshift form.
+
+```lua
+result = GetGlancingBlowPenalty([playerWeaponSkill], targetDefenseSkill)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `playerWeaponSkill` | number | yes |  |
+| `targetDefenseSkill` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local result = GetGlancingBlowPenalty(0)
+```
+
 ### PlayerScript.GetHaste
 
 ```lua
@@ -1170,6 +1224,24 @@ result = GetNormalizedRealmName()
 local result = GetNormalizedRealmName()
 ```
 
+### PlayerScript.GetOffhandHitModifier
+
+```lua
+result = GetOffhandHitModifier()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local result = GetOffhandHitModifier()
+```
+
 ### PlayerScript.GetOverrideAPBySpellPower
 
 ```lua
@@ -1240,6 +1312,43 @@ result = GetParryChanceFromAttribute()
 
 ```lua
 local result = GetParryChanceFromAttribute()
+```
+
+### PlayerScript.GetPetCritChance
+
+```lua
+meleeCrit, spellCrit = GetPetCritChance()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `meleeCrit` | number | no |  |
+| `spellCrit` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local meleeCrit, spellCrit = GetPetCritChance()
+```
+
+### PlayerScript.GetPetDodgeChance
+
+```lua
+result = GetPetDodgeChance()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local result = GetPetDodgeChance()
 ```
 
 ### PlayerScript.GetPetHitChanceModifier

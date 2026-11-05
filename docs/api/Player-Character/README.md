@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**16** namespaces · **323** functions · **43** events · **26** types
+**16** namespaces · **328** functions · **43** events · **26** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -21,4 +21,4 @@
 | [C_PlayerInfo](C_PlayerInfo.md) | 40 | 0 | 2 |
 | [C_PlayerInteractionManager](C_PlayerInteractionManager.md) | 8 | 2 | 0 |
 | [C_PlayerMentorship](C_PlayerMentorship.md) | 5 | 2 | 0 |
-| [PlayerScript](PlayerScript.md) | 185 | 2 | 1 |
+| [PlayerScript](PlayerScript.md) | 190 | 2 | 1 |

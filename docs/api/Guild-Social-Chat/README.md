@@ -2,12 +2,12 @@
 
 [← All API groups](../README.md)
 
-**28** namespaces · **754** functions · **381** events · **128** types
+**28** namespaces · **760** functions · **385** events · **129** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
 | [BNetOutage](BNetOutage.md) | 2 | 0 | 0 |
-| [C_BattleNet](C_BattleNet.md) | 33 | 0 | 4 |
+| [C_BattleNet](C_BattleNet.md) | 36 | 0 | 4 |
 | [C_Calendar](C_Calendar.md) | 90 | 13 | 12 |
 | [C_ChatBubbles](C_ChatBubbles.md) | 1 | 0 | 0 |
 | [C_ChatInfo](C_ChatInfo.md) | 45 | 102 | 2 |
@@ -30,7 +30,7 @@
 | [C_SocialQueue](C_SocialQueue.md) | 10 | 3 | 4 |
 | [C_SocialRestrictions](C_SocialRestrictions.md) | 12 | 4 | 0 |
 | [C_SocialUI](C_SocialUI.md) | 1 | 1 | 3 |
-| [C_VoiceChat](C_VoiceChat.md) | 79 | 47 | 9 |
+| [C_VoiceChat](C_VoiceChat.md) | 82 | 51 | 10 |
 | [PingPinFrameAPI](PingPinFrameAPI.md) | 0 | 0 | 0 |
 | [RaidMarkers](RaidMarkers.md) | 9 | 0 | 0 |
 | [SimpleAnimGroupAPI](SimpleAnimGroupAPI.md) | 28 | 0 | 0 |

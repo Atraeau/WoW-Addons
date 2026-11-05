@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Units, Combat & PvP](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **3** functions · **0** events · **0** types
 
@@ -10,7 +10,7 @@
 
 ### C_Roleset.ApplyRolesetFilters
 
-Sets or clears both blocklist and allowlist filters atomically with a single visibility reevaluation. Pass an empty table to clear the corresponding filter.
+Sets or clears both blocklist and allowlist filters atomically with a single visibility reevaluation. Pass an empty table to clear the corresponding filter. Blocked for tainted callers while in combat lockdown.
 
 ```lua
 C_Roleset.ApplyRolesetFilters(blockedRolesets, allowedRolesets)

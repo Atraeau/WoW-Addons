@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Units, Combat & PvP](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **218** functions · **142** events · **8** types
 
@@ -5621,6 +5621,7 @@ local result = WorldLootObjectExists()
 | `agilityDelta` | number | no |  |
 | `staminaDelta` | number | no |  |
 | `intellectDelta` | number | no |  |
+| `spiritDelta` | number | no |  |
 
 ### PLAYER_MAX_LEVEL_UPDATE
 

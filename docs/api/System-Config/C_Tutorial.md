@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**3** functions · **6** events · **1** types
+**4** functions · **6** events · **1** types
 
 ## Functions
 
@@ -42,6 +42,24 @@ C_Tutorial.ReturnToTutorialArea()
 
 ```lua
 C_Tutorial.ReturnToTutorialArea()
+```
+
+### C_Tutorial.SendTutorialStartButtonTelem
+
+```lua
+C_Tutorial.SendTutorialStartButtonTelem(skipTutorial)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `skipTutorial` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+C_Tutorial.SendTutorialStartButtonTelem(false)
 ```
 
 ## Events

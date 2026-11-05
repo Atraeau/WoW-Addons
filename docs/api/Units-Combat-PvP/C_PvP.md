@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Units, Combat & PvP](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **114** functions · **43** events · **28** types
 
@@ -2672,6 +2672,7 @@ C_PvP.ToggleWarMode()
 | `honorGained` | number | no |  |
 | `faction` | number | no |  |
 | `raceName` | string | no |  |
+| `gender` | number | no |  |
 | `className` | string | no |  |
 | `classToken` | string | no |  |
 | `damageDone` | number | no |  |

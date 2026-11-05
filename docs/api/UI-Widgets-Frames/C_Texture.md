@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [UI Widgets & Frames](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **11** functions · **1** events · **4** types
 
@@ -167,7 +167,7 @@ local filename = C_Texture.GetFilenameFromFileDataID(0)
 ### C_Texture.GetTitleIconTexture
 
 ```lua
-C_Texture.GetTitleIconTexture(titleID, version, callback)
+C_Texture.GetTitleIconTexture(titleID, version, callback, [subIcon])
 ```
 
 **Arguments**
@@ -177,6 +177,7 @@ C_Texture.GetTitleIconTexture(titleID, version, callback)
 | `titleID` | string | no |  |
 | `version` | TitleIconVersion | no |  |
 | `callback` | GetTitleIconTextureCallback | no |  |
+| `subIcon` | string | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -187,7 +188,7 @@ C_Texture.GetTitleIconTexture("", Enum.TitleIconVersion.Small, callback)
 ### C_Texture.IsTitleIconTextureReady
 
 ```lua
-ready = C_Texture.IsTitleIconTextureReady(titleID, version)
+ready = C_Texture.IsTitleIconTextureReady(titleID, version, [subIcon])
 ```
 
 **Arguments**
@@ -196,6 +197,7 @@ ready = C_Texture.IsTitleIconTextureReady(titleID, version)
 |------|------|---------|-------------|
 | `titleID` | string | no |  |
 | `version` | TitleIconVersion | no |  |
+| `subIcon` | string | yes |  |
 
 **Returns**
 
@@ -212,7 +214,7 @@ local ready = C_Texture.IsTitleIconTextureReady("", Enum.TitleIconVersion.Small)
 ### C_Texture.SetTitleIconTexture
 
 ```lua
-C_Texture.SetTitleIconTexture(texture, titleID, version)
+C_Texture.SetTitleIconTexture(texture, titleID, version, [subIcon])
 ```
 
 **Arguments**
@@ -222,6 +224,7 @@ C_Texture.SetTitleIconTexture(texture, titleID, version)
 | `texture` | SimpleTexture | no |  |
 | `titleID` | string | no |  |
 | `version` | TitleIconVersion | no |  |
+| `subIcon` | string | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 

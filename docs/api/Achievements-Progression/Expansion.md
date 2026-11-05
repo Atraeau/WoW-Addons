@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Achievements & Progression](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**23** functions · **3** events · **4** types
+**24** functions · **3** events · **5** types
 
 ## Functions
 
@@ -78,6 +78,24 @@ expansionLevel = GetClientDisplayExpansionLevel()
 
 ```lua
 local expansionLevel = GetClientDisplayExpansionLevel()
+```
+
+### Expansion.GetCreditsDisplayInfo
+
+```lua
+info = GetCreditsDisplayInfo()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `info` | CreditsDisplayInfo[] | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local info = GetCreditsDisplayInfo()
 ```
 
 ### Expansion.GetCurrentRegionName
@@ -460,6 +478,18 @@ local showUpgradeBanner = ShouldShowExpansionUpgradeBanner()
 
 ## Types
 
+### CreditsDisplayInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isDefault` | bool | no |  |
+| `creditsFileID` | number | no |  |
+| `keyArt` | string | no |  |
+| `background` | string | no |  |
+| `name` | string | no |  |
+| `logo` | fileID | no |  |
+| `soundKit` | number | yes |  |
+
 ### ExpansionDisplayInfo (Structure)
 
 | Name | Type | Nilable | Description |
@@ -496,3 +526,4 @@ local showUpgradeBanner = ShouldShowExpansionUpgradeBanner()
 | `Standard` | SubscriptionInterstitialType | no |  |
 | `LeftNpeArea` | SubscriptionInterstitialType | no |  |
 | `MaxLevel` | SubscriptionInterstitialType | no |  |
+| `SubscriptionPeriod` | SubscriptionInterstitialType | no |  |

@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Auction, Mail & Trade](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**85** functions · **47** events · **16** types
+**86** functions · **47** events · **16** types
 
 ## Functions
 
@@ -584,6 +584,32 @@ requiredLevel = C_AuctionHouse.GetItemKeyRequiredLevel(itemKey)
 
 ```lua
 local requiredLevel = C_AuctionHouse.GetItemKeyRequiredLevel(6948)
+```
+
+### C_AuctionHouse.GetItemKeySampleLink
+
+Returns a link for an item in this key's results with player-applied enchants, gems and reforges stripped
+
+```lua
+sampleItemLink = C_AuctionHouse.GetItemKeySampleLink(itemKey)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `itemKey` | ItemKey | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `sampleItemLink` | string | yes |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local sampleItemLink = C_AuctionHouse.GetItemKeySampleLink(6948)
 ```
 
 ### C_AuctionHouse.GetItemSearchResultInfo

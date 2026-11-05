@@ -4,7 +4,7 @@
 
 An object that manages a collection of integer keys, each scheduled to signal at a specific time. When a key's time arrives it is removed from the map and passed to the map's callback, letting you track many keyed deadlines through a single callback rather than scheduling each one individually.
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **8** functions · **0** events · **0** types
 

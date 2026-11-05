@@ -1,6 +1,6 @@
 ---@meta
 -- WoW: Forever API definitions -- generated from the client's own APIDocumentation.
--- build 70170, interface 16001, exported 2026-10-01 21:34:30.
+-- build 70790, interface 16001, exported 2026-11-05 05:23:47.
 -- Do not edit by hand; regenerate with scripts/generate-lua-definitions.ps1.
 
 Enum = Enum or {}
@@ -630,6 +630,7 @@ Enum.BankLockedReason = {
 ---@field regionID number
 ---@field isInCurrentRegion boolean
 ---@field timerunningSeasonID? number
+---@field subIcon? string
 
 ---@alias Bc26Experience number
 Enum.Bc26Experience = {
@@ -1686,6 +1687,7 @@ Enum.ContributionResult = {
 
 ---@class GroupBuffItem
 ---@field spellID number
+---@field displaySpellID number
 ---@field name string
 ---@field iconID number
 ---@field flags GroupBuffItemFlags
@@ -2231,7 +2233,17 @@ Enum.SubscriptionInterstitialType = {
 	Standard = 0,
 	LeftNpeArea = 1,
 	MaxLevel = 2,
+	SubscriptionPeriod = 3,
 }
+
+---@class CreditsDisplayInfo
+---@field isDefault boolean
+---@field creditsFileID number
+---@field keyArt string
+---@field background string
+---@field name string
+---@field logo number
+---@field soundKit? number
 
 ---@class ExpansionDisplayInfo
 ---@field logo number
@@ -2422,7 +2434,15 @@ Enum.TableSecurityOption = {
 ---@alias ForeverExperiencePreset number
 Enum.ForeverExperiencePreset = {
 	Classic = 0,
-	Modern = 1,
+	Enhanced = 1,
+}
+
+---@alias SdToggleUsageLocationUI number
+Enum.SdToggleUsageLocationUI = {
+	BeforeLogin = 0,
+	CharacterCreation = 1,
+	BarberShop = 2,
+	OptionsMenu = 3,
 }
 
 ---@class GameModeDisplayInfo
@@ -3310,6 +3330,7 @@ Enum.TurnStrafeStyle = {
 ---@field name kstringLfgListApplicant
 ---@field comment kstringLfgListApplicant
 ---@field voiceChat kstringLfgListApplicant
+---@field voiceMode LFGEntryVoiceMode
 ---@field censored boolean
 ---@field duration number
 ---@field autoAccept boolean
@@ -3334,6 +3355,7 @@ Enum.TurnStrafeStyle = {
 ---@field requiredDungeonScore number
 ---@field requiredItemLevel number
 ---@field requiredPvpRating number
+---@field voiceMode LFGEntryVoiceMode
 
 ---@class LfgSearchResultData
 ---@field searchResultID number
@@ -3342,6 +3364,7 @@ Enum.TurnStrafeStyle = {
 ---@field name kstringLfgListSearch
 ---@field comment kstringLfgListSearch
 ---@field voiceChat kstringLfgListSearch
+---@field voiceMode LFGEntryVoiceMode
 ---@field censored boolean
 ---@field requiredItemLevel number
 ---@field requiredHonorLevel number
@@ -4328,6 +4351,7 @@ Enum.PvPMatchState = {
 ---@field honorGained number
 ---@field faction number
 ---@field raceName string
+---@field gender number
 ---@field className string
 ---@field classToken string
 ---@field damageDone number
@@ -4904,7 +4928,11 @@ Enum.ScriptedAnimationTrajectory = {
 ---@field loopingSoundKitID? number
 ---@field particleOverrideScale? number
 
----@class MailInfo
+---@class MailReceiveInfo
+---@field sender string
+---@field money number
+
+---@class MailSendInfo
 ---@field target string
 ---@field sendMoney number
 
@@ -7151,6 +7179,12 @@ Enum.VoiceChatStatusCode = {
 	PlayerVoiceChatAgeVerificationRestricted = 25,
 }
 
+---@alias VoiceProviderID number
+Enum.VoiceProviderID = {
+	Legacy = 0,
+	Discord = 1,
+}
+
 ---@alias VoiceTtsStatusCode number
 Enum.VoiceTtsStatusCode = {
 	Success = 0,
@@ -7178,7 +7212,7 @@ Enum.VoiceTtsStatusCode = {
 
 ---@class VoiceChatChannel
 ---@field name string
----@field channelID number
+---@field channelID VoiceChatID
 ---@field channelType ChatChannelType
 ---@field clubId ClubId
 ---@field streamId ClubStreamId
@@ -7191,7 +7225,7 @@ Enum.VoiceTtsStatusCode = {
 
 ---@class VoiceChatMember
 ---@field energy number
----@field memberID number
+---@field memberID VoiceChatID
 ---@field isActive boolean
 ---@field isSpeaking boolean
 ---@field isMutedForAll boolean
@@ -7981,6 +8015,10 @@ function C_ActionBar.IsHarmfulAction(actionID, useNeutral) end
 ---@return boolean isHelpful
 function C_ActionBar.IsHelpfulAction(actionID, useNeutral) end
 
+---@param spellID SpellIdentifier
+---@return boolean isHighestRank
+function C_ActionBar.IsHighestSpellRank(spellID) end
+
 --- Returns whether the given action button contains a spell that can interrupt spellcasting.
 ---@param slotID number
 ---@return boolean isInterruptAction
@@ -8717,6 +8755,11 @@ function C_AuctionHouse.GetItemKeyInfo(itemKey, restrictQualityToFilter) end
 ---@return number requiredLevel
 function C_AuctionHouse.GetItemKeyRequiredLevel(itemKey) end
 
+--- Returns a link for an item in this key's results with player-applied enchants, gems and reforges stripped
+---@param itemKey ItemKey
+---@return  sampleItemLink
+function C_AuctionHouse.GetItemKeySampleLink(itemKey) end
+
 ---@param itemKey ItemKey
 ---@param itemSearchResultIndex number
 ---@return  result
@@ -9412,6 +9455,9 @@ function C_BattleNet.AreFriendTagsEnabled() end
 ---@return boolean installed
 function C_BattleNet.AreHighResTexturesInstalled() end
 
+---@return boolean areRealIDFriendsEnabled
+function C_BattleNet.AreRealIDFriendsEnabled() end
+
 ---@return boolean areTitleFriendCustomNamesEnabled
 function C_BattleNet.AreTitleFriendCustomNamesEnabled() end
 
@@ -9440,6 +9486,10 @@ function C_BattleNet.GetAccountInfoByID(id, wowAccountGUID) end
 ---@return string customName
 function C_BattleNet.GetCustomTitleFriendName(id) end
 
+---@param id number
+---@return string whisperTarget
+function C_BattleNet.GetDefaultTitleWhisperTarget(id) end
+
 ---@param friendIndex number
 ---@param  string
 ---@return  accountInfo
@@ -9453,6 +9503,10 @@ function C_BattleNet.GetFriendGameAccountInfo(friendIndex, accountIndex) end
 ---@param inviteIndex number
 ---@return  inviteInfo
 function C_BattleNet.GetFriendInviteInfo(inviteIndex) end
+
+---@param inviteText string
+---@return BattleNetFriendLevel friendLevel
+function C_BattleNet.GetFriendLevelFromInviteText(inviteText) end
 
 ---@param friendIndex number
 ---@return number numGameAccounts
@@ -13246,10 +13300,10 @@ function C_Discord.Authorize() end
 ---@return string name
 function C_Discord.GetDiscordChannelName(serverIndex, channelIndex) end
 
----@return DiscordID userID
+---@return DiscordMemberOpaqueID userID
 function C_Discord.GetDiscordUserID() end
 
----@param userID DiscordID
+---@param userID DiscordMemberOpaqueID
 ---@return KStringDiscordUserName userName
 function C_Discord.GetDiscordUserName(userID) end
 
@@ -13294,6 +13348,9 @@ function C_Discord.IsGuildSettingSet(setting) end
 
 ---@return boolean hasOAuth
 function C_Discord.IsUserOAuthed() end
+
+---@return boolean enabled
+function C_Discord.IsVoiceEnabled() end
 
 function C_Discord.RefreshAuth() end
 
@@ -14031,6 +14088,9 @@ function GetAccountExpansionLevel() end
 ---@return number expansionLevel
 function GetClientDisplayExpansionLevel() end
 
+---@return CreditsDisplayInfo[] info
+function GetCreditsDisplayInfo() end
+
 ---@return string regionName
 function GetCurrentRegionName() end
 
@@ -14108,6 +14168,9 @@ function GetClassicExpansionLevel() end
 function C_ExpansionTrial.OnTrialLevelUpDialogClicked() end
 
 function C_ExpansionTrial.OnTrialLevelUpDialogShown() end
+
+---@return boolean canShow
+function C_ExternalEventURL.CanShow() end
 
 ---@return boolean hasURL
 function C_ExternalEventURL.HasURL() end
@@ -15831,10 +15894,14 @@ function C_GameRules.IsStandard() end
 function C_GameRules.IsWoWHack() end
 
 ---@param preset ForeverExperiencePreset
-function C_GameRules.SetForeverExperiencePreset(preset) end
+function C_GameRules.SetForeverExperiencePresetPostLogin(preset) end
+
+---@param preset ForeverExperiencePreset
+function C_GameRules.SetForeverExperiencePresetPreLogin(preset) end
 
 ---@param setToSD boolean
-function C_GameRules.SetSDHDToggleValue(setToSD) end
+---@param usageLocation SdToggleUsageLocationUI
+function C_GameRules.SetSDHDToggleValue(setToSD, usageLocation) end
 
 ---@param visible boolean
 function SetInWorldUIVisibility(visible) end
@@ -15846,9 +15913,6 @@ function SetUIVisibility(visible) end
 function C_GamepadTargeting.Disable() end
 
 function C_GamepadTargeting.Enable() end
-
----@return boolean hasReticleHoverTarget
-function C_GamepadTargeting.HasReticleHoverTarget() end
 
 ---@param filter GamepadTargetingFilters
 function C_GamepadTargeting.SetFilter(filter) end
@@ -17740,6 +17804,10 @@ function C_IncomingSummon.HasIncomingSummon(unit) end
 ---@return SummonStatus status
 function C_IncomingSummon.IncomingSummonStatus(unit) end
 
+---@return number posX
+---@return number posY
+function GetCursorCenterPosition() end
+
 ---@return number deltaX
 ---@return number deltaY
 function GetCursorDelta() end
@@ -17767,6 +17835,9 @@ function IsAltKeyDown() end
 
 ---@return boolean down
 function IsControlKeyDown() end
+
+---@return boolean visible
+function IsCursorVisible() end
 
 ---@param keyOrMouseName string
 ---@param excludeBindingState boolean
@@ -21032,7 +21103,7 @@ function C_PaperDollInfo.AmmoNeeded() end
 ---@return boolean canAutoEquip
 function C_PaperDollInfo.CanAutoEquipCursorItem() end
 
---- Cancels active temporary enchantments on inventory slot items.
+--- Cancels active temporary enchantments on inventory slot items. Imbue enchants take priority over temporary enchants.
 ---@param slot LuaInventorySlot
 function C_PaperDollInfo.CancelTemporaryEnchantment(slot) end
 
@@ -21095,7 +21166,7 @@ function C_PaperDollInfo.GetMinItemLevel() end
 ---@return  staggerAgainstTarget
 function C_PaperDollInfo.GetStaggerPercentage(unit) end
 
---- Queries information about active temporary enchants on inventory slot items.
+--- Queries information about active temporary enchants on inventory slot items. Imbue enchants take priority over temporary enchants.
 ---@param slot LuaInventorySlot
 ---@return TemporaryItemEnchantInfo enchantInfo
 function C_PaperDollInfo.GetTemporaryEnchantmentInfo(slot) end
@@ -21537,6 +21608,9 @@ function C_PetInfo.GetSpellForPetAction(actionID) end
 ---@param actionID number
 ---@return boolean isPassive
 function C_PetInfo.IsPetActionPassive(actionID) end
+
+---@return boolean isPetOrderMoveToPending
+function C_PetInfo.IsPetOrderMoveToPending() end
 
 ---@param  number
 function C_PetInfo.PetAbandon(petNumber) end
@@ -22125,6 +22199,18 @@ function GetExpertise() end
 ---@return number rangedExpertisePercent
 function GetExpertisePercent() end
 
+--- If no playerWeaponSkill value is provided, uses the skill value for the player's main hand weapon/shapeshift form.
+---@param  number
+---@param targetDefenseSkill number
+---@return number result
+function GetGlancingBlowChance(playerWeaponSkill, targetDefenseSkill) end
+
+--- If no playerWeaponSkill value is provided, uses the skill value for the player's main hand weapon/shapeshift form.
+---@param  number
+---@param targetDefenseSkill number
+---@return number result
+function GetGlancingBlowPenalty(playerWeaponSkill, targetDefenseSkill) end
+
 ---@return number result
 function GetHaste() end
 
@@ -22179,6 +22265,9 @@ function GetMoney() end
 function GetNormalizedRealmName() end
 
 ---@return number result
+function GetOffhandHitModifier() end
+
+---@return number result
 function GetOverrideAPBySpellPower() end
 
 ---@return number result
@@ -22210,6 +22299,13 @@ function GetParryChance() end
 
 ---@return number result
 function GetParryChanceFromAttribute() end
+
+---@return number meleeCrit
+---@return number spellCrit
+function GetPetCritChance() end
+
+---@return number result
+function GetPetDodgeChance() end
 
 ---@return number result
 function GetPetHitChanceModifier() end
@@ -24039,7 +24135,7 @@ function C_RestrictedActions.InCombatLockdown() end
 ---@return boolean active
 function C_RestrictedActions.IsAddOnRestrictionActive(type) end
 
---- Sets or clears both blocklist and allowlist filters atomically with a single visibility reevaluation. Pass an empty table to clear the corresponding filter.
+--- Sets or clears both blocklist and allowlist filters atomically with a single visibility reevaluation. Pass an empty table to clear the corresponding filter. Blocked for tainted callers while in combat lockdown.
 ---@param blockedRolesets string[]
 ---@param allowedRolesets string[]
 function C_Roleset.ApplyRolesetFilters(blockedRolesets, allowedRolesets) end
@@ -24455,8 +24551,11 @@ function C_SecureTransfer.GetHousingPurchaseQuantity() end
 ---@return number productID
 function C_SecureTransfer.GetHousingVCPurchaseProductID() end
 
----@return MailInfo mailInfo
-function C_SecureTransfer.GetMailInfo() end
+---@return MailReceiveInfo mailInfo
+function C_SecureTransfer.GetMailReceiveInfo() end
+
+---@return MailSendInfo mailInfo
+function C_SecureTransfer.GetMailSendInfo() end
 
 ---@return  name
 function C_SecureTransfer.GetTradePartner() end
@@ -24465,6 +24564,11 @@ function C_SecureTransfer.SendMail() end
 
 ---@return boolean shouldShow
 function C_SecureTransfer.ShouldShowTradeOfferWarning() end
+
+---@return boolean shouldShow
+function C_SecureTransfer.ShouldShowTradeRMTWarning() end
+
+function C_SecureTransfer.TakeMailMoney() end
 
 function C_SettingsUtil.NotifySettingsLoaded() end
 
@@ -29320,17 +29424,20 @@ function C_Texture.GetFilenameFromFileDataID(fileDataID) end
 ---@param titleID string
 ---@param version TitleIconVersion
 ---@param callback GetTitleIconTextureCallback
-function C_Texture.GetTitleIconTexture(titleID, version, callback) end
+---@param  string
+function C_Texture.GetTitleIconTexture(titleID, version, callback, subIcon) end
 
 ---@param titleID string
 ---@param version TitleIconVersion
+---@param  string
 ---@return boolean ready
-function C_Texture.IsTitleIconTextureReady(titleID, version) end
+function C_Texture.IsTitleIconTextureReady(titleID, version, subIcon) end
 
 ---@param texture SimpleTexture
 ---@param titleID string
 ---@param version TitleIconVersion
-function C_Texture.SetTitleIconTexture(texture, titleID, version) end
+---@param  string
+function C_Texture.SetTitleIconTexture(texture, titleID, version, subIcon) end
 
 ---@param texture SimpleTexture
 ---@param url string
@@ -31039,6 +31146,9 @@ function C_Tutorial.GetCombatEventInfo() end
 
 function C_Tutorial.ReturnToTutorialArea() end
 
+---@param skipTutorial boolean
+function C_Tutorial.SendTutorialStartButtonTelem(skipTutorial) end
+
 --- True if any display attached has a notch. This does not mean the current view intersects the notch.
 ---@return boolean notchPresent
 function C_UI.DoesAnyDisplayHaveNotch() end
@@ -32481,9 +32591,11 @@ function C_UnitAuras.GetCooldownAuraBySpellID(spellID) end
 ---@return  aura
 function C_UnitAuras.GetDebuffDataByIndex(unit, index, filter) end
 
+--- Returns the alerts passed to SetGroupBuffVisualAlerts plus an entry for every linked rank spell of those group buffs.
 ---@return GroupBuffVisualAlertInfo[] visualAlerts
 function C_UnitAuras.GetGroupBuffVisualAlerts() end
 
+--- Returns the spell IDs passed to SetHiddenGroupBuffs plus every linked rank spell of those group buffs.
 ---@return number[] spellIDs
 function C_UnitAuras.GetHiddenGroupBuffs() end
 
@@ -32799,10 +32911,10 @@ function C_VignetteInfo.GetVignettePosition(vignetteGUID, uiMapID) end
 ---@return string[] vignetteGUIDs
 function C_VignetteInfo.GetVignettes() end
 
----@param channelID number
+---@param channelID VoiceChatID
 function C_VoiceChat.ActivateChannel(channelID) end
 
----@param channelID number
+---@param channelID VoiceChatID
 function C_VoiceChat.ActivateChannelTranscription(channelID) end
 
 ---@param listenToLocalUser boolean
@@ -32818,10 +32930,10 @@ function C_VoiceChat.CanPlayerUseVoiceChat() end
 ---@return VoiceChatStatusCode status
 function C_VoiceChat.CreateChannel(channelDisplayName) end
 
----@param channelID number
+---@param channelID VoiceChatID
 function C_VoiceChat.DeactivateChannel(channelID) end
 
----@param channelID number
+---@param channelID VoiceChatID
 function C_VoiceChat.DeactivateChannelTranscription(channelID) end
 
 function C_VoiceChat.EndLocalCapture() end
@@ -32832,13 +32944,16 @@ function C_VoiceChat.GetActiveChannelID() end
 ---@return  channelType
 function C_VoiceChat.GetActiveChannelType() end
 
+---@return VoiceProviderID activeVoiceProviderID
+function C_VoiceChat.GetActiveVoiceProviderID() end
+
 ---@return  inputDevices
 function C_VoiceChat.GetAvailableInputDevices() end
 
 ---@return  outputDevices
 function C_VoiceChat.GetAvailableOutputDevices() end
 
----@param channelID number
+---@param channelID VoiceChatID
 ---@return VoiceChatChannel channel
 function C_VoiceChat.GetChannel(channelID) end
 
@@ -32867,30 +32982,30 @@ function C_VoiceChat.GetJoinClubVoiceChannelError(clubId) end
 ---@return  memberInfo
 function C_VoiceChat.GetLocalPlayerActiveChannelMemberInfo() end
 
----@param channelID number
+---@param channelID VoiceChatID
 ---@return  memberID
 function C_VoiceChat.GetLocalPlayerMemberID(channelID) end
 
 ---@return number scale
 function C_VoiceChat.GetMasterVolumeScale() end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return string memberGUID
 function C_VoiceChat.GetMemberGUID(memberID, channelID) end
 
----@param channelID number
+---@param channelID VoiceChatID
 ---@param memberGUID string
 ---@return  memberID
 function C_VoiceChat.GetMemberID(channelID, memberGUID) end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return  memberInfo
 function C_VoiceChat.GetMemberInfo(memberID, channelID) end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return  memberName
 function C_VoiceChat.GetMemberName(memberID, channelID) end
 
@@ -32934,8 +33049,8 @@ function C_VoiceChat.IsEnabled() end
 ---@return boolean isLoggedIn
 function C_VoiceChat.IsLoggedIn() end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return boolean isLocalPlayer
 function C_VoiceChat.IsMemberLocalPlayer(memberID, channelID) end
 
@@ -32943,13 +33058,13 @@ function C_VoiceChat.IsMemberLocalPlayer(memberID, channelID) end
 ---@return  mutedForMe
 function C_VoiceChat.IsMemberMuted(playerLocation) end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return  mutedForAll
 function C_VoiceChat.IsMemberMutedForAll(memberID, channelID) end
 
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 ---@return  silenced
 function C_VoiceChat.IsMemberSilenced(memberID, channelID) end
 
@@ -32984,11 +33099,12 @@ function C_VoiceChat.IsTranscriptionAllowed() end
 ---@return boolean connected
 function C_VoiceChat.IsVoiceChatConnected() end
 
----@param channelID number
+---@param channelID VoiceChatID
 function C_VoiceChat.LeaveChannel(channelID) end
 
+---@param  ChatChannelType
 ---@return VoiceChatStatusCode status
-function C_VoiceChat.Login() end
+function C_VoiceChat.Login(channelType) end
 
 ---@return VoiceChatStatusCode status
 function C_VoiceChat.Logout() end
@@ -33003,6 +33119,15 @@ function C_VoiceChat.RequestJoinAndActivateCommunityStreamChannel(clubId, stream
 ---@param channelType ChatChannelType
 ---@param  boolean
 function C_VoiceChat.RequestJoinChannelByChannelType(channelType, autoActivate) end
+
+--- Changes the active voice provider to the party voice provider, or to the preferred voice provider when the party has none.
+---@return boolean changed
+function C_VoiceChat.RestoreActiveVoiceProvider() end
+
+--- Changes the active voice provider without changing the preferred voice provider.
+---@param voiceProviderID VoiceProviderID
+---@return boolean success
+function C_VoiceChat.SetActiveVoiceProvider(voiceProviderID) end
 
 ---@param communicationMode CommunicationMode
 function C_VoiceChat.SetCommunicationMode(communicationMode) end
@@ -33038,8 +33163,8 @@ function C_VoiceChat.SetOutputDevice(deviceID) end
 function C_VoiceChat.SetOutputVolume(volume) end
 
 ---@param textureObject SimpleTexture
----@param memberID number
----@param channelID number
+---@param memberID VoiceChatID
+---@param channelID VoiceChatID
 function C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID) end
 
 ---@param keys string[]

@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Spells, Auras & Talents](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **38** functions · **6** events · **0** types
 
@@ -541,6 +541,8 @@ local aura = C_UnitAuras.GetDebuffDataByIndex("player", 1)
 
 ### C_UnitAuras.GetGroupBuffVisualAlerts
 
+Returns the alerts passed to SetGroupBuffVisualAlerts plus an entry for every linked rank spell of those group buffs.
+
 ```lua
 visualAlerts = C_UnitAuras.GetGroupBuffVisualAlerts()
 ```
@@ -558,6 +560,8 @@ local visualAlerts = C_UnitAuras.GetGroupBuffVisualAlerts()
 ```
 
 ### C_UnitAuras.GetHiddenGroupBuffs
+
+Returns the spell IDs passed to SetHiddenGroupBuffs plus every linked rank spell of those group buffs.
 
 ```lua
 spellIDs = C_UnitAuras.GetHiddenGroupBuffs()
@@ -915,6 +919,8 @@ local wantsAlteredForm = C_UnitAuras.WantsAlteredForm("player")
 
 ### GROUP_BUFF_VISUAL_ALERTS_CHANGED
 
+The payload matches GetGroupBuffVisualAlerts, including linked rank spells.
+
 **Payload**
 
 | Name | Type | Nilable | Description |
@@ -922,6 +928,8 @@ local wantsAlteredForm = C_UnitAuras.WantsAlteredForm("player")
 | `visualAlerts` | GroupBuffVisualAlertInfo[] | no |  |
 
 ### HIDDEN_GROUP_BUFFS_CHANGED
+
+The payload matches GetHiddenGroupBuffs, including linked rank spells.
 
 **Payload**
 

@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**79** functions · **47** events · **9** types
+**82** functions · **51** events · **10** types
 
 ## Functions
 
@@ -18,12 +18,12 @@ C_VoiceChat.ActivateChannel(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.ActivateChannel(0)
+C_VoiceChat.ActivateChannel(channelID)
 ```
 
 ### C_VoiceChat.ActivateChannelTranscription
@@ -36,12 +36,12 @@ C_VoiceChat.ActivateChannelTranscription(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.ActivateChannelTranscription(0)
+C_VoiceChat.ActivateChannelTranscription(channelID)
 ```
 
 ### C_VoiceChat.BeginLocalCapture
@@ -132,12 +132,12 @@ C_VoiceChat.DeactivateChannel(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.DeactivateChannel(0)
+C_VoiceChat.DeactivateChannel(channelID)
 ```
 
 ### C_VoiceChat.DeactivateChannelTranscription
@@ -150,12 +150,12 @@ C_VoiceChat.DeactivateChannelTranscription(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.DeactivateChannelTranscription(0)
+C_VoiceChat.DeactivateChannelTranscription(channelID)
 ```
 
 ### C_VoiceChat.EndLocalCapture
@@ -180,7 +180,7 @@ channelID = C_VoiceChat.GetActiveChannelID()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | yes |  |
+| `channelID` | VoiceChatID | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -204,6 +204,24 @@ channelType = C_VoiceChat.GetActiveChannelType()
 
 ```lua
 local channelType = C_VoiceChat.GetActiveChannelType()
+```
+
+### C_VoiceChat.GetActiveVoiceProviderID
+
+```lua
+activeVoiceProviderID = C_VoiceChat.GetActiveVoiceProviderID()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `activeVoiceProviderID` | VoiceProviderID | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local activeVoiceProviderID = C_VoiceChat.GetActiveVoiceProviderID()
 ```
 
 ### C_VoiceChat.GetAvailableInputDevices
@@ -252,7 +270,7 @@ channel = C_VoiceChat.GetChannel(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -263,7 +281,7 @@ channel = C_VoiceChat.GetChannel(channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local channel = C_VoiceChat.GetChannel(0)
+local channel = C_VoiceChat.GetChannel(channelID)
 ```
 
 ### C_VoiceChat.GetChannelForChannelType
@@ -421,18 +439,18 @@ memberID = C_VoiceChat.GetLocalPlayerMemberID(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | yes |  |
+| `memberID` | VoiceChatID | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberID = C_VoiceChat.GetLocalPlayerMemberID(0)
+local memberID = C_VoiceChat.GetLocalPlayerMemberID(channelID)
 ```
 
 ### C_VoiceChat.GetMasterVolumeScale
@@ -463,8 +481,8 @@ memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -475,7 +493,7 @@ memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberGUID = C_VoiceChat.GetMemberGUID(0, 0)
+local memberGUID = C_VoiceChat.GetMemberGUID(memberID, channelID)
 ```
 
 ### C_VoiceChat.GetMemberID
@@ -488,19 +506,19 @@ memberID = C_VoiceChat.GetMemberID(channelID, memberGUID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `memberGUID` | WOWGUID | no |  |
 
 **Returns**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | yes |  |
+| `memberID` | VoiceChatID | yes |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberID = C_VoiceChat.GetMemberID(0, UnitGUID("player"))
+local memberID = C_VoiceChat.GetMemberID(channelID, UnitGUID("player"))
 ```
 
 ### C_VoiceChat.GetMemberInfo
@@ -513,8 +531,8 @@ memberInfo = C_VoiceChat.GetMemberInfo(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -525,7 +543,7 @@ memberInfo = C_VoiceChat.GetMemberInfo(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberInfo = C_VoiceChat.GetMemberInfo(0, 0)
+local memberInfo = C_VoiceChat.GetMemberInfo(memberID, channelID)
 ```
 
 ### C_VoiceChat.GetMemberName
@@ -538,8 +556,8 @@ memberName = C_VoiceChat.GetMemberName(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -550,7 +568,7 @@ memberName = C_VoiceChat.GetMemberName(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local memberName = C_VoiceChat.GetMemberName(0, 0)
+local memberName = C_VoiceChat.GetMemberName(memberID, channelID)
 ```
 
 ### C_VoiceChat.GetMemberVolume
@@ -793,8 +811,8 @@ isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -805,7 +823,7 @@ isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(0, 0)
+local isLocalPlayer = C_VoiceChat.IsMemberLocalPlayer(memberID, channelID)
 ```
 
 ### C_VoiceChat.IsMemberMuted
@@ -842,8 +860,8 @@ mutedForAll = C_VoiceChat.IsMemberMutedForAll(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -854,7 +872,7 @@ mutedForAll = C_VoiceChat.IsMemberMutedForAll(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local mutedForAll = C_VoiceChat.IsMemberMutedForAll(0, 0)
+local mutedForAll = C_VoiceChat.IsMemberMutedForAll(memberID, channelID)
 ```
 
 ### C_VoiceChat.IsMemberSilenced
@@ -867,8 +885,8 @@ silenced = C_VoiceChat.IsMemberSilenced(memberID, channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Returns**
 
@@ -879,7 +897,7 @@ silenced = C_VoiceChat.IsMemberSilenced(memberID, channelID)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local silenced = C_VoiceChat.IsMemberSilenced(0, 0)
+local silenced = C_VoiceChat.IsMemberSilenced(memberID, channelID)
 ```
 
 ### C_VoiceChat.IsMuted
@@ -1078,19 +1096,25 @@ C_VoiceChat.LeaveChannel(channelID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.LeaveChannel(0)
+C_VoiceChat.LeaveChannel(channelID)
 ```
 
 ### C_VoiceChat.Login
 
 ```lua
-status = C_VoiceChat.Login()
+status = C_VoiceChat.Login([channelType])
 ```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `channelType` | ChatChannelType | yes |  |
 
 **Returns**
 
@@ -1172,6 +1196,52 @@ C_VoiceChat.RequestJoinChannelByChannelType(channelType, [autoActivate])
 
 ```lua
 C_VoiceChat.RequestJoinChannelByChannelType(channelType)
+```
+
+### C_VoiceChat.RestoreActiveVoiceProvider
+
+Changes the active voice provider to the party voice provider, or to the preferred voice provider when the party has none.
+
+```lua
+changed = C_VoiceChat.RestoreActiveVoiceProvider()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `changed` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local changed = C_VoiceChat.RestoreActiveVoiceProvider()
+```
+
+### C_VoiceChat.SetActiveVoiceProvider
+
+Changes the active voice provider without changing the preferred voice provider.
+
+```lua
+success = C_VoiceChat.SetActiveVoiceProvider(voiceProviderID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `voiceProviderID` | VoiceProviderID | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `success` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local success = C_VoiceChat.SetActiveVoiceProvider(Enum.VoiceProviderID.Legacy)
 ```
 
 ### C_VoiceChat.SetCommunicationMode
@@ -1369,13 +1439,13 @@ C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `textureObject` | SimpleTexture | no |  |
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_VoiceChat.SetPortraitTexture(textureObject, 0, 0)
+C_VoiceChat.SetPortraitTexture(textureObject, memberID, channelID)
 ```
 
 ### C_VoiceChat.SetPushToTalkBinding
@@ -1536,6 +1606,14 @@ C_VoiceChat.ToggleMuted()
 
 ### VOICE_CHAT_ACTIVE_OUTPUT_DEVICE_UPDATED
 
+### VOICE_CHAT_ACTIVE_VOICE_PROVIDER_CHANGED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `voiceProviderID` | VoiceProviderID | no |  |
+
 ### VOICE_CHAT_AUDIO_CAPTURE_ENERGY
 
 **Payload**
@@ -1555,7 +1633,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_DEACTIVATED
 
@@ -1563,7 +1641,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_DISPLAY_NAME_CHANGED
 
@@ -1571,7 +1649,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `channelDisplayName` | cstring | no |  |
 
 ### VOICE_CHAT_CHANNEL_JOINED
@@ -1581,7 +1659,7 @@ C_VoiceChat.ToggleMuted()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `status` | VoiceChatStatusCode | no |  |
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `channelType` | ChatChannelType | no |  |
 | `clubId` | ClubId | yes |  |
 | `streamId` | ClubStreamId | yes |  |
@@ -1592,8 +1670,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isActive` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_ADDED
@@ -1602,8 +1680,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_ENERGY_CHANGED
 
@@ -1611,8 +1689,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `speakingEnergy` | number | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_GUID_UPDATED
@@ -1621,8 +1699,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ALL_CHANGED
 
@@ -1630,8 +1708,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isMutedForAll` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_MUTE_FOR_ME_CHANGED
@@ -1640,8 +1718,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isMutedForMe` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_REMOVED
@@ -1650,8 +1728,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_SILENCED_CHANGED
 
@@ -1659,8 +1737,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isSilenced` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_SPEAKING_STATE_CHANGED
@@ -1669,8 +1747,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isSpeaking` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_MEMBER_STT_MESSAGE
@@ -1679,8 +1757,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `message` | string | no |  |
 | `language` | string | no |  |
 
@@ -1690,8 +1768,8 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `memberID` | number | no |  |
-| `channelID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `volume` | number | no |  |
 
 ### VOICE_CHAT_CHANNEL_MUTE_STATE_CHANGED
@@ -1700,7 +1778,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isMuted` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_PTT_CHANGED
@@ -1709,7 +1787,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `pushToTalkSetting` | cstring | no |  |
 
 ### VOICE_CHAT_CHANNEL_REMOVED
@@ -1718,7 +1796,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 
 ### VOICE_CHAT_CHANNEL_TRANSCRIBING_CHANGED
 
@@ -1726,7 +1804,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isTranscribing` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_TRANSMIT_CHANGED
@@ -1735,7 +1813,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `isTransmitting` | bool | no |  |
 
 ### VOICE_CHAT_CHANNEL_VOLUME_CHANGED
@@ -1744,7 +1822,7 @@ C_VoiceChat.ToggleMuted()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `volume` | number | no |  |
 
 ### VOICE_CHAT_COMMUNICATION_MODE_CHANGED
@@ -1764,6 +1842,8 @@ C_VoiceChat.ToggleMuted()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `isDeafened` | bool | no |  |
+
+### VOICE_CHAT_DISCORD_SETTINGS_UPDATED
 
 ### VOICE_CHAT_ERROR
 
@@ -1880,6 +1960,16 @@ C_VoiceChat.ToggleMuted()
 
 ### VOICE_CHAT_VAD_SETTINGS_UPDATED
 
+### VOICE_CHAT_VOICE_PROVIDER_CHANGED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `voiceProviderID` | VoiceProviderID | no |  |
+
+### VOICE_CHAT_VOICE_PROVIDERS_AVAILABLE_CHANGED
+
 ## Types
 
 ### CommunicationMode (Enumeration)
@@ -1911,7 +2001,7 @@ C_VoiceChat.ToggleMuted()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `name` | string | no |  |
-| `channelID` | number | no |  |
+| `channelID` | VoiceChatID | no |  |
 | `channelType` | ChatChannelType | no |  |
 | `clubId` | ClubId | no |  |
 | `streamId` | ClubStreamId | no |  |
@@ -1927,7 +2017,7 @@ C_VoiceChat.ToggleMuted()
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `energy` | number | no |  |
-| `memberID` | number | no |  |
+| `memberID` | VoiceChatID | no |  |
 | `isActive` | bool | no |  |
 | `isSpeaking` | bool | no |  |
 | `isMutedForAll` | bool | no |  |
@@ -1970,6 +2060,13 @@ C_VoiceChat.ToggleMuted()
 | `InvalidInputDevice` | VoiceChatStatusCode | no |  |
 | `InvalidOutputDevice` | VoiceChatStatusCode | no |  |
 | `PlayerVoiceChatAgeVerificationRestricted` | VoiceChatStatusCode | no |  |
+
+### VoiceProviderID (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `Legacy` | VoiceProviderID | no |  |
+| `Discord` | VoiceProviderID | no |  |
 
 ### VoiceTtsStatusCode (Enumeration)
 

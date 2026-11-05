@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [UI Systems & Input](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**4** functions · **0** events · **1** types
+**3** functions · **0** events · **1** types
 
 ## Functions
 
@@ -36,24 +36,6 @@ C_GamepadTargeting.Enable()
 
 ```lua
 C_GamepadTargeting.Enable()
-```
-
-### C_GamepadTargeting.HasReticleHoverTarget
-
-```lua
-hasReticleHoverTarget = C_GamepadTargeting.HasReticleHoverTarget()
-```
-
-**Returns**
-
-| Name | Type | Nilable | Description |
-|------|------|---------|-------------|
-| `hasReticleHoverTarget` | bool | no |  |
-
-**Example** _(auto-generated from the signature — illustrative)_
-
-```lua
-local hasReticleHoverTarget = C_GamepadTargeting.HasReticleHoverTarget()
 ```
 
 ### C_GamepadTargeting.SetFilter

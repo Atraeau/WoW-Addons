@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Store, Account & Services](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**29** functions · **6** events · **2** types
+**30** functions · **7** events · **3** types
 
 ## Functions
 
@@ -555,10 +555,10 @@ active = C_GameRules.IsWoWHack()
 local active = C_GameRules.IsWoWHack()
 ```
 
-### C_GameRules.SetForeverExperiencePreset
+### C_GameRules.SetForeverExperiencePresetPostLogin
 
 ```lua
-C_GameRules.SetForeverExperiencePreset(preset)
+C_GameRules.SetForeverExperiencePresetPostLogin(preset)
 ```
 
 **Arguments**
@@ -570,13 +570,31 @@ C_GameRules.SetForeverExperiencePreset(preset)
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GameRules.SetForeverExperiencePreset(Enum.ForeverExperiencePreset.Classic)
+C_GameRules.SetForeverExperiencePresetPostLogin(Enum.ForeverExperiencePreset.Classic)
+```
+
+### C_GameRules.SetForeverExperiencePresetPreLogin
+
+```lua
+C_GameRules.SetForeverExperiencePresetPreLogin(preset)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `preset` | ForeverExperiencePreset | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+C_GameRules.SetForeverExperiencePresetPreLogin(Enum.ForeverExperiencePreset.Classic)
 ```
 
 ### C_GameRules.SetSDHDToggleValue
 
 ```lua
-C_GameRules.SetSDHDToggleValue(setToSD)
+C_GameRules.SetSDHDToggleValue(setToSD, usageLocation)
 ```
 
 **Arguments**
@@ -584,11 +602,12 @@ C_GameRules.SetSDHDToggleValue(setToSD)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `setToSD` | bool | no |  |
+| `usageLocation` | SdToggleUsageLocationUI | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-C_GameRules.SetSDHDToggleValue(false)
+C_GameRules.SetSDHDToggleValue(false, Enum.SdToggleUsageLocationUI.BeforeLogin)
 ```
 
 ## Events
@@ -624,6 +643,8 @@ C_GameRules.SetSDHDToggleValue(false)
 
 ### GAME_RULES_CHANGED
 
+### SETTINGS_HEADER_TEXT_UPDATE
+
 ## Types
 
 ### ForeverExperiencePreset (Enumeration)
@@ -631,7 +652,7 @@ C_GameRules.SetSDHDToggleValue(false)
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
 | `Classic` | ForeverExperiencePreset | no |  |
-| `Modern` | ForeverExperiencePreset | no |  |
+| `Enhanced` | ForeverExperiencePreset | no |  |
 
 ### GameModeDisplayInfo (Structure)
 
@@ -644,3 +665,12 @@ C_GameRules.SetSDHDToggleValue(false)
 | `logoUsesDarkBackdrop` | bool | no |  |
 | `characterCreateExtraHeight` | number | no |  |
 | `characterCreateOuterBorder` | fileID | no |  |
+
+### SdToggleUsageLocationUI (Enumeration)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `BeforeLogin` | SdToggleUsageLocationUI | no |  |
+| `CharacterCreation` | SdToggleUsageLocationUI | no |  |
+| `BarberShop` | SdToggleUsageLocationUI | no |  |
+| `OptionsMenu` | SdToggleUsageLocationUI | no |  |

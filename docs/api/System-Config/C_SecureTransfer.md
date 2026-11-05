@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**11** functions · **5** events · **1** types
+**14** functions · **6** events · **2** types
 
 ## Functions
 
@@ -110,22 +110,40 @@ productID = C_SecureTransfer.GetHousingVCPurchaseProductID()
 local productID = C_SecureTransfer.GetHousingVCPurchaseProductID()
 ```
 
-### C_SecureTransfer.GetMailInfo
+### C_SecureTransfer.GetMailReceiveInfo
 
 ```lua
-mailInfo = C_SecureTransfer.GetMailInfo()
+mailInfo = C_SecureTransfer.GetMailReceiveInfo()
 ```
 
 **Returns**
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `mailInfo` | MailInfo | no |  |
+| `mailInfo` | MailReceiveInfo | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
 ```lua
-local mailInfo = C_SecureTransfer.GetMailInfo()
+local mailInfo = C_SecureTransfer.GetMailReceiveInfo()
+```
+
+### C_SecureTransfer.GetMailSendInfo
+
+```lua
+mailInfo = C_SecureTransfer.GetMailSendInfo()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `mailInfo` | MailSendInfo | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local mailInfo = C_SecureTransfer.GetMailSendInfo()
 ```
 
 ### C_SecureTransfer.GetTradePartner
@@ -176,6 +194,36 @@ shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()
 local shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()
 ```
 
+### C_SecureTransfer.ShouldShowTradeRMTWarning
+
+```lua
+shouldShow = C_SecureTransfer.ShouldShowTradeRMTWarning()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `shouldShow` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local shouldShow = C_SecureTransfer.ShouldShowTradeRMTWarning()
+```
+
+### C_SecureTransfer.TakeMailMoney
+
+```lua
+C_SecureTransfer.TakeMailMoney()
+```
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+C_SecureTransfer.TakeMailMoney()
+```
+
 ## Events
 
 ### SECURE_TRANSFER_CANCEL
@@ -184,13 +232,22 @@ local shouldShow = C_SecureTransfer.ShouldShowTradeOfferWarning()
 
 ### SECURE_TRANSFER_CONFIRM_SEND_MAIL
 
+### SECURE_TRANSFER_CONFIRM_TAKE_MAIL_MONEY
+
 ### SECURE_TRANSFER_CONFIRM_TRADE_ACCEPT
 
 ### SECURE_TRANSFER_HOUSING_CURRENCY_PURCHASE_CONFIRMATION
 
 ## Types
 
-### MailInfo (Structure)
+### MailReceiveInfo (Structure)
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `sender` | string | no |  |
+| `money` | number | no |  |
+
+### MailSendInfo (Structure)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|

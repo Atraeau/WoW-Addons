@@ -1,16 +1,16 @@
 {
   "meta": {
     "systemCount": 410,
-    "tableCount": 797,
+    "tableCount": 801,
     "product": "wow_classic_beta",
     "interface": 16001,
-    "buildDate": "Oct  1 2026",
+    "buildDate": "Nov  3 2026",
     "hasAPIDocumentation": true,
-    "eventCount": 1806,
+    "eventCount": 1816,
     "version": "1.60.1",
-    "exportedAt": "2026-10-01 21:34:30",
-    "functionCount": 6598,
-    "build": "70170"
+    "exportedAt": "2026-11-05 05:23:47",
+    "functionCount": 6621,
+    "build": "70790"
   },
   "groups": [
     {

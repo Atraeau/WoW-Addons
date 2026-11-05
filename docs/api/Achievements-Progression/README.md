@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**24** namespaces · **200** functions · **65** events · **50** types
+**24** namespaces · **201** functions · **65** events · **51** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -25,7 +25,7 @@
 | [C_SeasonInfo](C_SeasonInfo.md) | 3 | 0 | 0 |
 | [C_WeeklyRewards](C_WeeklyRewards.md) | 21 | 2 | 6 |
 | [C_WowEntitlementInfo](C_WowEntitlementInfo.md) | 0 | 2 | 1 |
-| [Expansion](Expansion.md) | 23 | 3 | 4 |
+| [Expansion](Expansion.md) | 24 | 3 | 5 |
 | [ExpansionInfo](ExpansionInfo.md) | 3 | 0 | 0 |
 | [SimpleAnimAlphaAPI](SimpleAnimAlphaAPI.md) | 4 | 0 | 0 |
 | [SimpleAnimatableObjectAPI](SimpleAnimatableObjectAPI.md) | 3 | 0 | 0 |

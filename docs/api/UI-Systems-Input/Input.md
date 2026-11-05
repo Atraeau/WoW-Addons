@@ -2,11 +2,30 @@
 
 [← API index](../README.md) · group: [UI Systems & Input](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**29** functions · **1** events · **0** types
+**31** functions · **1** events · **0** types
 
 ## Functions
+
+### Input.GetCursorCenterPosition
+
+```lua
+posX, posY = GetCursorCenterPosition()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `posX` | number | no |  |
+| `posY` | number | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local posX, posY = GetCursorCenterPosition()
+```
 
 ### Input.GetCursorDelta
 
@@ -164,6 +183,24 @@ down = IsControlKeyDown()
 
 ```lua
 local down = IsControlKeyDown()
+```
+
+### Input.IsCursorVisible
+
+```lua
+visible = IsCursorVisible()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `visible` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local visible = IsCursorVisible()
 ```
 
 ### Input.IsKeyDown

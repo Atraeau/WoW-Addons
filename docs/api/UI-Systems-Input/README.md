@@ -2,12 +2,12 @@
 
 [← All API groups](../README.md)
 
-**39** namespaces · **355** functions · **82** events · **47** types
+**39** namespaces · **357** functions · **82** events · **47** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
 | [C_AccessibilityOptions](C_AccessibilityOptions.md) | 0 | 0 | 0 |
-| [C_ActionBar](C_ActionBar.md) | 72 | 15 | 1 |
+| [C_ActionBar](C_ActionBar.md) | 73 | 15 | 1 |
 | [C_AutoComplete](C_AutoComplete.md) | 4 | 0 | 1 |
 | [C_CinematicList](C_CinematicList.md) | 1 | 0 | 1 |
 | [C_ClickBindings](C_ClickBindings.md) | 9 | 1 | 0 |
@@ -19,7 +19,7 @@
 | [C_EndOfMatchUI](C_EndOfMatchUI.md) | 1 | 1 | 4 |
 | [C_EventToastManager](C_EventToastManager.md) | 3 | 2 | 1 |
 | [C_GamePad](C_GamePad.md) | 25 | 6 | 9 |
-| [C_GamepadTargeting](C_GamepadTargeting.md) | 4 | 0 | 1 |
+| [C_GamepadTargeting](C_GamepadTargeting.md) | 3 | 0 | 1 |
 | [C_GamepadUI](C_GamepadUI.md) | 5 | 2 | 3 |
 | [C_Glue](C_Glue.md) | 2 | 1 | 0 |
 | [C_InputInterfaceStyle](C_InputInterfaceStyle.md) | 1 | 0 | 0 |
@@ -42,6 +42,6 @@
 | [Console](Console.md) | 10 | 7 | 4 |
 | [GameError](GameError.md) | 2 | 0 | 0 |
 | [GameUI](GameUI.md) | 2 | 0 | 0 |
-| [Input](Input.md) | 29 | 1 | 0 |
+| [Input](Input.md) | 31 | 1 | 0 |
 | [Movie](Movie.md) | 6 | 0 | 0 |
 | [Screen](Screen.md) | 5 | 0 | 0 |

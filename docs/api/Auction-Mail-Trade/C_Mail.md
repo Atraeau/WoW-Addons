@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Auction, Mail & Trade](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**5** functions · **13** events · **0** types
+**5** functions · **14** events · **0** types
 
 ## Functions
 
@@ -141,6 +141,8 @@ C_Mail.SetOpeningAll(false)
 |------|------|---------|-------------|
 | `attachSlot` | luaIndex | no |  |
 | `itemLink` | cstring | no |  |
+
+### MAIL_OPEN_ALL_CANCELED
 
 ### MAIL_SEND_INFO_UPDATE
 

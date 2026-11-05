@@ -2,7 +2,7 @@
 
 [← All API groups](../README.md)
 
-**33** namespaces · **277** functions · **9** events · **14** types
+**33** namespaces · **278** functions · **10** events · **14** types
 
 | Namespace | Functions | Events | Types |
 |-----------|-----------|--------|-------|
@@ -13,7 +13,7 @@
 | [C_DateAndTime](C_DateAndTime.md) | 11 | 1 | 1 |
 | [C_DurationUtil](C_DurationUtil.md) | 3 | 0 | 0 |
 | [C_EncodingUtil](C_EncodingUtil.md) | 10 | 0 | 5 |
-| [C_ExternalEventURL](C_ExternalEventURL.md) | 3 | 1 | 0 |
+| [C_ExternalEventURL](C_ExternalEventURL.md) | 4 | 2 | 0 |
 | [C_Intl](C_Intl.md) | 27 | 0 | 0 |
 | [C_NameUtil](C_NameUtil.md) | 1 | 0 | 0 |
 | [C_PhotoSharing](C_PhotoSharing.md) | 11 | 5 | 0 |

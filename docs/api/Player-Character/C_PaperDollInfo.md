@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Player & Character](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **21** functions · **23** events · **4** types
 
@@ -46,7 +46,7 @@ local canAutoEquip = C_PaperDollInfo.CanAutoEquipCursorItem()
 
 ### C_PaperDollInfo.CancelTemporaryEnchantment
 
-Cancels active temporary enchantments on inventory slot items.
+Cancels active temporary enchantments on inventory slot items. Imbue enchants take priority over temporary enchants.
 
 ```lua
 C_PaperDollInfo.CancelTemporaryEnchantment(slot)
@@ -365,7 +365,7 @@ local stagger, staggerAgainstTarget = C_PaperDollInfo.GetStaggerPercentage("play
 
 ### C_PaperDollInfo.GetTemporaryEnchantmentInfo
 
-Queries information about active temporary enchants on inventory slot items.
+Queries information about active temporary enchants on inventory slot items. Imbue enchants take priority over temporary enchants.
 
 ```lua
 enchantInfo = C_PaperDollInfo.GetTemporaryEnchantmentInfo(slot)

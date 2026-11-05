@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Pets, Mounts & Collections](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**13** functions · **11** events · **1** types
+**14** functions · **12** events · **1** types
 
 ## Functions
 
@@ -215,6 +215,24 @@ isPassive = C_PetInfo.IsPetActionPassive(actionID)
 local isPassive = C_PetInfo.IsPetActionPassive(0)
 ```
 
+### C_PetInfo.IsPetOrderMoveToPending
+
+```lua
+isPetOrderMoveToPending = C_PetInfo.IsPetOrderMoveToPending()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isPetOrderMoveToPending` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local isPetOrderMoveToPending = C_PetInfo.IsPetOrderMoveToPending()
+```
+
 ### C_PetInfo.PetAbandon
 
 ```lua
@@ -298,6 +316,14 @@ C_PetInfo.PetRename("")
 | `declinedName3` | cstring | yes |  |
 | `declinedName4` | cstring | yes |  |
 | `declinedName5` | cstring | yes |  |
+
+### PET_ORDER_MOVE_TO_PENDING_CHANGED
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isPetOrderMoveToPending` | bool | no |  |
 
 ### PET_UI_CLOSE
 

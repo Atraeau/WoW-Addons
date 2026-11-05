@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **52** functions · **17** events · **11** types
 
@@ -1310,6 +1310,7 @@ local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)
 | `name` | kstringLfgListApplicant | no |  |
 | `comment` | kstringLfgListApplicant | no |  |
 | `voiceChat` | kstringLfgListApplicant | no |  |
+| `voiceMode` | LFGEntryVoiceMode | no |  |
 | `censored` | bool | no |  |
 | `duration` | time_t | no |  |
 | `autoAccept` | bool | no |  |
@@ -1337,6 +1338,7 @@ local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)
 | `requiredDungeonScore` | number | no | (default: 0) |
 | `requiredItemLevel` | number | no | (default: 0) |
 | `requiredPvpRating` | number | no | (default: 0) |
+| `voiceMode` | LFGEntryVoiceMode | no | (default: None) |
 
 ### LfgSearchResultData (Structure)
 
@@ -1348,6 +1350,7 @@ local passes = C_LFGList.ValidateRequiredPvpRatingForActivity(0, 0)
 | `name` | kstringLfgListSearch | no |  |
 | `comment` | kstringLfgListSearch | no |  |
 | `voiceChat` | kstringLfgListSearch | no |  |
+| `voiceMode` | LFGEntryVoiceMode | no |  |
 | `censored` | bool | no |  |
 | `requiredItemLevel` | number | no |  |
 | `requiredHonorLevel` | number | no |  |

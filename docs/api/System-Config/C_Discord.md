@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**20** functions · **6** events · **0** types
+**21** functions · **6** events · **0** types
 
 ## Functions
 
@@ -55,7 +55,7 @@ userID = C_Discord.GetDiscordUserID()
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `userID` | DiscordID | no |  |
+| `userID` | DiscordMemberOpaqueID | no |  |
 
 **Example** _(auto-generated from the signature — illustrative)_
 
@@ -73,7 +73,7 @@ userName = C_Discord.GetDiscordUserName(userID)
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `userID` | DiscordID | no |  |
+| `userID` | DiscordMemberOpaqueID | no |  |
 
 **Returns**
 
@@ -317,6 +317,24 @@ hasOAuth = C_Discord.IsUserOAuthed()
 
 ```lua
 local hasOAuth = C_Discord.IsUserOAuthed()
+```
+
+### C_Discord.IsVoiceEnabled
+
+```lua
+enabled = C_Discord.IsVoiceEnabled()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `enabled` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local enabled = C_Discord.IsVoiceEnabled()
 ```
 
 ### C_Discord.RefreshAuth

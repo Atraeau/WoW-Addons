@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Spells, Auras & Talents](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **7** functions · **3** events · **2** types
 
@@ -195,7 +195,8 @@ C_CooldownViewer.SetLayoutData("")
 
 | Name | Type | Nilable | Description |
 |------|------|---------|-------------|
-| `spellID` | number | no |  |
+| `spellID` | number | no | The persisted key for this item, shared by every rank of the spell. |
+| `displaySpellID` | number | no | The spell used for name, icon and tooltip: the highest known rank, or the lowest rank if none are known. |
 | `name` | cstring | no |  |
 | `iconID` | fileID | no |  |
 | `flags` | GroupBuffItemFlags | no |  |

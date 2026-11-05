@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [System & Config](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**1** functions · **30** events · **0** types
+**1** functions · **31** events · **0** types
 
 ## Functions
 
@@ -114,6 +114,8 @@ local objects = C_System.GetFrameStack()
 ### SEARCH_DB_LOADED
 
 ### SHARD_TRANSFER
+
+### SHARD_TRANSFER_CANCELLED
 
 ### SHARD_TRANSFER_IMMINENT
 

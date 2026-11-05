@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [Guild, Social & Chat](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**33** functions · **0** events · **4** types
+**36** functions · **0** events · **4** types
 
 ## Functions
 
@@ -42,6 +42,24 @@ installed = C_BattleNet.AreHighResTexturesInstalled()
 
 ```lua
 local installed = C_BattleNet.AreHighResTexturesInstalled()
+```
+
+### C_BattleNet.AreRealIDFriendsEnabled
+
+```lua
+areRealIDFriendsEnabled = C_BattleNet.AreRealIDFriendsEnabled()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `areRealIDFriendsEnabled` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local areRealIDFriendsEnabled = C_BattleNet.AreRealIDFriendsEnabled()
 ```
 
 ### C_BattleNet.AreTitleFriendCustomNamesEnabled
@@ -207,6 +225,30 @@ customName = C_BattleNet.GetCustomTitleFriendName(id)
 local customName = C_BattleNet.GetCustomTitleFriendName(0)
 ```
 
+### C_BattleNet.GetDefaultTitleWhisperTarget
+
+```lua
+whisperTarget = C_BattleNet.GetDefaultTitleWhisperTarget(id)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `id` | number | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `whisperTarget` | string | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local whisperTarget = C_BattleNet.GetDefaultTitleWhisperTarget(0)
+```
+
 ### C_BattleNet.GetFriendAccountInfo
 
 ```lua
@@ -279,6 +321,30 @@ inviteInfo = C_BattleNet.GetFriendInviteInfo(inviteIndex)
 
 ```lua
 local inviteInfo = C_BattleNet.GetFriendInviteInfo(1)
+```
+
+### C_BattleNet.GetFriendLevelFromInviteText
+
+```lua
+friendLevel = C_BattleNet.GetFriendLevelFromInviteText(inviteText)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `inviteText` | cstring | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `friendLevel` | BattleNetFriendLevel | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local friendLevel = C_BattleNet.GetFriendLevelFromInviteText("")
 ```
 
 ### C_BattleNet.GetFriendNumGameAccounts
@@ -758,3 +824,4 @@ C_BattleNet.SetFriendTags(0, friendTags)
 | `regionID` | number | no |  |
 | `isInCurrentRegion` | bool | no |  |
 | `timerunningSeasonID` | number | yes |  |
+| `subIcon` | string | yes |  |

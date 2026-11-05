@@ -2,11 +2,29 @@
 
 [← API index](../README.md) · group: [Core & Shared Libraries](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**3** functions · **1** events · **0** types
+**4** functions · **2** events · **0** types
 
 ## Functions
+
+### C_ExternalEventURL.CanShow
+
+```lua
+canShow = C_ExternalEventURL.CanShow()
+```
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `canShow` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local canShow = C_ExternalEventURL.CanShow()
+```
 
 ### C_ExternalEventURL.HasURL
 
@@ -58,4 +76,12 @@ C_ExternalEventURL.LaunchURL()
 
 ## Events
 
-### EXTERNAL_EVENT_LAUNCH_URL_FAILED
+### EXTERNAL_EVENT_LAUNCH_URL_RESULT
+
+**Payload**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `result` | bool | no |  |
+
+### EXTERNAL_EVENT_URL_CHANGED

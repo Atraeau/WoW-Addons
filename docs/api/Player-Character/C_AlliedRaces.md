@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Player & Character](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
 **2** functions · **2** events · **2** types
 

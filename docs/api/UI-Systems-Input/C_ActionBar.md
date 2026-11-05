@@ -2,9 +2,9 @@
 
 [← API index](../README.md) · group: [UI Systems & Input](README.md)
 
-> Generated from the WoW: Forever client (build 70170, interface 16001) on 2026-10-01 21:34:30.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
 
-**72** functions · **15** events · **1** types
+**73** functions · **15** events · **1** types
 
 ## Functions
 
@@ -1291,6 +1291,30 @@ isHelpful = C_ActionBar.IsHelpfulAction(actionID, useNeutral)
 
 ```lua
 local isHelpful = C_ActionBar.IsHelpfulAction(1, false)
+```
+
+### C_ActionBar.IsHighestSpellRank
+
+```lua
+isHighestRank = C_ActionBar.IsHighestSpellRank(spellID)
+```
+
+**Arguments**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `spellID` | SpellIdentifier | no |  |
+
+**Returns**
+
+| Name | Type | Nilable | Description |
+|------|------|---------|-------------|
+| `isHighestRank` | bool | no |  |
+
+**Example** _(auto-generated from the signature — illustrative)_
+
+```lua
+local isHighestRank = C_ActionBar.IsHighestSpellRank(2050)
 ```
 
 ### C_ActionBar.IsInterruptAction
