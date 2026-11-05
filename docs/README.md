@@ -16,7 +16,7 @@ any external assumption.
    base64-encoded JSON payload (`WowApiExportB64`) plus a human-readable Lua table. From
    addon version 0.2.0 it also holds the client's console commands and CVars (with their
    values and defaults); `.\scripts\generate-console-docs.ps1` turns those into
-   [`docs/console-commands.md`](console-commands.md) (once generated).
+   `docs/console-commands.md` (it doesn't exist until you generate it).
 
 2. **Generate the Markdown** — from the repo root:
    ```powershell
