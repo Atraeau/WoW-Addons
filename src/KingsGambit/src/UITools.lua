@@ -111,14 +111,23 @@ function M.Find(id)
 end
 
 ---------------------------------------------------------------- the frames
-local function button(parent, text, w, h)
-    local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-    b:SetSize(w, h or 22)
-    b:SetText(text)
-    return b
+local MAX_FIELDS = 4
+
+local function groupById(id) for _, g in ipairs(M.GROUPS) do if g.id == id then return g end end end
+
+-- A dropdown the game's way (radio buttons in a menu), or nil if this client doesn't have it.
+local function dropdown(parent, width)
+    local ok, d = pcall(CreateFrame, "DropdownButton", nil, parent, "WowStyle1DropdownTemplate")
+    if ok and d and d.SetupMenu then d:SetWidth(width); return d end
 end
 
-local MAX_ACTIONS, MAX_FIELDS = 12, 4
+local function chooseAction(f, ui, a)
+    f.action = a and a.id or nil
+    for _, box in ipairs(f.boxes) do box:SetText("") end
+    if a then for j, fld in ipairs(a.fields) do if fld.default then f.boxes[j]:SetText(fld.default) end end end
+    f.problem:SetText("")
+    ui:Refresh()
+end
 
 function M.Build(parent, ui)
     local f = CreateFrame("Frame", nil, parent)
@@ -131,36 +140,70 @@ function M.Build(parent, ui)
     f:SetAllPoints()
     f.group, f.action = M.GROUPS[1].id, nil
 
-    f.groupButtons = {}
-    for i, g in ipairs(M.GROUPS) do
-        local b = button(f, g.title, 94, 22)
-        b:SetPoint("TOPLEFT", 4 + (i - 1) * 96, 0)
-        b:SetScript("OnClick", function() f.group, f.action = g.id, nil; ui:Refresh() end)
-        f.groupButtons[g.id] = b
+    -- Two choices, one under the other: the area (Raid, List, ...), then what to do in it. The form for that action fills the rest of the tab.
+    local l1 = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    l1:SetPoint("TOPLEFT", 4, -6); l1:SetText("Area:")
+    local l2 = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    l2:SetPoint("TOPLEFT", 4, -40); l2:SetText("Action:")
+
+    f.groupDrop = dropdown(f, 250)
+    f.actionDrop = dropdown(f, 250)
+    if f.groupDrop and f.actionDrop then
+        f.groupDrop:SetPoint("TOPLEFT", 70, -2)
+        f.actionDrop:SetPoint("TOPLEFT", 70, -36)
+        f.groupDrop:SetupMenu(function(_, root)
+            for _, g in ipairs(M.GROUPS) do
+                root:CreateRadio(g.title, function() return f.group == g.id end, function() f.group = g.id; chooseAction(f, ui, nil) end)
+            end
+        end)
+        f.actionDrop:SetDefaultText("Choose an action")
+        f.actionDrop:SetupMenu(function(_, root)
+            local g = groupById(f.group)
+            for _, a in ipairs(g and g.actions or {}) do
+                root:CreateRadio(a.label, function() return f.action == a.id end, function() chooseAction(f, ui, a) end)
+            end
+        end)
+    else
+        -- Without the game's dropdowns: two buttons that step through the choices.
+        f.groupDrop, f.actionDrop = nil, nil
+        f.groupStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+        f.groupStep:SetSize(250, 24); f.groupStep:SetPoint("TOPLEFT", 70, -2)
+        f.groupStep:SetScript("OnClick", function()
+            for i, g in ipairs(M.GROUPS) do
+                if g.id == f.group then f.group = M.GROUPS[i % #M.GROUPS + 1].id; break end
+            end
+            chooseAction(f, ui, nil)
+        end)
+        f.actionStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+        f.actionStep:SetSize(250, 24); f.actionStep:SetPoint("TOPLEFT", 70, -36)
+        f.actionStep:SetScript("OnClick", function()
+            local g = groupById(f.group)
+            local nextAction = g.actions[1]
+            for i, a in ipairs(g.actions) do
+                if a.id == f.action then nextAction = g.actions[i % #g.actions + 1]; break end
+            end
+            chooseAction(f, ui, nextAction)
+        end)
     end
-    f.actionButtons = {}
-    for i = 1, MAX_ACTIONS do
-        local b = button(f, "", 122, 22)
-        b:SetPoint("TOPLEFT", 4 + ((i - 1) % 3) * 126, -30 - math.floor((i - 1) / 3) * 26)
-        f.actionButtons[i] = b
-    end
+
     f.title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    f.title:SetPoint("TOPLEFT", 4, -142)
+    f.title:SetPoint("TOPLEFT", 4, -82)
     f.help = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    f.help:SetPoint("TOPLEFT", 4, -166); f.help:SetWidth(372); f.help:SetJustifyH("LEFT"); f.help:SetWordWrap(true)
+    f.help:SetPoint("TOPLEFT", 4, -108); f.help:SetWidth(372); f.help:SetJustifyH("LEFT"); f.help:SetJustifyV("TOP"); f.help:SetWordWrap(true)
     f.labels, f.boxes = {}, {}
     for i = 1, MAX_FIELDS do
-        local y = -216 - (i - 1) * 30
+        local y = -172 - (i - 1) * 32
         f.labels[i] = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         f.labels[i]:SetPoint("TOPLEFT", 4, y); f.labels[i]:SetWidth(150); f.labels[i]:SetJustifyH("LEFT")
         local box = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
-        box:SetSize(210, 20); box:SetPoint("TOPLEFT", 164, y + 4); box:SetAutoFocus(false)
+        box:SetSize(200, 20); box:SetPoint("TOPLEFT", 164, y + 4); box:SetAutoFocus(false)
         box:SetScript("OnEditFocusGained", function(self) M.focus = self end)
         box:SetScript("OnEditFocusLost", function(self) if M.focus == self then M.focus = nil end end)
         f.boxes[i] = box
     end
-    f.run = button(f, "Do it", 100, 24)
-    f.run:SetPoint("TOPLEFT", 4, -216 - MAX_FIELDS * 30)
+    f.run = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    f.run:SetSize(100, 24); f.run:SetText("Do it")
+    f.run:SetPoint("TOPLEFT", 4, -172 - MAX_FIELDS * 32 - 6)
     f.problem = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.problem:SetPoint("LEFT", f.run, "RIGHT", 10, 0)
     f.run:SetScript("OnClick", function()
@@ -177,31 +220,20 @@ function M.Build(parent, ui)
 end
 
 function M.Refresh(f, ctx, ui)
-    local group
-    for _, g in ipairs(M.GROUPS) do
-        if g.id == f.group then group = g end
-        f.groupButtons[g.id]:SetEnabled(g.id ~= f.group)
-    end
-    for i = 1, MAX_ACTIONS do
-        local a, b = group.actions[i], f.actionButtons[i]
-        if a then
-            b:SetText(a.label); b:Show()
-            b:SetEnabled(a.id ~= f.action)
-            b:SetScript("OnClick", function()
-                f.action = a.id
-                for _, box in ipairs(f.boxes) do box:SetText("") end
-                for j, fld in ipairs(a.fields) do if fld.default then f.boxes[j]:SetText(fld.default) end end
-                f.problem:SetText("")
-                ui:Refresh()
-            end)
-        else
-            b:Hide()
-        end
-    end
+    local group = groupById(f.group)
     local action = f.action and M.Find(f.action)
+    if f.groupDrop then
+        if f.shown ~= f.group .. "/" .. tostring(f.action) then
+            f.shown = f.group .. "/" .. tostring(f.action)
+            f.groupDrop:GenerateMenu(); f.actionDrop:GenerateMenu()
+        end
+    else
+        f.groupStep:SetText("Area: " .. group.title .. "  (click for the next)")
+        f.actionStep:SetText(action and action.label or "Choose an action (click)")
+    end
     if not action then
         f.title:SetText(group.title)
-        f.help:SetText("Pick an action. Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output below says why.")
+        f.help:SetText("Choose an action above. Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output at the foot of the window says why.")
         for i = 1, MAX_FIELDS do f.labels[i]:Hide(); f.boxes[i]:Hide() end
         f.run:Hide()
         return

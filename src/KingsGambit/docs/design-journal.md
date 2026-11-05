@@ -1952,7 +1952,7 @@ shift-clicking an item while a box has the cursor inserts its link, and a link i
 
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
-what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.
+The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

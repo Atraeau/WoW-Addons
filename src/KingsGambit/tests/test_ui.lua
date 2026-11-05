@@ -65,9 +65,15 @@ local function frame()
     end })
 end
 
-test("the window builds and refreshes on every tab, in practice and out, without errors", function()
+for _, variant in ipairs { "with the game's templates", "without them (the plain fallbacks)" } do
+test("the window builds and refreshes on every tab, in practice and out, without errors, " .. variant, function()
+    local missing = variant:find("without") and { DropdownButton = true, WowStyle1DropdownTemplate = true, TabSystemTemplate = true, WowScrollBoxList = true,
+        MinimalScrollBar = true, InsetFrameTemplate = true, UICheckButtonTemplate = true, UIPanelScrollFrameTemplate = true, BasicFrameTemplateWithInset = true } or {}
     local saved = { CreateFrame = _G.CreateFrame, UIParent = _G.UIParent, UISpecialFrames = _G.UISpecialFrames }
-    _G.CreateFrame, _G.UIParent, _G.UISpecialFrames = function() return frame() end, frame(), {}
+    _G.CreateFrame, _G.UIParent, _G.UISpecialFrames = function(_, _, _, template)
+        if template and missing[template] then error("no such template: " .. template) end
+        return frame()
+    end, frame(), {}
     local shown = {}
     local g = { CreateScrollBoxListLinearView = _G.CreateScrollBoxListLinearView, ScrollUtil = _G.ScrollUtil, CreateDataProvider = _G.CreateDataProvider, ScrollBoxConstants = _G.ScrollBoxConstants }
     _G.CreateScrollBoxListLinearView = function() return frame() end
@@ -99,6 +105,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
     UI.window, UI.practice = nil, nil
     assert(ok, tostring(err))
 end)
+end
 
 H.section("Window: the Tools forms")
 local UITools = SK.modules.UITools
