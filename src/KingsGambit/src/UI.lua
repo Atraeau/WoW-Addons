@@ -142,8 +142,10 @@ function M:Refresh()
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
     w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" or "")
-    w.practiceButton:SetText(M.practice and "Leave practice" or "Practice")
-    w.sizeButton:SetText((M.practice and "Group: " or "Practice with: ") .. M.size)
+    w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode")
+    -- The group size only means something inside practice mode.
+    setShown(w.sizeButton, M.practice ~= nil)
+    w.sizeButton:SetText("Practice group: " .. M.size)
     for _, t in ipairs(TABS) do
         w.tabButtons[t[1]]:SetEnabled(M.tab ~= t[1])
         setShown(w.pages[t[1]], M.tab == t[1])
@@ -268,7 +270,7 @@ function M:Build()
         for i, n in ipairs(M.SIZES) do
             if n == M.size then M.size = M.SIZES[i % #M.SIZES + 1]; break end
         end
-        if M.practice then M:StartPractice() else M:Refresh() end
+        if M.practice then M:StartPractice() end
     end)
 
     w.tabButtons = {}
