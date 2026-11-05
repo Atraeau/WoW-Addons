@@ -58,9 +58,10 @@ function M:Refresh()
             row:Hide()
         end
     end
+    w.startButton:SetShown(#model.lists == 0)
     if model.total == 0 then
         w.rows[1]:SetText(#model.lists == 0
-            and "No lists yet. The guild master starts the ledger by typing:  /gambit create main"
+            and "No lists yet. The guild master starts the ledger with the button below."
             or "(nothing on this list yet)")
         w.rows[1]:Show()
     end
@@ -114,6 +115,15 @@ function M:Build()
         f:SetJustifyH("LEFT")
         w.rows[i] = f
     end
+
+    -- First run: the guild master founds the ledger (the same as `create main`; the ledger records who did it as the guild master).
+    w.startButton = button(w, "Start the ledger", 160, 26)
+    w.startButton:SetPoint("TOP", 0, -130)
+    w.startButton:SetScript("OnClick", function()
+        SK.commands.handle("create main Main")
+        M.list = "main"; M:Refresh()
+    end)
+    w.startButton:Hide()
 
     local prev, nxt, refresh = button(w, "<", 30), button(w, ">", 30), button(w, "Refresh", 70)
     prev:SetPoint("BOTTOMLEFT", 16, 14); nxt:SetPoint("LEFT", prev, "RIGHT", 4, 0)
