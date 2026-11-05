@@ -15,20 +15,20 @@ end
 M.GROUPS = {
     { id = "raid", title = "Raid", actions = {
         { id = "raidopen", label = "Open a raid", help = "Officers. The Master Looter writes the raid's awards. Name a list to play on it (required if the guild master set one list per raid).",
-            fields = { F("ml", "Master Looter", { name = true, optional = true }), F("hours", "Hours", { optional = true, default = "4" }), F("list", "List", { optional = true }) },
+            fields = { F("ml", "Master Looter", { name = true, optional = true, source = "group" }), F("hours", "Hours", { optional = true, default = "4" }), F("list", "List", { optional = true }) },
             cmd = { "raid open", "@ml", "@hours", { "list", "@list" } } },
         { id = "raidlist", label = "Name the raid's list", help = "Officers. Once named, a raid never changes list.", fields = { F("id", "List") }, cmd = { "raid list", "@id" } },
         { id = "raidshow", label = "Open raids", help = "Who is Master Looter of the raids that are open, and on which list.", fields = {}, cmd = { "raid" } },
         { id = "raidextend", label = "Extend a raid", help = "Give a running raid more time (24 hours at most).", fields = { F("hours", "Hours", { optional = true, default = "2" }) }, cmd = { "raid extend", "@hours" } },
-        { id = "raidrevoke", label = "Revoke a raid", help = "Take the Master Looter's right to write away at once. It is in the record.", fields = { F("name", "Raid or Master Looter", { optional = true, name = true }) }, cmd = { "raid revoke", "@name" } },
+        { id = "raidrevoke", label = "Revoke a raid", help = "Take the Master Looter's right to write away at once. It is in the record.", fields = { F("name", "Raid or Master Looter", { optional = true, name = true, source = "group" }) }, cmd = { "raid revoke", "@name" } },
         { id = "raidclose", label = "Close my raid", help = "Master Looter: end your raid.", fields = {}, cmd = { "raid close" } },
-        { id = "masterloot", label = "Set Master Looter", help = "Raid leader: set the loot method to Master Looter (the game's own setting).", fields = { F("name", "Looter (default you)", { optional = true, name = true }) }, cmd = { "masterloot", "@name" } },
-        { id = "disenchanter", label = "Disenchanter", help = "Master Looter: who disenchants what nobody wants. Required before loot is handed out. Empty shows who it is.", fields = { F("name", "Name", { optional = true, name = true }) }, cmd = { "disenchanter", "@name" } },
+        { id = "masterloot", label = "Set Master Looter", help = "Raid leader: set the loot method to Master Looter (the game's own setting).", fields = { F("name", "Looter (default you)", { optional = true, name = true, source = "group" }) }, cmd = { "masterloot", "@name" } },
+        { id = "disenchanter", label = "Disenchanter", help = "Master Looter: who disenchants what nobody wants. Required before loot is handed out. Empty shows who it is.", fields = { F("name", "Name", { optional = true, name = true, source = "group" }) }, cmd = { "disenchanter", "@name" } },
     } },
     { id = "list", title = "List", actions = {
         { id = "listuse", label = "Work on a list", help = "Which list add, move, award and undo change (empty = your raid's list, else main).", fields = { F("id", "List", { optional = true }) }, cmd = { "list use", "@id" } },
         { id = "create", label = "Create a list", help = "A list's id: lower-case letters, digits and _ (up to 24).", fields = { F("id", "List id"), F("name", "Title", { optional = true }) }, cmd = { "create", "@id", "@name" } },
-        { id = "add", label = "Add a player", help = "Add one player (the Standings tab adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
+        { id = "add", label = "Add a player", help = "Add one player (the Standings tab adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
         { id = "remove", label = "Remove a player", help = "Take a player off the list. They can be put back at the same place.", fields = { F("name", "Player", { name = true }), F("reason", "Reason", { optional = true }) }, cmd = { "remove", "@name", "@reason" } },
         { id = "move", label = "Move a player", help = "A reason is required: it is part of the record.", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place"), F("reason", "Reason") }, cmd = { "move", "@name", "@pos", "@reason" } },
         { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner).", fields = { F("name", "Winner", { name = true }), F("item", "Item (link or id)"), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
@@ -104,6 +104,28 @@ function M.Compose(action, values)
     return table.concat(out, " ")
 end
 
+-- The players a field can be: "members" (on the list), "group" (in your party or raid, else the list's members), "missing" (in the group or
+-- guild but not on the list yet). Canonical names, in list order for members.
+function M.Players(ctx, source, listId)
+    local out, seen = {}, {}
+    local function add(name) if name and not seen[name] then seen[name] = true; out[#out + 1] = name end end
+    local engine, client = ctx.engine, ctx.client
+    local chain = engine:Get(listId or engine:RaidList() or "main")
+    local onList = chain and chain.state.members or {}
+    if source == "group" then
+        for _, m in ipairs(client:roster()) do add(m.name) end
+    elseif source == "missing" then
+        for _, list in ipairs { client:roster(), client:guildRoster() } do
+            for _, m in ipairs(list) do if m.name and not onList[m.name] then add(m.name) end end
+        end
+        return out
+    end
+    if #out == 0 and chain then for _, name in ipairs(chain.state.order) do add(name) end end
+    return out
+end
+
+local function shown(name) return (tostring(name):gsub("_", " ")) end
+
 function M.Find(id)
     for _, g in ipairs(M.GROUPS) do
         for _, a in ipairs(g.actions) do if a.id == id then return a, g end end
@@ -123,7 +145,16 @@ end
 
 local function chooseAction(f, ui, a)
     f.action = a and a.id or nil
+    f.picked = {}
     for _, box in ipairs(f.boxes) do box:SetText("") end
+    if a and f.ctx and ui.selected then
+        for j, fld in ipairs(a.fields) do
+            if fld.name and (fld.source or "members") == "members" then
+                for _, name in ipairs(M.Players(f.ctx, "members", ui.list)) do if name == ui.selected then f.picked[j] = name end end
+                break
+            end
+        end
+    end
     if a then for j, fld in ipairs(a.fields) do if fld.default then f.boxes[j]:SetText(fld.default) end end end
     f.problem:SetText("")
     ui:Refresh()
@@ -201,6 +232,28 @@ function M.Build(parent, ui)
         box:SetScript("OnEditFocusLost", function(self) if M.focus == self then M.focus = nil end end)
         f.boxes[i] = box
     end
+    -- A player field is a dropdown of the players it could be (typing stays as the fallback).
+    f.drops, f.picked = {}, {}
+    for i = 1, MAX_FIELDS do
+        local d = dropdown(f, 206)
+        if d then
+            d:SetPoint("TOPLEFT", 158, -172 - (i - 1) * 32 + 6)
+            d:SetDefaultText("Choose a player")
+            d:SetupMenu(function(_, root)
+                local action = f.action and M.Find(f.action)
+                local fld = action and action.fields[i]
+                if not (fld and f.ctx) then return end
+                if root.SetScrollMode then root:SetScrollMode(260) end
+                if fld.optional then
+                    root:CreateRadio("(nobody)", function() return f.picked[i] == nil end, function() f.picked[i] = nil end)
+                end
+                for _, name in ipairs(M.Players(f.ctx, fld.source, f.listId)) do
+                    root:CreateRadio(shown(name), function() return f.picked[i] == name end, function() f.picked[i] = name end)
+                end
+            end)
+            f.drops[i] = d
+        end
+    end
     f.run = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     f.run:SetSize(100, 24); f.run:SetText("Do it")
     f.run:SetPoint("TOPLEFT", 4, -172 - MAX_FIELDS * 32 - 6)
@@ -210,7 +263,9 @@ function M.Build(parent, ui)
         local action = f.action and M.Find(f.action)
         if not action then return end
         local values = {}
-        for i, fld in ipairs(action.fields) do values[fld.key] = f.boxes[i]:GetText() end
+        for i, fld in ipairs(action.fields) do
+            if fld.name and f.drops[i] then values[fld.key] = f.picked[i] else values[fld.key] = f.boxes[i]:GetText() end
+        end
         local text, missing = M.Compose(action, values)
         if not text then f.problem:SetText("Needed: " .. tostring(missing)); return end
         f.problem:SetText("")
@@ -219,13 +274,26 @@ function M.Build(parent, ui)
     return f
 end
 
+-- Open a form directly (Standings' Award button): the area, the action, and the player already chosen.
+function M.Goto(f, ui, actionId, who)
+    local action, group = M.Find(actionId)
+    if not action then return end
+    f.group = group.id
+    chooseAction(f, ui, action)
+    if who then
+        for j, fld in ipairs(action.fields) do if fld.name then f.picked[j] = who; break end end
+    end
+end
+
 function M.Refresh(f, ctx, ui)
+    f.ctx, f.listId = ctx, ui.list
     local group = groupById(f.group)
     local action = f.action and M.Find(f.action)
     if f.groupDrop then
         if f.shown ~= f.group .. "/" .. tostring(f.action) then
             f.shown = f.group .. "/" .. tostring(f.action)
             f.groupDrop:GenerateMenu(); f.actionDrop:GenerateMenu()
+            for _, d in pairs(f.drops) do d:GenerateMenu() end
         end
     else
         f.groupStep:SetText("Area: " .. group.title .. "  (click for the next)")
@@ -234,7 +302,7 @@ function M.Refresh(f, ctx, ui)
     if not action then
         f.title:SetText(group.title)
         f.help:SetText("Choose an action above. Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output at the foot of the window says why.")
-        for i = 1, MAX_FIELDS do f.labels[i]:Hide(); f.boxes[i]:Hide() end
+        for i = 1, MAX_FIELDS do f.labels[i]:Hide(); f.boxes[i]:Hide(); if f.drops[i] then f.drops[i]:Hide() end end
         f.run:Hide()
         return
     end
@@ -243,9 +311,17 @@ function M.Refresh(f, ctx, ui)
     for i = 1, MAX_FIELDS do
         local fld = action.fields[i]
         if fld then
-            f.labels[i]:SetText(fld.label .. (fld.optional and " (optional)" or "")); f.labels[i]:Show(); f.boxes[i]:Show()
+            f.labels[i]:SetText(fld.label .. (fld.optional and " (optional)" or "")); f.labels[i]:Show()
+            if fld.name and f.drops[i] then
+                f.boxes[i]:Hide(); f.drops[i]:Show()
+                -- keep the shown choice in step with what is picked (the menu is rebuilt when the action or the pick changes)
+                local key = tostring(f.picked[i])
+                if f.drops[i].shownPick ~= key then f.drops[i].shownPick = key; f.drops[i]:GenerateMenu() end
+            else
+                f.boxes[i]:Show(); if f.drops[i] then f.drops[i]:Hide() end
+            end
         else
-            f.labels[i]:Hide(); f.boxes[i]:Hide()
+            f.labels[i]:Hide(); f.boxes[i]:Hide(); if f.drops[i] then f.drops[i]:Hide() end
         end
     end
     f.run:Show()

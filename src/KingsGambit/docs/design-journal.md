@@ -1955,6 +1955,13 @@ load), so practice mode takes the wearable gear in the player's bags and equipme
 link with a real tooltip; the simulation reads each item's slot, type and stats from the real client, exactly as a real session does. Molten Core's table
 stays as the fallback (fewer than three pieces of gear) and for the website, whose items are shown by name.
 
+**Players are picked, never typed.** A name typed into a box is the commonest mistake (a misspelling, the wrong character, a realm that doesn't exist here).
+So a player is chosen from the list: in Standings a click selects a row, and the buttons under the table act on that player (Top, Up, Down, Bottom, Remove, Award);
+in Tools every player field is a dropdown of the players it could be (the list's members; for "add" those in the group or guild who aren't on the list yet; for
+a Master Looter or disenchanter, the group). Choosing a player in Standings pre-fills the form. A move needs a reason (it is part of the record), so the reason
+box under the table is required for moves. The controls under the table are shown only to someone who may change the list (an officer outside a raid, the Master Looter inside one: the same
+check the engine makes); everyone else sees a line saying so and where to ask. Typing a name stays only where there is nothing to pick from (the plain-frame fallback, and "set the officers").
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

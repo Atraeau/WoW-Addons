@@ -21,7 +21,8 @@ function M.Model(engine, client, listId)
     local lists = engine:Lists()
     local raidList, raid = engine:RaidList()
     local id = listId or raidList or "main"
-    local model = { missing = 0, lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, total = 0 }
+    local mayWrite = engine.MayWrite and engine:MayWrite() and true or false
+    local model = { mayWrite = mayWrite, missing = 0, lists = lists, list = id, raid = raid, raidList = raidList, me = client:me(), rows = {}, total = 0 }
     local chain = engine:Get(id)
     if not chain then return model end
     local order = chain.state.order
@@ -178,6 +179,8 @@ function M.OutputText()
     return table.concat(lines, "\n")
 end
 
+function M.Say(text) remember(text); M:Refresh() end
+
 local function nextList(lists, current)
     for i, id in ipairs(lists) do
         if id == current then return lists[i % #lists + 1] end
@@ -225,6 +228,21 @@ function M:Refresh()
     end
     if p.listDrop and p.shownList ~= model.list then p.shownList = model.list; p.listDrop:GenerateMenu() end
     M.FillRows(p, model.rows)
+    -- the player selected, if they are on this list; the places let Up and Down work out where to move them
+    M.places = {}
+    local selectedRow
+    for _, r in ipairs(model.rows) do
+        M.places[r.who] = r.pos
+        if r.who == M.selected then selectedRow = r end
+    end
+    if not selectedRow then M.selected = nil end
+    p.selText:SetText(selectedRow and ("Selected: " .. selectedRow.name .. "  (place " .. selectedRow.pos .. " of " .. model.total .. ")")
+        or "Click a player in the list to act on them.")
+    for _, b in ipairs(p.actionButtons) do b:SetEnabled(selectedRow ~= nil) end
+    -- only someone who may write sees the controls
+    local may = model.mayWrite
+    setShown(p.barLabel, may); setShown(p.reason, may); setShown(p.hint, not may)
+    for _, b in ipairs(p.actionButtons) do setShown(b, may) end
     local hasList = #model.lists > 0
     setShown(p.startButton, not hasList)
     setShown(p.addAllButton, hasList and model.missing > 0)
@@ -250,6 +268,13 @@ local function className(class) return class and (class:sub(1, 1) .. class:sub(2
 
 -- Fill one row (a Button) with a player: made once, reused by the scroll box as it scrolls.
 function M.InitRow(row, r)
+    if row.SetScript then row:SetScript("OnClick", function() M.selected = r.who; M:Refresh() end) end
+    if not row.hl and row.CreateTexture then
+        row.hl = row:CreateTexture(nil, "BACKGROUND")
+        row.hl:SetAllPoints()
+        row.hl:SetColorTexture(1, 0.82, 0, 0.2)
+    end
+    if row.hl then if M.selected == r.who then row.hl:Show() else row.hl:Hide() end end
     if not row.cells then
         row.cells = {}
         for c = 1, 4 do
@@ -294,7 +319,7 @@ function M.FillRows(p, rows)
     for i, r in ipairs(rows) do
         local line = p.lines[i]
         if not line then
-            line = CreateFrame("Frame", nil, p.child)
+            line = CreateFrame("Button", nil, p.child)
             line:SetSize(340, ROW_H)
             line:SetPoint("TOPLEFT", 0, -(i - 1) * ROW_H)
             p.lines[i] = line
@@ -347,7 +372,7 @@ function M:BuildStandings(parent)
     -- scroll box with its scroll bar. If this client's scroll box can't be built, the older scroll frame does the same job.
     local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
     if okInset and inset then
-        inset:SetPoint("TOPLEFT", -2, -26); inset:SetPoint("BOTTOMRIGHT", 2, 52)
+        inset:SetPoint("TOPLEFT", -2, -26); inset:SetPoint("BOTTOMRIGHT", 2, 124)
     end
     p.headers = {}
     for i, c in ipairs(SORTS) do
@@ -367,7 +392,7 @@ function M:BuildStandings(parent)
         local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
         local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
         box:SetPoint("TOPLEFT", 4, -50)
-        box:SetPoint("BOTTOMRIGHT", -22, 56)
+        box:SetPoint("BOTTOMRIGHT", -22, 128)
         bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
         bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
         local view = CreateScrollBoxListLinearView()
@@ -380,7 +405,7 @@ function M:BuildStandings(parent)
         local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
         if not ok or not scroll then scroll = CreateFrame("ScrollFrame", nil, p) end
         scroll:SetPoint("TOPLEFT", 4, -50)
-        scroll:SetPoint("BOTTOMRIGHT", -26, 56)
+        scroll:SetPoint("BOTTOMRIGHT", -26, 128)
         p.child = CreateFrame("Frame", nil, scroll)
         p.child:SetSize(340, 1)
         scroll:SetScrollChild(p.child)
@@ -397,9 +422,51 @@ function M:BuildStandings(parent)
     p.startButton:SetScript("OnClick", function() M:Command("create main Main"); M.list = "main"; M:Refresh() end)
     p.startButton:Hide()
 
+    -- Act on the player selected above: a reason (required for a move: it goes in the record), then where to move them, remove them, or record a win.
+    p.selText = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    p.selText:SetPoint("BOTTOMLEFT", 6, 104); p.selText:SetWidth(360); p.selText:SetJustifyH("LEFT"); p.selText:SetWordWrap(false)
+    local rl = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    rl:SetPoint("BOTTOMLEFT", 6, 82); rl:SetText("Reason:")
+    p.barLabel = rl
+    -- Someone who may not change the list (not an officer, and not the raid's Master Looter) sees this instead of the buttons.
+    p.hint = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.hint:SetPoint("BOTTOMLEFT", 6, 56); p.hint:SetWidth(360); p.hint:SetHeight(44); p.hint:SetJustifyH("LEFT"); p.hint:SetJustifyV("TOP"); p.hint:SetWordWrap(true)
+    p.hint:SetText("Only officers, and the Master Looter of a raid, can change the list. During a raid you can ask the Master Looter: Tools, then Rules and requests.")
+    p.reason = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
+    p.reason:SetSize(290, 20); p.reason:SetPoint("BOTTOMLEFT", 56, 78); p.reason:SetAutoFocus(false)
+    p.actionButtons = {}
+    local function selected() return M.selected end
+    local function reasonText() return (p.reason:GetText() or ""):gsub("^%s+", ""):gsub("%s+$", "") end
+    local function move(target)
+        local who = selected(); if not who then return end
+        local reason = reasonText()
+        if reason == "" then return M.Say("A move needs a reason: it is part of the record. Type it in the Reason box.") end
+        local place = M.places and M.places[who]
+        local where = target
+        if target == "up" then where = place and math.max(1, place - 1) elseif target == "down" then where = place and (place + 1) end
+        if not where then return end
+        M:Command(("move %s %s %s"):format(who, where, reason))
+    end
+    local ACTIONS = {
+        { "Top", function() move("top") end }, { "Up", function() move("up") end }, { "Down", function() move("down") end },
+        { "Bottom", function() move("bottom") end },
+        { "Remove", function()
+            local who = selected(); if not who then return end
+            local reason = reasonText()
+            M:Command(("remove %s%s"):format(who, reason ~= "" and (" " .. reason) or ""))
+        end },
+        { "Award...", function() if selected() then M.OpenTool("award", selected()) end end },
+    }
+    for i, a in ipairs(ACTIONS) do
+        local b = button(p, a[1], 56, 22)
+        b:SetPoint("BOTTOMLEFT", 6 + (i - 1) * 60, 52)
+        b:SetScript("OnClick", a[2])
+        p.actionButtons[i] = b
+    end
+
     -- Fill the list from the group and the guild: the same as `addall`.
     p.addAllButton = button(p, "Add from your group and guild", 260, 24)
-    p.addAllButton:SetPoint("BOTTOMLEFT", 4, 30)
+    p.addAllButton:SetPoint("BOTTOMLEFT", 4, 24)
     p.addAllButton:SetScript("OnClick", function() M:Command("addall") end)
 
     return p
@@ -512,6 +579,14 @@ function M:Build()
 end
 
 -- Build the window once; if it fails part-way the half-built frame is hidden and the error is passed on.
+-- Open a form in the Tools tab with the selected player filled in.
+function M.OpenTool(actionId, who)
+    local w = M:Window()
+    M.tab = "tools"
+    UITools.Goto(w.pages.tools, M, actionId, who)
+    M:Refresh()
+end
+
 function M:Window()
     if self.window then return self.window end
     local ok, w = pcall(self.Build, self)

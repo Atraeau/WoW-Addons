@@ -226,3 +226,21 @@ test("an item your class can't bid on greys need and off-spec out of the model, 
     -- Magmadar-side drops include plate and mail pieces a priest can't wear, so at least one must be refused
     assert(saw or #m.items > 0, "items listed")
 end)
+
+H.section("Window: acting on a selected player")
+test("player fields offer the players it could be, and Up and Down move a player one place", function()
+    local sim, cmd, ctx = practice(5)
+    local members = UITools.Players(ctx, "members", "main")
+    eq(#members, 5, "everyone on the list")
+    local group = UITools.Players(ctx, "group", "main")
+    eq(#group, #sim.client:roster())
+    sim.client:setGuild({ { name = "Newcomer", class = "MAGE" }, { name = members[1], class = "MAGE" } })
+    eq(table.concat(UITools.Players(ctx, "missing", "main"), ","), "Newcomer", "only those not on the list yet")
+    -- what the Down button sends: a move to the place below, with a reason
+    local who = members[2]
+    cmd.handle(("move %s %d testing"):format(who, 3))
+    eq(sim.engine:Get("main").state.order[3], who, "moved down one place")
+    cmd.handle(("move %s %d testing"):format(who, 2))
+    eq(sim.engine:Get("main").state.order[2], who, "and back up one")
+    assert(UI.Model(sim.engine, sim.client, "main").mayWrite == true, "the founder may write")
+end)
