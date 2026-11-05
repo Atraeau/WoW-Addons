@@ -59,7 +59,10 @@ function M:Refresh()
         end
     end
     if model.total == 0 then
-        w.rows[1]:SetText("(nothing on this list yet)"); w.rows[1]:Show()
+        w.rows[1]:SetText(#model.lists == 0
+            and "No lists yet. The guild master starts the ledger by typing:  /gambit create main"
+            or "(nothing on this list yet)")
+        w.rows[1]:Show()
     end
 end
 
