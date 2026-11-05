@@ -229,7 +229,7 @@ function M.OnItemLink(f, ui, link)
             for _, it in ipairs(M.Items(f.ctx)) do
                 if sameItem(it.link, link) then
                     f.picked[i] = it.link
-                    ui:Refresh()
+                    if ui.Say then ui.Say("Item chosen: " .. it.link) else ui:Refresh() end
                     return true
                 end
             end
@@ -237,10 +237,11 @@ function M.OnItemLink(f, ui, link)
             f.picked[i] = link
             f.extra = f.extra or {}
             f.extra[i] = link
-            ui:Refresh()
+            if ui.Say then ui.Say("Item chosen: " .. link) else ui:Refresh() end
             return true
         elseif fld.link then
             f.boxes[i]:SetText(link)
+            if ui.Say then ui.Say("Item chosen: " .. link) end
             return true
         end
     end
@@ -270,17 +271,27 @@ function M.Build(parent, ui)
     M.frame, M.ui = f, ui
     if hooksecurefunc and not M.hooked then
         M.hooked = true
-        local function insert(link)
+        local function took(link)
             if M.OnItemLink(M.frame, M.ui, link) then
                 -- the game also opened the chat box with the link in it: put that away, if it holds nothing but the link
-                local get = ChatEdit_GetActiveWindow
+                local get = (ChatFrameUtil and ChatFrameUtil.GetActiveWindow) or ChatEdit_GetActiveWindow
                 local box = get and get()
-                if box and box.GetText and box:GetText() == link and ChatEdit_DeactivateChat then
-                    box:SetText(""); pcall(ChatEdit_DeactivateChat, box)
+                local deactivate = (ChatFrameUtil and ChatFrameUtil.DeactivateChat) or ChatEdit_DeactivateChat
+                if box and box.GetText and box:GetText() == link and deactivate then
+                    box:SetText(""); pcall(deactivate, box)
                 end
             end
         end
-        pcall(hooksecurefunc, "ChatEdit_InsertLink", insert)
+        -- Every shift-click of an item (a chat link, the bags, the loot window) ends in the game's insert-link function. In this client it is
+        -- ChatFrameUtil.InsertLink (ChatEdit_InsertLink is only a saved copy of it, which the game's own code doesn't call), so that is hooked, and
+        -- the game's modified-click handler as a second way in. Both may fire for one click; taking the same link twice changes nothing.
+        if ChatFrameUtil and ChatFrameUtil.InsertLink then pcall(hooksecurefunc, ChatFrameUtil, "InsertLink", took)
+        elseif ChatEdit_InsertLink then pcall(hooksecurefunc, "ChatEdit_InsertLink", took) end
+        if HandleModifiedItemClick then
+            pcall(hooksecurefunc, "HandleModifiedItemClick", function(link)
+                if IsModifiedClick and IsModifiedClick("CHATLINK") then took(link) end
+            end)
+        end
     end
     f:SetAllPoints()
     f.group, f.action = M.GROUPS[1].id, nil

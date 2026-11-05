@@ -342,7 +342,8 @@ test("a shift-clicked item fills the form's item field; for Record a win a held 
     -- record a win: an item you don't hold is taken too (it may be in someone else's bags), and shows in the dropdown's choices
     f = page("award")
     assert(UITools.OnItemLink(f, ui, other))
-    eq(f.picked[2], other); eq(f.extra[2], other); eq(#says, 0, "no refusal")
+    eq(f.picked[2], other); eq(f.extra[2], other)
+    assert(says[#says] and says[#says]:find("Item chosen", 1, true) and says[#says]:find(other, 1, true), "the window says what it took")
     assert(UITools.OnItemLink(f, ui, "|cff0070dd|Hitem:2000::::::::60|h[Some Cloak]|h|r"))
     eq(f.picked[2], held, "the same item (by id) is taken, as the bag's own link")
     -- an action with no item, a hidden tab, plain text: not taken
