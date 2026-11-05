@@ -187,3 +187,26 @@ test("an item the game hasn't cached yet is still shown as a link built from its
     assert(text:find("|Hitem:16837", 1, true) and text:find("[Earthfury Boots]", 1, true), text)
     eq(SK.modules.UILoot.Display("a name with no id", nil), "a name with no id")
 end)
+
+H.section("Practice: loot from the player's own gear")
+test("gear from bags becomes a practice raid whose bosses drop it, shown by link", function()
+    local MockClient = SK.modules.MockClient
+    local client = MockClient.New({ name = "Me" })
+    local links, n = {}, 0
+    for i, spec in ipairs { { "INVTYPE_FEET", 4, 2 }, { "INVTYPE_HAND", 4, 1 }, { "INVTYPE_WEAPON", 2, 7 }, { "INVTYPE_CHEST", 4, 4 }, { "INVTYPE_BAG", 1, 0 }, { "", 0, 0 } } do
+        local link = ("|cff1eff00|Hitem:%d::::::::|h[Thing %d]|h|r"):format(1000 + i, i)
+        links[#links + 1] = link
+        client:setItemInfo(link, { name = "Thing " .. i, equipLoc = spec[1], class = spec[2], subclass = spec[3] })
+        client:setItemStats(link, { stats = { sta = 5 } })
+    end
+    local gear = UI.GearItems(client, links, 24)
+    eq(#gear, 4, "bags and plain items are not gear")
+    local sim = SK.modules.Sim.NewPractice(gear, { learner = "Me", seed = 1, size = 10 })
+    eq(sim.raid.name, "Your gear"); eq(#sim.raid.bosses, 1)
+    local boss, dropped = sim:killBoss(nil, true)
+    assert(boss and #sim.held == 2, "a practice boss drops two items")
+    assert(sim.held[1].item.name:find("|Hitem:", 1, true), "an item's name is its link")
+    local ok = sim:handOut()
+    assert(ok, "the loot can be handed out")
+    assert(SK.modules.UILoot.Model({ client = sim.client, host = { session = sim.session }, sim = sim }).items[1].tip, "the link has a tooltip")
+end)

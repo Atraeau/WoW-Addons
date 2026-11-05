@@ -1950,6 +1950,11 @@ Items are links, not text: each item in the Loot tab shows the game's own link, 
 control-click tries it on, as anywhere else in the game (simulated drops in practice use their real item ids, so the tooltips work there too). In the Tools forms,
 shift-clicking an item while a box has the cursor inserts its link, and a link in a field is turned into `item:ID` before the command is composed (a link contains spaces).
 
+Practice loot comes from items that exist in this game. Molten Core's items are not in Forever's server data until the raid releases (their links never
+load), so practice mode takes the wearable gear in the player's bags and equipment, shares it among a few "Practice boss" drops, and shows each as its real
+link with a real tooltip; the simulation reads each item's slot, type and stats from the real client, exactly as a real session does. Molten Core's table
+stays as the fallback (fewer than three pieces of gear) and for the website, whose items are shown by name.
+
 The **Tools** tab holds a form for every command that needs a name, a reason or a choice, in four groups (Raid; List; Rules and requests; Guild
 master and me). A form only composes the command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows
 The forms are chosen with two dropdowns (the area, then the action), so a new action needs no new button and nothing can overlap. what the last command said, so a refusal ("only the raid's Master Looter can...") is read where the button was, not in the chat window.

@@ -450,6 +450,27 @@ function M.NewRaidNight(data, opts)
 end
 
 function M.NewMoltenCore(opts) return M.NewRaidNight(MoltenCore, opts) end
+
+-- A practice raid on items that exist in the game being played: `items` is a list of { id, link, equipLoc, class, subclass, stats } (the gear in a
+-- player's bags, say). They are shared out among a few practice bosses, four to a boss, each dropping two; the item's link is its name, so the
+-- window shows a real link with a tooltip. Same shape as MoltenCore's data, so everything that runs on a raid night runs on this.
+function M.NewPracticeData(items, title)
+    local data = { name = title or "Your gear", CLASS_BITS = MoltenCore.CLASS_BITS, items = {}, bosses = {}, officerCalls = {} }
+    local ids = {}
+    for _, it in ipairs(items) do
+        data.items[it.id] = { id = it.id, name = it.link, classes = 0,
+            fit = { slot = it.equipLoc, class = it.class, subclass = it.subclass, stats = it.stats or {} } }
+        ids[#ids + 1] = it.id
+    end
+    for i = 1, #ids, 4 do
+        local loot = {}
+        for j = i, math.min(i + 3, #ids) do loot[#loot + 1] = { ids[j], 1 } end
+        local n = #data.bosses + 1
+        data.bosses[n] = { name = "Practice boss " .. n, id = n, drops = math.min(2, #loot), loot = loot }
+    end
+    return data
+end
+function M.NewPractice(items, opts) return M.NewRaidNight(M.NewPracticeData(items), opts) end
 -- Ahn'Qiraj: tokens (class-group tier tokens, plus weapon and C'Thun tokens) drop beside gear.
 function M.NewAQ40(opts) return M.NewRaidNight(AQ40, opts) end
 

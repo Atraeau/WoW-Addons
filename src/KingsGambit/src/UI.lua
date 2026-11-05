@@ -12,6 +12,10 @@ local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UIToo
     Identity, Sim, Commands, UILoot, UITools = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools
 end)
 
+local function say(text)
+    if SK.Print then SK:Print(text) else print(text) end
+end
+
 -- What the window shows for one list (every row; the window scrolls). listId nil = the list the viewer's raid plays on, else main.
 function M.Model(engine, client, listId)
     local lists = engine:Lists()
@@ -48,10 +52,53 @@ M.SIZES = { 5, 10, 20, 40 }
 M.size = 40
 M.tab = "standings"
 
+-- The gear this character has on or carries: item links, each item once (game only).
+function M.GearLinks()
+    local links, seen = {}, {}
+    local function add(link)
+        local id = type(link) == "string" and tonumber(link:match("item:(%d+)"))
+        if id and not seen[id] then seen[id] = true; links[#links + 1] = link end
+    end
+    if GetInventoryItemLink then for slot = 1, 19 do add(GetInventoryItemLink("player", slot)) end end
+    local C = C_Container
+    if C and C.GetContainerNumSlots and C.GetContainerItemLink then
+        for bag = 0, 5 do
+            for slot = 1, (C.GetContainerNumSlots(bag) or 0) do add(C.GetContainerItemLink(bag, slot)) end
+        end
+    end
+    return links
+end
+
+local NOT_GEAR = { INVTYPE_BAG = true, INVTYPE_QUIVER = true, INVTYPE_AMMO = true, INVTYPE_NON_EQUIP_IGNORE = true, INVTYPE_TABARD = true, INVTYPE_BODY = true }
+-- Of those links, the ones that are wearable gear, as the practice raid wants them (needs the game to know each item: a cached one).
+function M.GearItems(client, links, max)
+    local out = {}
+    for _, link in ipairs(links) do
+        local info = client:itemInfo(link)
+        local id = tonumber(link:match("item:(%d+)"))
+        if info and id and info.equipLoc and info.equipLoc ~= "" and not NOT_GEAR[info.equipLoc] and (info.class == 2 or info.class == 4) then
+            local st = client:itemStats(link)
+            out[#out + 1] = { id = id, link = link, equipLoc = info.equipLoc, class = info.class, subclass = info.subclass, stats = st and st.stats or {} }
+            if max and #out >= max then break end
+        end
+    end
+    return out
+end
+
 function M:StartPractice()
     if not (Sim and Commands) then return end
     local me = SK.client:me()
-    local sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size })
+    -- Loot: the gear in your bags and on your character, which the game really has (Molten Core's items aren't in this game yet). Molten Core's
+    -- loot table is the fallback when there are too few pieces to make a raid of.
+    local gear = M.GearItems(SK.client, M.GearLinks(), 24)
+    local sim
+    if #gear >= 3 then
+        sim = Sim.NewPractice(gear, { learner = me, seed = 1, size = M.size })
+        say(("Practice: the loot is %d pieces of gear from your bags and equipment, so it has real tooltips."):format(#gear))
+    else
+        sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size })
+        say("Practice: you carry fewer than 3 pieces of gear, so the loot is Molten Core's (those items may not exist in this game yet, so no tooltips).")
+    end
     -- A simulated guild: the raid's players, and others who are not in the group (some offline).
     local guild = {}
     for _, m in ipairs(sim.client:roster()) do guild[#guild + 1] = { name = m.name, class = m.class } end
@@ -71,8 +118,8 @@ function M:StartPractice()
         total = total + 1
         if not UILoot.KnownToGame(id) then unknown = unknown + 1 end
     end
-    if unknown > 0 then
-        SK:Print(("Practice: %d of the %d %s items aren't in this game's item data yet, so they show as plain names without a tooltip."):format(unknown, total, sim.raid.name or "raid"))
+    if unknown > 0 and not (sim.raid and sim.raid.name == "Your gear") then
+        say(("Practice: %d of the %d %s items aren't in this game's item data yet, so they show as plain names without a tooltip."):format(unknown, total, sim.raid.name or "raid"))
     end
     M.list = nil
     M:Refresh()
@@ -89,10 +136,10 @@ function M:PracticeKill()
     local p = M.practice
     if not p then return end
     local s = p.sim.session
-    if s and s.phase ~= "done" and s.phase ~= "cancelled" then return SK:Print("Practice: finish handing out the current loot first.") end
+    if s and s.phase ~= "done" and s.phase ~= "cancelled" then return say("Practice: finish handing out the current loot first.") end
     local boss, _, why = p.sim:killBoss(nil, false)
-    if not boss then return SK:Print("Practice: there are no more bosses.") end
-    if why then SK:Print("Practice: " .. tostring(why)) end
+    if not boss then return say("Practice: there are no more bosses.") end
+    if why then say("Practice: " .. tostring(why)) end
     M.tab = "loot"; M:Refresh()
 end
 function M:PracticeHandOut()
