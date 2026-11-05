@@ -1,6 +1,6 @@
 # WoW: Forever API Reference
 
-Generated from the client's own `APIDocumentation` (build 70790, interface 16001) on 2026-11-05 05:23:47.
+Generated from the client's own `APIDocumentation` (build 70790, interface 16001) on 2026-11-05 13:35:56.
 
 **410** systems · **6621** functions · **1816** events · **801** types, organized into **19** groups.
 

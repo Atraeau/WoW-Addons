@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [UI Systems & Input](README.md)
 
-> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 13:35:56.
 
 **11** functions · **4** events · **5** types
 

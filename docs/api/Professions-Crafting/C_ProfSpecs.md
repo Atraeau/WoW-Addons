@@ -2,7 +2,7 @@
 
 [← API index](../README.md) · group: [Professions & Crafting](README.md)
 
-> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 13:35:56.
 
 **27** functions · **2** events · **0** types
 

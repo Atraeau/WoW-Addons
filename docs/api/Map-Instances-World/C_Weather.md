@@ -4,7 +4,7 @@
 
 Cloudy, with a chance of documentation.
 
-> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 05:23:47.
+> Generated from the WoW: Forever client (build 70790, interface 16001) on 2026-11-05 13:35:56.
 
 **1** functions · **1** events · **1** types
 
