@@ -97,7 +97,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:Command("pass 1")
         UI:Command("resolve"); UI:PracticeWait(30); UI:Refresh()
         UI:ToggleLoot(); UI:ToggleLoot(); UI:Tick()
-        UI.tab = "history"; UI:Refresh(); UI.histKind = "list"; UI.histText = "added"; UI:Refresh(); UI.histKind, UI.histText = "all", ""
+        UI.tab = "ledger"; UI:Refresh(); UI.histKind = "list"; UI.histText = "added"; UI:Refresh(); UI.histKind, UI.histText = "all", ""
         for _, s in ipairs(SK.modules.GuildBook.SECTIONS) do UI.tab = s.id; UI:Refresh() end
         UI.OpenTool("award", "Me"); assert(UI.tab == "awards", "Award... opens the Awards section")
         UI.tab = "lists"; UI:Refresh()

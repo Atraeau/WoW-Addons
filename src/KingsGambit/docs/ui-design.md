@@ -1,7 +1,7 @@
 # King's Gambit — UI design (proposal, under review)
 
 *Status: the two-surface structure (section 4, option B) was accepted on 2026-11-06 and is in the [design journal](design-journal.md); the
-open questions in section 11 are not yet settled. The Loot window is built; the Guild book is started (2026-11-06: the shell, Lists and History in the game window). When a decision is accepted it goes into the
+open questions in section 11 are not yet settled. The Loot window is built; the Guild book is started (2026-11-06: the shell, Lists and the Ledger in the game window). When a decision is accepted it goes into the
 journal, and this file is updated to match. The rules themselves are in the
 [rationale](rationale.md); this file is only about how people meet them on screen.*
 
@@ -133,7 +133,7 @@ column on the left, content on the right, the way Blizzard's own Group Finder an
 │ Lists        │  Main list            [Which list ▾]  │
 │ Raids        │  #  Player       Class   Last win      │
 │ People       │  1  Aleria       ▣ Pal   2 weeks ago   │
-│ History      │  2  Bo           ▣ War   …             │
+│ Ledger       │  2  Bo           ▣ War   …             │
 │ Rules        │  ...                                   │
 │ Practice     │  ┌ Selected: Bo ────────────────────┐ │
 │              │  │ Move  Remove  Record a win        │ │
@@ -147,7 +147,7 @@ column on the left, content on the right, the way Blizzard's own Group Finder an
 | **Lists** | everyone reads, officers change | The list as a scroll table; sort and drag; the selected player's actions in a detail panel (not a toolbar above everyone) |
 | **Raids** | officers | Open or close a raid, choose its list and Master Looter |
 | **People** | officers, guild master | Roster from group and guild, classes, officers, designated disenchanter |
-| **History** | everyone | The ledger as readable sentences: *"Kirk won Sulfuras, moved 3 → 40, 12 Nov, by Aleria"*, filterable by player and item; a "why am I here?" view for the player's own position |
+| **Ledger** | everyone | The ledger as readable sentences: *"Kirk won Sulfuras, moved 3 → 40, 12 Nov, by Aleria"*, filterable by player and item; a "why am I here?" view for the player's own position |
 | **Rules** | guild master, officers | Item value, eligibility overrides, defaults; each shown with its effect |
 | **Practice** | anyone | Start or leave a simulated raid |
 
@@ -232,7 +232,7 @@ screenshots).
 
 1. **Heuristic review** against section 3 for each state of each surface, recorded as a checklist in this file.
 2. **Scripted walkthroughs** in practice mode for each person in section 2: the raider answers four items in under ten seconds; the
-   Master Looter runs a boss start to confirm; the officer fixes a mistake and finds it in History; the guild master founds a ledger.
+   Master Looter runs a boss start to confirm; the officer fixes a mistake and finds it in the Ledger; the guild master founds a ledger.
 3. **A guild test**: two or three real raiders use it in a real run and we note where they hesitate. Hesitation, not praise, is the signal.
 4. **Regression**: the parity snapshots, and the existing tests.
 
@@ -245,7 +245,7 @@ screenshots).
 5. Retire the old tabs window, keeping `/gambit` for the Guild book and the Loot window for sessions.
 6. Add the in-place helpers.
 
-*Status (2026-11-06): step 3 is done. Step 4 is started: the navigation shell, Lists (the older standings page), History, and the former Tools forms split into Awards, Raids, People, Rules and Admin are in the game window. Practice as a section, the page renderer for the Guild book, and staged list changes are still to do.*
+*Status (2026-11-06): step 3 is done. Step 4 is started: the navigation shell, Lists (the older standings page), the Ledger, and the former Tools forms split into Awards, Raids, People, Rules and Admin are in the game window. Practice as a section, the page renderer for the Guild book, and staged list changes are still to do.*
 
 ## 11. Open questions
 

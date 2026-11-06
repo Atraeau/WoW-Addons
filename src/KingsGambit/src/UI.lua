@@ -1,5 +1,5 @@
 -- King's Gambit: the Guild book. `/gambit` with nothing after it opens it (design journal: "/gambit opens a window").
--- A navigation column on the left (Lists, History, Tools: GuildBook.SECTIONS) and the section on the right (docs/ui-design.md, 5.2). A live loot session
+-- A navigation column on the left (Lists, Ledger, Awards, Raids, People, Rules, Admin: GuildBook.SECTIONS) and the section on the right (docs/ui-design.md, 5.2). A live loot session
 -- has its own small window (LootWindow).
 -- Keep this file Lua 5.1-safe. Every button runs the same command a player would type, so the rules, the messages and the ledger are
 -- exactly the same as with commands.
@@ -256,7 +256,7 @@ function M:Refresh()
     w.output:SetText(M.OutputText())
     local section = GuildBook.Section(M.tab)
     if section and section.actions then return UITools.Refresh(w.pages[M.tab], ctx, M) end
-    if M.tab == "history" then return M.RefreshHistory(w.pages.history, ctx) end
+    if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     local p = w.pages.lists
     local model = M.Model(ctx.engine, ctx.client, self.list)
     self.list = model.list
@@ -462,13 +462,36 @@ local function button(parent, text, w, h)
     return b
 end
 
--- ---- History: the record in words -------------------------------------------------------------------------------------------------
+-- ---- The Ledger section: the record in words -------------------------------------------------------------------------------------------------
 
 local HIST_H = 20
+
+local function stripColors(t) return (t:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")) end
+
+-- An entry's sentence for the game: each person in their class color (the pieces GuildBook.Segments cut it into).
+function M.ColoredText(e)
+    if not e.segments then return stripColors(e.text) end
+    local parts = {}
+    for i, s in ipairs(e.segments) do
+        if s.who then parts[i] = s.who.color and ("|cff" .. s.who.color .. s.who.name .. "|r") or s.who.name
+        else parts[i] = stripColors(s.text) end
+    end
+    return table.concat(parts)
+end
 
 -- One entry on one line: when (muted) and what happened (a long sentence is cut off; the whole of it is in the tooltip).
 function M.InitHistoryRow(row, e)
     row.entry = e
+    if not row.hl and row.CreateTexture then
+        row.hl = row:CreateTexture(nil, "BACKGROUND")
+        row.hl:SetAllPoints()
+        row.hl:SetColorTexture(1, 0.82, 0, 0.2)
+    end
+    if row.hl then if M.ledgerSelected == e.id then row.hl:Show() else row.hl:Hide() end end
+    if row.SetScript and not row.clickSet then
+        row.clickSet = true
+        row:SetScript("OnClick", function(self) if self.entry then M.ledgerSelected = self.entry.id; M:Refresh() end end)
+    end
     if not row.cells then
         row.when = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
         row.when:SetPoint("LEFT", 4, 0); row.when:SetWidth(72); row.when:SetJustifyH("LEFT"); row.when:SetWordWrap(false)
@@ -485,7 +508,7 @@ function M.InitHistoryRow(row, e)
         end
     end
     row.when:SetText(e.when or "")
-    row.text:SetText((e.text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")))
+    row.text:SetText(M.ColoredText(e))
 end
 
 function M:BuildHistory(parent)
@@ -525,13 +548,19 @@ function M:BuildHistory(parent)
     end)
     Tips.Attach(p.find, "historyfind")
 
+    -- The selected entry as the raw record, under the list.
+    p.detailTitle = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    p.detailTitle:SetPoint("BOTTOMLEFT", 4, 112); p.detailTitle:SetText("Selected entry")
+    p.detail = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.detail:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 4, 108); p.detail:SetWidth(390); p.detail:SetHeight(104)
+    p.detail:SetJustifyH("LEFT"); p.detail:SetJustifyV("TOP"); p.detail:SetWordWrap(true)
     local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
-    if okInset and inset then inset:SetPoint("TOPLEFT", -2, -28); inset:SetPoint("BOTTOMRIGHT", 2, 22) end
+    if okInset and inset then inset:SetPoint("TOPLEFT", -2, -28); inset:SetPoint("BOTTOMRIGHT", 2, 132) end
     local okBox = pcall(function()
         local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
         local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
         box:SetPoint("TOPLEFT", 4, -32)
-        box:SetPoint("BOTTOMRIGHT", -22, 26)
+        box:SetPoint("BOTTOMRIGHT", -22, 136)
         bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
         bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
         local view = CreateScrollBoxListLinearView()
@@ -542,7 +571,7 @@ function M:BuildHistory(parent)
     end)
     if not okBox then
         local scroll = CreateFrame("ScrollFrame", nil, p)
-        scroll:SetPoint("TOPLEFT", 4, -32); scroll:SetPoint("BOTTOMRIGHT", -26, 26)
+        scroll:SetPoint("TOPLEFT", 4, -32); scroll:SetPoint("BOTTOMRIGHT", -26, 136)
         p.child = CreateFrame("Frame", nil, scroll)
         p.child:SetSize(380, 1)
         scroll:SetScrollChild(p.child)
@@ -555,7 +584,16 @@ function M:BuildHistory(parent)
     return p
 end
 
--- Fill the History page from the ledger (newest first).
+-- The selected entry's details as text: each field's name in gold, its value after it.
+function M.DetailText(lines)
+    local parts = {}
+    for i, l in ipairs(lines) do
+        if i > 9 then parts[#parts + 1] = "|cff999999...|r"; break end
+        parts[i] = ("|cffffd100%s:|r %s"):format(l.label, (l.value:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", ""))) end
+    return table.concat(parts, "\n")
+end
+
+-- Fill the Ledger page from the ledger (newest first).
 function M.RefreshHistory(p, ctx)
     local h = GuildBook.History(ctx, { kind = M.histKind, text = M.histText, limit = 300 })
     local label = "Everything"
@@ -582,6 +620,9 @@ function M.RefreshHistory(p, ctx)
         for i = #h.entries + 1, #p.lines do p.lines[i]:Hide() end
         p.child:SetHeight(math.max(#h.entries * HIST_H, 1))
     end
+    local detail = M.ledgerSelected and GuildBook.Detail(ctx, M.ledgerSelected)
+    if not detail then M.ledgerSelected = nil end
+    p.detail:SetText(detail and M.DetailText(detail) or "Click an entry to see exactly what was written: who wrote it, when, its id and every field.")
     p.countText:SetText(h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total))
     if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end
 end
@@ -841,7 +882,7 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { lists = M:BuildStandings(content), history = M:BuildHistory(content) }
+    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content) }
     for _, s in ipairs(GuildBook.SECTIONS) do
         if s.actions then w.pages[s.id] = UITools.Build(content, M, s) end
     end

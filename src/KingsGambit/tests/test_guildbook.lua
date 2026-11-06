@@ -11,8 +11,8 @@ local function raid()
 end
 
 H.section("Guild book")
-test("the sections are Lists, History and Tools, each explained", function()
-    eq(GuildBook.SECTIONS[1].id, "lists"); eq(GuildBook.SECTIONS[2].id, "history")
+test("the sections start with Lists and the Ledger, each explained", function()
+    eq(GuildBook.SECTIONS[1].id, "lists"); eq(GuildBook.SECTIONS[2].id, "ledger"); eq(GuildBook.SECTIONS[2].label, "Ledger")
     for _, s in ipairs(GuildBook.SECTIONS) do assert(s.label and s.tip, "every section has a label and a tip") end
 end)
 
@@ -172,4 +172,49 @@ test("the loot window a disenchant opens is recorded against the oldest item wai
     local r = sim.engine:Get("main").state.disenchants[ev.id].result
     assert(r and r[1].name == "Strange Dust" and r[1].count == 2 and r[1].item == 10940, "recorded from the game's loot window")
     assert(cmd.pendingDisenchants, "(the command object keeps the helpers)")
+end)
+
+H.section("Ledger: people in their class colors")
+test("a sentence is cut into words and people, whole names only, never inside an item link", function()
+    local people = {
+        { name = "Aldric Stormwind", class = "WARRIOR", color = "c79c6e" },
+        { name = "Aldric", class = "MAGE", color = "69ccf0" },
+        { name = "Me", class = "PRIEST", color = "ffffff" },
+    }
+    local segs = GuildBook.Segments("Aldric Stormwind won |cffffffff|Hitem:1::::::::|h[Blade of Aldric]|h|r for Me, not Aldricson", people)
+    local who, plain = {}, {}
+    for _, s in ipairs(segs) do if s.who then who[#who + 1] = s.who.name else plain[#plain + 1] = s.text end end
+    eq(table.concat(who, "|"), "Aldric Stormwind|Me", "the longer name wins over the shorter one inside it; the item's name and 'Aldricson' are not people")
+    eq(segs[1].who.color, "c79c6e")
+    eq(table.concat(plain), " won |cffffffff|Hitem:1::::::::|h[Blade of Aldric]|h|r for , not Aldricson", "the rest is kept exactly as written")
+    eq(#GuildBook.Segments("nothing here", people), 1)
+end)
+
+test("each ledger entry carries its pieces, with a player's class from the list", function()
+    local _, ctx, cmd = raid()
+    cmd.handle("move Me 1 coloring")
+    local h = GuildBook.History(ctx, { text = "coloring" })
+    local found
+    for _, s in ipairs(h.entries[1].segments) do if s.who and s.who.name == "Me" then found = s.who end end
+    assert(found and found.class and found.color, "'Me' is a known player with a class color")
+end)
+
+test("an entry's detail is the raw record: kind, writer, time, id, list and every field", function()
+    local sim, ctx, cmd = raid()
+    cmd.handle("move Me 1 for the details")
+    local h = GuildBook.History(ctx, { text = "for the details" })
+    local d = GuildBook.Detail(ctx, h.entries[1].id)
+    local by = {}
+    for _, l in ipairs(d) do by[l.label] = l.value end
+    assert(by.Entry:find("MovePlayer") and by.Entry:find("list change"), by.Entry)
+    eq(by["Written by"], "Me"); assert(by.When:find("just now") or by.When:find("ago"), by.When)
+    eq(by.List, "main"); assert(by.Id:find("#" .. h.entries[1].id, 1, true), by.Id)
+    eq(by.reason, "for the details"); eq(by.member, "Me")
+    eq(GuildBook.Detail(ctx, "no-such-entry"), nil)
+    -- a list of results reads as words
+    local de = sim:disenchanterName()
+    local ev = assert(sim.engine:Append("main", "Disenchant", { item = "Linen Cloth", to = de }))
+    local r = assert(sim.engine:Append("main", "DisenchantResult", { disenchant = ev.id, results = { { name = "Strange Dust", count = 3 } }, requestedBy = de }))
+    for _, l in ipairs(GuildBook.Detail(ctx, r.id)) do by[l.label] = l.value end
+    eq(by.results, "3 Strange Dust")
 end)

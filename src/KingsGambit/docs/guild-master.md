@@ -4,7 +4,7 @@ Everything the guild master can configure, what each option is for, and how to u
 shared ledger, not a private setting, so **every client enforces it the same way**, and anyone can see who chose what and when
 (`history`, or the audit tool). Nothing here can be changed quietly.
 
-**The windows.** Type `/gambit` to open the Guild book: a column of sections down the left (Lists, History, Awards, Raids, People, Rules, and Admin below them), with a form for every
+**The windows.** Type `/gambit` to open the Guild book: a column of sections down the left (Lists, Ledger, Awards, Raids, People, Rules, and Admin below them), with a form for every
 command below spread across them. A running loot session has its own small **Loot window**, which opens by itself when a
 session starts (`/gambit window`, or the Loot window button, brings it back). The commands shown in this guide are what those forms and buttons run, so either way works,
 and the foot of the window shows what the command answered, including why a refusal was refused. **Practice** runs all of it on a simulated raid and guild
@@ -151,7 +151,7 @@ These are officers' to set, so the guild master can do them as well. They are gu
 | `raid extend [name] [hours]` | Give a running raid more time (a raid lasts 4 hours by default, 24 at most). |
 | `raid revoke [name]` | Take the Master Looter's right to write away at once. It is in the record. |
 
-Whoever is given an item to disenchant says what it gave: the addon notices the loot window a Disenchant cast opens and records it by itself, or they type `disenchanted 3 Strange Dust, 1 Lesser Magic Essence` (the Awards section has the same form). If they are not the Master Looter, the Master Looter's addon writes it for them at once; History shows the item as "waiting for the result" until then, then what it gave.
+Whoever is given an item to disenchant says what it gave: the addon notices the loot window a Disenchant cast opens and records it by itself, or they type `disenchanted 3 Strange Dust, 1 Lesser Magic Essence` (the Awards section has the same form). If they are not the Master Looter, the Master Looter's addon writes it for them at once; the Ledger shows the item as "waiting for the result" until then, then what it gave.
 
 The Master Looter (not the guild master) chooses the disenchanter for their raid (`disenchanter <name>`), and loot is not handed out until they
 have.
