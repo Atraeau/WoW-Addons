@@ -70,6 +70,31 @@
   .peer.good { border-color: var(--good); } .peer.warn { border-color: var(--warn); } .peer.bad { border-color: var(--bad); }
   .mini { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
   .hint { font-size: 13px; margin: 0 0 6px; }
+  /* The Loot window: the same table the game draws (LootView), here as HTML. */
+  .lw { background: #1b1612; border: 2px solid #5a4a2a; border-radius: 6px; max-width: 640px; box-shadow: 0 2px 10px rgba(0,0,0,.5); margin-bottom: 14px; }
+  .lw-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; background: linear-gradient(#3a2e18, #2a2112); border-bottom: 1px solid #5a4a2a; color: var(--gold); font-weight: 600; }
+  .lw-title .sub2 { color: var(--muted); font-weight: 400; font-size: 12px; }
+  .lw-body { padding: 8px 10px; }
+  .lw-timer { height: 6px; background: #0b0f14; border-radius: 3px; overflow: hidden; margin: 2px 0 4px; }
+  .lw-timer > i { display: block; height: 100%; background: var(--gold); transition: width .2s linear; }
+  .lw-timer.urgent > i { background: var(--warn); }
+  .lw-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .lw-row { padding: 7px 0; border-top: 1px solid #3a3020; }
+  .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lw-row .note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .lw-row .warn { font-size: 12px; color: var(--warn); margin-top: 3px; }
+  .lw-row.answered { background: rgba(63,185,80,.06); }
+  .lw-btn { min-width: 74px; font-weight: 600; }
+  .lw-btn .k { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 3px; border: 1px solid currentColor; font-size: 10px; margin-right: 5px; }
+  .lw-btn.sel { outline: 2px solid currentColor; background: rgba(255,255,255,.14); }
+  .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
+  .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
+  .lw-banner { border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font-size: 13px; margin: 6px 0; }
+  .lw-banner.good { border-color: var(--good); } .lw-banner.warn { border-color: var(--warn); }
+  .lw-turn { border: 1px solid var(--gold); background: rgba(227,179,65,.08); border-radius: 4px; padding: 8px; margin: 8px 0; }
+  .lw-turn .hd { font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .lw-ml { border-top: 1px solid #5a4a2a; padding: 8px 10px; background: #14100c; }
+  .lw-practice { background: #3d2f00; color: var(--gold); font-size: 11px; padding: 2px 10px; text-align: center; }
 </style>
 </head>
 <body>
@@ -156,6 +181,77 @@
     if (!it.token) return "";
     const w = it.token.wanted.length ? it.token.wanted.map((r) => esc(r.player) + " (" + (READY[r.ready] || "unknown") + ")").join(", ") : "nobody yet";
     return '<div class="small muted">Token: makes ' + esc(it.token.makes).toLowerCase() + ". Wanted by, in list order: " + w + "</div>";
+  }
+
+  // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
+  // it only draws, and maps a button's `act` to the engine call.
+  let lw = null;
+  const tipText = (b) => (b.tip ? b.tip.title + "\n\n" + b.tip.text : b.label) + (b.why ? "\n\nUnavailable: " + b.why : "");
+  function lwButton(b, extra) {
+    const cls = "lw-btn" + (b.selected ? " sel" : "") + (b.primary && b.enabled ? " primary" : "") + (b.key === "need" || b.key === "off" || b.key === "gift" || b.key === "pass" ? " b-" + b.key : "");
+    const dis = !b.enabled || (extra && extra.disabled);
+    const why = !b.enabled ? "" : (extra && extra.disabledWhy ? "\n\n" + extra.disabledWhy : "");
+    return '<button class="' + cls + '" data-act="w" data-a=\'' + esc(JSON.stringify(b.act)) + '\'' + (dis ? ' aria-disabled="true" data-off="1"' : "") + ' title="' + esc(tipText(b) + why) + '">' +
+      (b.letter ? '<span class="k">' + b.letter + "</span>" : "") + (b.selected ? "&#10003; " : "") + esc(b.label) + "</button>";
+  }
+  function lootWindowHtml() {
+    const v = lw;
+    if (!v || !v.visible) return "";
+    const timer = v.timer
+      ? '<div class="lw-timer' + (v.timer.urgent ? " urgent" : "") + '"><i style="width:' + Math.round((v.timer.fraction == null ? 1 : v.timer.fraction) * 100) + '%"></i></div>' : "";
+    const meta = '<div class="lw-meta"><span>' + esc(v.progress || "") + "</span><span>" +
+      (v.timer ? v.timer.seconds + "s" : "") + (v.place ? (v.timer ? " &middot; " : "") + "Your place: " + v.place : "") + "</span></div>";
+    const rows = v.rows.map((r) => {
+      const snap = (st.items || []).filter((x) => x.id === r.id)[0] || {};
+      const extra = [];
+      if (r.state === "open" || r.state === "answered") {
+        if (snap.token) extra.push(tokenHtml(snap));
+        if (snap.youMay === false && (snap.youWhy === "wrongclass" || snap.youWhy === "nostats"))
+          extra.push('<button data-act="eligible" data-a="' + r.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason.">Request eligibility&hellip;</button>');
+      }
+      const buttons = r.buttons.map((b) => lwButton(b)).join(" ") +
+        (snap.token && (r.state === "open" || r.state === "answered") ? ' <button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "");
+      return '<div class="lw-row ' + r.state + '"><div class="top"><span class="iname">' + esc(r.link) + "</span>" +
+        (buttons ? '<span class="row" style="gap:4px">' + buttons + "</span>" : "") + "</div>" +
+        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + esc(r.note) + "</div>" : "") +
+        (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:4px">' + extra.join(" ") + "</div>" : "") + "</div>";
+    }).join("");
+    const gift = v.state === "bidding" || v.state === "waiting"
+      ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll" title="Pass on every item. Passing is free.">Pass on everything</button></div>' : "";
+    let turn = "";
+    if (v.turn) {
+      const t = v.turn;
+      const needT = (b) => b.needsTarget && !giftTo;
+      turn = '<div class="lw-turn"><div class="hd">' + esc(t.text) + "</div>" + (t.itemLink ? '<div class="iname">' + esc(t.itemLink) + "</div>" : "") +
+        (t.kind === "recipient" || t.kind === "salvage" ? '<div class="row" style="margin:6px 0"><span class="muted">Gift to:</span>' + giftSelect(t.item) + "</div>" : "") +
+        '<div class="row">' + t.buttons.map((b) => {
+          const label = b.link ? { label: b.label + " " + b.link } : null;
+          return lwButton(label ? Object.assign({}, b, label) : b, { disabled: needT(b), disabledWhy: needT(b) ? "Choose who gets it first." : "" });
+        }).join(" ") + "</div></div>";
+    } else if (v.banner) {
+      turn = '<div class="lw-banner ' + v.banner.kind + '">' + esc(v.banner.text) + "</div>";
+    }
+    const ml = v.ml
+      ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";
+    const hidden = v.hidden > 0 ? '<div class="small muted">+ ' + v.hidden + " more items not shown</div>" : "";
+    return '<div class="lw"><div class="lw-practice">Practice: nothing here is saved or sent</div><div class="lw-title"><span>' + esc(v.title) + '</span><span class="sub2">' + esc(v.subtitle || "") + "</span></div>" +
+      '<div class="lw-body">' + timer + meta + turn + rows + hidden + gift + "</div>" + ml + "</div>";
+  }
+  function lwAct(act) {
+    switch (act.name) {
+      case "bid": return ["bid", act.item, act.kind, act.kind === "gift" ? giftTo : ""];
+      case "pick": return ["pick", act.item];
+      case "skip": return ["skip"];
+      case "give": return ["recipient", giftTo];
+      case "keep": return ["keep"];
+      case "claim": return ["claim", act.gift ? giftTo : ""];
+      case "decline": return ["decline"];
+      case "resolve": return ["resolveNow"];
+      case "extend": return ["extend", act.seconds];
+      case "confirm": return ["confirm"];
+      case "cancel": return ["cancel"];
+    }
+    return null;
   }
 
   function remaining() {
@@ -388,9 +484,6 @@
     const p = st.phase;
     let h = '<div class="row" style="margin-top:10px">';
     const isML = !st.roles || st.roles.youAreML;
-    if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
-    if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -449,6 +542,7 @@
     const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
     if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
 
+    lw = call("lootView");
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =
@@ -460,7 +554,7 @@
       "</div><div>" + lesson +
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
-          turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
+          lootWindowHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
         resultHtml() + pendingHtml() + correctionsHtml() + askHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
@@ -743,6 +837,21 @@
       case "toggle": started = true; running = !running; render(); renderLab(); break;
       case "labToggle": labRunning = !labRunning; render(); renderLab(); renderMig(); break;
       case "speed": speed = Number(a); render(); renderLab(); renderMig(); break;
+      case "w": {
+        // a button of the Loot window: its `act` says what it does
+        const action = JSON.parse(a);
+        if (action.name === "withdraw") {
+          ask("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.", false, "Give up").then((ok) => { if (ok) act("withdraw"); });
+          break;
+        }
+        if (action.name === "cancel") {
+          ask("Cancel this session? Nothing is handed out and nothing is recorded.", false, "Cancel the session").then((ok) => { if (ok) act("cancel"); });
+          break;
+        }
+        const m = lwAct(action);
+        if (m) act(m[0], m[1], m[2], m[3]);
+        break;
+      }
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": ask("Why are you asking to be eligible for this item? (Your reason goes in the record.)", true, "Ask").then((reason) => { if (reason) act("eligible", a, reason); }); break;

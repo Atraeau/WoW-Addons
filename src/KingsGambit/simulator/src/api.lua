@@ -306,6 +306,36 @@ end
 
 function api.state() return state() end
 
+-- The Loot window for the player ("You"), exactly the table the game draws (LootView over UILoot.Model). The page only draws it.
+function api.lootView()
+    if not sim then return { visible = false, state = "none", rows = {} } end
+    local session = sim.session
+    local me = sim.learner
+    local myInfo = sim.info[short(me)]
+    local function targets(itemId)
+        local fit = session and session:fitOf(itemId)
+        local out = {}
+        for _, n in ipairs(sim.names) do
+            if n ~= short(me) and S.Loot.MayHave(fit, sim.info[n] and sim.info[n].class) then out[#out + 1] = n end
+        end
+        return out
+    end
+    local ctx = {
+        client = { me = function() return me end, now = function() return sim.client:now() end },
+        host = { session = session },
+        sim = sim,
+        isML = (sim.ml == sim.learner),
+        commands = { mayHave = function(itemId) return S.Loot.MayHave(session:fitOf(itemId), myInfo and myInfo.class) end },
+        targets = targets,
+        place = function()
+            for i, n in ipairs(sim.engine:Get("main").state.order) do if n == me then return i end end
+        end,
+    }
+    local model = S.UILoot.Model(ctx)
+    model.practice = true
+    return S.LootView.Build(model)
+end
+
 -- A raid night: kill the next boss; hold = "1" keeps the loot for a later hand-out.
 function api.kill(hold)
     if not (sim and sim.raid) then return { error = "not a raid night" } end
@@ -428,6 +458,11 @@ function api.extend(sec)
     if sim.ml ~= sim.learner then return notML() end
     return result(sim.session:extend(tonumber(sec) or 30))
 end
+function api.cancel()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:cancel("cancelled by the Master Looter"))
+end
+
 function api.resolveNow()
     if sim.ml ~= sim.learner then return notML() end
     return result(sim.session:resolveNow())

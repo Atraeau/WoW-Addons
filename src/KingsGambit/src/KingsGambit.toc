@@ -35,4 +35,6 @@ Scenarios.lua
 UI.lua
 UILoot.lua
 UITips.lua
+LootView.lua
+LootWindow.lua
 UITools.lua

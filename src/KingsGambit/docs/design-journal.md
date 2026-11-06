@@ -2002,6 +2002,23 @@ Decided (full reasoning and alternatives in [ui-design.md](ui-design.md)):
 Not yet decided (the design file lists them, each with a recommendation): whether the Loot window opens by itself or asks, how much History every raider sees,
 answer hotkeys, the launcher button, and which surface is built first (recommended: the Loot window).
 
+**Build order chosen (2026-11-06): the Loot window first.** `LootView` (a new module, pure Lua) turns what `UILoot.Model` reads from a session into the window as a
+table: its state (`bidding`, `waiting`, `myturn`, `turn`, `review`, `result`, `cancelled`), the timer with its fraction, a row per item with the four answers
+(each with a letter, a tooltip id, enabled or greyed with the reason, and whether it is the player's answer), the panel for the player's own turn (pick, gift
+recipient, salvage claim), and the Master Looter's strip, which only the Master Looter has. A button carries an `act` (`{ name = "bid", item = 2, kind = "need" }`)
+and each place runs it its own way (the game as the same command a player could type; the page through the engine), so no rule lives in a drawing.
+The web simulator is the design bench: the window is drawn on the page first, where it can be looked at and refined, then drawn with the game's frames from the
+same table. Taken from the design file: a raider's window has no rule text, lists or history; the Master Looter's strip is absent for everyone else (not greyed,
+since it is another role's area), while a raider's own answers that don't apply are greyed with the reason, as decided on 2026-11-05.
+
+**First version built (2026-11-06).** The page now draws the raider's part of the simulator (the items, the answers, your turn, the Master Looter's buttons) from
+`LootView`, through the engine's own bundle (`UITips`, `UILoot` and `LootView` are now in the page), and every scenario runs to its end through it. The game has a
+new `LootWindow` module that draws the same table with the game's frames; it opens by itself when a session starts (as the old tab did), shows the practice
+buttons (next boss, hand out, wait) in practice, and can be opened with `/gambit window` or the Loot window button on the main window. **The Loot tab is gone
+from the main window**: a live session and the lists are different moments, and the main window keeps Standings and Tools until the Guild book replaces them. Rules
+unchanged: a button types the command the old button typed. Left as they were, for now: the page still has its teaching material around the window (the lesson,
+the scenario list, the answers table), and the page's "Need, ready" button and "Request eligibility" are page-only extras for tokens and the Master Looter.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

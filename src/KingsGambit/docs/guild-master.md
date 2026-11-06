@@ -4,8 +4,9 @@ Everything the guild master can configure, what each option is for, and how to u
 shared ledger, not a private setting, so **every client enforces it the same way**, and anyone can see who chose what and when
 (`history`, or the audit tool). Nothing here can be changed quietly.
 
-**The window.** Type `/gambit` to open it: the Standings tab, the Loot tab for a running session, and the **Tools** tab, which has a form for every
-command below (Raid; List; Rules and requests; Guild master and me). The commands shown in this guide are what those forms run, so either way works,
+**The windows.** Type `/gambit` to open the main window: the Standings tab and the **Tools** tab, which has a form for every
+command below (Raid; List; Rules and requests; Guild master and me). A running loot session has its own small **Loot window**, which opens by itself when a
+session starts (`/gambit window`, or the Loot window button, brings it back). The commands shown in this guide are what those forms and buttons run, so either way works,
 and the foot of the window shows what the command answered, including why a refusal was refused. **Practice** runs all of it on a simulated raid and guild
 that is never saved or sent. `/gambit help` lists the commands.
 

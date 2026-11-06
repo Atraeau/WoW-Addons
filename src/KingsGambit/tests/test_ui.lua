@@ -85,16 +85,18 @@ test("the window builds and refreshes on every tab, in practice and out, without
     local old = { client = SK.client, engine = SK.engine, commands = SK.commands, host = SK.host, player = SK.player }
     SK.client, SK.engine = client, engine
     SK.commands = Commands.New({ client = client, engine = engine })
-    UI.window, UI.practice, UI.tab = nil, nil, "standings"
+    UI.window, UI.lootWindow, UI.practice, UI.tab = nil, nil, nil, "standings"
     local ok, err = pcall(function()
         assert(UI:Toggle(), "the window opens")
         UI:Refresh()
         UI:StartPractice()
-        UI.tab = "loot"; UI:Refresh()
+        UI:OpenLoot(); UI:Refresh()
         UI:PracticeKill()
         UI:Refresh()
         UI:PracticeWait(10)
         UI:Command("pass 1")
+        UI:Command("resolve"); UI:PracticeWait(30); UI:Refresh()
+        UI:ToggleLoot(); UI:ToggleLoot(); UI:Tick()
         UI.tab = "standings"; UI:Refresh()
         UI:LeavePractice()
     end)
@@ -102,7 +104,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
     for k, v in pairs(g) do _G[k] = v end
     _G.CreateScrollBoxListLinearView, _G.ScrollUtil, _G.CreateDataProvider, _G.ScrollBoxConstants = g.CreateScrollBoxListLinearView, g.ScrollUtil, g.CreateDataProvider, g.ScrollBoxConstants
     SK.client, SK.engine, SK.commands, SK.host, SK.player = old.client, old.engine, old.commands, old.host, old.player
-    UI.window, UI.practice = nil, nil
+    UI.window, UI.lootWindow, UI.practice = nil, nil, nil
     assert(ok, tostring(err))
 end)
 end

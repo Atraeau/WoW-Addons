@@ -58,6 +58,12 @@ SlashCmdList["KINGSGAMBIT"] = function(msg)
         if ok and shown then return end
         if not ok then SK:Print("the window failed to open: " .. tostring(shown)) end
     end
+    -- `/gambit window` opens the Loot window (to look at it between sessions; it opens by itself when a session starts).
+    if (msg or ""):match("^%s*window%s*$") and SK.modules.UI and SK.modules.UI.OpenLoot then
+        local ok, err = pcall(SK.modules.UI.OpenLoot, SK.modules.UI)
+        if not ok then SK:Print("the loot window failed to open: " .. tostring(err)) end
+        return
+    end
     local ok, err = pcall(SK.commands.handle, msg)
     if not ok then SK:Print("error: " .. tostring(err)) end
 end

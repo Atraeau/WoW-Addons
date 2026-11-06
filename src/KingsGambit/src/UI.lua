@@ -1,5 +1,5 @@
 -- King's Gambit: the window. `/gambit` with nothing after it opens it (design journal: "/gambit opens a window").
--- Tabs: Standings, Loot (the running session: answer, draft, and the Master Looter's controls). More tabs follow (officers, guild master).
+-- Tabs: Standings and Tools (the Guild book, to be reshaped: docs/ui-design.md). A live loot session has its own small window (LootWindow).
 -- Keep this file Lua 5.1-safe. Every button runs the same command a player would type, so the rules, the messages and the ledger are
 -- exactly the same as with commands.
 --
@@ -7,9 +7,9 @@
 --   M.Model(engine, client, listId)        pure: what the Standings tab shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools, Tips
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools, Tips = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips
+local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow
 end)
 
 local function say(text)
@@ -141,11 +141,11 @@ function M:PracticeKill()
     local boss, _, why = p.sim:killBoss(nil, false)
     if not boss then return say("Practice: there are no more bosses.") end
     if why then say("Practice: " .. tostring(why)) end
-    M.tab = "loot"; M:Refresh()
+    M:OpenLoot()
 end
 function M:PracticeHandOut()
     local p = M.practice
-    if p then p.sim:handOut(); M.tab = "loot"; M:Refresh() end
+    if p then p.sim:handOut(); M:OpenLoot() end
 end
 function M:PracticeWait(sec)
     local p = M.practice
@@ -188,12 +188,40 @@ local function nextList(lists, current)
     return lists[1]
 end
 
-local TABS = { { "standings", "Standings" }, { "loot", "Loot" }, { "tools", "Tools" } }
+local TABS = { { "standings", "Standings" }, { "tools", "Tools" } }
 local SORTS = { { "pos", "#" }, { "name", "Name" }, { "class", "Class" }, { "wins", "Wins" } }
 
 local function setShown(frame, on) if on then frame:Show() else frame:Hide() end end
 
+-- The Loot window: opened by a session starting, by /gambit window, and by the button on the main window.
+function M:OpenLoot()
+    if not (CreateFrame and UIParent) then return end
+    if not self.lootWindow then
+        local ok, f = pcall(LootWindow.Build, M)
+        if not ok then error(f, 0) end
+        self.lootWindow = f
+    end
+    self.lootWindow:Show()
+    M:Refresh()
+end
+
+function M:ToggleLoot()
+    if self.lootWindow and self.lootWindow:IsShown() then self.lootWindow:Hide() else self:OpenLoot() end
+end
+
+-- Once a second, from whichever window is open: a practice raid's clock runs, and what is drawn is brought up to date (the ledger changes as other
+-- players' updates arrive, a session's timer runs down).
+function M:Tick()
+    local now = GetTime and GetTime() or 0
+    if now - (M.lastTick or 0) < 1 then return end
+    M.lastTick = now
+    if M.practice then M.practice.sim:advance(1) end
+    M:Refresh()
+end
+
 function M:Refresh()
+    local lw = self.lootWindow
+    if lw and lw:IsShown() then LootWindow.Refresh(lw, M.Ctx(), M) end
     local w = self.window
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
@@ -215,7 +243,6 @@ function M:Refresh()
         setShown(w.pages[t[1]], M.tab == t[1])
     end
     w.output:SetText(M.OutputText())
-    if M.tab == "loot" then return UILoot.Refresh(w.pages.loot, ctx, M) end
     if M.tab == "tools" then return UITools.Refresh(w.pages.tools, ctx, M) end
     local p = w.pages.standings
     local model = M.Model(ctx.engine, ctx.client, self.list)
@@ -656,6 +683,12 @@ function M:Build()
         end)
     end
 
+    -- The Loot window opens by itself when a session starts; this brings it back, or shows it between sessions.
+    w.lootButton = button(w, "Loot window", 96)
+    w.lootButton:SetPoint("TOPRIGHT", -16, -48)
+    w.lootButton:SetScript("OnClick", function() M:ToggleLoot() end)
+    Tips.Attach(w.lootButton, "lootwindow")
+
     -- Tabs hang along the bottom edge of the window, as the game's own windows have them; plain buttons along the top if the tab system isn't there.
     w.tabButtons = {}
     local okTabs, tabs = pcall(CreateFrame, "Frame", nil, w, "TabSystemTemplate")
@@ -675,22 +708,14 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 16, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { standings = M:BuildStandings(content), loot = UILoot.Build(content, M), tools = UITools.Build(content, M) }
+    w.pages = { standings = M:BuildStandings(content), tools = UITools.Build(content, M) }
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
     w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     w.output:SetPoint("BOTTOMLEFT", 20, 18); w.output:SetWidth(380); w.output:SetHeight(66)
     w.output:SetJustifyH("LEFT"); w.output:SetJustifyV("TOP"); w.output:SetWordWrap(true)
 
     -- Keep it current while it is open: the ledger changes as other players' updates arrive, and a practice raid's clock runs.
-    local elapsed = 0
-    w:SetScript("OnUpdate", function(_, dt)
-        elapsed = elapsed + dt
-        if elapsed > 1 then
-            elapsed = 0
-            if M.practice then M.practice.sim:advance(1) end
-            M:Refresh()
-        end
-    end)
+    w:SetScript("OnUpdate", function() M:Tick() end)
     w:SetScript("OnShow", function() M:Refresh() end)
     -- Escape closes it.
     if UISpecialFrames then table.insert(UISpecialFrames, "KingsGambitWindow") end
@@ -728,6 +753,7 @@ end
 -- Show the window on a tab (a loot session has started).
 function M:Open(tab)
     if not (CreateFrame and UIParent) then return end
+    if tab == "loot" then return self:OpenLoot() end
     local w = self:Window()
     if tab then M.tab = tab end
     w:Show(); M:Refresh()

@@ -70,6 +70,31 @@
   .peer.good { border-color: var(--good); } .peer.warn { border-color: var(--warn); } .peer.bad { border-color: var(--bad); }
   .mini { margin: 6px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
   .hint { font-size: 13px; margin: 0 0 6px; }
+  /* The Loot window: the same table the game draws (LootView), here as HTML. */
+  .lw { background: #1b1612; border: 2px solid #5a4a2a; border-radius: 6px; max-width: 640px; box-shadow: 0 2px 10px rgba(0,0,0,.5); margin-bottom: 14px; }
+  .lw-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 10px; background: linear-gradient(#3a2e18, #2a2112); border-bottom: 1px solid #5a4a2a; color: var(--gold); font-weight: 600; }
+  .lw-title .sub2 { color: var(--muted); font-weight: 400; font-size: 12px; }
+  .lw-body { padding: 8px 10px; }
+  .lw-timer { height: 6px; background: #0b0f14; border-radius: 3px; overflow: hidden; margin: 2px 0 4px; }
+  .lw-timer > i { display: block; height: 100%; background: var(--gold); transition: width .2s linear; }
+  .lw-timer.urgent > i { background: var(--warn); }
+  .lw-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .lw-row { padding: 7px 0; border-top: 1px solid #3a3020; }
+  .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lw-row .note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .lw-row .warn { font-size: 12px; color: var(--warn); margin-top: 3px; }
+  .lw-row.answered { background: rgba(63,185,80,.06); }
+  .lw-btn { min-width: 74px; font-weight: 600; }
+  .lw-btn .k { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 3px; border: 1px solid currentColor; font-size: 10px; margin-right: 5px; }
+  .lw-btn.sel { outline: 2px solid currentColor; background: rgba(255,255,255,.14); }
+  .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
+  .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
+  .lw-banner { border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font-size: 13px; margin: 6px 0; }
+  .lw-banner.good { border-color: var(--good); } .lw-banner.warn { border-color: var(--warn); }
+  .lw-turn { border: 1px solid var(--gold); background: rgba(227,179,65,.08); border-radius: 4px; padding: 8px; margin: 8px 0; }
+  .lw-turn .hd { font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+  .lw-ml { border-top: 1px solid #5a4a2a; padding: 8px 10px; background: #14100c; }
+  .lw-practice { background: #3d2f00; color: var(--gold); font-size: 11px; padding: 2px 10px; text-align: center; }
 </style>
 </head>
 <body>
@@ -6628,6 +6653,419 @@ function M.find(id)
 end
 
 end; chunk("KingsGambit", SK) end
+-- ===== UITips.lua =====
+do local chunk = function(...)
+-- King's Gambit: the tooltips for the window's buttons. Keep this file Lua 5.1-safe.
+-- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A greyed-out button's tooltip also says why it is
+-- unavailable. The words describe the same rules as docs/rationale.md and docs/guild-master.md.
+local _, SK = ...
+local M = SK:NewModule("UITips")
+
+M.TEXT = {
+    -- answering for an item
+    need = { "Need (main spec)", "Bid on this item as an upgrade for your main spec.\n\nWhen bidding closes, the main-spec draft goes down the list from the top: each player who bid on something picks one item they bid on. Whoever picks an item moves to the bottom of the main list; everyone else keeps their place.\n\nOnly for items your class may have. If it isn't, this is greyed out: you can still pass, or gift it." },
+    off = { "Off-spec", "Bid on this item for your off-spec.\n\nOff-spec bids are drafted after the main-spec round, down a separate off-spec list. Winning here moves you to the bottom of the off-spec list, and does not cost you your place on the main list." },
+    pass = { "Pass", "No bid on this item.\n\nYour answer is public, like everyone's. Passing costs nothing and never changes your place on any list." },
+    gift = { "Gift", "Bid to win this item for someone else.\n\nYou can name who gets it later, if you win. They must be able to use it. Gifts are drafted after the main-spec and off-spec rounds, and as the winner you move to the bottom of the list. The Master Looter never chooses a gift's recipient for you." },
+    -- the Master Looter's session controls
+    resolve = { "Resolve now", "Master Looter: close bidding right now instead of waiting for the timer.\n\nThe drafts then run down the list. Items nobody bid on go to the salvage round." },
+    extend = { "Add 30 seconds", "Master Looter: add 30 seconds to the bid timer, or to the current player's turn, so people have time to answer." },
+    confirm = { "Confirm", "Master Looter: after the draft, review the results and confirm to hand every item over and record the wins in the ledger.\n\nNothing is handed out or recorded until you confirm. You can only record if a raid is open with you as its Master Looter (an officer opens it)." },
+    cancel = { "Cancel the session", "Master Looter: end this session. Nothing is handed out and nothing is recorded." },
+    start = { "Start from the loot window", "Master Looter: with the boss's loot window open, start a session for all its items.\n\nEveryone in the raid gets this window and answers for each item. The loot method must be Master Looter (the raid leader sets it)." },
+    -- your turn
+    pick = { "Pick this item", "Your turn in the draft: take this item.\n\nYou move to the bottom of the list. You may only pick one of the items you bid on." },
+    skip = { "Skip", "Give up the rest of this round. Passing on your turn is always free, and your place does not change." },
+    claim = { "Claim it", "Salvage: take this item that nobody wanted. It is yours to keep, sell, or gift on. Declining sends it to the disenchanter instead." },
+    decline = { "Decline", "Salvage: you don't want it. It goes to the disenchanter. It is never offered to anyone else." },
+    give = { "Give it", "Name who gets the gift you won. They must be able to use it. Type the name, or leave it, keep it yourself, or withdraw." },
+    keep = { "Keep it", "Keep the gift yourself. Only allowed if the item is for your class (or you are the salvager)." },
+    withdraw = { "Withdraw", "Give up the gift: it counts as your pass, and the draft moves on to the next player." },
+    -- practice
+    kill = { "Kill the next practice boss", "Practice only: the next practice boss dies and drops two items. The simulated raiders answer as their class and role would, just like in the simulator on the website." },
+    handout = { "Hand out the held loot", "Practice only: put loot that was held back up for bidding." },
+    wait = { "Wait 10 seconds", "Practice only: let 10 simulated seconds pass, so bid timers run out and the simulated raiders answer." },
+    practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
+    practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
+    -- the windows
+    lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
+    -- standings
+    listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the guild master decide which (see Tools, Raid)." },
+    sort = { "Sort", "Click to sort the table by this column; click again to reverse it.\n\nThis only changes how the table is shown. It never changes the list's real order, which is the order players are called in." },
+    top = { "Move to the top", "Stage a move of the selected player to the top of this list.\n\nNothing is recorded yet: the table shows where they would go. Press Apply move (with a reason) to record it as one entry; Cancel to drop it." },
+    up = { "Up one place", "Stage a move of the selected player up one place. Each press only changes the preview; nothing is recorded until you press Apply move, so several presses make one entry." },
+    down = { "Down one place", "Stage a move of the selected player down one place. Each press only changes the preview; nothing is recorded until you press Apply move, so several presses make one entry." },
+    bottom = { "Move to the bottom", "Stage a move of the selected player to the bottom of this list. Nothing is recorded until you press Apply move." },
+    place = { "To place", "Type the place to move the selected player to, then Set. You can also drag a player onto another row. Either way it is only a preview until you press Apply move." },
+    apply = { "Apply move", "Record the staged move as a single entry in the shared ledger, with the reason you typed. A reason is required: it is part of the record, with who made the change.\n\nHistory is never rewritten: the old order stays visible." },
+    cancelmove = { "Cancel the move", "Drop the staged move. Nothing was recorded." },
+    remove = { "Remove from the list", "Take the selected player off this list. A reason is optional but recommended.\n\nThe record keeps the place they were at, so they can be put back there." },
+    award = { "Record a win", "Open the 'Record a win' form for the selected player: for a win a session didn't record (a failed hand-out, a corrected winner).\n\nThey move to the bottom of the list, as after any win. You choose the item and give a reason." },
+    addall = { "Add everyone from your group and guild", "Add every player in your group and guild who isn't on this list yet, with their classes.\n\nThis writes one entry per player to the shared ledger, the same as the 'add' command, so only an officer (or a raid's Master Looter) can." },
+    startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the guild master.\n\nDo this once, on the character that should be guild master. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
+    -- tools
+    dothis = { "Do it", "Run this form's command: the same one you could type in chat. If you aren't allowed, the output at the foot of the window says why, and nothing is changed." },
+}
+
+-- What a tooltip says: an id from TEXT, a { title, text } pair, or a function returning title, text. `extra` (optional, a function) gives a line to
+-- add at hover time (a button that is greyed out says why).
+function M.Resolve(tip)
+    if type(tip) == "function" then return tip() end
+    if type(tip) == "string" then tip = M.TEXT[tip] end
+    if type(tip) == "table" then return tip[1], tip[2] end
+end
+
+function M.Attach(frame, tip, extra)
+    if not frame then return end
+    local function enter(self)
+        if not GameTooltip then return end
+        local title, text = M.Resolve(tip)
+        if not title then return end
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(title, 1, 1, 1)
+        if text then GameTooltip:AddLine(text, 0.85, 0.85, 0.85, true) end
+        local more = extra and extra()
+        if more then GameTooltip:AddLine("\n" .. more, 1, 0.5, 0.25, true) end
+        GameTooltip:Show()
+    end
+    local function leave() if GameTooltip then GameTooltip:Hide() end end
+    -- A greyed-out button should still explain itself.
+    if frame.SetMotionScriptsWhileDisabled then frame:SetMotionScriptsWhileDisabled(true) end
+    if frame.HookScript then
+        frame:HookScript("OnEnter", enter); frame:HookScript("OnLeave", leave)
+    else
+        frame:SetScript("OnEnter", enter); frame:SetScript("OnLeave", leave)
+    end
+end
+
+function M:OnInit() end
+
+end; chunk("KingsGambit", SK) end
+-- ===== UILoot.lua =====
+do local chunk = function(...)
+-- King's Gambit: what the Loot window reads from a session (Model, pure and tested). Keep this file Lua 5.1-safe.
+-- The buttons that answer it are in LootWindow, drawn from LootView; every button runs the same command a player would type, so the rules and the
+-- ledger are exactly those of the commands. The Master Looter's own session and a player's view of someone else's are read from the same place the commands read.
+local _, SK = ...
+local Identity, Sim, Tips
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips" }, function(d) Identity, Sim, Tips = d.Identity, d.Sim, d.UITips end)
+
+M.MAX_ITEMS = 8
+
+local PHASES = {
+    bidding = "Bidding is open",
+    main = "Main-spec draft",
+    off = "Off-spec draft",
+    gift = "Gift draft",
+    salvage = "Salvage: items nobody wanted",
+    review = "Review: confirm to hand the loot out",
+    done = "Finished",
+    cancelled = "Cancelled: nothing was recorded",
+}
+M.PHASES = PHASES
+
+local function show(who) return who and Identity.Display(who) end
+
+-- Does this game have an item with that id at all? (Its static item data, not the server's: true for any real item, cached or not.)
+-- Without the function to ask, assume yes.
+function M.KnownToGame(id)
+    local instant = (C_Item and C_Item.GetItemInfoInstant) or GetItemInfoInstant
+    if not instant then return true end
+    local ok, known = pcall(instant, id)
+    return ok and known ~= nil
+end
+
+-- What the game can show a tooltip for: a real item link as it came, or (in practice, where the simulated drops are named) "item:ID".
+function M.TipOf(link)
+    if type(link) ~= "string" then return nil end
+    if link:find("|Hitem:", 1, true) or link:find("^item:") then return link end
+    local it = Sim and Sim.FindItem and Sim.FindItem(link)
+    if it and M.KnownToGame(it.id) then return "item:" .. it.id end
+    return nil
+end
+
+-- The link to show: the game's own when it has the item cached, else (and the game is asked to load the item, so a moment later) a link made from the
+-- id and the name, which looks and hovers like the real one.
+function M.Display(link, tip)
+    if link and link:find("|H", 1, true) then return link end
+    local id = tip and tonumber(tip:match("^item:(%d+)"))
+    if not id then return link or "?" end
+    local get = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+    if get then
+        local _, full = get(tip)
+        if full then return full end
+    end
+    if C_Item and C_Item.RequestLoadItemDataByID then pcall(C_Item.RequestLoadItemDataByID, id) end
+    return ("|cffa335ee|Hitem:%d::::::::::::|h[%s]|h|r"):format(id, link or ("item " .. id))
+end
+
+-- The session this machine can see: the one it runs as Master Looter, else the one it is answering.
+local function sessionOf(ctx)
+    local host = ctx.host and ctx.host.session
+    if host and host.phase ~= "idle" then return host, "ml" end
+    local p = ctx.player and ctx.player.session
+    if p then return p, "player" end
+end
+
+-- ctx: { client, host, player, sim (practice only) }. Returns what the tab shows.
+function M.Model(ctx)
+    local me = ctx.client:me()
+    local out = { mode = "none", items = {}, hidden = 0, me = me, can = {} }
+    local s, mode = sessionOf(ctx)
+    if ctx.sim then
+        local sim = ctx.sim
+        local nextBoss = sim.raid and sim.raid.bosses[sim.bossIndex + 1]
+        out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held }
+    end
+    if not s then return out end
+    out.mode, out.phase = mode, s.phase
+    out.phaseText = PHASES[s.phase] or tostring(s.phase)
+    local now = ctx.client:now()
+    local deadline = (mode == "ml" and s.deadline) or (s.turn and s.turn.deadline) or s.deadline
+    out.seconds = deadline and math.max(0, math.floor(deadline - now + 0.5)) or nil
+    out.active = s.phase ~= "done" and s.phase ~= "cancelled"
+    -- How long the timer started with (for a bar that drains): the bid time, or a pick's or a claim's.
+    local cfg = s.cfg or {}
+    if s.turn then out.total = s.turn.type == "claim" and cfg.claimSeconds or cfg.pickSeconds
+    elseif s.phase == "bidding" then out.total = cfg.bidSeconds end
+    if ctx.place then out.place = ctx.place() end
+    -- The Master Looter's controls belong to the Master Looter. (The session is read from the same place either way; on the practice
+    -- page a bot can hold the role while the player only answers, which ctx.isML = false says.)
+    out.isML = mode == "ml" and ctx.isML ~= false
+    local list = s.items or {}
+    for i, it in ipairs(list) do
+        if i > M.MAX_ITEMS then out.hidden = out.hidden + 1
+        else
+            local row = { id = it.id or i, link = it.link, tip = M.TipOf(it.link), status = it.status }
+            if mode == "ml" then
+                local b = s.bids[me] and s.bids[me][it.id]
+                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
+            else
+                local b = s.mine and s.mine[it.id or i]
+                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                for _, a in ipairs(s.results and s.results.awards or {}) do
+                    if a.item == row.id then row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier end
+                end
+            end
+            row.giftTargets = ctx.targets and ctx.targets(row.id) or nil
+            row.canBid, row.whyNot = true, nil
+            if ctx.commands and ctx.commands.mayHave then
+                local ok, whyNot = ctx.commands.mayHave(row.id)
+                if ok == false then row.canBid, row.whyNot = false, whyNot end
+            end
+            out.items[#out.items + 1] = row
+        end
+    end
+    if mode == "ml" then
+        out.answered, out.eligible = s:answerCount()
+        out.eligibleMe = s.eligible and s.eligible[me] and true or false
+        out.pending = {}
+        for _, a in ipairs(s.pending or {}) do
+            if a.type == "award" then out.pending[#out.pending + 1] = ("%s: %s%s"):format(a.item.link or "?", show(a.member), a.to and (" (for " .. show(a.to) .. ")") or "")
+            elseif a.type == "disenchant" then out.pending[#out.pending + 1] = ("%s: disenchanted by %s"):format(a.item.link or "?", show(a.to)) end
+        end
+        if out.isML then
+            out.can.resolve = s.phase == "bidding"
+            out.can.extend = s.phase == "bidding" or (s.turn ~= nil)
+            out.can.confirm = s.phase == "review"
+            out.can.cancel = out.active
+        end
+    end
+    local t = s.turn
+    if t and t.player == me then
+        out.turn = { type = t.type, tier = t.tier, options = t.options, item = t.item }
+        if t.type == "recipient" and s.mayKeep then out.turn.canKeep = s:mayKeep(me, t.item) and true or false end
+        if t.type ~= "pick" and ctx.targets then out.turn.targets = ctx.targets(t.item) end
+        local function linkOfItem(id) for _, it in ipairs(list) do if (it.id or 0) == id then return it.link end end end
+        out.turn.itemLink = t.item and linkOfItem(t.item)
+    elseif t then
+        out.waitingFor = show(t.player)
+    end
+    return out
+end
+
+function M:OnInit() end
+
+end; chunk("KingsGambit", SK) end
+-- ===== LootView.lua =====
+do local chunk = function(...)
+-- King's Gambit: what the Loot window shows, as a plain table. Keep this file Lua 5.1-safe.
+--
+-- Build(model) turns what UILoot.Model reads from a session into the window itself: its state, its timer, each item's row and buttons (enabled or
+-- greyed, and why), the panel for a player's turn, and the Master Looter's strip. Nothing here draws or runs anything. The game draws it with the
+-- game's frames and the web simulator draws it as HTML; both read these same tables, so the two show the same screens, the same words, and the same
+-- greyed-out buttons. A button carries `act`, a neutral description of what it does ({ name = "bid", item = 2, kind = "need" }); each place maps
+-- that to its own way of running it (the game types the same command a player could, the page calls the engine).
+-- Design: docs/ui-design.md, section 5.1.
+local _, SK = ...
+local Tips
+local M = SK:NewModule("LootView", { "UITips" }, function(d) Tips = d.UITips end)
+
+-- The four answers, in the order they are shown. `letter` is there so colour is never the only difference.
+M.ANSWERS = {
+    { key = "need", letter = "N", label = "Need" },
+    { key = "off", letter = "O", label = "Off-spec" },
+    { key = "gift", letter = "G", label = "Gift" },
+    { key = "pass", letter = "P", label = "Pass" },
+}
+
+local TIER = { main = "main-spec draft", off = "off-spec draft", gift = "gift draft", salvage = "salvage" }
+
+local WHY = {
+    cantequip = "Your class can't wear or wield this. You can still gift it or pass.",
+    nostats = "Nothing on this helps your class. You can still gift it or pass.",
+    wrongclass = "This isn't for your class. You can still gift it or pass.",
+}
+
+local function tipOf(id)
+    local t = Tips and Tips.TEXT and Tips.TEXT[id]
+    if t then return { title = t[1], text = t[2] } end
+end
+
+local function button(key, label, act, o)
+    o = o or {}
+    return { key = key, letter = o.letter, label = label, act = act, tip = tipOf(o.tip or key), enabled = o.enabled ~= false,
+        why = o.why, selected = o.selected or false, primary = o.primary or false }
+end
+
+local function answerButtons(m, row)
+    local out = {}
+    for _, a in ipairs(M.ANSWERS) do
+        local enabled, why = true, nil
+        if (a.key == "need" or a.key == "off") and row.canBid == false then
+            enabled, why = false, WHY[row.whyNot] or "This isn't for your class."
+        end
+        out[#out + 1] = button(a.key, a.label, { name = "bid", item = row.id, kind = a.key },
+            { letter = a.letter, enabled = enabled, why = why, selected = row.mine == a.key })
+    end
+    return out
+end
+
+local function answerText(row)
+    if row.mine == "gift" then return "You: Gift" .. (row.mineTo and (" to " .. row.mineTo) or " (you'll choose who if you win)") end
+    local word = ({ need = "Need", off = "Off-spec", pass = "Pass" })[row.mine]
+    return word and ("You: " .. word) or nil
+end
+
+-- The window, for one player. `m` is UILoot.Model's table.
+function M.Build(m)
+    local v = { visible = false, state = "none", rows = {}, practice = m.practice or false }
+    if m.mode == "none" then
+        v.night = m.night
+        return v
+    end
+    v.visible = true
+    v.title = "King's Gambit"
+    v.subtitle = m.phaseText
+    v.place = m.place
+    v.isML = m.isML or false
+    if m.seconds and (m.phase == "bidding" or m.turn or m.waitingFor) then
+        v.timer = { seconds = m.seconds, fraction = (m.total and m.total > 0) and math.min(1, m.seconds / m.total) or nil,
+            urgent = m.seconds <= 10 }
+    end
+
+    local phase = m.phase
+    local bidding = phase == "bidding"
+    local turn = m.turn
+
+    -- the state, which decides what the window leads with
+    if phase == "cancelled" then v.state = "cancelled"
+    elseif phase == "done" then v.state = "result"
+    elseif phase == "review" then v.state = "review"
+    elseif turn then v.state = "myturn"
+    elseif m.waitingFor then v.state = "turn"
+    elseif bidding then
+        local open = 0
+        for _, r in ipairs(m.items) do if not r.mine then open = open + 1 end end
+        v.state = open == 0 and "waiting" or "bidding"
+    else v.state = "turn" end
+
+    -- the line under the title
+    if bidding and m.answered and m.eligible then
+        v.progress = ("%d of %d answered"):format(m.answered, m.eligible)
+    end
+
+    -- rows: one per item
+    for _, r in ipairs(m.items) do
+        local row = { id = r.id, link = r.link, tip = r.tip, buttons = {}, note = nil, giftTargets = r.giftTargets }
+        if bidding then
+            row.state = r.mine and "answered" or "open"
+            row.buttons = answerButtons(m, r)
+            row.note = answerText(r)
+            if r.canBid == false then row.warn = WHY[r.whyNot] or "This isn't for your class." end
+        elseif r.winner then
+            row.state = "awarded"
+            local to = (r.to and r.to ~= r.winner) and (" for " .. r.to) or ""
+            row.note = r.winner .. to .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or "")
+            row.mineWon = (r.winner == m.me) or (r.to == m.me)
+        elseif r.status == "de" then
+            row.state, row.note = "unwanted", "Goes to the disenchanter"
+        else
+            row.state, row.note = "locked", answerText(r) or "Bidding is closed"
+        end
+        v.rows[#v.rows + 1] = row
+    end
+    v.hidden = m.hidden
+
+    -- what the window says to the player, in plain words
+    if v.state == "myturn" then
+        if turn.type == "pick" then
+            v.turn = { kind = "pick", text = "Your turn: pick one item. You'll move to the bottom of the list.", buttons = {}, itemLink = nil }
+            for _, id in ipairs(turn.options or {}) do
+                local link
+                for _, r in ipairs(m.items) do if r.id == id then link = r.link end end
+                v.turn.buttons[#v.turn.buttons + 1] = button("pick", "Pick", { name = "pick", item = id }, { primary = true })
+                v.turn.buttons[#v.turn.buttons].link = link
+                v.turn.buttons[#v.turn.buttons].item = id
+            end
+            v.turn.buttons[#v.turn.buttons + 1] = button("skip", "Skip", { name = "skip" })
+        elseif turn.type == "recipient" then
+            v.turn = { kind = "recipient", text = "You won a gift. Who gets it? The draft waits for you.", item = turn.item, itemLink = turn.itemLink,
+                targets = turn.targets, buttons = {} }
+            v.turn.buttons[1] = button("give", "Give it", { name = "give", item = turn.item }, { primary = true })
+            v.turn.buttons[1].needsTarget = true
+            v.turn.buttons[2] = button("keep", "Keep it", { name = "keep", item = turn.item },
+                { enabled = turn.canKeep ~= false, why = turn.canKeep == false and "It isn't for your class, and you aren't the salvager." or nil })
+            v.turn.buttons[3] = button("withdraw", "Withdraw", { name = "withdraw", item = turn.item })
+        else
+            v.turn = { kind = "salvage", text = "Nobody wanted this. Claim it, claim it and gift it on, or decline and the disenchanter takes it.", item = turn.item,
+                itemLink = turn.itemLink, targets = turn.targets, buttons = {} }
+            v.turn.buttons[1] = button("claim", "Claim it", { name = "claim", item = turn.item }, { primary = true })
+            v.turn.buttons[2] = button("claimgift", "Claim and gift", { name = "claim", item = turn.item, gift = true }, { tip = "claim" })
+            v.turn.buttons[2].needsTarget = true
+            v.turn.buttons[3] = button("decline", "Decline", { name = "decline", item = turn.item })
+        end
+    elseif v.state == "turn" then
+        v.banner = { kind = "info", text = ("Waiting for %s%s"):format(m.waitingFor or "the next player", m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "") }
+    elseif v.state == "waiting" then
+        v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
+    elseif v.state == "review" then
+        v.banner = { kind = "info", text = m.isML and "Review what will be recorded, then confirm." or "The Master Looter is confirming the loot." }
+    elseif v.state == "cancelled" then
+        v.banner = { kind = "warn", text = "Cancelled. Nothing was recorded." }
+    elseif v.state == "result" then
+        local won = {}
+        for _, row in ipairs(v.rows) do if row.mineWon then won[#won + 1] = row.link end end
+        v.banner = { kind = "good", text = #won > 0 and ("You won: " .. table.concat(won, ", ")) or "Finished. Nothing for you this time." }
+    end
+
+    -- the Master Looter's strip
+    if m.isML then
+        v.ml = { buttons = {
+            button("resolve", "Resolve now", { name = "resolve" }, { enabled = m.can.resolve, why = (not m.can.resolve) and "Only while bidding is open." or nil }),
+            button("extend", "+30 seconds", { name = "extend", seconds = 30 }, { enabled = m.can.extend, why = (not m.can.extend) and "Only while there is a timer." or nil }),
+            button("confirm", "Confirm", { name = "confirm" }, { enabled = m.can.confirm, primary = m.can.confirm,
+                why = (not m.can.confirm) and "After the draft, when the result is in review." or nil }),
+            button("cancel", "Cancel", { name = "cancel" }, { enabled = m.can.cancel, why = (not m.can.cancel) and "There is nothing running to cancel." or nil }),
+        }, pending = m.pending }
+    end
+    return v
+end
+
+function M:OnInit() end
+
+end; chunk("KingsGambit", SK) end
 SK:Resolve()
 -- ===== migration_lab.lua (simulator only) =====
 KG_LAB = (function(...)
@@ -7400,6 +7838,36 @@ end
 
 function api.state() return state() end
 
+-- The Loot window for the player ("You"), exactly the table the game draws (LootView over UILoot.Model). The page only draws it.
+function api.lootView()
+    if not sim then return { visible = false, state = "none", rows = {} } end
+    local session = sim.session
+    local me = sim.learner
+    local myInfo = sim.info[short(me)]
+    local function targets(itemId)
+        local fit = session and session:fitOf(itemId)
+        local out = {}
+        for _, n in ipairs(sim.names) do
+            if n ~= short(me) and S.Loot.MayHave(fit, sim.info[n] and sim.info[n].class) then out[#out + 1] = n end
+        end
+        return out
+    end
+    local ctx = {
+        client = { me = function() return me end, now = function() return sim.client:now() end },
+        host = { session = session },
+        sim = sim,
+        isML = (sim.ml == sim.learner),
+        commands = { mayHave = function(itemId) return S.Loot.MayHave(session:fitOf(itemId), myInfo and myInfo.class) end },
+        targets = targets,
+        place = function()
+            for i, n in ipairs(sim.engine:Get("main").state.order) do if n == me then return i end end
+        end,
+    }
+    local model = S.UILoot.Model(ctx)
+    model.practice = true
+    return S.LootView.Build(model)
+end
+
 -- A raid night: kill the next boss; hold = "1" keeps the loot for a later hand-out.
 function api.kill(hold)
     if not (sim and sim.raid) then return { error = "not a raid night" } end
@@ -7522,6 +7990,11 @@ function api.extend(sec)
     if sim.ml ~= sim.learner then return notML() end
     return result(sim.session:extend(tonumber(sec) or 30))
 end
+function api.cancel()
+    if sim.ml ~= sim.learner then return notML() end
+    return result(sim.session:cancel("cancelled by the Master Looter"))
+end
+
 function api.resolveNow()
     if sim.ml ~= sim.learner then return notML() end
     return result(sim.session:resolveNow())
@@ -8013,6 +8486,77 @@ end
     return '<div class="small muted">Token: makes ' + esc(it.token.makes).toLowerCase() + ". Wanted by, in list order: " + w + "</div>";
   }
 
+  // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
+  // it only draws, and maps a button's `act` to the engine call.
+  let lw = null;
+  const tipText = (b) => (b.tip ? b.tip.title + "\n\n" + b.tip.text : b.label) + (b.why ? "\n\nUnavailable: " + b.why : "");
+  function lwButton(b, extra) {
+    const cls = "lw-btn" + (b.selected ? " sel" : "") + (b.primary && b.enabled ? " primary" : "") + (b.key === "need" || b.key === "off" || b.key === "gift" || b.key === "pass" ? " b-" + b.key : "");
+    const dis = !b.enabled || (extra && extra.disabled);
+    const why = !b.enabled ? "" : (extra && extra.disabledWhy ? "\n\n" + extra.disabledWhy : "");
+    return '<button class="' + cls + '" data-act="w" data-a=\'' + esc(JSON.stringify(b.act)) + '\'' + (dis ? ' aria-disabled="true" data-off="1"' : "") + ' title="' + esc(tipText(b) + why) + '">' +
+      (b.letter ? '<span class="k">' + b.letter + "</span>" : "") + (b.selected ? "&#10003; " : "") + esc(b.label) + "</button>";
+  }
+  function lootWindowHtml() {
+    const v = lw;
+    if (!v || !v.visible) return "";
+    const timer = v.timer
+      ? '<div class="lw-timer' + (v.timer.urgent ? " urgent" : "") + '"><i style="width:' + Math.round((v.timer.fraction == null ? 1 : v.timer.fraction) * 100) + '%"></i></div>' : "";
+    const meta = '<div class="lw-meta"><span>' + esc(v.progress || "") + "</span><span>" +
+      (v.timer ? v.timer.seconds + "s" : "") + (v.place ? (v.timer ? " &middot; " : "") + "Your place: " + v.place : "") + "</span></div>";
+    const rows = v.rows.map((r) => {
+      const snap = (st.items || []).filter((x) => x.id === r.id)[0] || {};
+      const extra = [];
+      if (r.state === "open" || r.state === "answered") {
+        if (snap.token) extra.push(tokenHtml(snap));
+        if (snap.youMay === false && (snap.youWhy === "wrongclass" || snap.youWhy === "nostats"))
+          extra.push('<button data-act="eligible" data-a="' + r.id + '" title="Ask to be eligible for this item. In the real addon the request goes to the Master Looter, who accepts or declines. Here you are the Master Looter, so it is granted and recorded with your reason.">Request eligibility&hellip;</button>');
+      }
+      const buttons = r.buttons.map((b) => lwButton(b)).join(" ") +
+        (snap.token && (r.state === "open" || r.state === "answered") ? ' <button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "");
+      return '<div class="lw-row ' + r.state + '"><div class="top"><span class="iname">' + esc(r.link) + "</span>" +
+        (buttons ? '<span class="row" style="gap:4px">' + buttons + "</span>" : "") + "</div>" +
+        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + esc(r.note) + "</div>" : "") +
+        (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:4px">' + extra.join(" ") + "</div>" : "") + "</div>";
+    }).join("");
+    const gift = v.state === "bidding" || v.state === "waiting"
+      ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll" title="Pass on every item. Passing is free.">Pass on everything</button></div>' : "";
+    let turn = "";
+    if (v.turn) {
+      const t = v.turn;
+      const needT = (b) => b.needsTarget && !giftTo;
+      turn = '<div class="lw-turn"><div class="hd">' + esc(t.text) + "</div>" + (t.itemLink ? '<div class="iname">' + esc(t.itemLink) + "</div>" : "") +
+        (t.kind === "recipient" || t.kind === "salvage" ? '<div class="row" style="margin:6px 0"><span class="muted">Gift to:</span>' + giftSelect(t.item) + "</div>" : "") +
+        '<div class="row">' + t.buttons.map((b) => {
+          const label = b.link ? { label: b.label + " " + b.link } : null;
+          return lwButton(label ? Object.assign({}, b, label) : b, { disabled: needT(b), disabledWhy: needT(b) ? "Choose who gets it first." : "" });
+        }).join(" ") + "</div></div>";
+    } else if (v.banner) {
+      turn = '<div class="lw-banner ' + v.banner.kind + '">' + esc(v.banner.text) + "</div>";
+    }
+    const ml = v.ml
+      ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";
+    const hidden = v.hidden > 0 ? '<div class="small muted">+ ' + v.hidden + " more items not shown</div>" : "";
+    return '<div class="lw"><div class="lw-practice">Practice: nothing here is saved or sent</div><div class="lw-title"><span>' + esc(v.title) + '</span><span class="sub2">' + esc(v.subtitle || "") + "</span></div>" +
+      '<div class="lw-body">' + timer + meta + turn + rows + hidden + gift + "</div>" + ml + "</div>";
+  }
+  function lwAct(act) {
+    switch (act.name) {
+      case "bid": return ["bid", act.item, act.kind, act.kind === "gift" ? giftTo : ""];
+      case "pick": return ["pick", act.item];
+      case "skip": return ["skip"];
+      case "give": return ["recipient", giftTo];
+      case "keep": return ["keep"];
+      case "claim": return ["claim", act.gift ? giftTo : ""];
+      case "decline": return ["decline"];
+      case "resolve": return ["resolveNow"];
+      case "extend": return ["extend", act.seconds];
+      case "confirm": return ["confirm"];
+      case "cancel": return ["cancel"];
+    }
+    return null;
+  }
+
   function remaining() {
     if (st.deadline == null) return null;
     return Math.max(0, st.deadline - st.now);
@@ -8243,9 +8787,6 @@ end
     const p = st.phase;
     let h = '<div class="row" style="margin-top:10px">';
     const isML = !st.roles || st.roles.youAreML;
-    if (p === "bidding" && isML) h += '<button data-act="extend" data-a="30">+30s</button><button data-act="resolveNow">Resolve now</button>';
-    if (p === "review" && isML) h += '<button class="primary" data-act="confirm">Confirm &amp; distribute</button>';
-    if (p === "review" && !isML) h += '<span class="muted small">' + esc(st.roles.masterLooter) + " (the Master Looter) is confirming the loot.</span>";
     const n = st.night;
     if (n && (p === "idle" || p === "done" || p === "cancelled")) {
       if (n.next) {
@@ -8304,6 +8845,7 @@ end
     const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
     if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
 
+    lw = call("lootView");
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =
@@ -8315,7 +8857,7 @@ end
       "</div><div>" + lesson +
         '<div class="card"><div class="row spread"><h2 style="margin:0">Master Looter</h2><span class="pill phase">' + (PHASE[st.phase] || st.phase) + "</span></div>" +
           (st.phase === "bidding" ? '<div class="small muted" style="margin:6px 0">' + st.answered + " of " + st.eligible + " eligible players have answered every item. Bidding closes when everyone has, or the timer ends." + timerHtml() + "</div>" : "") +
-          turnHtml() + itemsHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
+          lootWindowHtml() + controlsHtml() + (lastMsg ? '<div class="small" style="color:var(--bad);margin-top:6px">' + esc(lastMsg) + "</div>" : "") + "</div>" +
         resultHtml() + pendingHtml() + correctionsHtml() + askHtml() +
         '<div class="card"><h2>Answers (public)</h2>' + playersHtml() + "</div>" +
       "</div><div>" + standingsHtml(st.order, "Standings") + standingsHtml(st.offOrder, "Off-spec list") +
@@ -8598,6 +9140,21 @@ end
       case "toggle": started = true; running = !running; render(); renderLab(); break;
       case "labToggle": labRunning = !labRunning; render(); renderLab(); renderMig(); break;
       case "speed": speed = Number(a); render(); renderLab(); renderMig(); break;
+      case "w": {
+        // a button of the Loot window: its `act` says what it does
+        const action = JSON.parse(a);
+        if (action.name === "withdraw") {
+          ask("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.", false, "Give up").then((ok) => { if (ok) act("withdraw"); });
+          break;
+        }
+        if (action.name === "cancel") {
+          ask("Cancel this session? Nothing is handed out and nothing is recorded.", false, "Cancel the session").then((ok) => { if (ok) act("cancel"); });
+          break;
+        }
+        const m = lwAct(action);
+        if (m) act(m[0], m[1], m[2], m[3]);
+        break;
+      }
       case "bid":
         act("bid", a, b, b === "gift" ? giftTo : ""); break;
       case "eligible": ask("Why are you asking to be eligible for this item? (Your reason goes in the record.)", true, "Ask").then((reason) => { if (reason) act("eligible", a, reason); }); break;

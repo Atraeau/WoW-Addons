@@ -30,6 +30,8 @@ M.TEXT = {
     wait = { "Wait 10 seconds", "Practice only: let 10 simulated seconds pass, so bid timers run out and the simulated raiders answer." },
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
+    -- the windows
+    lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
     listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the guild master decide which (see Tools, Raid)." },
     sort = { "Sort", "Click to sort the table by this column; click again to reverse it.\n\nThis only changes how the table is shown. It never changes the list's real order, which is the order players are called in." },
