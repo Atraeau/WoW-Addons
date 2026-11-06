@@ -1981,6 +1981,27 @@ master and me), chosen with two dropdowns (the area, then the action), so a new 
 command text (the `Compose` function, tested for every form) and runs it. The foot of the window shows what the last command said, so a refusal ("only the
 raid's Master Looter can...") is read where the button was, not in the chat window.
 
+### Decision: two surfaces, a Loot window and a Guild book, replace the one tabbed window (2026-11-06)
+
+The tabbed window grew by adding a button for each command, so its shape followed the command list. It served a raider with seconds to answer and an
+officer reorganising a list from the same frame. The guild master asked for a panel for managing rules and standings and a separate, specialised
+interface for in-raid loot (Gargul was named as inspiration), and for solid UX standards instead of functional UI piled up.
+
+Decided (full reasoning and alternatives in [ui-design.md](ui-design.md)):
+- **Two surfaces.** A small **Loot window** for the live session, which opens by itself when a session starts; the Master Looter sees an extra control strip in the
+  same window. A larger **Guild book** (`/gambit`) with a navigation column: Lists, Raids, People, History, Rules, Practice. Rejected: one window with tabs
+  (mixes two unlike moments), three surfaces by role (duplicates the session logic), and in-place helpers only (no overview for lists and history); the
+  in-place ideas (item tooltips, a launcher button, Master Looter modifier-click) stay as optional extras.
+- **Standards.** Each screen is reviewed against Nielsen's heuristics, the interaction laws, WoW conventions and accessibility rules in the design file. Kept from
+  earlier decisions: unavailable controls are greyed with the reason, players are picked and never typed, list changes are staged and applied as one entry. New rule:
+  a screen says whether a thing is a preview, pending or recorded.
+- **The web simulator and the game share the window's decisions** through view models (plain tables saying what rows, which buttons are enabled and why, and
+  which text), drawn by one renderer in the game and one on the page, with a replay test that compares them. Pixels will differ; screens, states, words and
+  enabled logic will not. Refining layouts on the page first also gives a faster loop, since the page can be viewed here and the game cannot.
+
+Not yet decided (the design file lists them, each with a recommendation): whether the Loot window opens by itself or asks, how much History every raider sees,
+answer hotkeys, the launcher button, and which surface is built first (recommended: the Loot window).
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
