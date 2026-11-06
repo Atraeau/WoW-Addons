@@ -151,6 +151,8 @@ These are officers' to set, so the guild master can do them as well. They are gu
 | `raid extend [name] [hours]` | Give a running raid more time (a raid lasts 4 hours by default, 24 at most). |
 | `raid revoke [name]` | Take the Master Looter's right to write away at once. It is in the record. |
 
+Whoever is given an item to disenchant says what it gave: the addon notices the loot window a Disenchant cast opens and records it by itself, or they type `disenchanted 3 Strange Dust, 1 Lesser Magic Essence` (the Awards section has the same form). If they are not the Master Looter, the Master Looter's addon writes it for them at once; History shows the item as "waiting for the result" until then, then what it gave.
+
 The Master Looter (not the guild master) chooses the disenchanter for their raid (`disenchanter <name>`), and loot is not handed out until they
 have.
 

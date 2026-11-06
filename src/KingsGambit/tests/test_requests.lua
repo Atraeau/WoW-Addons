@@ -412,3 +412,32 @@ test("a session started with nobody designated is refused by the engine itself",
     assert(H.rawNewSession(w.Looter.engine, { deHandler = "Brann" }):start({ { link = "item:1" } }))
     assert(Loot)
 end)
+
+H.section("Requests: what disenchanting gave")
+test("a disenchanter who isn't the Master Looter reports the result; the Master Looter writes it at once, as requested by them", function()
+    local w = guild()
+    openRaid(w)
+    local ev = assert(w.Looter.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = "Aldric" }))
+    assert(settle(w))
+    w.Aldric.cmd.handle("disenchanted 2 Strange Dust, 1 Soul Dust")
+    w.net:advance(5)
+    assert(settle(w), "everyone agrees again after the result is written")
+    for _, n in ipairs(NAMES) do
+        local d = w.nodes[n].engine:Get("main").state.disenchants[ev.id]
+        assert(d and d.result and d.result[1].name == "Strange Dust" and d.result[1].count == 2, n .. " sees what it gave")
+    end
+    local written
+    for _, e in ipairs(w.Looter.engine:View().applied) do if e.type == "DisenchantResult" then written = e end end
+    eq(written.author, "Looter"); eq(written.data.requestedBy, "Aldric", "the record says who reported it")
+end)
+
+test("someone else can't report a result for an item given to another player", function()
+    local w = guild()
+    openRaid(w)
+    local ev = assert(w.Looter.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = "Aldric" }))
+    assert(settle(w))
+    clear(w.Brann)
+    w.Brann.cmd.handle("disenchanted 5 Soul Dust")
+    assert(text(w.Brann):find("Nothing is waiting"), "Brann was given nothing to disenchant: " .. text(w.Brann))
+    eq(w.Looter.engine:Get("main").state.disenchants[ev.id].result, nil)
+end)

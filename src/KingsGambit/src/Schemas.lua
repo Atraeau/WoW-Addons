@@ -65,6 +65,10 @@ FORMATS[2] = {
         Pass = { list = true, data = { member = "name!", item = "name!", kind = "text" } },
         Transfer = { list = true, data = { award = "name!", to = "name!", member = "name", reason = "text" } },
         Disenchant = { list = true, data = { item = "name!", to = "name!" } },
+        -- what disenchanting an item actually gave (0.5.0): written by the Master Looter, for the disenchanter it was given to
+        -- (`requestedBy` when the disenchanter reported it). `disenchant` is the id of the Disenchant event it is about; `results` is a list of
+        -- { name, count, item? }. It moves nobody. The Disenchant event itself is never changed.
+        DisenchantResult = { list = true, data = { disenchant = "name!", results = "table!" } },
         Salvage = { list = true, data = { award = "name!", action = "salvage!", member = "name" } },
         MovePlayer = { list = true, data = { member = "name!", reason = "name!", to = "pos", above = "name" } },
         Revert = { list = true, data = { target = "name!", member = "name", reason = "text" } },

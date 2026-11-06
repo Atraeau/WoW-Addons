@@ -18,6 +18,7 @@ function M.New()
         order = {},   -- member names, top first
         members = {}, -- [name] = { class, active, wins, passes, upgradePasses, lastWinId, lastWinTs }
         awards = {},  -- [eventId] = { member, to, item, ts, reverted, salvage }
+        disenchants = {}, -- [eventId] = { to, item, ts, result }: items given to a disenchanter, and what disenchanting them gave (once recorded)
         undo = {},    -- [chainId] = stack of that writer's undoable awards
         count = 0,    -- events applied
     }
@@ -155,7 +156,42 @@ end
 function handlers.Disenchant(s, ev, d)
     if not isName(d.item) then return nil, "baditem" end
     if not isName(d.to) then return nil, "badrecipient" end
-    return function() end
+    return function()
+        if ev.id then s.disenchants[ev.id] = { to = d.to, item = d.item, ts = ev.ts } end
+    end
+end
+
+-- A list of results: 1 to 8 materials, each a name and a count (an item id is kept when the game gave one).
+local function validResults(r)
+    if type(r) ~= "table" or #r < 1 or #r > 8 then return false end
+    for _, e in ipairs(r) do
+        if type(e) ~= "table" or not isName(e.name) or #e.name > 60 then return false end
+        if type(e.count) ~= "number" or e.count ~= math.floor(e.count) or e.count < 1 or e.count > 200 then return false end
+        if e.item ~= nil and (type(e.item) ~= "number" or e.item ~= math.floor(e.item)) then return false end
+    end
+    return true
+end
+
+-- What disenchanting an item gave, as words: "3 Strange Dust, 1 Lesser Magic Essence".
+function M.ResultText(results)
+    local parts = {}
+    for i, e in ipairs(results or {}) do parts[i] = ("%d %s"):format(e.count or 1, tostring(e.name)) end
+    return table.concat(parts, ", ")
+end
+
+-- What disenchanting an item actually gave. Only the player it was given to may say (the Master Looter writes it for them, as `requestedBy`),
+-- once. Changes nobody's place: it is a record of the outcome.
+function handlers.DisenchantResult(s, ev, d)
+    local target = s.disenchants[d.disenchant]
+    if not target then return nil, "nodisenchant" end
+    if (d.requestedBy or ev.author) ~= target.to then return nil, "notyours" end
+    if target.result then return nil, "alreadyrecorded" end
+    if not validResults(d.results) then return nil, "badresults" end
+    return function()
+        local copy = {}
+        for i, e in ipairs(d.results) do copy[i] = { name = e.name, count = e.count, item = e.item } end
+        target.result = copy
+    end
 end
 
 local SALVAGE_ACTIONS = { keep = true, gift = true, sell = true, disenchant = true, bank = true }

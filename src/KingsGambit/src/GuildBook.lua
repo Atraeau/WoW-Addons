@@ -17,7 +17,7 @@ M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "history", label = "History", tip = "Everything that happened to the lists, in words: who won what, who moved whom, and why." },
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
-        actions = { "award", "undo", "trade", "salvaged" } },
+        actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
         actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
@@ -48,7 +48,7 @@ M.KINDS = {
     { id = "raid", label = "Raids" },
 }
 local KIND_OF = {
-    Award = "loot", Disenchant = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
+    Award = "loot", Disenchant = "loot", DisenchantResult = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
     SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",
@@ -87,14 +87,24 @@ function M.History(ctx, filter)
     for i, ev in ipairs(all) do order[ev] = i end
     table.sort(all, function(x, y) if x.ts ~= y.ts then return x.ts > y.ts end return order[x] > order[y] end)
 
+    -- What disenchanting gave is one line with the item: "given to X to disenchant (waiting)" until it is recorded, then "X disenchanted it and got ...".
+    local results = {}
+    for _, ev in ipairs(all) do
+        if ev.type == "DisenchantResult" and type(ev.data) == "table" then results[ev.data.disenchant] = ev end
+    end
     local now = ctx.client:serverTime()
     local want = (filter.text and filter.text ~= "") and filter.text:lower() or nil
     local kind = filter.kind or "all"
     local out = { entries = {}, total = 0 }
     for _, ev in ipairs(all) do
         local k = M.KindOf(ev.type)
-        if kind == "all" or kind == k then
-            local text = ctx.commands.describe(ev)
+        local shownEv, waiting = ev, false
+        if ev.type == "Disenchant" then
+            if results[ev.id] then shownEv = results[ev.id] else waiting = true end
+        end
+        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k) then
+            local text = ctx.commands.describe(shownEv) .. (waiting and " (waiting for the result)" or "")
+            ev = shownEv
             if not want or text:lower():find(want, 1, true) then
                 out.total = out.total + 1
                 if not filter.limit or #out.entries < filter.limit then

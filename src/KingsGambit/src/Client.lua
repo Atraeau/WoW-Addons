@@ -27,7 +27,7 @@ M.METHODS = {
 
 M.EVENTS = {
     "roster.changed", "lootMethod.changed",
-    "loot.opened", "loot.slotCleared", "loot.closed",
+    "loot.opened", "loot.slotCleared", "loot.closed", "disenchant.loot",
     "comms.received", "whisper.received",
     "trade.changed", "trade.closed",
     "encounter.ended", "world.entered",

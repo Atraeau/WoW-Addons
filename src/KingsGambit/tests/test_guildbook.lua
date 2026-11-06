@@ -81,5 +81,95 @@ test("the Admin section is kept apart, and a section's group keeps its order", f
     local UITools = SK.modules.UITools
     eq(GuildBook.Section("admin").gap, true)
     local g = UITools.SectionGroup(GuildBook.Section("awards"))
-    eq(g.id, "awards"); eq(g.actions[1].id, "award"); eq(#g.actions, 4)
+    eq(g.id, "awards"); eq(g.actions[1].id, "award"); eq(#g.actions, 5)
+end)
+
+H.section("What disenchanting gave (DisenchantResult)")
+local Standings = SK.modules.Standings
+
+local function withDisenchant()
+    local sim, ctx, cmd = raid()
+    local de = sim:disenchanterName()
+    local ev = assert(sim.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = de }))
+    return sim, ctx, cmd, de, ev
+end
+
+test("the result is recorded once, only for the player the item was given to, and moves nobody", function()
+    local sim, _, _, de, ev = withDisenchant()
+    local before = table.concat(sim.engine:Get("main").state.order, ",")
+    local results = { { name = "Strange Dust", count = 3 } }
+    local bad, why = sim.engine:Append("main", "DisenchantResult", { disenchant = ev.id, results = results })
+    eq(bad, nil); eq(why, "notyours", "the Master Looter can't say what someone else got without being told by them")
+    local ok = sim.engine:Append("main", "DisenchantResult", { disenchant = ev.id, results = results, requestedBy = de })
+    assert(ok, "reported by the disenchanter, written by the Master Looter")
+    eq(sim.engine:Get("main").state.disenchants[ev.id].result[1].name, "Strange Dust")
+    eq(table.concat(sim.engine:Get("main").state.order, ","), before, "it moves nobody")
+    local _, again = sim.engine:Append("main", "DisenchantResult", { disenchant = ev.id, results = results, requestedBy = de })
+    eq(again, "alreadyrecorded")
+end)
+
+test("nonsense results and unknown disenchants are refused", function()
+    local sim, _, _, de, ev = withDisenchant()
+    local function try(d) local _, w = sim.engine:Append("main", "DisenchantResult", d); return w end
+    eq(try({ disenchant = "nope", results = { { name = "X", count = 1 } }, requestedBy = de }), "nodisenchant")
+    eq(try({ disenchant = ev.id, results = {}, requestedBy = de }), "badresults")
+    eq(try({ disenchant = ev.id, results = { { name = "X", count = 0 } }, requestedBy = de }), "badresults")
+    eq(try({ disenchant = ev.id, results = { { name = "", count = 1 } }, requestedBy = de }), "badresults")
+end)
+
+test("the disenchanted command reads results as typed or as links, and records them", function()
+    local sim, ctx, cmd = raid()
+    local c = cmd
+    local r = c.parseResults("3 Strange Dust, Soul Dust x2, Lesser Magic Essence")
+    eq(#r, 3); eq(r[1].count, 3); eq(r[1].name, "Strange Dust"); eq(r[2].count, 2); eq(r[2].name, "Soul Dust"); eq(r[3].count, 1)
+    local links = c.parseResults("|cff1eff00|Hitem:10940::::::::|h[Strange Dust]|h|r x3")
+    eq(links[1].item, 10940); eq(links[1].count, 3); eq(links[1].name, "Strange Dust")
+    eq(c.parseResults("   "), nil)
+    -- the Master Looter of this practice raid disenchants: the command writes it directly
+    assert(sim:setDisenchanter(sim.learner))
+    local ev = assert(sim.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = sim.learner }))
+    eq(#c.pendingDisenchants(), 1)
+    cmd.handle("disenchanted 3 Strange Dust")
+    eq(#c.pendingDisenchants(), 0, "recorded: nothing waiting any more")
+    eq(sim.engine:Get("main").state.disenchants[ev.id].result[1].count, 3)
+    ctx.client.printed = {}
+    cmd.handle("disenchanted 1 Soul Dust")
+    assert(table.concat(ctx.client.printed, "\n"):find("Nothing is waiting"), "nothing left to record is said plainly")
+end)
+
+test("History shows one line per disenchant: waiting, then what it gave", function()
+    local sim, ctx, cmd, de = withDisenchant()
+    local function lines()
+        local h = GuildBook.History(ctx, { text = "Linen Cloth" })
+        return h
+    end
+    local h = lines()
+    eq(h.total, 1); assert(h.entries[1].text:find("to disenchant") and h.entries[1].text:find("waiting for the result"), h.entries[1].text)
+    assert(sim.engine:Append("main", "DisenchantResult", { disenchant = h.entries[1].id, results = { { name = "Strange Dust", count = 3 } }, requestedBy = de }))
+    h = lines()
+    eq(h.total, 1, "the result updates the line, it is not a second one")
+    assert(h.entries[1].text:find("disenchanted") and h.entries[1].text:find("3 Strange Dust"), h.entries[1].text)
+    assert(not h.entries[1].text:find("waiting"))
+end)
+
+test("practice: a disenchanter reports a result a few seconds after being given the item", function()
+    local sim, _, _, de, ev = withDisenchant()
+    sim.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = de })
+    sim:advance(10)
+    local n = 0
+    for _, d in pairs(sim.engine:Get("main").state.disenchants) do if d.result then n = n + 1 end end
+    assert(n >= 1, "the practice raid's disenchanter said what they got")
+    eq(Standings.ResultText({ { name = "Strange Dust", count = 3 }, { name = "Soul Dust", count = 1 } }), "3 Strange Dust, 1 Soul Dust")
+end)
+
+test("the loot window a disenchant opens is recorded against the oldest item waiting, and any other loot is ignored", function()
+    local sim, _, cmd = raid()
+    assert(sim:setDisenchanter(sim.learner))
+    -- nothing waiting: the loot of an ordinary disenchant is ignored without a word
+    sim.client:emit("disenchant.loot", { slots = { { link = "|cff1eff00|Hitem:10940::::::::|h[Strange Dust]|h|r", itemId = 10940, quantity = 2 } } })
+    local ev = assert(sim.engine:Append("main", "Disenchant", { item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r", to = sim.learner }))
+    sim.client:emit("disenchant.loot", { slots = { { link = "|cff1eff00|Hitem:10940::::::::|h[Strange Dust]|h|r", itemId = 10940, quantity = 2 } } })
+    local r = sim.engine:Get("main").state.disenchants[ev.id].result
+    assert(r and r[1].name == "Strange Dust" and r[1].count == 2 and r[1].item == 10940, "recorded from the game's loot window")
+    assert(cmd.pendingDisenchants, "(the command object keeps the helpers)")
 end)

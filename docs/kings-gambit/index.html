@@ -647,6 +647,10 @@ FORMATS[2] = {
         Pass = { list = true, data = { member = "name!", item = "name!", kind = "text" } },
         Transfer = { list = true, data = { award = "name!", to = "name!", member = "name", reason = "text" } },
         Disenchant = { list = true, data = { item = "name!", to = "name!" } },
+        -- what disenchanting an item actually gave (0.5.0): written by the Master Looter, for the disenchanter it was given to
+        -- (`requestedBy` when the disenchanter reported it). `disenchant` is the id of the Disenchant event it is about; `results` is a list of
+        -- { name, count, item? }. It moves nobody. The Disenchant event itself is never changed.
+        DisenchantResult = { list = true, data = { disenchant = "name!", results = "table!" } },
         Salvage = { list = true, data = { award = "name!", action = "salvage!", member = "name" } },
         MovePlayer = { list = true, data = { member = "name!", reason = "name!", to = "pos", above = "name" } },
         Revert = { list = true, data = { target = "name!", member = "name", reason = "text" } },
@@ -896,6 +900,7 @@ function M.New()
         order = {},   -- member names, top first
         members = {}, -- [name] = { class, active, wins, passes, upgradePasses, lastWinId, lastWinTs }
         awards = {},  -- [eventId] = { member, to, item, ts, reverted, salvage }
+        disenchants = {}, -- [eventId] = { to, item, ts, result }: items given to a disenchanter, and what disenchanting them gave (once recorded)
         undo = {},    -- [chainId] = stack of that writer's undoable awards
         count = 0,    -- events applied
     }
@@ -1033,7 +1038,42 @@ end
 function handlers.Disenchant(s, ev, d)
     if not isName(d.item) then return nil, "baditem" end
     if not isName(d.to) then return nil, "badrecipient" end
-    return function() end
+    return function()
+        if ev.id then s.disenchants[ev.id] = { to = d.to, item = d.item, ts = ev.ts } end
+    end
+end
+
+-- A list of results: 1 to 8 materials, each a name and a count (an item id is kept when the game gave one).
+local function validResults(r)
+    if type(r) ~= "table" or #r < 1 or #r > 8 then return false end
+    for _, e in ipairs(r) do
+        if type(e) ~= "table" or not isName(e.name) or #e.name > 60 then return false end
+        if type(e.count) ~= "number" or e.count ~= math.floor(e.count) or e.count < 1 or e.count > 200 then return false end
+        if e.item ~= nil and (type(e.item) ~= "number" or e.item ~= math.floor(e.item)) then return false end
+    end
+    return true
+end
+
+-- What disenchanting an item gave, as words: "3 Strange Dust, 1 Lesser Magic Essence".
+function M.ResultText(results)
+    local parts = {}
+    for i, e in ipairs(results or {}) do parts[i] = ("%d %s"):format(e.count or 1, tostring(e.name)) end
+    return table.concat(parts, ", ")
+end
+
+-- What disenchanting an item actually gave. Only the player it was given to may say (the Master Looter writes it for them, as `requestedBy`),
+-- once. Changes nobody's place: it is a record of the outcome.
+function handlers.DisenchantResult(s, ev, d)
+    local target = s.disenchants[d.disenchant]
+    if not target then return nil, "nodisenchant" end
+    if (d.requestedBy or ev.author) ~= target.to then return nil, "notyours" end
+    if target.result then return nil, "alreadyrecorded" end
+    if not validResults(d.results) then return nil, "badresults" end
+    return function()
+        local copy = {}
+        for i, e in ipairs(d.results) do copy[i] = { name = e.name, count = e.count, item = e.item } end
+        target.result = copy
+    end
 end
 
 local SALVAGE_ACTIONS = { keep = true, gift = true, sell = true, disenchant = true, bank = true }
@@ -1865,7 +1905,7 @@ M.METHODS = {
 
 M.EVENTS = {
     "roster.changed", "lootMethod.changed",
-    "loot.opened", "loot.slotCleared", "loot.closed",
+    "loot.opened", "loot.slotCleared", "loot.closed", "disenchant.loot",
     "comms.received", "whisper.received",
     "trade.changed", "trade.closed",
     "encounter.ended", "world.entered",
@@ -4116,6 +4156,8 @@ local NEEDS = {
     gift = function(r) return isName(r.member) and isName(r.to) end,
     trade = function(r) return isName(r.member) and isName(r.to) end,
     eligible = function(r) return isName(r.item) and ItemFit.ItemId(r.item) ~= nil and ItemFit.CLASS_BITS[r.class] ~= nil end,
+    -- what disenchanting an item gave: the disenchanter tells the Master Looter, who writes it down at once (nothing to decide)
+    disenchanted = function(r) return isName(r.disenchant) and type(r.results) == "table" and #r.results >= 1 and #r.results <= 8 end,
 }
 M.KINDS = {}
 for k in pairs(NEEDS) do M.KINDS[k] = true end
@@ -4139,6 +4181,7 @@ function M.Describe(r)
     elseif r.kind == "award" then return ("record that %s won %s%s"):format(who, r.item, r.to and (" for " .. short(r.to)) or "")
     elseif r.kind == "gift" then return ("%s's last item went to %s (a gift: nobody moves)"):format(who, short(r.to))
     elseif r.kind == "trade" then return ("%s's last item went to %s (restore %s, %s moves to the bottom)"):format(who, short(r.to), who, short(r.to))
+    elseif r.kind == "disenchanted" then return "record what disenchanting gave"
     elseif r.kind == "eligible" then
         return ("let %s%s bid on %s"):format(r.spec and (r.spec .. " ") or "", (ItemFit.CLASS_NAMES[r.class] or r.class or "?") .. "s",
             r.item:match("%[(.-)%]") or ("item " .. tostring(ItemFit.ItemId(r.item))))
@@ -4191,6 +4234,9 @@ function M.ClassList() return ItemFit.CLASSES end
 -- Returns type, data, or nil + reason.
 function M.EventFor(state, r, chainId)
     if not state then return nil, "nolist" end
+    if r.kind == "disenchanted" then
+        return "DisenchantResult", { disenchant = r.disenchant, results = r.results, requestedBy = r.by, rid = r.rid }
+    end
     local d = { member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
     if r.kind == "move" or r.kind == "add" then
         if r.pos then
@@ -4296,7 +4342,7 @@ function M.New(sync, engine)
             if r.tries >= M.MAX_TRIES then r.state = "unanswered"; em.emit("unanswered", { req = r }); return end
             r.tries = r.tries + 1
             sync:send({ t = "QR", rid = r.rid, kind = r.kind, member = r.member, pos = r.pos, item = r.item, to = r.to,
-                class = r.class, spec = r.spec, reason = r.reason }, "WHISPER", ml)
+                class = r.class, spec = r.spec, reason = r.reason, disenchant = r.disenchant, results = r.results }, "WHISPER", ml)
             client:after(M.RETRY_SECONDS, try)
         end
         try()
@@ -4345,9 +4391,19 @@ function M.New(sync, engine)
         end
         if not runningMine() then return ack(sender, { rid = msg.rid, ok = false, why = "notml" }) end
         local r = { rid = msg.rid, by = sender, kind = msg.kind, member = msg.member, pos = msg.pos, item = msg.item,
-            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason }
+            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason, disenchant = msg.disenchant, results = msg.results }
         local ok, why = M.Validate(r)
         if not ok then return ack(sender, { rid = msg.rid, ok = false, why = why }) end
+        if r.kind == "disenchanted" then
+            -- nothing to decide: the ledger's own rule says whether the sender may report it (only the disenchanter it was given to), so it is written now
+            local listId = engine:RaidList() or M.LIST
+            local list = engine:Get(listId)
+            local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
+            if not type_ then return ack(sender, { rid = msg.rid, ok = false, why = data }) end
+            local ev, werr = engine:Append(listId, type_, data)
+            if not ev then return ack(sender, { rid = msg.rid, ok = false, why = werr }) end
+            return ack(sender, { rid = msg.rid, ok = true, num = 0 })
+        end
         local n = 0
         for _, p in ipairs(mine.pending) do if p.by == sender then n = n + 1 end end
         if n >= M.MAX_PENDING_PER_PLAYER then return ack(sender, { rid = msg.rid, ok = false, why = "toomany" }) end
@@ -5823,10 +5879,21 @@ function M.NewRaid(opts)
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
 
-    return setmetatable({
+    local sim = setmetatable({
         client = client, engine = engine, names = names, learner = learner, ml = ml,
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
+    -- A disenchanter disenchants a little after being given the item, and the result is written down (as the real addon does: they tell the Master Looter).
+    local MATERIALS = { "Strange Dust", "Soul Dust", "Lesser Magic Essence", "Greater Magic Essence", "Small Glimmering Shard", "Large Glowing Shard" }
+    engine:OnChange(function(kind, _, ev)
+        if kind ~= "local" or type(ev) ~= "table" or ev.type ~= "Disenchant" then return end
+        client:after(2 + client:random() * 6, function()
+            local results = { { name = MATERIALS[client:random(#MATERIALS)], count = client:random(3) } }
+            local to = ev.data.to
+            engine:Append(ev.list, "DisenchantResult", { disenchant = ev.id, results = results, requestedBy = (to ~= client:me()) and to or nil })
+        end)
+    end)
+    return sim
 end
 
 -- Who disenchants: the Master Looter's designation for this raid, from the ledger.
@@ -7338,7 +7405,7 @@ M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "history", label = "History", tip = "Everything that happened to the lists, in words: who won what, who moved whom, and why." },
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
-        actions = { "award", "undo", "trade", "salvaged" } },
+        actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
         actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
@@ -7369,7 +7436,7 @@ M.KINDS = {
     { id = "raid", label = "Raids" },
 }
 local KIND_OF = {
-    Award = "loot", Disenchant = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
+    Award = "loot", Disenchant = "loot", DisenchantResult = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
     SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",
@@ -7408,14 +7475,24 @@ function M.History(ctx, filter)
     for i, ev in ipairs(all) do order[ev] = i end
     table.sort(all, function(x, y) if x.ts ~= y.ts then return x.ts > y.ts end return order[x] > order[y] end)
 
+    -- What disenchanting gave is one line with the item: "given to X to disenchant (waiting)" until it is recorded, then "X disenchanted it and got ...".
+    local results = {}
+    for _, ev in ipairs(all) do
+        if ev.type == "DisenchantResult" and type(ev.data) == "table" then results[ev.data.disenchant] = ev end
+    end
     local now = ctx.client:serverTime()
     local want = (filter.text and filter.text ~= "") and filter.text:lower() or nil
     local kind = filter.kind or "all"
     local out = { entries = {}, total = 0 }
     for _, ev in ipairs(all) do
         local k = M.KindOf(ev.type)
-        if kind == "all" or kind == k then
-            local text = ctx.commands.describe(ev)
+        local shownEv, waiting = ev, false
+        if ev.type == "Disenchant" then
+            if results[ev.id] then shownEv = results[ev.id] else waiting = true end
+        end
+        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k) then
+            local text = ctx.commands.describe(shownEv) .. (waiting and " (waiting for the result)" or "")
+            ev = shownEv
             if not want or text:lower():find(want, 1, true) then
                 out.total = out.total + 1
                 if not filter.limit or #out.entries < filter.limit then

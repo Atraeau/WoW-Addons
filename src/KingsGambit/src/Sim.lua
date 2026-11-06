@@ -86,10 +86,21 @@ function M.NewRaid(opts)
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
 
-    return setmetatable({
+    local sim = setmetatable({
         client = client, engine = engine, names = names, learner = learner, ml = ml,
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
     }, Sim)
+    -- A disenchanter disenchants a little after being given the item, and the result is written down (as the real addon does: they tell the Master Looter).
+    local MATERIALS = { "Strange Dust", "Soul Dust", "Lesser Magic Essence", "Greater Magic Essence", "Small Glimmering Shard", "Large Glowing Shard" }
+    engine:OnChange(function(kind, _, ev)
+        if kind ~= "local" or type(ev) ~= "table" or ev.type ~= "Disenchant" then return end
+        client:after(2 + client:random() * 6, function()
+            local results = { { name = MATERIALS[client:random(#MATERIALS)], count = client:random(3) } }
+            local to = ev.data.to
+            engine:Append(ev.list, "DisenchantResult", { disenchant = ev.id, results = results, requestedBy = (to ~= client:me()) and to or nil })
+        end)
+    end)
+    return sim
 end
 
 -- Who disenchants: the Master Looter's designation for this raid, from the ledger.

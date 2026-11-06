@@ -123,7 +123,8 @@ Order is top of the list first. Positions are never numbers: they are an end (`t
 | `Transfer` | `award`, `to` | Re-routes where an earlier award went. |
 | `MovePlayer` | `member`, `reason`, `to` / `above` | A correction. `reason` is required. |
 | `Revert` | `target` | Undoes one of this writer's own `Award`s, the latest or an earlier one, as long as this writer has made no `MovePlayer` or `RemoveMember` since. Later awards stay as they are. The winner goes back directly above the highest-placed of the players who were below them when they won or have won since, so the list ends as if that award had never been made. If the same player won again later (a draft pick, then a salvage claim), that later win already put them at the bottom, so nobody moves: the later win takes over remembering who was below them, and the player just loses one win. |
-| `Disenchant` | `item`, `to` | Nobody wanted the item. |
+| `Disenchant` | `item`, `to` | Nobody wanted the item: it was given to `to` to disenchant. |
+| `DisenchantResult` | `disenchant`, `results`, `requestedBy?` | What disenchanting that item actually gave (added in 0.5.0). `disenchant` is the id of the `Disenchant` event; `results` is 1 to 8 entries `{ name, count (1 to 200), item? }`. Valid only if the player who disenchanted (`requestedBy`, else the author) is the `to` of that `Disenchant`, and once. Written by the Master Looter, who is told by the disenchanter; it moves nobody and never changes the `Disenchant` event. |
 | `Salvage` | `award`, `action` | What the claimer of a salvage item did: `keep`, `gift`, `sell`, `disenchant` or `bank`. Written by the Master Looter (`salvaged <name> <action>`); for transparency, it moves nobody. |
 
 ## 6. Verifying

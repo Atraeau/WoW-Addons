@@ -8,7 +8,7 @@ local Schemas, Standings, Ledger = SK.modules.Schemas, SK.modules.Standings, SK.
 local baseline = assert(loadfile("tests/schema_baseline.lua"))()
 
 -- Event types a format gained AFTER it was first published, so the golden ledger of that release doesn't use them.
-local ADDED_LATER = { [2] = { Migrate = "0.2.0", SetRaidList = "0.4.0", SetListPolicy = "0.4.0" } }
+local ADDED_LATER = { [2] = { Migrate = "0.2.0", SetRaidList = "0.4.0", SetListPolicy = "0.4.0", DisenchantResult = "0.5.0" } }
 
 local function setOf(list) local s = {} for _, v in ipairs(list) do s[v] = true end return s end
 local function sortedKeys(set) local o = {} for k in pairs(set) do o[#o + 1] = k end table.sort(o) return o end

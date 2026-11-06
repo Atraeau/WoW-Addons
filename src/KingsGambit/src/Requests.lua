@@ -51,6 +51,8 @@ local NEEDS = {
     gift = function(r) return isName(r.member) and isName(r.to) end,
     trade = function(r) return isName(r.member) and isName(r.to) end,
     eligible = function(r) return isName(r.item) and ItemFit.ItemId(r.item) ~= nil and ItemFit.CLASS_BITS[r.class] ~= nil end,
+    -- what disenchanting an item gave: the disenchanter tells the Master Looter, who writes it down at once (nothing to decide)
+    disenchanted = function(r) return isName(r.disenchant) and type(r.results) == "table" and #r.results >= 1 and #r.results <= 8 end,
 }
 M.KINDS = {}
 for k in pairs(NEEDS) do M.KINDS[k] = true end
@@ -74,6 +76,7 @@ function M.Describe(r)
     elseif r.kind == "award" then return ("record that %s won %s%s"):format(who, r.item, r.to and (" for " .. short(r.to)) or "")
     elseif r.kind == "gift" then return ("%s's last item went to %s (a gift: nobody moves)"):format(who, short(r.to))
     elseif r.kind == "trade" then return ("%s's last item went to %s (restore %s, %s moves to the bottom)"):format(who, short(r.to), who, short(r.to))
+    elseif r.kind == "disenchanted" then return "record what disenchanting gave"
     elseif r.kind == "eligible" then
         return ("let %s%s bid on %s"):format(r.spec and (r.spec .. " ") or "", (ItemFit.CLASS_NAMES[r.class] or r.class or "?") .. "s",
             r.item:match("%[(.-)%]") or ("item " .. tostring(ItemFit.ItemId(r.item))))
@@ -126,6 +129,9 @@ function M.ClassList() return ItemFit.CLASSES end
 -- Returns type, data, or nil + reason.
 function M.EventFor(state, r, chainId)
     if not state then return nil, "nolist" end
+    if r.kind == "disenchanted" then
+        return "DisenchantResult", { disenchant = r.disenchant, results = r.results, requestedBy = r.by, rid = r.rid }
+    end
     local d = { member = r.member, requestedBy = r.by, rid = r.rid, reason = r.reason }
     if r.kind == "move" or r.kind == "add" then
         if r.pos then
@@ -231,7 +237,7 @@ function M.New(sync, engine)
             if r.tries >= M.MAX_TRIES then r.state = "unanswered"; em.emit("unanswered", { req = r }); return end
             r.tries = r.tries + 1
             sync:send({ t = "QR", rid = r.rid, kind = r.kind, member = r.member, pos = r.pos, item = r.item, to = r.to,
-                class = r.class, spec = r.spec, reason = r.reason }, "WHISPER", ml)
+                class = r.class, spec = r.spec, reason = r.reason, disenchant = r.disenchant, results = r.results }, "WHISPER", ml)
             client:after(M.RETRY_SECONDS, try)
         end
         try()
@@ -280,9 +286,19 @@ function M.New(sync, engine)
         end
         if not runningMine() then return ack(sender, { rid = msg.rid, ok = false, why = "notml" }) end
         local r = { rid = msg.rid, by = sender, kind = msg.kind, member = msg.member, pos = msg.pos, item = msg.item,
-            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason }
+            to = msg.to, class = msg.class, spec = msg.spec, reason = msg.reason, disenchant = msg.disenchant, results = msg.results }
         local ok, why = M.Validate(r)
         if not ok then return ack(sender, { rid = msg.rid, ok = false, why = why }) end
+        if r.kind == "disenchanted" then
+            -- nothing to decide: the ledger's own rule says whether the sender may report it (only the disenchanter it was given to), so it is written now
+            local listId = engine:RaidList() or M.LIST
+            local list = engine:Get(listId)
+            local type_, data = M.EventFor(list and list.state, r, engine:MyChain())
+            if not type_ then return ack(sender, { rid = msg.rid, ok = false, why = data }) end
+            local ev, werr = engine:Append(listId, type_, data)
+            if not ev then return ack(sender, { rid = msg.rid, ok = false, why = werr }) end
+            return ack(sender, { rid = msg.rid, ok = true, num = 0 })
+        end
         local n = 0
         for _, p in ipairs(mine.pending) do if p.by == sender then n = n + 1 end end
         if n >= M.MAX_PENDING_PER_PLAYER then return ack(sender, { rid = msg.rid, ok = false, why = "toomany" }) end

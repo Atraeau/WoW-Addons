@@ -24,6 +24,8 @@ local WHY = {
     needsownlist = "the guild requires each raid to have a list of its own, so it can't be main",
     badlistid = "a list id is lower-case letters, digits and _ (up to 24), and not 'off'", badpolicy = "the policy is choose or perraid",
     nodisenchanter = "no disenchanter is designated for this raid yet. Choose who disenchants what nobody wants: disenchanter <name>",
+    nodisenchant = "there is no such disenchant on the list", notyours = "only the player the item was given to can say what disenchanting it gave",
+    alreadyrecorded = "what that item gave is already recorded", badresults = "what you got must be 1 to 8 materials, each with a name and a count (1 to 200)",
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
     expired = "your raid has ended, and with it your right to write to the list",
@@ -74,6 +76,7 @@ local HELP = {
     "  request move|undo|remove|add|award|trade|gift ... - ask the Master Looter to change the list",
     "  request eligible <item> <reason> - ask for your class to be allowed to bid",
     "  requests - waiting requests and recent decisions",
+    "  disenchanted <what you got> - record what disenchanting an item gave, e.g. disenchanted 3 Strange Dust, 1 Lesser Magic Essence",
     "  history [N] - the last changes, with who, why and at whose request",
     "  eligible [item] - the class rule for an item, or every rule",
     "  spec <main> [off] - your specs, for fit hints",
@@ -417,6 +420,75 @@ function M.New(ctx)
         if ev then
             out(("Recorded: %s's %s went to %s. %s is back in their place and %s moves to the bottom."):format(short(name(who)), tostring(a.item), short(toName), short(name(who)), short(toName)))
         end
+    end
+
+    -- The disenchants given to me whose result is not recorded yet, oldest first: { listId, eventId }.
+    function c.pendingDisenchants()
+        local out = {}
+        for _, id in ipairs(engine:Lists()) do
+            local chain = engine:Get(id)
+            for eid, dis in pairs(chain and chain.state.disenchants or {}) do
+                if dis.to == client:me() and not dis.result then out[#out + 1] = { list = id, id = eid, ts = dis.ts, item = dis.item } end
+            end
+        end
+        table.sort(out, function(a, b) if a.ts ~= b.ts then return a.ts < b.ts end return a.id < b.id end)
+        return out
+    end
+
+    -- What you got, as typed ("3 Strange Dust, 1 Lesser Magic Essence", "Strange Dust x3") or as shift-clicked links (each followed by x2 for a stack).
+    function c.parseResults(args)
+        local results = {}
+        for link, count in tostring(args or ""):gmatch("(|c%x+|Hitem:.-|h%[.-%]|h|r)%s*[xX]?(%d*)") do
+            results[#results + 1] = { item = tonumber(link:match("item:(%d+)")), name = link:match("%[(.-)%]"), count = tonumber(count) or 1 }
+        end
+        if #results == 0 then
+            for piece in (tostring(args or "") .. ","):gmatch("%s*(.-)%s*,") do
+                if piece ~= "" then
+                    local n, nm = piece:match("^(%d+)%s*[xX]?%s+(.+)$")
+                    if not n then nm, n = piece:match("^(.-)%s+[xX](%d+)$") end
+                    results[#results + 1] = { name = nm or piece, count = tonumber(n) or 1 }
+                end
+            end
+        end
+        if #results == 0 then return nil end
+        return results
+    end
+
+    -- Record what disenchanting gave for the oldest item waiting (the Master Looter writes it; anyone else tells the Master Looter, who writes it at once).
+    function c.reportDisenchant(results, silent)
+        local waiting = c.pendingDisenchants()[1]
+        if not waiting then
+            if not silent then out("Nothing is waiting: no item was given to you to disenchant, or what it gave is already recorded.") end
+            return
+        end
+        local data = { disenchant = waiting.id, results = results }
+        if engine:LedgerId() and engine:MayWrite() then
+            local ev = append(waiting.list, "DisenchantResult", data)
+            if ev then out(("Recorded: %s"):format(c.describe(ev))) end
+            return ev
+        end
+        if not ctx.requests then return out("Not sent: requests are not available here.") end
+        local sent, err = ctx.requests:send({ kind = "disenchanted", disenchant = waiting.id, results = results, reason = "disenchanted" })
+        if not sent then return out("Not sent: " .. why(err)) end
+        out(("Telling %s what %s gave. It is written in the record when they receive it."):format(short(sent.ml), tostring(waiting.item)))
+    end
+
+    -- The game's own report: the loot window a Disenchant cast opened. What is in it is what the item gave, recorded against the oldest item waiting
+    -- (silent when nothing is waiting: it is any other disenchant).
+    if client.on then
+        client:on("disenchant.loot", function(p)
+            local results = {}
+            for _, s in ipairs(p and p.slots or {}) do
+                results[#results + 1] = { item = s.itemId, name = tostring(s.link or ""):match("%[(.-)%]") or "?", count = s.quantity or 1 }
+            end
+            if #results > 0 then c.reportDisenchant(results, true) end
+        end)
+    end
+
+    function cmds.disenchanted(args)
+        local results = c.parseResults(args)
+        if not results then return out("disenchanted <what you got>  e.g. disenchanted 3 Strange Dust, 1 Lesser Magic Essence (or shift-click the items, each followed by x2 for a stack)") end
+        c.reportDisenchant(results)
     end
 
     -- What the salvager (or anyone who claimed a leftover) did with it: keep, gift, sell, disenchant or bank. For transparency
@@ -947,6 +1019,7 @@ function M.New(ctx)
         args = rest or args
         local kind, body = args:match("^(%a+)%s*(.-)$")
         kind = kind and kind:lower()
+        if kind == "disenchanted" then return nil, nil, "To record what disenchanting gave, use: disenchanted <what you got>" end
         if not (kind and Requests.KINDS[kind]) then return nil, nil, "request <move|undo|add|remove|award|trade|gift|eligible> ...  (see help)" end
         local r = { kind = kind }
         if kind == "eligible" then
@@ -1055,7 +1128,11 @@ function M.New(ctx)
             end
         elseif ev.type == "MovePlayer" then text = ("%s moved %s to %s"):format(by, who, d.to or ("just above " .. short(d.above)))
         elseif ev.type == "AddMember" then text = ("%s added %s"):format(by, who)
-        elseif ev.type == "Disenchant" then text = ("%s was disenchanted by %s"):format(tostring(d.item), short(d.to))
+        elseif ev.type == "Disenchant" then text = ("%s was given to %s to disenchant"):format(tostring(d.item), short(d.to))
+        elseif ev.type == "DisenchantResult" then
+            local item
+            for _, e in ipairs(engine:View().applied) do if e.id == d.disenchant then item = e.data and e.data.item end end
+            text = ("%s disenchanted %s and got %s"):format(short(d.requestedBy or ev.author), tostring(item or "an item"), Standings.ResultText(d.results))
         elseif ev.type == "CreateList" then text = ("%s started the list %s"):format(by, tostring(d.name or ev.list or "main"))
         elseif ev.type == "RemoveMember" then text = ("%s removed %s"):format(by, who)
         elseif ev.type == "Revert" then text = ("%s undid %s"):format(by, who and (who .. "'s award") or "an award")

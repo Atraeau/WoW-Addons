@@ -557,9 +557,20 @@ function M.New(opts)
     function handlers.GROUP_ROSTER_UPDATE() bus.emit("roster.changed") end
     function handlers.PARTY_LOOT_METHOD_CHANGED() bus.emit("lootMethod.changed", { method = c:lootMethod() }) end
 
+    -- Disenchanting: the cast, then the loot window it opens. FIELD: confirm the spell id (13262) and that the result arrives as a loot window.
+    local disenchantCastAt
+    function handlers.UNIT_SPELLCAST_SUCCEEDED(unit, _, spellId)
+        if unit == "player" and spellId == 13262 then disenchantCastAt = (E.GetTime and E.GetTime()) or 0 end
+    end
+
     function handlers.LOOT_OPENED()
         lootOpen = true
-        bus.emit("loot.opened", { slots = readSlots() })
+        local slots = readSlots()
+        bus.emit("loot.opened", { slots = slots })
+        if disenchantCastAt and ((E.GetTime and E.GetTime()) or 0) - disenchantCastAt < 10 then
+            disenchantCastAt = nil
+            bus.emit("disenchant.loot", { slots = slots })
+        end
     end
     function handlers.LOOT_SLOT_CLEARED(slot) bus.emit("loot.slotCleared", { slot = slot }) end
     function handlers.LOOT_CLOSED()
