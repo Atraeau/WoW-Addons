@@ -82,6 +82,7 @@
   .lw-row { padding: 7px 0; border-top: 1px solid #3a3020; }
   .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
   .lw-row .note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .spec2 { color: var(--muted); font-size: 11px; }
   .lw-row .warn { font-size: 12px; color: var(--warn); margin-top: 3px; }
   .lw-row.answered { background: rgba(63,185,80,.06); }
   .lw-btn { min-width: 74px; font-weight: 600; }
@@ -6856,6 +6857,17 @@ function M.Model(ctx)
     -- The Master Looter's controls belong to the Master Looter. (The session is read from the same place either way; on the practice
     -- page a bot can hold the role while the player only answers, which ctx.isML = false says.)
     out.isML = mode == "ml" and ctx.isML ~= false
+    -- Who a name is: their display name, class (from the group) and spec (only where the practice raid knows it; the game doesn't tell us others' specs).
+    local classOf = {}
+    for _, member in ipairs((ctx.client.roster and ctx.client:roster()) or {}) do classOf[member.name] = member.class end
+    local function whoOf(full)
+        if not full then return nil end
+        local name = show(full)
+        local info = { name = name, class = classOf[full] }
+        local known = ctx.sim and ctx.sim.info and ctx.sim.info[name]
+        if known then info.class, info.spec = info.class or known.class, known.spec end
+        return info
+    end
     local list = s.items or {}
     -- What the session will record, by item (the draft adds to it as it goes): where each winner was on the list, and who has not said who gets a gift.
     local pendingFor = {}
@@ -6871,6 +6883,7 @@ function M.Model(ctx)
                 row.mine, row.mineTo = b and b.kind, b and show(b.to)
                 row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
                 row.winnerIsMe, row.toIsMe = it.winner ~= nil and it.winner == me, it.to ~= nil and it.to == me
+                row.winnerWho, row.toWho = whoOf(it.winner), whoOf(it.to)
                 local a = pendingFor[it.id or 0]
                 if a then row.from, row.undecided = a.fromIndex, a.undecided end
                 if it.status == "de" then row.deTo = show(s.deHandler) end
@@ -6881,6 +6894,7 @@ function M.Model(ctx)
                     if a.item == row.id then
                         row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier
                         row.winnerIsMe, row.toIsMe = a.winner == me, a.to ~= nil and a.to == me
+                        row.winnerWho, row.toWho = whoOf(a.winner), whoOf(a.to)
                     end
                 end
             end
@@ -6917,6 +6931,7 @@ function M.Model(ctx)
         out.turn.itemLink = t.item and linkOfItem(t.item)
     elseif t then
         out.waitingFor = show(t.player)
+        out.waitingWho = whoOf(t.player)
     end
     return out
 end
@@ -6935,8 +6950,29 @@ do local chunk = function(...)
 -- that to its own way of running it (the game types the same command a player could, the page calls the engine).
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
-local Tips
-local M = SK:NewModule("LootView", { "UITips" }, function(d) Tips = d.UITips end)
+local Tips, ItemFit
+local M = SK:NewModule("LootView", { "UITips", "ItemFit?" }, function(d) Tips, ItemFit = d.UITips, d.ItemFit end)
+
+-- The game's class colours (hex, no alpha), so a name is coloured the same in the game, on the page and in the list.
+M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROGUE = "fff569", PRIEST = "ffffff", SHAMAN = "0070de",
+    MAGE = "69ccf0", WARLOCK = "9482c9", DRUID = "ff7d0a" }
+
+-- A line of text made of pieces: plain words, and people. A person carries what a renderer needs to draw them like the standings list does: their name in the
+-- class colour, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
+-- can't draw the pieces.
+local function line()
+    local b = { segments = {}, parts = {} }
+    function b.text(t) b.segments[#b.segments + 1] = { text = t }; b.parts[#b.parts + 1] = t end
+    function b.who(w, label)
+        label = label or (w and w.name) or "?"
+        if not w then return b.text(label) end
+        b.segments[#b.segments + 1] = { who = { name = label, class = w.class, className = (ItemFit and ItemFit.CLASS_NAMES or {})[w.class],
+            spec = w.spec, color = M.CLASS_COLOR[w.class] } }
+        b.parts[#b.parts + 1] = label
+    end
+    function b.plain() return table.concat(b.parts) end
+    return b
+end
 
 -- The four answers, in the order they are shown. `letter` is there so colour is never the only difference.
 M.ANSWERS = {
@@ -7034,16 +7070,19 @@ function M.Build(m)
             -- who gets it: the winner, who it is given to if not the winner, which round, and where the winner falls on the list
             row.state = "awarded"
             local you = r.winnerIsMe
-            local text = (you and "You win" or (r.winner .. " wins")) .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or "")
+            local b = line()
+            b.who(r.winnerWho or { name = r.winner }, you and "You" or r.winner)
+            b.text((you and " win" or " wins") .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or ""))
             if r.undecided then
-                text = text .. (you and ", and haven't chosen who gets it yet" or ", and hasn't chosen who gets it yet")
+                b.text(you and ", and haven't chosen who gets it yet" or ", and hasn't chosen who gets it yet")
             elseif r.to and r.to ~= r.winner then
-                text = text .. ((you and " and give it to " or " and gives it to ") .. (r.toIsMe and "you" or r.to))
+                b.text(you and " and give it to " or " and gives it to ")
+                b.who(r.toWho or { name = r.to }, r.toIsMe and "you" or r.to)
             end
             if r.from and r.from > 0 and r.tier ~= "salvage" then
-                text = text .. ((" · moves from place %d to the bottom of the %s"):format(r.from, r.tier == "off" and "off-spec list" or "list"))
+                b.text((" · moves from place %d to the bottom of the %s"):format(r.from, r.tier == "off" and "off-spec list" or "list"))
             end
-            row.note = text
+            row.note, row.segments = b.plain(), b.segments
             row.mineWon = (r.winnerIsMe or r.toIsMe) and true or false
             row.winnerName = r.winner
         elseif r.status == "de" then
@@ -7084,7 +7123,11 @@ function M.Build(m)
             v.turn.buttons[3] = button("decline", "Decline", { name = "decline", item = turn.item })
         end
     elseif v.state == "turn" then
-        v.banner = { kind = "info", text = ("Waiting for %s%s"):format(m.waitingFor or "the next player", m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "") }
+        local b = line()
+        b.text("Waiting for ")
+        b.who(m.waitingWho or { name = m.waitingFor or "the next player" }, m.waitingFor or "the next player")
+        b.text(m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "")
+        v.banner = { kind = "info", text = b.plain(), segments = b.segments }
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then
@@ -8538,6 +8581,15 @@ end
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
+  // A line made of pieces (LootView's `segments`): a person's name in their class colour with spec and class beside it, as in the standings list.
+  function segsHtml(segs) {
+    return segs.map((g) => {
+      if (g.text !== undefined) return esc(g.text);
+      const w = g.who, detail = ((w.spec ? w.spec + " " : "") + (w.className || "")).trim();
+      return '<span style="color:' + (w.color ? "#" + w.color : "inherit") + '">' + esc(w.name) + "</span>" +
+        (detail ? ' <span class="spec2">(' + esc(detail) + ")</span>" : "");
+    }).join("");
+  }
   const tipText = (b) => (b.tip ? b.tip.title + "\n\n" + b.tip.text : b.label) + (b.why ? "\n\nUnavailable: " + b.why : "");
   function lwButton(b, extra) {
     const cls = "lw-btn" + (b.selected ? " sel" : "") + (b.primary && b.enabled ? " primary" : "") + (b.key === "need" || b.key === "off" || b.key === "gift" || b.key === "pass" ? " b-" + b.key : "");
@@ -8565,7 +8617,7 @@ end
         (snap.token && (r.state === "open" || r.state === "answered") ? ' <button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "");
       return '<div class="lw-row ' + r.state + '"><div class="top"><span class="iname">' + esc(r.link) + "</span>" +
         (buttons ? '<span class="row" style="gap:4px">' + buttons + "</span>" : "") + "</div>" +
-        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + esc(r.note) + "</div>" : "") +
+        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
         (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:4px">' + extra.join(" ") + "</div>" : "") + "</div>";
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"
@@ -8581,7 +8633,7 @@ end
           return lwButton(label ? Object.assign({}, b, label) : b, { disabled: needT(b), disabledWhy: needT(b) ? "Choose who gets it first." : "" });
         }).join(" ") + "</div></div>";
     } else if (v.banner) {
-      turn = '<div class="lw-banner ' + v.banner.kind + '">' + esc(v.banner.text) + "</div>";
+      turn = '<div class="lw-banner ' + v.banner.kind + '">' + (v.banner.segments ? segsHtml(v.banner.segments) : esc(v.banner.text)) + "</div>";
     }
     const ml = v.ml
       ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";

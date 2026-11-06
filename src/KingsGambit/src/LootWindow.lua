@@ -7,7 +7,7 @@ local UILoot, LootView, Tips
 local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips" }, function(d) UILoot, LootView, Tips = d.UILoot, d.LootView, d.UITips end)
 
 local WIDTH = 440
-local ROW = 44          -- one item: its link, then the answers
+local ROW = 50          -- one item: its link, then the answers or the result (which can run to three lines)
 local MAX = 8          -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
 
 -- What a button's `act` types. Returns the command, or nil and what to tell the player.
@@ -28,6 +28,22 @@ function M.CommandText(act, target)
         end
         return "claim"
     end
+end
+
+-- A line of pieces (LootView's `segments`) as the game's coloured text: a person's name in their class colour, then their spec and class in grey, as the
+-- standings list shows them.
+function M.Rich(segments)
+    local out = {}
+    for _, seg in ipairs(segments or {}) do
+        if seg.text then out[#out + 1] = seg.text
+        elseif seg.who then
+            local w = seg.who
+            local name = w.color and ("|cff" .. w.color .. w.name .. "|r") or w.name
+            local detail = ((w.spec and (w.spec .. " ") or "") .. (w.className or "")):gsub("%s+$", "")
+            out[#out + 1] = detail ~= "" and (name .. " |cff999999(" .. detail .. ")|r") or name
+        end
+    end
+    return table.concat(out)
 end
 
 local function button(parent, text, w, h)
@@ -136,7 +152,7 @@ function M.Build(ui)
             if HandleModifiedItemClick then HandleModifiedItemClick(full) end
         end)
         row.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(24)
+        row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(32)
         row.buttons = {}
         for j = 1, 4 do
             local b = button(f, "", 70, 20)
@@ -290,7 +306,7 @@ function M.Refresh(f, ctx, ui)
             end
             y = y - 30
         elseif v.banner then
-            f.banner:SetText(v.banner.text)
+            f.banner:SetText(v.banner.segments and M.Rich(v.banner.segments) or v.banner.text)
             put(f.banner, 16, 34)
         end
 
@@ -313,7 +329,7 @@ function M.Refresh(f, ctx, ui)
                         layout[#layout + 1] = { b, 16 + (j - 1) * 72, y - 17 }; want[b] = true
                     end
                 end
-                row.note:SetText(vr.warn and ("|cffffaa33" .. vr.warn .. "|r") or (vr.note or ""))
+                row.note:SetText(vr.warn and ("|cffffaa33" .. vr.warn .. "|r") or (vr.segments and M.Rich(vr.segments)) or vr.note or "")
                 row.note:SetWidth(hasButtons and (WIDTH - 36 - 292) or (WIDTH - 36))
                 layout[#layout + 1] = { row.note, hasButtons and (16 + 292) or 16, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
                 y = y - ROW

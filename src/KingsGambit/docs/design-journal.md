@@ -2052,6 +2052,14 @@ until you confirm". Nothing about the rules changed, and nothing is written unti
 Also fixed: the Loot window had been raised to a higher layer than the main window, and the game opens dropdown menus in the normal one, so the "who gets this gift" dropdown opened
 behind the window and could not be used. The window is back in the normal layer and is raised above the main window when it opens (clicking a window raises it).
 
+### People in the Loot window are drawn like the standings list draws them (2026-11-06)
+
+A winner, a gift's recipient and the player a turn is waiting for are now shown by **name in their class colour, with their spec and class beside it** ("Brann (Fury Warrior)"), the way the
+standings list and the simulator show people, instead of as plain text. The shared table (`LootView`) carries a line as pieces (`segments`: plain words, and people with their class
+colour, class name and spec), and each place draws them its own way: the game with colour codes, the page with coloured spans. The plain `note` is kept alongside, with no colour codes,
+for anything that can't draw pieces and for the tests. The spec is shown only where it is known: the practice raid knows everyone's; in a real raid the game doesn't tell us another player's
+spec, so a real player is shown with their class alone (and we don't guess a spec). The colours are the game's class colours, defined once in `LootView`.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

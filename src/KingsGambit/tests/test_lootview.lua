@@ -227,3 +227,50 @@ test("in review each item says who wins it, in which round, and how the list mov
     assert(sawMove, "the list movement is shown")
     eq(#sim.engine:Get("main").events, ledgerBefore, "nothing is written while reviewing")
 end)
+
+H.section("Loot window: people are shown like the list shows them")
+test("a winner's line carries their class colour, class and (in practice) spec; the plain text says the same", function()
+    local LootWindow = SK.modules.LootWindow
+    local sim, cmd, view = practice(10)
+    sim:killBoss(nil, false)
+    for i = 1, #view().rows do cmd.handle("need " .. i) end
+    cmd.handle("resolve")
+    local v
+    for _ = 1, 60 do
+        v = view()
+        if v.state == "review" then break end
+        if v.state == "myturn" and v.turn.kind == "pick" then cmd.handle("pick " .. v.turn.buttons[1].act.item)
+        elseif v.state == "myturn" and v.turn.kind == "recipient" then cmd.handle("keep")
+        elseif v.state == "myturn" then cmd.handle("claim")
+        else sim:advance(10) end
+    end
+    eq(v.state, "review")
+    local found
+    for _, r in ipairs(v.rows) do
+        if r.state == "awarded" then
+            for _, seg in ipairs(r.segments) do
+                if seg.who and seg.who.class then found = seg.who end
+            end
+        end
+    end
+    assert(found, "someone wins an item, and the line knows their class")
+    assert(found.color and #found.color == 6, "a class colour")
+    assert(found.className and found.spec, "class name and spec in practice: " .. tostring(found.className) .. "/" .. tostring(found.spec))
+    -- the game draws it with colour codes, the plain note carries no codes
+    local rich = LootWindow.Rich({ { who = found }, { text = " wins" } })
+    assert(rich:find("|cff" .. found.color, 1, true) and rich:find(found.spec, 1, true) and rich:find(found.className, 1, true), rich)
+    for _, r in ipairs(v.rows) do if r.note then assert(not r.note:find("|c", 1, true), "plain text has no colour codes") end end
+end)
+
+test("another player's win is drawn with their class colour, name and spec; a gift names its recipient too", function()
+    local LootWindow = SK.modules.LootWindow
+    local m = { mode = "player", phase = "review", phaseText = "Review", active = true, me = "Me", can = {}, hidden = 0, isML = false, items = {
+        { id = 1, link = "[Helm]", status = "awarded", winner = "Brann", to = "Cass", tier = "gift", winnerIsMe = false, toIsMe = false,
+          winnerWho = { name = "Brann", class = "WARRIOR", spec = "Fury" }, toWho = { name = "Cass", class = "MAGE" }, from = 4 } } }
+    local v = LootView.Build(m)
+    local r = v.rows[1]
+    eq(r.note, "Brann wins (gift draft) and gives it to Cass " .. "·" .. " moves from place 4 to the bottom of the list")
+    local rich = LootWindow.Rich(r.segments)
+    assert(rich:find("|cffc79c6eBrann|r |cff999999(Fury Warrior)|r", 1, true), rich)
+    assert(rich:find("|cff69ccf0Cass|r |cff999999(Mage)|r", 1, true), "a recipient with no known spec shows the class alone: " .. rich)
+end)

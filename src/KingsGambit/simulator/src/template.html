@@ -82,6 +82,7 @@
   .lw-row { padding: 7px 0; border-top: 1px solid #3a3020; }
   .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
   .lw-row .note { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .spec2 { color: var(--muted); font-size: 11px; }
   .lw-row .warn { font-size: 12px; color: var(--warn); margin-top: 3px; }
   .lw-row.answered { background: rgba(63,185,80,.06); }
   .lw-btn { min-width: 74px; font-weight: 600; }
@@ -186,6 +187,15 @@
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
+  // A line made of pieces (LootView's `segments`): a person's name in their class colour with spec and class beside it, as in the standings list.
+  function segsHtml(segs) {
+    return segs.map((g) => {
+      if (g.text !== undefined) return esc(g.text);
+      const w = g.who, detail = ((w.spec ? w.spec + " " : "") + (w.className || "")).trim();
+      return '<span style="color:' + (w.color ? "#" + w.color : "inherit") + '">' + esc(w.name) + "</span>" +
+        (detail ? ' <span class="spec2">(' + esc(detail) + ")</span>" : "");
+    }).join("");
+  }
   const tipText = (b) => (b.tip ? b.tip.title + "\n\n" + b.tip.text : b.label) + (b.why ? "\n\nUnavailable: " + b.why : "");
   function lwButton(b, extra) {
     const cls = "lw-btn" + (b.selected ? " sel" : "") + (b.primary && b.enabled ? " primary" : "") + (b.key === "need" || b.key === "off" || b.key === "gift" || b.key === "pass" ? " b-" + b.key : "");
@@ -213,7 +223,7 @@
         (snap.token && (r.state === "open" || r.state === "answered") ? ' <button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "");
       return '<div class="lw-row ' + r.state + '"><div class="top"><span class="iname">' + esc(r.link) + "</span>" +
         (buttons ? '<span class="row" style="gap:4px">' + buttons + "</span>" : "") + "</div>" +
-        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + esc(r.note) + "</div>" : "") +
+        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
         (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:4px">' + extra.join(" ") + "</div>" : "") + "</div>";
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"
@@ -229,7 +239,7 @@
           return lwButton(label ? Object.assign({}, b, label) : b, { disabled: needT(b), disabledWhy: needT(b) ? "Choose who gets it first." : "" });
         }).join(" ") + "</div></div>";
     } else if (v.banner) {
-      turn = '<div class="lw-banner ' + v.banner.kind + '">' + esc(v.banner.text) + "</div>";
+      turn = '<div class="lw-banner ' + v.banner.kind + '">' + (v.banner.segments ? segsHtml(v.banner.segments) : esc(v.banner.text)) + "</div>";
     }
     const ml = v.ml
       ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";

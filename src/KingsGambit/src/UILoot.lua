@@ -87,6 +87,17 @@ function M.Model(ctx)
     -- The Master Looter's controls belong to the Master Looter. (The session is read from the same place either way; on the practice
     -- page a bot can hold the role while the player only answers, which ctx.isML = false says.)
     out.isML = mode == "ml" and ctx.isML ~= false
+    -- Who a name is: their display name, class (from the group) and spec (only where the practice raid knows it; the game doesn't tell us others' specs).
+    local classOf = {}
+    for _, member in ipairs((ctx.client.roster and ctx.client:roster()) or {}) do classOf[member.name] = member.class end
+    local function whoOf(full)
+        if not full then return nil end
+        local name = show(full)
+        local info = { name = name, class = classOf[full] }
+        local known = ctx.sim and ctx.sim.info and ctx.sim.info[name]
+        if known then info.class, info.spec = info.class or known.class, known.spec end
+        return info
+    end
     local list = s.items or {}
     -- What the session will record, by item (the draft adds to it as it goes): where each winner was on the list, and who has not said who gets a gift.
     local pendingFor = {}
@@ -102,6 +113,7 @@ function M.Model(ctx)
                 row.mine, row.mineTo = b and b.kind, b and show(b.to)
                 row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
                 row.winnerIsMe, row.toIsMe = it.winner ~= nil and it.winner == me, it.to ~= nil and it.to == me
+                row.winnerWho, row.toWho = whoOf(it.winner), whoOf(it.to)
                 local a = pendingFor[it.id or 0]
                 if a then row.from, row.undecided = a.fromIndex, a.undecided end
                 if it.status == "de" then row.deTo = show(s.deHandler) end
@@ -112,6 +124,7 @@ function M.Model(ctx)
                     if a.item == row.id then
                         row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier
                         row.winnerIsMe, row.toIsMe = a.winner == me, a.to ~= nil and a.to == me
+                        row.winnerWho, row.toWho = whoOf(a.winner), whoOf(a.to)
                     end
                 end
             end
@@ -148,6 +161,7 @@ function M.Model(ctx)
         out.turn.itemLink = t.item and linkOfItem(t.item)
     elseif t then
         out.waitingFor = show(t.player)
+        out.waitingWho = whoOf(t.player)
     end
     return out
 end

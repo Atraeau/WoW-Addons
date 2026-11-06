@@ -7,8 +7,29 @@
 -- that to its own way of running it (the game types the same command a player could, the page calls the engine).
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
-local Tips
-local M = SK:NewModule("LootView", { "UITips" }, function(d) Tips = d.UITips end)
+local Tips, ItemFit
+local M = SK:NewModule("LootView", { "UITips", "ItemFit?" }, function(d) Tips, ItemFit = d.UITips, d.ItemFit end)
+
+-- The game's class colours (hex, no alpha), so a name is coloured the same in the game, on the page and in the list.
+M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROGUE = "fff569", PRIEST = "ffffff", SHAMAN = "0070de",
+    MAGE = "69ccf0", WARLOCK = "9482c9", DRUID = "ff7d0a" }
+
+-- A line of text made of pieces: plain words, and people. A person carries what a renderer needs to draw them like the standings list does: their name in the
+-- class colour, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
+-- can't draw the pieces.
+local function line()
+    local b = { segments = {}, parts = {} }
+    function b.text(t) b.segments[#b.segments + 1] = { text = t }; b.parts[#b.parts + 1] = t end
+    function b.who(w, label)
+        label = label or (w and w.name) or "?"
+        if not w then return b.text(label) end
+        b.segments[#b.segments + 1] = { who = { name = label, class = w.class, className = (ItemFit and ItemFit.CLASS_NAMES or {})[w.class],
+            spec = w.spec, color = M.CLASS_COLOR[w.class] } }
+        b.parts[#b.parts + 1] = label
+    end
+    function b.plain() return table.concat(b.parts) end
+    return b
+end
 
 -- The four answers, in the order they are shown. `letter` is there so colour is never the only difference.
 M.ANSWERS = {
@@ -106,16 +127,19 @@ function M.Build(m)
             -- who gets it: the winner, who it is given to if not the winner, which round, and where the winner falls on the list
             row.state = "awarded"
             local you = r.winnerIsMe
-            local text = (you and "You win" or (r.winner .. " wins")) .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or "")
+            local b = line()
+            b.who(r.winnerWho or { name = r.winner }, you and "You" or r.winner)
+            b.text((you and " win" or " wins") .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or ""))
             if r.undecided then
-                text = text .. (you and ", and haven't chosen who gets it yet" or ", and hasn't chosen who gets it yet")
+                b.text(you and ", and haven't chosen who gets it yet" or ", and hasn't chosen who gets it yet")
             elseif r.to and r.to ~= r.winner then
-                text = text .. ((you and " and give it to " or " and gives it to ") .. (r.toIsMe and "you" or r.to))
+                b.text(you and " and give it to " or " and gives it to ")
+                b.who(r.toWho or { name = r.to }, r.toIsMe and "you" or r.to)
             end
             if r.from and r.from > 0 and r.tier ~= "salvage" then
-                text = text .. ((" · moves from place %d to the bottom of the %s"):format(r.from, r.tier == "off" and "off-spec list" or "list"))
+                b.text((" · moves from place %d to the bottom of the %s"):format(r.from, r.tier == "off" and "off-spec list" or "list"))
             end
-            row.note = text
+            row.note, row.segments = b.plain(), b.segments
             row.mineWon = (r.winnerIsMe or r.toIsMe) and true or false
             row.winnerName = r.winner
         elseif r.status == "de" then
@@ -156,7 +180,11 @@ function M.Build(m)
             v.turn.buttons[3] = button("decline", "Decline", { name = "decline", item = turn.item })
         end
     elseif v.state == "turn" then
-        v.banner = { kind = "info", text = ("Waiting for %s%s"):format(m.waitingFor or "the next player", m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "") }
+        local b = line()
+        b.text("Waiting for ")
+        b.who(m.waitingWho or { name = m.waitingFor or "the next player" }, m.waitingFor or "the next player")
+        b.text(m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "")
+        v.banner = { kind = "info", text = b.plain(), segments = b.segments }
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then
