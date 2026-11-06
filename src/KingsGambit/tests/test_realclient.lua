@@ -108,9 +108,19 @@ test("identity: first and last name, the fullest name wins, and the surname sepa
     -- a game with no separator function still works: whitespace, hyphen and underscore separate the names
     local c3 = newClient(function(E) E.C_NameUtil = nil; E.UnitFullName = function() return "Aldric Stormwind", "" end end)
     eq(c3:me(), "Aldric_Stormwind")
-    -- there are no realms: whatever the "server" return says is not part of the name
+    -- a name that already has both parts is not extended by the second value
     local c4 = newClient(function(E) E.UnitFullName = function() return "Aldric Stormwind", "SomeServer" end end)
     eq(c4:me(), "Aldric_Stormwind")
+    -- CONFIRMED in the live game: the first name, then the SURNAME as the second value (where a realm would be)
+    local c5 = newClient(function(E)
+        E.UnitNameUnmodified = function() return "Coreander", "Shoeberry" end
+        E.UnitFullName = function() return "Coreander", "Shoeberry" end
+        E.UnitName = function() return "Coreander", "Shoeberry" end
+    end)
+    eq(c5:me(), "Coreander_Shoeberry", "the surname comes from the second value, so the identity is the whole name")
+    eq(c5:normalize("Coreander-Shoeberry"), "Coreander_Shoeberry", "chat names (First-Last) read the same")
+    local probe = c5:nameProbe()
+    eq(probe[#probe], "identity = Coreander_Shoeberry")
 end)
 test("the probe prints what the game says about names, for the in-game field test", function()
     local c = newClient(function(E)
@@ -333,4 +343,16 @@ test("setLootMethod refuses when not the leader, when the method is unavailable,
     ok, why = c:setLootMethod("master"); assert(not ok); eq(why, "failed")
     local notLeader = newClient(function(X) X.UnitFullName = function(u) if u == "player" then return "Mirel", "Realm" end end end)
     ok, why = notLeader:setLootMethod("master"); assert(not ok); eq(why, "notleader")
+end)
+
+test("a roster name the game gives without a surname is completed from its unit", function()
+    local c = newClient(function(E)
+        E.UnitFullName = function(u)
+            if u == "player" then return "Raidlead", "" end
+            if u == "raid2" then return "Mirel", "Shoeberry" end
+        end
+    end)
+    local r = c:roster()
+    eq(r[2].name, "Mirel_Shoeberry", "the surname was missing from the roster and came from the unit")
+    eq(r[3].name, "Brann_Ironforge", "a name that already has both is left as it is")
 end)

@@ -365,10 +365,10 @@ do local chunk = function(...)
 -- separator" (C_NameUtil.ReplaceSurnameSeparatorWithLinkSeparator). We do not hard-code what it is. The client learns it from the game itself by
 -- comparing a name with that function's result (LearnSeparator), and Normalize splits on it, on whitespace, on "-" and on "_".
 --
--- ASSUMPTIONS TO CONFIRM IN THE LIVE GAME (they are all in the real client, RealClient.lua, and the in-game `/gambit check` prints the raw values):
---   * which API returns the full name with the surname intact (UnitNameUnmodified is preferred: ShouldDisplaySurname() suggests UnitName can leave the
---     surname out depending on a player's settings, which would make one character look like two);
---   * that the second return value ("server") is empty, since there are no realms.
+-- CONFIRMED IN THE LIVE GAME (the self-check, 2026-11-04; the same in RealClient.lua): UnitNameUnmodified, UnitFullName and UnitName all return the FIRST name
+-- and then the SURNAME as the second value, where a realm would be (`"Coreander", "Shoeberry"`), and the game's own folders and chat names read
+-- "Coreander-Shoeberry". The first value alone is only the first name, which is why a character once looked like "Coreander". Still to confirm in
+-- the game: whether rosters leave the surname out for someone who shares yours (the client completes such a name from its unit), and what a whisper target needs.
 -- Names are never parsed anywhere else in the addon.
 local _, SK = ...
 local M = SK:NewModule("Identity")

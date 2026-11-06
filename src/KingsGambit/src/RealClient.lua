@@ -61,22 +61,33 @@ function M.New(opts)
         if id and rawOf[id] == nil then rawOf[id] = raw end
         return id
     end
-    -- the game's spelling of an identity: as it gave it to us, else the display form with the learned separator
+    -- the game's spelling of an identity: as it gave it to us, else First-Last (the surname goes where a realm would: the game's own folders and chat
+    -- names read "Coreander-Shoeberry")
     local function toGame(id)
         if type(id) ~= "string" then return id end
-        return rawOf[id] or (id:gsub(Identity.SEP, seps[1] or " "))
+        return rawOf[id] or (id:gsub(Identity.SEP, seps[1] or "-"))
     end
     -- A unit's full name. UnitNameUnmodified is preferred and the answer with the most parts wins: ShouldDisplaySurname() suggests UnitName can leave
     -- the surname out depending on a player's own display settings, and an identity must not depend on that. FIELD: confirm in the game which of these
     -- carries the surname (the `/gambit check` self-check prints all three).
+    -- CONFIRMED in the game (the self-check, 2026-11-04): all three return the FIRST name, then the SURNAME as the second value, where a realm would be:
+    -- UnitNameUnmodified("player") = "Coreander", "Shoeberry". The surname is therefore taken from the second value (unless the first already has two names).
     local NAME_SOURCES = { "UnitNameUnmodified", "UnitFullName", "UnitName" }
+    local function withSurname(name, surname)
+        surname = safe(surname)
+        if type(name) == "string" and type(surname) == "string" and surname ~= "" and #(Identity.Normalize(name, seps) or ""):gsub("[^" .. Identity.SEP .. "]", "") == 0 then
+            return name .. "-" .. surname
+        end
+        return name
+    end
     local function unitName(unit)
         local best, bestParts
         for _, fn in ipairs(NAME_SOURCES) do
             if E[fn] then
-                local ok, name = pcall(E[fn], unit)
+                local ok, name, surname = pcall(E[fn], unit)
                 name = ok and safe(name)
                 if type(name) == "string" and name ~= "" then
+                    name = withSurname(name, surname)
                     learn(name)
                     local n = #(Identity.Normalize(name, seps) or ""):gsub("[^" .. Identity.SEP .. "]", "") + 1
                     if not best or n > bestParts then best, bestParts = name, n end
@@ -150,12 +161,24 @@ function M.New(opts)
     function c:inRaid() return E.IsInRaid() and true or false end
 
     -- { name, class (file token), rank 0/1/2, online, subgroup }
+    -- A name the roster gave without a surname (the game may leave it out for someone who shares yours, as it would a realm), completed from the unit it belongs to.
+    local function complete(raw, unit)
+        raw = safe(raw)
+        if type(raw) ~= "string" or raw == "" or not unit then return raw end
+        local id = Identity.Normalize(raw, seps)
+        if id and id:find(Identity.SEP, 1, true) then return raw end
+        local full = unitName(unit)
+        local fullId = full and Identity.Normalize(full, seps)
+        if fullId and Identity.First(fullId) and id and Identity.First(fullId):lower() == id:lower() then return full end
+        return raw
+    end
+
     function c:roster()
         local out = {}
         if E.IsInRaid() then
             for i = 1, E.GetNumGroupMembers() do
                 local name, rank, subgroup, _, _, fileName, _, online = E.GetRaidRosterInfo(i)
-                name = fromGame(name)
+                name = fromGame(complete(name, "raid" .. i))
                 if name then
                     out[#out + 1] = { name = name, class = fileName, rank = rank or 0,
                         online = online and true or false, subgroup = subgroup or 1 }
@@ -260,7 +283,7 @@ function M.New(opts)
         local _, partyId, raidId = E.C_PartyInfo.GetLootMethod()
         if E.IsInRaid() and raidId then
             local name = E.GetRaidRosterInfo(raidId)
-            return fromGame(name)
+            return fromGame(complete(name, "raid" .. raidId))
         elseif partyId == 0 then
             return self:me()
         elseif partyId then
@@ -294,6 +317,16 @@ function M.New(opts)
         for i = 1, 40 do
             local name = E.GetMasterLootCandidate(slot, i)
             if name then
+                -- (a candidate comes with no surname when the game leaves it out: the group member with that first name, if only one, is who it is)
+                local id = Identity.Normalize(safe(name) or "", seps)
+                if id and not id:find(Identity.SEP, 1, true) then
+                    local found, count
+                    count = 0
+                    for _, m in ipairs(c:roster()) do
+                        if Identity.First(m.name) and Identity.First(m.name):lower() == id:lower() then found, count = m.name, count + 1 end
+                    end
+                    if count == 1 then name = toGame(found) end
+                end
                 out[#out + 1] = { index = i, name = fromGame(name) }
             end
         end
