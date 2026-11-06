@@ -362,10 +362,13 @@ local function rosterNames(sim)
     return names
 end
 
-test("when a raid opens everyone there is written down, in small entries, and the Ledger's default view leaves them out", function()
+test("a raid officially starts at its first boss kill: then everyone there is written down, in small entries, and the Ledger's default view leaves them out", function()
     local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 40 })
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local ctx = { client = sim.client, engine = sim.engine, commands = Commands.New({ client = sim.client, engine = sim.engine, host = host }), sim = sim, host = host }
+    eq(next(sim.engine:Present("sim")), nil, "nothing is written before the first boss has died")
+    eq(sim.engine:View().attendance["sim"], nil)
+    sim:killBoss(nil, false)
     local present = sim.engine:Present("sim")
     local n = 0
     for _ in pairs(present) do n = n + 1 end
@@ -382,6 +385,8 @@ test("someone who leaves mid-raid is written as having left, and their time in t
     local sim, ctx = raid()
     local names = rosterNames(sim)
     local leaver = names[3]
+    sim.client:advance(5000) -- (time spent gathering before the first kill doesn't count)
+    sim:killBoss(nil, false)
     sim.client:advance(3600)
     local keep = {}
     for _, nm in ipairs(names) do if nm ~= leaver then keep[#keep + 1] = nm end end

@@ -5823,9 +5823,11 @@ end; chunk("KingsGambit", SK) end
 do local chunk = function(...)
 -- King's Gambit: the Master Looter's addon writes down who is in the raid. Keep this file Lua 5.1-safe.
 --
--- While a raid this character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one
--- or more Attendance entries ({ raid, joined, left }): everyone there when the raid opens, then whoever comes or goes. It follows the group (the game's
+-- A raid officially starts when its FIRST BOSS DIES: before that people are still arriving and nothing has been done. From then on, while a raid this
+-- character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one or more
+-- Attendance entries ({ raid, joined, left }): everyone there at the first kill, then whoever comes or goes. It follows the group (the game's
 -- roster-changed event), settles for a few seconds so a burst of changes is one entry, and checks again every half minute in case an event was missed.
+-- A kill is the game's encounter-ended event with a success, or a loot session starting (the Master Looter has a boss's loot to hand out), or `bossKilled()`.
 -- Someone who leaves mid-raid is written as having left at that time, which is what makes "was in the raid when the boss died" answerable.
 -- Names are split into entries of at most CHUNK so each stays small enough to travel (see Sync).
 local _, SK = ...
@@ -5835,9 +5837,10 @@ M.CHUNK = 12
 M.SETTLE = 4      -- seconds to wait after a roster change before writing it
 M.RECHECK = 30    -- seconds between checks in case a change was missed
 
-function M.New(engine, client)
+function M.New(engine, client, host)
     local a = { engine = engine, client = client }
     local waiting = false
+    local official = {} -- raids whose first boss has died, as far as this session knows (the ledger remembers it past a /reload)
 
     local function myRaid()
         local me = client:me()
@@ -5848,6 +5851,8 @@ function M.New(engine, client)
     function a:sync()
         local r = myRaid()
         if not r then return 0 end
+        -- not started yet: nothing is written until the first boss has died (unless the ledger already has entries, e.g. after a /reload)
+        if not official[r.id] and not engine:View().attendance[r.id] then return 0 end
         local present = {}
         for _, m in ipairs(client:roster()) do if m.name then present[m.name] = true end end
         local known = engine:Present(r.id)
@@ -5881,10 +5886,19 @@ function M.New(engine, client)
         client:after(M.SETTLE, function() waiting = false; a:sync() end)
     end
 
+    -- The first boss has died: the raid officially starts, with everyone there now.
+    function a:bossKilled()
+        local r = myRaid()
+        if not r then return 0 end
+        official[r.id] = true
+        return a:sync()
+    end
+
     client:on("roster.changed", function() a:soon() end)
-    engine:OnChange(function(kind, _, ev)
-        if kind == "local" and type(ev) == "table" and ev.type == "Elevate" then a:soon() end
-    end)
+    client:on("encounter.ended", function(p) if type(p) == "table" and p.success then a:bossKilled() end end)
+    if host and host.on then
+        host.on("phase", function(p) if p == "bidding" or (type(p) == "table" and p.phase == "bidding") then a:bossKilled() end end)
+    end
     if client.every then client:every(M.RECHECK, function() a:sync() end) end
     return a
 end
@@ -5983,9 +5997,8 @@ function M.NewRaid(opts)
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
-    -- Who is in the raid is written down as in the real addon: everyone there now, then whoever comes or goes.
+    -- Who is in the raid is written down as in the real addon, from the first boss kill on (Sim:killBoss).
     local attendance = Attendance and Attendance.New(engine, client)
-    if attendance then attendance:sync() end
 
     local sim = setmetatable({
         client = client, engine = engine, names = names, learner = learner, ml = ml,
@@ -6001,6 +6014,7 @@ function M.NewRaid(opts)
             engine:Append(ev.list, "DisenchantResult", { disenchant = ev.id, results = results, requestedBy = (to ~= client:me()) and to or nil })
         end)
     end)
+    sim.attendance = attendance
     return sim
 end
 
@@ -6441,6 +6455,7 @@ function Sim:killBoss(name, hold)
         boss = MC.bosses[self.bossIndex]
     end
     if not boss then return nil, "noboss" end
+    if self.attendance then self.attendance:bossKilled() end -- the raid officially starts with its first kill
     local pool = {}
     for i, entry in ipairs(boss.loot) do pool[i] = { id = entry[1], w = entry[2] } end
     local dropped = {}
@@ -7878,7 +7893,9 @@ function M.Attendance(ctx, listId)
     for _, id in ipairs(ids) do
         local r = view.auth.raids[id]
         local finish = r.ended or math.min(r.expires, now)
-        local raid = { id = id, start = r.start, finish = finish, length = math.max(finish - r.start, 1), present = {}, leftEarly = {} }
+        -- the raid officially starts at its first kill: the time of its first attendance entry, not when it was opened
+        local start = view.attendance[id][1].ts
+        local raid = { id = id, start = start, finish = finish, length = math.max(finish - start, 1), present = {}, leftEarly = {} }
         local since = {}
         local function close(who, ts)
             if since[who] then raid.present[who] = (raid.present[who] or 0) + math.max(0, math.min(ts, finish) - since[who]); since[who] = nil end

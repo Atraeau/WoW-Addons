@@ -374,7 +374,9 @@ function M.Attendance(ctx, listId)
     for _, id in ipairs(ids) do
         local r = view.auth.raids[id]
         local finish = r.ended or math.min(r.expires, now)
-        local raid = { id = id, start = r.start, finish = finish, length = math.max(finish - r.start, 1), present = {}, leftEarly = {} }
+        -- the raid officially starts at its first kill: the time of its first attendance entry, not when it was opened
+        local start = view.attendance[id][1].ts
+        local raid = { id = id, start = start, finish = finish, length = math.max(finish - start, 1), present = {}, leftEarly = {} }
         local since = {}
         local function close(who, ts)
             if since[who] then raid.present[who] = (raid.present[who] or 0) + math.max(0, math.min(ts, finish) - since[who]); since[who] = nil end
