@@ -144,10 +144,43 @@ function M:PracticeKill()
     if not p then return end
     local s = p.sim.session
     if s and s.phase ~= "done" and s.phase ~= "cancelled" then return say("Practice: finish handing out the current loot first.") end
-    local boss, _, why = p.sim:killBoss(nil, false)
-    if not boss then return say("Practice: there are no more bosses.") end
+    local boss, err, why = p.sim:killBoss(nil, false)
+    if not boss then return say(err == "noraid" and "Practice: no raid is open: open the next one first." or "Practice: there are no more bosses.") end
     if why then say("Practice: " .. tostring(why)) end
     M:OpenLoot()
+end
+-- Practice: end the raid, open the next one a few days later, and people leaving and coming back.
+local WHYNOT = { busy = "finish handing out the current loot first", held = "hand out the held loot first", noraid = "no raid is open", open = "a raid is already open" }
+function M:PracticeEndRaid()
+    local p = M.practice
+    if not p then return end
+    local ok, why = p.sim:endRaid()
+    if not ok then return say("Practice: " .. (WHYNOT[why] or tostring(why))) end
+    say("Practice: the raid is over. Open the next one when you are ready.")
+    M:Refresh()
+end
+function M:PracticeOpenRaid()
+    local p = M.practice
+    if not p then return end
+    local n, why = p.sim:openRaid()
+    if not n then return say("Practice: " .. (WHYNOT[why] or tostring(why))) end
+    say(("Practice: raid %d is open, a few days later. A few raiders are away this time."):format(n))
+    M:Refresh()
+end
+function M:PracticeLeave()
+    local p = M.practice
+    if not p then return end
+    local who, why = p.sim:leave()
+    if not who then return say("Practice: nobody can leave (" .. tostring(why) .. ").") end
+    say("Practice: " .. Identity.Display(who) .. " left the group.")
+    M:Refresh()
+end
+function M:PracticeRejoin()
+    local p = M.practice
+    if not p then return end
+    local who = p.sim:rejoin()
+    if who then say("Practice: " .. Identity.Display(who) .. " is back.") end
+    M:Refresh()
 end
 function M:PracticeHandOut()
     local p = M.practice

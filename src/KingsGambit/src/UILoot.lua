@@ -70,7 +70,9 @@ function M.Model(ctx)
     if ctx.sim then
         local sim = ctx.sim
         local nextBoss = sim.raid and sim.raid.bosses[sim.bossIndex + 1]
-        out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held }
+        local busy = sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled"
+        out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held, raidOpen = sim:raidOpen(), raidNo = sim.raidNo or 1,
+            absent = sim:absentCount(), busy = busy and true or false, canLeave = sim:raidOpen() and #sim.roster - sim:absentCount() > 6 }
     end
     if not s then return out end
     out.mode, out.phase = mode, s.phase

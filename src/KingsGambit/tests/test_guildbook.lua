@@ -554,3 +554,67 @@ test("someone else's raid shows its length and what was handed out, but not what
     eq(view.mine, false); assert(view.lines[4]:find("only known to the Master Looter"), view.lines[4]); eq(view.held, nil)
     eq(GuildBook.RaidNow({ engine = sim.engine, client = sim.client }).mine, true)
 end)
+
+H.section("Practice: more than one raid")
+test("a practice night runs raid after raid: open, kill, hand out, people come and go, end, days pass, the next opens", function()
+    local sim, ctx = raid()
+    local function handOutAll()
+        sim.autoLearner = true
+        assert(sim:handOut()); assert(sim:runUntil("review", 900)); assert(sim.session:confirm())
+    end
+    eq(sim:raidOpen(), true); eq(sim.raidNo, 1)
+    -- raid 1: a boss dies (holding its loot), someone leaves, the loot is handed out
+    sim:killBoss(nil, true)
+    local leaver = assert(sim:leave())
+    sim.client:advance(30)
+    assert(not sim.engine:Present("sim")[leaver], "the addon wrote down that they left")
+    -- the raid can't end with loot held or a session running
+    eq(select(2, sim:endRaid()), "held")
+    handOutAll()
+    assert(sim:rejoin() == leaver, "the one who left is back")
+    sim.client:advance(30)
+    assert(sim.engine:Present("sim")[leaver], "and written as back")
+    assert(sim:endRaid()); eq(sim:raidOpen(), false)
+    local k, why = sim:killBoss()
+    eq(k, nil); eq(why, "noraid", "no kills without an open raid")
+    -- raid 2, days later
+    local before = sim.client:serverTime()
+    eq(sim:openRaid(), 2); eq(sim:raidOpen(), true); eq(sim.raidId, "sim2")
+    assert(sim.client:serverTime() - before >= 3 * 86400, "days passed")
+    eq(sim.bossIndex, 0, "the bosses are back")
+    assert(sim:absentCount() >= 1, "a few raiders can't make it")
+    eq(sim.engine:View().attendance["sim2"], nil, "the new raid hasn't started")
+    sim:killBoss(nil, false)
+    assert(sim.engine:View().attendance["sim2"], "its first kill starts it")
+    assert(sim:runUntil("review", 900)); assert(sim.session:confirm())
+    assert(sim:endRaid())
+    -- the ledger now covers two raids: Stats counts both, and someone who missed the second shows 1 of 2
+    local stats = GuildBook.Stats(ctx, "main")
+    eq(stats.attendance.total, 2)
+    local missed
+    for name in pairs(sim.absent) do missed = name end
+    eq(stats.attendance.byPlayer[missed] and stats.attendance.byPlayer[missed].attended, 1, "was in raid 1, not raid 2")
+    for _, r in ipairs(stats.rows) do if r.who == missed then eq(r.raidsText, "1/2") end end
+    eq(GuildBook.RaidNow(ctx).running, false, "no raid is open now")
+end)
+
+test("the practice window ends and opens raids, and has people leave and return", function()
+    local UI = SK.modules.UI
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })
+    UI.practice = { engine = sim.engine, client = sim.client, commands = Commands.New({ client = sim.client, engine = sim.engine, host = { on = function() end }, attendance = sim.attendance }),
+        sim = sim, host = { on = function() end }, attendance = sim.attendance }
+    local said = {}
+    local oldSay = UI.Say
+    local model = SK.modules.UILoot.Model(UI.practice)
+    eq(model.night.raidOpen, true); eq(model.night.raidNo, 1)
+    UI:PracticeLeave()
+    assert(SK.modules.UILoot.Model(UI.practice).night.absent == 1)
+    UI:PracticeRejoin()
+    eq(SK.modules.UILoot.Model(UI.practice).night.absent, 0)
+    UI:PracticeEndRaid()
+    eq(SK.modules.UILoot.Model(UI.practice).night.raidOpen, false)
+    UI:PracticeOpenRaid()
+    local n = SK.modules.UILoot.Model(UI.practice).night
+    eq(n.raidOpen, true); eq(n.raidNo, 2)
+    UI.practice = nil
+end)

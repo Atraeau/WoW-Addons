@@ -298,6 +298,15 @@ function M.Build(ui)
     f.handOut = button(f, "Hand out the loot", 120, BTN_H)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
     Tips.Attach(f.handOut, "handout")
+    f.raidButton = button(f, "End the raid", 168, BTN_H)
+    f.raidButton:SetScript("OnClick", function() if f.raidIsOpen then ui:PracticeEndRaid() else ui:PracticeOpenRaid() end end)
+    Tips.Attach(f.raidButton, "raidtoggle")
+    f.leaveButton = button(f, "Someone leaves", 120, BTN_H)
+    f.leaveButton:SetScript("OnClick", function() ui:PracticeLeave() end)
+    Tips.Attach(f.leaveButton, "leaveraid")
+    f.rejoinButton = button(f, "Someone returns", 104, BTN_H)
+    f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
+    Tips.Attach(f.rejoinButton, "rejoinraid")
     f.wait = button(f, "Wait 10 s", 80, BTN_H)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
     Tips.Attach(f.wait, "wait")
@@ -498,10 +507,22 @@ function M.Refresh(f, ctx, ui)
         divider()
         place(f.practiceLabel, PAD); y = y - 14 - 4
         place(f.nextBoss, PAD)
-        f.nextBoss:SetText(m.night and m.night.nextBoss and ("Kill " .. m.night.nextBoss) or "No more bosses")
+        local night = m.night or {}
+        f.nextBoss:SetText(not night.raidOpen and "No raid is open" or (night.nextBoss and ("Kill " .. night.nextBoss) or "No more bosses"))
+        if f.nextBoss.SetEnabled then f.nextBoss:SetEnabled(night.raidOpen and night.nextBoss ~= nil and not night.busy) end
         local x = PAD + 168 + GAP
-        if m.night and (m.night.held or 0) > 0 then layout[#layout + 1] = { f.handOut, x, y }; want[f.handOut] = true; x = x + 120 + GAP end
+        if (night.held or 0) > 0 then layout[#layout + 1] = { f.handOut, x, y }; want[f.handOut] = true; x = x + 120 + GAP end
         layout[#layout + 1] = { f.wait, x, y }; want[f.wait] = true
+        y = y - BTN_H - GAP
+        -- the raid itself: end it (then open the next one, days later), and people leaving and coming back
+        f.raidIsOpen = night.raidOpen
+        local label = night.raidOpen and ("End raid " .. tostring(night.raidNo or 1)) or "Open the next raid"
+        f.raidButton:SetText(label)
+        if f.raidButton.SetEnabled then f.raidButton:SetEnabled(not (night.raidOpen and (night.busy or (night.held or 0) > 0))) end
+        layout[#layout + 1] = { f.raidButton, PAD, y }; want[f.raidButton] = true
+        x = PAD + 168 + GAP
+        if night.canLeave then layout[#layout + 1] = { f.leaveButton, x, y }; want[f.leaveButton] = true; x = x + 120 + GAP end
+        if (night.absent or 0) > 0 and night.raidOpen then layout[#layout + 1] = { f.rejoinButton, x, y }; want[f.rejoinButton] = true end
         y = y - BTN_H - GAP
     elseif v.visible and (v.state == "result" or v.state == "cancelled") then
         place(f.startButton, PAD); y = y - BTN_H - GAP
@@ -519,7 +540,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.recipient }
+    local everything = { f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end

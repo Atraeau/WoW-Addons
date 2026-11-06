@@ -6059,12 +6059,14 @@ function M.NewRaid(opts)
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
+    local deName = de or ml
     -- Who is in the raid is written down as in the real addon, from the first kill on (Sim:killBoss).
     local attendance = Attendance and Attendance.New(engine, client)
 
     local sim = setmetatable({
         client = client, engine = engine, names = names, learner = learner, ml = ml,
         policies = {}, autoLearner = false, session = nil, log = {}, info = info, held = {}, rngState = opts.seed or 1,
+        roster = roster, raidId = "sim", raidNo = 1, deName = deName, absent = {},
     }, Sim)
     -- A disenchanter disenchants a little after being given the item, and the result is written down (as the real addon does: they tell the Master Looter).
     local MATERIALS = { "Strange Dust", "Soul Dust", "Lesser Magic Essence", "Greater Magic Essence", "Small Glimmering Shard", "Large Glowing Shard" }
@@ -6089,9 +6091,101 @@ function Sim:setDisenchanter(name)
     local known = false
     for _, n in ipairs(self.names) do if n == name then known = true end end
     if not known then return false, "notinraid" end
-    local ev, err = self.engine:Write("SetDisenchanter", { raid = "sim", name = name })
+    local ev, err = self.engine:Write("SetDisenchanter", { raid = self.raidId or "sim", name = name })
     if not ev then return false, err end
+    self.deName = name
     return true
+end
+
+---------------------------------------------------------------- raids, one after another
+-- Practice runs more than one raid: a raid opens, bosses die and loot is handed out, people come and go, the raid ends, days pass, and the next one opens. Each is
+-- a real raid in the ledger (an Elevate and a RaidClose), so Stats, attendance and the Ledger change the way they do over weeks.
+
+-- Is this practice raid open (opened and not yet closed or expired)?
+function Sim:raidOpen()
+    for _, r in ipairs(self.engine:ActiveRaids()) do if r.id == self.raidId then return true end end
+    return false
+end
+
+-- Put the group on the roster minus the absent, as the game would show it.
+function Sim:setRoster()
+    local members = {}
+    for _, m in ipairs(self.roster) do
+        if not self.absent[m.name] then members[#members + 1] = { name = m.name, class = m.class } end
+    end
+    self.client:setRaid(members, { leader = self.client:leader(), lootMethod = "master", masterLooter = self.ml })
+end
+
+-- Raiders who could leave: not the Master Looter, not the raid leader.
+local function leavers(self)
+    local out = {}
+    local leader = self.client:leader()
+    for _, m in ipairs(self.roster) do
+        if m.name ~= self.ml and m.name ~= self.learner and m.name ~= leader and not self.absent[m.name] then out[#out + 1] = m.name end
+    end
+    return out
+end
+
+-- Someone leaves the group (disconnects, goes afk, is called away). Returns their name, or nil + why.
+function Sim:leave(name)
+    local who = name
+    if not who then
+        local candidates = leavers(self)
+        if #candidates == 0 then return nil, "nobody" end
+        who = candidates[self.client:random(#candidates)]
+    end
+    self.absent[who] = true
+    self:setRoster()
+    return who
+end
+
+-- Someone who left comes back (the one who has been away longest). Returns their name, or nil + why.
+function Sim:rejoin()
+    for _, m in ipairs(self.roster) do
+        if self.absent[m.name] then
+            self.absent[m.name] = nil
+            self:setRoster()
+            return m.name
+        end
+    end
+    return nil, "nobody"
+end
+
+function Sim:absentCount()
+    local n = 0
+    for _ in pairs(self.absent) do n = n + 1 end
+    return n
+end
+
+-- The Master Looter ends the raid (RaidClose). Not while a session is running or loot is held.
+function Sim:endRaid()
+    if not self:raidOpen() then return false, "noraid" end
+    local s = self.session
+    if s and s.phase ~= "done" and s.phase ~= "cancelled" then return false, "busy" end
+    if #self.held > 0 then return false, "held" end
+    local ev, why = self.engine:Write("RaidClose", { raid = self.raidId })
+    if not ev then return false, why end
+    return true
+end
+
+-- The next raid: a few days later, with a few raiders away, the same bosses again. Returns the raid's number, or nil + why.
+function Sim:openRaid()
+    if self:raidOpen() then return nil, "open" end
+    self.client:advance(3 * 86400)
+    self.raidNo = (self.raidNo or 1) + 1
+    self.raidId = "sim" .. self.raidNo
+    -- a couple of raiders can't make it this time; those who missed the last one are back
+    for name in pairs(self.absent) do self.absent[name] = nil end
+    for _ = 1, 2 do
+        local candidates = leavers(self)
+        if #candidates > 3 then self.absent[candidates[self.client:random(#candidates)]] = true end
+    end
+    self:setRoster()
+    local ok, why = self.engine:Write("Elevate", { raid = self.raidId, ml = self.ml, minutes = 24 * 60 })
+    if not ok then return nil, why end
+    assert(self.engine:Write("SetDisenchanter", { raid = self.raidId, name = self.deName }))
+    self.bossIndex, self.held, self.session, self.policies = 0, {}, nil, {}
+    return self.raidNo
 end
 
 function Sim:note(text) self.log[#self.log + 1] = { t = self.client:now(), text = text } end
@@ -6509,6 +6603,7 @@ function M.NewAQ40(opts) return M.NewRaidNight(AQ40, opts) end
 -- dropped items ({ id, name, ... }). With hold = true the loot is set aside for a later hand-out.
 function Sim:killBoss(name, hold)
     local MC = assert(self.raid, "not a raid night")
+    if not self:raidOpen() then return nil, "noraid" end
     local boss
     if name then
         for i, b in ipairs(MC.bosses) do if b.name == name then boss, self.bossIndex = b, i end end
@@ -7043,6 +7138,9 @@ M.TEXT = {
     raidautostart = { "Start by itself", "Ticked (the default): the raid starts by itself when the first enemy dies inside an instance, boss or trash. Unticked: you take control, and nothing starts it but Start the raid now. Kept for this character." },
     raidstartnow = { "Start the raid now", "Start the raid yourself, wherever it is (a world boss, for one): everyone in the group at this moment is written down as being there, and the group is followed from then on." },
     navthisraid = { "This raid", "The raid that is open now: how long it has run, how many items have been handed out, what the Master Looter still holds to hand out and how long it can be traded, and the raid's own part of the ledger." },
+    raidtoggle = { "End or open a raid", "Practice. While a raid is open this ends it: the Master Looter closes it (the same as 'raid close'), recorded in the ledger. Hand out the held loot first. When none is open it opens the next one a few days later (the same as 'raid open'): a couple of raiders can't make it, and the bosses are back. Stats and the Ledger then cover more than one raid." },
+    leaveraid = { "Someone leaves", "Practice: a raider leaves the group mid-raid (a disconnect, called away). The addon writes down that they left, and what they miss is shown in Stats." },
+    rejoinraid = { "Someone returns", "Practice: the raider who left comes back, and the addon writes down that they rejoined." },
     navledger = { "Ledger", "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
@@ -7178,7 +7276,9 @@ function M.Model(ctx)
     if ctx.sim then
         local sim = ctx.sim
         local nextBoss = sim.raid and sim.raid.bosses[sim.bossIndex + 1]
-        out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held }
+        local busy = sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled"
+        out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held, raidOpen = sim:raidOpen(), raidNo = sim.raidNo or 1,
+            absent = sim:absentCount(), busy = busy and true or false, canLeave = sim:raidOpen() and #sim.roster - sim:absentCount() > 6 }
     end
     if not s then return out end
     out.mode, out.phase = mode, s.phase
