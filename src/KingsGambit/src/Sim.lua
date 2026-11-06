@@ -85,7 +85,7 @@ function M.NewRaid(opts)
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
-    -- Who is in the raid is written down as in the real addon, from the first boss kill on (Sim:killBoss).
+    -- Who is in the raid is written down as in the real addon, from the first kill on (Sim:killBoss).
     local attendance = Attendance and Attendance.New(engine, client)
 
     local sim = setmetatable({
@@ -543,7 +543,7 @@ function Sim:killBoss(name, hold)
         boss = MC.bosses[self.bossIndex]
     end
     if not boss then return nil, "noboss" end
-    if self.attendance then self.attendance:bossKilled() end -- the raid officially starts with its first kill
+    if self.attendance then self.attendance:enemyKilled() end -- the raid officially starts with its first kill
     local pool = {}
     for i, entry in ipairs(boss.loot) do pool[i] = { id = entry[1], w = entry[2] } end
     local dropped = {}

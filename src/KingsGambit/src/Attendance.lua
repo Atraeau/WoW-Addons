@@ -1,10 +1,13 @@
 -- King's Gambit: the Master Looter's addon writes down who is in the raid. Keep this file Lua 5.1-safe.
 --
--- A raid officially starts when its FIRST BOSS DIES: before that people are still arriving and nothing has been done. From then on, while a raid this
+-- A raid officially starts when its FIRST ENEMY DIES (a boss or trash: both drop loot that matters): before that people are still arriving and nothing
+-- has been done. From then on, while a raid this
 -- character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one or more
 -- Attendance entries ({ raid, joined, left }): everyone there at the first kill, then whoever comes or goes. It follows the group (the game's
 -- roster-changed event), settles for a few seconds so a burst of changes is one entry, and checks again every half minute in case an event was missed.
--- A kill is the game's encounter-ended event with a success, or a loot session starting (the Master Looter has a boss's loot to hand out), or `bossKilled()`.
+-- A kill is seen as the first of: the game's encounter-ended event with a success; the Master Looter's loot window opening (they loot the corpse, trash or
+-- boss, to hand its loot out); a loot session starting; or `enemyKilled()`. (The game's combat log would say it directly, but this client doesn't export the
+-- function that reads it.)
 -- Someone who leaves mid-raid is written as having left at that time, which is what makes "was in the raid when the boss died" answerable.
 -- Names are split into entries of at most CHUNK so each stays small enough to travel (see Sync).
 local _, SK = ...
@@ -17,7 +20,7 @@ M.RECHECK = 30    -- seconds between checks in case a change was missed
 function M.New(engine, client, host)
     local a = { engine = engine, client = client }
     local waiting = false
-    local official = {} -- raids whose first boss has died, as far as this session knows (the ledger remembers it past a /reload)
+    local official = {} -- raids whose first kill has happened, as far as this session knows (the ledger remembers it past a /reload)
 
     local function myRaid()
         local me = client:me()
@@ -28,7 +31,7 @@ function M.New(engine, client, host)
     function a:sync()
         local r = myRaid()
         if not r then return 0 end
-        -- not started yet: nothing is written until the first boss has died (unless the ledger already has entries, e.g. after a /reload)
+        -- not started yet: nothing is written until the first kill (unless the ledger already has entries, e.g. after a /reload)
         if not official[r.id] and not engine:View().attendance[r.id] then return 0 end
         local present = {}
         for _, m in ipairs(client:roster()) do if m.name then present[m.name] = true end end
@@ -63,18 +66,21 @@ function M.New(engine, client, host)
         client:after(M.SETTLE, function() waiting = false; a:sync() end)
     end
 
-    -- The first boss has died: the raid officially starts, with everyone there now.
-    function a:bossKilled()
+    -- The first enemy has died: the raid officially starts, with everyone there now.
+    function a:enemyKilled()
         local r = myRaid()
         if not r then return 0 end
         official[r.id] = true
         return a:sync()
     end
+    a.bossKilled = a.enemyKilled
 
     client:on("roster.changed", function() a:soon() end)
-    client:on("encounter.ended", function(p) if type(p) == "table" and p.success then a:bossKilled() end end)
+    client:on("encounter.ended", function(p) if type(p) == "table" and p.success then a:enemyKilled() end end)
+    -- the Master Looter opening a loot window (a corpse, trash or boss) while their raid is open: something has died
+    client:on("loot.opened", function(p) if type(p) == "table" and p.slots and #p.slots > 0 then a:enemyKilled() end end)
     if host and host.on then
-        host.on("phase", function(p) if p == "bidding" or (type(p) == "table" and p.phase == "bidding") then a:bossKilled() end end)
+        host.on("phase", function(p) if p == "bidding" or (type(p) == "table" and p.phase == "bidding") then a:enemyKilled() end end)
     end
     if client.every then client:every(M.RECHECK, function() a:sync() end) end
     return a

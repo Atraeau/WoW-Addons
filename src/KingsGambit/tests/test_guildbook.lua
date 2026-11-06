@@ -362,7 +362,7 @@ local function rosterNames(sim)
     return names
 end
 
-test("a raid officially starts at its first boss kill: then everyone there is written down, in small entries, and the Ledger's default view leaves them out", function()
+test("a raid officially starts at its first kill (a boss or trash): then everyone there is written down, in small entries, and the Ledger's default view leaves them out", function()
     local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 40 })
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local ctx = { client = sim.client, engine = sim.engine, commands = Commands.New({ client = sim.client, engine = sim.engine, host = host }), sim = sim, host = host }
@@ -425,4 +425,16 @@ test("a raid from before attendance was written is not counted, so nobody is mar
     local stats = GuildBook.Stats(ctx, "main")
     for _, r in ipairs(stats.rows) do assert(r.raidsText == "-" or r.raidsText:find("/"), r.raidsText) end
     assert(ml)
+end)
+
+test("opening a loot window or a successful encounter also starts the raid, an unsuccessful one does not", function()
+    local sim = raid()
+    local function started() return sim.engine:View().attendance["sim"] ~= nil end
+    sim.client:emit("encounter.ended", { id = 1, name = "Wipe", success = false })
+    sim.client:advance(10)
+    eq(started(), false, "a wipe isn't a kill")
+    sim.client:emit("loot.opened", { slots = {} })
+    eq(started(), false, "an empty loot window isn't either")
+    sim.client:emit("loot.opened", { slots = { { slot = 1, link = "|Hitem:1|h[X]|h", quantity = 1 } } })
+    eq(started(), true, "looting a corpse (trash or boss) starts the raid")
 end)
