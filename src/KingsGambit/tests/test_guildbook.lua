@@ -218,3 +218,38 @@ test("an entry's detail is the raw record: kind, writer, time, id, list and ever
     for _, l in ipairs(GuildBook.Detail(ctx, r.id)) do by[l.label] = l.value end
     eq(by.results, "3 Strange Dust")
 end)
+
+H.section("Staged list changes")
+test("staged moves and removals are simulated in order, so the preview is what will be written", function()
+    local order0 = { "A", "B", "C", "D", "E" }
+    local ops = {}
+    assert(GuildBook.StageMove(ops, order0, "C", 1))
+    eq(table.concat(GuildBook.Simulate(order0, ops), ""), "CABDE")
+    assert(GuildBook.StageMove(ops, order0, "E", 2)); eq(#ops, 2)
+    eq(table.concat(GuildBook.Simulate(order0, ops), ""), "CEABD", "the second move is made against the list the first left")
+    GuildBook.StageRemove(ops, "A")
+    eq(table.concat(GuildBook.Simulate(order0, ops), ""), "CEBD")
+    -- re-staging a player replaces their move where it stood; staging the place they already hold clears it
+    assert(GuildBook.StageMove(ops, order0, "C", 4)); eq(#ops, 3)
+    eq(table.concat(GuildBook.Simulate(order0, ops), ""), "EBDC", "C now goes to 4, where it stood in the sequence, so E and the removal still follow it")
+    eq(GuildBook.StageMove(ops, order0, "C", 3), false, "C already holds place 3 where its move stood: that clears it"); eq(#ops, 2)
+    GuildBook.Unstage(ops, "A"); GuildBook.Unstage(ops, "E"); eq(#ops, 0)
+    eq(GuildBook.StageMove(ops, order0, "B", 2), false, "staging the place they hold stages nothing"); eq(#ops, 0)
+end)
+
+test("the preview marks a moved player and drops a removed one; the pending line and commands say exactly what will be written", function()
+    local rows = {}
+    for i, n in ipairs { "A", "B", "C" } do rows[i] = { pos = i, who = n, name = n } end
+    local ops = {}
+    GuildBook.StageMove(ops, { "A", "B", "C" }, "C", 1)
+    GuildBook.StageRemove(ops, "B")
+    local p = GuildBook.Preview(rows, ops)
+    eq(#p, 2); eq(p[1].who, "C"); eq(p[1].shown, 1); eq(p[1].pos, 3); assert(p[1].moving); eq(p[2].who, "A")
+    eq(GuildBook.PendingText({}):find("No pending") ~= nil, true)
+    eq(GuildBook.PendingText(ops), "2 pending changes: C to place 1; remove B")
+    local cmds, why = GuildBook.Commands(ops, "  ")
+    eq(cmds, nil); assert(why:find("reason"))
+    cmds = GuildBook.Commands(ops, " fixing the list ")
+    eq(cmds[1], "move C 1 fixing the list"); eq(cmds[2], "remove B fixing the list")
+    eq(GuildBook.Preview(rows, {}), rows, "nothing staged: the rows as they are")
+end)

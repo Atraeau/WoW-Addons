@@ -2,7 +2,7 @@
 -- frame code run against a stand-in for the game's frame functions (so a typo or a missing call is found here, not in the game).
 local H = ...
 local SK, test, eq = H.SK, H.test, H.eq
-local Sim, Commands, UI, UILoot = SK.modules.Sim, SK.modules.Commands, SK.modules.UI, SK.modules.UILoot
+local Sim, Commands, UI, UILoot, GuildBook = SK.modules.Sim, SK.modules.Commands, SK.modules.UI, SK.modules.UILoot, SK.modules.GuildBook
 
 -- A practice raid and its commands, wired as the window wires them.
 local function practice(size)
@@ -273,41 +273,46 @@ test("every button has a tooltip with a title and an explanation, and a grayed-o
     assert(lines[1] == "Need (main spec)" and lines[#lines]:find("because", 1, true), table.concat(lines, "|"))
 end)
 
-H.section("Window: staged moves")
-test("Up, Down, a typed place and a drop only stage a move; Apply writes exactly one entry", function()
+H.section("Window: staged changes")
+test("Up, Down, a typed place, a drop and Remove only stage; Apply all writes each change with the one reason, in order", function()
     local sim, cmd, ctx = practice(5)
-    local saved = { practice = UI.practice, selected = UI.selected, pending = UI.pending }
-    UI.practice, UI.pending = ctx, nil
+    local saved = { practice = UI.practice, selected = UI.selected, staged = UI.staged }
+    UI.practice, UI.staged = ctx, {}
     local before = #sim.engine:Get("main").events
-    local order = sim.engine:Get("main").state.order
-    local who = order[2]
+    local order = {}
+    for i, n in ipairs(sim.engine:Get("main").state.order) do order[i] = n end
     local model = UI.Model(sim.engine, sim.client, "main")
-    UI.selected, UI.places, UI.total, UI.may = who, {}, model.total, true
-    for _, r in ipairs(model.rows) do UI.places[r.who] = r.pos end
     -- (the window's own Refresh needs frames; the staging logic is what is under test)
-    local function stage(to)
-        local place = UI.places[who]
-        to = math.floor(math.max(1, math.min(UI.total, to)))
-        UI.pending = (to ~= place) and { who = who, to = to } or nil
+    UI.baseOrder = order
+    local function places()
+        UI.places = {}
+        for _, r in ipairs(UI.Preview(model.rows)) do UI.places[r.who] = r.shown or r.pos end
+        UI.total = #UI.Preview(model.rows)
     end
+    places(); UI.selected = order[2]; UI.may = true
+    local who = order[2]
+    local function stage(to) GuildBook.StageMove(UI.staged, UI.baseOrder, who, to); places() end
     stage(4); stage(5); stage(4)
-    eq(UI.pending.to, 4)
+    eq(#UI.staged, 1, "one staged move, replaced as it was changed"); eq(UI.staged[1].to, 4)
     local preview = UI.Preview(model.rows)
     eq(preview[4].who, who, "the player is shown at the staged place"); assert(preview[4].moving); eq(preview[4].pos, 2, "and remembers where they were")
     eq(preview[1].who, order[1]); eq(preview[2].who, order[3], "the others close up")
+    -- a second change stacks on the first: the third player goes, so the preview closes up again
+    UI.selected = order[3]
+    GuildBook.StageRemove(UI.staged, order[3]); places()
+    eq(#UI.staged, 2); eq(#UI.Preview(model.rows), #order - 1, "a staged removal is gone from the preview")
     eq(#sim.engine:Get("main").events, before, "nothing was written while staging")
-    local text, problem = UI.MoveCommand("  ")
-    eq(text, nil); assert(problem:find("reason"), problem)
-    text = UI.MoveCommand("fixed after a failed hand-out")
-    eq(text, ("move %s 4 fixed after a failed hand-out"):format(who))
-    cmd.handle(text)
-    eq(sim.engine:Get("main").state.order[4], who, "applied")
-    eq(#sim.engine:Get("main").events, before + 1, "one entry for the whole move")
-    -- dropping on a row stages a move to that row's place
-    UI.pending, UI.dragging, UI.selected = nil, who, who
-    UI.places[who] = 4
-    UI.DropOn({ pos = 1 }) -- (Stage refreshes the window: no window here, so only the state matters)
-    UI.practice, UI.selected, UI.pending, UI.dragging = saved.practice, saved.selected, saved.pending, nil
+    local noReason, problem = GuildBook.Commands(UI.staged, "  ")
+    eq(noReason, nil); assert(problem:find("reason"), problem)
+    UI.practice = ctx
+    UI.Say = function() end -- (no window to show the answer in)
+    assert(UI.ApplyStaged("fixed after a failed hand-out"))
+    local now = sim.engine:Get("main").state
+    eq(now.order[3], who, "the move was applied (place 4 before the removal closed the line up)")
+    assert(not now.members[order[3]].active, "and the removal")
+    eq(#sim.engine:Get("main").events, before + 2, "one entry per change")
+    eq(#UI.staged, 0, "nothing is staged any more")
+    UI.practice, UI.selected, UI.staged = saved.practice, saved.selected, saved.staged
 end)
 
 H.section("Window: Award only offers items you hold")

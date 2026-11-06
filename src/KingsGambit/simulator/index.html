@@ -6864,14 +6864,14 @@ M.TEXT = {
     -- standings
     listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the guild master decide which (see Tools, Raid)." },
     sort = { "Sort", "Click to sort the table by this column; click again to reverse it.\n\nThis only changes how the table is shown. It never changes the list's real order, which is the order players are called in." },
-    top = { "Move to the top", "Stage a move of the selected player to the top of this list.\n\nNothing is recorded yet: the table shows where they would go. Press Apply move (with a reason) to record it as one entry; Cancel to drop it." },
-    up = { "Up one place", "Stage a move of the selected player up one place. Each press only changes the preview; nothing is recorded until you press Apply move, so several presses make one entry." },
-    down = { "Down one place", "Stage a move of the selected player down one place. Each press only changes the preview; nothing is recorded until you press Apply move, so several presses make one entry." },
-    bottom = { "Move to the bottom", "Stage a move of the selected player to the bottom of this list. Nothing is recorded until you press Apply move." },
-    place = { "To place", "Type the place to move the selected player to, then Set. You can also drag a player onto another row. Either way it is only a preview until you press Apply move." },
-    apply = { "Apply move", "Record the staged move as a single entry in the shared ledger, with the reason you typed. A reason is required: it is part of the record, with who made the change.\n\nHistory is never rewritten: the old order stays visible." },
-    cancelmove = { "Cancel the move", "Drop the staged move. Nothing was recorded." },
-    remove = { "Remove from the list", "Take the selected player off this list. A reason is optional but recommended.\n\nThe record keeps the place they were at, so they can be put back there." },
+    top = { "Move to the top", "Stage a move of the selected player to the top of this list.\n\nNothing is recorded yet: the table shows the list as it would be. Stage as many changes as you like, then press Apply all (with a reason); Discard drops them." },
+    up = { "Up one place", "Stage a move of the selected player up one place. Each press only changes the preview; nothing is recorded until you press Apply all." },
+    down = { "Down one place", "Stage a move of the selected player down one place. Each press only changes the preview; nothing is recorded until you press Apply all." },
+    bottom = { "Move to the bottom", "Stage a move of the selected player to the bottom of this list. Nothing is recorded until you press Apply all." },
+    place = { "To place", "Type the place to move the selected player to, then Set. You can also drag a player onto another row. Either way it is only a preview until you press Apply all." },
+    apply = { "Apply all", "Write every pending change to the shared ledger, one after another, each with the reason you typed. A reason is required: it is part of the record, with who made the change. If one is refused, the ones already written stay and the rest stay staged.\n\nThe Ledger is never rewritten: the old order stays visible." },
+    cancelmove = { "Discard", "Drop every pending change. Nothing was recorded." },
+    remove = { "Remove from the list", "Stage taking the selected player off this list. It is recorded when you press Apply all, with your reason.\n\nThe record keeps the place they were at, so they can be put back there." },
     award = { "Record a win", "Open the 'Record a win' form for the selected player: for a win a session didn't record (a failed hand-out, a corrected winner).\n\nThey move to the bottom of the list, as after any win. You choose the item and give a reason." },
     addall = { "Add everyone from your group and guild", "Add every player in your group and guild who isn't on this list yet, with their classes.\n\nThis writes one entry per player to the shared ledger, the same as the 'add' command, so only an officer (or a raid's Master Looter) can." },
     startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the guild master.\n\nDo this once, on the character that should be guild master. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
@@ -7613,6 +7613,119 @@ function M.History(ctx, filter)
     if out.total == 0 then
         out.empty = (#all == 0) and "Nothing has happened yet. Awards, moves and rule changes will appear here."
             or "Nothing matches. Clear the filter to see everything."
+    end
+    return out
+end
+
+---------------------------------------------------------------- staged list changes
+-- Changes to a list are STAGED first: a list of operations the table previews, applied together with one reason. `ops` is an array of
+-- { kind = "move", who, to } (to = the place the player takes once they are taken out of the line) and { kind = "remove", who }. They are
+-- applied in order, each against the list the earlier ones left, so what the preview shows (a simulation of exactly this) is what is written.
+
+local function indexOf(list, name)
+    for i, n in ipairs(list) do if n == name then return i end end
+end
+
+-- The order after the operations, and who was removed. Operations about a player no longer in the line are skipped.
+function M.Simulate(order0, ops)
+    local order, removed = {}, {}
+    for i, n in ipairs(order0) do order[i] = n end
+    for _, op in ipairs(ops or {}) do
+        local at = indexOf(order, op.who)
+        if at then
+            table.remove(order, at)
+            if op.kind == "move" then table.insert(order, math.min(math.max(op.to, 1), #order + 1), op.who)
+            else removed[#removed + 1] = op.who end
+        end
+    end
+    return order, removed
+end
+
+-- The table's rows as they would be: each at its new place (`shown`), a moved player marked (`moving`, still remembering `pos`), removed players gone.
+function M.Preview(rows, ops)
+    if not ops or #ops == 0 then return rows end
+    local byWho, order0, moved = {}, {}, {}
+    for i, r in ipairs(rows) do byWho[r.who] = r; order0[i] = r.who end
+    for _, op in ipairs(ops) do if op.kind == "move" then moved[op.who] = true end end
+    local out = {}
+    for i, who in ipairs(M.Simulate(order0, ops)) do
+        local c = {}
+        for k, v in pairs(byWho[who]) do c[k] = v end
+        c.shown, c.moving = i, moved[who] and true or nil
+        out[i] = c
+    end
+    return out
+end
+
+local function without(ops, who, kind)
+    local out = {}
+    for _, op in ipairs(ops) do
+        if not (op.who == who and (kind == nil or op.kind == kind)) then out[#out + 1] = op end
+    end
+    return out
+end
+
+-- Stage a move of `who` to a place (a place they already hold, as the earlier operations leave it, stages nothing and clears an earlier move of theirs).
+-- A player's earlier staged move is replaced where it stood in the sequence. Changes `ops` in place; returns whether anything is staged for them.
+function M.StageMove(ops, order0, who, to)
+    local at
+    for i, op in ipairs(ops) do if op.who == who and op.kind == "move" then at = i; break end end
+    local before = {}
+    for i, op in ipairs(ops) do if not at or i < at then before[#before + 1] = op end end
+    local base = M.Simulate(order0, before)
+    local place = indexOf(base, who)
+    if not place then return false end
+    to = math.floor(math.max(1, math.min(#base, tonumber(to) or place)))
+    if to == place then
+        if at then table.remove(ops, at) end
+        return false
+    end
+    if at then ops[at] = { kind = "move", who = who, to = to } else ops[#ops + 1] = { kind = "move", who = who, to = to } end
+    return true
+end
+
+-- Stage taking `who` off the list (a staged move of theirs is dropped: they are going).
+function M.StageRemove(ops, who)
+    local kept = without(ops, who)
+    for i = #ops, 1, -1 do ops[i] = nil end
+    for i, op in ipairs(kept) do ops[i] = op end
+    ops[#ops + 1] = { kind = "remove", who = who }
+end
+
+-- Drop everything staged for `who`.
+function M.Unstage(ops, who)
+    local kept = without(ops, who)
+    for i = #ops, 1, -1 do ops[i] = nil end
+    for i, op in ipairs(kept) do ops[i] = op end
+end
+
+function M.Staged(ops, who)
+    for _, op in ipairs(ops or {}) do if op.who == who then return op end end
+end
+
+-- One operation in words.
+function M.OpText(op)
+    local who = Identity.Display(op.who)
+    if op.kind == "move" then return ("%s to place %d"):format(who, op.to) end
+    return ("remove %s"):format(who)
+end
+
+-- The pending changes in words: "2 pending changes: Aldric Stormwind to place 1; remove Ilsa Greywater".
+function M.PendingText(ops)
+    if not ops or #ops == 0 then return "No pending changes. Move or remove players above, then apply them together." end
+    local parts = {}
+    for i, op in ipairs(ops) do parts[i] = M.OpText(op) end
+    return ("%d pending change%s: %s"):format(#ops, #ops == 1 and "" or "s", table.concat(parts, "; "))
+end
+
+-- The commands that write the staged changes, in order, each with the one reason; or nil and what is missing.
+function M.Commands(ops, reason)
+    reason = (tostring(reason or ""):gsub("^%s+", ""):gsub("%s+$", ""))
+    if not ops or #ops == 0 then return nil, "Nothing is staged: move or remove a player first." end
+    if reason == "" then return nil, "A change needs a reason: it is part of the record. Type it in the Reason box." end
+    local out = {}
+    for i, op in ipairs(ops) do
+        out[i] = op.kind == "move" and ("move %s %d %s"):format(op.who, op.to, reason) or ("remove %s %s"):format(op.who, reason)
     end
     return out
 end

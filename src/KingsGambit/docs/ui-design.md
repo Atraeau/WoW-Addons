@@ -245,7 +245,7 @@ screenshots).
 5. Retire the old tabs window, keeping `/gambit` for the Guild book and the Loot window for sessions.
 6. Add the in-place helpers.
 
-*Status (2026-11-06): step 3 is done. Step 4 is started: the navigation shell, Lists (the older standings page), the Ledger, and the former Tools forms split into Awards, Raids, People, Rules and Admin are in the game window. Practice as a section, the page renderer for the Guild book, and staged list changes are still to do.*
+*Status (2026-11-06): step 3 is done. Step 4 is started: the navigation shell, Lists (the older standings page), the Ledger, and the former Tools forms split into Awards, Raids, People, Rules and Admin are in the game window. Lists now stages several changes behind a pending-changes bar. Practice as a section and the page renderer for the Guild book are still to do.*
 
 ## 11. Open questions
 
