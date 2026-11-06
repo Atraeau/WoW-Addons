@@ -379,3 +379,23 @@ test("inInstance is true in a raid or dungeon and false in the open world, a bat
     eq(with(function() return true, "pvp" end):inInstance(), false)
     eq(with(nil):inInstance(), false)
 end)
+
+test("tradeableItems reads the loot-trade time from a bound item's tooltip, soonest first, and says nil when it can't read it", function()
+    local c = newClient(function(E)
+        E.BIND_TRADE_TIME_REMAINING = "You may trade this item with players that were also eligible to loot this item for the next %s."
+        local bag = {
+            { hyperlink = "|Hitem:1|h[Soon]|h", isBound = true, tip = "You may trade this item with players that were also eligible to loot this item for the next 12 min." },
+            { hyperlink = "|Hitem:2|h[Later]|h", isBound = true, tip = "You may trade this item with players that were also eligible to loot this item for the next 1 hour 59 min." },
+            { hyperlink = "|Hitem:3|h[Odd]|h", isBound = true, tip = "You may trade this item with players that were also eligible to loot this item for the next a while." },
+            { hyperlink = "|Hitem:4|h[Plain]|h", isBound = true, tip = "Soulbound" },
+            { hyperlink = "|Hitem:5|h[Free]|h", isBound = false, tip = "" },
+        }
+        E.C_Container = { GetContainerNumSlots = function(b) return b == 0 and #bag or 0 end, GetContainerItemInfo = function(b, s) return bag[s] end }
+        E.C_TooltipInfo = { GetBagItem = function(b, s) return { lines = { { leftText = "Name" }, { leftText = bag[s].tip } } } end }
+    end)
+    local items = c:tradeableItems()
+    eq(#items, 3, "only items with a trade window")
+    eq(items[1].link, "|Hitem:1|h[Soon]|h"); eq(items[1].seconds, 12 * 60)
+    eq(items[2].seconds, 3600 + 59 * 60)
+    eq(items[3].link, "|Hitem:3|h[Odd]|h"); eq(items[3].seconds, nil, "an unreadable time is nil, and sorts last")
+end)

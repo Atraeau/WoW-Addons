@@ -12,7 +12,7 @@ end
 
 H.section("Guild book")
 test("the sections start with Lists and the Ledger, each explained", function()
-    eq(GuildBook.SECTIONS[1].id, "lists"); eq(GuildBook.SECTIONS[2].id, "ledger"); eq(GuildBook.SECTIONS[2].label, "Ledger")
+    eq(GuildBook.SECTIONS[1].id, "lists"); eq(GuildBook.SECTIONS[2].id, "thisraid"); eq(GuildBook.SECTIONS[3].id, "ledger"); eq(GuildBook.SECTIONS[3].label, "Ledger")
     for _, s in ipairs(GuildBook.SECTIONS) do assert(s.label and s.tip, "every section has a label and a tip") end
 end)
 
@@ -512,4 +512,45 @@ test("the Raids panel says where the raid stands and what can be done about it",
     -- not running a raid, or no writer at all
     local other = GuildBook.RaidStart({ attendance = nil, client = sim.client })
     eq(other.available, false); eq(other.canStart, false)
+end)
+
+H.section("This raid: the open raid in numbers")
+test("the open raid: not started, then how long it has run, what is held with its trade time, and what has been handed out", function()
+    local sim, ctx = raid()
+    local r = GuildBook.RaidNow(ctx)
+    eq(r.running, true); eq(r.started, false); eq(r.mine, true); eq(r.handedOut, 0)
+    assert(r.lines[2]:find("Not started yet"), r.lines[2])
+    -- a boss dies and its loot is held (not handed out yet): the raid starts, two items are held, and their trade window runs two hours
+    sim:killBoss(nil, true)
+    sim.client:advance(1800)
+    r = GuildBook.RaidNow(ctx)
+    eq(r.started, true); eq(r.elapsed, 1800)
+    assert(r.lines[2]:find("Started 30 minutes ago"), r.lines[2])
+    assert(#r.held >= 1, "the held loot is counted")
+    assert(r.lines[4]:find("Still to hand out: %d+ item"), r.lines[4])
+    assert(r.nextExpiry and r.nextExpiry.seconds == 7200 - 1800, "trade time left: " .. tostring(r.nextExpiry and r.nextExpiry.seconds))
+    assert(r.lines[5]:find("earliest trade window closes in 1 hour"), r.lines[5])
+    local held = #r.held
+    -- hand it all out: the awards count, and nothing is held
+    sim.autoLearner = true
+    assert(sim:handOut()); assert(sim:runUntil("review", 900)); assert(sim.session:confirm())
+    r = GuildBook.RaidNow(ctx)
+    assert(r.handedOut >= held, "everything held has been handed out: " .. r.handedOut .. " of " .. held)
+    eq(r.awards + r.disenchants, r.handedOut)
+    eq(#r.held, 0); assert(r.lines[4]:find("nothing held"), r.lines[4])
+    -- the raid's part of the ledger starts when it started, and has the awards in it
+    local h = GuildBook.History(ctx, r.filter)
+    assert(h.total >= r.handedOut, "the raid's ledger has what was handed out")
+    local before = GuildBook.History(ctx, { kind = "happened" }).total
+    assert(h.total <= before)
+end)
+
+test("someone else's raid shows its length and what was handed out, but not what is held", function()
+    local sim, ctx = raid()
+    ctx.client = sim.client
+    sim:killBoss(nil, false)
+    local other = setmetatable({ me = function() return "Somebody_Else" end }, { __index = sim.client })
+    local view = GuildBook.RaidNow({ engine = sim.engine, client = other, sim = nil })
+    eq(view.mine, false); assert(view.lines[4]:find("only known to the Master Looter"), view.lines[4]); eq(view.held, nil)
+    eq(GuildBook.RaidNow({ engine = sim.engine, client = sim.client }).mine, true)
 end)

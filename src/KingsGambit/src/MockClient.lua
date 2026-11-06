@@ -399,6 +399,15 @@ function M.New(opts)
 
     function h:setTradeable(link, seconds) S.tradeable[link] = clock + seconds end
 
+    -- The items still inside their trade window, with the seconds left: { { link, seconds } } (soonest to close first).
+    function h:tradeableItems()
+        local out = {}
+        for link, exp in pairs(S.tradeable) do
+            if exp > clock then out[#out + 1] = { link = link, seconds = exp - clock } end
+        end
+        table.sort(out, function(a, b) if a.seconds ~= b.seconds then return a.seconds < b.seconds end return a.link < b.link end)
+        return out
+    end
     function h:tradeableUntil(link)
         local exp = S.tradeable[link]
         if exp and exp > clock then return exp - clock end

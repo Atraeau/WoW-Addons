@@ -136,7 +136,7 @@ function M.BagLinks()
     local out, stats = {}, { seen = 0, bound = 0, tradeable = 0 }
     local C = C_Container
     if not (C and C.GetContainerNumSlots and C.GetContainerItemInfo) then stats.unavailable = true; return out, stats end
-    local pattern = BIND_TRADE_TIME_REMAINING and ("^" .. BIND_TRADE_TIME_REMAINING:gsub("([%(%)%.%+%-%*%?%[%]%^%$])", "%%%1"):gsub("%%%%s", ".+") .. "$")
+    local pattern = BIND_TRADE_TIME_REMAINING and ("^" .. BIND_TRADE_TIME_REMAINING:gsub("([%%%(%)%.%+%-%*%?%[%]%^%$])", "%%%1"):gsub("%%%%s", ".+") .. "$")
     local function tradeWindow(bag, slot)
         if not (pattern and C_TooltipInfo and C_TooltipInfo.GetBagItem) then return false end
         local ok, data = pcall(C_TooltipInfo.GetBagItem, bag, slot)

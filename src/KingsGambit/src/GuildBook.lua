@@ -7,6 +7,7 @@
 --   M.SECTIONS                            the navigation column, in order
 --   M.History(ctx, filter)                the ledger as readable sentences, newest first, filtered (the Ledger section)
 --   M.Detail(ctx, id)                     one entry as the raw record: kind, writer, time, id, chain and every field it carries
+--   M.RaidNow(ctx)                        the open raid: how long, what has been handed out, what is held and for how long it can be traded
 --   M.Stats(ctx, listId)                  who held which place for how long, wins and last win, by replaying the list with timestamps
 --   M.Segments(text, people)              a sentence cut into plain words and people (a person carries their class color)
 --   M.Ago(now, ts)                        "3 days ago"
@@ -20,6 +21,7 @@ local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migr
 -- Every action belongs to exactly one section (the old History form is the Ledger section now).
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
+    { id = "thisraid", label = "This raid", tip = "The raid that is open now: how long it has run, what has been handed out, what is still to hand out and how long it can be traded, and its part of the ledger." },
     { id = "ledger", label = "Ledger", tip = "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     { id = "stats", label = "Stats", tip = "Who is at which place and for how long, who has won and when, from the record." },
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
@@ -211,7 +213,8 @@ function M.History(ctx, filter)
     local view = ctx.engine:View()
     local all = {}
     for _, ev in ipairs(view.applied) do
-        if not filter.list or ev.list == filter.list or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits" then all[#all + 1] = ev end
+        local onList = (not filter.list and not filter.lists) or ev.list == filter.list or (filter.lists and filter.lists[ev.list])
+        if (onList or ev.type == "Declined" or ev.type == "ItemClasses" or ev.type == "ItemSuits") and (not filter.since or ev.ts >= filter.since) then all[#all + 1] = ev end
     end
     for _, ev in ipairs(view.authApplied or {}) do
         if ev.type == "SetDisenchanter" or ev.type == "SetRaidList" or ev.type == "SetListPolicy" then all[#all + 1] = ev end
@@ -352,6 +355,90 @@ function M.PlaceHistory(stats, who)
         local h = hist[i]
         out[#out + 1] = { place = h.place, from = h.from, to = h.to, left = h.left,
             text = ("place %d for %s, until %s%s"):format(h.place, M.Span(h.to - h.from), M.Ago(stats.now, h.to), h.left and " (taken off the list)" or "") }
+    end
+    return out
+end
+
+---------------------------------------------------------------- the raid that is open now (the This raid section)
+-- What the Master Looter holds to hand out: { { link, seconds (left to trade it, nil if not known) } }, soonest to close first. In practice, the practice
+-- raid's held loot; in the game, the bind-on-pickup items in the bags still inside their trade window.
+local function heldLoot(ctx)
+    local out = {}
+    if ctx.sim then
+        for _, h in ipairs(ctx.sim.held or {}) do
+            local link = h.item and h.item.name
+            if link then out[#out + 1] = { link = link, seconds = ctx.client:tradeableUntil(link) } end
+        end
+    elseif ctx.client.tradeableItems then
+        for _, it in ipairs(ctx.client:tradeableItems()) do out[#out + 1] = it end
+    end
+    table.sort(out, function(a, b)
+        if (a.seconds or math.huge) ~= (b.seconds or math.huge) then return (a.seconds or math.huge) < (b.seconds or math.huge) end
+        return tostring(a.link) < tostring(b.link)
+    end)
+    return out
+end
+
+local function itemName(link) return tostring(link):match("%[(.-)%]") or tostring(link) end
+
+-- The raid that is open now (the one this character runs, else the first), in numbers and words. Handed out = the Master Looter's awards and
+-- disenchants on the raid's list since it started; what is held and how long it can be traded come from the Master Looter's own bags (so only they see them).
+-- `filter` is what the section's ledger subset uses: this raid's entries only.
+function M.RaidNow(ctx)
+    local engine = ctx.engine
+    local view = engine:View()
+    local now = ctx.client:serverTime()
+    local me = ctx.client:me()
+    local raids = engine:ActiveRaids()
+    local raid
+    for _, r in ipairs(raids) do if r.ml == me then raid = r end end
+    raid = raid or raids[1]
+    local out = { running = raid ~= nil, now = now, lines = {} }
+    if not raid then
+        out.lines[1] = "No raid is open."
+        return out
+    end
+    local list = engine:ListOfRaid(raid) or "main"
+    local entries = view.attendance[raid.id]
+    out.raid, out.ml, out.list, out.mine = raid.id, raid.ml, list, raid.ml == me
+    out.since = entries and entries[1].ts
+    out.started = out.since ~= nil
+    out.elapsed = out.started and (now - out.since) or nil
+    out.filter = { kind = "happened", list = list, lists = { [list] = true, [engine:OffListOf(list)] = true }, since = out.since or raid.start, limit = 300 }
+    local awards, disenchants = 0, 0
+    for _, ev in ipairs(view.applied) do
+        if ev.ts >= (out.since or raid.start) and ev.author == raid.ml and (ev.list == list or ev.list == engine:OffListOf(list)) then
+            if ev.type == "Award" then awards = awards + 1 elseif ev.type == "Disenchant" then disenchants = disenchants + 1 end
+        end
+    end
+    out.awards, out.disenchants, out.handedOut = awards, disenchants, awards + disenchants
+    local present = 0
+    for _ in pairs(engine:Present(raid.id)) do present = present + 1 end
+    out.present = present
+    out.lines[1] = ("Raid %s on the %s list, run by %s."):format(raid.id, list, Identity.Display(raid.ml))
+    if out.started then
+        out.lines[2] = ("Started %s ago, at the first kill. %d player%s in the raid now."):format(M.Span(out.elapsed), present, present == 1 and "" or "s")
+    else
+        out.lines[2] = "Not started yet: it starts at the first enemy killed in an instance, or when the Master Looter says so."
+    end
+    out.lines[3] = ("Handed out: %d (%d awarded, %d disenchanted)."):format(out.handedOut, awards, disenchants)
+    if out.mine then
+        out.held = heldLoot(ctx)
+        if #out.held == 0 then
+            out.lines[4] = "Still to hand out: nothing held."
+        else
+            out.lines[4] = ("Still to hand out: %d item%s you hold."):format(#out.held, #out.held == 1 and "" or "s")
+            local unknown = 0
+            for _, it in ipairs(out.held) do if not it.seconds then unknown = unknown + 1 end end
+            local soonest = out.held[1]
+            if soonest and soonest.seconds then
+                out.nextExpiry = { seconds = soonest.seconds, link = soonest.link }
+                out.lines[5] = ("The earliest trade window closes in %s (%s)."):format(M.Span(soonest.seconds), itemName(soonest.link))
+            end
+            if unknown > 0 then out.lines[#out.lines + 1] = ("The trade time of %d item%s can't be read."):format(unknown, unknown == 1 and "" or "s") end
+        end
+    else
+        out.lines[4] = "What is still to hand out is only known to the Master Looter."
     end
     return out
 end

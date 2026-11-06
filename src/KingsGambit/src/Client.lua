@@ -18,7 +18,7 @@ M.METHODS = {
     -- communication
     "registerPrefix", "send", "pending", "whisper", "announce", "serialize", "deserialize",
     -- trade
-    "trade", "tradeableUntil",
+    "trade", "tradeableUntil", "tradeableItems",
     -- environment and storage
     "storage", "playSound", "print", "log",
     -- events

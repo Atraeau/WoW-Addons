@@ -563,6 +563,7 @@ function Sim:killBoss(name, hold)
     end
     for _, item in ipairs(dropped) do
         self.held[#self.held + 1] = { item = item, boss = boss.name, seen = self.client:serverTime() }
+        self.client:setTradeable(item.name, 2 * 3600) -- a bind-on-pickup drop can be traded for two hours
     end
     self:note(boss.name .. " died and dropped " .. #dropped .. " item(s)")
     local why

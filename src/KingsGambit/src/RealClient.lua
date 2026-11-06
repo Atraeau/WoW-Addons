@@ -604,6 +604,44 @@ function M.New(opts)
     -- FIELD: needs a tooltip scan ("You may trade this item ... within the next X"); not yet implemented.
     function c:tradeableUntil(_) return nil end
 
+    -- The bind-on-pickup items in the bags that can still be traded to the players who were eligible to loot them: { { link, seconds } } (seconds is nil if
+    -- the tooltip's time can't be read), soonest to close first. The window is told by the item's tooltip (BIND_TRADE_TIME_REMAINING, "... for the next
+    -- 1 hour 59 min"). FIELD: confirm the tooltip text and that C_TooltipInfo.GetBagItem carries it on this client.
+    function c:tradeableItems()
+        local out = {}
+        local C = E.C_Container
+        if not (C and C.GetContainerNumSlots and C.GetContainerItemInfo and E.C_TooltipInfo and E.C_TooltipInfo.GetBagItem and E.BIND_TRADE_TIME_REMAINING) then return out end
+        -- (the "%" of the %s is escaped too, so the placeholder can be found and made a capture)
+        local pattern = "^" .. E.BIND_TRADE_TIME_REMAINING:gsub("([%%%(%)%.%+%-%*%?%[%]%^%$])", "%%%1"):gsub("%%%%s", "(.+)") .. "$"
+        for bag = 0, 5 do
+            for slot = 1, (C.GetContainerNumSlots(bag) or 0) do
+                local info = C.GetContainerItemInfo(bag, slot)
+                if info and info.hyperlink and info.isBound then
+                    local ok, data = pcall(E.C_TooltipInfo.GetBagItem, bag, slot)
+                    if ok and data and data.lines then
+                        for _, line in ipairs(data.lines) do
+                            local left = safe(line.leftText)
+                            local rest = type(left) == "string" and left:match(pattern)
+                            if rest then
+                                local h = tonumber(rest:match("(%d+)%s*[Hh]our")) or 0
+                                local m = tonumber(rest:match("(%d+)%s*[Mm]in")) or 0
+                                local s = tonumber(rest:match("(%d+)%s*[Ss]ec")) or 0
+                                local seconds = (h > 0 or m > 0 or s > 0) and (h * 3600 + m * 60 + s) or nil
+                                out[#out + 1] = { link = info.hyperlink, seconds = seconds }
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        table.sort(out, function(a, b)
+            if (a.seconds or math.huge) ~= (b.seconds or math.huge) then return (a.seconds or math.huge) < (b.seconds or math.huge) end
+            return a.link < b.link
+        end)
+        return out
+    end
+
     ---------------------------------------------------------------- environment and storage
     function c:storage()
         E.KingsGambitDB = E.KingsGambitDB or {}

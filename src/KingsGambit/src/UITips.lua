@@ -40,6 +40,7 @@ M.TEXT = {
     navstats = { "Stats", "Who is at which place and for how long, who has won and when, worked out from the record. Click a player to see every place they have held." },
     raidautostart = { "Start by itself", "Ticked (the default): the raid starts by itself when the first enemy dies inside an instance, boss or trash. Unticked: you take control, and nothing starts it but Start the raid now. Kept for this character." },
     raidstartnow = { "Start the raid now", "Start the raid yourself, wherever it is (a world boss, for one): everyone in the group at this moment is written down as being there, and the group is followed from then on." },
+    navthisraid = { "This raid", "The raid that is open now: how long it has run, how many items have been handed out, what the Master Looter still holds to hand out and how long it can be traded, and the raid's own part of the ledger." },
     navledger = { "Ledger", "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },

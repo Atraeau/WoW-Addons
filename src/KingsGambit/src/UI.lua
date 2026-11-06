@@ -263,6 +263,7 @@ function M:Refresh()
     end
     if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     if M.tab == "stats" then return M.RefreshStats(w.pages.stats, ctx) end
+    if M.tab == "thisraid" then return M.RefreshThisRaid(w.pages.thisraid, ctx) end
     local p = w.pages.lists
     local model = M.Model(ctx.engine, ctx.client, self.list)
     self.list = model.list
@@ -663,6 +664,71 @@ function M.RefreshHistory(p, ctx)
     p.detail:SetText(detail and M.DetailText(detail) or "Click an entry to see exactly what was written: who wrote it, when, its id and every field.")
     p.countText:SetText(h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total))
     if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end
+end
+
+-- ---- The This raid section: the open raid in numbers, and its part of the ledger ------------------------------------------------
+
+function M:BuildThisRaid(parent)
+    local p = CreateFrame("Frame", nil, parent)
+    p:SetAllPoints()
+    p.summary = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    p.summary:SetPoint("TOPLEFT", 4, 0); p.summary:SetWidth(410); p.summary:SetHeight(100)
+    p.summary:SetJustifyH("LEFT"); p.summary:SetJustifyV("TOP"); p.summary:SetWordWrap(true)
+    local head = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    head:SetPoint("TOPLEFT", 4, -110); head:SetText("What has happened in this raid")
+    local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
+    if okInset and inset then inset:SetPoint("TOPLEFT", -2, -124); inset:SetPoint("BOTTOMRIGHT", 2, 22) end
+    local okBox = pcall(function()
+        local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
+        local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
+        box:SetPoint("TOPLEFT", 4, -128)
+        box:SetPoint("BOTTOMRIGHT", -22, 26)
+        bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
+        bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
+        local view = CreateScrollBoxListLinearView()
+        view:SetElementExtent(HIST_H)
+        view:SetElementInitializer("Button", M.InitHistoryRow)
+        ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
+        p.scrollBox = box
+    end)
+    if not okBox then
+        local scroll = CreateFrame("ScrollFrame", nil, p)
+        scroll:SetPoint("TOPLEFT", 4, -128); scroll:SetPoint("BOTTOMRIGHT", -26, 26)
+        p.child = CreateFrame("Frame", nil, scroll)
+        p.child:SetSize(380, 1)
+        scroll:SetScrollChild(p.child)
+        p.lines = {}
+    end
+    p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.countText:SetPoint("BOTTOMRIGHT", -6, 4)
+    p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    p.message:SetPoint("TOPLEFT", 14, -146); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
+    return p
+end
+
+function M.RefreshThisRaid(p, ctx)
+    local raid = GuildBook.RaidNow(ctx)
+    p.summary:SetText(table.concat(raid.lines, "\n"))
+    local h = raid.running and GuildBook.History(ctx, raid.filter) or { entries = {}, total = 0, shown = 0 }
+    if p.scrollBox then
+        local data = CreateDataProvider()
+        for _, e in ipairs(h.entries) do data:Insert(e) end
+        p.scrollBox:SetDataProvider(data, ScrollBoxConstants and ScrollBoxConstants.RetainScrollPosition)
+    else
+        for i, e in ipairs(h.entries) do
+            local line = p.lines[i]
+            if not line then
+                line = CreateFrame("Button", nil, p.child)
+                line:SetSize(380, HIST_H); line:SetPoint("TOPLEFT", 0, -(i - 1) * HIST_H)
+                p.lines[i] = line
+            end
+            M.InitHistoryRow(line, e); line:Show()
+        end
+        for i = #h.entries + 1, #p.lines do p.lines[i]:Hide() end
+        p.child:SetHeight(math.max(#h.entries * HIST_H, 1))
+    end
+    p.countText:SetText(raid.running and (h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total)) or "")
+    if raid.running and h.total == 0 then p.message:SetText("Nothing has happened in this raid yet."); p.message:Show() else p.message:Hide() end
 end
 
 -- ---- The Raids section's panel: when the raid starts -------------------------------------------------------------------------------
@@ -1090,7 +1156,7 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content) }
+    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content), thisraid = M:BuildThisRaid(content) }
     for _, s in ipairs(GuildBook.SECTIONS) do
         if s.actions then
             w.pages[s.id] = UITools.Build(content, M, s)
