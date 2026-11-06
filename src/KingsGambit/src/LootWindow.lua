@@ -63,10 +63,30 @@ local function setShown(frame, on)
 end
 
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
+-- Show a button as the player's current choice without changing its text: the button stays lit (the game's own "pressed in" highlight, which is a shape
+-- change, not just a color) and its label turns green. Un-marking puts the label back the way the button's state makes it (normal or grayed out).
+function M.Mark(b, on)
+    on = on and true or false
+    if on then
+        if b.LockHighlight then b:LockHighlight() end
+    elseif b.UnlockHighlight then
+        b:UnlockHighlight()
+    end
+    local fs = b.GetFontString and b:GetFontString()
+    if fs and fs.SetTextColor and on then
+        fs:SetTextColor(0.3, 1, 0.3)
+    elseif fs and b.marked and not on then
+        local font = b.IsEnabled and b:IsEnabled() and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
+        if font and fs.SetFontObject then fs:SetFontObject(font) end
+    end
+    b.marked = on
+end
+
 local function setup(b, vb, label)
     b.view = vb
     b:SetText(label)
     if b.SetEnabled then b:SetEnabled(vb.enabled) end
+    M.Mark(b, vb.selected)
 end
 
 local function tooltipOf(b)
@@ -381,7 +401,7 @@ function M.Refresh(f, ctx, ui)
                     local vb = vr.buttons[j]
                     local b = row.buttons[j]
                     if vb then
-                        setup(b, vb, vb.selected and ("[" .. vb.label .. "]") or vb.label)
+                        setup(b, vb, vb.label)
                         layout[#layout + 1] = { b, 16 + (j - 1) * 72, y - 17 }; want[b] = true
                     end
                 end

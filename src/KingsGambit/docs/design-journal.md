@@ -2086,6 +2086,13 @@ item. It reaches the window as `turn.targets` (and `row.giftTargets`) in the sha
 list changes and drops a choice that is no longer on offer. If nobody in the group can have the item, the window says so and leaves Keep (if allowed) and Withdraw. The same list serves
 "Claim and gift" in the salvage round.
 
+### Your choice is shown by highlighting the button, not by changing its text (2026-11-06)
+
+In the game window a chosen answer was shown by wrapping its text in brackets ("[Need]"), which changes the label, can overflow a narrow button, and reads as part of the name. The chosen
+button is now **lit with the game's own highlight (the "pressed in" frame, a shape change, so color is not the only cue) and its label turns green**, and the label itself never changes.
+Un-choosing puts the label back to what the button's state makes it (normal, or grayed out). The line under the item still says "You: Need". This is the same idea the page already uses
+(an outline and a check mark); the shared view only says `selected`, and each place draws it.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

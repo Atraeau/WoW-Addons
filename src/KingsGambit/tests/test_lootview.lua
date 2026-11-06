@@ -355,3 +355,24 @@ test("a gift with nobody who can have it says so, and Keep or Withdraw remain", 
     assert(v.turn.text:find("nobody in your group can have"), v.turn.text)
     eq(v.turn.buttons[2].enabled, true, "Keep is open"); eq(v.turn.buttons[3].label, "Withdraw")
 end)
+
+H.section("Loot window: showing your choice")
+test("a chosen answer is lit and colored, and its text is never changed; un-choosing restores it", function()
+    local LootWindow = SK.modules.LootWindow
+    local calls, color, font = {}, nil, nil
+    local fs = { SetTextColor = function(_, r, g, b) color = { r, g, b } end, SetFontObject = function(_, f) font = f end }
+    local b = { enabled = true, text = "Need" }
+    function b:LockHighlight() calls[#calls + 1] = "lock" end
+    function b:UnlockHighlight() calls[#calls + 1] = "unlock" end
+    function b:GetFontString() return fs end
+    function b:IsEnabled() return self.enabled end
+    function b:GetNormalFontObject() return "normalfont" end
+    function b:GetDisabledFontObject() return "disabledfont" end
+    LootWindow.Mark(b, true)
+    eq(calls[#calls], "lock"); eq(color[2], 1, "green label"); eq(b.text, "Need", "the text is untouched")
+    LootWindow.Mark(b, false)
+    eq(calls[#calls], "unlock"); eq(font, "normalfont", "the label goes back to the button's own font")
+    b.enabled = false
+    LootWindow.Mark(b, true); LootWindow.Mark(b, false)
+    eq(font, "disabledfont", "a grayed-out button goes back to the grayed-out font")
+end)
