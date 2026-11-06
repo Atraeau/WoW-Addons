@@ -90,7 +90,7 @@ Regenerate it (and the LSP definitions) any time — see [`docs/README.md`](docs
 # In game: /apiexport  then  /reload   (writes the dump to SavedVariables)
 .\scripts\generate-api-docs.ps1          # -> docs/api/
 .\scripts\generate-lua-definitions.ps1   # -> types/WowForeverAPI.lua
-.\scripts\generate-console-docs.ps1      # -> docs/console-commands.md (every console command and CVar the client lists)
+.\scripts\generate-console-docs.ps1      # -> docs/console-commands.md (every console command and CVar the client lists, sorted by topic; the topic rules are in scripts/console-groups.json)
 ```
 
 ## Quick start
