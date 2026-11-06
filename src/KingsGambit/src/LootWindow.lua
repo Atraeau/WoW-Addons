@@ -64,8 +64,8 @@ end
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
 -- Show a button as the player's current choice the way the game's own interface shows a selection, without changing its text and without relying on a
 -- color change of the text. (Researched in the game's UI source: tabs swap to an "active" look and a white label; toggled panel buttons are held in the
--- pressed state; list rows get a translucent white band.) Two cues on the button: it is held pressed in, and its label is white (as on an active tab); the
--- row's band and tick (see Refresh) say which item it belongs to. Un-marking puts the button back completely: released, and the label in the color its state
+-- pressed state.) Two cues on the button: it is held pressed in, and its label is white (as on an active tab); the status and tick on the item's own line
+-- (see Refresh) say what it is. Un-marking puts the button back completely: released, and the label in the color its state
 -- gives it (the game's gold, or gray when unavailable), so nothing of a previous round is left on a button that is reused for the next one.
 local GOLD, GRAY = { 1, 0.82, 0 }, { 0.5, 0.5, 0.5 }
 function M.Mark(b, on)
@@ -86,19 +86,6 @@ function M.Mark(b, on)
         end
     end
     b.marked = on
-end
-
--- The band behind an answered item's row: the same translucent white band the game puts behind the selected row of a list (its reputation panel and
--- dropdown lines), from the game's own atlas when it has it, else a plain white fill.
-local function makeBand(parent)
-    local t = parent:CreateTexture(nil, "ARTWORK")
-    local ok = pcall(t.SetAtlas, t, "charactercreate-customize-dropdown-linemouseover-middle")
-    if not ok or not t.GetAtlas or not t:GetAtlas() then
-        if t.SetColorTexture then t:SetColorTexture(1, 1, 1, 1) end
-    end
-    if t.SetVertexColor then t:SetVertexColor(1, 1, 1) end
-    t:SetAlpha(0.2)
-    return t
 end
 
 local function setup(b, vb, label)
@@ -207,8 +194,6 @@ function M.Build(ui)
     f.rows = {}
     for i = 1, MAX do
         local row = { }
-        -- the band behind an answered item sits in the artwork layer: above the window's own background, below the text and buttons
-        row.band = makeBand(f)
         row.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         row.text:SetWidth(CW - 160); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
         -- Hover for the item's tooltip; shift-click puts the link in chat, as anywhere in the game.
@@ -444,7 +429,6 @@ function M.Refresh(f, ctx, ui)
             local row, vr = f.rows[i], v.rows[i]
             if vr then
                 row.id, row.tip = vr.id, vr.tip
-                local top = y
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
@@ -470,13 +454,7 @@ function M.Refresh(f, ctx, ui)
                     row.note:SetText((vr.segments and M.Rich(vr.segments)) or vr.note or "")
                     place(row.note, PAD); y = y - textH(row.note, 12)
                 end
-                local bottom = y - 6
-                -- an answered item (or one you won) has the selected-row band behind it, like a selected row in the game's lists
-                if vr.state == "answered" or vr.mineWon then
-                    row.band:SetSize(WIDTH - 2 * (PAD - 8), (top + 4) - bottom)
-                    layout[#layout + 1] = { row.band, PAD - 8, top + 4 }; want[row.band] = true
-                end
-                y = bottom - 4
+                y = y - 6 - 4
             end
         end
         if (v.hidden or 0) > 0 then
@@ -532,7 +510,7 @@ function M.Refresh(f, ctx, ui)
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
         everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.status
-        everything[#everything + 1] = r.note; everything[#everything + 1] = r.band
+        everything[#everything + 1] = r.note
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
     end
     -- A button that is not drawn this time (a new round, a finished session) is cleared, so what was chosen last round never shows on it.

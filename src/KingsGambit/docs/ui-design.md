@@ -190,7 +190,8 @@ A window that works but looks cramped fails the "professional" bar, so these hol
 4. **Hierarchy.** The item (what is being decided) is the most prominent; status and counts are small and muted; one short sentence says what to do now (long explanations live in tooltips).
 5. **Alignment.** Left edges line up down the window; a status that belongs to an item is right-aligned on the item's own line (name left, what you answered right, the tick set directly against its text), so the eye reads name, status, then choices. No narrow side columns where text has to wrap.
 6. **Consistent controls.** Buttons in a row are one size; the primary action of a group is in the same place every time (Confirm on the right of its heading).
-7. **State is shown by the game's own idioms** (a selected-row band, a toggle button held pressed in), never by a color change of text alone, and a control that isn't drawn is cleared so nothing carries over.
+7. **State is shown by the game's own idioms** (a toggle button held pressed in, a tick beside its status), never by a color change of text alone, and a control that isn't drawn is cleared so nothing carries over.
+8. **A state mark must tell things apart.** A highlight that applies to every row at once says nothing and only adds weight (the selected-row band was tried, and when every item was answered the whole window went gray); use a mark only where it distinguishes one thing from another.
 
 ## 7. How the website simulator stays the same as the game
 
