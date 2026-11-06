@@ -25,7 +25,7 @@ M.SECTIONS = {
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
-        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidautostart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
+        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
@@ -353,6 +353,30 @@ function M.PlaceHistory(stats, who)
         out[#out + 1] = { place = h.place, from = h.from, to = h.to, left = h.left,
             text = ("place %d for %s, until %s%s"):format(h.place, M.Span(h.to - h.from), M.Ago(stats.now, h.to), h.left and " (taken off the list)" or "") }
     end
+    return out
+end
+
+---------------------------------------------------------------- when the raid starts (the Raids section's panel)
+-- Where the Master Looter's raid stands and what they may do about it, as text and flags for the window: { available, running, started, auto, canStart,
+-- text }. `ctx.attendance` is the Master Looter's attendance writer (Attendance.lua).
+function M.RaidStart(ctx)
+    local a = ctx.attendance
+    if not a then return { available = false, running = false, auto = true, canStart = false, text = "Not available here." } end
+    local s = a:status()
+    local out = { available = true, running = s.running, started = s.started, auto = s.auto }
+    if not s.running then
+        out.text = "You are not running a raid. An officer opens one for you in the form above, and then it can be started here."
+    elseif s.started then
+        local now = ctx.client:serverTime()
+        out.text = ("Started %s. %d player%s in the raid now."):format(M.Ago(now, s.since or now), s.present or 0, (s.present or 0) == 1 and "" or "s")
+    elseif not s.auto then
+        out.text = "Waiting for you: the raid starts when you press Start the raid now."
+    elseif s.inInstance then
+        out.text = "Waiting for the first enemy killed. The raid starts by itself then, or press Start the raid now."
+    else
+        out.text = "Not in an instance, so nothing starts it by itself. For a world boss, press Start the raid now."
+    end
+    out.canStart = s.running and not s.started
     return out
 end
 

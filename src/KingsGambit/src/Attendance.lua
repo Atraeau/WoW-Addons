@@ -99,6 +99,20 @@ function M.New(engine, client, host)
         return a:sync()
     end
 
+    -- Where the raid I run stands, for the window: { running = I run an open raid, started, auto, inInstance, since (when it started), present (how many), raid }.
+    function a:status()
+        local r = myRaid()
+        local s = { running = r ~= nil, auto = a:auto(), inInstance = (not client.inInstance) or client:inInstance() }
+        if r then
+            local entries = engine:View().attendance[r.id]
+            s.raid, s.started, s.since = r.id, (official[r.id] or entries ~= nil) and true or false, entries and entries[1].ts
+            local n = 0
+            for _ in pairs(engine:Present(r.id)) do n = n + 1 end
+            s.present = n
+        end
+        return s
+    end
+
     -- Has the raid I run officially started (the ledger has attendance for it)?
     function a:started()
         local r = myRaid()

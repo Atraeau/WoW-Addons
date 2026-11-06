@@ -47,7 +47,7 @@ end
 -- in-memory ledger: nothing in it is saved, sent to anyone, or mixed with the real one.
 function M.Ctx()
     if M.practice then return M.practice end
-    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks }
+    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks, attendance = SK.attendance }
 end
 
 M.SIZES = { 5, 10, 20, 40 }
@@ -118,7 +118,7 @@ function M:StartPractice()
     -- The commands find the running loot session through `host.session`: here it is whatever the simulation is running.
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host, attendance = sim.attendance })
-    M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host }
+    M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host, attendance = sim.attendance }
     -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
     local total, unknown = 0, 0
     for id in pairs(sim.raid and sim.raid.items or {}) do
@@ -256,7 +256,11 @@ function M:Refresh()
     for _, s in ipairs(GuildBook.SECTIONS) do setShown(w.pages[s.id], M.tab == s.id) end
     w.output:SetText(M.OutputText())
     local section = GuildBook.Section(M.tab)
-    if section and section.actions then return UITools.Refresh(w.pages[M.tab], ctx, M) end
+    if section and section.actions then
+        UITools.Refresh(w.pages[M.tab], ctx, M)
+        if M.tab == "raids" then M.RefreshRaidStart(w.pages.raids, ctx) end
+        return
+    end
     if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     if M.tab == "stats" then return M.RefreshStats(w.pages.stats, ctx) end
     local p = w.pages.lists
@@ -661,6 +665,54 @@ function M.RefreshHistory(p, ctx)
     if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end
 end
 
+-- ---- The Raids section's panel: when the raid starts -------------------------------------------------------------------------------
+
+-- At the foot of the Raids page: where this raid stands, whether it starts by itself, and a button to start it now.
+function M.BuildRaidStart(page)
+    local p = CreateFrame("Frame", nil, page)
+    p:SetPoint("BOTTOMLEFT", 0, 0); p:SetPoint("BOTTOMRIGHT", 0, 0); p:SetHeight(104)
+    local line = p:CreateTexture(nil, "ARTWORK")
+    line:SetColorTexture(1, 1, 1, 0.12); line:SetHeight(1)
+    line:SetPoint("TOPLEFT", 0, 0); line:SetPoint("TOPRIGHT", 0, 0)
+    local title = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    title:SetPoint("TOPLEFT", 4, -12); title:SetText("When the raid starts")
+    p.status = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.status:SetPoint("TOPLEFT", 4, -34); p.status:SetWidth(410); p.status:SetHeight(28)
+    p.status:SetJustifyH("LEFT"); p.status:SetJustifyV("TOP"); p.status:SetWordWrap(true)
+    local label = "Start by itself at the first enemy killed in an instance"
+    local okc, check = pcall(CreateFrame, "CheckButton", nil, p, "UICheckButtonTemplate")
+    if okc and check then
+        check:SetPoint("TOPLEFT", 0, -66)
+        check:SetScript("OnClick", function(self) M:Command("raid autostart " .. (self:GetChecked() and "on" or "off")) end)
+        local text = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        text:SetPoint("LEFT", check, "RIGHT", 2, 1); text:SetWidth(240); text:SetJustifyH("LEFT"); text:SetText(label)
+        p.check = check
+    else
+        p.check = button(p, "Start by itself: on", 150)
+        p.check:SetPoint("TOPLEFT", 4, -68)
+        p.check:SetScript("OnClick", function() M:Command("raid autostart " .. (p.autoNow and "off" or "on")) end)
+        p.checkIsButton = true
+    end
+    Tips.Attach(p.check, "raidautostart")
+    p.start = button(p, "Start the raid now", 140)
+    p.start:SetPoint("TOPRIGHT", -2, -66)
+    p.start:SetScript("OnClick", function() M:Command("raid start") end)
+    Tips.Attach(p.start, "raidstartnow")
+    page.startPanel = p
+    return p
+end
+
+function M.RefreshRaidStart(page, ctx)
+    local p = page.startPanel
+    if not p then return end
+    local rs = GuildBook.RaidStart(ctx)
+    p.autoNow = rs.auto
+    p.status:SetText(rs.text)
+    if p.checkIsButton then p.check:SetText("Start by itself: " .. (rs.auto and "on" or "off")) elseif p.check.SetChecked then p.check:SetChecked(rs.auto) end
+    if p.check.SetEnabled then p.check:SetEnabled(rs.available and rs.running) end
+    p.start:SetEnabled(rs.canStart)
+end
+
 -- ---- The Stats section: who held which place for how long ----------------------------------------------------------------------------
 
 local STAT_X, STAT_W = { 4, 30, 148, 226, 262, 346 }, { 24, 116, 76, 32, 80, 64 }
@@ -1040,7 +1092,10 @@ function M:Build()
     content:SetPoint("BOTTOMRIGHT", -16, 92)
     w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content) }
     for _, s in ipairs(GuildBook.SECTIONS) do
-        if s.actions then w.pages[s.id] = UITools.Build(content, M, s) end
+        if s.actions then
+            w.pages[s.id] = UITools.Build(content, M, s)
+            if s.id == "raids" then M.BuildRaidStart(w.pages.raids) end
+        end
     end
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
     w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
