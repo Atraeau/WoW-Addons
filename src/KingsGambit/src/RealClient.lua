@@ -515,12 +515,15 @@ function M.New(opts)
         if #payload > self.maxMessage then return false, "toolong" end
         if not CHANNELS[channel] then return false, "badchannel" end
         if channel == "WHISPER" and not target then return false, "notarget" end
-        if restricted() then return false, "restricted" end
+        -- The game's own answer decides, not the restriction flag: on Forever AreOutgoingAddonChatMessagesRestricted() is true yet the game takes the
+        -- message (the self-check's raw sends: WHISPER and GUILD "Success"), and Gargul and BigWigs likewise just send and read the result. During a boss
+        -- fight or similar the game answers AddOnMessageLockdown, which is "restricted": queued and retried by the sync layer.
         local result = E.C_ChatInfo.SendAddonMessage(prefix, payload, channel, channel == "WHISPER" and toGame(target) or target)
         local name = enumName(E.Enum and E.Enum.SendAddonMessageResult, result)
         if result == true or result == nil or name == "Success" then return true end
         local reason = (name or tostring(result)):lower()
         if reason == "invalidprefix" then reason = "noprefix" end
+        if reason == "addonmessagelockdown" then reason = "restricted" end
         return false, reason
     end
 

@@ -27,7 +27,7 @@ local function newEnv(over)
     E.GetRaidRosterInfo = function(i) return (table.unpack or unpack)(raid[i]) end
     E.Enum = {
         LootMethod = { Freeforall = 0, Master = 2, Group = 3, NeedBeforeGreed = 4, Personal = 5 },
-        SendAddonMessageResult = { Success = 0, InvalidPrefix = 1, AddonMessageThrottle = 3, GeneralError = 9 },
+        SendAddonMessageResult = { Success = 0, InvalidPrefix = 1, AddonMessageThrottle = 3, GeneralError = 9, AddOnMessageLockdown = 11 },
         RegisterAddonMessagePrefixResult = { Success = 0, DuplicatePrefix = 1, InvalidPrefix = 2 },
         Base64Variant = { Standard = 0 },
     }
@@ -239,12 +239,15 @@ test("send translates the result enum and pre-checks limits", function()
     local _, ch = c:send("KG", "x", "SAY"); eq(ch, "badchannel")
     local _, n = c:send("KG", "x", "WHISPER"); eq(n, "notarget")
 end)
-test("restriction: send fails with 'restricted' and the change is announced", function()
+test("restriction: the game's own answer decides (the flag alone blocks nothing), a lockdown answer is 'restricted', and the change is announced", function()
     local c, E = newClient()
     local events = {}
     c:on("comms.restrictionChanged", function(p) events[#events + 1] = p.restricted end)
     E.restricted = true
+    assert(c:send("KG", "hi", "RAID"), "the flag says restricted but the game takes the message (as on Forever): it is not second-guessed")
+    E.sendResult = 11
     local ok, why = c:send("KG", "hi", "RAID"); assert(not ok); eq(why, "restricted")
+    E.sendResult = 0
     fire(E, "ADDON_RESTRICTION_STATE_CHANGED", 1, 1)
     E.restricted = false; fire(E, "ADDON_RESTRICTION_STATE_CHANGED", 1, 0)
     eq(table.concat({ tostring(events[1]), tostring(events[2]) }, ","), "true,false")
