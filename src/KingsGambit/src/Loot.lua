@@ -857,12 +857,14 @@ function Session:finish()
             self.pending[#self.pending + 1] = { type = "disenchant", list = self.cfg.listId, item = it, to = handler }
         end
     end
-    -- Explicit passes that carry a kind (e.g. "upgrade") are recorded for the transparency stats.
+    -- Passes are not recorded (the ledger is about what happened to an item), with one exception: a gift won but never given to anyone ("undecided")
+    -- is an outcome, counted as a pass by the Master Looter. A pass that says it was on an "upgrade" is NOT recorded: whether something is an upgrade is a
+    -- judgment the addon can't make well, so no statistic is built on it. (Older ledgers' upgrade passes still read.)
     -- pairs() order is not stable, so collect and sort them before appending.
     local passes = {}
     for p, items in pairs(self.bids) do
         for itemId, b in pairs(items) do
-            if b.kind == "pass" and b.passKind then
+            if b.kind == "pass" and b.passKind == "undecided" then
                 passes[#passes + 1] = { type = "pass", list = self.cfg.listId, member = p,
                     item = self.items[itemId], kind = b.passKind }
             end
