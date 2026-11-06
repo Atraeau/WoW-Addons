@@ -88,8 +88,30 @@ function M.GearItems(client, links, max)
     return out
 end
 
+-- Is this character in the middle of a real raid? Returns why, or nil. Practice is off then: it would hide the real loot window and the real list, and what
+-- is practised could be mistaken for what is real.
+function M.RealRaidBusy()
+    local client, engine = SK.client, SK.engine
+    if not client then return nil end
+    if client:inRaid() then return "you are in a raid group" end
+    local host, player = SK.host, SK.player
+    if host and host.session and host.session.phase ~= "done" and host.session.phase ~= "cancelled" then return "a loot session is running" end
+    if player and player.session then return "a loot session is running" end
+    if engine then
+        local me = client:me()
+        for _, r in ipairs(engine:ActiveRaids()) do
+            if r.ml == me then return "your raid is open (end it first: raid close)" end
+        end
+    end
+end
+
 function M:StartPractice()
     if not (Sim and Commands) then return end
+    local busy = M.RealRaidBusy()
+    if busy then
+        say("Practice is off while you are in the middle of a raid: " .. busy .. ".")
+        return M:Refresh()
+    end
     local me = SK.client:me()
     -- You practise as your own class (a warrior is asked about warrior loot, not a priest's); a class the simulation doesn't know falls back to a priest.
     local class = SK.client.myClass and SK.client:myClass() or nil
@@ -1250,9 +1272,16 @@ end
 
 function M:OnInit()
     -- A loot session reaches this player (or starts on this machine): open the window on it.
-    local function opener() M:Open("loot") end
+    -- A real session or a real raid group while practising ends practice: the window must show the real thing, never the rehearsal.
+    local function endPractice(why)
+        if M.practice then say("Practice ended: " .. why .. "."); M:LeavePractice() end
+    end
+    local function opener() endPractice("a real loot session has started"); M:Open("loot") end
     if SK.player and SK.player.on then SK.player.on("session", opener) end
     if SK.host and SK.host.on then
         SK.host.on("phase", function(p) if p == "bidding" or (type(p) == "table" and p.phase == "bidding") then opener() end end)
+    end
+    if SK.client and SK.client.on then
+        SK.client:on("roster.changed", function() if M.practice and SK.client:inRaid() then endPractice("you joined a raid") end end)
     end
 end

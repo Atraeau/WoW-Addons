@@ -618,3 +618,36 @@ test("the practice window ends and opens raids, and has people leave and return"
     eq(n.raidOpen, true); eq(n.raidNo, 2)
     UI.practice = nil
 end)
+
+H.section("Practice: not in the middle of a real raid")
+test("practice can't start in a raid group, with a real session running or with your raid open, and a real raid ends it", function()
+    local UI = SK.modules.UI
+    local MockClient, Engine = SK.modules.MockClient, SK.modules.Engine
+    local client = MockClient.New({ name = "Me" })
+    local engine = Engine.New(client)
+    engine:CreateList("main", "Main")
+    local old = { client = SK.client, engine = SK.engine, host = SK.host, player = SK.player }
+    SK.client, SK.engine, SK.host, SK.player = client, engine, nil, nil
+    UI.practice = nil
+    local savedSay = UI.Say
+    -- alone: practice may start
+    eq(UI.RealRaidBusy(), nil)
+    -- in a raid group: refused
+    client:setRaid({ "Me", "Aldric", "Brann" }, { leader = "Me", lootMethod = "master", masterLooter = "Me" })
+    assert(UI.RealRaidBusy():find("raid group"), tostring(UI.RealRaidBusy()))
+    UI:StartPractice(); eq(UI.practice, nil, "practice did not start")
+    -- a real session running
+    client:setRaid({}, {}) -- (left the group)
+    SK.host = { session = { phase = "bidding" }, on = function() end }
+    assert(UI.RealRaidBusy():find("loot session"))
+    SK.host = { session = { phase = "done" }, on = function() end }
+    eq(UI.RealRaidBusy(), nil, "a finished session doesn't count")
+    SK.host = nil
+    -- your own raid open
+    assert(engine:Write("Elevate", { raid = "r1", ml = "Me", minutes = 60 }))
+    assert(UI.RealRaidBusy():find("raid is open"), tostring(UI.RealRaidBusy()))
+    assert(engine:Write("RaidClose", { raid = "r1" }))
+    eq(UI.RealRaidBusy(), nil, "closed: free again")
+    UI.practice = nil
+    SK.client, SK.engine, SK.host, SK.player = old.client, old.engine, old.host, old.player
+end)
