@@ -87,7 +87,7 @@
   .lw-row.answered { background: rgba(255,255,255,.08); } /* the selected-row band, as in the game's lists */
   .lw-btn { min-width: 74px; font-weight: 600; }
   .lw-btn .k { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 3px; border: 1px solid currentColor; font-size: 10px; margin-right: 5px; }
-  .lw-btn.sel { color: #fff; background: #0b0f14; border-color: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,.8); } /* held pressed in, white label, plus the tick before the text (as in the game window) */
+  .lw-btn.sel { color: #fff; background: #0b0f14; border-color: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,.8); } /* held pressed in with a white label (as in the game window); the tick is before the note under the item, not inside the button */
   .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
   .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
   .lw-rank { border: 1px solid var(--gold); border-radius: 4px; padding: 6px 8px; margin: 6px 0; }
@@ -8740,7 +8740,7 @@ end
     const dis = !b.enabled || (extra && extra.disabled);
     const why = !b.enabled ? "" : (extra && extra.disabledWhy ? "\n\n" + extra.disabledWhy : "");
     return '<button class="' + cls + '" data-act="w" data-a=\'' + esc(JSON.stringify(b.act)) + '\'' + (dis ? ' aria-disabled="true" data-off="1"' : "") + ' title="' + esc(tipText(b) + why) + '">' +
-      (b.letter ? '<span class="k">' + b.letter + "</span>" : "") + (b.selected ? "&#10003; " : "") + esc(b.label) + "</button>";
+      (b.letter ? '<span class="k">' + b.letter + "</span>" : "") + esc(b.label) + "</button>";
   }
   function lootWindowHtml() {
     const v = lw;
@@ -8761,7 +8761,7 @@ end
         (snap.token && (r.state === "open" || r.state === "answered") ? ' <button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>' : "");
       return '<div class="lw-row ' + r.state + '"><div class="top"><span class="iname">' + esc(r.link) + "</span>" +
         (buttons ? '<span class="row" style="gap:4px">' + buttons + "</span>" : "") + "</div>" +
-        (r.note ? '<div class="note">' + (r.mineWon ? "&#10003; " : "") + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
+        (r.note ? '<div class="note">' + ((r.mineWon || r.state === "answered") ? "&#10003; " : "") + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
         (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:4px">' + extra.join(" ") + "</div>" : "") + "</div>";
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"

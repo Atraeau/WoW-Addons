@@ -357,29 +357,26 @@ test("a gift with nobody who can have it says so, and Keep or Withdraw remain", 
 end)
 
 H.section("Loot window: showing your choice")
-test("a chosen answer is held pressed with a white label and a tick; its text is never changed; un-choosing restores it", function()
+test("a chosen answer is held pressed with a white label; its text is never changed; un-choosing resets it completely", function()
     local LootWindow = SK.modules.LootWindow
     local state, color, font = {}, nil, nil
     local fs = { SetTextColor = function(_, r, g, b) color = { r, g, b } end, SetFontObject = function(_, f) font = f end }
-    local shown = {}
-    local checkTex = { SetSize = function() end, SetPoint = function() end, SetTexture = function(_, t) shown.tex = t end,
-        Show = function() shown.on = true end, Hide = function() shown.on = false end }
     local b = { enabled = true, text = "Need" }
-    function b:CreateTexture() return checkTex end
     function b:SetButtonState(name, locked) state.name, state.locked = name, locked end
     function b:GetFontString() return fs end
     function b:IsEnabled() return self.enabled end
     function b:GetNormalFontObject() return "normalfont" end
     function b:GetDisabledFontObject() return "disabledfont" end
+    LootWindow.Mark(b, false)
+    eq(state.name, nil, "a button that was never marked is left alone")
     LootWindow.Mark(b, true)
     eq(state.name, "PUSHED"); eq(state.locked, true, "held pressed in")
     eq(color[1], 1); eq(color[2], 1); eq(color[3], 1, "a white label, as on an active tab")
-    eq(b.text, "Need", "the text is untouched")
-    eq(shown.on, true); assert(shown.tex:find("Check"), "a tick inside the button")
+    eq(b.text, "Need", "the text is untouched, and nothing is added inside the button")
     LootWindow.Mark(b, false)
     eq(state.name, "NORMAL"); eq(state.locked, false, "released")
-    eq(font, "normalfont", "the label goes back to the button\x27s own font"); eq(shown.on, false, "the tick goes")
+    eq(font, "normalfont"); eq(color[1], 1); eq(color[2], 0.82); eq(color[3], 0, "the label is the game\x27s gold again, not what the last round left")
     b.enabled = false
     LootWindow.Mark(b, true); LootWindow.Mark(b, false)
-    eq(font, "disabledfont", "a grayed-out button goes back to the grayed-out font")
+    eq(font, "disabledfont"); eq(color[1], 0.5, "a grayed-out button goes back to gray")
 end)

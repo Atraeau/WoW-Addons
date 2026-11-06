@@ -65,31 +65,25 @@ end
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
 -- Show a button as the player's current choice the way the game's own interface shows a selection, without changing its text and without relying on a
 -- color change of the text. (Researched in the game's UI source: tabs swap to an "active" look and a white label; toggled panel buttons are held in the
--- pressed state; dropdown radios get a tick mark; list rows get a translucent white band behind them.) Three cues here: the button is held pressed in, its
--- label is white (as on an active tab), and a tick mark sits inside it. Un-marking puts everything back the way the button's state makes it.
+-- pressed state; list rows get a translucent white band.) Two cues on the button: it is held pressed in, and its label is white (as on an active tab); the
+-- row's band and tick (see Refresh) say which item it belongs to. Un-marking puts the button back completely: released, and the label in the color its state
+-- gives it (the game's gold, or gray when unavailable), so nothing of a previous round is left on a button that is reused for the next one.
+local GOLD, GRAY = { 1, 0.82, 0 }, { 0.5, 0.5, 0.5 }
 function M.Mark(b, on)
     on = on and true or false
-    if on == (b.marked or false) and b.markDone then return end
-    b.markDone = true
+    if not on and not b.marked then return end -- never marked: nothing to undo
     local fs = b.GetFontString and b:GetFontString()
     if on then
-        if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stay pressed until released by code)
+        if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stays pressed until code releases it)
         if fs and fs.SetTextColor then fs:SetTextColor(1, 1, 1) end
-        if not b.check and b.CreateTexture then
-            b.check = b:CreateTexture(nil, "OVERLAY")
-            b.check:SetSize(14, 14)
-            b.check:SetPoint("LEFT", b, "LEFT", 5, 0)
-            b.check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-        end
-        if b.check then b.check:Show() end
-        if fs and fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 7, 0) end -- room for the tick
     else
         if b.SetButtonState then b:SetButtonState("NORMAL", false) end
-        if b.check then b.check:Hide() end
-        if b.marked and fs then
-            if fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 0, 0) end
-            local font = b.IsEnabled and b:IsEnabled() and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
+        if fs then
+            local enabled = not b.IsEnabled or b:IsEnabled()
+            local font = enabled and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
             if font and fs.SetFontObject then fs:SetFontObject(font) end
+            local c = enabled and GOLD or GRAY
+            if fs.SetTextColor then fs:SetTextColor(c[1], c[2], c[3]) end
         end
     end
     b.marked = on
@@ -203,6 +197,10 @@ function M.Build(ui)
         end)
         row.band = makeBand(f)
         row.band:SetSize(WIDTH - 20, ROW - 4)
+        -- a tick before the note ("You: Need"), in the same place on every row, so an answered item reads at a glance
+        row.tick = f:CreateTexture(nil, "OVERLAY")
+        row.tick:SetSize(12, 12)
+        row.tick:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
         row.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(32)
         row.buttons = {}
@@ -438,8 +436,14 @@ function M.Refresh(f, ctx, ui)
                     end
                 end
                 row.note:SetText(vr.warn and ("|cffffaa33" .. vr.warn .. "|r") or (vr.segments and M.Rich(vr.segments)) or vr.note or "")
-                row.note:SetWidth(hasButtons and (WIDTH - 36 - 300) or (WIDTH - 36))
-                layout[#layout + 1] = { row.note, hasButtons and (16 + 300) or 16, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
+                local ticked = vr.state == "answered" or vr.mineWon
+                local noteX = hasButtons and (16 + 300) or 16
+                if ticked then
+                    layout[#layout + 1] = { row.tick, noteX, hasButtons and (y - 20) or (y - 18) }; want[row.tick] = true
+                    noteX = noteX + 16
+                end
+                row.note:SetWidth((hasButtons and (WIDTH - 36 - 300) or (WIDTH - 36)) - (ticked and 16 or 0))
+                layout[#layout + 1] = { row.note, noteX, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
                 y = y - ROW
             end
         end
@@ -498,8 +502,14 @@ function M.Refresh(f, ctx, ui)
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
-        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note; everything[#everything + 1] = r.band
+        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note; everything[#everything + 1] = r.band; everything[#everything + 1] = r.tick
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
+    end
+    -- A button that is not drawn this time (a new round, a finished session) is cleared, so what was chosen last round never shows on it.
+    for _, r in ipairs(f.rows) do
+        for _, b in ipairs(r.buttons) do
+            if not want[b] then M.Mark(b, false) end
+        end
     end
     for _, el in ipairs(everything) do setShown(el, want[el] == true) end
     return v

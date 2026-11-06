@@ -2099,6 +2099,12 @@ as on an active tab, and a tick sits inside it. Nothing about the label text cha
 translucent white fill. The page matches (a pressed-in button with a white border and a tick, on a white translucent band). Rule kept for later work: never mark state by a color change of text alone,
 and prefer the game's own idioms over new ones.
 
+**Two faults found in the game, fixed the same day.** (1) *Selection persisted between rounds.* The answer buttons are reused for every round, and a button not drawn this time kept what the last
+round had put on it. Now a button that is not drawn is cleared, and un-marking is complete: released, and the label set back explicitly to the game's gold (or gray when unavailable), not left to a
+font swap. A new round therefore starts with nothing chosen, until the player chooses something. (2) *The tick inside the button looked unprofessional:* a tick at the button's left edge with the label
+shifted right left an unnatural gap. **The tick is no longer inside the button**: it sits in the note column directly before "You: Need" (both left-aligned, no gap), in the same place on every
+row; the button itself only changes state (pressed in, white label) and its text and position never change. The page does the same.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
