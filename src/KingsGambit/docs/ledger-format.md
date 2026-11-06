@@ -77,7 +77,7 @@ stays in its chain. Every verifier skips exactly the same events, so everyone ge
 
 ### Who may write
 
-The ledger-wide state is: the ledger keeper, the set of officers, and raids (`{ id, ml, opened by, expires,
+The ledger-wide state is: the ledger owner, the set of officers, and raids (`{ id, ml, opened by, expires,
 ended by }`). A raid is **active for an event** when the event comes after the `Elevate` that opened it in write order,
 its `ts` is before `expires`, and it comes before the `RaidClose` or `Revoke` that ended it (if any).
 
@@ -85,7 +85,7 @@ A list event, `Declined`, `ItemClasses` or `ItemSuits` is allowed when:
 
 - its author is the Master Looter of a raid active for it **and**, if it is about a list, that list is the raid's list or the raid's off-spec list
   (see `SetRaidList`; a raid with none named plays on `main`), or
-- its author was an officer (or the ledger keeper) when it was written and **no** raid is active for it.
+- its author was an officer (or the ledger owner) when it was written and **no** raid is active for it.
 
 Otherwise it is skipped (`duringraid`, `expired`, `notauthorized`, `wronglist`, or `nolistchosen` when the guild requires a raid to have a list of its
 own and none is named yet). A raid's off-spec list is `off` for the list `main` and `<list>-off` for any other.
@@ -94,18 +94,18 @@ own and none is named yet). A raid's off-spec list is `off` for the list `main` 
 
 | Type | `data` | Rule and effect |
 |---|---|---|
-| `Genesis` | `name` | First event of the ledger, `seq` 1 of its chain, `ledger = ""`. Its author is the ledger keeper. Only one. |
-| `SetGuildMaster` | `name` | By the ledger keeper only. Hands the role on. |
-| `SetOfficers` | `names` (list) | By the ledger keeper only. Replaces the officer list (mirrored from the game's guild ranks). |
+| `Genesis` | `name` | First event of the ledger, `seq` 1 of its chain, `ledger = ""`. Its author is the ledger owner. Only one. |
+| `SetGuildMaster` | `name` | By the ledger owner only. Hands the role on. |
+| `SetOfficers` | `names` (list) | By the ledger owner only. Replaces the officer list (mirrored from the game's guild ranks). |
 | `Elevate` | `raid`, `ml`, `minutes` (1 to 1440) | By an officer. Opens raid `raid` with Master Looter `ml` until `ts + minutes*60`. For a running raid with the same `ml`, extends it (never shortens). Skipped for an ended raid or a different `ml`. |
 | `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |
 | `Attendance` | `raid`, `joined?`, `left?` | Who was in a raid (added in 0.6.0). Written by that raid's Master Looter, as the group changes: `joined` and `left` are the players who came and went since their last entry for the raid, and the first entry's `joined` is everyone there when its first enemy died inside an instance (a boss or trash), or when the Master Looter started it by hand (a world boss), which is when a raid officially starts. Must name an existing raid, the writer must be its Master Looter, and it must name at least one player; entries are kept small (a dozen names at most each). A raid's present set is the replay of its entries; it moves nobody. |
 | `SetDisenchanter` | `raid`, `name` | By the raid's Master Looter, while the raid is active. Designates who disenchants what nobody wants, for that raid. The latest choice stands. Loot is not handed out until one is set. |
 | `SetRaidList` | `raid`, `list` | By an officer, for an active raid: the list the raid plays on. **The first one stands** (`listset` after that). `list` is lower-case letters, digits and `_`, up to 24, not `off` (`badlistid`); under the per-raid policy it can't be `main` (`needsownlist`). A list that does not exist yet is created by the raid's Master Looter, in the order of `main`, when the first session starts. |
-| `SetListPolicy` | `mode` (`choose` or `perraid`) | By the ledger keeper only (`badpolicy` otherwise). `perraid`: every raid opened **after** this entry must have a list of its own, and is a `dedicated` raid for good; `choose` (the default) lets a raid play on `main`. Changing it never changes a raid already open. |
+| `SetListPolicy` | `mode` (`choose` or `perraid`) | By the ledger owner only (`badpolicy` otherwise). `perraid`: every raid opened **after** this entry must have a list of its own, and is a `dedicated` raid for good; `choose` (the default) lets a raid play on `main`. Changing it never changes a raid already open. |
 | `Declined` | `request`, `requestedBy`, `declineReason` | A declined adjustment request. No effect; recorded for transparency. |
-| `Migrate` | `from`, `to`, `cut`, `digest`, `reason` | The cutover to a new format (see "Migrating the ledger"). By the ledger keeper only, written in the NEW format (`v == to`), `to == from + 1`, `from` the ledger's current format. `cut` is `{ [chain] = n }`: how many events of each chain are before the change. `digest` is the standings those events produce. |
+| `Migrate` | `from`, `to`, `cut`, `digest`, `reason` | The cutover to a new format (see "Migrating the ledger"). By the ledger owner only, written in the NEW format (`v == to`), `to == from + 1`, `from` the ledger's current format. `cut` is `{ [chain] = n }`: how many events of each chain are before the change. `digest` is the standings those events produce. |
 | `ItemSuits` | `item` (item id), `roles` (tank, melee, hunter, caster, healer; empty = back to the heuristic), `reason`, `name?` | An officer's override of who an item suits (a suggestion, not a rule). |
 | `ItemClasses` | `item` (item id), `classes` (class tokens, empty = any class), `reason`, `name?` | The guild's rule for who may bid on an item in the drafts; it overrides the item's own "Classes:" line. The latest rule for an item wins. |
 
@@ -136,7 +136,7 @@ and the recomputed `id` matches. Then merge all chains and replay (section 5).
 
 ## 7. Worked example
 
-The ledger keeper starts the ledger, creates `main`, adds two players and elevates a Master Looter, who awards an item.
+The ledger owner starts the ledger, creates `main`, adds two players and elevates a Master Looter, who awards an item.
 
 | Chain | seq | ts | type | data | `id` |
 |---|---|---|---|---|---|
@@ -217,14 +217,14 @@ that is the point). Instead:
   rules would differ (a changed default becomes an explicit value), so a past outcome is never re-decided.
 - **A golden ledger per published format** (`tests/ledgers/format_2.lua`, 41 real events covering every event type) must always load, verify and replay to the
   standings it was frozen with. This is the proof that "any ledger, however old" still works; it also catches a wrong upcaster before release.
-- **The cutover is a ledger entry** (`Migrate`, ledger keeper only). Until it, everyone writes the ledger's current format, even a release that knows the next
+- **The cutover is a ledger entry** (`Migrate`, ledger owner only). Until it, everyone writes the ledger's current format, even a release that knows the next
   (a *downcaster* writes the old shape). `cut` names exactly which events are before the change, the same on every machine whatever order they arrive in. After the
   cut, an event in the old format is recorded as a conflict (`staleformat`: its writer needs to update), never silently applied. The entry itself is in the new
   format, so a client that cannot read it learns the ledger has moved on when it arrives (`unreadable`).
 - **The migration proves itself on every machine.** `digest` is the standings (orders, wins, passes, awards and where an undo would put each winner back) the cut's
   history produces. Each client replays that history under its own code and compares. A client that gets a different answer is *frozen*: it refuses to write, and says why.
 - **Rollout.** A release that adds a format reads both and keeps writing the old one, advertising the formats it reads in heartbeats (`f`); `migrate status` shows the
-  ledger keeper who is ready, and `migrate <format> <reason>` writes the cutover. It is a ledger decision, not a download, so players update on their own schedule;
+  ledger owner who is ready, and `migrate <format> <reason>` writes the cutover. It is a ledger decision, not a download, so players update on their own schedule;
   only those who cannot read the new format must update after it.
 
 This strategy is evaluated against a simulated breaking change (`tests/migration_fixture.lua`, `tests/test_migration.lua`): `KG_SCORECARD=1 lua tests/run.lua` prints every check.

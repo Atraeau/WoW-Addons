@@ -23,7 +23,7 @@ local function settle(w, limit)
     return false
 end
 
--- A guild: the ledger keeper (GM), an officer (Off), a Master Looter who is not an officer (Looter), raiders
+-- A guild: the ledger owner (GM), an officer (Off), a Master Looter who is not an officer (Looter), raiders
 -- Aldric, Brann and Cass. Everyone has the addon. The ledger is founded and synced; no raid is open yet.
 local NAMES = { "GM", "Off", "Looter", "Aldric", "Brann", "Cass" }
 local function guild(netOpts)

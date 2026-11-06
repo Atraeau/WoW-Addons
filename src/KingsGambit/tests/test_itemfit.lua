@@ -267,7 +267,7 @@ test("a rule that isn't valid is refused by the ledger", function()
     eq(select(2, engine:Write("ItemClasses", { item = "x", classes = {}, reason = "x" })), "baditemrule")
 end)
 
--- The ledger keeper, an officer and a raider, with addons, over the simulated network.
+-- The ledger owner, an officer and a raider, with addons, over the simulated network.
 local function guild()
     local net = SimNetwork.New({ latency = 0.1, seed = 5 })
     local w = { net = net }

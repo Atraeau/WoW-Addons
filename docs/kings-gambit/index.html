@@ -669,7 +669,7 @@ FORMATS[2] = {
         -- who was in a raid (0.6.0): written by the raid's Master Looter as the group changes. `joined` and `left` are the players who came and went since
         -- their last entry for this raid; the first entry's `joined` is everyone there when it started. It moves nobody.
         Attendance = { list = false, data = { raid = "name!", joined = "names", left = "names" } },
-        -- the cutover to a new format (see Migrations.lua): written by the ledger keeper, in the NEW format
+        -- the cutover to a new format (see Migrations.lua): written by the ledger owner, in the NEW format
         Migrate = { list = false, data = { from = "int!", to = "int!", cut = "table!", digest = "name!", reason = "name!" } },
         -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")
         SetRaidList = { list = false, data = { raid = "name!", list = "name!" } },
@@ -759,7 +759,7 @@ do local chunk = function(...)
 -- format to the equivalent event of the next, and the replay runs every event through the chain of upcasters to the newest
 -- format before applying it. An upcaster is a pure function of one event. It must make the old MEANING explicit wherever the new rules
 -- would decide differently (a default that changed becomes an explicit value), so a past outcome is never re-decided: nobody's place
--- moves because the rules did. The ledger itself carries the proof: the ledger keeper's `Migrate` entry (Ledger.lua) holds a digest of
+-- moves because the rules did. The ledger itself carries the proof: the ledger owner's `Migrate` entry (Ledger.lua) holds a digest of
 -- the standings the old history produces, and every client checks that its own replay of that history, through its own upcasters,
 -- produces the same digest.
 --
@@ -1220,7 +1220,7 @@ do local chunk = function(...)
 -- writer appends to it, so it can't fork. The VIEW (standings, authority, conflicts) is a replay of every
 -- chain, in two passes:
 --   1. authority events (Genesis, SetGuildMaster, SetOfficers, Elevate, Revoke, RaidClose) in order of the time
---      they were written, giving who was ledger keeper and officer when, and every raid's final window;
+--      they were written, giving who was ledger owner and officer when, and every raid's final window;
 --   2. list events (and Declined, ItemClasses) merged in SORT-KEY order, each checked against that authority at the time it
 --      was written.
 -- The sort key is when the loot became visible: an event may carry data.seen (the loot window's time); its key
@@ -1479,7 +1479,7 @@ local function record(a, ev)
     a.history[#a.history + 1] = { ev = ev, gm = a.gm, officers = snapshotOfficers(a) }
 end
 
--- Ledger keeper and officers in effect for event `e` (after every authority event written before it).
+-- Ledger owner and officers in effect for event `e` (after every authority event written before it).
 local function rolesAt(a, e)
     local gm, officers = nil, {}
     for _, h in ipairs(a.history) do
@@ -1579,7 +1579,7 @@ function auth.SetGuildMaster(a, ev, d)
     return function() a.gm = d.name end
 end
 
--- The cutover to a new format: the ledger keeper's entry. `cut` says how many events of each chain are before the change, `digest` is the
+-- The cutover to a new format: the ledger owner's entry. `cut` says how many events of each chain are before the change, `digest` is the
 -- standings that history produces (checked by every client, see VerifyMigrations), and the entry itself is written in the NEW format, so
 -- a client that cannot read it learns the ledger has moved on the moment it arrives.
 function auth.Migrate(a, ev, d)
@@ -1626,7 +1626,7 @@ function auth.Elevate(a, ev, d)
     end
 end
 
--- The ledger keeper's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
+-- The ledger owner's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
 -- "perraid" (every raid opened from now on must name a list of its own, and may not use main).
 function auth.SetListPolicy(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
@@ -1832,7 +1832,7 @@ end
 -- Replay the whole store into a fresh view. `extra` (optional) is one more event, not yet in the store,
 -- appended to its chain for this replay only (used to check a write before making it).
 -- Check every migration in force: replay the history inside its cut under THIS client's code and compare the standings with the digest the
--- ledger keeper recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
+-- ledger owner recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
 -- wrong upcaster): the view is frozen, and the engine refuses to write. The result is remembered, since a cut never changes.
 function M.VerifyMigrations(view, store)
     for _, m in ipairs(view.auth.migrations) do
@@ -2507,7 +2507,7 @@ function Engine:Fingerprint() return self.fingerprint end
 function Engine:Format() return self.view.auth.format end
 -- The chains whose saved entries include a format this build can't read: { [chainId] = { format, index } }. Empty when everything loaded.
 function Engine:Ahead() return self.ahead end
--- The ledger formats this build can read, lowest first (advertised in heartbeats so the ledger keeper can see who is ready).
+-- The ledger formats this build can read, lowest first (advertised in heartbeats so the ledger owner can see who is ready).
 function Engine:Readable() return Migrations.Readable(self.rules) end
 function Engine:Frozen() return self.view.frozen end
 function Engine:LedgerId() return self.store.id end
@@ -2672,7 +2672,7 @@ function Engine:Write(type_, data, list, format)
     return ev
 end
 
--- Move the ledger to the next format (the ledger keeper does this once per migration, when the guild is ready). The entry names exactly
+-- Move the ledger to the next format (the ledger owner does this once per migration, when the guild is ready). The entry names exactly
 -- how many events of each chain are before the change, and the digest of the standings they produce, as THIS client reads them. Returns
 -- the event, or nil + reason: "frozen", "badmigrate" (not the next format), "cantwrite" (this build doesn't work in that format), or
 -- what the ledger says ("notguildmaster").
@@ -2686,7 +2686,7 @@ function Engine:Migrate(to, reason)
     return self:Write("Migrate", { from = to - 1, to = to, cut = cut, digest = digest, reason = reason }, nil, to)
 end
 
--- Start a new ledger (the ledger keeper does this once). Returns the Genesis event.
+-- Start a new ledger (the ledger owner does this once). Returns the Genesis event.
 function Engine:Genesis(name)
     if self.store.id then return nil, "exists" end
     return self:Write("Genesis", { name = name })
@@ -2694,7 +2694,7 @@ end
 
 -- List helpers.
 -- The first list created on a machine with no ledger founds the ledger (Genesis) first: in the game
--- that is the ledger keeper, who is the only one allowed to (see Commands).
+-- that is the ledger owner, who is the only one allowed to (see Commands).
 function Engine:CreateList(listId, name)
     if not self.store.id then
         -- the ledger is the guild's: it takes the guild's name when the game says it
@@ -7102,7 +7102,7 @@ end; chunk("KingsGambit", SK) end
 do local chunk = function(...)
 -- King's Gambit: the tooltips for the window's buttons. Keep this file Lua 5.1-safe.
 -- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A grayed-out button's tooltip also says why it is
--- unavailable. The words describe the same rules as docs/rationale.md and docs/ledger-keeper.md.
+-- unavailable. The words describe the same rules as docs/rationale.md and docs/ledger-owner.md.
 local _, SK = ...
 local M = SK:NewModule("UITips")
 
@@ -7151,12 +7151,12 @@ M.TEXT = {
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
     navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
     navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
-    navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the ledger keeper's and maintenance steps. (The record itself is the Ledger.)" },
+    navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)" },
     historykind = { "Show", "What happened (the default) leaves out passes: they are the most common entries and say what could have happened to an item, not what did. Passes stay in the record: choose Passes to see only them, or Everything to see all." },
     historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
-    listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the ledger keeper decide which (see Tools, Raid)." },
+    listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the ledger owner decide which (see Tools, Raid)." },
     sort = { "Sort", "Click to sort the table by this column; click again to reverse it.\n\nThis only changes how the table is shown. It never changes the list's real order, which is the order players are called in." },
     top = { "Move to the top", "Stage a move of the selected player to the top of this list.\n\nNothing is recorded yet: the table shows the list as it would be. Stage as many changes as you like, then press Apply all (with a reason); Discard drops them." },
     up = { "Up one place", "Stage a move of the selected player up one place. Each press only changes the preview; nothing is recorded until you press Apply all." },
@@ -7168,7 +7168,7 @@ M.TEXT = {
     remove = { "Remove from the list", "Stage taking the selected player off this list. It is recorded when you press Apply all, with your reason.\n\nThe record keeps the place they were at, so they can be put back there." },
     award = { "Record a win", "Open the 'Record a win' form for the selected player: for a win a session didn't record (a failed hand-out, a corrected winner).\n\nThey move to the bottom of the list, as after any win. You choose the item and give a reason." },
     addall = { "Add everyone from your group and guild", "Add every player in your group and guild who isn't on this list yet, with their classes.\n\nThis writes one entry per player to the shared ledger, the same as the 'add' command, so only an officer (or a raid's Master Looter) can." },
-    startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the ledger keeper.\n\nDo this once, on the character that should be ledger keeper. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
+    startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the ledger owner.\n\nDo this once, on the character that should be ledger owner. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
     -- tools
     dothis = { "Do it", "Run this form's command: the same one you could type in chat. If you aren't allowed, the output at the foot of the window says why, and nothing is changed." },
 }
@@ -7707,7 +7707,7 @@ local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migr
     function(d) LootView, Identity, Standings, Migrations = d.LootView, d.Identity, d.Standings, d.Migrations end)
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
--- `gap` puts a space above its button: Admin is the ledger keeper's and maintenance corner, kept apart from the everyday sections.
+-- `gap` puts a space above its button: Admin is the ledger owner's and maintenance corner, kept apart from the everyday sections.
 -- Every action belongs to exactly one section (the old History form is the Ledger section now).
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
@@ -7722,7 +7722,7 @@ M.SECTIONS = {
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
-    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger keeper's and maintenance steps. (The record itself is the Ledger.)",
+    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
 }
 
@@ -8486,7 +8486,7 @@ function Lab.evaluate(seed, lossy)
     local card, stats = {}, { seed = seed, lossy = lossy }
     local function mark(name, ok, detail) card[#card + 1] = { name = name, ok = ok and true or false, detail = detail } end
 
-    -- who runs what: the ledger keeper and two raiders are on the new release; an officer and a raider have not updated yet
+    -- who runs what: the ledger owner and two raiders are on the new release; an officer and a raider have not updated yet
     local gm, cass, dara = Lab.node(w, "GM", rules3), Lab.node(w, "Cass", rules3), Lab.node(w, "Dara", rules3)
     local off, eira = Lab.node(w, "Off", Migrations.Default), Lab.node(w, "Eira", Migrations.Default)
     assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
@@ -8545,13 +8545,13 @@ function Lab.evaluate(seed, lossy)
     local idsBefore = allEventIds(gm)
     local allV2 = true
     for _, v in pairs(idsBefore) do if v ~= 2 then allV2 = false end end
-    mark("until the ledger keeper says so, even the new release writes the old format", allV2)
+    mark("until the ledger owner says so, even the new release writes the old format", allV2)
     stats.events = 0
     for _ in pairs(idsBefore) do stats.events = stats.events + 1 end
 
     -- the cutover
     local mig, why = gm.engine:Migrate(3, "simulated breaking change")
-    mark("the ledger keeper can write the cutover", mig ~= nil, why)
+    mark("the ledger owner can write the cutover", mig ~= nil, why)
     local newNames = { "GM", "Cass", "Dara" }
     local tc, convNew = settle(w, newNames)
     mark("every player on the new release receives it", convNew, "settled in " .. tc .. " s")
@@ -8564,7 +8564,7 @@ function Lab.evaluate(seed, lossy)
         local c = m and nd.engine.store.verified[m.ev.id]
         if c and c.ok and not nd.engine:Frozen() then verified = verified + 1 end
     end
-    mark("every new client replayed the old history itself and got the ledger keeper's digest", verified == #newNames, verified .. " of " .. #newNames)
+    mark("every new client replayed the old history itself and got the ledger owner's digest", verified == #newNames, verified .. " of " .. #newNames)
     local oldReading = m and Ledger.CutDigest(eira.engine.store, m.cut)
     mark("and that digest is what the OLD release computes for the same history (the migration lost nothing)", m ~= nil and oldReading == m.digest)
     local unchanged = true
@@ -8663,7 +8663,7 @@ function Lab.mutations()
         Ledger.CutDigest = function(store, cut) calls = calls + 1; return calls == 1 and "0000000000000000" or realCut(store, cut) end
     end, function() Ledger.CutDigest = realCut end)
     failed = ok and Lab.failed(card) or {}
-    out[#out + 1] = { name = "the ledger keeper records a wrong digest",
+    out[#out + 1] = { name = "the ledger owner records a wrong digest",
         caught = (not ok) or anyContains(failed, "every new client replayed the old history"),
         detail = ok and (#failed .. " check(s) failed") or "every client refused to write: the guild stopped" }
     return out
@@ -8672,7 +8672,7 @@ end
 ---------------------------------------------------------------- an interactive world (the page's lab)
 local MEMBERS = 6
 
--- Players: GM (ledger keeper) and Cass, Dara are on the new release; Off (an officer) and Eira have not updated. Fenn can join with a wrong upcaster.
+-- Players: GM (ledger owner) and Cass, Dara are on the new release; Off (an officer) and Eira have not updated. Fenn can join with a wrong upcaster.
 function Lab.New()
     local L = { log = {}, counter = 0 }
     local w, rules3
@@ -8730,7 +8730,7 @@ function Lab.New()
     function L:migrate()
         local ev, err = w.nodes.GM.engine:Migrate(3, "migration lab")
         if not ev then return false, err end
-        note("The ledger keeper wrote the cutover to format 3. It records exactly which entries are before it and the standings they produce. Players on the new release check that against their own replay; players on the old release can't read it.")
+        note("The ledger owner wrote the cutover to format 3. It records exactly which entries are before it and the standings they produce. Players on the new release check that against their own replay; players on the old release can't read it.")
         return true
     end
 
@@ -8788,7 +8788,7 @@ function Lab.New()
             local mm = view.auth.migrations[1]
             if mm and nd.engine.store.verified[mm.ev.id] then verified = nd.engine.store.verified[mm.ev.id].ok end
             local frozen = nd.engine:Frozen()
-            out.players[#out.players + 1] = { name = nm, role = nm == "GM" and "ledger keeper" or nm == "Off" and "officer" or "raider", release = release,
+            out.players[#out.players + 1] = { name = nm, role = nm == "GM" and "ledger owner" or nm == "Off" and "officer" or "raider", release = release,
                 reads = Migrations.Readable(nd.rules), format = nd.engine:Format(), events = events, head = fp(nd):sub(1, 8),
                 top = top, members = view.lists.main and #view.lists.main.order or 0,
                 status = fp(nd) == best and "in sync" or "behind", frozen = frozen and frozen.reason or nil, verified = verified,
@@ -10271,10 +10271,10 @@ end
   // A hypothetical "format 3" of the ledger (nothing like it exists yet) used to try the migration strategy: players on different releases, a cutover,
   // an update, and a client whose conversion of old entries is wrong. The checks at the bottom score the whole strategy and prove the scoring can fail.
   let mig = null, migEval = null, migMut = null, migBusy = "", migMsg = "";
-  const MIG_WHY = { notauthorized: "only the ledger keeper and officers can write entries", noplayer: "no such player", nolist: "there is no list yet",
+  const MIG_WHY = { notauthorized: "only the ledger owner and officers can write entries", noplayer: "no such player", nolist: "there is no list yet",
     alreadynew: "that player is already on the new release", alreadyjoined: "Fenn has already joined",
     badmigrate: "the ledger has already moved to the next format (or this is not the next format)", frozen: "that client refused: it could not reproduce the cutover",
-    cantwrite: "that release does not know the next format", notguildmaster: "only the ledger keeper can write the cutover" };
+    cantwrite: "that release does not know the next format", notguildmaster: "only the ledger owner can write the cutover" };
   function migCall(name, a, b) {
     mig = call(name, a, b);
     migMsg = mig.ok === false ? "Not allowed: " + (MIG_WHY[mig.why] || mig.why) : "";
@@ -10319,7 +10319,7 @@ end
       const agree = !behind.length;
       return { cls: agree ? "good" : "warn", head: agree ? "Everyone shares one ledger, still in format 2" : "Not the same yet",
         text: (agree ? "" : "Some players are catching up: " + behind.map((p) => esc(p.name)).join(", ") + ". ") +
-          news.length + " player(s) run the new release and " + olds.length + " run the old one, and they all read and write the same entries. Next: write a few entries as the ledger keeper (new release) and as Off (old release), then press <b>Move the ledger to format 3</b>." };
+          news.length + " player(s) run the new release and " + olds.length + " run the old one, and they all read and write the same entries. Next: write a few entries as the ledger owner (new release) and as Off (old release), then press <b>Move the ledger to format 3</b>." };
     }
     const lines = [];
     lines.push("The ledger is in <b>format 3</b>. It was cut over with " + mig.cutover.events + " entries before the change (digest <code>" + esc(mig.cutover.digest) + "</code>).");
@@ -10376,13 +10376,13 @@ end
     }
     if (migBusy) result = '<div class="card" style="margin:10px 0 0"><div>' + migBusy + "</div></div>";
     $("#mig").innerHTML =
-      '<p class="sub">A ledger can never be rewritten: every entry keeps the format it was written in, so every hash still verifies however old it is. When the rules change, a new release learns to <b>read</b> the old format, and the ledger keeper <b>cuts the ledger over</b> with one entry. This lab simulates that with a <b>hypothetical format 3</b> (it does not exist): award entries rename their fields, and a new member with no stated position goes to the <b>top</b> instead of the bottom. Five players, real engines, a simulated network.</p>' +
+      '<p class="sub">A ledger can never be rewritten: every entry keeps the format it was written in, so every hash still verifies however old it is. When the rules change, a new release learns to <b>read</b> the old format, and the ledger owner <b>cuts the ledger over</b> with one entry. This lab simulates that with a <b>hypothetical format 3</b> (it does not exist): award entries rename their fields, and a new member with no stated position goes to the <b>top</b> instead of the bottom. Five players, real engines, a simulated network.</p>' +
       '<div class="card verdict ' + v.cls + '"><div class="row spread"><h2 style="margin:0">' + (v.cls === "good" ? "&#10003; " : "&#9203; ") + v.head + '</h2><button data-act="mig-reset" title="Back to five players sharing a format 2 ledger, as at the start">Reset the lab</button></div><div style="margin-top:8px">' + v.text + "</div></div>" +
       '<div class="peers">' + players + "</div>" +
       '<div class="card"><h2>Do something</h2>' +
-        '<div class="small muted">Each button acts on the players above. Write entries at the ledger keeper (GM, new release) and at Off (an officer still on the old release) with the buttons on their cards. Raiders can\'t write: only the ledger keeper and officers can.</div>' +
-        '<div class="small" style="margin:10px 0 3px"><b>The cutover</b> &mdash; the ledger keeper writes one entry that records exactly which entries are before the change and the standings they produce. Every player on the new release replays that history themselves and checks they get the same answer. Players on the old release can\'t read it: they are told to update, and their own ledger stays in format 2.</div><div class="row">' +
-          '<button class="primary" data-act="mig-migrate"' + (busy() || mig.migrated ? " disabled" : "") + ' title="' + (mig.migrated ? "The ledger is already in format 3: a ledger moves once. Press Reset the lab (top right of the verdict) to start again." : busy() ? "A check is running: wait for it to finish." : "The ledger keeper moves the ledger to format 3.") + '">' +
+        '<div class="small muted">Each button acts on the players above. Write entries at the ledger owner (GM, new release) and at Off (an officer still on the old release) with the buttons on their cards. Raiders can\'t write: only the ledger owner and officers can.</div>' +
+        '<div class="small" style="margin:10px 0 3px"><b>The cutover</b> &mdash; the ledger owner writes one entry that records exactly which entries are before the change and the standings they produce. Every player on the new release replays that history themselves and checks they get the same answer. Players on the old release can\'t read it: they are told to update, and their own ledger stays in format 2.</div><div class="row">' +
+          '<button class="primary" data-act="mig-migrate"' + (busy() || mig.migrated ? " disabled" : "") + ' title="' + (mig.migrated ? "The ledger is already in format 3: a ledger moves once. Press Reset the lab (top right of the verdict) to start again." : busy() ? "A check is running: wait for it to finish." : "The ledger owner moves the ledger to format 3.") + '">' +
             (mig.migrated ? "Already moved to format 3" : busy() ? "Working&hellip;" : "Move the ledger to format 3") + "</button>" +
             (mig.migrated ? '<span class="small muted">A ledger moves once. <b>Reset the lab</b> (top right) starts again from format 2.</span>' : "") + "</div>" +
         '<div class="small" style="margin:10px 0 3px"><b>A wrong conversion</b> &mdash; a client joins whose conversion of old entries is wrong (it forgets that an old "no position" meant the bottom). It replays the history, gets a different answer from the cutover\'s, and must refuse to write.</div><div class="row">' +
@@ -10401,7 +10401,7 @@ end
         '<p class="hint"><b>Format.</b> The shape and meaning of the entries in the ledger. Every entry stays in the format it was written in, for ever.</p>' +
         '<p class="hint"><b>Old and new release.</b> A new release can read formats 2 and 3. Until the cutover it still writes format 2, so old and new players agree.</p>' +
         '<p class="hint"><b>Conversion (upcaster).</b> How a new release reads an old entry as the new format, keeping its old meaning (an old "no position" stays the bottom).</p>' +
-        '<p class="hint"><b>Cutover.</b> One entry from the ledger keeper. After it entries must be in format 3; an entry still in format 2 is recorded as <b>stale</b>, never silently applied.</p>' +
+        '<p class="hint"><b>Cutover.</b> One entry from the ledger owner. After it entries must be in format 3; an entry still in format 2 is recorded as <b>stale</b>, never silently applied.</p>' +
         '<p class="hint"><b>Digest.</b> A short code for the standings the old history produces. Every new client recomputes it; a client that gets a different one is <b>frozen</b>.</p></div></div>';
   }
   const busy = () => !!migBusy;

@@ -364,7 +364,7 @@ function M:Refresh()
     p.addAllButton:SetText(("Add %d from your group and guild"):format(model.missing))
     if model.total == 0 then
         p.message:SetText(hasList and "Nobody is on this list yet. Players in your group and guild can be added with the button below."
-            or "No lists yet. The ledger keeper starts the ledger with the button below.")
+            or "No lists yet. The ledger owner starts the ledger with the button below.")
         p.message:Show()
     else
         p.message:Hide()
@@ -1041,7 +1041,7 @@ function M:BuildStandings(parent)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     p.message:SetPoint("TOPLEFT", 14, -64); p.message:SetWidth(330); p.message:SetJustifyH("LEFT"); p.message:Hide()
 
-    -- First run: the ledger keeper founds the ledger (the same as `create main`; the ledger records who did it as the ledger keeper).
+    -- First run: the ledger owner founds the ledger (the same as `create main`; the ledger records who did it as the ledger owner).
     p.startButton = button(p, "Start the ledger", 160, 26)
     p.startButton:SetPoint("TOP", 0, -130)
     p.startButton:SetScript("OnClick", function() M:Command("create main Main"); M.list = "main"; M:Refresh() end)

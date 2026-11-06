@@ -1,10 +1,10 @@
-# King's Gambit — Ledger keeper's guide
+# King's Gambit — Ledger owner's guide
 
-Everything the ledger keeper can configure, what each option is for, and how to use it. Every one of these is an entry in the
+Everything the ledger owner can configure, what each option is for, and how to use it. Every one of these is an entry in the
 shared ledger, not a private setting, so **every client enforces it the same way**, and anyone can see who chose what and when
 (`history`, or the audit tool). Nothing here can be changed quietly.
 
-**Who the ledger keeper is.** The ledger keeper is the player who founded the guild's ledger, and the one who names its officers. It is **not** the game's Guild Master: that is a role in the game's guild, which this addon does not use, and the game's ranks (an officer in the guild, say) do not decide who may write here. A guild's Guild Master and its ledger keeper can be different people, and so can the game's officers and the ledger's.
+**Who the ledger owner is.** The ledger owner is the player who founded the guild's ledger, and the one who names its officers. It is **not** the game's Guild Master: that is a role in the game's guild, which this addon does not use, and the game's ranks (an officer in the guild, say) do not decide who may write here. A guild's Guild Master and its ledger owner can be different people, and so can the game's officers and the ledger's.
 
 **The windows.** Type `/gambit` to open the Guild book: a column of sections down the left (Lists, Ledger, Awards, Raids, People, Rules, and Admin below them), with a form for every
 command below spread across them. A running loot session has its own small **Loot window**, which opens by itself when a
@@ -16,29 +16,29 @@ that is never saved or sent. `/gambit help` lists the commands.
 
 | Who | Can |
 |---|---|
-| **Ledger keeper** (whoever founded the ledger) | name the officers · set how raids pick their list · move the ledger to a new format |
+| **Ledger owner** (whoever founded the ledger) | name the officers · set how raids pick their list · move the ledger to a new format |
 | **Officers** | open, extend and revoke raids · name a raid's list · set which classes may bid on an item and who it suits · edit lists directly when no raid is running |
 | **A raid's Master Looter** | run loot sessions · write to the raid's list (and no other) · choose who disenchants · answer requests |
 | **Everyone** | bid, request changes, verify the ledger |
 
-The ledger keeper is also an officer, so everything under "Officers" applies to them too.
+The ledger owner is also an officer, so everything under "Officers" applies to them too.
 
 ---
 
 ## 1. Founding the ledger (once)
 
-**What it is for:** the ledger belongs to whoever starts it. That character is the ledger keeper, for ever, unless the role is handed over.
+**What it is for:** the ledger belongs to whoever starts it. That character is the ledger owner, for ever, unless the role is handed over.
 
-**How:** on the ledger keeper's character, in a group where they are the raid leader or an assistant, create the first list:
+**How:** on the ledger owner's character, in a group where they are the raid leader or an assistant, create the first list:
 
 ```
 create main
 ```
 
-This writes the first entry (the *Genesis*, which names you ledger keeper) and then the list. Other players receive your ledger by syncing with
+This writes the first entry (the *Genesis*, which names you ledger owner) and then the list. Other players receive your ledger by syncing with
 you; a ledger founded separately (another guild, a training session) never mixes in.
 
-**Take care:** do it on the character you mean to be ledger keeper. Two people each founding a ledger end up with two unrelated ledgers.
+**Take care:** do it on the character you mean to be ledger owner. Two people each founding a ledger end up with two unrelated ledgers.
 Handing the role to someone else exists in the ledger format (`SetGuildMaster`) but has no command yet.
 
 ## 2. Officers
@@ -48,9 +48,9 @@ Handing the role to someone else exists in the ledger format (`SetGuildMaster`) 
 **How:**
 
 ```
-officers                    show the ledger keeper and the officers
+officers                    show the ledger owner and the officers
 officers set Aldric Brann   replace the officer list with exactly these characters
-officers set                no officers: only the ledger keeper
+officers set                no officers: only the ledger owner
 ```
 
 `officers set` always replaces the whole list (give every name you want, not just the new one). Write each character as `First_Last` (a character is its first and
@@ -114,7 +114,7 @@ standings <id>              look at a list without switching
 ## 4. Moving the ledger to a new format
 
 **What it is for:** now and then a release changes how the ledger is written in a way old versions cannot read. The ledger never rewrites its
-history; instead the ledger keeper writes a *cutover*, and from then on everyone writes in the new format. See
+history; instead the ledger owner writes a *cutover*, and from then on everyone writes in the new format. See
 [ledger-format.md](ledger-format.md) ("Migrating the ledger") for the details.
 
 **How:**
@@ -144,7 +144,7 @@ major is 0). Players on an older line see that they must update; you do not conf
 
 ## Officers' other settings (for reference)
 
-These are officers' to set, so the ledger keeper can do them as well. They are guild-wide and in the ledger, like the options above.
+These are officers' to set, so the ledger owner can do them as well. They are guild-wide and in the ledger, like the options above.
 
 | Command | What it is for |
 |---|---|
@@ -159,10 +159,10 @@ These are officers' to set, so the ledger keeper can do them as well. They are g
 
 Whoever is given an item to disenchant says what it gave: the addon notices the loot window a Disenchant cast opens and records it by itself, or they type `disenchanted 3 Strange Dust, 1 Lesser Magic Essence` (the Awards section has the same form). If they are not the Master Looter, the Master Looter's addon writes it for them at once; the Ledger shows the item as "waiting for the result" until then, then what it gave.
 
-The Master Looter (not the ledger keeper) chooses the disenchanter for their raid (`disenchanter <name>`), and loot is not handed out until they
+The Master Looter (not the ledger owner) chooses the disenchanter for their raid (`disenchanter <name>`), and loot is not handed out until they
 have.
 
-## Things the ledger keeper does *not* control
+## Things the ledger owner does *not* control
 
 These are deliberate. They are what stop one person from deciding for everyone:
 

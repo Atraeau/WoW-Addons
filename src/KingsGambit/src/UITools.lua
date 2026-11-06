@@ -15,7 +15,7 @@ end
 
 M.GROUPS = {
     { id = "raid", title = "Raid", actions = {
-        { id = "raidopen", label = "Open a raid", help = "Officers. The Master Looter writes the raid's awards. Name a list to play on it (required if the ledger keeper set one list per raid).",
+        { id = "raidopen", label = "Open a raid", help = "Officers. The Master Looter writes the raid's awards. Name a list to play on it (required if the ledger owner set one list per raid).",
             fields = { F("ml", "Master Looter", { name = true, optional = true, source = "group" }), F("hours", "Hours", { optional = true, default = "4" }), F("list", "List", { optional = true }) },
             cmd = { "raid open", "@ml", "@hours", { "list", "@list" } } },
         { id = "raidlist", label = "Name the raid's list", help = "Officers. Once named, a raid never changes list.", fields = { F("id", "List") }, cmd = { "raid list", "@id" } },
@@ -49,12 +49,12 @@ M.GROUPS = {
         { id = "decline", label = "Decline a request", help = "Master Looter. A reason is required.", fields = { F("n", "Request number"), F("reason", "Reason") }, cmd = { "decline", "@n", "@reason" } },
         { id = "history", label = "History", help = "The last changes to the list, with who, why and at whose request.", fields = { F("n", "How many", { optional = true, default = "10" }) }, cmd = { "history", "@n" } },
     } },
-    { id = "admin", title = "Ledger keeper and me", actions = {
-        { id = "officers", label = "Officers", help = "Show the ledger keeper and the officers.", fields = {}, cmd = { "officers" } },
-        { id = "officersset", label = "Set the officers", help = "Ledger keeper. Replaces the whole list: give every name you want, separated by spaces or commas (First Last as First_Last).", fields = { F("names", "Names", { optional = true }) }, cmd = { "officers set", "@names" } },
-        { id = "policy", label = "One list per raid?", help = "Ledger keeper. choose (the default): the officer may name a list. perraid: every raid must have a list of its own. Empty shows it.", fields = { F("mode", "choose or perraid", { optional = true }) }, cmd = { "raid policy", "@mode" } },
+    { id = "admin", title = "Ledger owner and me", actions = {
+        { id = "officers", label = "Officers", help = "Show the ledger owner and the officers.", fields = {}, cmd = { "officers" } },
+        { id = "officersset", label = "Set the officers", help = "Ledger owner. Replaces the whole list: give every name you want, separated by spaces or commas (First Last as First_Last).", fields = { F("names", "Names", { optional = true }) }, cmd = { "officers set", "@names" } },
+        { id = "policy", label = "One list per raid?", help = "Ledger owner. choose (the default): the officer may name a list. perraid: every raid must have a list of its own. Empty shows it.", fields = { F("mode", "choose or perraid", { optional = true }) }, cmd = { "raid policy", "@mode" } },
         { id = "migratestatus", label = "Ledger format", help = "The ledger's format, and which players can already read the next one.", fields = {}, cmd = { "migrate status" } },
-        { id = "migrate", label = "Move to the next format", help = "Ledger keeper. Permanent. Only when 'Ledger format' shows everyone is ready.", fields = { F("format", "Next format number"), F("reason", "Reason") }, cmd = { "migrate", "@format", "@reason" } },
+        { id = "migrate", label = "Move to the next format", help = "Ledger owner. Permanent. Only when 'Ledger format' shows everyone is ready.", fields = { F("format", "Next format number"), F("reason", "Reason") }, cmd = { "migrate", "@format", "@reason" } },
         { id = "version", label = "Versions", help = "This addon's version, and what every other player runs.", fields = {}, cmd = { "version" } },
         { id = "sync", label = "Sync status", help = "How the ledger is syncing with other players.", fields = {}, cmd = { "sync" } },
         { id = "check", label = "Check the game client", help = "Probe the game's API (results are saved for the developer).", fields = {}, cmd = { "check" } },

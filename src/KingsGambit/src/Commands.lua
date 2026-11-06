@@ -29,7 +29,7 @@ local WHY = {
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
     expired = "your raid has ended, and with it your right to write to the list",
-    notofficer = "only an officer can do that", notguildmaster = "only the ledger keeper can do that",
+    notofficer = "only an officer can do that", notguildmaster = "only the ledger owner can do that",
     -- ledger formats (see Migrations.lua)
     ahead = "this ledger has entries in a newer format than this version can read, so writing is paused: update King's Gambit (nothing was lost)",
     frozen = "this client could not reproduce the last migration, so it will not write (it would not agree with everyone else): update King's Gambit",
@@ -109,7 +109,7 @@ local HELP = {
     "  undo yes - undo the last award (it asks first)",
     "  eligible <item> <classes|any> <reason> - which classes may bid on an item",
     "  suits <item> <roles|auto> <reason> - who an item suits: tank, melee, hunter, caster, healer",
-    "Ledger keeper",
+    "Ledger owner",
     "  officers [set <names...>] - who the officers are",
     "  raid policy [choose|perraid] - how raids pick their list",
     "  migrate [status] - the ledger's format, and who can read the next one",
@@ -179,7 +179,7 @@ function M.New(ctx)
 
     function cmds.help() for _, l in ipairs(HELP) do out(l) end end
 
-    -- The ledger's format, and who can read the next one. The ledger keeper moves the ledger to it with `migrate <format> <reason>` once the guild is ready:
+    -- The ledger's format, and who can read the next one. The ledger owner moves the ledger to it with `migrate <format> <reason>` once the guild is ready:
     -- the entry records exactly which entries are before the change and what they add up to, and every client checks its own replay against that.
     function cmds.migrate(args)
         local sub, rest = args:match("^(%S*)%s*(.-)$")
@@ -198,7 +198,7 @@ function M.New(ctx)
         out(("The ledger is in format %d. This version reads format%s %s."):format(fmt, #readable > 1 and "s" or "", table.concat(readable, ", ")))
         if next(engine:Ahead()) then out("This ledger has entries in a newer format than this version can read: you see it as of the last entry you can read, and writing is paused. Update King's Gambit.") end
         local frozen = engine:Frozen()
-        if frozen then out(("This client could not reproduce the migration to format %d (it got a different result from the ledger keeper's), so it will not write. Update King's Gambit."):format(frozen.to)) end
+        if frozen then out(("This client could not reproduce the migration to format %d (it got a different result from the ledger owner's), so it will not write. Update King's Gambit."):format(frozen.to)) end
         local nextFormat = fmt + 1
         if readable[#readable] < nextFormat then out(("This version does not know format %d: there is nothing newer to move to yet."):format(nextFormat)); return end
         local ready, notReady, unknown = {}, {}, {}
@@ -214,7 +214,7 @@ function M.New(ctx)
         out(("Format %d is available. Can read it: %s. Cannot yet: %s. Not heard from: %s."):format(nextFormat,
             #ready > 0 and table.concat(ready, ", ") or "nobody", #notReady > 0 and table.concat(notReady, ", ") or "nobody",
             #unknown > 0 and table.concat(unknown, ", ") or "nobody"))
-        out("The ledger keeper moves the ledger with: migrate " .. nextFormat .. " <reason>. Anyone who cannot read it yet will have to update first.")
+        out("The ledger owner moves the ledger with: migrate " .. nextFormat .. " <reason>. Anyone who cannot read it yet will have to update first.")
     end
 
     -- Which version is this, and can it work with what the others run? Players are listed from their heartbeats.
@@ -915,7 +915,7 @@ function M.New(ctx)
             out(("Raid %s plays on the %s list. It cannot change any more."):format(r.id, args))
         end
     end
-    -- The ledger keeper's rule for how raids pick their list.
+    -- The ledger owner's rule for how raids pick their list.
     function raid.policy(args)
         local a = engine:View().auth
         if args == "" then
@@ -1018,13 +1018,13 @@ function M.New(ctx)
             local names = {}
             for n in pairs(a.officers) do names[#names + 1] = short(n) end
             table.sort(names)
-            out(("Ledger keeper: %s. Officers: %s."):format(short(a.gm) or "none (no ledger yet)", #names > 0 and table.concat(names, ", ") or "none"))
+            out(("Ledger owner: %s. Officers: %s."):format(short(a.gm) or "none (no ledger yet)", #names > 0 and table.concat(names, ", ") or "none"))
             return
         end
         local names = {}
         for n in rest:gmatch("%S+") do names[#names + 1] = name(n) end
         if writeAuthority("SetOfficers", { names = names }) then
-            out(#names > 0 and ("Officers are now: " .. rest .. ".") or "There are no officers now (only the ledger keeper).")
+            out(#names > 0 and ("Officers are now: " .. rest .. ".") or "There are no officers now (only the ledger owner).")
         end
     end
 

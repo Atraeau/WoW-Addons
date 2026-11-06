@@ -73,13 +73,13 @@ already have the property.
 Authority is recorded in the ledger itself, so any peer (and the audit tool) can check it from the chains alone, without
 knowing who was in which raid or what the guild roster looked like at the time.
 
-- **Officers come from the game.** Only the ledger keeper can appoint officers in WoW, so we don't invent a second
-  system. The **ledger keeper's addon mirrors the guild's officer ranks into the ledger** (`SetOfficers { names }`)
+- **Officers come from the game.** Only the ledger owner can appoint officers in WoW, so we don't invent a second
+  system. The **ledger owner's addon mirrors the guild's officer ranks into the ledger** (`SetOfficers { names }`)
   whenever it sees them change. That makes the officer list part of the record, so it can be checked later. Which ranks
   count as officers is read from the rank permissions (`C_GuildInfo.GuildControlGetRankFlags`); the exact flag is
-  confirmed in the game. A `SetOfficers` event counts only if its writer was the ledger keeper; the genesis event, written
-  by the ledger keeper's addon when the ledger is created, records who that is, and a later `SetGuildMaster` (written by the
-  current ledger keeper) hands it on.
+  confirmed in the game. A `SetOfficers` event counts only if its writer was the ledger owner; the genesis event, written
+  by the ledger owner's addon when the ledger is created, records who that is, and a later `SetGuildMaster` (written by the
+  current ledger owner) hands it on.
 - **Master Looters get just-in-time elevation.** Being Master Looter is a temporary privilege, not a rank:
   1. The would-be Master Looter asks for it (a message to the online officers, not a ledger event).
   2. An officer approves, by writing `Elevate { raid, ml, minutes }` on their own chain. That opens the raid and names its
@@ -152,9 +152,9 @@ parallel play. To make it rarer still, a client catches up on its own chain from
 
 1. **Master Looter:** officer-approved just-in-time elevation that expires on its own (section 4).
 2. **Expiry:** default **6 hours**, adjustable per guild and per approval, recorded in each `Elevate` event.
-3. **Officers:** taken from the game's guild ranks (only the ledger keeper can appoint them), mirrored into the ledger by the
-   ledger keeper's addon.
+3. **Officers:** taken from the game's guild ranks (only the ledger owner can appoint them), mirrored into the ledger by the
+   ledger owner's addon.
 4. **Adjustment requests:** both accepted and declined requests are recorded, with reasons.
 
-Still to confirm in the game (Nov 4): which rank-permission flag means "officer", and that the ledger keeper's addon can read
+Still to confirm in the game (Nov 4): which rank-permission flag means "officer", and that the ledger owner's addon can read
 every rank's permissions.

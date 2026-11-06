@@ -138,27 +138,27 @@ for _, m in ipairs(Lab.mutations()) do
 end
 
 H.section("Migration: the cutover entry is guarded")
-test("only the ledger keeper can migrate, only to the next format, only once, and only with a reason", function()
+test("only the ledger owner can migrate, only to the next format, only once, and only with a reason", function()
     local net = SimNetwork.New()
     local w = { net = net, nodes = {} }
     local rules3 = makeRules3()
     local gm, off = node(w, "GM", rules3), node(w, "Off", rules3)
     assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } })); net:advance(5)
-    eq(select(2, off.engine:Migrate(3, "not the ledger keeper")), "notguildmaster")
+    eq(select(2, off.engine:Migrate(3, "not the ledger owner")), "notguildmaster")
     eq(select(2, gm.engine:Migrate(4, "too far")), "badmigrate"); eq(select(2, gm.engine:Migrate(2, "backwards")), "badmigrate")
     local ev, why = gm.engine:Migrate(3, ""); eq(ev, nil)
     assert(gm.engine:Migrate(3, "the first one"))
     eq(select(2, gm.engine:Migrate(3, "again")), "badmigrate", "the ledger is already in format 3")
     local old = Engine.New(MockClient.New({ name = "Old", seed = 5 }), { rules = Migrations.Default })
     eq(select(2, old:Migrate(3, "this build can't write format 3")), "cantwrite")
-    -- a forged cutover: not from the ledger keeper, or with a cut or digest that doesn't hold
+    -- a forged cutover: not from the ledger owner, or with a cut or digest that doesn't hold
     net:advance(5)
     local forged = Ledger.Build(off.engine.store, off.engine:MyChain(), "Off", "Migrate", { from = 2, to = 3, cut = {}, digest = "x", reason = "forged" }, off.client:serverTime() + 100, nil, 3)
     local status = Ledger.Receive(off.engine.store, forged)
     assert(status == "appended"); off.engine:rebuild()
     local conflict
     for _, c in ipairs(off.engine:Conflicts()) do if c.type == "Migrate" then conflict = c.reason end end
-    assert(conflict, "a Migrate entry that is not the ledger keeper's is refused by every client")
+    assert(conflict, "a Migrate entry that is not the ledger owner's is refused by every client")
 end)
 
 H.section("Migration lab: the interactive world the simulator page drives")

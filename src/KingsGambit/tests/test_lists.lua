@@ -1,4 +1,4 @@
--- Which list a raid plays on: an officer names it when the raid opens (the first choice stands), the ledger keeper can require every raid to
+-- Which list a raid plays on: an officer names it when the raid opens (the first choice stands), the ledger owner can require every raid to
 -- have a list of its own, and a Master Looter writes only to their raid's list (and its off-spec list). Design journal: "a raid chooses its
 -- list when it opens". The ledger rules first, then the engine, the loot session and the commands on top of them.
 local H = ...
@@ -77,7 +77,7 @@ test("an officer outside a raid is not held to a list", function()
     eq(w:view().lists.main.members.Y.active, true)
 end)
 
-H.section("Lists: the ledger keeper can require one list per raid")
+H.section("Lists: the ledger owner can require one list per raid")
 test("under the per-raid policy a raid has no default list, and its Master Looter can't write until one is named", function()
     local w = raidWorld("perraid")
     award(w, "main", 205)
@@ -93,7 +93,7 @@ test("under the per-raid policy a raid has no default list, and its Master Loote
     eq(v.lists.mc.members.A.wins, 1); eq(v.auth.raids.r1.list, "mc")
 end)
 
-test("only the ledger keeper sets the policy, and only to a policy that exists", function()
+test("only the ledger owner sets the policy, and only to a policy that exists", function()
     local w = raidWorld()
     w:write("Off", "SetListPolicy", { mode = "perraid" }, 210)
     w:write("GM", "SetListPolicy", { mode = "everything" }, 211)
@@ -162,7 +162,7 @@ test("raid open ... list <id> opens the raid on that list; policy and list comma
     assert(run("raid list"):find("20man"))
     assert(run("raid list other"):find("already"), "the list can't change once named")
     run("raid close")
-    assert(run("raid policy perraid"):find("own"), "the ledger keeper sets the policy")
+    assert(run("raid policy perraid"):find("own"), "the ledger owner sets the policy")
     assert(run("raid open Raidlead 2"):find("requires a list"), "a raid can't be opened without a list now")
     assert(run("raid open Raidlead 2 list main"):find("main"), "a raid on main is refused under the policy")
     assert(run("raid policy"):find("perraid"))

@@ -139,7 +139,7 @@ function Lab.evaluate(seed, lossy)
     local card, stats = {}, { seed = seed, lossy = lossy }
     local function mark(name, ok, detail) card[#card + 1] = { name = name, ok = ok and true or false, detail = detail } end
 
-    -- who runs what: the ledger keeper and two raiders are on the new release; an officer and a raider have not updated yet
+    -- who runs what: the ledger owner and two raiders are on the new release; an officer and a raider have not updated yet
     local gm, cass, dara = Lab.node(w, "GM", rules3), Lab.node(w, "Cass", rules3), Lab.node(w, "Dara", rules3)
     local off, eira = Lab.node(w, "Off", Migrations.Default), Lab.node(w, "Eira", Migrations.Default)
     assert(gm.engine:CreateList("main", "Main")); assert(gm.engine:Write("SetOfficers", { names = { "Off" } }))
@@ -198,13 +198,13 @@ function Lab.evaluate(seed, lossy)
     local idsBefore = allEventIds(gm)
     local allV2 = true
     for _, v in pairs(idsBefore) do if v ~= 2 then allV2 = false end end
-    mark("until the ledger keeper says so, even the new release writes the old format", allV2)
+    mark("until the ledger owner says so, even the new release writes the old format", allV2)
     stats.events = 0
     for _ in pairs(idsBefore) do stats.events = stats.events + 1 end
 
     -- the cutover
     local mig, why = gm.engine:Migrate(3, "simulated breaking change")
-    mark("the ledger keeper can write the cutover", mig ~= nil, why)
+    mark("the ledger owner can write the cutover", mig ~= nil, why)
     local newNames = { "GM", "Cass", "Dara" }
     local tc, convNew = settle(w, newNames)
     mark("every player on the new release receives it", convNew, "settled in " .. tc .. " s")
@@ -217,7 +217,7 @@ function Lab.evaluate(seed, lossy)
         local c = m and nd.engine.store.verified[m.ev.id]
         if c and c.ok and not nd.engine:Frozen() then verified = verified + 1 end
     end
-    mark("every new client replayed the old history itself and got the ledger keeper's digest", verified == #newNames, verified .. " of " .. #newNames)
+    mark("every new client replayed the old history itself and got the ledger owner's digest", verified == #newNames, verified .. " of " .. #newNames)
     local oldReading = m and Ledger.CutDigest(eira.engine.store, m.cut)
     mark("and that digest is what the OLD release computes for the same history (the migration lost nothing)", m ~= nil and oldReading == m.digest)
     local unchanged = true
@@ -316,7 +316,7 @@ function Lab.mutations()
         Ledger.CutDigest = function(store, cut) calls = calls + 1; return calls == 1 and "0000000000000000" or realCut(store, cut) end
     end, function() Ledger.CutDigest = realCut end)
     failed = ok and Lab.failed(card) or {}
-    out[#out + 1] = { name = "the ledger keeper records a wrong digest",
+    out[#out + 1] = { name = "the ledger owner records a wrong digest",
         caught = (not ok) or anyContains(failed, "every new client replayed the old history"),
         detail = ok and (#failed .. " check(s) failed") or "every client refused to write: the guild stopped" }
     return out
@@ -325,7 +325,7 @@ end
 ---------------------------------------------------------------- an interactive world (the page's lab)
 local MEMBERS = 6
 
--- Players: GM (ledger keeper) and Cass, Dara are on the new release; Off (an officer) and Eira have not updated. Fenn can join with a wrong upcaster.
+-- Players: GM (ledger owner) and Cass, Dara are on the new release; Off (an officer) and Eira have not updated. Fenn can join with a wrong upcaster.
 function Lab.New()
     local L = { log = {}, counter = 0 }
     local w, rules3
@@ -383,7 +383,7 @@ function Lab.New()
     function L:migrate()
         local ev, err = w.nodes.GM.engine:Migrate(3, "migration lab")
         if not ev then return false, err end
-        note("The ledger keeper wrote the cutover to format 3. It records exactly which entries are before it and the standings they produce. Players on the new release check that against their own replay; players on the old release can't read it.")
+        note("The ledger owner wrote the cutover to format 3. It records exactly which entries are before it and the standings they produce. Players on the new release check that against their own replay; players on the old release can't read it.")
         return true
     end
 
@@ -441,7 +441,7 @@ function Lab.New()
             local mm = view.auth.migrations[1]
             if mm and nd.engine.store.verified[mm.ev.id] then verified = nd.engine.store.verified[mm.ev.id].ok end
             local frozen = nd.engine:Frozen()
-            out.players[#out.players + 1] = { name = nm, role = nm == "GM" and "ledger keeper" or nm == "Off" and "officer" or "raider", release = release,
+            out.players[#out.players + 1] = { name = nm, role = nm == "GM" and "ledger owner" or nm == "Off" and "officer" or "raider", release = release,
                 reads = Migrations.Readable(nd.rules), format = nd.engine:Format(), events = events, head = fp(nd):sub(1, 8),
                 top = top, members = view.lists.main and #view.lists.main.order or 0,
                 status = fp(nd) == best and "in sync" or "behind", frozen = frozen and frozen.reason or nil, verified = verified,
