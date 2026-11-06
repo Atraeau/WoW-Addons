@@ -2019,6 +2019,11 @@ from the main window**: a live session and the lists are different moments, and 
 unchanged: a button types the command the old button typed. Left as they were, for now: the page still has its teaching material around the window (the lesson,
 the scenario list, the answers table), and the page's "Need, ready" button and "Request eligibility" are page-only extras for tokens and the Master Looter.
 
+**The windows are the player's to place (2026-11-06).** Both windows (the Loot window and the main window) can be dragged, can't be dragged off the screen, and the
+place they are left is remembered for each character (`KingsGambitCharDB.ui`, which the design had reserved for frame positions). `/gambit window reset` puts both back where
+they start; a damaged saved position falls back to the default. The Loot window starts to the left of the main window so the two don't cover each other. (Size and scale
+options are still to come.)
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

@@ -59,16 +59,38 @@ local function tooltipOf(b)
     end
 end
 
+-- A window the player can move: drag it by its title bar or anywhere that isn't a button. Where they leave it is remembered for this character
+-- (KingsGambitCharDB.ui[key]), it can't be dragged off the screen, and `/gambit window reset` puts both windows back. `default` = { point, x, y }.
+function M.Movable(f, key, default)
+    f:SetMovable(true); f:EnableMouse(true)
+    if f.SetClampedToScreen then f:SetClampedToScreen(true) end
+    f:RegisterForDrag("LeftButton")
+    f:SetScript("OnDragStart", f.StartMoving)
+    f:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+        local point, _, relPoint, x, y = self:GetPoint()
+        local store = SK.char and SK.char.ui
+        if store and type(point) == "string" then store[key] = { point, relPoint, x, y } end
+    end)
+    f.placeDefault = function()
+        f:ClearAllPoints()
+        f:SetPoint(default[1], UIParent, default[1], default[2], default[3])
+    end
+    local saved = SK.char and SK.char.ui and SK.char.ui[key]
+    if type(saved) == "table" and type(saved[1]) == "string" and tonumber(saved[3]) and tonumber(saved[4]) then
+        f:ClearAllPoints()
+        f:SetPoint(saved[1], UIParent, saved[2] or saved[1], saved[3], saved[4])
+    else
+        f.placeDefault()
+    end
+end
+
 function M.Build(ui)
     local ok, f = pcall(CreateFrame, "Frame", "KingsGambitLootWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not f then f = CreateFrame("Frame", "KingsGambitLootWindow", UIParent) end
     f:SetSize(WIDTH, 120)
-    f:SetPoint("CENTER", 0, 140)
     f:SetFrameStrata("DIALOG")
-    f:SetMovable(true); f:EnableMouse(true)
-    f:RegisterForDrag("LeftButton")
-    f:SetScript("OnDragStart", f.StartMoving)
-    f:SetScript("OnDragStop", f.StopMovingOrSizing)
+    M.Movable(f, "loot", { "CENTER", -440, 140 }) -- by default left of the main window (centred, 420 wide)
     if f.TitleText then f.TitleText:SetText("King's Gambit: loot") end
     if not f.TitleText then
         local t = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")

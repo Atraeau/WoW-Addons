@@ -142,3 +142,36 @@ test("a button the view shows can always be run: its command exists", function()
     end
     for _, b in ipairs(v.ml.buttons) do assert(LootWindow.CommandText(b.act, "Someone"), "a command for " .. b.key) end
 end)
+
+H.section("Loot window: moving it")
+test("a moved window is remembered for the character, restored next time, and can be reset", function()
+    local LootWindow = SK.modules.LootWindow
+    local saved = { UIParent = _G.UIParent, char = SK.char }
+    _G.UIParent = {}
+    SK.char = { ui = {} }
+    local function fake()
+        local f = { points = {} }
+        function f:SetMovable() end function f:EnableMouse() end function f:SetClampedToScreen() end function f:RegisterForDrag() end
+        function f:SetScript(name, fn) self[name] = fn end
+        function f:StartMoving() end function f:StopMovingOrSizing() end
+        function f:ClearAllPoints() self.points = {} end
+        function f:SetPoint(...) self.points[#self.points + 1] = { ... } end
+        function f:GetPoint() return "TOP", _G.UIParent, "TOP", 12, -34 end
+        return f
+    end
+    local a = fake()
+    LootWindow.Movable(a, "loot", { "CENTER", -440, 140 })
+    eq(a.points[1][1], "CENTER"); eq(a.points[1][4], -440, "starts at its default place")
+    a.OnDragStop(a)
+    eq(SK.char.ui.loot[1], "TOP"); eq(SK.char.ui.loot[3], 12)
+    local b = fake()
+    LootWindow.Movable(b, "loot", { "CENTER", -440, 140 })
+    eq(b.points[1][1], "TOP"); eq(b.points[1][4], 12, "restored where it was left")
+    SK.char.ui.loot = { "bad" }
+    local c = fake()
+    LootWindow.Movable(c, "loot", { "CENTER", -440, 140 })
+    eq(c.points[1][1], "CENTER", "a damaged saved position falls back to the default")
+    b.placeDefault()
+    eq(b.points[1][1], "CENTER", "reset puts it back")
+    _G.UIParent, SK.char = saved.UIParent, saved.char
+end)

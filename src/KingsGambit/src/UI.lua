@@ -205,6 +205,15 @@ function M:OpenLoot()
     M:Refresh()
 end
 
+-- Put both windows back where they start, and forget where they were moved to.
+function M:ResetWindows()
+    local store = SK.char and SK.char.ui
+    if store then store.main, store.loot = nil, nil end
+    for _, f in ipairs({ self.window, self.lootWindow }) do
+        if f and f.placeDefault then f.placeDefault() end
+    end
+end
+
 function M:ToggleLoot()
     if self.lootWindow and self.lootWindow:IsShown() then self.lootWindow:Hide() else self:OpenLoot() end
 end
@@ -623,12 +632,8 @@ function M:Build()
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
     M.building = w -- (hidden again if building the rest fails, so a half-built window is never left on screen)
     w:SetSize(420, 640)
-    w:SetPoint("CENTER")
     w:SetFrameStrata("DIALOG")
-    w:SetMovable(true); w:EnableMouse(true)
-    w:RegisterForDrag("LeftButton")
-    w:SetScript("OnDragStart", w.StartMoving)
-    w:SetScript("OnDragStop", w.StopMovingOrSizing)
+    LootWindow.Movable(w, "main", { "CENTER", 0, 0 })
     if w.TitleText then w.TitleText:SetText("King's Gambit") end
     if w.SetBackdrop and not w.TitleText then
         w:SetBackdrop({ bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background", edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
