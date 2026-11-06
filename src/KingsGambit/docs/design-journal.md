@@ -2135,6 +2135,16 @@ With the Loot window settled, the second surface of the two-surface decision was
 - **Tools stays as a section for now.** The existing forms are kept whole until they are split into Raids, People and Rules.
 - Still to do: the page renderer for the Guild book; Raids, People, Rules and Practice sections; staging list changes behind a pending-changes bar.
 
+### The Tools tab is split into sections (2026-11-06)
+
+The Tools tab was one page with an Area dropdown and an Action dropdown over every form: a person had to know which of four areas held "Add a player". It is now **five sections of the Guild book**, each a page of its own forms with only an Action choice (the Area step is gone):
+- **Awards**: record a win the session missed, undo the last award, an item that went elsewhere, note a salvager. The corrections.
+- **Raids**: open raids, open, name its list, extend, close, revoke, set the Master Looter, the disenchanter, one list per raid.
+- **People**: add, remove and move a player, the officers (show and set), my spec, fit hints.
+- **Rules**: class rules and who an item suits, requests to the Master Looter and their answers.
+- **Ledger**: create a list, work on a list, the ledger's format and the move to the next one, versions, sync, the game check. A gap above its button keeps the guild master's and maintenance corner apart from the everyday sections, as the design asks for the rare and permanent steps.
+Decisions: every form lives in exactly one section (a test fails when a form is in none or two, so nothing becomes unreachable); the old History form is gone because the History section replaced it; `GuildBook.SECTIONS` lists each section's forms, so the page can draw the same sections later; "Award..." on the Lists page opens the Awards section (`SectionOf`); a shift-clicked item link goes to the form page on screen. The forms themselves are unchanged and still run the command a player would type, so what each may do is decided as before. The Master Looter's list-change refusal now points to Rules ("Request a list change").
+
 ### Correction: moving an item in your order does not confirm it (2026-11-06)
 
 The first version of the ranking panel sent the whole order the moment Up or Down was pressed, so a single move turned the panel to "Order set" and counted the player as answered while they were

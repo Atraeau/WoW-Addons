@@ -10,12 +10,34 @@
 local _, SK = ...
 local M = SK:NewModule("GuildBook", {}, function() end)
 
--- The sections of the navigation column. `soon` marks ones whose content is still the older Tools forms.
+-- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
+-- `gap` puts a space above its button: the Ledger is the guild master's and maintenance corner, kept apart from the everyday sections.
+-- Every action belongs to exactly one section (the old History form is the History section now).
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "history", label = "History", tip = "Everything that happened to the lists, in words: who won what, who moved whom, and why." },
-    { id = "tools", label = "Tools", tip = "Award, eligibility, requests, the Master Looter's checks and the guild master's one-time steps." },
+    { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
+        actions = { "award", "undo", "trade", "salvaged" } },
+    { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
+        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
+    { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
+        actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
+    { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
+        actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
+    { id = "ledger", label = "Ledger", gap = true, tip = "Starting a list, the ledger's format and versions, syncing: the guild master's and maintenance steps.",
+        actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
 }
+
+function M.Section(id)
+    for _, s in ipairs(M.SECTIONS) do if s.id == id then return s end end
+end
+
+-- The section that holds a form (so a button elsewhere can open it).
+function M.SectionOf(actionId)
+    for _, s in ipairs(M.SECTIONS) do
+        for _, a in ipairs(s.actions or {}) do if a == actionId then return s end end
+    end
+end
 
 -- Which group of the record an entry belongs to, for the filter.
 M.KINDS = {

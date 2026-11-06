@@ -37,7 +37,11 @@ M.TEXT = {
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
     navhistory = { "History", "Everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
-    navtools = { "Tools", "Award, eligibility, requests, the Master Looter's checks and the guild master's one-time steps." },
+    navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
+    navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
+    navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
+    navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
+    navledger = { "Ledger", "Starting a list, the ledger's format and versions, syncing: the guild master's and maintenance steps." },
     historykind = { "Show", "Narrow the record to loot, list changes, rules or raids." },
     historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },

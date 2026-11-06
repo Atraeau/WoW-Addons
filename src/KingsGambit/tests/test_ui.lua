@@ -98,7 +98,8 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:Command("resolve"); UI:PracticeWait(30); UI:Refresh()
         UI:ToggleLoot(); UI:ToggleLoot(); UI:Tick()
         UI.tab = "history"; UI:Refresh(); UI.histKind = "list"; UI.histText = "added"; UI:Refresh(); UI.histKind, UI.histText = "all", ""
-        UI.tab = "tools"; UI:Refresh()
+        for _, s in ipairs(SK.modules.GuildBook.SECTIONS) do UI.tab = s.id; UI:Refresh() end
+        UI.OpenTool("award", "Me"); assert(UI.tab == "awards", "Award... opens the Awards section")
         UI.tab = "lists"; UI:Refresh()
         UI:LeavePractice()
     end)
@@ -339,7 +340,7 @@ test("a shift-clicked item fills the form's item field; for Record a win a held 
         return { action = actionId, picked = {}, boxes = boxes, IsVisible = function() return true end,
             ctx = { client = client, bagLinks = function() return { held } end } }
     end
-    UITools.focus = nil
+    UITools.focus, UITools.frames = nil, {} -- (no real pages built by the other tests count here)
     -- a class rule: the link goes into the item box
     local f = page("eligible")
     assert(UITools.OnItemLink(f, ui, other)); eq(f.boxes[1].text, other)

@@ -5,7 +5,7 @@
 -- exactly the same as with commands.
 --
 -- Two halves, so most of it can be tested without the game:
---   M.Model(engine, client, listId)        pure: what the Standings tab shows (every row, the lists, the raid and its list)
+--   M.Model(engine, client, listId)        pure: what the Lists section shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
 local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook
@@ -254,7 +254,8 @@ function M:Refresh()
     end
     for _, s in ipairs(GuildBook.SECTIONS) do setShown(w.pages[s.id], M.tab == s.id) end
     w.output:SetText(M.OutputText())
-    if M.tab == "tools" then return UITools.Refresh(w.pages.tools, ctx, M) end
+    local section = GuildBook.Section(M.tab)
+    if section and section.actions then return UITools.Refresh(w.pages[M.tab], ctx, M) end
     if M.tab == "history" then return M.RefreshHistory(w.pages.history, ctx) end
     local p = w.pages.lists
     local model = M.Model(ctx.engine, ctx.client, self.list)
@@ -682,7 +683,7 @@ function M:BuildStandings(parent)
     -- Someone who may not change the list (not an officer, and not the raid's Master Looter) still sees the buttons, grayed out, and this line saying why.
     p.hint = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.hint:SetPoint("BOTTOMLEFT", 6, 126); p.hint:SetWidth(360); p.hint:SetJustifyH("LEFT"); p.hint:SetWordWrap(false)
-    p.hint:SetText("|cffff8040You can't change the list: only officers, and a raid's Master Looter, can. Ask via Tools.|r")
+    p.hint:SetText("|cffff8040You can't change the list: only officers, and a raid's Master Looter, can. Ask via Rules (Request a list change).|r")
     p.reason = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
     p.reason:SetSize(290, 20); p.reason:SetPoint("BOTTOMLEFT", 56, 78); p.reason:SetAutoFocus(false)
     p.actionButtons = {}
@@ -824,9 +825,12 @@ function M:Build()
 
     -- The navigation column: one pushed-in button per section, as the game's own micro-menu shows what is open. A thin line separates it from the section.
     w.nav = {}
+    local navY = -112
     for i, s in ipairs(GuildBook.SECTIONS) do
         local b = button(w, s.label, 108, 28)
-        b:SetPoint("TOPLEFT", 16, -112 - (i - 1) * 36)
+        navY = navY - (s.gap and 16 or 0)
+        b:SetPoint("TOPLEFT", 16, navY)
+        navY = navY - 36
         b:SetScript("OnClick", function() M.tab = s.id; M:Refresh() end)
         Tips.Attach(b, "nav" .. s.id)
         w.nav[s.id] = b
@@ -838,7 +842,10 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { lists = M:BuildStandings(content), history = M:BuildHistory(content), tools = UITools.Build(content, M) }
+    w.pages = { lists = M:BuildStandings(content), history = M:BuildHistory(content) }
+    for _, s in ipairs(GuildBook.SECTIONS) do
+        if s.actions then w.pages[s.id] = UITools.Build(content, M, s) end
+    end
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
     w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     w.output:SetPoint("BOTTOMLEFT", 144, 18); w.output:SetWidth(420); w.output:SetHeight(66)
@@ -855,11 +862,13 @@ function M:Build()
 end
 
 -- Build the window once; if it fails part-way the half-built frame is hidden and the error is passed on.
--- Open a form in the Tools tab with the selected player filled in.
+-- Open a form in the section that holds it (Awards, Raids, ...) with the selected player filled in.
 function M.OpenTool(actionId, who)
     local w = M:Window()
-    M.tab = "tools"
-    UITools.Goto(w.pages.tools, M, actionId, who)
+    local section = GuildBook.SectionOf(actionId)
+    if not section then return end
+    M.tab = section.id
+    UITools.Goto(w.pages[section.id], M, actionId, who)
     M:Refresh()
 end
 

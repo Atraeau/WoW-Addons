@@ -56,3 +56,30 @@ test("a limit shows the newest few and still counts them all", function()
     local h = GuildBook.History(ctx, { limit = 1 })
     eq(h.shown, 1); assert(h.total >= 2, "the total counts what was left out")
 end)
+
+test("every form belongs to exactly one section, and the sections' forms all exist", function()
+    local UITools = SK.modules.UITools
+    local owner = {}
+    for _, s in ipairs(GuildBook.SECTIONS) do
+        for _, id in ipairs(s.actions or {}) do
+            assert(UITools.Find(id), "section " .. s.id .. " names a form that doesn't exist: " .. id)
+            assert(not owner[id], id .. " is in two sections: " .. tostring(owner[id]) .. " and " .. s.id)
+            owner[id] = s.id
+        end
+    end
+    for _, g in ipairs(UITools.GROUPS) do
+        for _, a in ipairs(g.actions) do
+            -- (the old History form is the History section now)
+            if a.id ~= "history" then assert(owner[a.id], "form " .. a.id .. " is in no section, so nobody could reach it") end
+        end
+    end
+    eq(GuildBook.SectionOf("award").id, "awards"); eq(GuildBook.SectionOf("migrate").id, "ledger")
+    eq(GuildBook.SectionOf("raidopen").id, "raids"); assert(GuildBook.SectionOf("nope") == nil)
+end)
+
+test("the Ledger section is kept apart, and a section's group keeps its order", function()
+    local UITools = SK.modules.UITools
+    eq(GuildBook.Section("ledger").gap, true)
+    local g = UITools.SectionGroup(GuildBook.Section("awards"))
+    eq(g.id, "awards"); eq(g.actions[1].id, "award"); eq(#g.actions, 4)
+end)

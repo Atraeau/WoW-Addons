@@ -1,4 +1,4 @@
--- King's Gambit: the Tools tab of the window: a form for every command that needs a name, a reason or a choice, grouped by who uses it.
+-- King's Gambit: the forms of the Guild book: a form for every command that needs a name, a reason or a choice. GuildBook.SECTIONS says which section (Awards, Raids, People, Rules, Ledger) holds which.
 -- Keep this file Lua 5.1-safe. A form only COMPOSES the command a person would have typed (Compose, pure and tested) and runs it, so a form can
 -- never do what the command could not, and the commands' own checks and messages apply unchanged.
 local _, SK = ...
@@ -29,7 +29,7 @@ M.GROUPS = {
     { id = "list", title = "List", actions = {
         { id = "listuse", label = "Work on a list", help = "Which list add, move, award and undo change (empty = your raid's list, else main).", fields = { F("id", "List", { optional = true }) }, cmd = { "list use", "@id" } },
         { id = "create", label = "Create a list", help = "A list's id: lower-case letters, digits and _ (up to 24).", fields = { F("id", "List id"), F("name", "Title", { optional = true }) }, cmd = { "create", "@id", "@name" } },
-        { id = "add", label = "Add a player", help = "Add one player (the Standings tab adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
+        { id = "add", label = "Add a player", help = "Add one player (the Lists section adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
         { id = "remove", label = "Remove a player", help = "Take a player off the list. They can be put back at the same place.", fields = { F("name", "Player", { name = true }), F("reason", "Reason", { optional = true }) }, cmd = { "remove", "@name", "@reason" } },
         { id = "move", label = "Move a player", help = "A reason is required: it is part of the record.", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place"), F("reason", "Reason") }, cmd = { "move", "@name", "@pos", "@reason" } },
         { id = "award", label = "Record a win", help = "A win the session didn't record (a failed hand-out, a corrected winner). Choose the item from what you hold (tradeable items in your bags, the open loot window), or shift-click any item link, for instance one from chat: the item may already be in someone else's bags.", fields = { F("name", "Winner", { name = true }), F("item", "Item (held, or shift-click one)", { source = "items", link = true }), F("reason", "Reason") }, cmd = { "award", "@name", "@item", "@reason" } },
@@ -204,7 +204,17 @@ end
 ---------------------------------------------------------------- the frames
 local MAX_FIELDS = 4
 
-local function groupById(id) for _, g in ipairs(M.GROUPS) do if g.id == id then return g end end end
+local function groupById(f, id) for _, g in ipairs(f.groups or M.GROUPS) do if g.id == id then return g end end end
+
+-- The actions of a Guild book section, in the order it lists them, as one group (ids that no longer exist are skipped).
+function M.SectionGroup(section)
+    local g = { id = section.id, title = section.label, actions = {} }
+    for _, id in ipairs(section.actions or {}) do
+        local a = M.Find(id)
+        if a then g.actions[#g.actions + 1] = a end
+    end
+    return g
+end
 
 -- A dropdown the game's way (radio buttons in a menu), or nil if this client doesn't have it.
 local function dropdown(parent, width)
@@ -221,6 +231,16 @@ end
 function M.OnItemLink(f, ui, link)
     if type(link) ~= "string" or not link:find("|Hitem:", 1, true) then return false end
     if M.focus and M.focus.Insert then M.focus:Insert(link); return true end
+    if M.TakeLink(f, ui, link) then return true end
+    -- (there is a form page per Guild book section: when the one given isn't the one on screen, the one that is takes the item)
+    for _, page in ipairs(M.frames or {}) do
+        if page ~= f and M.TakeLink(page, ui, link) then return true end
+    end
+    return false
+end
+
+-- Put a link into one page's open form, if that page is on screen and its form has a place for it.
+function M.TakeLink(f, ui, link)
     if not (f and f.IsVisible and f:IsVisible()) then return false end
     local action = f.action and M.Find(f.action)
     if not action then return false end
@@ -265,10 +285,16 @@ local function chooseAction(f, ui, a)
     ui:Refresh()
 end
 
-function M.Build(parent, ui)
+-- A page of forms. With a Guild book section, only that section's actions (and no Area choice, since there is just the one area); with none, every group.
+function M.Build(parent, ui, section)
     local f = CreateFrame("Frame", nil, parent)
     -- Shift-clicking an item (in the bags, the loot window, a chat link) fills the open form's item field.
     M.frame, M.ui = f, ui
+    M.frames = M.frames or {}
+    M.frames[#M.frames + 1] = f
+    f.groups = section and { M.SectionGroup(section) } or M.GROUPS
+    local single = section ~= nil
+    local up = single and 34 or 0 -- (the form moves up by the Area row it does not have)
     if hooksecurefunc and not M.hooked then
         M.hooked = true
         local function took(link)
@@ -294,27 +320,35 @@ function M.Build(parent, ui)
         end
     end
     f:SetAllPoints()
-    f.group, f.action = M.GROUPS[1].id, nil
+    f.group, f.action = f.groups[1].id, nil
 
     -- Two choices, one under the other: the area (Raid, List, ...), then what to do in it. The form for that action fills the rest of the tab.
     local l1 = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     l1:SetPoint("TOPLEFT", 4, -6); l1:SetText("Area:")
     local l2 = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    l2:SetPoint("TOPLEFT", 4, -40); l2:SetText("Action:")
+    l2:SetPoint("TOPLEFT", 4, -40 + up); l2:SetText("Action:")
+    if single then l1:Hide() end
 
-    f.groupDrop = dropdown(f, 250)
+    f.groupDrop = single and {} or dropdown(f, 250)
     f.actionDrop = dropdown(f, 250)
+    if single then
+        -- (no Area choice: a stand-in that does nothing, so the code below treats this like the two-dropdown case)
+        f.groupDrop = setmetatable({}, { __index = function() return function() end end })
+        f.groupDropNone = true
+    end
     if f.groupDrop and f.actionDrop then
-        f.groupDrop:SetPoint("TOPLEFT", 70, -2)
-        f.actionDrop:SetPoint("TOPLEFT", 70, -36)
-        f.groupDrop:SetupMenu(function(_, root)
-            for _, g in ipairs(M.GROUPS) do
-                root:CreateRadio(g.title, function() return f.group == g.id end, function() f.group = g.id; chooseAction(f, ui, nil) end)
-            end
-        end)
+        if not single then
+            f.groupDrop:SetPoint("TOPLEFT", 70, -2)
+            f.groupDrop:SetupMenu(function(_, root)
+                for _, g in ipairs(f.groups) do
+                    root:CreateRadio(g.title, function() return f.group == g.id end, function() f.group = g.id; chooseAction(f, ui, nil) end)
+                end
+            end)
+        end
+        f.actionDrop:SetPoint("TOPLEFT", 70, -36 + up)
         f.actionDrop:SetDefaultText("Choose an action")
         f.actionDrop:SetupMenu(function(_, root)
-            local g = groupById(f.group)
+            local g = groupById(f, f.group)
             for _, a in ipairs(g and g.actions or {}) do
                 root:CreateRadio(a.label, function() return f.action == a.id end, function() chooseAction(f, ui, a) end)
             end
@@ -324,16 +358,17 @@ function M.Build(parent, ui)
         f.groupDrop, f.actionDrop = nil, nil
         f.groupStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
         f.groupStep:SetSize(250, 24); f.groupStep:SetPoint("TOPLEFT", 70, -2)
+        if single then f.groupStep:Hide() end
         f.groupStep:SetScript("OnClick", function()
-            for i, g in ipairs(M.GROUPS) do
-                if g.id == f.group then f.group = M.GROUPS[i % #M.GROUPS + 1].id; break end
+            for i, g in ipairs(f.groups) do
+                if g.id == f.group then f.group = f.groups[i % #f.groups + 1].id; break end
             end
             chooseAction(f, ui, nil)
         end)
         f.actionStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
-        f.actionStep:SetSize(250, 24); f.actionStep:SetPoint("TOPLEFT", 70, -36)
+        f.actionStep:SetSize(250, 24); f.actionStep:SetPoint("TOPLEFT", 70, -36 + up)
         f.actionStep:SetScript("OnClick", function()
-            local g = groupById(f.group)
+            local g = groupById(f, f.group)
             local nextAction = g.actions[1]
             for i, a in ipairs(g.actions) do
                 if a.id == f.action then nextAction = g.actions[i % #g.actions + 1]; break end
@@ -343,12 +378,12 @@ function M.Build(parent, ui)
     end
 
     f.title = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    f.title:SetPoint("TOPLEFT", 4, -82)
+    f.title:SetPoint("TOPLEFT", 4, -82 + up)
     f.help = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    f.help:SetPoint("TOPLEFT", 4, -108); f.help:SetWidth(372); f.help:SetJustifyH("LEFT"); f.help:SetJustifyV("TOP"); f.help:SetWordWrap(true)
+    f.help:SetPoint("TOPLEFT", 4, -108 + up); f.help:SetWidth(372); f.help:SetJustifyH("LEFT"); f.help:SetJustifyV("TOP"); f.help:SetWordWrap(true)
     f.labels, f.boxes = {}, {}
     for i = 1, MAX_FIELDS do
-        local y = -172 - (i - 1) * 32
+        local y = -172 + up - (i - 1) * 32
         f.labels[i] = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         f.labels[i]:SetPoint("TOPLEFT", 4, y); f.labels[i]:SetWidth(150); f.labels[i]:SetJustifyH("LEFT")
         local box = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
@@ -362,7 +397,7 @@ function M.Build(parent, ui)
     for i = 1, MAX_FIELDS do
         local d = dropdown(f, 206)
         if d then
-            d:SetPoint("TOPLEFT", 158, -172 - (i - 1) * 32 + 6)
+            d:SetPoint("TOPLEFT", 158, -172 + up - (i - 1) * 32 + 6)
             d:SetDefaultText("Choose a player")
             d:SetupMenu(function(_, root)
                 local action = f.action and M.Find(f.action)
@@ -403,7 +438,7 @@ function M.Build(parent, ui)
     f.run = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     f.run:SetSize(100, 24); f.run:SetText("Do it")
     Tips.Attach(f.run, "dothis")
-    f.run:SetPoint("TOPLEFT", 4, -172 - MAX_FIELDS * 32 - 6)
+    f.run:SetPoint("TOPLEFT", 4, -172 + up - MAX_FIELDS * 32 - 6)
     f.problem = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.problem:SetPoint("LEFT", f.run, "RIGHT", 10, 0)
     f.run:SetScript("OnClick", function()
@@ -434,7 +469,7 @@ end
 
 function M.Refresh(f, ctx, ui)
     f.ctx, f.listId = ctx, ui.list
-    local group = groupById(f.group)
+    local group = groupById(f, f.group)
     local action = f.action and M.Find(f.action)
     if f.groupDrop then
         if f.shown ~= f.group .. "/" .. tostring(f.action) then
@@ -443,12 +478,15 @@ function M.Refresh(f, ctx, ui)
             for _, d in pairs(f.drops) do d:GenerateMenu() end
         end
     else
-        f.groupStep:SetText("Area: " .. group.title .. "  (click for the next)")
+        if not f.groups[2] then f.groupStep:Hide() else f.groupStep:SetText("Area: " .. group.title .. "  (click for the next)") end
         f.actionStep:SetText(action and action.label or "Choose an action (click)")
     end
     if not action then
         f.title:SetText(group.title)
-        f.help:SetText("Choose an action above. Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output at the foot of the window says why.")
+        local names = {}
+        for i, a in ipairs(group.actions) do names[i] = a.label end
+        f.help:SetText((f.groups[2] and "Choose an action above." or ("Choose an action above: " .. table.concat(names, ", ") .. ".")) ..
+            " Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output at the foot of the window says why.")
         for i = 1, MAX_FIELDS do f.labels[i]:Hide(); f.boxes[i]:Hide(); if f.drops[i] then f.drops[i]:Hide() end end
         f.run:Hide()
         return
