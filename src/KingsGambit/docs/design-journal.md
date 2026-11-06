@@ -2115,6 +2115,10 @@ answered right-aligned on the same line, and the tick inline against that text (
 ranking message is one sentence, the answer reads "Need", "Off-spec", "Pass", "Gift, name later" or "Gift to Name" instead of "You: Gift (you'll choose who if you win)"). The chosen answer is still held
 pressed in (a toggle) with a white label, reasserted every refresh. The web page uses the same layout (a grid of four equal buttons, status on the item's line).
 
+**The selected-row band was then removed.** Once it showed (above), the guild master saw that with every item answered the whole window went gray: a mark that applies to every row at once tells
+nothing and only adds weight. The choice is now shown by the pressed-in toggle button and the "tick + answer" status on the item's own line, which differ row by row. (Rule 8 in the layout rules.)
+The band code, its atlas and its fallback are gone from the window and the page.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
