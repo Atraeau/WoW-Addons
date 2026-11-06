@@ -1,21 +1,21 @@
 -- King's Gambit: what the Loot window shows, as a plain table. Keep this file Lua 5.1-safe.
 --
 -- Build(model) turns what UILoot.Model reads from a session into the window itself: its state, its timer, each item's row and buttons (enabled or
--- greyed, and why), the panel for a player's turn, and the Master Looter's strip. Nothing here draws or runs anything. The game draws it with the
+-- grayed, and why), the panel for a player's turn, and the Master Looter's strip. Nothing here draws or runs anything. The game draws it with the
 -- game's frames and the web simulator draws it as HTML; both read these same tables, so the two show the same screens, the same words, and the same
--- greyed-out buttons. A button carries `act`, a neutral description of what it does ({ name = "bid", item = 2, kind = "need" }); each place maps
+-- grayed-out buttons. A button carries `act`, a neutral description of what it does ({ name = "bid", item = 2, kind = "need" }); each place maps
 -- that to its own way of running it (the game types the same command a player could, the page calls the engine).
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
 local Tips, ItemFit
 local M = SK:NewModule("LootView", { "UITips", "ItemFit?" }, function(d) Tips, ItemFit = d.UITips, d.ItemFit end)
 
--- The game's class colours (hex, no alpha), so a name is coloured the same in the game, on the page and in the list.
+-- The game's class colors (hex, no alpha), so a name is colored the same in the game, on the page and in the list.
 M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROGUE = "fff569", PRIEST = "ffffff", SHAMAN = "0070de",
     MAGE = "69ccf0", WARLOCK = "9482c9", DRUID = "ff7d0a" }
 
 -- A line of text made of pieces: plain words, and people. A person carries what a renderer needs to draw them like the standings list does: their name in the
--- class colour, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
+-- class color, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
 -- can't draw the pieces.
 local function line()
     local b = { segments = {}, parts = {} }
@@ -31,7 +31,7 @@ local function line()
     return b
 end
 
--- The four answers, in the order they are shown. `letter` is there so colour is never the only difference.
+-- The four answers, in the order they are shown. `letter` is there so color is never the only difference.
 M.ANSWERS = {
     { key = "need", letter = "N", label = "Need" },
     { key = "off", letter = "O", label = "Off-spec" },

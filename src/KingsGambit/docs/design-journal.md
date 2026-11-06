@@ -962,7 +962,7 @@ made earlier leaked into the next prompt):
    official role in the game's raid UI), so the simulation should let you pick who holds it among the raiders
    instead of always making the learner the Master Looter.
 2. **Loot must not be distributed until the loot method is set to Master Looter in the raid configuration.** That is
-   done by the **raid leader**, a separate role the system must recognise and acknowledge. The game decides who may
+   done by the **raid leader**, a separate role the system must recognize and acknowledge. The game decides who may
    change the loot method; the addon should refuse to run a session until it has been set (the Client already reports
    the loot method and who the Master Looter is).
 3. **There is always a raid leader** in every raid, and a **leader in every dungeon group**. The raid leader is not the
@@ -1023,7 +1023,7 @@ main-list place: the rule should be **configurable by the guild master**, becaus
   a change of policy is itself visible), set by the guild master.
 - **Open (to decide before building):** which orders to offer, and the default. Candidates: main-list order (today);
   the order players first bid off-spec; time on the list (when they joined, so winning doesn't cost it). Nothing is
-  built yet; current behaviour (main-list order) stands until then.
+  built yet; current behavior (main-list order) stands until then.
 
 ### Decision (direction, supersedes the "options" above): the off-spec list starts from a random seed (2026-10-30)
 
@@ -1036,7 +1036,7 @@ otherwise also get an unfair off-spec advantage.** Instead:
   newcomers at the bottom, and no further rolls (no tie-breaker rolls, no roll per item). The result is kept in the
   ledger as the order the raiders were added in, so every peer and the audit tool replay the same order and nothing
   depends on who ran it.
-- This replaces today's behaviour (lazy enrollment, newcomers ordered by main-list place), and revisits the earlier
+- This replaces today's behavior (lazy enrollment, newcomers ordered by main-list place), and revisits the earlier
   rejection of a "free roll" for loot, which was about a costless roll over scarce items, not about seeding an order.
 - **Built (off-spec list):** created at the first session with all raiders present, shuffled; newcomers at the bottom.
   The list is written at confirm, with the awards.
@@ -1959,11 +1959,11 @@ stays as the fallback (fewer than three pieces of gear) and for the website, who
 So a player is chosen from the list: in Standings a click selects a row, and the buttons under the table act on that player (Top, Up, Down, Bottom, Remove, Award);
 in Tools every player field is a dropdown of the players it could be (the list's members; for "add" those in the group or guild who aren't on the list yet; for
 a Master Looter or disenchanter, the group). Choosing a player in Standings pre-fills the form. A move needs a reason (it is part of the record), so the reason
-box under the table is required for moves. The controls under the table are always there but greyed out for someone who may not change the list (not an officer, and not the Master Looter inside a raid: the same
+box under the table is required for moves. The controls under the table are always there but grayed out for someone who may not change the list (not an officer, and not the Master Looter inside a raid: the same
 check the engine makes), with a line saying why, so a missing permission reads as a permission and not as a missing feature. Typing a name stays only where there is nothing to pick from (the plain-frame fallback, and "set the officers").
 
 Every button has a tooltip that says in full what it does: the rule behind it, what it costs a player's place, who may use it (`UITips`).
-A greyed-out button's tooltip also says why (no permission, nobody selected, your class can't have the item), so a disabled control is never a mystery.
+A grayed-out button's tooltip also says why (no permission, nobody selected, your class can't have the item), so a disabled control is never a mystery.
 
 **A move is staged, then applied once.** The ledger records every move, so a move made one step at a time (Up, Up, Up...) left a trail of entries for one
 intention. In Standings, Up, Down, Top, Bottom, a typed place number and dragging a row onto another only change a *preview* (the selected player is shown at
@@ -1984,7 +1984,7 @@ raid's Master Looter can...") is read where the button was, not in the chat wind
 ### Decision: two surfaces, a Loot window and a Guild book, replace the one tabbed window (2026-11-06)
 
 The tabbed window grew by adding a button for each command, so its shape followed the command list. It served a raider with seconds to answer and an
-officer reorganising a list from the same frame. The guild master asked for a panel for managing rules and standings and a separate, specialised
+officer reorganizing a list from the same frame. The guild master asked for a panel for managing rules and standings and a separate, specialised
 interface for in-raid loot (Gargul was named as inspiration), and for solid UX standards instead of functional UI piled up.
 
 Decided (full reasoning and alternatives in [ui-design.md](ui-design.md)):
@@ -1993,7 +1993,7 @@ Decided (full reasoning and alternatives in [ui-design.md](ui-design.md)):
   (mixes two unlike moments), three surfaces by role (duplicates the session logic), and in-place helpers only (no overview for lists and history); the
   in-place ideas (item tooltips, a launcher button, Master Looter modifier-click) stay as optional extras.
 - **Standards.** Each screen is reviewed against Nielsen's heuristics, the interaction laws, WoW conventions and accessibility rules in the design file. Kept from
-  earlier decisions: unavailable controls are greyed with the reason, players are picked and never typed, list changes are staged and applied as one entry. New rule:
+  earlier decisions: unavailable controls are grayed with the reason, players are picked and never typed, list changes are staged and applied as one entry. New rule:
   a screen says whether a thing is a preview, pending or recorded.
 - **The web simulator and the game share the window's decisions** through view models (plain tables saying what rows, which buttons are enabled and why, and
   which text), drawn by one renderer in the game and one on the page, with a replay test that compares them. Pixels will differ; screens, states, words and
@@ -2004,12 +2004,12 @@ answer hotkeys, the launcher button, and which surface is built first (recommend
 
 **Build order chosen (2026-11-06): the Loot window first.** `LootView` (a new module, pure Lua) turns what `UILoot.Model` reads from a session into the window as a
 table: its state (`bidding`, `waiting`, `myturn`, `turn`, `review`, `result`, `cancelled`), the timer with its fraction, a row per item with the four answers
-(each with a letter, a tooltip id, enabled or greyed with the reason, and whether it is the player's answer), the panel for the player's own turn (pick, gift
+(each with a letter, a tooltip id, enabled or grayed with the reason, and whether it is the player's answer), the panel for the player's own turn (pick, gift
 recipient, salvage claim), and the Master Looter's strip, which only the Master Looter has. A button carries an `act` (`{ name = "bid", item = 2, kind = "need" }`)
 and each place runs it its own way (the game as the same command a player could type; the page through the engine), so no rule lives in a drawing.
 The web simulator is the design bench: the window is drawn on the page first, where it can be looked at and refined, then drawn with the game's frames from the
-same table. Taken from the design file: a raider's window has no rule text, lists or history; the Master Looter's strip is absent for everyone else (not greyed,
-since it is another role's area), while a raider's own answers that don't apply are greyed with the reason, as decided on 2026-11-05.
+same table. Taken from the design file: a raider's window has no rule text, lists or history; the Master Looter's strip is absent for everyone else (not grayed,
+since it is another role's area), while a raider's own answers that don't apply are grayed with the reason, as decided on 2026-11-05.
 
 **First version built (2026-11-06).** The page now draws the raider's part of the simulator (the items, the answers, your turn, the Master Looter's buttons) from
 `LootView`, through the engine's own bundle (`UITips`, `UILoot` and `LootView` are now in the page), and every scenario runs to its end through it. The game has a
@@ -2037,7 +2037,7 @@ This is one rule in the engine, so the game and the web simulator both follow it
 
 ### Decision: practice mode plays as your own class (2026-11-06)
 
-Practice mode made the player a priest (the simulator's usual learner), so a warrior was asked about priest loot and saw the wrong answers greyed. The client now says what
+Practice mode made the player a priest (the simulator's usual learner), so a warrior was asked about priest loot and saw the wrong answers grayed. The client now says what
 class its player is (`myClass`: the game's `UnitClass`, or the roster's entry in the mock), and starting practice passes it to the simulation, so the Loot window and the
 eligibility checks are those of the player's real class. A class the simulation doesn't know falls back to the priest. The simulated spec is the class's first one (a warrior
 practises as Arms); the game doesn't give us the player's talent spec in a way we read yet, so that stays a default for now. The raiders around the player are unchanged.
@@ -2054,11 +2054,11 @@ behind the window and could not be used. The window is back in the normal layer 
 
 ### People in the Loot window are drawn like the standings list draws them (2026-11-06)
 
-A winner, a gift's recipient and the player a turn is waiting for are now shown by **name in their class colour, with their spec and class beside it** ("Brann (Fury Warrior)"), the way the
+A winner, a gift's recipient and the player a turn is waiting for are now shown by **name in their class color, with their spec and class beside it** ("Brann (Fury Warrior)"), the way the
 standings list and the simulator show people, instead of as plain text. The shared table (`LootView`) carries a line as pieces (`segments`: plain words, and people with their class
-colour, class name and spec), and each place draws them its own way: the game with colour codes, the page with coloured spans. The plain `note` is kept alongside, with no colour codes,
+color, class name and spec), and each place draws them its own way: the game with color codes, the page with colored spans. The plain `note` is kept alongside, with no color codes,
 for anything that can't draw pieces and for the tests. The spec is shown only where it is known: the practice raid knows everyone's; in a real raid the game doesn't tell us another player's
-spec, so a real player is shown with their class alone (and we don't guess a spec). The colours are the game's class colours, defined once in `LootView`.
+spec, so a real player is shown with their class alone (and we don't guess a spec). The colors are the game's class colors, defined once in `LootView`.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

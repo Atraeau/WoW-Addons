@@ -1,4 +1,4 @@
--- Randomized loot-session test: random raids, drops and bot behaviour. For every seed the session
+-- Randomized loot-session test: random raids, drops and bot behavior. For every seed the session
 -- must finish, and the ledger it writes must satisfy invariants checked independently of the
 -- session's own code. A failing seed is reproducible: it is the only input.
 local H = ...
@@ -127,7 +127,7 @@ local function run(seed)
 end
 
 H.fuzzLootRun = run
-H.section("Fuzz: loot sessions under random raids and bot behaviour")
+H.section("Fuzz: loot sessions under random raids and bot behavior")
 local SEEDS = 60
 for seed = 1, SEEDS do
     test("seed " .. seed .. ": session finishes and the ledger obeys the rules", function()

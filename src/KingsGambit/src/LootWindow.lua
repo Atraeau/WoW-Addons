@@ -30,7 +30,7 @@ function M.CommandText(act, target)
     end
 end
 
--- A line of pieces (LootView's `segments`) as the game's coloured text: a person's name in their class colour, then their spec and class in grey, as the
+-- A line of pieces (LootView's `segments`) as the game's colored text: a person's name in their class color, then their spec and class in gray, as the
 -- standings list shows them.
 function M.Rich(segments)
     local out = {}
@@ -58,7 +58,7 @@ local function setShown(frame, on)
     if on and not now then frame:Show() elseif not on and now then frame:Hide() end
 end
 
--- A button drawn from a view button: its label, its greyed-out state, and a tooltip that also says why it is greyed.
+-- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
 local function setup(b, vb, label)
     b.view = vb
     b:SetText(label)
@@ -107,7 +107,7 @@ function M.Build(ui)
     if not ok or not f then f = CreateFrame("Frame", "KingsGambitLootWindow", UIParent) end
     f:SetSize(WIDTH, 120)
     f:SetFrameStrata("DIALOG") -- the same layer as the main window: the game opens dropdown menus in this one, so a higher layer would hide them
-    M.Movable(f, "loot", { "CENTER", -440, 140 }) -- by default left of the main window (centred, 420 wide)
+    M.Movable(f, "loot", { "CENTER", -440, 140 }) -- by default left of the main window (centered, 420 wide)
     if f.TitleText then f.TitleText:SetText("King's Gambit: loot") end
     if not f.TitleText then
         local t = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")

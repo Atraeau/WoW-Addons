@@ -100,7 +100,7 @@ Regenerate it (and the LSP definitions) any time — see [`docs/README.md`](docs
 .\scripts\deploy.ps1
 
 # 2. Launch WoW: Forever. On character select, enable "Load out of date AddOns"
-#    if anything is greyed out. In game, type:  /hf
+#    if anything is grayed out. In game, type:  /hf
 
 # 3. Create a new addon
 .\scripts\new-addon.ps1 -Name MyAddon -Title "My Addon" -Notes "What it does"

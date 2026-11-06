@@ -1,4 +1,4 @@
--- The Loot window as a table (LootView.Build over UILoot.Model): each state a session goes through, the buttons greyed with their reasons, the
+-- The Loot window as a table (LootView.Build over UILoot.Model): each state a session goes through, the buttons grayed with their reasons, the
 -- Master Looter's strip. Both the game's frames and the web page draw exactly this table, so what is asserted here is what both show.
 local H = ...
 local SK, test, eq = H.SK, H.test, H.eq
@@ -21,7 +21,7 @@ test("no session: nothing to show, and the next boss is offered", function()
     eq(v.visible, false); eq(v.state, "none"); assert(v.night and v.night.nextBoss, "the next boss is offered")
 end)
 
-test("bidding: a row per item with four answers, letters as well as colours, and a timer", function()
+test("bidding: a row per item with four answers, letters as well as colors, and a timer", function()
     local sim, _, view = practice()
     sim:killBoss(nil, false)
     local v = view()
@@ -49,18 +49,18 @@ test("an answer is marked, and answering every item changes the state to waiting
     assert(view().banner.text:find("change an answer"), "the player is told they can still change it")
 end)
 
-test("need and off-spec are greyed, with the reason, for an item the class can't have; gift and pass are not", function()
+test("need and off-spec are grayed, with the reason, for an item the class can't have; gift and pass are not", function()
     local sim, _, view = practice(10)
     sim:killBoss(nil, false)
-    local greyed
+    local grayed
     for _, r in ipairs(view().rows) do
-        if not find(r.buttons, "need").enabled then greyed = r end
+        if not find(r.buttons, "need").enabled then grayed = r end
     end
-    -- the practice player's class may not have every Molten Core drop; if one is greyed it must be consistent
-    if greyed then
-        eq(find(greyed.buttons, "off").enabled, false)
-        assert(find(greyed.buttons, "need").why and #find(greyed.buttons, "need").why > 5, "greyed out with a reason")
-        eq(find(greyed.buttons, "gift").enabled, true); eq(find(greyed.buttons, "pass").enabled, true)
+    -- the practice player's class may not have every Molten Core drop; if one is grayed it must be consistent
+    if grayed then
+        eq(find(grayed.buttons, "off").enabled, false)
+        assert(find(grayed.buttons, "need").why and #find(grayed.buttons, "need").why > 5, "grayed out with a reason")
+        eq(find(grayed.buttons, "gift").enabled, true); eq(find(grayed.buttons, "pass").enabled, true)
     end
 end)
 
@@ -70,7 +70,7 @@ test("the Master Looter's strip: resolve while bidding, confirm only in review, 
     local v = view()
     assert(v.ml, "the Master Looter has a strip")
     eq(find(v.ml.buttons, "resolve").enabled, true); eq(find(v.ml.buttons, "confirm").enabled, false)
-    assert(find(v.ml.buttons, "confirm").why, "the greyed Confirm says why")
+    assert(find(v.ml.buttons, "confirm").why, "the grayed Confirm says why")
     for i = 1, #v.rows do cmd.handle("pass " .. i) end
     cmd.handle("resolve")
     for _ = 1, 40 do
@@ -184,7 +184,7 @@ test("practice uses the player's real class, and falls back to a priest for one 
     eq(classOf(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })), "PRIEST", "no class asked: the usual priest")
     local w = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10, learnerClass = "WARRIOR" })
     eq(w.client:myClass(), "WARRIOR", "the client says what class its player is")
-    -- a warrior is asked about warrior loot: a cloth caster item is greyed for them, plate is not
+    -- a warrior is asked about warrior loot: a cloth caster item is grayed for them, plate is not
     w:killBoss(nil, false)
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return w.session end end })
     local cmd = Commands.New({ client = w.client, engine = w.engine, host = host })
@@ -192,7 +192,7 @@ test("practice uses the player's real class, and falls back to a priest for one 
     assert(#v.rows > 0)
     for _, r in ipairs(v.rows) do
         local need = r.buttons[1]
-        if not need.enabled then assert(need.why, "a greyed Need says why") end
+        if not need.enabled then assert(need.why, "a grayed Need says why") end
     end
 end)
 
@@ -229,7 +229,7 @@ test("in review each item says who wins it, in which round, and how the list mov
 end)
 
 H.section("Loot window: people are shown like the list shows them")
-test("a winner's line carries their class colour, class and (in practice) spec; the plain text says the same", function()
+test("a winner's line carries their class color, class and (in practice) spec; the plain text says the same", function()
     local LootWindow = SK.modules.LootWindow
     local sim, cmd, view = practice(10)
     sim:killBoss(nil, false)
@@ -254,15 +254,15 @@ test("a winner's line carries their class colour, class and (in practice) spec; 
         end
     end
     assert(found, "someone wins an item, and the line knows their class")
-    assert(found.color and #found.color == 6, "a class colour")
+    assert(found.color and #found.color == 6, "a class color")
     assert(found.className and found.spec, "class name and spec in practice: " .. tostring(found.className) .. "/" .. tostring(found.spec))
-    -- the game draws it with colour codes, the plain note carries no codes
+    -- the game draws it with color codes, the plain note carries no codes
     local rich = LootWindow.Rich({ { who = found }, { text = " wins" } })
     assert(rich:find("|cff" .. found.color, 1, true) and rich:find(found.spec, 1, true) and rich:find(found.className, 1, true), rich)
-    for _, r in ipairs(v.rows) do if r.note then assert(not r.note:find("|c", 1, true), "plain text has no colour codes") end end
+    for _, r in ipairs(v.rows) do if r.note then assert(not r.note:find("|c", 1, true), "plain text has no color codes") end end
 end)
 
-test("another player's win is drawn with their class colour, name and spec; a gift names its recipient too", function()
+test("another player's win is drawn with their class color, name and spec; a gift names its recipient too", function()
     local LootWindow = SK.modules.LootWindow
     local m = { mode = "player", phase = "review", phaseText = "Review", active = true, me = "Me", can = {}, hidden = 0, isML = false, items = {
         { id = 1, link = "[Helm]", status = "awarded", winner = "Brann", to = "Cass", tier = "gift", winnerIsMe = false, toIsMe = false,

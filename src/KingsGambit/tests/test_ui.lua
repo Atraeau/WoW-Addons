@@ -213,7 +213,7 @@ test("gear from bags becomes a practice raid whose bosses drop it, shown by link
     assert(SK.modules.UILoot.Model({ client = sim.client, host = { session = sim.session }, sim = sim }).items[1].tip, "the link has a tooltip")
 end)
 
-test("an item your class can't bid on greys need and off-spec out of the model, and pass and gift stay", function()
+test("an item your class can't bid on grays need and off-spec out of the model, and pass and gift stay", function()
     local MockClient = SK.modules.MockClient
     local sim = SK.modules.Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 5, learnerClass = "PRIEST" })
     local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end }) })
@@ -248,7 +248,7 @@ test("player fields offer the players it could be, and Up and Down move a player
 end)
 
 H.section("Window: tooltips")
-test("every button has a tooltip with a title and an explanation, and a greyed-out one can say why", function()
+test("every button has a tooltip with a title and an explanation, and a grayed-out one can say why", function()
     local Tips = SK.modules.UITips
     for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
         "kill", "handout", "wait", "practice", "practicesize", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do

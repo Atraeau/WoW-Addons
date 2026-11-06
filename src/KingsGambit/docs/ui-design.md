@@ -9,7 +9,7 @@ journal, and this file is updated to match. The rules themselves are in the
 
 The window we have grew by adding a button for every command, so its structure follows the command list, not the people using it.
 Symptoms we have already hit: a Tools tab with groups of forms, a page for everything, one window that must serve a raider with five
-seconds to answer and a guild master reorganising lists. A good design starts from who is using it, when, and what they need to
+seconds to answer and a guild master reorganizing lists. A good design starts from who is using it, when, and what they need to
 get done, and only then decides what is on screen.
 
 ## 2. Who uses it, and in what moment
@@ -35,9 +35,9 @@ These are checkable, so each design below is reviewed against them (section 9).
 1. *Visibility of status*: always show where a session is (waiting for answers, whose turn, how long left) and what you answered.
 2. *Match the real world*: use the guild's words (Need, Off-spec, Gift, Pass, the bottom of the list), the same as the rationale. No internal terms (`ledger entry`, `tier`, `enrollment`) on a raider's screen.
 3. *User control and freedom*: change your answer until bidding closes; preview any list change and cancel it; undo a Master Looter award.
-4. *Consistency*: the same action looks and is worded the same everywhere; same colours mean the same thing.
-5. *Error prevention*: don't offer what can't work. A control that is unavailable is greyed with the reason on hover, never hidden (decided 2026-11-05); a name is picked, never typed.
-6. *Recognition over recall*: item links, class icons and colours, tooltips; nothing needs a remembered command.
+4. *Consistency*: the same action looks and is worded the same everywhere; same colors mean the same thing.
+5. *Error prevention*: don't offer what can't work. A control that is unavailable is grayed with the reason on hover, never hidden (decided 2026-11-05); a name is picked, never typed.
+6. *Recognition over recall*: item links, class icons and colors, tooltips; nothing needs a remembered command.
 7. *Flexibility*: the common path is one click; shortcuts (hotkeys, modifier-click) exist for the experienced, never required.
 8. *Minimalist design*: show only what the current moment needs; the rest is one step away (progressive disclosure).
 9. *Help recover from errors*: say what happened and what to do, in plain words.
@@ -52,7 +52,7 @@ its place, scales with the user's UI scale, Esc closes it. Never steal keyboard 
 during combat unless it is the prompt the player is waiting for. Respect combat lockdown (no protected-frame changes in combat).
 Dim and slim by default, bigger on request.
 
-**Accessibility.** Never colour alone (an icon or letter as well: Need `N`, Off-spec `O`, Gift `G`, Pass `P`); contrast of at least 4.5:1
+**Accessibility.** Never color alone (an icon or letter as well: Need `N`, Off-spec `O`, Gift `G`, Pass `P`); contrast of at least 4.5:1
 for text; no text under 12 pt; every function reachable by mouse; common ones by keyboard; sound is optional and off by default;
 a size option for the loot window.
 
@@ -70,7 +70,7 @@ administration (opened on purpose). Matches the two moments. Cost: two things to
 
 **C. Three surfaces by role.** A tiny raider popup, a separate Master Looter console, and a management window. Every role gets exactly
 its own thing. But the raider popup and ML console are the same session seen by two people, and splitting them duplicates logic and
-means the Master Looter, who is also a raider, juggles two windows. *Rejected in favour of B with a role-aware strip (below).*
+means the Master Looter, who is also a raider, juggles two windows. *Rejected in favor of B with a role-aware strip (below).*
 
 **D. No management window; work in place.** Tooltips show your place and whether you would be asked, right-click a name in the raid
 frame or chat to act on it, modifier-click an item to start a session (Gargul's approach). Lowest footprint, and it reaches people
@@ -96,7 +96,7 @@ the usual one to four items (a scroll list takes over past that). One row per it
 ```
 ┌─ King's Gambit ─ Ragnaros ─────────── 0:24 ▮▮▮▮▯ ─ x ┐
 │ [icon] Sulfuras Hand      you may need   [N] [O] [G] [P] │  <- waiting for you
-│ [icon] Band of Accuria    not for you          (G) [P]   │  <- Need/Off greyed with reason
+│ [icon] Band of Accuria    not for you          (G) [P]   │  <- Need/Off grayed with reason
 │ [icon] Eye of Divinity    you: Need ✓      change ▾      │  <- answered; can change
 │                                                          │
 │  Draft order:  Kirk ▸ Aleria ▸ Bo …      Your place: 12  │
@@ -116,8 +116,8 @@ States, each of which must look different at a glance:
 | Result | Who got what, where each moved on the list, what you won; then it fades |
 
 **Master Looter strip.** The same window, with one extra row only for the person running it: Start from loot window, Add time, Resolve
-now, Confirm, Cancel. Others see the window without it, not with the buttons greyed (here the layout is *not* held constant because the
-strip is a different role's area, and a raider needs the space; the greyed-button rule applies to actions a person may do elsewhere).
+now, Confirm, Cancel. Others see the window without it, not with the buttons grayed (here the layout is *not* held constant because the
+strip is a different role's area, and a raider needs the space; the grayed-button rule applies to actions a person may do elsewhere).
 After the draft the strip becomes **Review**: exactly what will be recorded, with Confirm and Cancel. Nothing is recorded before that.
 
 **Why a raider's window must not have rule text, lists or history.** Every extra thing is a second to read. Rule text lives in tooltips;
@@ -173,10 +173,10 @@ Small, optional, and each reachable another way:
 
 ## 6. Visual language
 
-- Native Blizzard frame, title bar, close button and fonts; 8 px spacing grid; item icon with a quality-coloured border; class colour
+- Native Blizzard frame, title bar, close button and fonts; 8 px spacing grid; item icon with a quality-colored border; class color
   plus a class icon on every name.
-- A small set of semantic colours: *answerable* (neutral buttons), *your turn* (gold), *recorded* (green check), *preview* (dashed or
-  blue border), *unavailable* (grey + reason on hover). Colour is always paired with an icon or word.
+- A small set of semantic colors: *answerable* (neutral buttons), *your turn* (gold), *recorded* (green check), *preview* (dashed or
+  blue border), *unavailable* (gray + reason on hover). Color is always paired with an icon or word.
 - The timer is a bar plus seconds; it turns amber under ten seconds, and never flashes.
 - Motion is minimal: a short highlight when your turn begins, a fade at the end. No bounce.
 
@@ -190,7 +190,7 @@ a small change in structure:
    name. Much of this exists (`UI.Model`, `UILoot.Model`, `UITools.Compose`, `UITips.TEXT`) and gets consolidated.
 2. **Two renderers** that only draw a view model: Blizzard frames in the game, HTML on the page. All decisions live in the view model,
    so there is nothing for the renderers to disagree about.
-3. **A parity test**: replay a scripted session, snapshot the view model at each step, and fail CI when the engine's behaviour or the
+3. **A parity test**: replay a scripted session, snapshot the view model at each step, and fail CI when the engine's behavior or the
    model changes without an updated snapshot. The Blizzard renderer is tested for "draws every field of the model"; the HTML one the
    same.
 
@@ -209,7 +209,7 @@ screenshots).
 | Where does the list live? | Guild book | Inside the Loot window (clutters the time-pressured moment) |
 | Acting on a player | Select a row, act in the detail panel, plus right-click | Toolbar above the table (acts on a selection you may have lost); a form of typed names (error-prone, rejected) |
 | Changing the list | Stage, preview, apply once with a reason | Write each click (noise in the record, rejected 2026-11-05) |
-| Unavailable actions | Greyed with the reason | Hidden (looks like a missing feature, rejected 2026-11-05) |
+| Unavailable actions | Grayed with the reason | Hidden (looks like a missing feature, rejected 2026-11-05) |
 | History | Readable sentences with filters | Raw entries (accurate, but nobody reads them) |
 | Master Looter control | Role strip in the same window | A separate console (two windows for one session) |
 | Sound and flash on a new session | Off by default, soft sound option | On (raid noise, accessibility) |

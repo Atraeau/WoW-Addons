@@ -6681,14 +6681,14 @@ end; chunk("KingsGambit", SK) end
 -- ===== UITips.lua =====
 do local chunk = function(...)
 -- King's Gambit: the tooltips for the window's buttons. Keep this file Lua 5.1-safe.
--- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A greyed-out button's tooltip also says why it is
+-- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A grayed-out button's tooltip also says why it is
 -- unavailable. The words describe the same rules as docs/rationale.md and docs/guild-master.md.
 local _, SK = ...
 local M = SK:NewModule("UITips")
 
 M.TEXT = {
     -- answering for an item
-    need = { "Need (main spec)", "Bid on this item as an upgrade for your main spec.\n\nWhen bidding closes, the main-spec draft goes down the list from the top: each player who bid on something picks one item they bid on. Whoever picks an item moves to the bottom of the main list; everyone else keeps their place.\n\nOnly for items your class may have. If it isn't, this is greyed out: you can still pass, or gift it." },
+    need = { "Need (main spec)", "Bid on this item as an upgrade for your main spec.\n\nWhen bidding closes, the main-spec draft goes down the list from the top: each player who bid on something picks one item they bid on. Whoever picks an item moves to the bottom of the main list; everyone else keeps their place.\n\nOnly for items your class may have. If it isn't, this is grayed out: you can still pass, or gift it." },
     off = { "Off-spec", "Bid on this item for your off-spec.\n\nOff-spec bids are drafted after the main-spec round, down a separate off-spec list. Winning here moves you to the bottom of the off-spec list, and does not cost you your place on the main list." },
     pass = { "Pass", "No bid on this item.\n\nYour answer is public, like everyone's. Passing costs nothing and never changes your place on any list." },
     gift = { "Gift", "Bid to win this item for someone else.\n\nYou can name who gets it later, if you win. They must be able to use it. Gifts are drafted after the main-spec and off-spec rounds, and as the winner you move to the bottom of the list. The Master Looter never chooses a gift's recipient for you." },
@@ -6733,7 +6733,7 @@ M.TEXT = {
 }
 
 -- What a tooltip says: an id from TEXT, a { title, text } pair, or a function returning title, text. `extra` (optional, a function) gives a line to
--- add at hover time (a button that is greyed out says why).
+-- add at hover time (a button that is grayed out says why).
 function M.Resolve(tip)
     if type(tip) == "function" then return tip() end
     if type(tip) == "string" then tip = M.TEXT[tip] end
@@ -6754,7 +6754,7 @@ function M.Attach(frame, tip, extra)
         GameTooltip:Show()
     end
     local function leave() if GameTooltip then GameTooltip:Hide() end end
-    -- A greyed-out button should still explain itself.
+    -- A grayed-out button should still explain itself.
     if frame.SetMotionScriptsWhileDisabled then frame:SetMotionScriptsWhileDisabled(true) end
     if frame.HookScript then
         frame:HookScript("OnEnter", enter); frame:HookScript("OnLeave", leave)
@@ -6944,21 +6944,21 @@ do local chunk = function(...)
 -- King's Gambit: what the Loot window shows, as a plain table. Keep this file Lua 5.1-safe.
 --
 -- Build(model) turns what UILoot.Model reads from a session into the window itself: its state, its timer, each item's row and buttons (enabled or
--- greyed, and why), the panel for a player's turn, and the Master Looter's strip. Nothing here draws or runs anything. The game draws it with the
+-- grayed, and why), the panel for a player's turn, and the Master Looter's strip. Nothing here draws or runs anything. The game draws it with the
 -- game's frames and the web simulator draws it as HTML; both read these same tables, so the two show the same screens, the same words, and the same
--- greyed-out buttons. A button carries `act`, a neutral description of what it does ({ name = "bid", item = 2, kind = "need" }); each place maps
+-- grayed-out buttons. A button carries `act`, a neutral description of what it does ({ name = "bid", item = 2, kind = "need" }); each place maps
 -- that to its own way of running it (the game types the same command a player could, the page calls the engine).
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
 local Tips, ItemFit
 local M = SK:NewModule("LootView", { "UITips", "ItemFit?" }, function(d) Tips, ItemFit = d.UITips, d.ItemFit end)
 
--- The game's class colours (hex, no alpha), so a name is coloured the same in the game, on the page and in the list.
+-- The game's class colors (hex, no alpha), so a name is colored the same in the game, on the page and in the list.
 M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROGUE = "fff569", PRIEST = "ffffff", SHAMAN = "0070de",
     MAGE = "69ccf0", WARLOCK = "9482c9", DRUID = "ff7d0a" }
 
 -- A line of text made of pieces: plain words, and people. A person carries what a renderer needs to draw them like the standings list does: their name in the
--- class colour, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
+-- class color, with their spec and class under or beside it (the spec only where it is known). `text` is the same line as plain words, for anything that
 -- can't draw the pieces.
 local function line()
     local b = { segments = {}, parts = {} }
@@ -6974,7 +6974,7 @@ local function line()
     return b
 end
 
--- The four answers, in the order they are shown. `letter` is there so colour is never the only difference.
+-- The four answers, in the order they are shown. `letter` is there so color is never the only difference.
 M.ANSWERS = {
     { key = "need", letter = "N", label = "Need" },
     { key = "off", letter = "O", label = "Off-spec" },
@@ -8581,7 +8581,7 @@ end
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
-  // A line made of pieces (LootView's `segments`): a person's name in their class colour with spec and class beside it, as in the standings list.
+  // A line made of pieces (LootView's `segments`): a person's name in their class color with spec and class beside it, as in the standings list.
   function segsHtml(segs) {
     return segs.map((g) => {
       if (g.text !== undefined) return esc(g.text);
@@ -9022,7 +9022,7 @@ end
       '<p class="sub">Every player keeps their own copy of the guild ledger and writes new entries to it on their own. The entries travel to the others as addon messages. This page lets you break the network and check that, whatever happens, everyone still ends up with the same ledger. That is the whole point of the sync.</p>' +
       '<div class="card verdict ' + v.cls + '"><h2>' + (v.cls === "good" ? "&#10003; " : "&#9203; ") + v.head + "</h2><div>" + v.text + "</div></div>" +
       '<div class="peers">' + peers + "</div>" +
-      '<div class="small muted" style="margin:-4px 0 12px">Each card is one player. <b>Add a raider</b> and <b>Award an item</b> write one entry at that player. <b>Mute</b> stops that player\'s addon sending, as in a boss fight. Pill colours: <span style="color:var(--good)">in sync</span> = same fingerprint as most players, <span style="color:var(--warn)">behind</span> = only missing entries the others have, <span style="color:var(--bad)">diverged</span> = has entries the others have not seen yet.</div>' +
+      '<div class="small muted" style="margin:-4px 0 12px">Each card is one player. <b>Add a raider</b> and <b>Award an item</b> write one entry at that player. <b>Mute</b> stops that player\'s addon sending, as in a boss fight. Pill colors: <span style="color:var(--good)">in sync</span> = same fingerprint as most players, <span style="color:var(--warn)">behind</span> = only missing entries the others have, <span style="color:var(--bad)">diverged</span> = has entries the others have not seen yet.</div>' +
       '<div class="card"><h2>Checks: run a test</h2><div class="small muted" style="margin-bottom:6px">Each check resets the lab, does a fixed set of the things below, lets the simulated clock run, and tells you what it expected and whether it happened. Nothing to set up.</div>' + checkRows + checkResult + "</div>" +
       '<div class="card"><h2>Break the network yourself</h2>' +
         '<div class="small muted">Players can only hear each other when the network allows it. Try one thing, write a few entries at different players with the buttons on their cards, then reconnect and watch the verdict above.</div>' +

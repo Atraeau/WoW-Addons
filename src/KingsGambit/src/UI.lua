@@ -174,7 +174,7 @@ function M:Command(text)
     M:Refresh()
 end
 
--- Lines for the output area: the newest few, each trimmed of the game's colour codes.
+-- Lines for the output area: the newest few, each trimmed of the game's color codes.
 function M.OutputText()
     local lines = {}
     for i, l in ipairs(M.log) do lines[i] = (l:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")) end
@@ -306,7 +306,7 @@ end
 local ROW_H = 18
 local COLS_X = { 4, 36, 190, 290 }
 
-local function classColour(class)
+local function classColor(class)
     local c = RAID_CLASS_COLORS and class and RAID_CLASS_COLORS[class]
     if not c then return "|cffffffff" end
     return ("|cff%02x%02x%02x"):format(math.floor(c.r * 255 + 0.5), math.floor(c.g * 255 + 0.5), math.floor(c.b * 255 + 0.5))
@@ -343,7 +343,7 @@ function M.InitRow(row, r)
         end
     end
     row.cells[1]:SetText(tostring(r.shown or r.pos))
-    row.cells[2]:SetText(classColour(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or "") .. (r.moving and ("  |cff66aaff(from " .. r.pos .. ")|r") or ""))
+    row.cells[2]:SetText(classColor(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or "") .. (r.moving and ("  |cff66aaff(from " .. r.pos .. ")|r") or ""))
     row.cells[3]:SetText(className(r.class))
     row.cells[4]:SetText(tostring(r.wins))
 end
@@ -554,7 +554,7 @@ function M:BuildStandings(parent)
     local rl = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     rl:SetPoint("BOTTOMLEFT", 6, 82); rl:SetText("Reason:")
     p.barLabel = rl
-    -- Someone who may not change the list (not an officer, and not the raid's Master Looter) still sees the buttons, greyed out, and this line saying why.
+    -- Someone who may not change the list (not an officer, and not the raid's Master Looter) still sees the buttons, grayed out, and this line saying why.
     p.hint = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.hint:SetPoint("BOTTOMLEFT", 6, 126); p.hint:SetWidth(360); p.hint:SetJustifyH("LEFT"); p.hint:SetWordWrap(false)
     p.hint:SetText("|cffff8040You can't change the list: only officers, and a raid's Master Looter, can. Ask via Tools.|r")

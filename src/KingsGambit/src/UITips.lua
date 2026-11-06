@@ -1,12 +1,12 @@
 -- King's Gambit: the tooltips for the window's buttons. Keep this file Lua 5.1-safe.
--- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A greyed-out button's tooltip also says why it is
+-- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A grayed-out button's tooltip also says why it is
 -- unavailable. The words describe the same rules as docs/rationale.md and docs/guild-master.md.
 local _, SK = ...
 local M = SK:NewModule("UITips")
 
 M.TEXT = {
     -- answering for an item
-    need = { "Need (main spec)", "Bid on this item as an upgrade for your main spec.\n\nWhen bidding closes, the main-spec draft goes down the list from the top: each player who bid on something picks one item they bid on. Whoever picks an item moves to the bottom of the main list; everyone else keeps their place.\n\nOnly for items your class may have. If it isn't, this is greyed out: you can still pass, or gift it." },
+    need = { "Need (main spec)", "Bid on this item as an upgrade for your main spec.\n\nWhen bidding closes, the main-spec draft goes down the list from the top: each player who bid on something picks one item they bid on. Whoever picks an item moves to the bottom of the main list; everyone else keeps their place.\n\nOnly for items your class may have. If it isn't, this is grayed out: you can still pass, or gift it." },
     off = { "Off-spec", "Bid on this item for your off-spec.\n\nOff-spec bids are drafted after the main-spec round, down a separate off-spec list. Winning here moves you to the bottom of the off-spec list, and does not cost you your place on the main list." },
     pass = { "Pass", "No bid on this item.\n\nYour answer is public, like everyone's. Passing costs nothing and never changes your place on any list." },
     gift = { "Gift", "Bid to win this item for someone else.\n\nYou can name who gets it later, if you win. They must be able to use it. Gifts are drafted after the main-spec and off-spec rounds, and as the winner you move to the bottom of the list. The Master Looter never chooses a gift's recipient for you." },
@@ -51,7 +51,7 @@ M.TEXT = {
 }
 
 -- What a tooltip says: an id from TEXT, a { title, text } pair, or a function returning title, text. `extra` (optional, a function) gives a line to
--- add at hover time (a button that is greyed out says why).
+-- add at hover time (a button that is grayed out says why).
 function M.Resolve(tip)
     if type(tip) == "function" then return tip() end
     if type(tip) == "string" then tip = M.TEXT[tip] end
@@ -72,7 +72,7 @@ function M.Attach(frame, tip, extra)
         GameTooltip:Show()
     end
     local function leave() if GameTooltip then GameTooltip:Hide() end end
-    -- A greyed-out button should still explain itself.
+    -- A grayed-out button should still explain itself.
     if frame.SetMotionScriptsWhileDisabled then frame:SetMotionScriptsWhileDisabled(true) end
     if frame.HookScript then
         frame:HookScript("OnEnter", enter); frame:HookScript("OnLeave", leave)

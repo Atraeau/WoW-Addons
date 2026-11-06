@@ -117,7 +117,7 @@ foreach ($addonName in $sourceNames) {
 Write-Host ""
 Write-Host "Done. AddOns folder: $addonsDir" -ForegroundColor Gray
 if (-not $Clean) {
-    Write-Host "Tip: enable 'Load out of date AddOns' on the character select screen if anything is greyed out." -ForegroundColor Gray
+    Write-Host "Tip: enable 'Load out of date AddOns' on the character select screen if anything is grayed out." -ForegroundColor Gray
 }
 
 # --- Watch -----------------------------------------------------------------

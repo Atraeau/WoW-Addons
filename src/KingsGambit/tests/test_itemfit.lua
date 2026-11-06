@@ -6,7 +6,7 @@ local ItemFit, MockClient, Engine, Loot, Commands = SK.modules.ItemFit, SK.modul
     SK.modules.Loot, SK.modules.Commands
 local Sync, SimNetwork = SK.modules.Sync, SK.modules.SimNetwork
 
--- Items as a raider would recognise them (stats rounded; ItemFit's keys).
+-- Items as a raider would recognize them (stats rounded; ItemFit's keys).
 local ARMOR, WEAPON = 4, 2
 local ITEMS = {
     plateDps = { slot = "INVTYPE_CHEST", class = ARMOR, subclass = 4, stats = { str = 25, sta = 15, crit = 1, hit = 1, armor = 700 } },

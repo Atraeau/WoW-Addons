@@ -128,5 +128,5 @@ done
 echo
 echo "Done. AddOns folder: $addonsDir"
 if [ "$mode" != clean ]; then
-	echo "Tip: enable 'Load out of date AddOns' on the character select screen if anything is greyed out."
+	echo "Tip: enable 'Load out of date AddOns' on the character select screen if anything is grayed out."
 fi

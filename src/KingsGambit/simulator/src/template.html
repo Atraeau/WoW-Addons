@@ -187,7 +187,7 @@
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
-  // A line made of pieces (LootView's `segments`): a person's name in their class colour with spec and class beside it, as in the standings list.
+  // A line made of pieces (LootView's `segments`): a person's name in their class color with spec and class beside it, as in the standings list.
   function segsHtml(segs) {
     return segs.map((g) => {
       if (g.text !== undefined) return esc(g.text);
@@ -628,7 +628,7 @@
       '<p class="sub">Every player keeps their own copy of the guild ledger and writes new entries to it on their own. The entries travel to the others as addon messages. This page lets you break the network and check that, whatever happens, everyone still ends up with the same ledger. That is the whole point of the sync.</p>' +
       '<div class="card verdict ' + v.cls + '"><h2>' + (v.cls === "good" ? "&#10003; " : "&#9203; ") + v.head + "</h2><div>" + v.text + "</div></div>" +
       '<div class="peers">' + peers + "</div>" +
-      '<div class="small muted" style="margin:-4px 0 12px">Each card is one player. <b>Add a raider</b> and <b>Award an item</b> write one entry at that player. <b>Mute</b> stops that player\'s addon sending, as in a boss fight. Pill colours: <span style="color:var(--good)">in sync</span> = same fingerprint as most players, <span style="color:var(--warn)">behind</span> = only missing entries the others have, <span style="color:var(--bad)">diverged</span> = has entries the others have not seen yet.</div>' +
+      '<div class="small muted" style="margin:-4px 0 12px">Each card is one player. <b>Add a raider</b> and <b>Award an item</b> write one entry at that player. <b>Mute</b> stops that player\'s addon sending, as in a boss fight. Pill colors: <span style="color:var(--good)">in sync</span> = same fingerprint as most players, <span style="color:var(--warn)">behind</span> = only missing entries the others have, <span style="color:var(--bad)">diverged</span> = has entries the others have not seen yet.</div>' +
       '<div class="card"><h2>Checks: run a test</h2><div class="small muted" style="margin-bottom:6px">Each check resets the lab, does a fixed set of the things below, lets the simulated clock run, and tells you what it expected and whether it happened. Nothing to set up.</div>' + checkRows + checkResult + "</div>" +
       '<div class="card"><h2>Break the network yourself</h2>' +
         '<div class="small muted">Players can only hear each other when the network allows it. Try one thing, write a few entries at different players with the buttons on their cards, then reconnect and watch the verdict above.</div>' +

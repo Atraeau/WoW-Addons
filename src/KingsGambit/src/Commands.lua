@@ -585,7 +585,7 @@ function M.New(ctx)
         local rule, suits = ItemFit.Rules(engine, link)
         return ItemFit.Describe(client, link, Tokens and Tokens.Find(link), rule, suits)
     end
-    -- May this player bid need or off-spec on item n of the running session? (The window greys those buttons out when not.)
+    -- May this player bid need or off-spec on item n of the running session? (The window grays those buttons out when not.)
     -- Returns true, or false and why (cantequip, nostats, wrongclass).
     function c.mayHave(item)
         local link = linkOf(item)
