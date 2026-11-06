@@ -951,6 +951,20 @@ function M.New(ctx)
         if not n then return out("Not started: " .. tostring(why)) end
         out("The raid has started: everyone in the group now is written down as there, and the group is followed from here.")
     end
+    -- Take the start of the raid into your own hands (off), or leave it to the first kill in an instance (on, the default).
+    function raid.autostart(args)
+        local a = ctx.attendance
+        if not a then return out("Attendance is not available here.") end
+        args = args:lower()
+        if args == "" then
+            return out(a:auto() and "The raid starts by itself at the first enemy killed in an instance. Take control of the start: raid autostart off"
+                or "The raid starts only when you say so (raid start). Let it start by itself at the first kill in an instance: raid autostart on")
+        end
+        if args ~= "on" and args ~= "off" then return out("raid autostart [on|off]") end
+        a:setAuto(args == "on")
+        out(args == "on" and "The raid will start by itself at the first enemy killed in an instance (or when you say: raid start)."
+            or "The raid will start only when you say so: raid start. Nothing starts it by itself now.")
+    end
     function raid.close(args)
         local r = findRaid(client:me())
         if not r then return out("You are not the Master Looter of an open raid.") end
@@ -993,7 +1007,7 @@ function M.New(ctx)
     function cmds.raid(args)
         local sub, rest = args:match("^(%S*)%s*(.-)$")
         local fn = raid[sub ~= "" and sub:lower() or "show"]
-        if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | start | close | extend [name] [hours] | revoke [name]]") end
+        if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | start | autostart [on|off] | close | extend [name] [hours] | revoke [name]]") end
         fn(rest)
     end
 

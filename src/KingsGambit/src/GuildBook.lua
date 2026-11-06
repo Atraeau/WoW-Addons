@@ -25,7 +25,7 @@ M.SECTIONS = {
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
-        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
+        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidautostart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",

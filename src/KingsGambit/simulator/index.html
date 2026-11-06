@@ -5828,7 +5828,8 @@ do local chunk = function(...)
 --
 -- A raid officially starts when its FIRST ENEMY DIES INSIDE AN INSTANCE (a boss or trash: both drop loot that matters; something killed in the open world
 -- while in a raid doesn't count): before that people are still arriving and nothing has been done. A raid outside an instance, such as a world boss, is
--- started by hand: `start()` (the Master Looter's "raid start"). From then on, while a raid this
+-- started by hand: `start()` (the Master Looter's "raid start"). The Master Looter can also take over completely: with automatic start off (`setAuto(false)`,
+-- "raid autostart off"; remembered for this character) nothing starts a raid but `start()`, so they choose the moment. From then on, while a raid this
 -- character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one or more
 -- Attendance entries ({ raid, joined, left }): everyone there at the first kill, then whoever comes or goes. It follows the group (the game's
 -- roster-changed event), settles for a few seconds so a burst of changes is one entry, and checks again every half minute in case an event was missed.
@@ -5893,8 +5894,24 @@ function M.New(engine, client, host)
         client:after(M.SETTLE, function() waiting = false; a:sync() end)
     end
 
-    -- The first enemy has died: the raid officially starts, with everyone there now. Only inside an instance; a kill in the open world is not the raid.
+    -- Does the raid start by itself at the first kill? On unless the Master Looter turned it off (remembered for this character).
+    local function charStore()
+        local s = client:storage()
+        return s and s.char
+    end
+    function a:auto()
+        local c = charStore()
+        return not (c and c.attendanceAuto == false)
+    end
+    function a:setAuto(on)
+        local c = charStore()
+        if c then c.attendanceAuto = on and true or false end
+    end
+
+    -- The first enemy has died: the raid officially starts, with everyone there now. Only inside an instance (a kill in the open world is not the raid), and
+    -- only if the Master Looter hasn't taken the start into their own hands.
     function a:enemyKilled()
+        if not a:auto() then return 0 end
         if client.inInstance and not client:inInstance() then return 0 end
         return a:start()
     end
@@ -7566,7 +7583,7 @@ M.SECTIONS = {
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
-        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
+        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidautostart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
