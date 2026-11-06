@@ -4,7 +4,7 @@
 -- writer appends to it, so it can't fork. The VIEW (standings, authority, conflicts) is a replay of every
 -- chain, in two passes:
 --   1. authority events (Genesis, SetGuildMaster, SetOfficers, Elevate, Revoke, RaidClose) in order of the time
---      they were written, giving who was guild master and officer when, and every raid's final window;
+--      they were written, giving who was ledger keeper and officer when, and every raid's final window;
 --   2. list events (and Declined, ItemClasses) merged in SORT-KEY order, each checked against that authority at the time it
 --      was written.
 -- The sort key is when the loot became visible: an event may carry data.seen (the loot window's time); its key
@@ -263,7 +263,7 @@ local function record(a, ev)
     a.history[#a.history + 1] = { ev = ev, gm = a.gm, officers = snapshotOfficers(a) }
 end
 
--- Guild master and officers in effect for event `e` (after every authority event written before it).
+-- Ledger keeper and officers in effect for event `e` (after every authority event written before it).
 local function rolesAt(a, e)
     local gm, officers = nil, {}
     for _, h in ipairs(a.history) do
@@ -363,7 +363,7 @@ function auth.SetGuildMaster(a, ev, d)
     return function() a.gm = d.name end
 end
 
--- The cutover to a new format: the guild master's entry. `cut` says how many events of each chain are before the change, `digest` is the
+-- The cutover to a new format: the ledger keeper's entry. `cut` says how many events of each chain are before the change, `digest` is the
 -- standings that history produces (checked by every client, see VerifyMigrations), and the entry itself is written in the NEW format, so
 -- a client that cannot read it learns the ledger has moved on the moment it arrives.
 function auth.Migrate(a, ev, d)
@@ -410,7 +410,7 @@ function auth.Elevate(a, ev, d)
     end
 end
 
--- The guild master's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
+-- The ledger keeper's rule for how raids pick their list: "choose" (the default: a raid plays on main unless an officer names another) or
 -- "perraid" (every raid opened from now on must name a list of its own, and may not use main).
 function auth.SetListPolicy(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
@@ -616,7 +616,7 @@ end
 -- Replay the whole store into a fresh view. `extra` (optional) is one more event, not yet in the store,
 -- appended to its chain for this replay only (used to check a write before making it).
 -- Check every migration in force: replay the history inside its cut under THIS client's code and compare the standings with the digest the
--- guild master recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
+-- ledger keeper recorded. A mismatch means this client's reading of the old history differs from the one the migration was made with (a
 -- wrong upcaster): the view is frozen, and the engine refuses to write. The result is remembered, since a cut never changes.
 function M.VerifyMigrations(view, store)
     for _, m in ipairs(view.auth.migrations) do

@@ -5,7 +5,7 @@
 -- format to the equivalent event of the next, and the replay runs every event through the chain of upcasters to the newest
 -- format before applying it. An upcaster is a pure function of one event. It must make the old MEANING explicit wherever the new rules
 -- would decide differently (a default that changed becomes an explicit value), so a past outcome is never re-decided: nobody's place
--- moves because the rules did. The ledger itself carries the proof: the guild master's `Migrate` entry (Ledger.lua) holds a digest of
+-- moves because the rules did. The ledger itself carries the proof: the ledger keeper's `Migrate` entry (Ledger.lua) holds a digest of
 -- the standings the old history produces, and every client checks that its own replay of that history, through its own upcasters,
 -- produces the same digest.
 --

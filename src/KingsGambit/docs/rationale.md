@@ -104,8 +104,8 @@ costless roll can be gamed by collusion.
 ### Which list a raid plays on
 Normally everything is one list, `main`. When an officer opens a raid they can name another (say `20man`), and that raid's Master Looter then
 writes only to it: wins, passes and the draft all happen on that list, and the winner drops to the bottom of **that** list, not the others. A
-new list starts in `main`'s order, so "who has waited longest" carries over. The guild master can require every raid to have a list of its own
-([guild master's guide](guild-master.md)), so nobody can spend the wrong list by accident.
+new list starts in `main`'s order, so "who has waited longest" carries over. The ledger keeper can require every raid to have a list of its own
+([ledger keeper's guide](ledger-keeper.md)), so nobody can spend the wrong list by accident.
 
 **Why:** a raid has a quality ceiling, and old-tier loot should not cost a place that newer-tier loot is worth. The choice is made once, at
 the start, by an officer, and is in the record; it never changes part-way through a raid.

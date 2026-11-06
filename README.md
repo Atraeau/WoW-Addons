@@ -46,7 +46,7 @@ its TOC loads.
 
 - Design: [manifesto](src/KingsGambit/docs/manifesto.md), [player guide](src/KingsGambit/docs/rationale.md),
   [design journal](src/KingsGambit/docs/design-journal.md) (every decision and why),
-  [guild master's guide](src/KingsGambit/docs/guild-master.md) (every option the guild master configures),
+  [ledger keeper's guide](src/KingsGambit/docs/ledger-keeper.md) (every option the ledger keeper configures),
   [client interface](src/KingsGambit/docs/client-interface.md), [ledger format](src/KingsGambit/docs/ledger-format.md),
   [UI sketch](src/KingsGambit/docs/ui-sketch.html)
 - Try it: the [live simulator](https://atraeau.github.io/WoW-Addons/kings-gambit/) (or open

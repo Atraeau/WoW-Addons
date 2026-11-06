@@ -78,7 +78,7 @@ function Engine:Fingerprint() return self.fingerprint end
 function Engine:Format() return self.view.auth.format end
 -- The chains whose saved entries include a format this build can't read: { [chainId] = { format, index } }. Empty when everything loaded.
 function Engine:Ahead() return self.ahead end
--- The ledger formats this build can read, lowest first (advertised in heartbeats so the guild master can see who is ready).
+-- The ledger formats this build can read, lowest first (advertised in heartbeats so the ledger keeper can see who is ready).
 function Engine:Readable() return Migrations.Readable(self.rules) end
 function Engine:Frozen() return self.view.frozen end
 function Engine:LedgerId() return self.store.id end
@@ -243,7 +243,7 @@ function Engine:Write(type_, data, list, format)
     return ev
 end
 
--- Move the ledger to the next format (the guild master does this once per migration, when the guild is ready). The entry names exactly
+-- Move the ledger to the next format (the ledger keeper does this once per migration, when the guild is ready). The entry names exactly
 -- how many events of each chain are before the change, and the digest of the standings they produce, as THIS client reads them. Returns
 -- the event, or nil + reason: "frozen", "badmigrate" (not the next format), "cantwrite" (this build doesn't work in that format), or
 -- what the ledger says ("notguildmaster").
@@ -257,7 +257,7 @@ function Engine:Migrate(to, reason)
     return self:Write("Migrate", { from = to - 1, to = to, cut = cut, digest = digest, reason = reason }, nil, to)
 end
 
--- Start a new ledger (the guild master does this once). Returns the Genesis event.
+-- Start a new ledger (the ledger keeper does this once). Returns the Genesis event.
 function Engine:Genesis(name)
     if self.store.id then return nil, "exists" end
     return self:Write("Genesis", { name = name })
@@ -265,7 +265,7 @@ end
 
 -- List helpers.
 -- The first list created on a machine with no ledger founds the ledger (Genesis) first: in the game
--- that is the guild master, who is the only one allowed to (see Commands).
+-- that is the ledger keeper, who is the only one allowed to (see Commands).
 function Engine:CreateList(listId, name)
     if not self.store.id then
         -- the ledger is the guild's: it takes the guild's name when the game says it

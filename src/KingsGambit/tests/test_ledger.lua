@@ -19,7 +19,7 @@ local function world()
 end
 H.ledgerWorld = world
 
--- A ledger with a guild master (GM), one officer (Off) and list `main` holding A..E.
+-- A ledger with a ledger keeper (GM), one officer (Off) and list `main` holding A..E.
 local function guild()
     local w = world()
     w:write("GM", "Genesis", { name = "Guild" }, 100)
@@ -317,7 +317,7 @@ test("an officer can extend a raid; closing or revoking ends it early", function
     w:write("MLB", "Pass", { member = "A", item = "X" }, 6101, "main")
     eq(reasons(w:view()), "Elevate:raidended Pass:expired Pass:expired", "authority conflicts are listed first (pass 1)")
 end)
-test("only officers elevate, only the guild master sets officers, and anyone can be elevated", function()
+test("only officers elevate, only the ledger keeper sets officers, and anyone can be elevated", function()
     local w = guild()
     w:write("Rand", "Elevate", { raid = "r1", ml = "Rand", minutes = 60 }, 110)
     w:write("Off", "SetOfficers", { names = { "Off", "Rand" } }, 111)
@@ -327,7 +327,7 @@ test("only officers elevate, only the guild master sets officers, and anyone can
     eq(reasons(v), "Elevate:notofficer SetOfficers:notguildmaster")
     eq(order(v), "A,B,C,D,E,F", "a non-officer Master Looter writes while elevated")
 end)
-test("guild master hand-over", function()
+test("ledger keeper hand-over", function()
     local w = guild()
     w:write("GM", "SetGuildMaster", { name = "Off" }, 110)
     w:write("GM", "SetOfficers", { names = {} }, 111)
@@ -427,10 +427,10 @@ test("an override persists indefinitely, attributed to whoever set it, until som
     w:write("Off", "Elevate", { raid = "r1", ml = "MLA", minutes = 60 }, 110)
     w:write("MLA", "ItemSuits", { item = 17082, roles = { "tank" }, reason = "its use effect is a tank cooldown" }, 120)
     w:write("Off", "ItemSuits", { item = 18000, roles = { "healer" }, reason = "officer's call" }, 5000)
-    w:write("GM", "ItemSuits", { item = 18001, roles = { "caster" }, reason = "guild master's call" }, 5001)
+    w:write("GM", "ItemSuits", { item = 18001, roles = { "caster" }, reason = "ledger keeper's call" }, 5001)
     w:write("Rand", "ItemSuits", { item = 18002, roles = { "melee" }, reason = "nobody asked" }, 5002)
     local v = w:view()
-    eq(reasons(v), "ItemSuits:notauthorized", "only the guild master, officers and the raid's Master Looter may set one")
+    eq(reasons(v), "ItemSuits:notauthorized", "only the ledger keeper, officers and the raid's Master Looter may set one")
     for id, by in pairs { [17082] = "MLA", [18000] = "Off", [18001] = "GM" } do
         local o = v.itemSuits[id]
         eq(o.by, by); assert(o.ts and o.reason and o.id, "attribution: who, when, why and which event")

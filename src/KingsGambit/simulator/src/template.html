@@ -670,10 +670,10 @@
   // A hypothetical "format 3" of the ledger (nothing like it exists yet) used to try the migration strategy: players on different releases, a cutover,
   // an update, and a client whose conversion of old entries is wrong. The checks at the bottom score the whole strategy and prove the scoring can fail.
   let mig = null, migEval = null, migMut = null, migBusy = "", migMsg = "";
-  const MIG_WHY = { notauthorized: "only the guild master and officers can write entries", noplayer: "no such player", nolist: "there is no list yet",
+  const MIG_WHY = { notauthorized: "only the ledger keeper and officers can write entries", noplayer: "no such player", nolist: "there is no list yet",
     alreadynew: "that player is already on the new release", alreadyjoined: "Fenn has already joined",
     badmigrate: "the ledger has already moved to the next format (or this is not the next format)", frozen: "that client refused: it could not reproduce the cutover",
-    cantwrite: "that release does not know the next format", notguildmaster: "only the guild master can write the cutover" };
+    cantwrite: "that release does not know the next format", notguildmaster: "only the ledger keeper can write the cutover" };
   function migCall(name, a, b) {
     mig = call(name, a, b);
     migMsg = mig.ok === false ? "Not allowed: " + (MIG_WHY[mig.why] || mig.why) : "";
@@ -718,7 +718,7 @@
       const agree = !behind.length;
       return { cls: agree ? "good" : "warn", head: agree ? "Everyone shares one ledger, still in format 2" : "Not the same yet",
         text: (agree ? "" : "Some players are catching up: " + behind.map((p) => esc(p.name)).join(", ") + ". ") +
-          news.length + " player(s) run the new release and " + olds.length + " run the old one, and they all read and write the same entries. Next: write a few entries as the guild master (new release) and as Off (old release), then press <b>Move the ledger to format 3</b>." };
+          news.length + " player(s) run the new release and " + olds.length + " run the old one, and they all read and write the same entries. Next: write a few entries as the ledger keeper (new release) and as Off (old release), then press <b>Move the ledger to format 3</b>." };
     }
     const lines = [];
     lines.push("The ledger is in <b>format 3</b>. It was cut over with " + mig.cutover.events + " entries before the change (digest <code>" + esc(mig.cutover.digest) + "</code>).");
@@ -775,13 +775,13 @@
     }
     if (migBusy) result = '<div class="card" style="margin:10px 0 0"><div>' + migBusy + "</div></div>";
     $("#mig").innerHTML =
-      '<p class="sub">A ledger can never be rewritten: every entry keeps the format it was written in, so every hash still verifies however old it is. When the rules change, a new release learns to <b>read</b> the old format, and the guild master <b>cuts the ledger over</b> with one entry. This lab simulates that with a <b>hypothetical format 3</b> (it does not exist): award entries rename their fields, and a new member with no stated position goes to the <b>top</b> instead of the bottom. Five players, real engines, a simulated network.</p>' +
+      '<p class="sub">A ledger can never be rewritten: every entry keeps the format it was written in, so every hash still verifies however old it is. When the rules change, a new release learns to <b>read</b> the old format, and the ledger keeper <b>cuts the ledger over</b> with one entry. This lab simulates that with a <b>hypothetical format 3</b> (it does not exist): award entries rename their fields, and a new member with no stated position goes to the <b>top</b> instead of the bottom. Five players, real engines, a simulated network.</p>' +
       '<div class="card verdict ' + v.cls + '"><div class="row spread"><h2 style="margin:0">' + (v.cls === "good" ? "&#10003; " : "&#9203; ") + v.head + '</h2><button data-act="mig-reset" title="Back to five players sharing a format 2 ledger, as at the start">Reset the lab</button></div><div style="margin-top:8px">' + v.text + "</div></div>" +
       '<div class="peers">' + players + "</div>" +
       '<div class="card"><h2>Do something</h2>' +
-        '<div class="small muted">Each button acts on the players above. Write entries at the guild master (GM, new release) and at Off (an officer still on the old release) with the buttons on their cards. Raiders can\'t write: only the guild master and officers can.</div>' +
-        '<div class="small" style="margin:10px 0 3px"><b>The cutover</b> &mdash; the guild master writes one entry that records exactly which entries are before the change and the standings they produce. Every player on the new release replays that history themselves and checks they get the same answer. Players on the old release can\'t read it: they are told to update, and their own ledger stays in format 2.</div><div class="row">' +
-          '<button class="primary" data-act="mig-migrate"' + (busy() || mig.migrated ? " disabled" : "") + ' title="' + (mig.migrated ? "The ledger is already in format 3: a ledger moves once. Press Reset the lab (top right of the verdict) to start again." : busy() ? "A check is running: wait for it to finish." : "The guild master moves the ledger to format 3.") + '">' +
+        '<div class="small muted">Each button acts on the players above. Write entries at the ledger keeper (GM, new release) and at Off (an officer still on the old release) with the buttons on their cards. Raiders can\'t write: only the ledger keeper and officers can.</div>' +
+        '<div class="small" style="margin:10px 0 3px"><b>The cutover</b> &mdash; the ledger keeper writes one entry that records exactly which entries are before the change and the standings they produce. Every player on the new release replays that history themselves and checks they get the same answer. Players on the old release can\'t read it: they are told to update, and their own ledger stays in format 2.</div><div class="row">' +
+          '<button class="primary" data-act="mig-migrate"' + (busy() || mig.migrated ? " disabled" : "") + ' title="' + (mig.migrated ? "The ledger is already in format 3: a ledger moves once. Press Reset the lab (top right of the verdict) to start again." : busy() ? "A check is running: wait for it to finish." : "The ledger keeper moves the ledger to format 3.") + '">' +
             (mig.migrated ? "Already moved to format 3" : busy() ? "Working&hellip;" : "Move the ledger to format 3") + "</button>" +
             (mig.migrated ? '<span class="small muted">A ledger moves once. <b>Reset the lab</b> (top right) starts again from format 2.</span>' : "") + "</div>" +
         '<div class="small" style="margin:10px 0 3px"><b>A wrong conversion</b> &mdash; a client joins whose conversion of old entries is wrong (it forgets that an old "no position" meant the bottom). It replays the history, gets a different answer from the cutover\'s, and must refuse to write.</div><div class="row">' +
@@ -800,7 +800,7 @@
         '<p class="hint"><b>Format.</b> The shape and meaning of the entries in the ledger. Every entry stays in the format it was written in, for ever.</p>' +
         '<p class="hint"><b>Old and new release.</b> A new release can read formats 2 and 3. Until the cutover it still writes format 2, so old and new players agree.</p>' +
         '<p class="hint"><b>Conversion (upcaster).</b> How a new release reads an old entry as the new format, keeping its old meaning (an old "no position" stays the bottom).</p>' +
-        '<p class="hint"><b>Cutover.</b> One entry from the guild master. After it entries must be in format 3; an entry still in format 2 is recorded as <b>stale</b>, never silently applied.</p>' +
+        '<p class="hint"><b>Cutover.</b> One entry from the ledger keeper. After it entries must be in format 3; an entry still in format 2 is recorded as <b>stale</b>, never silently applied.</p>' +
         '<p class="hint"><b>Digest.</b> A short code for the standings the old history produces. Every new client recomputes it; a client that gets a different one is <b>frozen</b>.</p></div></div>';
   }
   const busy = () => !!migBusy;

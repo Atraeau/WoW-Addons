@@ -9,7 +9,7 @@ journal, and this file is updated to match. The rules themselves are in the
 
 The window we have grew by adding a button for every command, so its structure follows the command list, not the people using it.
 Symptoms we have already hit: a Tools tab with groups of forms, a page for everything, one window that must serve a raider with five
-seconds to answer and a guild master reorganizing lists. A good design starts from who is using it, when, and what they need to
+seconds to answer and a ledger keeper reorganizing lists. A good design starts from who is using it, when, and what they need to
 get done, and only then decides what is on screen.
 
 ## 2. Who uses it, and in what moment
@@ -20,7 +20,7 @@ get done, and only then decides what is on screen.
 | **Raider** | Between pulls / after a raid | Where am I on the list? Why did I lose that? What did I win? | None. Curiosity and trust |
 | **Master Looter** | A boss dies | Start a session in one action, watch answers arrive, resolve, check the result, confirm | Time pressure, a raid waiting, errors are public |
 | **Officer** | Between raids | Fix a list, add or remove players, correct a mistake, with a reason | Care. Must be deliberate, reversible, auditable |
-| **Guild master** | Rarely | Found the ledger, appoint officers, migrate, set which list a raid plays | Low frequency, high stakes |
+| **Ledger keeper** | Rarely | Found the ledger, appoint officers, migrate, set which list a raid plays | Low frequency, high stakes |
 | **Anyone, new** | First time | Try it without a real group; understand what the buttons do | Needs confidence |
 
 Two things follow. The **raider moment** and the **management moment** have almost nothing in common: one is fast, narrow and
@@ -146,9 +146,9 @@ column on the left, content on the right, the way Blizzard's own Group Finder an
 |---|---|---|
 | **Lists** | everyone reads, officers change | The list as a scroll table; sort and drag; the selected player's actions in a detail panel (not a toolbar above everyone) |
 | **Raids** | officers | Open or close a raid, choose its list and Master Looter |
-| **People** | officers, guild master | Roster from group and guild, classes, officers, designated disenchanter |
+| **People** | officers, ledger keeper | Roster from group and guild, classes, officers, designated disenchanter |
 | **Ledger** | everyone | The ledger as readable sentences: *"Kirk won Sulfuras, moved 3 → 40, 12 Nov, by Aleria"*, filterable by player and item; a "why am I here?" view for the player's own position |
-| **Rules** | guild master, officers | Item value, eligibility overrides, defaults; each shown with its effect |
+| **Rules** | ledger keeper, officers | Item value, eligibility overrides, defaults; each shown with its effect |
 | **Practice** | anyone | Start or leave a simulated raid |
 
 A change to a list is **staged** (the pending-changes bar), previewed in the table, and applied as one recorded entry with a reason;
@@ -232,13 +232,13 @@ screenshots).
 
 1. **Heuristic review** against section 3 for each state of each surface, recorded as a checklist in this file.
 2. **Scripted walkthroughs** in practice mode for each person in section 2: the raider answers four items in under ten seconds; the
-   Master Looter runs a boss start to confirm; the officer fixes a mistake and finds it in the Ledger; the guild master founds a ledger.
+   Master Looter runs a boss start to confirm; the officer fixes a mistake and finds it in the Ledger; the ledger keeper founds a ledger.
 3. **A guild test**: two or three real raiders use it in a real run and we note where they hesitate. Hesitation, not praise, is the signal.
 4. **Regression**: the parity snapshots, and the existing tests.
 
 ## 10. Order of work
 
-1. Settle this document with the guild master (the open questions below).
+1. Settle this document with the ledger keeper (the open questions below).
 2. Journal the accepted decisions.
 3. Extract the **Loot view model**, build the Loot window on the web page, refine it there, then port its renderer to the game.
 4. Rebuild the **Guild book** (Lists, then History, then People, Raids, Rules) the same way.

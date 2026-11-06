@@ -1,6 +1,6 @@
 -- King's Gambit: the tooltips for the window's buttons. Keep this file Lua 5.1-safe.
 -- Each button explains what it does in full: the rule behind it, what it costs, who may use it. A grayed-out button's tooltip also says why it is
--- unavailable. The words describe the same rules as docs/rationale.md and docs/guild-master.md.
+-- unavailable. The words describe the same rules as docs/rationale.md and docs/ledger-keeper.md.
 local _, SK = ...
 local M = SK:NewModule("UITips")
 
@@ -49,12 +49,12 @@ M.TEXT = {
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
     navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
     navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
-    navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the guild master's and maintenance steps. (The record itself is the Ledger.)" },
+    navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the ledger keeper's and maintenance steps. (The record itself is the Ledger.)" },
     historykind = { "Show", "What happened (the default) leaves out passes: they are the most common entries and say what could have happened to an item, not what did. Passes stay in the record: choose Passes to see only them, or Everything to see all." },
     historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
-    listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the guild master decide which (see Tools, Raid)." },
+    listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the ledger keeper decide which (see Tools, Raid)." },
     sort = { "Sort", "Click to sort the table by this column; click again to reverse it.\n\nThis only changes how the table is shown. It never changes the list's real order, which is the order players are called in." },
     top = { "Move to the top", "Stage a move of the selected player to the top of this list.\n\nNothing is recorded yet: the table shows the list as it would be. Stage as many changes as you like, then press Apply all (with a reason); Discard drops them." },
     up = { "Up one place", "Stage a move of the selected player up one place. Each press only changes the preview; nothing is recorded until you press Apply all." },
@@ -66,7 +66,7 @@ M.TEXT = {
     remove = { "Remove from the list", "Stage taking the selected player off this list. It is recorded when you press Apply all, with your reason.\n\nThe record keeps the place they were at, so they can be put back there." },
     award = { "Record a win", "Open the 'Record a win' form for the selected player: for a win a session didn't record (a failed hand-out, a corrected winner).\n\nThey move to the bottom of the list, as after any win. You choose the item and give a reason." },
     addall = { "Add everyone from your group and guild", "Add every player in your group and guild who isn't on this list yet, with their classes.\n\nThis writes one entry per player to the shared ledger, the same as the 'add' command, so only an officer (or a raid's Master Looter) can." },
-    startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the guild master.\n\nDo this once, on the character that should be guild master. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
+    startledger = { "Start the ledger", "Found this guild's ledger and create the main list, with you as the ledger keeper.\n\nDo this once, on the character that should be ledger keeper. Everyone else gets the ledger by syncing with you. Two people founding separate ledgers end up with two unrelated ones." },
     -- tools
     dothis = { "Do it", "Run this form's command: the same one you could type in chat. If you aren't allowed, the output at the foot of the window says why, and nothing is changed." },
 }
