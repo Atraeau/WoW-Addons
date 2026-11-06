@@ -127,6 +127,13 @@ end
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
 -- ids (optional): each link's item id (the simulator's links are plain names).
 function Sim:drop(links, cfg, seen, ids)
+    -- A simulation that plays as the game does (practice mode, the web page) asks for rankings, like the game's host.
+    if self.rankingRequired then
+        local c = {}
+        for k, v in pairs(cfg or {}) do c[k] = v end
+        if c.requireRanking == nil then c.requireRanking = true end
+        cfg = c
+    end
     local drops, items = {}, {}
     for i, link in ipairs(links) do
         -- A link that names a known raid item is taught to the game client like a real drop (slot, stats, the
@@ -156,10 +163,38 @@ function Sim:wireBots()
     for _, name in ipairs(s.eligibleList) do
         if self:isBot(name) then
             local policy = self:policyFor(name)
+            -- When the session asks for rankings, a bot ranks the items it wants of each kind by its preference (its `pick` list), else by item number.
+            local ranks = {}
+            if s.cfg.requireRanking then
+                local byKind = {}
+                for _, it in ipairs(s.items) do
+                    local kind = wantedKind(policy, it.link)
+                    if kind ~= "pass" then byKind[kind] = byKind[kind] or {}; table.insert(byKind[kind], it) end
+                end
+                local prefs = type(policy.pick) == "table" and policy.pick or {}
+                local function preference(it)
+                    for i, link in ipairs(prefs) do if link == it.link then return i end end
+                    return #prefs + 1
+                end
+                for _, list in pairs(byKind) do
+                    table.sort(list, function(a, b)
+                        local pa, pb = preference(a), preference(b)
+                        if pa ~= pb then return pa < pb end
+                        return a.id < b.id
+                    end)
+                    for i, it in ipairs(list) do ranks[it.id] = i end
+                end
+            end
             for _, it in ipairs(s.items) do
                 client:after(1 + client:random() * window, function()
                     if s.phase ~= "bidding" then return end
                     local kind, extra = wantedKind(policy, it.link)
+                    if ranks[it.id] then
+                        local e = {}
+                        for k, v in pairs(extra or {}) do e[k] = v end
+                        e.rank = ranks[it.id]
+                        extra = e
+                    end
                     s:bid(name, it.id, kind, extra)
                 end)
             end

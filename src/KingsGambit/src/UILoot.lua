@@ -110,7 +110,7 @@ function M.Model(ctx)
             local row = { id = it.id or i, link = it.link, tip = M.TipOf(it.link), status = it.status }
             if mode == "ml" then
                 local b = s.bids[me] and s.bids[me][it.id]
-                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                row.mine, row.mineTo, row.mineRank = b and b.kind, b and show(b.to), b and b.rank
                 row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
                 row.winnerIsMe, row.toIsMe = it.winner ~= nil and it.winner == me, it.to ~= nil and it.to == me
                 row.winnerWho, row.toWho = whoOf(it.winner), whoOf(it.to)
@@ -119,7 +119,7 @@ function M.Model(ctx)
                 if it.status == "de" then row.deTo = show(s.deHandler) end
             else
                 local b = s.mine and s.mine[it.id or i]
-                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                row.mine, row.mineTo, row.mineRank = b and b.kind, b and show(b.to), b and b.rank
                 for _, a in ipairs(s.results and s.results.awards or {}) do
                     if a.item == row.id then
                         row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier
@@ -135,6 +135,32 @@ function M.Model(ctx)
                 if ok == false then row.canBid, row.whyNot = false, whyNot end
             end
             out.items[#out.items + 1] = row
+        end
+    end
+    -- Where the player wants several items of one kind (needs, off-spec, gifts), the order they want them in: ranked ones first, in rank order, then the
+    -- ones not yet ranked by item number. `complete` is true once every one has a rank.
+    out.rankings = {}
+    local groups = {}
+    for _, row in ipairs(out.items) do
+        if row.mine and row.mine ~= "pass" then
+            groups[row.mine] = groups[row.mine] or {}
+            table.insert(groups[row.mine], row)
+        end
+    end
+    for _, kind in ipairs({ "need", "off", "gift" }) do
+        local g = groups[kind]
+        if g and #g >= 2 then
+            table.sort(g, function(a, b)
+                local ra, rb = a.mineRank or math.huge, b.mineRank or math.huge
+                if ra ~= rb then return ra < rb end
+                return a.id < b.id
+            end)
+            local panel = { kind = kind, items = {}, complete = true }
+            for i, row in ipairs(g) do
+                panel.items[i] = { id = row.id, link = row.link, tip = row.tip, rank = row.mineRank }
+                if not row.mineRank then panel.complete = false end
+            end
+            out.rankings[#out.rankings + 1] = panel
         end
     end
     if mode == "ml" then

@@ -284,6 +284,7 @@ function api.start(id, seed, ml)
             scenario = { id = n.id, title = n.title, lesson = n.lesson }
             sim = n.new({ seed = seed })
             if mlChoice ~= "You" and looter(sim.names) then sim = n.new({ seed = seed, masterLooter = mlChoice }) end
+            sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
             startCount = #sim.engine:View().applied
             return state()
         end
@@ -295,6 +296,7 @@ function api.start(id, seed, ml)
     sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You", masterLooter = looter(names),
         learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
     startCount = #sim.engine:View().applied
     -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
     local cfg = { pickSeconds = 60, claimSeconds = 60 }
@@ -419,6 +421,24 @@ function api.eligible(itemId, reason)
     if not ev then return result(false, err) end
     it.fit = nil -- read the item again, with the new rule
     return state()
+end
+
+-- Put the items you want in order, most wanted first (a comma-separated list of item numbers), as the game's rank command does.
+function api.rank(csv)
+    local ids = {}
+    for n in tostring(csv or ""):gmatch("%d+") do ids[#ids + 1] = tonumber(n) end
+    local mine = sim.session and sim.session.bids[sim.learner]
+    if #ids == 0 or not mine then return result(false, "noitem") end
+    for _, id in ipairs(ids) do
+        local b = mine[id]
+        if not b or b.kind == "pass" then return result(false, "noitem") end
+    end
+    for k, id in ipairs(ids) do
+        local b = mine[id]
+        local ok, why = sim.session:bid(sim.learner, id, b.kind, { to = b.to, ready = b.ready, rank = k })
+        if not ok then return result(false, why) end
+    end
+    return result(true)
 end
 
 function api.passAll()

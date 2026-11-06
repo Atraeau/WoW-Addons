@@ -90,6 +90,8 @@
   .lw-btn.sel { outline: 2px solid currentColor; background: rgba(255,255,255,.14); }
   .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
   .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
+  .lw-rank { border: 1px solid var(--gold); border-radius: 4px; padding: 6px 8px; margin: 6px 0; }
+  .lw-rank .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 2px 0; }
   .lw-banner { border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font-size: 13px; margin: 6px 0; }
   .lw-banner.good { border-color: var(--good); } .lw-banner.warn { border-color: var(--warn); }
   .lw-turn { border: 1px solid var(--gold); background: rgba(227,179,65,.08); border-radius: 4px; padding: 8px; margin: 8px 0; }
@@ -228,6 +230,9 @@
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"
       ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll" title="Pass on every item. Passing is free.">Pass on everything</button></div>' : "";
+    const ranks = (v.rankings || []).map((g) => '<div class="lw-rank"><div class="small">' + esc(g.title) + (g.complete ? " &#10003;" : "") + "</div>" +
+      g.items.map((it) => '<div class="item"><span>' + it.position + '. <span class="iname">' + esc(it.link) + '</span></span><span class="row" style="gap:4px">' + lwButton(it.up) + lwButton(it.down) + "</span></div>").join("") +
+      '<div class="row" style="margin-top:4px">' + lwButton(g.confirm) + "</div></div>").join("");
     let turn = "";
     if (v.turn) {
       const t = v.turn;
@@ -245,12 +250,13 @@
       ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";
     const hidden = v.hidden > 0 ? '<div class="small muted">+ ' + v.hidden + " more items not shown</div>" : "";
     return '<div class="lw"><div class="lw-practice">Practice: nothing here is saved or sent</div><div class="lw-title"><span>' + esc(v.title) + '</span><span class="sub2">' + esc(v.subtitle || "") + "</span></div>" +
-      '<div class="lw-body">' + timer + meta + turn + rows + hidden + gift + "</div>" + ml + "</div>";
+      '<div class="lw-body">' + timer + meta + turn + ranks + rows + hidden + gift + "</div>" + ml + "</div>";
   }
   function lwAct(act) {
     switch (act.name) {
       case "bid": return ["bid", act.item, act.kind, act.kind === "gift" ? giftTo : ""];
       case "pick": return ["pick", act.item];
+      case "rank": return ["rank", act.order.join(",")];
       case "skip": return ["skip"];
       case "give": return ["recipient", giftTo];
       case "keep": return ["keep"];

@@ -19,6 +19,9 @@ local DEFAULTS = {
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
+    requireRanking = false, -- a player who wants two or more items of one kind (needs, off-spec, gifts) must rank them before they count as
+                         -- having answered, so bidding can't close early on them. Off here so a bare session behaves as before; the game's
+                         -- host (LootNet) and the practice raid turn it on.
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
     deHandler = nil,     -- who disenchants when nobody wants an item. Normally the raid's designated disenchanter (the
                          -- Master Looter chooses one per raid, in the ledger); a session cannot start without one
@@ -406,12 +409,29 @@ function Session:announce(channel)
     return lines
 end
 
+-- Has this player left two or more answers of one kind (needs, off-spec, gifts) without a rank? Then which they want most is not settled:
+-- with `requireRanking` they don't count as having answered yet.
+function Session:rankingMissing(p)
+    local count, unranked = {}, {}
+    for _, b in pairs(self.bids[p] or {}) do
+        if b.kind ~= "pass" then
+            count[b.kind] = (count[b.kind] or 0) + 1
+            if not b.rank then unranked[b.kind] = true end
+        end
+    end
+    for kind, n in pairs(count) do
+        if n >= 2 and unranked[kind] then return true end
+    end
+    return false
+end
+
 function Session:allAnswered()
     for _, p in ipairs(self.eligibleList) do
         if not self.away[p] then
             for _, it in ipairs(self.items) do
                 if not (self.bids[p] and self.bids[p][it.id]) then return false end
             end
+            if self.cfg.requireRanking and self:rankingMissing(p) then return false end
         end
     end
     return true
@@ -427,6 +447,7 @@ function Session:answerCount()
             for _, it in ipairs(self.items) do
                 if not (self.bids[p] and self.bids[p][it.id]) then all = false end
             end
+            if all and self.cfg.requireRanking and self:rankingMissing(p) then all = false end
             if all then answered = answered + 1 end
         end
     end

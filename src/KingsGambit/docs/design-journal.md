@@ -2060,6 +2060,22 @@ color, class name and spec), and each place draws them its own way: the game wit
 for anything that can't draw pieces and for the tests. The spec is shown only where it is known: the practice raid knows everyone's; in a real raid the game doesn't tell us another player's
 spec, so a real player is shown with their class alone (and we don't guess a spec). The colors are the game's class colors, defined once in `LootView`.
 
+### Decision: ranking is explicit, set up front, and the session waits for it (2026-11-06)
+
+Ranked choice was decided on 2026-10-29 (answers stay up front; a player who wants several items ranks them; the draft takes the highest-ranked item still available with no prompt) and the
+engine and the whisper path implemented it, but the Loot window and the typed commands never sent a rank. So a player who needed two items was asked "Pick 1 or Pick 2" live on their turn
+and was never asked to prioritize. The guild master chose, from three options, **to require an explicit ranking** (over a silent default order, or leaving the live pick).
+- **The rule (engine):** with `requireRanking` on, a player who has two or more answers of one kind (needs, off-spec, gifts) is not counted as having answered until every one of them has a
+  rank, so bidding doesn't close early on them. One need, or only passes, has nothing to rank. Changing an answer drops that item's rank (a new rank is needed). If the timer runs out first the
+  existing fallback applies (they are asked live on their turn), so a rule can never stall a raid. The setting is off in a bare session (tests and old behavior are unchanged) and **on in the
+  game's host and in the practice raid and the web simulator**, so both play the same.
+- **The command:** `rank 2 1 3` puts the items in order, most wanted first (each must be answered need, off or gift); the window's buttons run it.
+- **The window:** when you want several items of one kind, a panel shows "Your order (most wanted first)" with Up and Down on each item and a **Confirm order** button. Nothing is ranked until you
+  press Confirm or move an item (each move saves the whole order at once); the banner says the session is waiting for your order, and the answered count doesn't include you yet. After that it reads
+  "Order set". It is in the shared view, so the game and the page show the same panel.
+- **Bots** in the simulation rank the items they want by their preference list, else item number, so a practice raid isn't held up by them.
+- Whispered answers rank in the order written (as before); separate whispers ("1 need", "2 need") are unranked and so keep bidding open to the timer, then fall back to the live pick.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

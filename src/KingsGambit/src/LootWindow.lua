@@ -17,6 +17,10 @@ function M.CommandText(act, target)
     elseif n == "pick" then return "pick " .. act.item
     elseif n == "skip" or n == "keep" or n == "decline" or n == "resolve" or n == "confirm" or n == "cancel" then return n
     elseif n == "extend" then return "extend " .. (act.seconds or 30)
+    elseif n == "rank" then
+        local ids = {}
+        for i, id in ipairs(act.order or {}) do ids[i] = tostring(id) end
+        return "rank " .. table.concat(ids, " ")
     elseif n == "withdraw" then return "withdraw yes"
     elseif n == "give" then
         if not target or target == "" then return nil, "Choose who gets it from the dropdown first." end
@@ -164,6 +168,27 @@ function M.Build(ui)
     end
     f.more = text("GameFontHighlightSmall")
 
+    -- Your order, when you want several items of one kind: a title, a line per item with Up and Down, and Confirm.
+    f.rankTitles, f.rankConfirms, f.rankRows = {}, {}, {}
+    for i = 1, 3 do
+        f.rankTitles[i] = text("GameFontNormalSmall")
+        local c = button(f, "", 110, 22)
+        c:SetScript("OnClick", function() if c.view and c.view.enabled then M.Run(c.view.act, f, ui) end end)
+        Tips.Attach(c, tooltipOf(c))
+        f.rankConfirms[i] = c
+    end
+    for i = 1, 12 do
+        local r = {}
+        r.text = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+        r.text:SetWidth(250); r.text:SetJustifyH("LEFT"); r.text:SetWordWrap(false)
+        r.up, r.down = button(f, "", 46, 20), button(f, "", 46, 20)
+        for _, b in ipairs({ r.up, r.down }) do
+            b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
+            Tips.Attach(b, tooltipOf(b))
+        end
+        f.rankRows[i] = r
+    end
+
     -- your turn
     f.turnButtons = {}
     for i = 1, 7 do
@@ -310,6 +335,33 @@ function M.Refresh(f, ctx, ui)
             put(f.banner, 16, 34)
         end
 
+        -- your order, where you want several items of one kind
+        local pi, ri = 0, 0
+        for _, panel in ipairs(v.rankings or {}) do
+            pi = pi + 1
+            local title = f.rankTitles[pi]
+            if title then
+                title:SetText(panel.title .. (panel.complete and "  |cff40ff40(set)|r" or ""))
+                put(title, 16, 16)
+                for pos, it in ipairs(panel.items) do
+                    ri = ri + 1
+                    local r = f.rankRows[ri]
+                    if r then
+                        r.text:SetText(("%d. %s"):format(pos, UILoot.Display(it.link, it.tip)))
+                        setup(r.up, it.up, "Up"); setup(r.down, it.down, "Down")
+                        layout[#layout + 1] = { r.text, 16, y }; want[r.text] = true
+                        layout[#layout + 1] = { r.up, 276, y + 2 }; want[r.up] = true
+                        layout[#layout + 1] = { r.down, 326, y + 2 }; want[r.down] = true
+                        y = y - 22
+                    end
+                end
+                local c = f.rankConfirms[pi]
+                setup(c, panel.confirm, panel.confirm.label)
+                layout[#layout + 1] = { c, 16, y }; want[c] = true
+                y = y - 28
+            end
+        end
+
         -- the items
         for i = 1, MAX do
             local row, vr = f.rows[i], v.rows[i]
@@ -385,6 +437,9 @@ function M.Refresh(f, ctx, ui)
     local everything = { f.practiceText, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end
+    for _, t in ipairs(f.rankTitles) do everything[#everything + 1] = t end
+    for _, c in ipairs(f.rankConfirms) do everything[#everything + 1] = c end
+    for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
         everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note

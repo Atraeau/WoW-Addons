@@ -274,3 +274,49 @@ test("another player's win is drawn with their class color, name and spec; a gif
     assert(rich:find("|cffc79c6eBrann|r |cff999999(Fury Warrior)|r", 1, true), rich)
     assert(rich:find("|cff69ccf0Cass|r |cff999999(Mage)|r", 1, true), "a recipient with no known spec shows the class alone: " .. rich)
 end)
+
+H.section("Loot window: ranking what you want most")
+test("wanting two items shows your order, asks you to confirm it, and the session waits until you do", function()
+    local LootWindow = SK.modules.LootWindow
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })
+    sim.rankingRequired = true
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = host })
+    local ctx = { client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host }
+    sim:killBoss(nil, false)
+    local function view() return LootView.Build(UILoot.Model(ctx)) end
+    eq(sim.session.cfg.requireRanking, true, "the practice raid asks for rankings, as the game does")
+    local n = #view().rows
+    if n < 2 then return end
+    for i = 1, n do cmd.handle("gift " .. i) end -- (a gift is open to every class, so this works whatever the practice class)
+    local v = view()
+    assert(v.rankings and #v.rankings == 1, "an order to set")
+    local panel = v.rankings[1]
+    eq(panel.complete, false); eq(#panel.items, n)
+    eq(v.state, "ranking"); assert(v.banner.text:find("order"), v.banner.text)
+    eq(panel.confirm.enabled, true); eq(panel.items[1].up.enabled, false, "the top item can't go up"); eq(panel.items[n].down.enabled, false)
+    -- the answered count does not include you yet
+    local answered = sim.session:answerCount()
+    eq(sim.session:rankingMissing(sim.client:me()), true)
+    -- confirming runs the rank command with the order shown
+    eq(LootWindow.CommandText(panel.confirm.act), "rank " .. table.concat((function() local t = {} for i, it in ipairs(panel.items) do t[i] = it.id end return t end)(), " "))
+    cmd.handle(LootWindow.CommandText(panel.confirm.act))
+    v = view()
+    eq(v.rankings[1].complete, true); eq(v.rankings[1].confirm.enabled, false); eq(v.rankings[1].confirm.label, "Order set")
+    assert(v.state ~= "ranking", "the order is set")
+    -- moving an item down saves the new order at once
+    cmd.handle(LootWindow.CommandText(v.rankings[1].items[1].down.act))
+    v = view()
+    eq(v.rankings[1].items[2].id, panel.items[1].id, "the first item is now second")
+end)
+test("a player who answered pass or one need has nothing to rank", function()
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })
+    sim.rankingRequired = true
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = host })
+    sim:killBoss(nil, false)
+    local m = UILoot.Model({ client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host })
+    for i = 1, #m.items do cmd.handle("pass " .. i) end
+    m = UILoot.Model({ client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host })
+    eq(#m.rankings, 0)
+end)

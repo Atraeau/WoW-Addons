@@ -102,6 +102,7 @@ function M:StartPractice()
         sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size, learnerClass = class })
         say("Practice: you carry fewer than 3 pieces of gear, so the loot is Molten Core's (those items may not exist in this game yet, so no tooltips).")
     end
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
     -- A simulated guild: the raid's players, and others who are not in the group (some offline).
     local guild = {}
     for _, m in ipairs(sim.client:roster()) do guild[#guild + 1] = { name = m.name, class = m.class } end

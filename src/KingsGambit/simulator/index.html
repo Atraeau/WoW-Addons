@@ -90,6 +90,8 @@
   .lw-btn.sel { outline: 2px solid currentColor; background: rgba(255,255,255,.14); }
   .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
   .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
+  .lw-rank { border: 1px solid var(--gold); border-radius: 4px; padding: 6px 8px; margin: 6px 0; }
+  .lw-rank .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 2px 0; }
   .lw-banner { border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; font-size: 13px; margin: 6px 0; }
   .lw-banner.good { border-color: var(--good); } .lw-banner.warn { border-color: var(--warn); }
   .lw-turn { border: 1px solid var(--gold); background: rgba(227,179,65,.08); border-radius: 4px; padding: 8px; margin: 8px 0; }
@@ -3111,6 +3113,9 @@ local DEFAULTS = {
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
+    requireRanking = false, -- a player who wants two or more items of one kind (needs, off-spec, gifts) must rank them before they count as
+                         -- having answered, so bidding can't close early on them. Off here so a bare session behaves as before; the game's
+                         -- host (LootNet) and the practice raid turn it on.
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
     deHandler = nil,     -- who disenchants when nobody wants an item. Normally the raid's designated disenchanter (the
                          -- Master Looter chooses one per raid, in the ledger); a session cannot start without one
@@ -3498,12 +3503,29 @@ function Session:announce(channel)
     return lines
 end
 
+-- Has this player left two or more answers of one kind (needs, off-spec, gifts) without a rank? Then which they want most is not settled:
+-- with `requireRanking` they don't count as having answered yet.
+function Session:rankingMissing(p)
+    local count, unranked = {}, {}
+    for _, b in pairs(self.bids[p] or {}) do
+        if b.kind ~= "pass" then
+            count[b.kind] = (count[b.kind] or 0) + 1
+            if not b.rank then unranked[b.kind] = true end
+        end
+    end
+    for kind, n in pairs(count) do
+        if n >= 2 and unranked[kind] then return true end
+    end
+    return false
+end
+
 function Session:allAnswered()
     for _, p in ipairs(self.eligibleList) do
         if not self.away[p] then
             for _, it in ipairs(self.items) do
                 if not (self.bids[p] and self.bids[p][it.id]) then return false end
             end
+            if self.cfg.requireRanking and self:rankingMissing(p) then return false end
         end
     end
     return true
@@ -3519,6 +3541,7 @@ function Session:answerCount()
             for _, it in ipairs(self.items) do
                 if not (self.bids[p] and self.bids[p][it.id]) then all = false end
             end
+            if all and self.cfg.requireRanking and self:rankingMissing(p) then all = false end
             if all then answered = answered + 1 end
         end
     end
@@ -5838,6 +5861,13 @@ end
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
 -- ids (optional): each link's item id (the simulator's links are plain names).
 function Sim:drop(links, cfg, seen, ids)
+    -- A simulation that plays as the game does (practice mode, the web page) asks for rankings, like the game's host.
+    if self.rankingRequired then
+        local c = {}
+        for k, v in pairs(cfg or {}) do c[k] = v end
+        if c.requireRanking == nil then c.requireRanking = true end
+        cfg = c
+    end
     local drops, items = {}, {}
     for i, link in ipairs(links) do
         -- A link that names a known raid item is taught to the game client like a real drop (slot, stats, the
@@ -5867,10 +5897,38 @@ function Sim:wireBots()
     for _, name in ipairs(s.eligibleList) do
         if self:isBot(name) then
             local policy = self:policyFor(name)
+            -- When the session asks for rankings, a bot ranks the items it wants of each kind by its preference (its `pick` list), else by item number.
+            local ranks = {}
+            if s.cfg.requireRanking then
+                local byKind = {}
+                for _, it in ipairs(s.items) do
+                    local kind = wantedKind(policy, it.link)
+                    if kind ~= "pass" then byKind[kind] = byKind[kind] or {}; table.insert(byKind[kind], it) end
+                end
+                local prefs = type(policy.pick) == "table" and policy.pick or {}
+                local function preference(it)
+                    for i, link in ipairs(prefs) do if link == it.link then return i end end
+                    return #prefs + 1
+                end
+                for _, list in pairs(byKind) do
+                    table.sort(list, function(a, b)
+                        local pa, pb = preference(a), preference(b)
+                        if pa ~= pb then return pa < pb end
+                        return a.id < b.id
+                    end)
+                    for i, it in ipairs(list) do ranks[it.id] = i end
+                end
+            end
             for _, it in ipairs(s.items) do
                 client:after(1 + client:random() * window, function()
                     if s.phase ~= "bidding" then return end
                     local kind, extra = wantedKind(policy, it.link)
+                    if ranks[it.id] then
+                        local e = {}
+                        for k, v in pairs(extra or {}) do e[k] = v end
+                        e.rank = ranks[it.id]
+                        extra = e
+                    end
                     s:bid(name, it.id, kind, extra)
                 end)
             end
@@ -6712,6 +6770,10 @@ M.TEXT = {
     wait = { "Wait 10 seconds", "Practice only: let 10 simulated seconds pass, so bid timers run out and the simulated raiders answer." },
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
+    -- ranking
+    rankup = { "Move up", "Move this item up your order: higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
+    rankdown = { "Move down", "Move this item down your order: lower means you want it less." },
+    rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right: each move is saved as you make it." },
     -- the windows
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
@@ -6880,7 +6942,7 @@ function M.Model(ctx)
             local row = { id = it.id or i, link = it.link, tip = M.TipOf(it.link), status = it.status }
             if mode == "ml" then
                 local b = s.bids[me] and s.bids[me][it.id]
-                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                row.mine, row.mineTo, row.mineRank = b and b.kind, b and show(b.to), b and b.rank
                 row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
                 row.winnerIsMe, row.toIsMe = it.winner ~= nil and it.winner == me, it.to ~= nil and it.to == me
                 row.winnerWho, row.toWho = whoOf(it.winner), whoOf(it.to)
@@ -6889,7 +6951,7 @@ function M.Model(ctx)
                 if it.status == "de" then row.deTo = show(s.deHandler) end
             else
                 local b = s.mine and s.mine[it.id or i]
-                row.mine, row.mineTo = b and b.kind, b and show(b.to)
+                row.mine, row.mineTo, row.mineRank = b and b.kind, b and show(b.to), b and b.rank
                 for _, a in ipairs(s.results and s.results.awards or {}) do
                     if a.item == row.id then
                         row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier
@@ -6905,6 +6967,32 @@ function M.Model(ctx)
                 if ok == false then row.canBid, row.whyNot = false, whyNot end
             end
             out.items[#out.items + 1] = row
+        end
+    end
+    -- Where the player wants several items of one kind (needs, off-spec, gifts), the order they want them in: ranked ones first, in rank order, then the
+    -- ones not yet ranked by item number. `complete` is true once every one has a rank.
+    out.rankings = {}
+    local groups = {}
+    for _, row in ipairs(out.items) do
+        if row.mine and row.mine ~= "pass" then
+            groups[row.mine] = groups[row.mine] or {}
+            table.insert(groups[row.mine], row)
+        end
+    end
+    for _, kind in ipairs({ "need", "off", "gift" }) do
+        local g = groups[kind]
+        if g and #g >= 2 then
+            table.sort(g, function(a, b)
+                local ra, rb = a.mineRank or math.huge, b.mineRank or math.huge
+                if ra ~= rb then return ra < rb end
+                return a.id < b.id
+            end)
+            local panel = { kind = kind, items = {}, complete = true }
+            for i, row in ipairs(g) do
+                panel.items[i] = { id = row.id, link = row.link, tip = row.tip, rank = row.mineRank }
+                if not row.mineRank then panel.complete = false end
+            end
+            out.rankings[#out.rankings + 1] = panel
         end
     end
     if mode == "ml" then
@@ -7094,6 +7182,34 @@ function M.Build(m)
     end
     v.hidden = m.hidden
 
+    -- Where you want several items of one kind, which you want most. Until it is set the session waits for you (and the window says so).
+    local KIND = { need = "main-spec", off = "off-spec", gift = "gift" }
+    if bidding and m.rankings and #m.rankings > 0 then
+        v.rankings = {}
+        local incomplete = 0
+        for _, g in ipairs(m.rankings) do
+            local ids = {}
+            for i, it in ipairs(g.items) do ids[i] = it.id end
+            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, items = {} }
+            for i, it in ipairs(g.items) do
+                local function swapped(j)
+                    local o = {}
+                    for k, id in ipairs(ids) do o[k] = id end
+                    o[i], o[j] = o[j], o[i]
+                    return o
+                end
+                panel.items[i] = { id = it.id, link = it.link, tip = it.tip, position = i, ranked = it.rank ~= nil,
+                    up = button("rankup", "Up", { name = "rank", order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
+                    down = button("rankdown", "Down", { name = "rank", order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
+            end
+            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", order = ids },
+                { enabled = not g.complete, primary = not g.complete })
+            if not g.complete then incomplete = incomplete + 1 end
+            v.rankings[#v.rankings + 1] = panel
+        end
+        if incomplete > 0 and (v.state == "bidding" or v.state == "waiting") then v.state = "ranking" end
+    end
+
     -- what the window says to the player, in plain words
     if v.state == "myturn" then
         if turn.type == "pick" then
@@ -7128,6 +7244,8 @@ function M.Build(m)
         b.who(m.waitingWho or { name = m.waitingFor or "the next player" }, m.waitingFor or "the next player")
         b.text(m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "")
         v.banner = { kind = "info", text = b.plain(), segments = b.segments }
+    elseif v.state == "ranking" then
+        v.banner = { kind = "warn", text = "You want more than one item: put them in order, most wanted first, and confirm. The session waits for your order; on your turn you get your highest-ranked item with no prompt." }
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then
@@ -7908,6 +8026,7 @@ function api.start(id, seed, ml)
             scenario = { id = n.id, title = n.title, lesson = n.lesson }
             sim = n.new({ seed = seed })
             if mlChoice ~= "You" and looter(sim.names) then sim = n.new({ seed = seed, masterLooter = mlChoice }) end
+            sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
             startCount = #sim.engine:View().applied
             return state()
         end
@@ -7919,6 +8038,7 @@ function api.start(id, seed, ml)
     sim = Sim.NewRaid({ members = scenario.members, seed = seed, learner = "You", masterLooter = looter(names),
         learnerClass = scenario.learnerClass, learnerSpec = scenario.learnerSpec, learnerRole = scenario.learnerRole })
     sim.policies = scenario.policies or {}
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
     startCount = #sim.engine:View().applied
     -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
     local cfg = { pickSeconds = 60, claimSeconds = 60 }
@@ -8043,6 +8163,24 @@ function api.eligible(itemId, reason)
     if not ev then return result(false, err) end
     it.fit = nil -- read the item again, with the new rule
     return state()
+end
+
+-- Put the items you want in order, most wanted first (a comma-separated list of item numbers), as the game's rank command does.
+function api.rank(csv)
+    local ids = {}
+    for n in tostring(csv or ""):gmatch("%d+") do ids[#ids + 1] = tonumber(n) end
+    local mine = sim.session and sim.session.bids[sim.learner]
+    if #ids == 0 or not mine then return result(false, "noitem") end
+    for _, id in ipairs(ids) do
+        local b = mine[id]
+        if not b or b.kind == "pass" then return result(false, "noitem") end
+    end
+    for k, id in ipairs(ids) do
+        local b = mine[id]
+        local ok, why = sim.session:bid(sim.learner, id, b.kind, { to = b.to, ready = b.ready, rank = k })
+        if not ok then return result(false, why) end
+    end
+    return result(true)
 end
 
 function api.passAll()
@@ -8622,6 +8760,9 @@ end
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"
       ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll" title="Pass on every item. Passing is free.">Pass on everything</button></div>' : "";
+    const ranks = (v.rankings || []).map((g) => '<div class="lw-rank"><div class="small">' + esc(g.title) + (g.complete ? " &#10003;" : "") + "</div>" +
+      g.items.map((it) => '<div class="item"><span>' + it.position + '. <span class="iname">' + esc(it.link) + '</span></span><span class="row" style="gap:4px">' + lwButton(it.up) + lwButton(it.down) + "</span></div>").join("") +
+      '<div class="row" style="margin-top:4px">' + lwButton(g.confirm) + "</div></div>").join("");
     let turn = "";
     if (v.turn) {
       const t = v.turn;
@@ -8639,12 +8780,13 @@ end
       ? '<div class="lw-ml"><div class="small muted" style="margin-bottom:4px">Master Looter</div><div class="row">' + v.ml.buttons.map((b) => lwButton(b)).join(" ") + "</div></div>" : "";
     const hidden = v.hidden > 0 ? '<div class="small muted">+ ' + v.hidden + " more items not shown</div>" : "";
     return '<div class="lw"><div class="lw-practice">Practice: nothing here is saved or sent</div><div class="lw-title"><span>' + esc(v.title) + '</span><span class="sub2">' + esc(v.subtitle || "") + "</span></div>" +
-      '<div class="lw-body">' + timer + meta + turn + rows + hidden + gift + "</div>" + ml + "</div>";
+      '<div class="lw-body">' + timer + meta + turn + ranks + rows + hidden + gift + "</div>" + ml + "</div>";
   }
   function lwAct(act) {
     switch (act.name) {
       case "bid": return ["bid", act.item, act.kind, act.kind === "gift" ? giftTo : ""];
       case "pick": return ["pick", act.item];
+      case "rank": return ["rank", act.order.join(",")];
       case "skip": return ["skip"];
       case "give": return ["recipient", giftTo];
       case "keep": return ["keep"];

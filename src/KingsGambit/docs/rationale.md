@@ -57,6 +57,11 @@ When a boss drops multiple items, the top remaining needer picks any
 available item, claims it, and drops to the bottom; then the next player up picks.
 There's no cap, so if the room passes you can win again from the bottom.
 
+**You rank what you want most, up front.** If you answer *Need* (or *Off-spec*, or *Gift*) on two or more items, the addon asks you to put them in order, most
+wanted first, and to confirm it; the session waits for that, so bidding can't close early on you. Then when it's your turn, the draft takes your
+highest-ranked item that is still available, with no prompt and no time pressure. (If the timer runs out before you've ranked, you're asked live
+on your turn, as before.) Whispering the Master Looter works too: the order you write is your ranking ("need 3, need 1" ranks item 3 first).
+
 **Why:** The first pick is an *earned* choice, and there is no arbitrary
 item order for anyone to benefit from.
 

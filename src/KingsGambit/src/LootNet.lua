@@ -118,7 +118,11 @@ function M.NewHost(sync, engine)
     function h:start(items, cfg)
         local old = self.session
         if old and old.phase ~= "done" and old.phase ~= "cancelled" then return false, "busy" end
-        local session = Loot.NewSession(self.engine, cfg)
+        -- The game asks players who want several items to rank them (an explicit order, so nobody is asked live at their turn).
+        local withRanking = {}
+        for k, v in pairs(cfg or {}) do withRanking[k] = v end
+        if withRanking.requireRanking == nil then withRanking.requireRanking = true end
+        local session = Loot.NewSession(self.engine, withRanking)
         local ok, why = session:start(items)
         if not ok then return false, why end
         self.counter = self.counter + 1
@@ -277,7 +281,7 @@ function M.NewPlayer(sync)
         if not s then return false, "nosession" end
         extra = extra or {}
         s.pendingBid = s.pendingBid or {}
-        s.pendingBid[item] = { kind = kind, to = to, ready = extra.ready }
+        s.pendingBid[item] = { kind = kind, to = to, ready = extra.ready, rank = extra.rank }
         return toHost({ t = "LB", item = item, kind = kind, to = to, passKind = passKind, rank = extra.rank, ready = extra.ready })
     end
     function p:pick(item) return toHost({ t = "LX", action = "pick", item = item }) end

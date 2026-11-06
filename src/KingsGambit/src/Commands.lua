@@ -691,6 +691,29 @@ function M.New(ctx)
         out("Readiness is a hint: materials in someone's bank can't be seen.")
     end
 
+    -- rank 2 1 3: put the items you want in order, most wanted first. Each must already be answered need, off or gift. When you want two or more items
+    -- the Master Looter's session waits for this (see Loot's requireRanking); on your turn your highest-ranked item still available is taken for you.
+    function cmds.rank(args)
+        local ids = {}
+        for n in args:gmatch("%d+") do ids[#ids + 1] = tonumber(n) end
+        if #ids == 0 then return out("rank <item#> [<item#> ...]   (the items you want, most wanted first; answer need/off/gift for them first)") end
+        local s = hosting()
+        local mine = s and s.bids[client:me()] or (ctx.player and ctx.player.session and ctx.player.session.mine) or nil
+        if not mine then return out("There is no loot session to answer.") end
+        local seen = {}
+        for _, id in ipairs(ids) do
+            local b = mine[id]
+            if not b or b.kind == "pass" then return out(("Item %d: answer need, off or gift for it first."):format(id)) end
+            if seen[id] then return out(("Item %d is listed twice."):format(id)) end
+            seen[id] = true
+        end
+        for k, id in ipairs(ids) do
+            local b = mine[id]
+            act(function(session) return session:bid(client:me(), id, b.kind, { to = b.to, ready = b.ready, rank = k }) end,
+                function(p) return p:bid(id, b.kind, b.to, nil, { ready = b.ready, rank = k }) end)
+        end
+    end
+
     function cmds.pick(args)
         local item = tonumber(args)
         if not item then return out("pick <item#>") end

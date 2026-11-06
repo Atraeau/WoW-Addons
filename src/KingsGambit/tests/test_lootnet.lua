@@ -88,7 +88,7 @@ test("a bid is acknowledged, and a refused bid says why", function()
 end)
 test("the draft is played live: turn is broadcast, the right player picks", function()
     local w = build()
-    assert(w.host:start(drop(w, 2)))
+    assert(w.host:start(drop(w, 2), { requireRanking = false }))
     w.net:advance(1)
     local a, b = w.players.Aldric.net, w.players.Brann.net
     a:bid(1, "need"); a:bid(2, "need"); b:bid(1, "need"); b:bid(2, "pass")

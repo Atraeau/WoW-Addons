@@ -151,6 +151,34 @@ function M.Build(m)
     end
     v.hidden = m.hidden
 
+    -- Where you want several items of one kind, which you want most. Until it is set the session waits for you (and the window says so).
+    local KIND = { need = "main-spec", off = "off-spec", gift = "gift" }
+    if bidding and m.rankings and #m.rankings > 0 then
+        v.rankings = {}
+        local incomplete = 0
+        for _, g in ipairs(m.rankings) do
+            local ids = {}
+            for i, it in ipairs(g.items) do ids[i] = it.id end
+            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, items = {} }
+            for i, it in ipairs(g.items) do
+                local function swapped(j)
+                    local o = {}
+                    for k, id in ipairs(ids) do o[k] = id end
+                    o[i], o[j] = o[j], o[i]
+                    return o
+                end
+                panel.items[i] = { id = it.id, link = it.link, tip = it.tip, position = i, ranked = it.rank ~= nil,
+                    up = button("rankup", "Up", { name = "rank", order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
+                    down = button("rankdown", "Down", { name = "rank", order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
+            end
+            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", order = ids },
+                { enabled = not g.complete, primary = not g.complete })
+            if not g.complete then incomplete = incomplete + 1 end
+            v.rankings[#v.rankings + 1] = panel
+        end
+        if incomplete > 0 and (v.state == "bidding" or v.state == "waiting") then v.state = "ranking" end
+    end
+
     -- what the window says to the player, in plain words
     if v.state == "myturn" then
         if turn.type == "pick" then
@@ -185,6 +213,8 @@ function M.Build(m)
         b.who(m.waitingWho or { name = m.waitingFor or "the next player" }, m.waitingFor or "the next player")
         b.text(m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "")
         v.banner = { kind = "info", text = b.plain(), segments = b.segments }
+    elseif v.state == "ranking" then
+        v.banner = { kind = "warn", text = "You want more than one item: put them in order, most wanted first, and confirm. The session waits for your order; on your turn you get your highest-ranked item with no prompt." }
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then
