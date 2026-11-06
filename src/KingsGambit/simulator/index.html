@@ -657,7 +657,9 @@ FORMATS[2] = {
         -- ledger-wide events
         Genesis = { list = false, data = { name = "name!" } },
         SetGuildMaster = { list = false, data = { name = "name!" } },
-        SetOfficers = { list = false, data = { names = "names!" } },
+        SetOfficers = { list = false, data = { names = "names!" } }, -- (no longer used from 0.7.0: officers are the game's; old entries still read)
+        -- an officer says to ignore a player's entries from now on (0.7.0), or to stop (`lift` = 1); the same on every client. It moves nobody.
+        Disregard = { list = false, data = { name = "name!", reason = "name!", lift = "int" } },
         Elevate = { list = false, data = { raid = "name!", ml = "name!", minutes = "number!" } },
         Revoke = { list = false, data = { raid = "name!" } },
         RaidClose = { list = false, data = { raid = "name!" } },
@@ -1243,9 +1245,9 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
-    SetRaidList = true, SetListPolicy = true, Attendance = true }
+    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 -- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
@@ -1466,34 +1468,38 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
+    return { gm = nil, officers = {}, disregarded = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
 end
 
-local function snapshotOfficers(a)
+local function snapshotSet(set)
     local copy = {}
-    for k, v in pairs(a.officers) do copy[k] = v end
+    for k, v in pairs(set) do copy[k] = v end
     return copy
 end
 
 local function record(a, ev)
-    a.history[#a.history + 1] = { ev = ev, gm = a.gm, officers = snapshotOfficers(a) }
+    a.history[#a.history + 1] = { ev = ev, gm = a.gm, disregarded = snapshotSet(a.disregarded) }
 end
 
--- Ledger owner and officers in effect for event `e` (after every authority event written before it).
+-- Ledger owner and the players being disregarded, in effect for event `e` (after every authority event written before it).
 local function rolesAt(a, e)
-    local gm, officers = nil, {}
+    local gm, disregarded = nil, {}
     for _, h in ipairs(a.history) do
         if not byTs(h.ev, e) then break end
-        gm, officers = h.gm, h.officers
+        gm, disregarded = h.gm, h.disregarded
     end
-    return gm, officers
+    return gm, disregarded
 end
 
-local function isOfficerNow(a, name) return name ~= nil and (name == a.gm or a.officers[name] == true) end
+-- Who may write is NOT decided here. Whether someone is an officer is the game's to say (a rank permission of the guild), and each writer's own addon
+-- checks it at the moment of the action (Engine:Allowed); the ledger keeps no list of officers, and an old SetOfficers entry has no effect. What the ledger
+-- does keep is the one remedy for a writer who shouldn't have: an officer's Disregard entry, after which that player's entries are ignored, the same on
+-- every client. So "an officer" here means anyone not being disregarded.
+local function isOfficerNow(a, name) return name ~= nil and not a.disregarded[name] end
 
 local function isOfficerAt(a, name, e)
-    local gm, officers = rolesAt(a, e)
-    return name ~= nil and (name == gm or officers[name] == true), gm
+    local gm, disregarded = rolesAt(a, e)
+    return name ~= nil and not disregarded[name], gm
 end
 
 -- During pass 1 (events arrive in write order): has the raid already ended for this authority event?
@@ -1527,6 +1533,7 @@ local function mayWrite(a, author, e)
     local t = e
     local officer, gm = isOfficerAt(a, author, t)
     if not gm then return nil, "noledger" end
+    if not officer then return nil, "disregarded" end
     local active = activeRaids(a, t)
     local refused
     for _, r in ipairs(active) do
@@ -1561,7 +1568,8 @@ M.Present = function(view, raid)
     end
     return present
 end
-M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end
+M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
+M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
 
 -- Authority events, applied in write-time order: each returns a commit function, or nil + reason.
@@ -1596,6 +1604,7 @@ function auth.Migrate(a, ev, d)
     end
 end
 
+-- (From 0.7.0 officers are the game's, and this entry has no effect; ledgers written before still read.)
 function auth.SetOfficers(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
     if type(d.names) ~= "table" then return nil, "badnames" end
@@ -1606,6 +1615,16 @@ function auth.SetOfficers(a, ev, d)
         a.officers = {}
         for _, n in ipairs(d.names) do a.officers[n] = true end
     end
+end
+
+-- An officer (by the game, checked by their own addon when they write it) says to ignore a player's entries from now on, or to stop. Not the ledger
+-- owner, who can't be disregarded. It is the same on every client, in write order.
+function auth.Disregard(a, ev, d)
+    if not isOfficerNow(a, ev.author) then return nil, "disregarded" end
+    if not (isName(d.name) and isName(d.reason)) then return nil, "badname" end
+    if d.name == a.gm then return nil, "notowner" end
+    if d.lift ~= nil and d.lift ~= 0 and d.lift ~= 1 then return nil, "badname" end
+    return function() a.disregarded[d.name] = (d.lift ~= 1) and true or nil end
 end
 
 function auth.Elevate(a, ev, d)
@@ -1653,6 +1672,7 @@ function auth.Revoke(a, ev, d)
 end
 
 function auth.RaidClose(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
     local r = a.raids[d.raid]
     if not r or raidOver(r, ev) then return nil, "notactive" end
     if ev.author ~= r.ml then return nil, "notml" end
@@ -1662,6 +1682,7 @@ end
 -- The raid's Master Looter designates who disenchants what nobody wants, for this raid. The latest choice stands;
 -- the Master Looter may change it while the raid is active.
 function auth.SetDisenchanter(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
     local r = a.raids[d.raid]
     if not r or raidOver(r, ev) then return nil, "notactive" end
     if ev.author ~= r.ml then return nil, "notml" end
@@ -2112,6 +2133,23 @@ function M.New(opts)
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
     function h:inRaid() return S.inRaid and #S.roster > 0 end
+    -- Who is an officer in the guild, as the game's rank permission would say: nobody has been named (the default: everyone counts, so tests and the
+    -- practice raid aren't held up by it), or the named set. `name` nil means this character.
+    function h:isOfficer(name)
+        if S.officers == nil then return true end
+        return S.officers[normalize(name or S.me)] == true
+    end
+    function h:setOfficers(list)
+        if list == nil then S.officers = nil return end
+        S.officers = {}
+        for _, n in ipairs(list) do S.officers[normalize(n)] = true end
+    end
+    function h:officers()
+        local out = {}
+        for n in pairs(S.officers or {}) do out[#out + 1] = n end
+        table.sort(out)
+        return out
+    end
     -- The guild this character belongs to (a name), or nil.
     function h:guildName() return S.guildName end
     function h:setGuildName(name) S.guildName = name end
@@ -2577,9 +2615,37 @@ end
 function Engine:ListPolicy() return self.view.auth.policy end
 -- The off-spec list that goes with a list.
 function Engine:OffListOf(listId) return Ledger.OffList(listId) end
-function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
+-- Is this player an officer? The GAME says (a rank permission of the guild: "Is Officer"), for this character just now, or for another from the guild
+-- roster; nil from the game means it doesn't know, which counts as no. A client without that (an old one) falls back to not being disregarded.
+function Engine:IsOfficer(name)
+    if self.client.isOfficer then return self.client:isOfficer(name) == true and not self.view.auth.disregarded[name or self.client:me()] end
+    return Ledger.IsOfficer(self.view, name or self.client:me())
+end
+
+-- These entries need an officer even for the Master Looter of a raid; everything else the Master Looter of this character's own open raid may write.
+local OFFICER_ONLY = { Genesis = true, Elevate = true, SetRaidList = true, Revoke = true, Disregard = true, SetListPolicy = true,
+    SetOfficers = true, SetGuildMaster = true, Migrate = true }
+
+-- Just-in-time authorization for writing an entry of this kind: an officer by the game right now, or (for the kinds that allow it) the Master Looter of a
+-- raid this character runs. Returns true, or nil + "notofficer". This is the only check of rank; other clients accept what arrives.
+function Engine:Allowed(type_)
+    if not self.client.isOfficer or self.client:isOfficer() == true then return true end
+    local me = self.client:me()
+    if not OFFICER_ONLY[type_] then
+        for _, r in ipairs(self:ActiveRaids()) do if r.ml == me then return true end end
+    end
+    -- someone whose raid has ended is told so, rather than that they aren't an officer
+    for _, r in pairs(self.view.auth.raids) do if r.ml == me and not OFFICER_ONLY[type_] then return nil, "expired" end end
+    return nil, "notofficer"
+end
+
 function Engine:MayWrite(name, t)
-    return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())
+    name = name or self.client:me()
+    if name == self.client:me() then
+        local allowed, why = self:Allowed("List")
+        if not allowed then return nil, why end
+    end
+    return Ledger.MayWrite(self.view, name, t or self.client:serverTime())
 end
 
 ---------------------------------------------------------------- writing
@@ -2634,6 +2700,8 @@ function Engine:Write(type_, data, list, format)
     if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
     if self.view.frozen then return nil, "frozen" end
     if next(self.ahead) then return nil, "ahead" end -- see Ledger.LoadStore: writing now would build on a truncated view
+    local allowed, notAllowed = self:Allowed(type_)
+    if not allowed then return nil, notAllowed end
     local fmt = format or self.view.auth.format
     if fmt ~= self.rules.current then
         -- the code builds entries in its newest shape; the ledger may still be in an older format: write that one
@@ -7149,7 +7217,7 @@ M.TEXT = {
     navledger = { "Ledger", "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
-    navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
+    navpeople = { "People", "Add, remove and move players; who the officers are (the game's rank permission) and who is being disregarded; and your own spec." },
     navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
     navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)" },
     historykind = { "Show", "What happened (the default) leaves out passes: they are the most common entries and say what could have happened to an item, not what did. Passes stay in the record: choose Passes to see only them, or Everything to see all." },
@@ -7718,8 +7786,8 @@ M.SECTIONS = {
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
         actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
-    { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
-        actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
+    { id = "people", label = "People", tip = "Add, remove and move players; who the officers are (the game's rank permission) and who is being disregarded; and your own spec.",
+        actions = { "add", "remove", "move", "officers", "disregard", "regard", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
     { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
@@ -8426,6 +8494,7 @@ end
 function Lab.node(w, name, rules, build, client)
     seedCounter = seedCounter + 1
     client = client or MockClient.New({ name = name, seed = seedCounter * 53 })
+    client:setOfficers({ "GM", "Off" }) -- who is an officer is the game's rank permission: the guild master and one officer, here
     client:setAddonVersion(build or "0.2.0+1")
     local engine = Engine.New(client, { rules = rules })
     local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })

@@ -466,3 +466,31 @@ test("the guild probe prints this character's rank, the game's officer answer, a
     local bare = table.concat(newClient():guildProbe(), "\n")
     assert(bare:find("(not available)", 1, true), bare)
 end)
+
+test("officer is the game's rank permission: this character by IsGuildOfficer, others by their rank's officer flag, nil when it can't tell", function()
+    local function guild(opts)
+        return newClient(function(E)
+            E.IsInGuild = function() return true end
+            E.GetGuildInfo = function() return "Gray Parse", "Officer", 1 end
+            E.C_GuildInfo = {
+                IsGuildOfficer = function() return opts.me end,
+                GuildControlGetNumRanks = function() return 3 end,
+                -- flag 3 is the officer-channel access of "Is Officer"
+                GuildControlGetRankFlags = function(i) return ({ { true, true, true }, { true, true, true }, { true, true, false } })[i] end,
+            }
+            local members = { { "Raidlead", "x", 1 }, { "Mirel", "x", 1 }, { "Brann" .. SEP .. "Ironforge", "x", 2 }, { "Lead", "x", 0 } }
+            E.GetNumGuildMembers = function() return #members end
+            E.GetGuildRosterInfo = function(i) return members[i][1], members[i][2], members[i][3] end
+        end)
+    end
+    local officer, member = guild({ me = true }), guild({ me = false })
+    eq(officer:isOfficer(), true); eq(member:isOfficer(), false)
+    eq(officer:isOfficer("Mirel"), true, "another player: their rank has the permission")
+    eq(officer:isOfficer("Brann Ironforge"), false, "a rank without it")
+    eq(officer:isOfficer("Lead"), true, "the Guild Master's rank always counts")
+    eq(officer:isOfficer("Nobody"), nil, "not in the guild roster: the game doesn't say")
+    local list = officer:officers()
+    eq(table.concat(list, ","), "Lead,Mirel,Raidlead")
+    -- no guild: the ledger is the character's own, so they are its officer
+    eq(newClient():isOfficer(), true)
+end)

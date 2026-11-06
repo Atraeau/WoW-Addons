@@ -11,6 +11,7 @@ return {
             CreateList = "2c34514465856bc8",
             Declined = "63b0c9c95c2cdcfd",
             Disenchant = "40afbd53c984fc2f",
+            Disregard = "2d479f300222e854",
             DisenchantResult = "bcd7a7785414d50c",
             Elevate = "74e77bc883162c0c",
             Genesis = "3c0e0dfa1147aa7e",

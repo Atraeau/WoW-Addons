@@ -49,6 +49,8 @@ local function Start(attempt)
     SK.db, SK.char = client:storage().account, client:storage().char
     SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player,
         requests = requests, selfcheck = M.SelfCheck, attendance = SK.attendance })
+    SK.guard = M.Guard.New(engine, client, { describe = function(ev) return SK.commands and SK.commands.describe(ev) or tostring(ev.type) end,
+        display = M.Identity.Display }) -- tells the officers when a non-officer writes to the ledger
     for _, m in pairs(M) do
         if m.OnInit then m:OnInit() end
     end

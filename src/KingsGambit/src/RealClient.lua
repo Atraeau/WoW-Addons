@@ -239,6 +239,56 @@ function M.New(opts)
         end
         return out
     end
+    -- ---- officers, from the game's own rank permission ("Is Officer": among other things, access to the officer channels: flag 3 of a rank's permissions;
+    -- the Guild Master's rank, index 0, always counts). Confirmed in the game: a member who isn't the Guild Master can read every rank's flags, and
+    -- C_GuildInfo.IsGuildOfficer() is true for an officer.
+    local OFFICER_FLAG = 3
+    local rankCache
+    local function guildRanks()
+        local now = E.GetTime and E.GetTime() or 0
+        if rankCache and now - rankCache.at < 30 then return rankCache end
+        local cache = { at = now, byName = {}, officerRank = {} }
+        local ci = E.C_GuildInfo or {}
+        local nFn = ci.GuildControlGetNumRanks or E.GuildControlGetNumRanks
+        local flagFn = ci.GuildControlGetRankFlags or E.GuildControlGetRankFlags
+        local ranks = nFn and tonumber(select(2, pcall(nFn))) or 0
+        for i = 1, ranks do
+            local ok, flags = pcall(flagFn, i)
+            cache.officerRank[i - 1] = (i == 1) or (ok and type(flags) == "table" and flags[OFFICER_FLAG] == true) or false
+        end
+        if E.IsInGuild and E.IsInGuild() and E.GetNumGuildMembers and E.GetGuildRosterInfo then
+            for i = 1, (E.GetNumGuildMembers() or 0) do
+                local name, _, rankIndex = E.GetGuildRosterInfo(i)
+                name = fromGame(name)
+                if name then cache.byName[name] = rankIndex end
+            end
+        end
+        rankCache = cache
+        return cache
+    end
+    -- Is this player (default: this character) an officer in the guild? true or false, nil when the game doesn't say. With no guild the ledger is one's own: true.
+    function c:isOfficer(name)
+        if not (E.IsInGuild and E.IsInGuild()) then return true end
+        name = name and normalize(name) or nil
+        if name == nil or name == self:me() then
+            local ok, v = pcall((E.C_GuildInfo or {}).IsGuildOfficer or function() return nil end)
+            if ok and v ~= nil then return v and true or false end
+            if E.IsGuildLeader then local ok2, leader = pcall(E.IsGuildLeader); if ok2 and leader then return true end end
+            return nil
+        end
+        local cache = guildRanks()
+        local rank = cache.byName[name]
+        if rank == nil then return nil end
+        return cache.officerRank[rank] == true
+    end
+    -- The guild's officers, by name (those whose rank has the permission), for display.
+    function c:officers()
+        local cache = guildRanks()
+        local out = {}
+        for name, rank in pairs(cache.byName) do if cache.officerRank[rank] then out[#out + 1] = name end end
+        table.sort(out)
+        return out
+    end
     function c:inGroup() return E.IsInGroup() and true or false end
     function c:inRaid() return E.IsInRaid() and true or false end
     -- Is this character inside an instance (a raid or a dungeon), as opposed to the open world? (IsInInstance: true plus the kind, "raid" or "party".)

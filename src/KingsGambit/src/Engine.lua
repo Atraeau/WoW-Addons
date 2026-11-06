@@ -148,9 +148,37 @@ end
 function Engine:ListPolicy() return self.view.auth.policy end
 -- The off-spec list that goes with a list.
 function Engine:OffListOf(listId) return Ledger.OffList(listId) end
-function Engine:IsOfficer(name) return Ledger.IsOfficer(self.view, name or self.client:me()) end
+-- Is this player an officer? The GAME says (a rank permission of the guild: "Is Officer"), for this character just now, or for another from the guild
+-- roster; nil from the game means it doesn't know, which counts as no. A client without that (an old one) falls back to not being disregarded.
+function Engine:IsOfficer(name)
+    if self.client.isOfficer then return self.client:isOfficer(name) == true and not self.view.auth.disregarded[name or self.client:me()] end
+    return Ledger.IsOfficer(self.view, name or self.client:me())
+end
+
+-- These entries need an officer even for the Master Looter of a raid; everything else the Master Looter of this character's own open raid may write.
+local OFFICER_ONLY = { Genesis = true, Elevate = true, SetRaidList = true, Revoke = true, Disregard = true, SetListPolicy = true,
+    SetOfficers = true, SetGuildMaster = true, Migrate = true }
+
+-- Just-in-time authorization for writing an entry of this kind: an officer by the game right now, or (for the kinds that allow it) the Master Looter of a
+-- raid this character runs. Returns true, or nil + "notofficer". This is the only check of rank; other clients accept what arrives.
+function Engine:Allowed(type_)
+    if not self.client.isOfficer or self.client:isOfficer() == true then return true end
+    local me = self.client:me()
+    if not OFFICER_ONLY[type_] then
+        for _, r in ipairs(self:ActiveRaids()) do if r.ml == me then return true end end
+    end
+    -- someone whose raid has ended is told so, rather than that they aren't an officer
+    for _, r in pairs(self.view.auth.raids) do if r.ml == me and not OFFICER_ONLY[type_] then return nil, "expired" end end
+    return nil, "notofficer"
+end
+
 function Engine:MayWrite(name, t)
-    return Ledger.MayWrite(self.view, name or self.client:me(), t or self.client:serverTime())
+    name = name or self.client:me()
+    if name == self.client:me() then
+        local allowed, why = self:Allowed("List")
+        if not allowed then return nil, why end
+    end
+    return Ledger.MayWrite(self.view, name, t or self.client:serverTime())
 end
 
 ---------------------------------------------------------------- writing
@@ -205,6 +233,8 @@ function Engine:Write(type_, data, list, format)
     if type_ ~= "Genesis" and not self.store.id then return nil, "noledger" end
     if self.view.frozen then return nil, "frozen" end
     if next(self.ahead) then return nil, "ahead" end -- see Ledger.LoadStore: writing now would build on a truncated view
+    local allowed, notAllowed = self:Allowed(type_)
+    if not allowed then return nil, notAllowed end
     local fmt = format or self.view.auth.format
     if fmt ~= self.rules.current then
         -- the code builds entries in its newest shape; the ledger may still be in an older format: write that one

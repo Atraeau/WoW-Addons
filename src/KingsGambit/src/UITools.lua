@@ -50,8 +50,9 @@ M.GROUPS = {
         { id = "history", label = "History", help = "The last changes to the list, with who, why and at whose request.", fields = { F("n", "How many", { optional = true, default = "10" }) }, cmd = { "history", "@n" } },
     } },
     { id = "admin", title = "Ledger owner and me", actions = {
-        { id = "officers", label = "Officers", help = "Show the ledger owner and the officers.", fields = {}, cmd = { "officers" } },
-        { id = "officersset", label = "Set the officers", help = "Ledger owner. Replaces the whole list: give every name you want, separated by spaces or commas (First Last as First_Last).", fields = { F("names", "Names", { optional = true }) }, cmd = { "officers set", "@names" } },
+        { id = "officers", label = "Officers", help = "Show the ledger owner, the officers (the game's \"Is Officer\" rank permission) and anyone being disregarded.", fields = {}, cmd = { "officers" } },
+        { id = "disregard", label = "Disregard a player's entries", help = "An officer. If someone who shouldn't be writing to the ledger has, this ignores everything they write from now on, on every client (what they wrote before stays). A reason is part of the record.", fields = { F("name", "Player", { name = true }), F("reason", "Reason") }, cmd = { "disregard", "@name", "@reason" } },
+        { id = "regard", label = "Stop disregarding a player", help = "An officer. The player's entries count again, from now on.", fields = { F("name", "Player", { name = true }) }, cmd = { "regard", "@name" } },
         { id = "policy", label = "One list per raid?", help = "Ledger owner. choose (the default): the officer may name a list. perraid: every raid must have a list of its own. Empty shows it.", fields = { F("mode", "choose or perraid", { optional = true }) }, cmd = { "raid policy", "@mode" } },
         { id = "migratestatus", label = "Ledger format", help = "The ledger's format, and which players can already read the next one.", fields = {}, cmd = { "migrate status" } },
         { id = "migrate", label = "Move to the next format", help = "Ledger owner. Permanent. Only when 'Ledger format' shows everyone is ready.", fields = { F("format", "Next format number"), F("reason", "Reason") }, cmd = { "migrate", "@format", "@reason" } },

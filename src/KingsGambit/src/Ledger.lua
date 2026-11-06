@@ -27,9 +27,9 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
-    SetRaidList = true, SetListPolicy = true, Attendance = true }
+    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 -- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
@@ -250,34 +250,38 @@ local function isName(v) return type(v) == "string" and v ~= "" end
 -- The authority state as pass 1 builds it. `history` records every change so pass 2 can ask
 -- "who was an officer at time t?".
 local function newAuth()
-    return { gm = nil, officers = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
+    return { gm = nil, officers = {}, disregarded = {}, raids = {}, history = {}, format = Migrations.BASE, migrations = {}, policy = "choose" }
 end
 
-local function snapshotOfficers(a)
+local function snapshotSet(set)
     local copy = {}
-    for k, v in pairs(a.officers) do copy[k] = v end
+    for k, v in pairs(set) do copy[k] = v end
     return copy
 end
 
 local function record(a, ev)
-    a.history[#a.history + 1] = { ev = ev, gm = a.gm, officers = snapshotOfficers(a) }
+    a.history[#a.history + 1] = { ev = ev, gm = a.gm, disregarded = snapshotSet(a.disregarded) }
 end
 
--- Ledger owner and officers in effect for event `e` (after every authority event written before it).
+-- Ledger owner and the players being disregarded, in effect for event `e` (after every authority event written before it).
 local function rolesAt(a, e)
-    local gm, officers = nil, {}
+    local gm, disregarded = nil, {}
     for _, h in ipairs(a.history) do
         if not byTs(h.ev, e) then break end
-        gm, officers = h.gm, h.officers
+        gm, disregarded = h.gm, h.disregarded
     end
-    return gm, officers
+    return gm, disregarded
 end
 
-local function isOfficerNow(a, name) return name ~= nil and (name == a.gm or a.officers[name] == true) end
+-- Who may write is NOT decided here. Whether someone is an officer is the game's to say (a rank permission of the guild), and each writer's own addon
+-- checks it at the moment of the action (Engine:Allowed); the ledger keeps no list of officers, and an old SetOfficers entry has no effect. What the ledger
+-- does keep is the one remedy for a writer who shouldn't have: an officer's Disregard entry, after which that player's entries are ignored, the same on
+-- every client. So "an officer" here means anyone not being disregarded.
+local function isOfficerNow(a, name) return name ~= nil and not a.disregarded[name] end
 
 local function isOfficerAt(a, name, e)
-    local gm, officers = rolesAt(a, e)
-    return name ~= nil and (name == gm or officers[name] == true), gm
+    local gm, disregarded = rolesAt(a, e)
+    return name ~= nil and not disregarded[name], gm
 end
 
 -- During pass 1 (events arrive in write order): has the raid already ended for this authority event?
@@ -311,6 +315,7 @@ local function mayWrite(a, author, e)
     local t = e
     local officer, gm = isOfficerAt(a, author, t)
     if not gm then return nil, "noledger" end
+    if not officer then return nil, "disregarded" end
     local active = activeRaids(a, t)
     local refused
     for _, r in ipairs(active) do
@@ -345,7 +350,8 @@ M.Present = function(view, raid)
     end
     return present
 end
-M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end
+M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
+M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
 
 -- Authority events, applied in write-time order: each returns a commit function, or nil + reason.
@@ -380,6 +386,7 @@ function auth.Migrate(a, ev, d)
     end
 end
 
+-- (From 0.7.0 officers are the game's, and this entry has no effect; ledgers written before still read.)
 function auth.SetOfficers(a, ev, d)
     if ev.author ~= a.gm then return nil, "notguildmaster" end
     if type(d.names) ~= "table" then return nil, "badnames" end
@@ -390,6 +397,16 @@ function auth.SetOfficers(a, ev, d)
         a.officers = {}
         for _, n in ipairs(d.names) do a.officers[n] = true end
     end
+end
+
+-- An officer (by the game, checked by their own addon when they write it) says to ignore a player's entries from now on, or to stop. Not the ledger
+-- owner, who can't be disregarded. It is the same on every client, in write order.
+function auth.Disregard(a, ev, d)
+    if not isOfficerNow(a, ev.author) then return nil, "disregarded" end
+    if not (isName(d.name) and isName(d.reason)) then return nil, "badname" end
+    if d.name == a.gm then return nil, "notowner" end
+    if d.lift ~= nil and d.lift ~= 0 and d.lift ~= 1 then return nil, "badname" end
+    return function() a.disregarded[d.name] = (d.lift ~= 1) and true or nil end
 end
 
 function auth.Elevate(a, ev, d)
@@ -437,6 +454,7 @@ function auth.Revoke(a, ev, d)
 end
 
 function auth.RaidClose(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
     local r = a.raids[d.raid]
     if not r or raidOver(r, ev) then return nil, "notactive" end
     if ev.author ~= r.ml then return nil, "notml" end
@@ -446,6 +464,7 @@ end
 -- The raid's Master Looter designates who disenchants what nobody wants, for this raid. The latest choice stands;
 -- the Master Looter may change it while the raid is active.
 function auth.SetDisenchanter(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
     local r = a.raids[d.raid]
     if not r or raidOver(r, ev) then return nil, "notactive" end
     if ev.author ~= r.ml then return nil, "notml" end

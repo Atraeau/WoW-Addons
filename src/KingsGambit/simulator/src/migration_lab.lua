@@ -79,6 +79,7 @@ end
 function Lab.node(w, name, rules, build, client)
     seedCounter = seedCounter + 1
     client = client or MockClient.New({ name = name, seed = seedCounter * 53 })
+    client:setOfficers({ "GM", "Off" }) -- who is an officer is the game's rank permission: the guild master and one officer, here
     client:setAddonVersion(build or "0.2.0+1")
     local engine = Engine.New(client, { rules = rules })
     local sync = Sync.New(engine, { heartbeat = 5, firstHeartbeat = 0.5, firstJitter = 1 })

@@ -172,7 +172,7 @@ test("the lab's world walks through a migration: write, cut over, a stale write,
     s = L:state()
     local top = s.players[1].top[1]
     for _, p in ipairs(s.players) do eq(p.status, "in sync", p.name .. " has the same ledger"); eq(p.top[1], top, p.name .. " the same standings") end
-    eq(select(2, L:write("Cass", "member")), "notauthorized", "a raider can't write")
+    eq(select(2, L:write("Cass", "member")), "notofficer", "a raider can't write: the game's rank says so, on their own addon")
     -- the cutover
     assert(L:migrate()); L:advance(15)
     s = L:state()

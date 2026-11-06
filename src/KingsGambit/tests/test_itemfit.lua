@@ -273,6 +273,7 @@ local function guild()
     local w = { net = net }
     for i, n in ipairs { "GM", "Off", "Maga" } do
         local client = MockClient.New({ name = n, seed = i * 7 })
+        client:setOfficers({ "GM", "Off" }) -- the game's rank permission
         client:setRaid({ { name = "GM", class = "WARRIOR" }, { name = "Off", class = "PRIEST" }, { name = "Maga", class = "MAGE" } },
             { leader = "GM", lootMethod = "master", masterLooter = "GM" })
         local engine = Engine.New(client)

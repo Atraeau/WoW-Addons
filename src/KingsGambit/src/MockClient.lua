@@ -127,6 +127,23 @@ function M.New(opts)
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
     function h:inRaid() return S.inRaid and #S.roster > 0 end
+    -- Who is an officer in the guild, as the game's rank permission would say: nobody has been named (the default: everyone counts, so tests and the
+    -- practice raid aren't held up by it), or the named set. `name` nil means this character.
+    function h:isOfficer(name)
+        if S.officers == nil then return true end
+        return S.officers[normalize(name or S.me)] == true
+    end
+    function h:setOfficers(list)
+        if list == nil then S.officers = nil return end
+        S.officers = {}
+        for _, n in ipairs(list) do S.officers[normalize(n)] = true end
+    end
+    function h:officers()
+        local out = {}
+        for n in pairs(S.officers or {}) do out[#out + 1] = n end
+        table.sort(out)
+        return out
+    end
     -- The guild this character belongs to (a name), or nil.
     function h:guildName() return S.guildName end
     function h:setGuildName(name) S.guildName = name end

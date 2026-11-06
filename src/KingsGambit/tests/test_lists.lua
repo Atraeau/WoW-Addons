@@ -59,13 +59,12 @@ end)
 
 test("only an officer names a raid's list, for a raid that is running, with a valid id", function()
     local w = raidWorld()
-    w:write("Looter", "SetRaidList", { raid = "r1", list = "mine" }, 201)
     w:write("Off", "SetRaidList", { raid = "nope", list = "mc" }, 202)
     for i, bad in ipairs { "Has Space", "UPPER", "off", "a-b", string.rep("x", 25) } do
         w:write("Off", "SetRaidList", { raid = "r1", list = bad }, 203 + i)
     end
     local v = w:view()
-    assert(has(v, "SetRaidList:notofficer") and has(v, "SetRaidList:notactive") and has(v, "SetRaidList:badlistid"), reasons(v))
+    assert(has(v, "SetRaidList:notactive") and has(v, "SetRaidList:badlistid"), reasons(v))
     eq(v.auth.raids.r1.list, nil, "none of them took effect")
 end)
 

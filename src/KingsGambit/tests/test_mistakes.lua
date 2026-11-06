@@ -38,6 +38,7 @@ local function guild()
     end
     for i, n in ipairs(NAMES) do
         local client = MockClient.New({ name = n, seed = i * 31 })
+        client:setOfficers({ "GM", "Off" }) -- the game's rank permission
         client:setRaid(NAMES, { leader = "GM", lootMethod = "master", masterLooter = "Looter" })
         w.nodes[n] = build(n, client)
         w[n] = w.nodes[n]

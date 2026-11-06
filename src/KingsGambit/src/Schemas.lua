@@ -75,7 +75,9 @@ FORMATS[2] = {
         -- ledger-wide events
         Genesis = { list = false, data = { name = "name!" } },
         SetGuildMaster = { list = false, data = { name = "name!" } },
-        SetOfficers = { list = false, data = { names = "names!" } },
+        SetOfficers = { list = false, data = { names = "names!" } }, -- (no longer used from 0.7.0: officers are the game's; old entries still read)
+        -- an officer says to ignore a player's entries from now on (0.7.0), or to stop (`lift` = 1); the same on every client. It moves nobody.
+        Disregard = { list = false, data = { name = "name!", reason = "name!", lift = "int" } },
         Elevate = { list = false, data = { raid = "name!", ml = "name!", minutes = "number!" } },
         Revoke = { list = false, data = { raid = "name!" } },
         RaidClose = { list = false, data = { raid = "name!" } },

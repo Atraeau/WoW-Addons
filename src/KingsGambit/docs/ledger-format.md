@@ -77,17 +77,18 @@ stays in its chain. Every verifier skips exactly the same events, so everyone ge
 
 ### Who may write
 
-The ledger-wide state is: the ledger owner, the set of officers, and raids (`{ id, ml, opened by, expires,
-ended by }`). A raid is **active for an event** when the event comes after the `Elevate` that opened it in write order,
+The ledger-wide state is: the ledger owner, the players being disregarded, and raids (`{ id, ml, opened by, expires,
+ended by }`). **Who is an officer is not in the ledger** (from 0.7.0): it is the game's, a rank permission of the guild ("Is Officer"), and each writer's own
+addon checks it just before writing. The ledger takes an entry from anyone who is not being disregarded (see `Disregard`). A raid is **active for an event** when the event comes after the `Elevate` that opened it in write order,
 its `ts` is before `expires`, and it comes before the `RaidClose` or `Revoke` that ended it (if any).
 
 A list event, `Declined`, `ItemClasses` or `ItemSuits` is allowed when:
 
 - its author is the Master Looter of a raid active for it **and**, if it is about a list, that list is the raid's list or the raid's off-spec list
   (see `SetRaidList`; a raid with none named plays on `main`), or
-- its author was an officer (or the ledger owner) when it was written and **no** raid is active for it.
+- its author was not being disregarded when it was written and **no** raid is active for it.
 
-Otherwise it is skipped (`duringraid`, `expired`, `notauthorized`, `wronglist`, or `nolistchosen` when the guild requires a raid to have a list of its
+Otherwise it is skipped (`duringraid`, `disregarded`, `wronglist`, or `nolistchosen` when the guild requires a raid to have a list of its
 own and none is named yet). A raid's off-spec list is `off` for the list `main` and `<list>-off` for any other.
 
 ### Ledger-wide events (no `list`)
@@ -96,7 +97,8 @@ own and none is named yet). A raid's off-spec list is `off` for the list `main` 
 |---|---|---|
 | `Genesis` | `name` | First event of the ledger, `seq` 1 of its chain, `ledger = ""`. Its author is the ledger owner. Only one. |
 | `SetGuildMaster` | `name` | By the ledger owner only. Hands the role on. |
-| `SetOfficers` | `names` (list) | By the ledger owner only. Replaces the officer list (mirrored from the game's guild ranks). |
+| `SetOfficers` | `names` (list) | By the ledger owner only. **Has no effect from 0.7.0** (officers are the game's); ledgers written before still read. |
+| `Disregard` | `name`, `reason`, `lift?` (1 to stop) | Added in 0.7.0. By an officer (by the game, checked by their own addon): ignore the player's entries from this entry on, the same on every client; `lift` = 1 ends it. Not the ledger owner (`notowner`); a disregarded player's own `Disregard` is skipped. Earlier entries of the player stay. Moves nobody. |
 | `Elevate` | `raid`, `ml`, `minutes` (1 to 1440) | By an officer. Opens raid `raid` with Master Looter `ml` until `ts + minutes*60`. For a running raid with the same `ml`, extends it (never shortens). Skipped for an ended raid or a different `ml`. |
 | `Revoke` | `raid` | By an officer, for an active raid: it ends at `ts`. |
 | `RaidClose` | `raid` | By the raid's Master Looter, while active: it ends at `ts`. |

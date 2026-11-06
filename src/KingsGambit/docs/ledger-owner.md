@@ -4,7 +4,9 @@ Everything the ledger owner can configure, what each option is for, and how to u
 shared ledger, not a private setting, so **every client enforces it the same way**, and anyone can see who chose what and when
 (`history`, or the audit tool). Nothing here can be changed quietly.
 
-**Who the ledger owner is.** The ledger owner is the player who founded the guild's ledger, and the one who names its officers. It is **not** the game's Guild Master: that is a role in the game's guild, which this addon does not use, and the game's ranks (an officer in the guild, say) do not decide who may write here. A guild's Guild Master and its ledger owner can be different people, and so can the game's officers and the ledger's.
+**Who the ledger owner is.** The ledger owner is the player who founded the guild's ledger. They no longer name the officers: **officers are the game's**. It is **not** the game's Guild Master: that is a role in the game's guild, which this addon does not use, and the game's ranks (an officer in the guild, say) do not decide who may write here. A guild's Guild Master and its ledger owner can be different people.
+
+**Who is an officer.** An officer is a member of the guild whose rank has the **Is Officer** permission, which the Guild Master sets for each rank in the game's guild control. Nothing is kept in the ledger about it. When someone acts, their own addon asks the game (just in time) and refuses if they aren't an officer. Other players' addons take what arrives; if an entry comes from someone the game says is not an officer (and who isn't a raid's Master Looter), the officers are told, and any officer can `disregard <name> <reason>` to ignore that player's entries from then on, on every client (`regard <name>` undoes it). Nothing is deleted.
 
 **The windows.** Type `/gambit` to open the Guild book: a column of sections down the left (Lists, Ledger, Awards, Raids, People, Rules, and Admin below them), with a form for every
 command below spread across them. A running loot session has its own small **Loot window**, which opens by itself when a
@@ -16,8 +18,8 @@ that is never saved or sent. `/gambit help` lists the commands.
 
 | Who | Can |
 |---|---|
-| **Ledger owner** (whoever founded the ledger) | name the officers · set how raids pick their list · move the ledger to a new format |
-| **Officers** | open, extend and revoke raids · name a raid's list · set which classes may bid on an item and who it suits · edit lists directly when no raid is running |
+| **Ledger owner** (whoever founded the ledger) | set how raids pick their list · move the ledger to a new format |
+| **Officers** (the game's "Is Officer" rank permission) | open, extend and revoke raids · name a raid's list · set which classes may bid on an item and who it suits · edit lists directly when no raid is running · disregard a player's entries |
 | **A raid's Master Looter** | run loot sessions · write to the raid's list (and no other) · choose who disenchants · answer requests |
 | **Everyone** | bid, request changes, verify the ledger |
 
@@ -43,17 +45,17 @@ Handing the role to someone else exists in the ledger format (`SetGuildMaster`) 
 
 ## 2. Officers
 
-**What it is for:** officers run the raids and fix the list between raids. Keeping the set small and named keeps the record accountable.
+**What it is for:** officers run the raids and fix the list between raids. Who they are is the game's to say: the members whose guild rank has the **Is Officer** permission.
 
 **How:**
 
 ```
-officers                    show the ledger owner and the officers
-officers set Aldric Brann   replace the officer list with exactly these characters
-officers set                no officers: only the ledger owner
+officers                      show the ledger owner, the officers (by the game) and anyone being disregarded
+disregard Aldric <reason>     an officer: ignore a player's entries from now on, on every client (a reason is part of the record)
+regard Aldric                 an officer: their entries count again
 ```
 
-`officers set` always replaces the whole list (give every name you want, not just the new one). Write each character as `First_Last` (a character is its first and
+`officers set` no longer does anything: set the **Is Officer** permission on a rank in the game's guild control instead. Write each character as `First_Last` (a character is its first and
 last name; there are no realms).
 
 ## 3. How raids pick their list

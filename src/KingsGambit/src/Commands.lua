@@ -29,7 +29,8 @@ local WHY = {
     -- who may write (ledger authority)
     notauthorized = "you are not an officer, and no raid is open with you as its Master Looter",
     expired = "your raid has ended, and with it your right to write to the list",
-    notofficer = "only an officer can do that", notguildmaster = "only the ledger owner can do that",
+    notofficer = "only an officer can do that (an officer is a member of the guild whose rank has the \"Is Officer\" permission)", notguildmaster = "only the ledger owner can do that",
+    disregarded = "an officer has decided to disregard that player's entries", notowner = "the ledger owner can't be disregarded",
     -- ledger formats (see Migrations.lua)
     ahead = "this ledger has entries in a newer format than this version can read, so writing is paused: update King's Gambit (nothing was lost)",
     frozen = "this client could not reproduce the last migration, so it will not write (it would not agree with everyone else): update King's Gambit",
@@ -110,7 +111,8 @@ local HELP = {
     "  eligible <item> <classes|any> <reason> - which classes may bid on an item",
     "  suits <item> <roles|auto> <reason> - who an item suits: tank, melee, hunter, caster, healer",
     "Ledger owner",
-    "  officers [set <names...>] - who the officers are",
+    "  officers - who the officers are (the game's \"Is Officer\" rank permission) and who is being disregarded",
+    "  disregard <name> <reason> | regard <name> - an officer: ignore a player's entries from now on, for everyone; or stop",
     "  raid policy [choose|perraid] - how raids pick their list",
     "  migrate [status] - the ledger's format, and who can read the next one",
     "  migrate <format> <reason> - move to the next format (everyone must be ready)",
@@ -1011,20 +1013,36 @@ function M.New(ctx)
         fn(rest)
     end
 
+    -- Officers are the game's: the members of the guild whose rank has the "Is Officer" permission, which the guild's Guild Master sets in the game.
     function cmds.officers(args)
-        local sub, rest = args:match("^(%S*)%s*(.-)$")
-        local a = engine:View().auth
-        if sub:lower() ~= "set" then
-            local names = {}
-            for n in pairs(a.officers) do names[#names + 1] = short(n) end
-            table.sort(names)
-            out(("Ledger owner: %s. Officers: %s."):format(short(a.gm) or "none (no ledger yet)", #names > 0 and table.concat(names, ", ") or "none"))
-            return
+        local sub = args:match("^(%S*)"):lower()
+        if sub == "set" then
+            return out("Officers are not set here any more: they are the guild members whose rank has the \"Is Officer\" permission (the Guild Master sets that in the game's guild control). Nothing was changed.")
         end
+        local a = engine:View().auth
         local names = {}
-        for n in rest:gmatch("%S+") do names[#names + 1] = name(n) end
-        if writeAuthority("SetOfficers", { names = names }) then
-            out(#names > 0 and ("Officers are now: " .. rest .. ".") or "There are no officers now (only the ledger owner).")
+        for i, n in ipairs(client.officers and client:officers() or {}) do names[i] = short(n) end
+        out(("Ledger owner: %s. Officers (by the game's \"Is Officer\" rank permission): %s."):format(short(a.gm) or "none (no ledger yet)",
+            #names > 0 and table.concat(names, ", ") or "none known"))
+        local dis = {}
+        for n in pairs(a.disregarded) do dis[#dis + 1] = short(n) end
+        table.sort(dis)
+        if #dis > 0 then out("Entries from these players are being disregarded: " .. table.concat(dis, ", ") .. ".") end
+    end
+
+    -- An officer says to ignore a player's entries from now on (or to stop). The same on every client; nothing is deleted.
+    function cmds.disregard(args)
+        local who, reason = args:match("^(%S+)%s+(.+)$")
+        if not who then return out("disregard <name> <reason>  (ignores that player's entries from now on, on every client; a reason is part of the record. Undo it: regard <name>)") end
+        if writeAuthority("Disregard", { name = name(who), reason = reason }) then
+            out(("From now on %s's entries are disregarded, on every client. What they wrote before stays. Undo it: regard %s"):format(short(name(who)), short(name(who))))
+        end
+    end
+    function cmds.regard(args)
+        local who = args:match("^(%S+)")
+        if not who then return out("regard <name>  (stop disregarding a player's entries)") end
+        if writeAuthority("Disregard", { name = name(who), reason = "regarded again", lift = 1 }) then
+            out(("%s's entries count again."):format(short(name(who))))
         end
     end
 

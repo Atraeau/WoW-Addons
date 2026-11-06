@@ -41,6 +41,7 @@ local function guild(netOpts)
     end
     for i, n in ipairs(NAMES) do
         local client = MockClient.New({ name = n, seed = i * 31 })
+        client:setOfficers({ "GM", "Off" }) -- the game's rank permission: the guild master and one officer
         client:setRaid(NAMES, { leader = "GM", lootMethod = "master", masterLooter = "Looter" })
         w.nodes[n] = build(n, client)
         w[n] = w.nodes[n]
@@ -374,7 +375,7 @@ test("only the raid's Master Looter designates the disenchanter; it is on the re
     eq(w.Looter.engine:RaidDisenchanter(), "Cass"); eq(#w.Looter.engine:Conflicts(), 0)
     -- a forged designation by someone else is refused by the ledger
     local ev, err = w.Aldric.engine:Write("SetDisenchanter", { raid = w.Looter.engine:ActiveRaids()[1].id, name = "Aldric" })
-    assert(not ev and err == "notml", tostring(err))
+    assert(not ev and err == "notofficer", tostring(err)) -- (Aldric's own addon refuses: the game says he is not an officer; the ledger's own refusal, notml, is tested on raw entries)
 end)
 test("loot cannot be started until a disenchanter is designated; then unwanted loot goes to them", function()
     local Loot = SK.modules.Loot
@@ -440,4 +441,70 @@ test("someone else can't report a result for an item given to another player", f
     w.Brann.cmd.handle("disenchanted 5 Soul Dust")
     assert(text(w.Brann):find("Nothing is waiting"), "Brann was given nothing to disenchant: " .. text(w.Brann))
     eq(w.Looter.engine:Get("main").state.disenchants[ev.id].result, nil)
+end)
+
+H.section("Officers are the game's: just-in-time authorization, the alert, and disregarding")
+test("a writer's own addon checks the game's officer permission at the moment of the action", function()
+    local w = guild()
+    -- an officer by the game writes outside a raid; a raider doesn't
+    w.Off.cmd.handle("add Dara"); w.net:advance(2)
+    assert(w.GM.engine:Get("main").state.members["Dara"], "the officer's entry went through")
+    clear(w.Aldric); w.Aldric.cmd.handle("add Eve")
+    assert(text(w.Aldric):find("Not recorded: only an officer can do that", 1, true), text(w.Aldric))
+    local ev, why = w.Aldric.engine:Write("AddMember", { member = "Eve" }, "main"); eq(ev, nil); eq(why, "notofficer")
+    -- the Master Looter of an open raid writes without being an officer, but can't open or close anyone's raid or name its list
+    openRaid(w)
+    assert(w.Looter.engine:Append("main", "Pass", { member = "Aldric", item = "X" }))
+    local ev2, why2 = w.Looter.engine:Write("Elevate", { raid = "r9", ml = "Looter", minutes = 30 }); eq(ev2, nil); eq(why2, "notofficer")
+    -- once the raid has ended they are told so, not that they are not an officer
+    w.Looter.cmd.handle("raid close"); w.net:advance(2)
+    local ev3, why3 = w.Looter.engine:Append("main", "Pass", { member = "Aldric", item = "X" }); eq(ev3, nil); eq(why3, "expired")
+    -- the game saying "I don't know" counts as no
+    w.Aldric.client:setOfficers({ "GM", "Off" })
+    assert(not w.Aldric.engine:IsOfficer()); assert(w.Off.engine:IsOfficer()); assert(w.Off.engine:IsOfficer("Off") and not w.Off.engine:IsOfficer("Cass"))
+end)
+
+test("an officer disregards a player: their later entries are skipped everywhere, earlier ones stay, and it can be lifted", function()
+    local w = guild()
+    local function modified(nd, fn) -- (an addon that doesn't ask the game: every writer counts as an officer on its own client)
+        nd.client:setOfficers(nil); local a, b = fn(); nd.client:setOfficers({ "GM", "Off" }); return a, b
+    end
+    modified(w.Aldric, function() return w.Aldric.engine:Write("AddMember", { member = "X1" }, "main") end); w.net:advance(2)
+    assert(w.GM.engine:Get("main").state.members["X1"], "the ledger takes it: the game's rank was the writer's own business")
+    clear(w.Off); w.Off.cmd.handle("disregard Aldric wrote as a raider"); w.net:advance(2)
+    assert(text(w.Off):find("From now on Aldric's entries are disregarded"), text(w.Off))
+    modified(w.Aldric, function() return w.Aldric.engine:Write("AddMember", { member = "X2" }, "main") end); w.net:advance(2)
+    local ev = modified(w.Aldric, function() return w.Aldric.engine:Write("AddMember", { member = "X3" }, "main") end)
+    eq(ev, nil, "his own addon sees it too: refused")
+    for _, n in ipairs { "GM", "Off", "Cass" } do
+        local m = w.nodes[n].engine:Get("main").state.members
+        assert(m["X1"] and not m["X2"], n .. ": what he wrote before stays, what he wrote after is ignored")
+    end
+    clear(w.GM); w.GM.cmd.handle("officers"); assert(text(w.GM):find("being disregarded: Aldric", 1, true), text(w.GM))
+    w.Off.cmd.handle("regard Aldric"); w.net:advance(2)
+    local ev2 = modified(w.Aldric, function() return w.Aldric.engine:Write("AddMember", { member = "X4" }, "main") end); assert(ev2)
+    -- a raider can't disregard anyone, and the ledger owner can't be disregarded
+    clear(w.Cass); w.Cass.cmd.handle("disregard Off because"); assert(text(w.Cass):find("only an officer", 1, true), text(w.Cass))
+    clear(w.Off); w.Off.cmd.handle("disregard GM no"); assert(text(w.Off):find("the ledger owner can't be disregarded", 1, true), text(w.Off))
+end)
+
+test("officers are told when a non-officer writes to the ledger; raiders and Master Looters are not, and each player is announced once", function()
+    local Guard = SK.modules.Guard
+    local w = guild()
+    for _, nd in pairs(w.nodes) do nd.guard = Guard.New(nd.engine, nd.client, { describe = function(ev) return nd.cmd.describe(ev) end }) end
+    clear(w.Off); clear(w.Cass)
+    w.Aldric.client:setOfficers(nil)
+    assert(w.Aldric.engine:Write("AddMember", { member = "X1" }, "main")); w.net:advance(2)
+    w.Aldric.client:setOfficers({ "GM", "Off" })
+    local alert = text(w.Off)
+    assert(alert:find("Aldric is not an officer in the guild but wrote to the ledger", 1, true) and alert:find("disregard Aldric <reason>", 1, true), alert)
+    eq(#w.Off.guard.alerts, 1)
+    assert(not text(w.Cass):find("not an officer", 1, true), "a raider isn't told")
+    -- a second entry soon after is not announced again
+    w.Aldric.client:setOfficers(nil); assert(w.Aldric.engine:Write("AddMember", { member = "X2" }, "main")); w.Aldric.client:setOfficers({ "GM", "Off" }); w.net:advance(2)
+    eq(#w.Off.guard.alerts, 1, "once in ten minutes")
+    -- the Master Looter of a raid isn't an officer and writes the raid's entries: nothing to report
+    clear(w.GM); openRaid(w)
+    assert(w.Looter.engine:Append("main", "Pass", { member = "Brann", item = "Y" })); w.net:advance(2)
+    assert(not text(w.GM):find("Looter is not an officer", 1, true), text(w.GM))
 end)
