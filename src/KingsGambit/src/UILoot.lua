@@ -88,6 +88,11 @@ function M.Model(ctx)
     -- page a bot can hold the role while the player only answers, which ctx.isML = false says.)
     out.isML = mode == "ml" and ctx.isML ~= false
     local list = s.items or {}
+    -- What the session will record, by item (the draft adds to it as it goes): where each winner was on the list, and who has not said who gets a gift.
+    local pendingFor = {}
+    for _, a in ipairs(s.pending or {}) do
+        if a.type == "award" and a.item then pendingFor[a.item.id or 0] = a end
+    end
     for i, it in ipairs(list) do
         if i > M.MAX_ITEMS then out.hidden = out.hidden + 1
         else
@@ -96,11 +101,18 @@ function M.Model(ctx)
                 local b = s.bids[me] and s.bids[me][it.id]
                 row.mine, row.mineTo = b and b.kind, b and show(b.to)
                 row.winner, row.to, row.tier = show(it.winner), show(it.to), it.tier
+                row.winnerIsMe, row.toIsMe = it.winner ~= nil and it.winner == me, it.to ~= nil and it.to == me
+                local a = pendingFor[it.id or 0]
+                if a then row.from, row.undecided = a.fromIndex, a.undecided end
+                if it.status == "de" then row.deTo = show(s.deHandler) end
             else
                 local b = s.mine and s.mine[it.id or i]
                 row.mine, row.mineTo = b and b.kind, b and show(b.to)
                 for _, a in ipairs(s.results and s.results.awards or {}) do
-                    if a.item == row.id then row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier end
+                    if a.item == row.id then
+                        row.status, row.winner, row.to, row.tier = "awarded", show(a.winner), show(a.to), a.tier
+                        row.winnerIsMe, row.toIsMe = a.winner == me, a.to ~= nil and a.to == me
+                    end
                 end
             end
             row.giftTargets = ctx.targets and ctx.targets(row.id) or nil

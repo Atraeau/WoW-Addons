@@ -2042,6 +2042,16 @@ class its player is (`myClass`: the game's `UnitClass`, or the roster's entry in
 eligibility checks are those of the player's real class. A class the simulation doesn't know falls back to the priest. The simulated spec is the class's first one (a warrior
 practises as Arms); the game doesn't give us the player's talent spec in a way we read yet, so that stays a default for now. The raiders around the player are unchanged.
 
+### The Loot window shows who gets what before the Master Looter confirms (2026-11-06)
+
+The draft already knew each item's winner as it went, but the window showed it as a bare name. Each item's line now reads as a result: **who wins it** ("You win" / "Brann wins"), **in which
+round** (main-spec, off-spec, gift, salvage), **who it is given to** if not the winner (or that a gift's winner hasn't chosen yet), and **where the winner falls**
+("moves from place 4 to the bottom of the list"); an item nobody wanted says it goes to the disenchanter, and names them. These lines appear as the draft proceeds, so everyone who sees the
+session (not just the Master Looter) can follow who is getting what, and in review the Master Looter's banner says it plainly: "this is who gets what; nothing is handed out or recorded
+until you confirm". Nothing about the rules changed, and nothing is written until Confirm (a test checks the ledger is unchanged while reviewing). The player's own wins are marked.
+Also fixed: the Loot window had been raised to a higher layer than the main window, and the game opens dropdown menus in the normal one, so the "who gets this gift" dropdown opened
+behind the window and could not be used. The window is back in the normal layer and is raised above the main window when it opens (clicking a window raises it).
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

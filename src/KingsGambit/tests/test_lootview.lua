@@ -195,3 +195,35 @@ test("practice uses the player's real class, and falls back to a priest for one 
         if not need.enabled then assert(need.why, "a greyed Need says why") end
     end
 end)
+
+H.section("Loot window: who gets what before confirming")
+test("in review each item says who wins it, in which round, and how the list moves; nothing is recorded yet", function()
+    local sim, cmd, view = practice(10)
+    sim:killBoss(nil, false)
+    for i = 1, #view().rows do cmd.handle("need " .. i) end
+    local ledgerBefore = #sim.engine:Get("main").events
+    cmd.handle("resolve")
+    local v
+    for _ = 1, 60 do
+        v = view()
+        if v.state == "review" then break end
+        if v.state == "myturn" and v.turn.kind == "pick" then cmd.handle("pick " .. v.turn.buttons[1].act.item)
+        elseif v.state == "myturn" and v.turn.kind == "recipient" then cmd.handle("keep")
+        elseif v.state == "myturn" then cmd.handle("claim")
+        else sim:advance(10) end
+    end
+    eq(v.state, "review")
+    assert(v.banner.text:find("Nothing is handed out or recorded until you confirm"), v.banner.text)
+    local sawWinner, sawMove = false, false
+    for _, r in ipairs(v.rows) do
+        assert(r.note and #r.note > 0, "every item says what happens to it")
+        if r.state == "awarded" then
+            sawWinner = sawWinner or (r.note:find(" wins ") or r.note:find("You win")) ~= nil
+            sawMove = sawMove or r.note:find("moves from place") ~= nil
+            assert(r.note:find("draft") or r.note:find("salvage"), "it names the round: " .. r.note)
+        end
+    end
+    assert(sawWinner, "someone wins an item")
+    assert(sawMove, "the list movement is shown")
+    eq(#sim.engine:Get("main").events, ledgerBefore, "nothing is written while reviewing")
+end)

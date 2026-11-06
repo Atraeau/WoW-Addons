@@ -204,6 +204,7 @@ function M:OpenLoot()
         self.lootWindow = f
     end
     self.lootWindow:Show()
+    if self.lootWindow.Raise then self.lootWindow:Raise() end -- above the main window when it opens
     M:Refresh()
 end
 

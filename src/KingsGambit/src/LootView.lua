@@ -103,12 +103,23 @@ function M.Build(m)
             row.note = answerText(r)
             if r.canBid == false then row.warn = WHY[r.whyNot] or "This isn't for your class." end
         elseif r.winner then
+            -- who gets it: the winner, who it is given to if not the winner, which round, and where the winner falls on the list
             row.state = "awarded"
-            local to = (r.to and r.to ~= r.winner) and (" for " .. r.to) or ""
-            row.note = r.winner .. to .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or "")
-            row.mineWon = (r.winner == m.me) or (r.to == m.me)
+            local you = r.winnerIsMe
+            local text = (you and "You win" or (r.winner .. " wins")) .. (r.tier and (" (" .. (TIER[r.tier] or r.tier) .. ")") or "")
+            if r.undecided then
+                text = text .. (you and ", and haven't chosen who gets it yet" or ", and hasn't chosen who gets it yet")
+            elseif r.to and r.to ~= r.winner then
+                text = text .. ((you and " and give it to " or " and gives it to ") .. (r.toIsMe and "you" or r.to))
+            end
+            if r.from and r.from > 0 and r.tier ~= "salvage" then
+                text = text .. ((" · moves from place %d to the bottom of the %s"):format(r.from, r.tier == "off" and "off-spec list" or "list"))
+            end
+            row.note = text
+            row.mineWon = (r.winnerIsMe or r.toIsMe) and true or false
+            row.winnerName = r.winner
         elseif r.status == "de" then
-            row.state, row.note = "unwanted", "Goes to the disenchanter"
+            row.state, row.note = "unwanted", "Nobody wanted it: goes to the disenchanter" .. (r.deTo and (", " .. r.deTo) or "")
         else
             row.state, row.note = "locked", answerText(r) or "Bidding is closed"
         end
@@ -149,7 +160,9 @@ function M.Build(m)
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then
-        v.banner = { kind = "info", text = m.isML and "Review what will be recorded, then confirm." or "The Master Looter is confirming the loot." }
+        v.banner = { kind = "info", text = m.isML
+            and "Review: this is who gets what. Nothing is handed out or recorded until you confirm."
+            or "The Master Looter is reviewing the loot. Who gets what is shown below." }
     elseif v.state == "cancelled" then
         v.banner = { kind = "warn", text = "Cancelled. Nothing was recorded." }
     elseif v.state == "result" then

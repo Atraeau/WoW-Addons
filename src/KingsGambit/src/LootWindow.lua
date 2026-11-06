@@ -90,7 +90,7 @@ function M.Build(ui)
     local ok, f = pcall(CreateFrame, "Frame", "KingsGambitLootWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not f then f = CreateFrame("Frame", "KingsGambitLootWindow", UIParent) end
     f:SetSize(WIDTH, 120)
-    f:SetFrameStrata("FULLSCREEN_DIALOG") -- above the main window: a session is the time-critical thing, so it is never hidden behind the lists
+    f:SetFrameStrata("DIALOG") -- the same layer as the main window: the game opens dropdown menus in this one, so a higher layer would hide them
     M.Movable(f, "loot", { "CENTER", -440, 140 }) -- by default left of the main window (centred, 420 wide)
     if f.TitleText then f.TitleText:SetText("King's Gambit: loot") end
     if not f.TitleText then
@@ -136,7 +136,7 @@ function M.Build(ui)
             if HandleModifiedItemClick then HandleModifiedItemClick(full) end
         end)
         row.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        row.note:SetJustifyH("LEFT"); row.note:SetWordWrap(false)
+        row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(24)
         row.buttons = {}
         for j = 1, 4 do
             local b = button(f, "", 70, 20)
