@@ -65,10 +65,9 @@ end
 -- Show a button as the player's current choice: a push-button toggle that stays pushed in, the way the game's own interface does it (its micro-menu
 -- buttons stay pressed while their window is open, as do the Damage Meter's and Edit Mode's: SetButtonState("PUSHED", true)). The game's pressed art is faint
 -- on its red buttons, so the pushed-in look is reinforced with an inset bevel drawn on top: a darker body, a shadow along the top and left edges and a light
--- edge along the bottom, which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label turns white. The text is
--- never changed. Un-marking puts the button back completely: released, the bevel gone, and the label in the color its state gives it (the game's gold, or
--- gray when unavailable), so nothing of a previous round is left on a button that is reused for the next one.
-local GOLD, GRAY = { 1, 0.82, 0 }, { 0.5, 0.5, 0.5 }
+-- edge along the bottom, which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label is left exactly as it is: the
+-- text and its color are never changed. Un-marking puts the button back completely (released, the bevel gone), so nothing of a previous round is left on a
+-- button that is reused for the next one.
 local BEVEL_INSET = 3
 local function bevel(b)
     if b.bevel then return b.bevel end
@@ -94,21 +93,12 @@ end
 function M.Mark(b, on)
     on = on and true or false
     if not on and not b.marked then return end -- never marked: nothing to undo
-    local fs = b.GetFontString and b:GetFontString()
     if on then
         if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stays pressed until code releases it)
-        if fs and fs.SetTextColor then fs:SetTextColor(1, 1, 1) end
         for _, t in ipairs(bevel(b) or {}) do t:Show() end
     else
         if b.SetButtonState then b:SetButtonState("NORMAL", false) end
         for _, t in ipairs(b.bevel or {}) do t:Hide() end
-        if fs then
-            local enabled = not b.IsEnabled or b:IsEnabled()
-            local font = enabled and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
-            if font and fs.SetFontObject then fs:SetFontObject(font) end
-            local c = enabled and GOLD or GRAY
-            if fs.SetTextColor then fs:SetTextColor(c[1], c[2], c[3]) end
-        end
     end
     b.marked = on
 end
