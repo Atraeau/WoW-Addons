@@ -2076,6 +2076,16 @@ and was never asked to prioritize. The guild master chose, from three options, *
 - **Bots** in the simulation rank the items they want by their preference list, else item number, so a practice raid isn't held up by them.
 - Whispered answers rank in the order written (as before); separate whispers ("1 need", "2 need") are unranked and so keep bidding open to the timer, then fall back to the live pick.
 
+### Fixed: the gift recipient list offers only players who can have the item (2026-11-06)
+
+The Loot window's "who gets this gift" dropdown listed everyone in the group, so it was easy to pick someone whose class can't have the item, and the only feedback was a refusal in
+chat afterwards. The rule was already enforced (a gift's recipient must be one who may have the item; the giver never has to), but a rule that can only say no after the fact is the
+wrong place for it: **the choices now exclude anyone who can't have it**, so the mistake can't be made (the same principle as greyed-out buttons and picked-not-typed names). The list
+comes from one place, `Commands.giftTargets(item)`: group members, other than you, whose class passes the same `Loot.MayHave` check the session applies, including a guild rule for the
+item. It reaches the window as `turn.targets` (and `row.giftTargets`) in the shared view, so the game's dropdown and the page's list are the same list, and the menu is rebuilt when the
+list changes and drops a choice that is no longer on offer. If nobody in the group can have the item, the window says so and leaves Keep (if allowed) and Withdraw. The same list serves
+"Claim and gift" in the salvage round.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

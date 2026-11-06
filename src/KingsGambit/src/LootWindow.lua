@@ -203,14 +203,10 @@ function M.Build(ui)
         drop:SetWidth(136)
         drop:SetDefaultText("Choose a player")
         drop:SetupMenu(function(_, root)
-            local ctx = f.ctx
-            if not ctx then return end
-            local me = ctx.client:me()
             if root.SetScrollMode then root:SetScrollMode(260) end
-            for _, m in ipairs(ctx.client:roster()) do
-                if m.name ~= me then
-                    root:CreateRadio((m.name:gsub("_", " ")), function() return f.recipientPick == m.name end, function() f.recipientPick = m.name end)
-                end
+            -- only players who can have the item (LootView's turn.targets), so a gift to someone who can't is not on offer
+            for _, name in ipairs(f.giftTargets or {}) do
+                root:CreateRadio((name:gsub("_", " ")), function() return f.recipientPick == name end, function() f.recipientPick = name end)
             end
         end)
         f.drop = drop
@@ -303,8 +299,16 @@ function M.Refresh(f, ctx, ui)
             f.turnText:SetText(t.text .. (t.itemLink and ("  " .. UILoot.Display(t.itemLink, nil)) or ""))
             put(f.turnText, 16, 36)
             local x = 16
-            local needDrop = t.kind == "recipient" or t.kind == "salvage"
+            local needDrop = (t.kind == "recipient" or t.kind == "salvage") and not t.noTargets
             if needDrop then
+                -- the choices are those who can have this item; drop a choice that is no longer on offer, and rebuild the menu when the list changes
+                local names = t.targets or {}
+                local listKey = table.concat(names, ",")
+                local stillThere = false
+                for _, n in ipairs(names) do if n == f.recipientPick then stillThere = true end end
+                if not stillThere then f.recipientPick = nil end
+                f.giftTargets = names
+                if f.targetsShown ~= listKey then f.targetsShown = listKey; f.recipientShown = nil end
                 local el = f.drop or f.recipient
                 layout[#layout + 1] = { el, f.drop and 12 or 20, y - (f.drop and 0 or 2) }; want[el] = true
                 if f.drop then

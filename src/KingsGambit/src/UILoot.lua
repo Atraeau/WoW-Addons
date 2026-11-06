@@ -98,6 +98,8 @@ function M.Model(ctx)
         if known then info.class, info.spec = info.class or known.class, known.spec end
         return info
     end
+    -- Who may be given an item (only those who can have it): the context's own list (the practice page), else the commands'.
+    local targetsFn = ctx.targets or (ctx.commands and ctx.commands.giftTargets)
     local list = s.items or {}
     -- What the session will record, by item (the draft adds to it as it goes): where each winner was on the list, and who has not said who gets a gift.
     local pendingFor = {}
@@ -128,7 +130,7 @@ function M.Model(ctx)
                     end
                 end
             end
-            row.giftTargets = ctx.targets and ctx.targets(row.id) or nil
+            row.giftTargets = targetsFn and targetsFn(row.id) or nil
             row.canBid, row.whyNot = true, nil
             if ctx.commands and ctx.commands.mayHave then
                 local ok, whyNot = ctx.commands.mayHave(row.id)
@@ -182,7 +184,7 @@ function M.Model(ctx)
     if t and t.player == me then
         out.turn = { type = t.type, tier = t.tier, options = t.options, item = t.item }
         if t.type == "recipient" and s.mayKeep then out.turn.canKeep = s:mayKeep(me, t.item) and true or false end
-        if t.type ~= "pick" and ctx.targets then out.turn.targets = ctx.targets(t.item) end
+        if t.type ~= "pick" and targetsFn then out.turn.targets = targetsFn(t.item) end
         local function linkOfItem(id) for _, it in ipairs(list) do if (it.id or 0) == id then return it.link end end end
         out.turn.itemLink = t.item and linkOfItem(t.item)
     elseif t then

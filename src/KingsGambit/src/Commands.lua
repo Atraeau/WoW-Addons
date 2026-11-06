@@ -593,6 +593,18 @@ function M.New(ctx)
         return Loot.MayHave(myFit(link), myClass())
     end
 
+    -- Who in the group may be given item n: those whose class may have it (the same rule the session applies to a gift's recipient), never yourself.
+    -- The window offers only these, so a gift to someone who can't have it can't be chosen. Names as the roster has them.
+    function c.giftTargets(item)
+        local link = linkOf(item)
+        local fit = link and myFit(link)
+        local out = {}
+        for _, m in ipairs(client:roster()) do
+            if m.name ~= client:me() and (not fit or Loot.MayHave(fit, m.class)) then out[#out + 1] = m.name end
+        end
+        return out
+    end
+
     -- "  [for: Priest, Mage]" when the item is restricted, plus suggestions when this player wants hints.
     function c.itemNote(link)
         local fit = myFit(link)

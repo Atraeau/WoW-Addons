@@ -196,6 +196,10 @@ function M.Build(m)
                 targets = turn.targets, buttons = {} }
             v.turn.buttons[1] = button("give", "Give it", { name = "give", item = turn.item }, { primary = true })
             v.turn.buttons[1].needsTarget = true
+            if turn.targets and #turn.targets == 0 then
+                v.turn.noTargets = true
+                v.turn.text = "You won a gift, but nobody in your group can have this item. Keep it or withdraw. The draft waits for you."
+            end
             v.turn.buttons[2] = button("keep", "Keep it", { name = "keep", item = turn.item },
                 { enabled = turn.canKeep ~= false, why = turn.canKeep == false and "It isn't for your class, and you aren't the salvager." or nil })
             v.turn.buttons[3] = button("withdraw", "Withdraw", { name = "withdraw", item = turn.item })

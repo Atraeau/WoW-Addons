@@ -320,3 +320,38 @@ test("a player who answered pass or one need has nothing to rank", function()
     m = UILoot.Model({ client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host })
     eq(#m.rankings, 0)
 end)
+
+H.section("Loot window: only those who can have the item are offered as a gift's recipient")
+test("the recipient choices are the group members whose class may have the item, never yourself", function()
+    local Loot = SK.modules.Loot
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 20 })
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = host })
+    sim:killBoss(nil, false)
+    local roster = sim.client:roster()
+    local filtered = false
+    for _, it in ipairs(sim.session.items) do
+        local got = cmd.giftTargets(it.id)
+        local want = {}
+        for _, m in ipairs(roster) do
+            if m.name ~= sim.client:me() and Loot.MayHave(sim.session:fitOf(it.id), m.class) then want[#want + 1] = m.name end
+        end
+        eq(table.concat(got, ","), table.concat(want, ","), "item " .. it.id)
+        for _, n in ipairs(got) do assert(n ~= sim.client:me(), "never yourself") end
+        if #got < #roster - 1 then filtered = true end
+    end
+    assert(filtered, "some item can't go to everyone, so the list is shorter than the group")
+    -- the model carries the list for a row, and for your own gift turn
+    local m = UILoot.Model({ client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host })
+    eq(table.concat(m.items[1].giftTargets, ","), table.concat(cmd.giftTargets(m.items[1].id), ","))
+end)
+
+test("a gift with nobody who can have it says so, and Keep or Withdraw remain", function()
+    local m = { mode = "ml", phase = "main", phaseText = "Main", active = true, me = "Me", can = {}, hidden = 0, isML = false,
+        items = { { id = 1, link = "[Odd]", status = "awarded" } },
+        turn = { type = "recipient", item = 1, itemLink = "[Odd]", targets = {}, canKeep = true } }
+    local v = LootView.Build(m)
+    eq(v.state, "myturn"); eq(v.turn.noTargets, true)
+    assert(v.turn.text:find("nobody in your group can have"), v.turn.text)
+    eq(v.turn.buttons[2].enabled, true, "Keep is open"); eq(v.turn.buttons[3].label, "Withdraw")
+end)
