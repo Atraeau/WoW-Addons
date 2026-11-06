@@ -52,6 +52,10 @@ function M.Run(client)
     if client.commsProbe then
         for i, line in ipairs(client:commsProbe()) do probe("comms " .. i, function() return line end) end
     end
+    -- guild: the ranks and what each may do, so "officer" can be read from the game's own permissions; paste this block when reporting
+    if client.guildProbe then
+        for i, line in ipairs(client:guildProbe()) do probe("guild " .. i, function() return line end) end
+    end
     probe("now() / serverTime()", function() return client:now() .. " / " .. client:serverTime() end)
     probe("inGroup / inRaid", function() return tostring(client:inGroup()) .. " / " .. tostring(client:inRaid()) end)
     probe("roster()", function()

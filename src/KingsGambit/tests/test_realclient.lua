@@ -445,3 +445,24 @@ test("a ledger belongs to a world: another ruleset or faction gets its own store
     eq(late:guildKnown(), false); eq(late:guildName(), nil)
     eq(client(1, "Alliance", db, "The Rooks"):guildKnown(), true); eq(client(1, "Alliance", db, nil):guildKnown(), true, "not in a guild is settled")
 end)
+
+test("the guild probe prints this character's rank, the game's officer answer, and every rank's permission flags", function()
+    local c = newClient(function(E)
+        E.IsInGuild = function() return true end
+        E.GetGuildInfo = function() return "Gray Parse", "Officer", 1 end
+        E.IsGuildLeader = function() return false end
+        E.C_GuildInfo = {
+            IsGuildOfficer = function() return true end,
+            GuildControlGetNumRanks = function() return 3 end,
+            GuildControlGetRankName = function(i) return ({ "Guild Master", "Officer", "Raider" })[i] end,
+            GuildControlGetRankFlags = function(i) return ({ { true, true, true, true }, { true, true, true, false }, { true, true, false, false } })[i] end,
+        }
+    end)
+    local text = table.concat(c:guildProbe(), "\n")
+    assert(text:find("GetGuildInfo(player) = Gray Parse, Officer, 1", 1, true), text)
+    assert(text:find("C_GuildInfo.IsGuildOfficer = true", 1, true) and text:find("ranks = 3", 1, true), text)
+    assert(text:find('rank 2 "Officer" flags 1110', 1, true) and text:find('rank 3 "Raider" flags 1100', 1, true), text)
+    -- without the API it says so rather than failing
+    local bare = table.concat(newClient():guildProbe(), "\n")
+    assert(bare:find("(not available)", 1, true), bare)
+end)

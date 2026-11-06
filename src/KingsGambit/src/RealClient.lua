@@ -194,6 +194,51 @@ function M.New(opts)
         end
         return out
     end
+    -- What the game says about the guild's ranks and what each may do, raw, for the self-check: it is how "an officer" is to be defined from the game's own
+    -- rank permissions instead of a list kept here. Prints this character's rank, the game's own officer answer, and every rank's name and permission flags
+    -- (a string of 1 and 0 in the game's order, or name=1 when the game names them).
+    function c:guildProbe()
+        local out = {}
+        local ci = E.C_GuildInfo or {}
+        local function call(fn, ...)
+            if not fn then return "(not available)" end
+            local r = { pcall(fn, ...) }
+            if not r[1] then return "error" end
+            local parts = {}
+            for i = 2, #r do parts[#parts + 1] = tostring(safe(r[i])) end
+            return table.concat(parts, ", ")
+        end
+        out[#out + 1] = "IsInGuild = " .. call(E.IsInGuild)
+        out[#out + 1] = "GetGuildInfo(player) = " .. call(E.GetGuildInfo, "player") .. "  (guild, rank name, rank index)"
+        out[#out + 1] = "C_GuildInfo.IsGuildOfficer = " .. call(ci.IsGuildOfficer)
+        out[#out + 1] = "IsGuildLeader = " .. call(E.IsGuildLeader)
+        local numFn = ci.GuildControlGetNumRanks or E.GuildControlGetNumRanks
+        local n = tonumber(call(numFn)) or 0
+        out[#out + 1] = "ranks = " .. tostring(n)
+        local nameFn = ci.GuildControlGetRankName or E.GuildControlGetRankName
+        local flagFn = ci.GuildControlGetRankFlags or E.GuildControlGetRankFlags
+        for i = 1, math.min(n, 12) do
+            local flags = "(not available)"
+            if flagFn then
+                local ok, t = pcall(flagFn, i)
+                if not ok then flags = "error"
+                elseif type(t) == "table" then
+                    if #t > 0 then
+                        local bits = {}
+                        for k = 1, #t do bits[k] = t[k] and "1" or "0" end
+                        flags = table.concat(bits)
+                    else
+                        local keys = {}
+                        for k, v in pairs(t) do keys[#keys + 1] = tostring(k) .. "=" .. (v and "1" or "0") end
+                        table.sort(keys)
+                        flags = table.concat(keys, " ")
+                    end
+                else flags = tostring(t) end
+            end
+            out[#out + 1] = ("rank %d %q flags %s"):format(i, call(nameFn, i), flags)
+        end
+        return out
+    end
     function c:inGroup() return E.IsInGroup() and true or false end
     function c:inRaid() return E.IsInRaid() and true or false end
     -- Is this character inside an instance (a raid or a dungeon), as opposed to the open world? (IsInInstance: true plus the kind, "raid" or "party".)
