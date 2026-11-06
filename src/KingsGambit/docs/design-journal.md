@@ -2119,6 +2119,13 @@ pressed in (a toggle) with a white label, reasserted every refresh. The web page
 nothing and only adds weight. The choice is now shown by the pressed-in toggle button and the "tick + answer" status on the item's own line, which differ row by row. (Rule 8 in the layout rules.)
 The band code, its atlas and its fallback are gone from the window and the page.
 
+**The tick is gone too, and the toggle is made unmistakable.** The guild master disliked the "random" tick (even the old brackets were better) and asked for the button to look pushed in and stay
+pushed, like a push-button toggle, and for other examples to follow. Searched in the game's UI source: that is exactly how the game's own **micro-menu buttons** (Character, Spellbook...) behave while
+their window is open, and how the **Damage Meter** and **Edit Mode** buttons show what is selected: `SetButtonState("PUSHED", true)`. We already did that, but the game's pressed art is faint on its
+red buttons, so a chosen answer now also gets an **inset bevel** drawn on top (a darker body, a shadow along the top and left edges, a light edge along the bottom), which reads as "pressed in" at a
+glance and is shading, not a change of hue; the label turns white; the text never changes. The status on the item's line is plain text ("Gift, name later"), no mark. The web page does the same (an
+inset shadow, one pixel lower). Removing the bevel on un-choosing is part of the same reset that clears a button between rounds.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

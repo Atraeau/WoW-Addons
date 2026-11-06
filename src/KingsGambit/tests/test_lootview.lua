@@ -362,6 +362,10 @@ test("a chosen answer is held pressed with a white label; its text is never chan
     local state, color, font = {}, nil, nil
     local fs = { SetTextColor = function(_, r, g, b) color = { r, g, b } end, SetFontObject = function(_, f) font = f end }
     local b = { enabled = true, text = "Need" }
+    local made, hidden = 0, 0
+    local function tex() local t = {}; function t:SetColorTexture() end; function t:SetPoint() end; function t:SetHeight() end; function t:SetWidth() end
+        function t:Show() self.on = true end; function t:Hide() self.on = false; hidden = hidden + 1 end; made = made + 1; return t end
+    function b:CreateTexture() return tex() end
     function b:SetButtonState(name, locked) state.name, state.locked = name, locked end
     function b:GetFontString() return fs end
     function b:IsEnabled() return self.enabled end
@@ -372,9 +376,12 @@ test("a chosen answer is held pressed with a white label; its text is never chan
     LootWindow.Mark(b, true)
     eq(state.name, "PUSHED"); eq(state.locked, true, "held pressed in")
     eq(color[1], 1); eq(color[2], 1); eq(color[3], 1, "a white label, as on an active tab")
-    eq(b.text, "Need", "the text is untouched, and nothing is added inside the button")
+    eq(b.text, "Need", "the text is untouched, and no mark is added to the label")
+    eq(made, 4, "an inset bevel: body, top shadow, left shadow, bottom edge")
+    for _, t in ipairs(b.bevel) do eq(t.on, true) end
     LootWindow.Mark(b, false)
     eq(state.name, "NORMAL"); eq(state.locked, false, "released")
+    for _, t in ipairs(b.bevel) do eq(t.on, false, "the bevel goes") end
     eq(font, "normalfont"); eq(color[1], 1); eq(color[2], 0.82); eq(color[3], 0, "the label is the game\x27s gold again, not what the last round left")
     b.enabled = false
     LootWindow.Mark(b, true); LootWindow.Mark(b, false)

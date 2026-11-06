@@ -91,7 +91,7 @@
   .lw-btn { min-width: 74px; font-weight: 600; }
   .lw-turn .row, .lw-ml .row { gap: 8px; }
   .lw-btn .k { display: inline-block; width: 16px; height: 16px; line-height: 16px; text-align: center; border-radius: 3px; border: 1px solid currentColor; font-size: 10px; margin-right: 5px; }
-  .lw-btn.sel { color: #fff; background: #0b0f14; border-color: #fff; box-shadow: inset 0 2px 5px rgba(0,0,0,.8); } /* held pressed in with a white label (as in the game window); the tick is before the note under the item, not inside the button */
+  .lw-btn.sel { color: #fff; background: #3a0f0f; border-color: #1a0505; box-shadow: inset 0 3px 6px rgba(0,0,0,.85), inset 2px 0 3px rgba(0,0,0,.5), inset 0 -1px 0 rgba(255,255,255,.22); transform: translateY(1px); } /* a toggle held pushed in: darker body, shadow on the top and left, a light edge below (as in the game window) */
   .lw-btn.primary { background: #1f6f3a; border-color: #2ea043; color: #fff; }
   .lw-btn[aria-disabled=true] { opacity: .45; cursor: help; }
   .lw-rank { border: 1px solid var(--gold); border-radius: 4px; padding: 6px 8px; margin: 6px 0; }
@@ -8771,7 +8771,7 @@ end
       if (snap.token && (r.state === "open" || r.state === "answered"))
         extra.push('<button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>');
       // the same layout as the game window: the name with, right-aligned on its line, what you answered; then the choices in an equal grid
-      const status = r.answer ? "&#10003; " + esc(r.answer) : (r.mineWon ? "&#10003; Yours" : "");
+      const status = r.answer ? esc(r.answer) : (r.mineWon ? "Yours" : "");
       const grid = r.buttons.length ? '<div class="btns">' + r.buttons.map((b) => lwButton(b)).join("") + "</div>" : "";
       return '<div class="lw-row ' + r.state + '"><div class="head"><span class="iname">' + esc(r.link) + '</span><span class="status">' + status + "</span></div>" + grid +
         (!r.buttons.length && r.note ? '<div class="note">' + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
@@ -8779,7 +8779,7 @@ end
     }).join("");
     const gift = v.state === "bidding" || v.state === "waiting"
       ? '<div class="row small" style="margin-top:6px"><span class="muted">Gift to:</span>' + giftSelect() + '<button data-act="passAll" title="Pass on every item. Passing is free.">Pass on everything</button></div>' : "";
-    const ranks = (v.rankings || []).map((g) => '<div class="lw-rank"><div class="small">' + esc(g.title) + (g.complete ? " &#10003;" : "") + "</div>" +
+    const ranks = (v.rankings || []).map((g) => '<div class="lw-rank"><div class="small">' + esc(g.title) + (g.complete ? " (set)" : "") + "</div>" +
       g.items.map((it) => '<div class="item"><span>' + it.position + '. <span class="iname">' + esc(it.link) + '</span></span><span class="row" style="gap:4px">' + lwButton(it.up) + lwButton(it.down) + "</span></div>").join("") +
       '<div class="row" style="margin-top:4px">' + lwButton(g.confirm) + "</div></div>").join("");
     let turn = "";

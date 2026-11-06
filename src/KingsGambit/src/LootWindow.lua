@@ -62,12 +62,35 @@ local function setShown(frame, on)
 end
 
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
--- Show a button as the player's current choice the way the game's own interface shows a selection, without changing its text and without relying on a
--- color change of the text. (Researched in the game's UI source: tabs swap to an "active" look and a white label; toggled panel buttons are held in the
--- pressed state.) Two cues on the button: it is held pressed in, and its label is white (as on an active tab); the status and tick on the item's own line
--- (see Refresh) say what it is. Un-marking puts the button back completely: released, and the label in the color its state
--- gives it (the game's gold, or gray when unavailable), so nothing of a previous round is left on a button that is reused for the next one.
+-- Show a button as the player's current choice: a push-button toggle that stays pushed in, the way the game's own interface does it (its micro-menu
+-- buttons stay pressed while their window is open, as do the Damage Meter's and Edit Mode's: SetButtonState("PUSHED", true)). The game's pressed art is faint
+-- on its red buttons, so the pushed-in look is reinforced with an inset bevel drawn on top: a darker body, a shadow along the top and left edges and a light
+-- edge along the bottom, which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label turns white. The text is
+-- never changed. Un-marking puts the button back completely: released, the bevel gone, and the label in the color its state gives it (the game's gold, or
+-- gray when unavailable), so nothing of a previous round is left on a button that is reused for the next one.
 local GOLD, GRAY = { 1, 0.82, 0 }, { 0.5, 0.5, 0.5 }
+local BEVEL_INSET = 3
+local function bevel(b)
+    if b.bevel then return b.bevel end
+    if not b.CreateTexture then return nil end
+    local function layer(r, g, bl, a)
+        local t = b:CreateTexture(nil, "OVERLAY")
+        if t.SetColorTexture then t:SetColorTexture(r, g, bl, a) end
+        return t
+    end
+    local I = BEVEL_INSET
+    local body = layer(0, 0, 0, 0.30)
+    body:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); body:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
+    local top = layer(0, 0, 0, 0.55); top:SetHeight(3)
+    top:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); top:SetPoint("TOPRIGHT", b, "TOPRIGHT", -I, -I)
+    local left = layer(0, 0, 0, 0.40); left:SetWidth(2)
+    left:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); left:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I)
+    local edge = layer(1, 1, 1, 0.22); edge:SetHeight(1)
+    edge:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I); edge:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
+    b.bevel = { body, top, left, edge }
+    return b.bevel
+end
+
 function M.Mark(b, on)
     on = on and true or false
     if not on and not b.marked then return end -- never marked: nothing to undo
@@ -75,8 +98,10 @@ function M.Mark(b, on)
     if on then
         if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stays pressed until code releases it)
         if fs and fs.SetTextColor then fs:SetTextColor(1, 1, 1) end
+        for _, t in ipairs(bevel(b) or {}) do t:Show() end
     else
         if b.SetButtonState then b:SetButtonState("NORMAL", false) end
+        for _, t in ipairs(b.bevel or {}) do t:Hide() end
         if fs then
             local enabled = not b.IsEnabled or b:IsEnabled()
             local font = enabled and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
@@ -141,7 +166,6 @@ local PAD, GAP = 16, 8
 local CW = WIDTH - 2 * PAD          -- the content width (408)
 local BTN_H = 22
 local BTN4 = (CW - 3 * GAP) / 4     -- four equal buttons across the content width (96)
-local TICK = "|TInterface\\Buttons\\UI-CheckBox-Check:12:12:0:-1|t " -- inline, so the tick sits directly against the text it belongs to
 
 -- The height a (wrapped) line of text takes, never less than `min` (the game gives the real number; a stand-in gives none).
 local function textH(fs, min)
@@ -432,7 +456,7 @@ function M.Refresh(f, ctx, ui)
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
-                local status = vr.answer and (TICK .. vr.answer) or (vr.mineWon and (TICK .. "Yours")) or ""
+                local status = vr.answer or (vr.mineWon and "Yours") or ""
                 row.status:SetText(status)
                 if status ~= "" then layout[#layout + 1] = { row.status, PAD + CW - 152, y - 2 }; want[row.status] = true end
                 y = y - 18 - 4
