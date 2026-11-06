@@ -1,5 +1,6 @@
--- King's Gambit: the window. `/gambit` with nothing after it opens it (design journal: "/gambit opens a window").
--- Tabs: Standings and Tools (the Guild book, to be reshaped: docs/ui-design.md). A live loot session has its own small window (LootWindow).
+-- King's Gambit: the Guild book. `/gambit` with nothing after it opens it (design journal: "/gambit opens a window").
+-- A navigation column on the left (Lists, History, Tools: GuildBook.SECTIONS) and the section on the right (docs/ui-design.md, 5.2). A live loot session
+-- has its own small window (LootWindow).
 -- Keep this file Lua 5.1-safe. Every button runs the same command a player would type, so the rules, the messages and the ledger are
 -- exactly the same as with commands.
 --
@@ -7,9 +8,9 @@
 --   M.Model(engine, client, listId)        pure: what the Standings tab shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow
+local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook
 end)
 
 local function say(text)
@@ -51,7 +52,8 @@ end
 
 M.SIZES = { 5, 10, 20, 40 }
 M.size = 40
-M.tab = "standings"
+M.tab = "lists"
+M.histKind, M.histText = "all", ""
 
 -- The gear this character has on or carries: item links, each item once (game only).
 function M.GearLinks()
@@ -191,7 +193,6 @@ local function nextList(lists, current)
     return lists[1]
 end
 
-local TABS = { { "standings", "Standings" }, { "tools", "Tools" } }
 local SORTS = { { "pos", "#" }, { "name", "Name" }, { "class", "Class" }, { "wins", "Wins" } }
 
 local function setShown(frame, on) if on then frame:Show() else frame:Hide() end end
@@ -239,8 +240,8 @@ function M:Refresh()
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
     w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" or "")
-    if w.tabSystem then
-        for i, t in ipairs(TABS) do if t[1] == M.tab then w.tabSystem:SetTabVisuallySelected(i) end end
+    for _, s in ipairs(GuildBook.SECTIONS) do
+        if w.nav and w.nav[s.id] then LootWindow.Mark(w.nav[s.id], M.tab == s.id) end
     end
     if w.practiceCheck then w.practiceCheck:SetChecked(M.practice ~= nil) end
     if w.practiceButton then w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode") end
@@ -251,13 +252,11 @@ function M:Refresh()
     else
         w.sizeButton:SetText("Practice group: " .. M.size)
     end
-    for _, t in ipairs(TABS) do
-        if w.tabButtons[t[1]] then w.tabButtons[t[1]]:SetEnabled(M.tab ~= t[1]) end
-        setShown(w.pages[t[1]], M.tab == t[1])
-    end
+    for _, s in ipairs(GuildBook.SECTIONS) do setShown(w.pages[s.id], M.tab == s.id) end
     w.output:SetText(M.OutputText())
     if M.tab == "tools" then return UITools.Refresh(w.pages.tools, ctx, M) end
-    local p = w.pages.standings
+    if M.tab == "history" then return M.RefreshHistory(w.pages.history, ctx) end
+    local p = w.pages.lists
     local model = M.Model(ctx.engine, ctx.client, self.list)
     self.list = model.list
     if not p.listDrop then p.listButton:SetText(model.list) end
@@ -462,6 +461,131 @@ local function button(parent, text, w, h)
     return b
 end
 
+-- ---- History: the record in words -------------------------------------------------------------------------------------------------
+
+local HIST_H = 38
+
+-- One entry: when (muted) and what happened (up to two lines; the whole sentence is in the tooltip).
+function M.InitHistoryRow(row, e)
+    row.entry = e
+    if not row.cells then
+        row.when = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+        row.when:SetPoint("TOPLEFT", 4, -4); row.when:SetWidth(76); row.when:SetJustifyH("LEFT"); row.when:SetWordWrap(false)
+        row.text = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        row.text:SetPoint("TOPLEFT", 84, -4); row.text:SetWidth(300); row.text:SetJustifyH("LEFT"); row.text:SetJustifyV("TOP")
+        if row.text.SetMaxLines then row.text:SetMaxLines(2) end
+        row.cells = true
+        if row.SetScript then
+            row:SetScript("OnEnter", function(self)
+                if GameTooltip and self.entry then
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); GameTooltip:SetText(self.entry.text, 1, 1, 1, 1, true); GameTooltip:Show()
+                end
+            end)
+            row:SetScript("OnLeave", function() if GameTooltip then GameTooltip:Hide() end end)
+        end
+    end
+    row.when:SetText(e.when or "")
+    row.text:SetText((e.text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")))
+end
+
+function M:BuildHistory(parent)
+    local p = CreateFrame("Frame", nil, parent)
+    p:SetAllPoints()
+    local lbl = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    lbl:SetPoint("TOPLEFT", 4, 0); lbl:SetText("Show:")
+    local okDrop, drop = pcall(CreateFrame, "DropdownButton", nil, p, "WowStyle1DropdownTemplate")
+    if okDrop and drop then
+        drop:SetWidth(130)
+        drop:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
+        drop:SetupMenu(function(_, root)
+            for _, k in ipairs(GuildBook.KINDS) do
+                root:CreateRadio(k.label, function() return M.histKind == k.id end, function() M.histKind = k.id; M:Refresh() end)
+            end
+        end)
+        p.kindDrop = drop
+        p.kindButton = drop
+    else
+        p.kindButton = button(p, "Everything", 120)
+        p.kindButton:SetPoint("LEFT", lbl, "RIGHT", 8, 0)
+        p.kindButton:SetScript("OnClick", function()
+            local kinds = GuildBook.KINDS
+            for i, k in ipairs(kinds) do
+                if k.id == M.histKind then M.histKind = kinds[i % #kinds + 1].id; break end
+            end
+            M:Refresh()
+        end)
+    end
+    Tips.Attach(p.kindButton, "historykind")
+    local fl = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    fl:SetPoint("LEFT", p.kindButton, "RIGHT", 16, 0); fl:SetText("Find:")
+    p.find = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
+    p.find:SetSize(120, 20); p.find:SetPoint("LEFT", fl, "RIGHT", 10, 0); p.find:SetAutoFocus(false)
+    p.find:SetScript("OnTextChanged", function(self, user)
+        if user then M.histText = self:GetText() or ""; M:Refresh() end
+    end)
+    Tips.Attach(p.find, "historyfind")
+
+    local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
+    if okInset and inset then inset:SetPoint("TOPLEFT", -2, -28); inset:SetPoint("BOTTOMRIGHT", 2, 22) end
+    local okBox = pcall(function()
+        local box = CreateFrame("Frame", nil, p, "WowScrollBoxList")
+        local bar = CreateFrame("EventFrame", nil, p, "MinimalScrollBar")
+        box:SetPoint("TOPLEFT", 4, -32)
+        box:SetPoint("BOTTOMRIGHT", -22, 26)
+        bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, -2)
+        bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 2)
+        local view = CreateScrollBoxListLinearView()
+        view:SetElementExtent(HIST_H)
+        view:SetElementInitializer("Button", M.InitHistoryRow)
+        ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
+        p.scrollBox = box
+    end)
+    if not okBox then
+        local scroll = CreateFrame("ScrollFrame", nil, p)
+        scroll:SetPoint("TOPLEFT", 4, -32); scroll:SetPoint("BOTTOMRIGHT", -26, 26)
+        p.child = CreateFrame("Frame", nil, scroll)
+        p.child:SetSize(380, 1)
+        scroll:SetScrollChild(p.child)
+        p.lines = {}
+    end
+    p.countText = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    p.countText:SetPoint("BOTTOMRIGHT", -6, 4)
+    p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    p.message:SetPoint("TOPLEFT", 14, -50); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
+    return p
+end
+
+-- Fill the History page from the ledger (newest first).
+function M.RefreshHistory(p, ctx)
+    local h = GuildBook.History(ctx, { kind = M.histKind, text = M.histText, limit = 300 })
+    local label = "Everything"
+    for _, k in ipairs(GuildBook.KINDS) do if k.id == M.histKind then label = k.label end end
+    if p.kindDrop then
+        if p.shownKind ~= M.histKind then p.shownKind = M.histKind; p.kindDrop:GenerateMenu() end
+    else
+        p.kindButton:SetText(label)
+    end
+    if p.scrollBox then
+        local data = CreateDataProvider()
+        for _, e in ipairs(h.entries) do data:Insert(e) end
+        p.scrollBox:SetDataProvider(data, ScrollBoxConstants and ScrollBoxConstants.RetainScrollPosition)
+    else
+        for i, e in ipairs(h.entries) do
+            local line = p.lines[i]
+            if not line then
+                line = CreateFrame("Button", nil, p.child)
+                line:SetSize(380, HIST_H); line:SetPoint("TOPLEFT", 0, -(i - 1) * HIST_H)
+                p.lines[i] = line
+            end
+            M.InitHistoryRow(line, e); line:Show()
+        end
+        for i = #h.entries + 1, #p.lines do p.lines[i]:Hide() end
+        p.child:SetHeight(math.max(#h.entries * HIST_H, 1))
+    end
+    p.countText:SetText(h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total))
+    if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end
+end
+
 function M:BuildStandings(parent)
     local p = CreateFrame("Frame", nil, parent)
     p:SetAllPoints()
@@ -635,7 +759,7 @@ function M:Build()
     local ok, w = pcall(CreateFrame, "Frame", "KingsGambitWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not w then w = CreateFrame("Frame", "KingsGambitWindow", UIParent) end
     M.building = w -- (hidden again if building the rest fails, so a half-built window is never left on screen)
-    w:SetSize(420, 640)
+    w:SetSize(580, 640)
     w:SetFrameStrata("DIALOG")
     LootWindow.Movable(w, "main", { "CENTER", 0, 0 })
     if w.TitleText then w.TitleText:SetText("King's Gambit") end
@@ -698,29 +822,26 @@ function M:Build()
     w.lootButton:SetScript("OnClick", function() M:ToggleLoot() end)
     Tips.Attach(w.lootButton, "lootwindow")
 
-    -- Tabs hang along the bottom edge of the window, as the game's own windows have them; plain buttons along the top if the tab system isn't there.
-    w.tabButtons = {}
-    local okTabs, tabs = pcall(CreateFrame, "Frame", nil, w, "TabSystemTemplate")
-    if okTabs and tabs and tabs.AddTab then
-        tabs:SetPoint("TOPLEFT", w, "BOTTOMLEFT", 12, 2)
-        tabs:SetTabSelectedCallback(function(id) M.tab = TABS[id][1]; M:Refresh() end)
-        for _, t in ipairs(TABS) do tabs:AddTab(t[2]) end
-        w.tabSystem = tabs
-    else
-        for i, t in ipairs(TABS) do
-            local b = button(w, t[2], 100, 24)
-            b:SetPoint("TOPLEFT", 16 + (i - 1) * 104, -80)
-            b:SetScript("OnClick", function() M.tab = t[1]; M:Refresh() end)
-            w.tabButtons[t[1]] = b
-        end
+    -- The navigation column: one pushed-in button per section, as the game's own micro-menu shows what is open. A thin line separates it from the section.
+    w.nav = {}
+    for i, s in ipairs(GuildBook.SECTIONS) do
+        local b = button(w, s.label, 108, 28)
+        b:SetPoint("TOPLEFT", 16, -112 - (i - 1) * 36)
+        b:SetScript("OnClick", function() M.tab = s.id; M:Refresh() end)
+        Tips.Attach(b, "nav" .. s.id)
+        w.nav[s.id] = b
     end
+    local line = w:CreateTexture(nil, "ARTWORK")
+    line:SetColorTexture(1, 1, 1, 0.12)
+    line:SetWidth(1)
+    line:SetPoint("TOPLEFT", 132, -112); line:SetPoint("BOTTOMLEFT", 132, 92)
     local content = CreateFrame("Frame", nil, w)
-    content:SetPoint("TOPLEFT", 16, -112)
+    content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { standings = M:BuildStandings(content), tools = UITools.Build(content, M) }
+    w.pages = { lists = M:BuildStandings(content), history = M:BuildHistory(content), tools = UITools.Build(content, M) }
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
     w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    w.output:SetPoint("BOTTOMLEFT", 20, 18); w.output:SetWidth(380); w.output:SetHeight(66)
+    w.output:SetPoint("BOTTOMLEFT", 144, 18); w.output:SetWidth(420); w.output:SetHeight(66)
     w.output:SetJustifyH("LEFT"); w.output:SetJustifyV("TOP"); w.output:SetWordWrap(true)
 
     -- Keep it current while it is open: the ledger changes as other players' updates arrive, and a practice raid's clock runs.

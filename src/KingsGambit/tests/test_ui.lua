@@ -85,7 +85,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
     local old = { client = SK.client, engine = SK.engine, commands = SK.commands, host = SK.host, player = SK.player }
     SK.client, SK.engine = client, engine
     SK.commands = Commands.New({ client = client, engine = engine })
-    UI.window, UI.lootWindow, UI.practice, UI.tab = nil, nil, nil, "standings"
+    UI.window, UI.lootWindow, UI.practice, UI.tab = nil, nil, nil, "lists"
     local ok, err = pcall(function()
         assert(UI:Toggle(), "the window opens")
         UI:Refresh()
@@ -97,7 +97,9 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:Command("pass 1")
         UI:Command("resolve"); UI:PracticeWait(30); UI:Refresh()
         UI:ToggleLoot(); UI:ToggleLoot(); UI:Tick()
-        UI.tab = "standings"; UI:Refresh()
+        UI.tab = "history"; UI:Refresh(); UI.histKind = "list"; UI.histText = "added"; UI:Refresh(); UI.histKind, UI.histText = "all", ""
+        UI.tab = "tools"; UI:Refresh()
+        UI.tab = "lists"; UI:Refresh()
         UI:LeavePractice()
     end)
     _G.CreateFrame, _G.UIParent, _G.UISpecialFrames = saved.CreateFrame, saved.UIParent, saved.UISpecialFrames

@@ -35,6 +35,11 @@ M.TEXT = {
     rankdown = { "Move down", "Move this item down your order (not saved until you confirm): lower means you want it less." },
     rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right. Moving only rearranges what you see: nothing is sent until you press Confirm, so you can keep deciding." },
     -- the windows
+    navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
+    navhistory = { "History", "Everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
+    navtools = { "Tools", "Award, eligibility, requests, the Master Looter's checks and the guild master's one-time steps." },
+    historykind = { "Show", "Narrow the record to loot, list changes, rules or raids." },
+    historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
     listpick = { "Which list", "Choose which list to look at. Each raid plays on one list; the officers and the guild master decide which (see Tools, Raid)." },

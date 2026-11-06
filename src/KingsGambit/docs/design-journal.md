@@ -2126,6 +2126,15 @@ red buttons, so a chosen answer now also gets an **inset bevel** drawn on top (a
 glance and is shading, not a change of hue. The text never changes. The status on the item's line is plain text ("Gift, name later"), no mark. The web page does the same (an
 inset shadow, one pixel lower). Removing the bevel on un-choosing is part of the same reset that clears a button between rounds. **Then the label color change was dropped too** ("I don't know that we need to change the text color too"): the bevel alone carries the state, and the label keeps the game's own color, so there is nothing to restore either. **And the echo was dropped:** the status text beside each item ("Off-spec", "Gift, name later", "Yours") repeated what the pressed button already says, so it is gone from the window, the page and the shared view; an item is now its name on its own line with the choices across the full width beneath it (rule 8, "Say a thing once", in the layout rules).
 
+### Guild book, first slice (2026-11-06)
+
+With the Loot window settled, the second surface of the two-surface decision was started: the **Guild book**, the larger, calmer window opened with `/gambit`. This slice is its shell and two sections.
+- **A navigation column replaces the bottom tabs.** Lists, History and Tools are buttons down the left, the open one held pushed in (the same idiom as the Loot window's chosen answer), with a thin line between the column and the section. The window is 580 wide so the section keeps the 424-wide layout the older pages were built for; nothing in them had to be re-laid out.
+- **History is new.** The ledger as readable sentences, newest first, with when it happened ("3 days ago"), filtered by kind (Everything, Loot, List changes, Rules, Raids) and by words (a player's or an item's name). A long sentence shows two lines and the whole of it in a tooltip. It only reads: nothing in it can be edited, and an empty or over-filtered record says so and what to do.
+- **The view model is shared.** `GuildBook` is a pure module (sections, kinds, `History`, `Ago`), like `LootView`, so the web page can draw the same sections and sentences later instead of deciding anything itself. It reuses the command line's own sentences (`describe`), so the window and `history` always agree; the ledger's list-creation entry now reads "started the list" instead of a bare event name.
+- **Tools stays as a section for now.** The existing forms are kept whole until they are split into Raids, People and Rules.
+- Still to do: the page renderer for the Guild book; Raids, People, Rules and Practice sections; staging list changes behind a pending-changes bar.
+
 ### Correction: moving an item in your order does not confirm it (2026-11-06)
 
 The first version of the ranking panel sent the whole order the moment Up or Down was pressed, so a single move turned the panel to "Order set" and counted the player as answered while they were

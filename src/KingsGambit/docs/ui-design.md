@@ -1,7 +1,7 @@
 # King's Gambit — UI design (proposal, under review)
 
 *Status: the two-surface structure (section 4, option B) was accepted on 2026-11-06 and is in the [design journal](design-journal.md); the
-open questions in section 11 are not yet settled. Nothing here is built yet. When a decision is accepted it goes into the
+open questions in section 11 are not yet settled. The Loot window is built; the Guild book is started (2026-11-06: the shell, Lists and History in the game window). When a decision is accepted it goes into the
 journal, and this file is updated to match. The rules themselves are in the
 [rationale](rationale.md); this file is only about how people meet them on screen.*
 
@@ -244,6 +244,8 @@ screenshots).
 4. Rebuild the **Guild book** (Lists, then History, then People, Raids, Rules) the same way.
 5. Retire the old tabs window, keeping `/gambit` for the Guild book and the Loot window for sessions.
 6. Add the in-place helpers.
+
+*Status (2026-11-06): step 3 is done. Step 4 is started: the navigation shell, Lists (the older standings page) and History are in the game window. Raids, People, Rules and Practice, the page renderer for the Guild book, and staged list changes are still to do.*
 
 ## 11. Open questions
 

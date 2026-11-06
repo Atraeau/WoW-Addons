@@ -36,5 +36,6 @@ UI.lua
 UILoot.lua
 UITips.lua
 LootView.lua
+GuildBook.lua
 LootWindow.lua
 UITools.lua
