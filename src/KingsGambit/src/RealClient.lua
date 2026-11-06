@@ -193,6 +193,12 @@ function M.New(opts)
     end
     function c:inGroup() return E.IsInGroup() and true or false end
     function c:inRaid() return E.IsInRaid() and true or false end
+    -- Is this character inside an instance (a raid or a dungeon), as opposed to the open world? (IsInInstance: true plus the kind, "raid" or "party".)
+    function c:inInstance()
+        if not E.IsInInstance then return false end
+        local ok, inside, kind = pcall(E.IsInInstance)
+        return ok and inside and (kind == "raid" or kind == "party") and true or false
+    end
 
     -- { name, class (file token), rank 0/1/2, online, subgroup }
     -- A name the roster gave without a surname (the game may leave it out for someone who shares yours, as it would a realm), completed from the unit it belongs to.

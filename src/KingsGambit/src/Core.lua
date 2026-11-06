@@ -30,7 +30,7 @@ local function Start()
     SK.attendance = M.Attendance.New(engine, client, host) -- as a Master Looter, writes down who is in the raid, from the first kill on
     SK.db, SK.char = client:storage().account, client:storage().char
     SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player,
-        requests = requests, selfcheck = M.SelfCheck })
+        requests = requests, selfcheck = M.SelfCheck, attendance = SK.attendance })
     for _, m in pairs(M) do
         if m.OnInit then m:OnInit() end
     end

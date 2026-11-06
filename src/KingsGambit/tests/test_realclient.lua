@@ -370,3 +370,12 @@ test("the comms probe reports what the game says about addon messages, for the i
     assert(text:find("AreOutgoingAddonChatMessagesRestricted = true", 1, true), text)
     assert(text:find("restriction Encounter = 2", 1, true) and text:find("raw send on WHISPER", 1, true), text)
 end)
+
+test("inInstance is true in a raid or dungeon and false in the open world, a battleground or without the API", function()
+    local function with(fn) return newClient(function(E) E.IsInInstance = fn end) end
+    eq(with(function() return true, "raid" end):inInstance(), true)
+    eq(with(function() return true, "party" end):inInstance(), true)
+    eq(with(function() return false, "none" end):inInstance(), false)
+    eq(with(function() return true, "pvp" end):inInstance(), false)
+    eq(with(nil):inInstance(), false)
+end)

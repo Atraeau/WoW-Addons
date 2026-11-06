@@ -940,6 +940,17 @@ function M.New(ctx)
             out(("Raid %s extended by %s hour(s)."):format(r.id, h))
         end
     end
+    -- Start the raid now, for a raid outside an instance (a world boss). Inside an instance it starts by itself at the first kill.
+    function raid.start()
+        local r = findRaid(client:me())
+        if not r then return out("You are not the Master Looter of an open raid.") end
+        local a = ctx.attendance
+        if not a then return out("Attendance is not available here.") end
+        if a:started() then return out("This raid has already started: who is in it is being written down.") end
+        local n, why = a:start()
+        if not n then return out("Not started: " .. tostring(why)) end
+        out("The raid has started: everyone in the group now is written down as there, and the group is followed from here.")
+    end
     function raid.close(args)
         local r = findRaid(client:me())
         if not r then return out("You are not the Master Looter of an open raid.") end
@@ -982,7 +993,7 @@ function M.New(ctx)
     function cmds.raid(args)
         local sub, rest = args:match("^(%S*)%s*(.-)$")
         local fn = raid[sub ~= "" and sub:lower() or "show"]
-        if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | close | extend [name] [hours] | revoke [name]]") end
+        if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | start | close | extend [name] [hours] | revoke [name]]") end
         fn(rest)
     end
 

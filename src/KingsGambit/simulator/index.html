@@ -1913,7 +1913,7 @@ M.METHODS = {
     -- time and randomness
     "now", "serverTime", "after", "every", "cancel", "random",
     -- identity and roster
-    "addonVersion", "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "leader", "guildRoster",
+    "addonVersion", "me", "normalize", "inGroup", "inRaid", "inInstance", "roster", "rankOf", "leader", "guildRoster",
     -- loot
     "lootMethod", "isMasterLooter", "masterLooter", "setLootMethod", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)
@@ -2112,6 +2112,9 @@ function M.New(opts)
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
     function h:inRaid() return S.inRaid and #S.roster > 0 end
+    -- Inside an instance (a raid or dungeon) rather than the open world: a simulated raid is, unless a test says otherwise.
+    function h:inInstance() return S.inInstance ~= false end
+    function h:setInInstance(inside) S.inInstance = inside and true or false end
     function h:inGroup() return #S.roster > 0 end
     function h:roster() return copyList(S.roster) end
 
@@ -5823,8 +5826,9 @@ end; chunk("KingsGambit", SK) end
 do local chunk = function(...)
 -- King's Gambit: the Master Looter's addon writes down who is in the raid. Keep this file Lua 5.1-safe.
 --
--- A raid officially starts when its FIRST ENEMY DIES (a boss or trash: both drop loot that matters): before that people are still arriving and nothing
--- has been done. From then on, while a raid this
+-- A raid officially starts when its FIRST ENEMY DIES INSIDE AN INSTANCE (a boss or trash: both drop loot that matters; something killed in the open world
+-- while in a raid doesn't count): before that people are still arriving and nothing has been done. A raid outside an instance, such as a world boss, is
+-- started by hand: `start()` (the Master Looter's "raid start"). From then on, while a raid this
 -- character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one or more
 -- Attendance entries ({ raid, joined, left }): everyone there at the first kill, then whoever comes or goes. It follows the group (the game's
 -- roster-changed event), settles for a few seconds so a burst of changes is one entry, and checks again every half minute in case an event was missed.
@@ -5889,14 +5893,26 @@ function M.New(engine, client, host)
         client:after(M.SETTLE, function() waiting = false; a:sync() end)
     end
 
-    -- The first enemy has died: the raid officially starts, with everyone there now.
+    -- The first enemy has died: the raid officially starts, with everyone there now. Only inside an instance; a kill in the open world is not the raid.
     function a:enemyKilled()
+        if client.inInstance and not client:inInstance() then return 0 end
+        return a:start()
+    end
+    a.bossKilled = a.enemyKilled
+
+    -- Start the raid now, wherever it is (a world boss): the Master Looter says so. Returns how many entries were written, or nil + why.
+    function a:start()
         local r = myRaid()
-        if not r then return 0 end
+        if not r then return nil, "notml" end
         official[r.id] = true
         return a:sync()
     end
-    a.bossKilled = a.enemyKilled
+
+    -- Has the raid I run officially started (the ledger has attendance for it)?
+    function a:started()
+        local r = myRaid()
+        return r ~= nil and (official[r.id] or engine:View().attendance[r.id] ~= nil) and true or false
+    end
 
     client:on("roster.changed", function() a:soon() end)
     client:on("encounter.ended", function(p) if type(p) == "table" and p.success then a:enemyKilled() end end)
@@ -7550,7 +7566,7 @@ M.SECTIONS = {
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
-        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
+        actions = { "raidshow", "raidopen", "raidlist", "raidextend", "raidstart", "raidclose", "raidrevoke", "masterloot", "disenchanter", "policy" } },
     { id = "people", label = "People", tip = "Add, remove and move players; who the officers are; and your own spec.",
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",

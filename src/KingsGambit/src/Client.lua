@@ -10,7 +10,7 @@ M.METHODS = {
     -- time and randomness
     "now", "serverTime", "after", "every", "cancel", "random",
     -- identity and roster
-    "addonVersion", "me", "normalize", "inGroup", "inRaid", "roster", "rankOf", "leader", "guildRoster",
+    "addonVersion", "me", "normalize", "inGroup", "inRaid", "inInstance", "roster", "rankOf", "leader", "guildRoster",
     -- loot
     "lootMethod", "isMasterLooter", "masterLooter", "setLootMethod", "lootSlots", "candidates", "give", "itemInfo", "itemStats",
     -- what this player holds (token readiness)

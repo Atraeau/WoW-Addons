@@ -1,7 +1,8 @@
 -- King's Gambit: the Master Looter's addon writes down who is in the raid. Keep this file Lua 5.1-safe.
 --
--- A raid officially starts when its FIRST ENEMY DIES (a boss or trash: both drop loot that matters): before that people are still arriving and nothing
--- has been done. From then on, while a raid this
+-- A raid officially starts when its FIRST ENEMY DIES INSIDE AN INSTANCE (a boss or trash: both drop loot that matters; something killed in the open world
+-- while in a raid doesn't count): before that people are still arriving and nothing has been done. A raid outside an instance, such as a world boss, is
+-- started by hand: `start()` (the Master Looter's "raid start"). From then on, while a raid this
 -- character runs is open, the raid roster is compared with what the ledger already says about it, and the difference is written as one or more
 -- Attendance entries ({ raid, joined, left }): everyone there at the first kill, then whoever comes or goes. It follows the group (the game's
 -- roster-changed event), settles for a few seconds so a burst of changes is one entry, and checks again every half minute in case an event was missed.
@@ -66,14 +67,26 @@ function M.New(engine, client, host)
         client:after(M.SETTLE, function() waiting = false; a:sync() end)
     end
 
-    -- The first enemy has died: the raid officially starts, with everyone there now.
+    -- The first enemy has died: the raid officially starts, with everyone there now. Only inside an instance; a kill in the open world is not the raid.
     function a:enemyKilled()
+        if client.inInstance and not client:inInstance() then return 0 end
+        return a:start()
+    end
+    a.bossKilled = a.enemyKilled
+
+    -- Start the raid now, wherever it is (a world boss): the Master Looter says so. Returns how many entries were written, or nil + why.
+    function a:start()
         local r = myRaid()
-        if not r then return 0 end
+        if not r then return nil, "notml" end
         official[r.id] = true
         return a:sync()
     end
-    a.bossKilled = a.enemyKilled
+
+    -- Has the raid I run officially started (the ledger has attendance for it)?
+    function a:started()
+        local r = myRaid()
+        return r ~= nil and (official[r.id] or engine:View().attendance[r.id] ~= nil) and true or false
+    end
 
     client:on("roster.changed", function() a:soon() end)
     client:on("encounter.ended", function(p) if type(p) == "table" and p.success then a:enemyKilled() end end)

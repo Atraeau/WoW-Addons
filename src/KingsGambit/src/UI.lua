@@ -117,7 +117,7 @@ function M:StartPractice()
     sim.client.print = function(_, text) print("|cffffaa00Practice|r", text) end
     -- The commands find the running loot session through `host.session`: here it is whatever the simulation is running.
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
-    local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host })
+    local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host, attendance = sim.attendance })
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host }
     -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
     local total, unknown = 0, 0

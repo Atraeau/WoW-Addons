@@ -438,3 +438,33 @@ test("opening a loot window or a successful encounter also starts the raid, an u
     sim.client:emit("loot.opened", { slots = { { slot = 1, link = "|Hitem:1|h[X]|h", quantity = 1 } } })
     eq(started(), true, "looting a corpse (trash or boss) starts the raid")
 end)
+
+test("a kill in the open world doesn't start the raid; the Master Looter starts it by hand (a world boss)", function()
+    local sim, ctx, cmd = raid()
+    local function started() return sim.engine:View().attendance["sim"] ~= nil end
+    sim.client:setInInstance(false)
+    sim.client:emit("loot.opened", { slots = { { slot = 1, link = "|Hitem:1|h[X]|h", quantity = 1 } } })
+    sim.client:emit("encounter.ended", { id = 9, name = "Azuregos", success = true })
+    sim.client:advance(10)
+    eq(started(), false, "outside an instance nothing starts it by itself")
+    -- the loot session of a world boss also leaves it alone
+    eq(sim.attendance:enemyKilled(), 0)
+    ctx.client.printed = {}
+    cmd.raid = nil
+    local c = Commands.New({ client = sim.client, engine = sim.engine, host = ctx.host, attendance = sim.attendance })
+    c.handle("raid start")
+    eq(started(), true, "'raid start' starts it, wherever it is")
+    local first = table.concat(sim.client.printed, "\n")
+    assert(first:find("The raid has started"), first)
+    sim.client.printed = {}
+    c.handle("raid start")
+    assert(table.concat(sim.client.printed, "\n"):find("already started"), "a second start says so")
+    sim.client:setInInstance(true)
+end)
+
+test("inside an instance the first kill starts it as before", function()
+    local sim = raid()
+    sim.client:setInInstance(true)
+    sim.client:emit("loot.opened", { slots = { { slot = 1, link = "|Hitem:1|h[X]|h", quantity = 1 } } })
+    assert(sim.engine:View().attendance["sim"] ~= nil)
+end)
