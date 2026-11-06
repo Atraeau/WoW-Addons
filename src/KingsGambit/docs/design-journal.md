@@ -2090,10 +2090,14 @@ list changes and drops a choice that is no longer on offer. If nobody in the gro
 
 In the game window a chosen answer was shown by wrapping its text in brackets ("[Need]"), which changes the label, can overflow a narrow button, and reads as part of the name. The first
 replacement (a lit button with a green label) was tried in the game and judged **too little contrast**: a green label on the game's red button is hard to read and a color change of text alone
-does not meet good design practice. The chosen button now uses three cues together: **the whole button turns green, its label turns white (high contrast on the green), and a check-mark icon
-appears inside it** (a shape, so it reads without color at all); the game's lit highlight stays on too. The label text itself never changes. Un-choosing puts everything back to what the
-button's state makes it (normal, or grayed out). The line under the item still says "You: Need". The page uses the same idea (an outline and a check mark); the shared view only says
-`selected`, and each place draws it. Rule kept for later work: never mark state by a color change of text alone.
+does not meet good design practice. A second try (the whole button tinted green, with a check mark) was also set aside: the guild master pointed out that the game's own interface marks a selection by its **background**, and asked to
+survey the game's UI and pick the best, not invent a look. Surveyed in the game's UI source (Gethe/wow-ui-source `live`): (1) a **list row** (reputation, dropdown lines) is selected by a translucent
+white band behind the whole row, alpha 0.20 selected and 0.10 hovered, from the atlas `charactercreate-customize-dropdown-linemouseover-*`; (2) a **tab** swaps to an "active" texture set and its label
+from gold to white; (3) a **dropdown radio or check** gets a tick mark; (4) a **toggled panel button** is held in the pressed state. The game never tints a button green. **Chosen, from those:** an answered
+item gets the selected-row band behind it (so a list of items shows what is answered at a glance), and the chosen answer button is held pressed in (`SetButtonState("PUSHED", true)`), its label is white
+as on an active tab, and a tick sits inside it. Nothing about the label text changes; un-choosing releases it and restores the label's own font. If the game lacks the atlas the band falls back to a plain
+translucent white fill. The page matches (a pressed-in button with a white border and a tick, on a white translucent band). Rule kept for later work: never mark state by a color change of text alone,
+and prefer the game's own idioms over new ones.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

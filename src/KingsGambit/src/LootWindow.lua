@@ -63,27 +63,17 @@ local function setShown(frame, on)
 end
 
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
--- Show a button as the player's current choice without changing its text, and without relying on a color change of the text (too little contrast on the
--- game's red buttons). Three cues together: the whole button turns green, its label turns white (high contrast on the green), and a check mark appears
--- inside it (a shape, so it reads without color at all). The button stays lit as well. Un-marking puts everything back the way the button's state makes it.
-local PARTS = { "Left", "Middle", "Right" } -- the pieces of the game's panel button
-local function tint(b, r, g, bl)
-    local nt = b.GetNormalTexture and b:GetNormalTexture()
-    if type(nt) == "table" and nt.SetVertexColor then nt:SetVertexColor(r, g, bl) end
-    for _, key in ipairs(PARTS) do
-        local part = b[key]
-        if type(part) == "table" and part.SetVertexColor then part:SetVertexColor(r, g, bl) end
-    end
-end
-
+-- Show a button as the player's current choice the way the game's own interface shows a selection, without changing its text and without relying on a
+-- color change of the text. (Researched in the game's UI source: tabs swap to an "active" look and a white label; toggled panel buttons are held in the
+-- pressed state; dropdown radios get a tick mark; list rows get a translucent white band behind them.) Three cues here: the button is held pressed in, its
+-- label is white (as on an active tab), and a tick mark sits inside it. Un-marking puts everything back the way the button's state makes it.
 function M.Mark(b, on)
     on = on and true or false
     if on == (b.marked or false) and b.markDone then return end
     b.markDone = true
     local fs = b.GetFontString and b:GetFontString()
     if on then
-        if b.LockHighlight then b:LockHighlight() end
-        tint(b, 0.15, 0.7, 0.25)
+        if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stay pressed until released by code)
         if fs and fs.SetTextColor then fs:SetTextColor(1, 1, 1) end
         if not b.check and b.CreateTexture then
             b.check = b:CreateTexture(nil, "OVERLAY")
@@ -92,10 +82,9 @@ function M.Mark(b, on)
             b.check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
         end
         if b.check then b.check:Show() end
-        if fs and fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 7, 0) end -- room for the check mark
+        if fs and fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 7, 0) end -- room for the tick
     else
-        if b.UnlockHighlight then b:UnlockHighlight() end
-        tint(b, 1, 1, 1)
+        if b.SetButtonState then b:SetButtonState("NORMAL", false) end
         if b.check then b.check:Hide() end
         if b.marked and fs then
             if fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 0, 0) end
@@ -104,6 +93,19 @@ function M.Mark(b, on)
         end
     end
     b.marked = on
+end
+
+-- The band behind an answered item's row: the same translucent white band the game puts behind the selected row of a list (its reputation panel and
+-- dropdown lines), from the game's own atlas when it has it, else a plain white fill.
+local function makeBand(parent)
+    local t = parent:CreateTexture(nil, "BACKGROUND")
+    local ok = pcall(t.SetAtlas, t, "charactercreate-customize-dropdown-linemouseover-middle")
+    if not ok or not t.GetAtlas or not t:GetAtlas() then
+        if t.SetColorTexture then t:SetColorTexture(1, 1, 1, 1) end
+    end
+    if t.SetVertexColor then t:SetVertexColor(1, 1, 1) end
+    t:SetAlpha(0.2)
+    return t
 end
 
 local function setup(b, vb, label)
@@ -199,6 +201,8 @@ function M.Build(ui)
             local full = get and select(2, get(row.tip)) or row.tip
             if HandleModifiedItemClick then HandleModifiedItemClick(full) end
         end)
+        row.band = makeBand(f)
+        row.band:SetSize(WIDTH - 20, ROW - 4)
         row.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(32)
         row.buttons = {}
@@ -418,6 +422,10 @@ function M.Refresh(f, ctx, ui)
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 if vr.state == "awarded" and vr.mineWon then label = label .. "   |cff40ff40(yours)|r" end
                 row.text:SetText(label)
+                -- an answered item (or one you won) has the selected-row band behind it, like a selected row in the game's lists
+                if vr.state == "answered" or vr.mineWon then
+                    layout[#layout + 1] = { row.band, 10, y + 4 }; want[row.band] = true
+                end
                 layout[#layout + 1] = { row.text, 16, y }; layout[#layout + 1] = { row.hit, 16, y }
                 want[row.text] = true; want[row.hit] = true
                 local hasButtons = #vr.buttons > 0
@@ -490,7 +498,7 @@ function M.Refresh(f, ctx, ui)
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
-        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note
+        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note; everything[#everything + 1] = r.band
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
     end
     for _, el in ipairs(everything) do setShown(el, want[el] == true) end
