@@ -253,3 +253,36 @@ test("the preview marks a moved player and drops a removed one; the pending line
     eq(cmds[1], "move C 1 fixing the list"); eq(cmds[2], "remove B fixing the list")
     eq(GuildBook.Preview(rows, {}), rows, "nothing staged: the rows as they are")
 end)
+
+H.section("Ledger: trying an item on")
+test("an entry about an item carries it (a link, or item:ID), a disenchant result carries the item it came from, a plain name carries nothing", function()
+    local sim, ctx, cmd = raid()
+    local link = "|cffa335ee|Hitem:16837::::::::|h[Earthfury Boots]|h|r"
+    local ev = assert(sim.engine:Append("main", "Disenchant", { item = link, to = sim:disenchanterName() }))
+    local r = assert(sim.engine:Append("main", "DisenchantResult", { disenchant = ev.id, results = { { name = "Strange Dust", count = 1 } }, requestedBy = sim:disenchanterName() }))
+    local view = ctx.engine:View()
+    eq(GuildBook.ItemOf(ev, view), link); eq(GuildBook.ItemOf(r, view), link, "the result belongs to the item that was disenchanted")
+    eq(GuildBook.ItemOf({ type = "Award", data = { item = "item:1234" } }, view), "item:1234")
+    eq(GuildBook.ItemOf({ type = "Award", data = { item = 5678 } }, view), "item:5678")
+    eq(GuildBook.ItemOf({ type = "Award", data = { item = "Linen Cloth" } }, view), nil, "a plain name has nothing to look up")
+    eq(GuildBook.ItemOf({ type = "MovePlayer", data = { member = "A" } }, view), nil)
+    local h = GuildBook.History(ctx, { text = "Earthfury" })
+    eq(h.entries[1].item, link, "the row carries it, so a click can try it on")
+    local _, item = GuildBook.Detail(ctx, h.entries[1].id)
+    eq(item, link, "and so does the detail panel")
+end)
+
+test("trying an item on opens the game's dressing room with it, and says so when the game can't", function()
+    local UI = SK.modules.UI
+    local saved, said = _G.DressUpItemLink, nil
+    local got
+    _G.DressUpItemLink = function(link) got = link; return true end
+    assert(UI.TryOn("|cffa335ee|Hitem:16837::::::::|h[Earthfury Boots]|h|r")); assert(got:find("16837", 1, true))
+    eq(UI.TryOn(nil), false)
+    _G.DressUpItemLink = nil
+    local savedSay, savedLink = UI.Say, _G.DressUpLink
+    _G.DressUpLink = nil
+    UI.Say = function(t) said = t end
+    eq(UI.TryOn("item:1"), false); assert(said and said:find("dressing room"), tostring(said))
+    UI.Say, _G.DressUpItemLink, _G.DressUpLink = savedSay, saved, savedLink
+end)

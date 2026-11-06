@@ -36,6 +36,7 @@ M.TEXT = {
     rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right. Moving only rearranges what you see: nothing is sent until you press Confirm, so you can keep deciding." },
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
+    tryon = { "Try it on", "See how this entry's item looks on your character, in the game's dressing room. You can also Ctrl-click an entry. It only shows the item; nothing is recorded or equipped." },
     navledger = { "Ledger", "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },

@@ -492,7 +492,13 @@ function M.InitHistoryRow(row, e)
     if row.hl then if M.ledgerSelected == e.id then row.hl:Show() else row.hl:Hide() end end
     if row.SetScript and not row.clickSet then
         row.clickSet = true
-        row:SetScript("OnClick", function(self) if self.entry then M.ledgerSelected = self.entry.id; M:Refresh() end end)
+        -- a click selects the entry (its raw record is shown below); Ctrl-click tries its item on, as Ctrl-clicking an item link does
+        row:SetScript("OnClick", function(self)
+            if not self.entry then return end
+            M.ledgerSelected = self.entry.id
+            if IsControlKeyDown and IsControlKeyDown() and self.entry.item then M.TryOn(self.entry.item) end
+            M:Refresh()
+        end)
     end
     if not row.cells then
         row.when = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
@@ -503,7 +509,14 @@ function M.InitHistoryRow(row, e)
         if row.SetScript then
             row:SetScript("OnEnter", function(self)
                 if GameTooltip and self.entry then
-                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); GameTooltip:SetText(self.entry.text, 1, 1, 1, 1, true); GameTooltip:Show()
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                    -- an entry about an item shows the item (its own tooltip), with how to try it on; any other shows its sentence in full
+                    if self.entry.item and GameTooltip.SetHyperlink and pcall(GameTooltip.SetHyperlink, GameTooltip, self.entry.item) then
+                        GameTooltip:AddLine(" "); GameTooltip:AddLine("Ctrl-click to try it on.", 0.6, 0.6, 0.6)
+                    else
+                        GameTooltip:SetText(self.entry.text, 1, 1, 1, 1, true)
+                    end
+                    GameTooltip:Show()
                 end
             end)
             row:SetScript("OnLeave", function() if GameTooltip then GameTooltip:Hide() end end)
@@ -553,6 +566,11 @@ function M:BuildHistory(parent)
     -- The selected entry as the raw record, under the list.
     p.detailTitle = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     p.detailTitle:SetPoint("BOTTOMLEFT", 4, 112); p.detailTitle:SetText("Selected entry")
+    p.tryOn = button(p, "Try it on", 80, 20)
+    p.tryOn:SetPoint("BOTTOMRIGHT", -6, 108)
+    p.tryOn:SetScript("OnClick", function() M.TryOn(p.tryOnItem) end)
+    Tips.Attach(p.tryOn, "tryon")
+    p.tryOn:Hide()
     p.detail = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.detail:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 4, 108); p.detail:SetWidth(390); p.detail:SetHeight(104)
     p.detail:SetJustifyH("LEFT"); p.detail:SetJustifyV("TOP"); p.detail:SetWordWrap(true)
@@ -584,6 +602,16 @@ function M:BuildHistory(parent)
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
     p.message:SetPoint("TOPLEFT", 14, -50); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
     return p
+end
+
+-- Show an item on this character in the game's dressing room (a link, or "item:ID"). Nothing is equipped or recorded.
+function M.TryOn(item)
+    if not item then return false end
+    local fn = DressUpItemLink or DressUpLink
+    if not fn then M.Say("This game can't open the dressing room from here."); return false end
+    local ok = pcall(fn, item)
+    if not ok and DressUpLink and fn ~= DressUpLink then ok = pcall(DressUpLink, item) end
+    return ok
 end
 
 -- The selected entry's details as text: each field's name in gold, its value after it.
@@ -622,8 +650,11 @@ function M.RefreshHistory(p, ctx)
         for i = #h.entries + 1, #p.lines do p.lines[i]:Hide() end
         p.child:SetHeight(math.max(#h.entries * HIST_H, 1))
     end
-    local detail = M.ledgerSelected and GuildBook.Detail(ctx, M.ledgerSelected)
+    local detail, item
+    if M.ledgerSelected then detail, item = GuildBook.Detail(ctx, M.ledgerSelected) end
     if not detail then M.ledgerSelected = nil end
+    p.tryOnItem = item
+    setShown(p.tryOn, item ~= nil)
     p.detail:SetText(detail and M.DetailText(detail) or "Click an entry to see exactly what was written: who wrote it, when, its id and every field.")
     p.countText:SetText(h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total))
     if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end

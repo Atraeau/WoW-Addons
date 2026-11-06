@@ -145,6 +145,23 @@ end
 
 local KIND_LABEL = { loot = "loot", list = "list change", rules = "rules", raid = "raid" }
 
+-- The item an entry is about, as something the game can show or dress a character in: an item link, or "item:ID" (an id with nothing else), or nil
+-- (a plain name has nothing to look up). What disenchanting gave belongs to the item that was disenchanted.
+function M.ItemOf(ev, view)
+    local d = type(ev) == "table" and ev.data or nil
+    if not d then return nil end
+    local item = d.item
+    if ev.type == "DisenchantResult" and view then
+        for _, e in ipairs(view.applied) do if e.id == d.disenchant then item = e.data and e.data.item end end
+    end
+    if type(item) == "number" then return "item:" .. item end
+    if type(item) ~= "string" then return nil end
+    local link = item:match("|c%x+|Hitem:.-|h%[.-%]|h|r") or item:match("|Hitem:.-|h%[.-%]|h")
+    if link then return link end
+    local id = item:match("^item:(%d+)")
+    return id and ("item:" .. id) or nil
+end
+
 -- One entry as the raw record, for whoever wants to see exactly what was written: { label, value } lines. The entry is found by its id.
 function M.Detail(ctx, id)
     local view = ctx.engine:View()
@@ -155,6 +172,7 @@ function M.Detail(ctx, id)
     if not ev then return nil end
     local lines = {}
     local function add(label, value) lines[#lines + 1] = { label = label, value = tostring(value) } end
+    local item = M.ItemOf(ev, view)
     add("Entry", ("%s (%s)"):format(ev.type, KIND_LABEL[M.KindOf(ev.type)] or "other"))
     add("Written by", Identity.Display(ev.author))
     local stamp = ""
@@ -170,7 +188,7 @@ function M.Detail(ctx, id)
     for k in pairs(ev.data or {}) do keys[#keys + 1] = k end
     table.sort(keys)
     for _, k in ipairs(keys) do add(k, valueText(ev.data[k])) end
-    return lines
+    return lines, item
 end
 
 function M.History(ctx, filter)
@@ -210,7 +228,7 @@ function M.History(ctx, filter)
                 out.total = out.total + 1
                 if not filter.limit or #out.entries < filter.limit then
                     out.entries[#out.entries + 1] = { id = ev.id, ts = ev.ts, when = M.Ago(now, ev.ts), kind = k, type = ev.type, text = text,
-                        segments = M.Segments(text, people) }
+                        segments = M.Segments(text, people), item = M.ItemOf(ev, view) }
                 end
             end
         end

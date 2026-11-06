@@ -2150,6 +2150,14 @@ Decisions: every form lives in exactly one section (a test fails when a form is 
 The split of the Tools tab named its corner of maintenance forms "Ledger", right beside a History section that is the ledger's own record: the guild master asked why they were two things. They were not the same thing, but the names said they were. The record is **History** (the ledger in sentences, with nothing to edit); the forms for starting a list, the record's format, versions and sync are **Admin**, still set apart by a gap. The user-facing wording avoids "ledger" for the corner so there is only one place to read the record.
 History rows are also **denser**: one line each (when, then what happened, cut off with the whole sentence in the tooltip) at 20 pixels instead of two lines at 38, so about twice as many entries show without scrolling. The record now has a sentence for a disenchant ("X was disenchanted by Y") instead of a bare event name, and counts it under Loot.
 
+### Ledger: an entry's item can be tried on (2026-11-06)
+
+The guild master wanted to click an item in the Ledger and see it on their own paper doll. An entry that is about an item now carries it (`GuildBook.ItemOf`: an item link, or `item:ID`; what disenchanting gave belongs to the item that was disenchanted; a plain name has nothing to look up, so nothing is offered). Three ways in, all through the game's own dressing room (`DressUpItemLink`, else `DressUpLink`; it only shows the item, nothing is equipped or recorded):
+- **Ctrl-click an entry**, as Ctrl-clicking an item link does everywhere in the game.
+- A **Try it on** button beside the selected entry's record, shown only when the entry has an item.
+- Hovering an item entry shows the item's own tooltip (with "Ctrl-click to try it on") instead of repeating the sentence; other entries still show their sentence in full.
+If the game has neither function, the window says so. Which of the two dress-up calls this client prefers is untried: the exported API lists both.
+
 ### Lists: several changes are staged, previewed, and applied together with one reason (2026-11-06)
 
 The Lists section could stage one move at a time and removed a player at once. It now stages **any number of changes** (moves and removals) in a pending-changes bar, which is the model the design asked for ("stage, preview, apply once with a reason"):
