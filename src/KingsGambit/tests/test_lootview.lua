@@ -402,3 +402,29 @@ test("a chosen answer is held pressed in with an inset bevel; its label and text
     for _, t in ipairs(b.bevel) do eq(t.on, false, "the bevel goes") end
     eq(colored, false)
 end)
+
+test("raiders have first and last names, and a winner's class and spec are found by that name", function()
+    local sim, _, view = practice(10)
+    local two = 0
+    for _, n in ipairs(sim.names) do if n:find("_", 1, true) then two = two + 1 end end
+    assert(two >= #sim.names - 1, "every bot has a first and a last name")
+    sim:killBoss(nil, false)
+    assert(sim:runUntil("review", 900)); assert(sim.session:confirm())
+    local found
+    for _, r in ipairs(view().rows) do
+        for _, seg in ipairs(r.segments or {}) do
+            if seg.who and seg.who.name:find(" ", 1, true) and seg.who.spec and seg.who.class then found = seg.who end
+        end
+    end
+    assert(found, "a winner with a first and last name shows their class and spec")
+end)
+
+test("the 40-player roster has shamans (the Alliance has them now) and still makes a full raid", function()
+    local shamans, total = 0, 0
+    for _, row in ipairs(Sim.ROSTER_40) do
+        total = total + row[4]
+        if row[1] == "SHAMAN" then shamans = shamans + row[4] end
+    end
+    eq(total, 39, "39 raiders and the learner make 40"); assert(shamans >= 3, "shamans in the raid: " .. shamans)
+    for _, n in ipairs(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 40 }).names) do assert(n == "Me" or n:find("_", 1, true), n .. " has no last name") end
+end)

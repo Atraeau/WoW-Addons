@@ -157,6 +157,40 @@ function M.New(opts)
         out[#out + 1] = "identity = " .. tostring(self:me())
         return out
     end
+    -- What the game says about addon messages, raw, for the self-check: whether outgoing ones are restricted (the API documents this as decided realm by
+    -- realm), the restriction states, and what the game answers when a send is attempted on each channel, ignoring our own restricted() gate.
+    function c:commsProbe()
+        local out = {}
+        local ci = E.C_ChatInfo or {}
+        local function call(fn, ...)
+            if not fn then return "(not available)" end
+            local ok, a = pcall(fn, ...)
+            return ok and tostring(safe(a)) or "error"
+        end
+        out[#out + 1] = "AreOutgoingAddonChatMessagesRestricted = " .. call(ci.AreOutgoingAddonChatMessagesRestricted)
+        out[#out + 1] = "InChatMessagingLockdown = " .. call(ci.InChatMessagingLockdown)
+        local ra = E.C_RestrictedActions
+        local types = E.Enum and E.Enum.AddOnRestrictionType
+        if ra and ra.GetAddOnRestrictionState and type(types) == "table" then
+            local names = {}
+            for name in pairs(types) do names[#names + 1] = name end
+            table.sort(names)
+            for _, name in ipairs(names) do
+                out[#out + 1] = ("restriction %s = %s"):format(name, call(ra.GetAddOnRestrictionState, types[name]))
+            end
+        else
+            out[#out + 1] = "restriction states: (not available)"
+        end
+        -- A raw attempt per channel: the answer the game gives, whatever it is (a refusal changes nothing).
+        for _, ch in ipairs { "WHISPER", "PARTY", "GUILD" } do
+            if ci.SendAddonMessage then
+                local ok, res = pcall(ci.SendAddonMessage, "KGCHECK", "ping", ch, ch == "WHISPER" and toGame(self:me()) or nil)
+                local label = ok and (enumName(E.Enum and E.Enum.SendAddonMessageResult, res) or tostring(safe(res))) or "error"
+                out[#out + 1] = ("raw send on %s -> %s"):format(ch, tostring(label))
+            end
+        end
+        return out
+    end
     function c:inGroup() return E.IsInGroup() and true or false end
     function c:inRaid() return E.IsInRaid() and true or false end
 

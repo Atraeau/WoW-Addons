@@ -48,6 +48,10 @@ function M.Run(client)
     if client.nameProbe then
         for i, line in ipairs(client:nameProbe()) do probe("name " .. i, function() return line end) end
     end
+    -- comms: whether the game lets addons send messages to other players at all (the sync depends on it); paste this block when reporting
+    if client.commsProbe then
+        for i, line in ipairs(client:commsProbe()) do probe("comms " .. i, function() return line end) end
+    end
     probe("now() / serverTime()", function() return client:now() .. " / " .. client:serverTime() end)
     probe("inGroup / inRaid", function() return tostring(client:inGroup()) .. " / " .. tostring(client:inRaid()) end)
     probe("roster()", function()

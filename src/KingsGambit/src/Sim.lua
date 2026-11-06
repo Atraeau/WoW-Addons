@@ -124,7 +124,8 @@ function Sim:isBot(fullName)
     return true
 end
 
-function Sim:policyFor(fullName) return self.policies[short(fullName)] or {} end
+-- A raider's policy: keyed by their canonical name (First_Last), or by the plain name a scenario writes ("Aldric", "You").
+function Sim:policyFor(fullName) return self.policies[fullName] or self.policies[short(fullName)] or {} end
 
 local function wantedKind(policy, link)
     local b = policy.bid and policy.bid[link]
@@ -277,14 +278,14 @@ function Sim:snapshot()
             snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
             -- May the learner bid on it (need, off-spec, gift)? If not, the page offers only a pass, and says why.
             local fit = s:fitOf(it.id)
-            local me = self.info[short(self.learner)]
+            local me = self.info[self.learner] or self.info[short(self.learner)]
             local may, why = Loot.MayHave(fit, me and me.class)
             snap.items[i].youMay, snap.items[i].youWhy = may, why
             snap.items[i].classes = ItemFit.ClassList(fit or {})
             -- who the learner may gift it to: raiders who are eligible for it themselves
             local targets = {}
             for _, n in ipairs(self.names) do
-                if n ~= short(self.learner) and Loot.MayHave(fit, self.info[n] and self.info[n].class) then targets[#targets + 1] = n end
+                if n ~= self.learner and Loot.MayHave(fit, self.info[n] and self.info[n].class) then targets[#targets + 1] = short(n) end
             end
             snap.items[i].giftTargets = targets
             local rows = s:readiness(it.id)
@@ -326,21 +327,26 @@ end
 -- A realistic 40-person Alliance raid: class, main spec and off-spec for every bot (the role follows the main
 -- spec). The learner is the 40th: a Holy priest with Shadow as off-spec. { class, spec, off-spec, count }.
 M.ROSTER_40 = {
-    { "WARRIOR", "Protection", "Fury", 3 }, { "WARRIOR", "Fury", "Protection", 5 },
-    { "ROGUE", "Combat", nil, 5 }, { "HUNTER", "Marksmanship", nil, 4 },
-    { "MAGE", "Frost", "Fire", 3 }, { "MAGE", "Fire", "Frost", 3 }, { "WARLOCK", "Destruction", "Affliction", 4 },
+    { "WARRIOR", "Protection", "Fury", 3 }, { "WARRIOR", "Fury", "Protection", 4 },
+    { "ROGUE", "Combat", nil, 4 }, { "HUNTER", "Marksmanship", nil, 3 },
+    { "SHAMAN", "Restoration", "Enhancement", 2 }, { "SHAMAN", "Enhancement", "Restoration", 1 }, { "SHAMAN", "Elemental", "Restoration", 1 },
+    { "MAGE", "Frost", "Fire", 3 }, { "MAGE", "Fire", "Frost", 2 }, { "WARLOCK", "Destruction", "Affliction", 4 },
     { "PRIEST", "Holy", "Shadow", 4 }, { "PRIEST", "Shadow", "Holy", 1 },
     { "DRUID", "Restoration", "Balance", 2 }, { "DRUID", "Feral (bear)", "Feral (cat)", 1 },
     { "PALADIN", "Holy", "Retribution", 3 }, { "PALADIN", "Retribution", "Holy", 1 },
 }
-local MC_NAMES = { "Aldric", "Brann", "Cass", "Dara", "Eira", "Fenn", "Garo", "Hale", "Ilsa", "Jory", "Kest", "Lio",
-    "Mirel", "Nyx", "Orsa", "Pell", "Quill", "Rhea", "Soren", "Tavi", "Ulf", "Vera", "Wren", "Xan", "Yara", "Zed",
-    "Ansel", "Bryn", "Corin", "Delia", "Emrys", "Fia", "Gideon", "Halia", "Ivo", "Jessa", "Kael", "Lysa", "Moro" }
+-- Raiders have a first and a last name, as characters do in the game (the identity is the pair: Identity.lua).
+local MC_NAMES = { "Aldric_Stormwind", "Brann_Ironforge", "Cass_Dunmere", "Dara_Whitlock", "Eira_Hollowell", "Fenn_Ashgrove", "Garo_Blackthorn",
+    "Hale_Winterbourne", "Ilsa_Greywater", "Jory_Thornfield", "Kest_Marrowby", "Lio_Brightwater", "Mirel_Fairwind", "Nyx_Duskwood", "Orsa_Stonehelm",
+    "Pell_Redmane", "Quill_Tanglewood", "Rhea_Silverbrook", "Soren_Oakhaven", "Tavi_Larkspur", "Ulf_Frostbeard", "Vera_Copperfield", "Wren_Highmoor",
+    "Xan_Nightshade", "Yara_Goldleaf", "Zed_Ravenscar", "Ansel_Wyndham", "Bryn_Coldwell", "Corin_Ashford", "Delia_Moonbrook", "Emrys_Hartley",
+    "Fia_Stoneridge", "Gideon_Blackwood", "Halia_Brightmoor", "Ivo_Fenwick", "Jessa_Thorne", "Kael_Ravenwood", "Lysa_Dawnwhisper", "Moro_Stonefist" }
 local ARMOR = { WARRIOR = "plate", PALADIN = "plate", HUNTER = "mail", SHAMAN = "mail", ROGUE = "leather",
     DRUID = "leather", PRIEST = "cloth", MAGE = "cloth", WARLOCK = "cloth" }
 -- Hybrids can also use the other role's gear as off-spec.
 local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { healer = "melee", melee = "healer" },
-    WARRIOR = { tank = "melee", melee = "tank" }, PRIEST = { healer = "caster" } }
+    WARRIOR = { tank = "melee", melee = "tank" }, PRIEST = { healer = "caster" },
+    SHAMAN = { healer = "melee", melee = "healer", caster = "healer" } }
 
 local function hasBit(mask, bit) return math.floor(mask / bit) % 2 == 1 end
 
@@ -402,7 +408,7 @@ function M.FreePlay(seed, opts)
     opts = opts or {}
     local count, nitems = opts.raiders or 7, opts.items or 3
     local rng = M.NewRaid({ members = {}, seed = seed }).client
-    local classes = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID" }
+    local classes = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "SHAMAN", "MAGE", "WARLOCK", "DRUID" }
     local members = {}
     for i = 1, count do
         local class = classes[rng:random(#classes)]

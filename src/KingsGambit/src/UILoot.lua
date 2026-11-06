@@ -94,7 +94,7 @@ function M.Model(ctx)
         if not full then return nil end
         local name = show(full)
         local info = { name = name, class = classOf[full] }
-        local known = ctx.sim and ctx.sim.info and ctx.sim.info[name]
+        local known = ctx.sim and ctx.sim.info and (ctx.sim.info[full] or ctx.sim.info[name])
         if known then info.class, info.spec = info.class or known.class, known.spec end
         return info
     end

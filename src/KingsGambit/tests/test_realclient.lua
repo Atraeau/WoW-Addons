@@ -356,3 +356,14 @@ test("a roster name the game gives without a surname is completed from its unit"
     eq(r[2].name, "Mirel_Shoeberry", "the surname was missing from the roster and came from the unit")
     eq(r[3].name, "Brann_Ironforge", "a name that already has both is left as it is")
 end)
+
+test("the comms probe reports what the game says about addon messages, for the in-game field test", function()
+    local c = newClient(function(E)
+        E.C_ChatInfo.AreOutgoingAddonChatMessagesRestricted = function() return true end
+        E.Enum.AddOnRestrictionType = { Combat = 0, Encounter = 1 }
+        E.C_RestrictedActions = { GetAddOnRestrictionState = function(t) return t == 1 and 2 or 0 end }
+    end)
+    local text = table.concat(c:commsProbe(), "\n")
+    assert(text:find("AreOutgoingAddonChatMessagesRestricted = true", 1, true), text)
+    assert(text:find("restriction Encounter = 2", 1, true) and text:find("raw send on WHISPER", 1, true), text)
+end)

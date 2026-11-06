@@ -320,12 +320,12 @@ function api.lootView(draft)
     end
     local session = sim.session
     local me = sim.learner
-    local myInfo = sim.info[short(me)]
+    local myInfo = sim.info[me] or sim.info[short(me)]
     local function targets(itemId)
         local fit = session and session:fitOf(itemId)
         local out = {}
         for _, n in ipairs(sim.names) do
-            if n ~= short(me) and S.Loot.MayHave(fit, sim.info[n] and sim.info[n].class) then out[#out + 1] = n end
+            if n ~= me and n ~= short(me) and S.Loot.MayHave(fit, sim.info[n] and sim.info[n].class) then out[#out + 1] = short(n) end
         end
         return out
     end

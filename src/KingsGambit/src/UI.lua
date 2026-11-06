@@ -108,8 +108,9 @@ function M:StartPractice()
     -- A simulated guild: the raid's players, and others who are not in the group (some offline).
     local guild = {}
     for _, m in ipairs(sim.client:roster()) do guild[#guild + 1] = { name = m.name, class = m.class } end
-    local classes = { "WARRIOR", "MAGE", "ROGUE", "PRIEST", "HUNTER", "WARLOCK", "DRUID", "PALADIN" }
-    for i, n in ipairs { "Oswin", "Perrin", "Rook", "Sabine", "Tamsin", "Ulric", "Vesna", "Wick", "Yorick", "Zora", "Alder", "Bexley" } do
+    local classes = { "WARRIOR", "MAGE", "ROGUE", "PRIEST", "HUNTER", "WARLOCK", "DRUID", "PALADIN", "SHAMAN" }
+    for i, n in ipairs { "Oswin_Harrowgate", "Perrin_Dunholm", "Rook_Underhill", "Sabine_Valeheart", "Tamsin_Brightfield", "Ulric_Stormcrow", "Vesna_Ashmoor",
+        "Wick_Thistledown", "Yorick_Greymantle", "Zora_Emberfall", "Alder_Quickwater", "Bexley_Holloway" } do
         guild[#guild + 1] = { name = n, class = classes[(i - 1) % #classes + 1], online = i % 3 ~= 0 }
     end
     sim.client:setGuild(guild)
