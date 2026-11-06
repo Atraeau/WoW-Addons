@@ -2105,6 +2105,16 @@ font swap. A new round therefore starts with nothing chosen, until the player ch
 shifted right left an unnatural gap. **The tick is no longer inside the button**: it sits in the note column directly before "You: Need" (both left-aligned, no gap), in the same place on every
 row; the button itself only changes state (pressed in, white label) and its text and position never change. The page does the same.
 
+### The Loot window is laid out on a grid, with the status on the item's own line (2026-11-06)
+
+Looking at the window in the game, the guild master found the text on the right "really tight" and asked for UX and UI principles to make it look professional. The faults: the answer shown in a
+narrow side column that wrapped to three lines; fixed row and message heights, so a three-line message ran into the heading under it; a tall, repetitive message; and the selected-row band not
+showing at all (it was drawn in the lowest layer, under the window's own background; it is now in the artwork layer). Fixed by one layout pass, written down as rules in `ui-design.md` ("Layout rules"):
+a 16 px margin and 8 px spacing on one grid; four equal buttons across the full width; heights measured from the text; thin dividers and small headings between groups; the item's name with what you
+answered right-aligned on the same line, and the tick inline against that text (no gap); Confirm beside the heading of your order, Up and Down right-aligned on each line; and shorter copy (the
+ranking message is one sentence, the answer reads "Need", "Off-spec", "Pass", "Gift, name later" or "Gift to Name" instead of "You: Gift (you'll choose who if you win)"). The chosen answer is still held
+pressed in (a toggle) with a white label, reasserted every refresh. The web page uses the same layout (a grid of four equal buttons, status on the item's line).
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

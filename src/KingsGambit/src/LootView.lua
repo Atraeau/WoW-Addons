@@ -71,6 +71,12 @@ local function answerButtons(m, row)
     return out
 end
 
+-- What the player answered, in as few words as fit beside the item's name.
+local function answerShort(row)
+    if row.mine == "gift" then return row.mineTo and ("Gift to " .. row.mineTo) or "Gift, name later" end
+    return ({ need = "Need", off = "Off-spec", pass = "Pass" })[row.mine]
+end
+
 local function answerText(row)
     if row.mine == "gift" then return "You: Gift" .. (row.mineTo and (" to " .. row.mineTo) or " (you'll choose who if you win)") end
     local word = ({ need = "Need", off = "Off-spec", pass = "Pass" })[row.mine]
@@ -122,6 +128,7 @@ function M.Build(m)
             row.state = r.mine and "answered" or "open"
             row.buttons = answerButtons(m, r)
             row.note = answerText(r)
+            row.answer = answerShort(r)
             if r.canBid == false then row.warn = WHY[r.whyNot] or "This isn't for your class." end
         elseif r.winner then
             -- who gets it: the winner, who it is given to if not the winner, which round, and where the winner falls on the list
@@ -218,7 +225,7 @@ function M.Build(m)
         b.text(m.phase and TIER[m.phase] and (" (" .. TIER[m.phase] .. ")") or "")
         v.banner = { kind = "info", text = b.plain(), segments = b.segments }
     elseif v.state == "ranking" then
-        v.banner = { kind = "warn", text = "You want more than one item: put them in order, most wanted first, and confirm. The session waits for your order; on your turn you get your highest-ranked item with no prompt." }
+        v.banner = { kind = "warn", text = "Put the items you want in order, most wanted first, then confirm. The session waits for your order." }
     elseif v.state == "waiting" then
         v.banner = { kind = "info", text = "You've answered everything. Waiting for the others. You can still change an answer until bidding closes." }
     elseif v.state == "review" then

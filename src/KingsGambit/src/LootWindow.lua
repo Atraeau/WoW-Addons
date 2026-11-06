@@ -7,7 +7,6 @@ local UILoot, LootView, Tips
 local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips" }, function(d) UILoot, LootView, Tips = d.UILoot, d.LootView, d.UITips end)
 
 local WIDTH = 440
-local ROW = 50          -- one item: its link, then the answers or the result (which can run to three lines)
 local MAX = 8          -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
 
 -- What a button's `act` types. Returns the command, or nil and what to tell the player.
@@ -92,7 +91,7 @@ end
 -- The band behind an answered item's row: the same translucent white band the game puts behind the selected row of a list (its reputation panel and
 -- dropdown lines), from the game's own atlas when it has it, else a plain white fill.
 local function makeBand(parent)
-    local t = parent:CreateTexture(nil, "BACKGROUND")
+    local t = parent:CreateTexture(nil, "ARTWORK")
     local ok = pcall(t.SetAtlas, t, "charactercreate-customize-dropdown-linemouseover-middle")
     if not ok or not t.GetAtlas or not t:GetAtlas() then
         if t.SetColorTexture then t:SetColorTexture(1, 1, 1, 1) end
@@ -146,6 +145,24 @@ function M.Movable(f, key, default)
     end
 end
 
+---------------------------------------------------------------- layout
+-- One grid for the whole window, so everything lines up: a 16 pixel margin all round, an 8 pixel unit of spacing, one content width, and widths that divide it
+-- (four equal buttons across a row, four across the Master Looter's strip). Heights follow the text (a wrapped line is measured, not guessed), so nothing
+-- collides when a message runs to two or three lines. Related things are grouped under thin dividers; the status that belongs to an item is right-aligned on
+-- the item's own line, so the eye reads name, then status, then the choices.
+local PAD, GAP = 16, 8
+local CW = WIDTH - 2 * PAD          -- the content width (408)
+local BTN_H = 22
+local BTN4 = (CW - 3 * GAP) / 4     -- four equal buttons across the content width (96)
+local TICK = "|TInterface\\Buttons\\UI-CheckBox-Check:12:12:0:-1|t " -- inline, so the tick sits directly against the text it belongs to
+
+-- The height a (wrapped) line of text takes, never less than `min` (the game gives the real number; a stand-in gives none).
+local function textH(fs, min)
+    local h = fs.GetStringHeight and fs:GetStringHeight()
+    if type(h) ~= "number" then h = min end
+    return math.max(min, math.ceil(h))
+end
+
 function M.Build(ui)
     local ok, f = pcall(CreateFrame, "Frame", "KingsGambitLootWindow", UIParent, "BasicFrameTemplateWithInset")
     if not ok or not f then f = CreateFrame("Frame", "KingsGambitLootWindow", UIParent) end
@@ -160,29 +177,43 @@ function M.Build(ui)
         close:SetScript("OnClick", function() f:Hide() end)
     end
 
-    local function text(font, w, justify)
+    local function text(font, w, justify, wrap)
         local s = f:CreateFontString(nil, "OVERLAY", font or "GameFontHighlight")
-        s:SetWidth(w or (WIDTH - 36)); s:SetJustifyH(justify or "LEFT"); s:SetWordWrap(true)
+        s:SetWidth(w or CW); s:SetJustifyH(justify or "LEFT"); s:SetWordWrap(wrap ~= false)
         return s
     end
+    local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); Tips.Attach(b, tooltipOf(b)) end
+
     f.practiceText = text("GameFontNormalSmall")
     f.bar = CreateFrame("StatusBar", nil, f)
-    f.bar:SetSize(WIDTH - 36, 8)
+    f.bar:SetSize(CW, 8)
     f.bar:SetMinMaxValues(0, 1)
     if f.bar.SetStatusBarTexture then f.bar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar") end
-    f.meta = text("GameFontHighlightSmall", 250)
-    f.metaRight = text("GameFontHighlightSmall", 170, "RIGHT")
+    f.meta = text("GameFontHighlightSmall", CW - 170, "LEFT", false)
+    f.metaRight = text("GameFontHighlightSmall", 170, "RIGHT", false)
     f.banner = text("GameFontHighlight")
     f.turnText = text("GameFontNormal")
+    f.more = text("GameFontHighlightSmall")
+
+    -- thin dividers between the groups (the turn, your order, the items, the Master Looter, practice)
+    f.dividers = {}
+    for i = 1, 5 do
+        local d = f:CreateTexture(nil, "ARTWORK")
+        d:SetSize(CW, 1)
+        if d.SetColorTexture then d:SetColorTexture(1, 1, 1, 0.15) end
+        f.dividers[i] = d
+    end
 
     f.rows = {}
     for i = 1, MAX do
         local row = { }
+        -- the band behind an answered item sits in the artwork layer: above the window's own background, below the text and buttons
+        row.band = makeBand(f)
         row.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        row.text:SetWidth(WIDTH - 36); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
+        row.text:SetWidth(CW - 160); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
         -- Hover for the item's tooltip; shift-click puts the link in chat, as anywhere in the game.
         row.hit = CreateFrame("Button", nil, f)
-        row.hit:SetSize(WIDTH - 36, 16)
+        row.hit:SetSize(CW - 160, 16)
         row.hit:SetScript("OnEnter", function(self)
             if row.tip and GameTooltip then
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); GameTooltip:SetHyperlink(row.tip); GameTooltip:Show()
@@ -195,58 +226,45 @@ function M.Build(ui)
             local full = get and select(2, get(row.tip)) or row.tip
             if HandleModifiedItemClick then HandleModifiedItemClick(full) end
         end)
-        row.band = makeBand(f)
-        row.band:SetSize(WIDTH - 20, ROW - 4)
-        -- a tick before the note ("You: Need"), in the same place on every row, so an answered item reads at a glance
-        row.tick = f:CreateTexture(nil, "OVERLAY")
-        row.tick:SetSize(12, 12)
-        row.tick:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-        row.note = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(32)
+        row.status = text("GameFontHighlightSmall", 152, "RIGHT", false) -- what you answered, right-aligned on the item's own line
+        row.note = text("GameFontHighlightSmall", CW, "LEFT", true)      -- a result, or why a choice is unavailable, under the item
         row.buttons = {}
         for j = 1, 4 do
-            local b = button(f, "", 72, 20)
-            b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
-            Tips.Attach(b, tooltipOf(b))
+            local b = button(f, "", BTN4, BTN_H)
+            onClick(b)
             row.buttons[j] = b
         end
         f.rows[i] = row
     end
-    f.more = text("GameFontHighlightSmall")
 
-    -- Your order, when you want several items of one kind: a title, a line per item with Up and Down, and Confirm.
+    -- Your order, when you want several items of one kind: a heading with Confirm on its right, then a line per item with Up and Down on its right.
     f.rankTitles, f.rankConfirms, f.rankRows = {}, {}, {}
     for i = 1, 3 do
-        f.rankTitles[i] = text("GameFontNormalSmall")
-        local c = button(f, "", 110, 22)
-        c:SetScript("OnClick", function() if c.view and c.view.enabled then M.Run(c.view.act, f, ui) end end)
-        Tips.Attach(c, tooltipOf(c))
+        f.rankTitles[i] = text("GameFontNormalSmall", CW - 118, "LEFT", false)
+        local c = button(f, "", 110, BTN_H)
+        onClick(c)
         f.rankConfirms[i] = c
     end
     for i = 1, 12 do
         local r = {}
         r.text = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-        r.text:SetWidth(250); r.text:SetJustifyH("LEFT"); r.text:SetWordWrap(false)
-        r.up, r.down = button(f, "", 46, 20), button(f, "", 46, 20)
-        for _, b in ipairs({ r.up, r.down }) do
-            b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
-            Tips.Attach(b, tooltipOf(b))
-        end
+        r.text:SetWidth(CW - 110); r.text:SetJustifyH("LEFT"); r.text:SetWordWrap(false)
+        r.up, r.down = button(f, "", 48, 20), button(f, "", 48, 20)
+        onClick(r.up); onClick(r.down)
         f.rankRows[i] = r
     end
 
     -- your turn
     f.turnButtons = {}
     for i = 1, 7 do
-        local b = button(f, "", 66, 22)
-        b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
-        Tips.Attach(b, tooltipOf(b))
+        local b = button(f, "", 64, BTN_H)
+        onClick(b)
         f.turnButtons[i] = b
     end
     -- Who gets a gift: chosen from the group, never typed. (A box stays only as the fallback when the game has no dropdown.)
     local okDrop, drop = pcall(CreateFrame, "DropdownButton", nil, f, "WowStyle1DropdownTemplate")
     if okDrop and drop and drop.SetupMenu then
-        drop:SetWidth(136)
+        drop:SetWidth(140)
         drop:SetDefaultText("Choose a player")
         drop:SetupMenu(function(_, root)
             if root.SetScrollMode then root:SetScrollMode(260) end
@@ -261,27 +279,28 @@ function M.Build(ui)
     f.recipient:SetSize(110, 20); f.recipient:SetAutoFocus(false)
 
     -- the Master Looter's strip (only the Master Looter's window has it) and the way in
-    f.mlLabel = text("GameFontHighlightSmall", 120)
+    f.mlLabel = text("GameFontNormalSmall", CW, "LEFT", false)
     f.mlLabel:SetText("Master Looter")
     f.mlButtons = {}
     for i = 1, 4 do
-        local b = button(f, "", 96, 22)
-        b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
-        Tips.Attach(b, tooltipOf(b))
+        local b = button(f, "", BTN4, BTN_H)
+        onClick(b)
         f.mlButtons[i] = b
     end
-    f.startButton = button(f, "Start from the loot window", 190, 22)
+    f.startButton = button(f, "Start from the loot window", 190, BTN_H)
     f.startButton:SetScript("OnClick", function() ui:Command("loot") end)
     Tips.Attach(f.startButton, "start")
 
     -- practice only
-    f.nextBoss = button(f, "Next boss", 160, 22)
+    f.practiceLabel = text("GameFontNormalSmall", CW, "LEFT", false)
+    f.practiceLabel:SetText("Practice")
+    f.nextBoss = button(f, "Next boss", 168, BTN_H)
     f.nextBoss:SetScript("OnClick", function() ui:PracticeKill() end)
     Tips.Attach(f.nextBoss, "kill")
-    f.handOut = button(f, "Hand out the loot", 130, 22)
+    f.handOut = button(f, "Hand out the loot", 120, BTN_H)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
     Tips.Attach(f.handOut, "handout")
-    f.wait = button(f, "Wait 10 s", 76, 22)
+    f.wait = button(f, "Wait 10 s", 80, BTN_H)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
     Tips.Attach(f.wait, "wait")
 
@@ -307,44 +326,48 @@ function M.Refresh(f, ctx, ui)
     m.practice = practice
     local v = LootView.Build(m)
     local layout, want = {}, {}
-    local y = -30
-    local function put(el, x, h, w)
-        layout[#layout + 1] = { el, x, y }
-        want[el] = true
-        if h then y = y - h end
+    local y = -32 -- just under the title bar
+
+    local function place(el, x) layout[#layout + 1] = { el, x, y }; want[el] = true end
+    local dividers = 0
+    local function divider()
+        dividers = dividers + 1
+        local d = f.dividers[dividers]
+        if not d then return end
+        y = y - 4
+        place(d, PAD)
+        y = y - 1 - GAP
     end
 
     if practice then
         f.practiceText:SetText("|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r")
-        put(f.practiceText, 16, 14)
+        place(f.practiceText, PAD); y = y - 14 - 4
     end
 
     if not v.visible then
         f.banner:SetText(practice and (v.night and v.night.nextBoss and ("No loot yet. Next boss: " .. v.night.nextBoss .. ((v.night.held or 0) > 0 and (".  Held loot: " .. v.night.held) or "")) or "No loot yet.")
             or "No loot session is running. A session starts when the Master Looter opens the loot window on a boss and starts it.")
-        put(f.banner, 16, 40)
-        if not practice then put(f.startButton, 16, 30) end
+        place(f.banner, PAD); y = y - textH(f.banner, 14) - GAP
+        if not practice then place(f.startButton, PAD); y = y - BTN_H - GAP end
     else
-        -- timer, and the line under it
+        -- the clock and the count: a bar, then progress on the left and time and your place on the right
         if v.timer then
             f.bar:SetValue(v.timer.fraction or 1)
             if f.bar.SetStatusBarColor then
                 if v.timer.urgent then f.bar:SetStatusBarColor(1, 0.6, 0.1) else f.bar:SetStatusBarColor(0.9, 0.75, 0.2) end
             end
-            put(f.bar, 18, 12)
+            place(f.bar, PAD); y = y - 8 - 4
         end
         f.meta:SetText(v.progress or v.subtitle or "")
         f.metaRight:SetText((v.timer and (v.timer.seconds .. "s") or "") .. ((v.timer and v.place) and "   " or "") .. (v.place and ("Your place: " .. v.place) or ""))
-        layout[#layout + 1] = { f.meta, 16, y }; want[f.meta] = true
-        layout[#layout + 1] = { f.metaRight, WIDTH - 16 - 170, y }; want[f.metaRight] = true
-        y = y - 18
+        place(f.meta, PAD); place(f.metaRight, PAD + CW - 170); y = y - 14 - GAP
 
         -- what to do now: your turn, or what is happening
         if v.turn then
             local t = v.turn
             f.turnText:SetText(t.text .. (t.itemLink and ("  " .. UILoot.Display(t.itemLink, nil)) or ""))
-            put(f.turnText, 16, 36)
-            local x = 16
+            place(f.turnText, PAD); y = y - textH(f.turnText, 14) - 6
+            local x = PAD
             local needDrop = (t.kind == "recipient" or t.kind == "salvage") and not t.noTargets
             if needDrop then
                 -- the choices are those who can have this item; drop a choice that is no longer on offer, and rebuild the menu when the list changes
@@ -356,12 +379,12 @@ function M.Refresh(f, ctx, ui)
                 f.giftTargets = names
                 if f.targetsShown ~= listKey then f.targetsShown = listKey; f.recipientShown = nil end
                 local el = f.drop or f.recipient
-                layout[#layout + 1] = { el, f.drop and 12 or 20, y - (f.drop and 0 or 2) }; want[el] = true
+                layout[#layout + 1] = { el, f.drop and (PAD - 4) or PAD + 4, y - (f.drop and 0 or 2) }; want[el] = true
                 if f.drop then
                     local key = tostring(f.recipientPick)
                     if f.recipientShown ~= key then f.recipientShown = key; f.drop:GenerateMenu() end
                 end
-                x = 160
+                x = PAD + 148
             end
             local n = 0
             for _, b in ipairs(t.buttons) do
@@ -370,116 +393,121 @@ function M.Refresh(f, ctx, ui)
                 if tb then
                     local label = b.key == "pick" and ("Pick " .. (b.item or "")) or b.label
                     setup(tb, b, label)
-                    tb:SetWidth(b.key == "claimgift" and 100 or 62)
+                    tb:SetWidth(b.key == "claimgift" and 104 or 64)
                     if b.needsTarget then
                         local picked = f.drop and f.recipientPick or (f.recipient:GetText() or ""):match("%S")
                         if not picked and tb.SetEnabled then tb:SetEnabled(false); tb.view = setmetatable({ enabled = false, why = "Choose who gets it first." }, { __index = b }) end
                     end
                     layout[#layout + 1] = { tb, x, y }; want[tb] = true
-                    x = x + tb:GetWidth() + 4
+                    x = x + tb:GetWidth() + GAP
                 end
             end
-            y = y - 30
+            y = y - BTN_H - GAP
         elseif v.banner then
             f.banner:SetText(v.banner.segments and M.Rich(v.banner.segments) or v.banner.text)
-            put(f.banner, 16, 34)
+            place(f.banner, PAD); y = y - textH(f.banner, 14) - GAP
         end
 
         -- your order, where you want several items of one kind
-        local pi, ri = 0, 0
-        for _, panel in ipairs(v.rankings or {}) do
-            pi = pi + 1
-            local title = f.rankTitles[pi]
-            if title then
-                title:SetText(panel.title .. (panel.complete and "  |cff40ff40(set)|r" or ""))
-                put(title, 16, 16)
-                for pos, it in ipairs(panel.items) do
-                    ri = ri + 1
-                    local r = f.rankRows[ri]
-                    if r then
-                        r.text:SetText(("%d. %s"):format(pos, UILoot.Display(it.link, it.tip)))
-                        setup(r.up, it.up, "Up"); setup(r.down, it.down, "Down")
-                        layout[#layout + 1] = { r.text, 16, y }; want[r.text] = true
-                        layout[#layout + 1] = { r.up, 276, y + 2 }; want[r.up] = true
-                        layout[#layout + 1] = { r.down, 326, y + 2 }; want[r.down] = true
-                        y = y - 22
+        if v.rankings and #v.rankings > 0 then
+            divider()
+            local pi, ri = 0, 0
+            for _, panel in ipairs(v.rankings) do
+                pi = pi + 1
+                local title, c = f.rankTitles[pi], f.rankConfirms[pi]
+                if title and c then
+                    title:SetText(panel.title .. (panel.complete and "  |cff40ff40(set)|r" or ""))
+                    setup(c, panel.confirm, panel.confirm.label)
+                    layout[#layout + 1] = { title, PAD, y - 4 }; want[title] = true
+                    layout[#layout + 1] = { c, PAD + CW - 110, y }; want[c] = true
+                    y = y - BTN_H - 4
+                    for pos, it in ipairs(panel.items) do
+                        ri = ri + 1
+                        local r = f.rankRows[ri]
+                        if r then
+                            r.text:SetText(("%d. %s"):format(pos, UILoot.Display(it.link, it.tip)))
+                            setup(r.up, it.up, "Up"); setup(r.down, it.down, "Down")
+                            layout[#layout + 1] = { r.text, PAD, y - 2 }; want[r.text] = true
+                            layout[#layout + 1] = { r.up, PAD + CW - 104, y }; want[r.up] = true
+                            layout[#layout + 1] = { r.down, PAD + CW - 48, y }; want[r.down] = true
+                            y = y - 24
+                        end
                     end
+                    y = y - GAP
                 end
-                local c = f.rankConfirms[pi]
-                setup(c, panel.confirm, panel.confirm.label)
-                layout[#layout + 1] = { c, 16, y }; want[c] = true
-                y = y - 28
             end
         end
 
-        -- the items
+        -- the items: the name and, right-aligned on the same line, what you answered; then the choices across the full width
+        if #v.rows > 0 then divider() end
         for i = 1, MAX do
             local row, vr = f.rows[i], v.rows[i]
             if vr then
                 row.id, row.tip = vr.id, vr.tip
+                local top = y
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
-                if vr.state == "awarded" and vr.mineWon then label = label .. "   |cff40ff40(yours)|r" end
                 row.text:SetText(label)
+                place(row.text, PAD); place(row.hit, PAD)
+                local status = vr.answer and (TICK .. vr.answer) or (vr.mineWon and (TICK .. "Yours")) or ""
+                row.status:SetText(status)
+                if status ~= "" then layout[#layout + 1] = { row.status, PAD + CW - 152, y - 2 }; want[row.status] = true end
+                y = y - 18 - 4
+                local hasButtons = #vr.buttons > 0
+                if hasButtons then
+                    for j = 1, 4 do
+                        local vb, b = vr.buttons[j], row.buttons[j]
+                        if vb then
+                            setup(b, vb, vb.label)
+                            layout[#layout + 1] = { b, PAD + (j - 1) * (BTN4 + GAP), y }; want[b] = true
+                        end
+                    end
+                    y = y - BTN_H
+                    if vr.warn then
+                        row.note:SetText("|cffffaa33" .. vr.warn .. "|r")
+                        y = y - 4; place(row.note, PAD); y = y - textH(row.note, 12)
+                    end
+                else
+                    row.note:SetText((vr.segments and M.Rich(vr.segments)) or vr.note or "")
+                    place(row.note, PAD); y = y - textH(row.note, 12)
+                end
+                local bottom = y - 6
                 -- an answered item (or one you won) has the selected-row band behind it, like a selected row in the game's lists
                 if vr.state == "answered" or vr.mineWon then
-                    layout[#layout + 1] = { row.band, 10, y + 4 }; want[row.band] = true
+                    row.band:SetSize(WIDTH - 2 * (PAD - 8), (top + 4) - bottom)
+                    layout[#layout + 1] = { row.band, PAD - 8, top + 4 }; want[row.band] = true
                 end
-                layout[#layout + 1] = { row.text, 16, y }; layout[#layout + 1] = { row.hit, 16, y }
-                want[row.text] = true; want[row.hit] = true
-                local hasButtons = #vr.buttons > 0
-                for j = 1, 4 do
-                    local vb = vr.buttons[j]
-                    local b = row.buttons[j]
-                    if vb then
-                        setup(b, vb, vb.label)
-                        layout[#layout + 1] = { b, 16 + (j - 1) * 74, y - 17 }; want[b] = true
-                    end
-                end
-                row.note:SetText(vr.warn and ("|cffffaa33" .. vr.warn .. "|r") or (vr.segments and M.Rich(vr.segments)) or vr.note or "")
-                local ticked = vr.state == "answered" or vr.mineWon
-                local noteX = hasButtons and (16 + 300) or 16
-                if ticked then
-                    layout[#layout + 1] = { row.tick, noteX, hasButtons and (y - 20) or (y - 18) }; want[row.tick] = true
-                    noteX = noteX + 16
-                end
-                row.note:SetWidth((hasButtons and (WIDTH - 36 - 300) or (WIDTH - 36)) - (ticked and 16 or 0))
-                layout[#layout + 1] = { row.note, noteX, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
-                y = y - ROW
+                y = bottom - 4
             end
         end
         if (v.hidden or 0) > 0 then
             f.more:SetText(("(and %d more items: use the need/off/pass commands for them)"):format(v.hidden))
-            put(f.more, 16, 16)
+            place(f.more, PAD); y = y - 14 - GAP
         end
 
         -- the Master Looter's strip
         if v.ml then
-            y = y - 4
-            layout[#layout + 1] = { f.mlLabel, 16, y }; want[f.mlLabel] = true
-            y = y - 14
+            divider()
+            place(f.mlLabel, PAD); y = y - 14 - 4
             for i, b in ipairs(v.ml.buttons) do
                 local mb = f.mlButtons[i]
                 setup(mb, b, b.label)
-                layout[#layout + 1] = { mb, 16 + (i - 1) * 100, y }; want[mb] = true
+                layout[#layout + 1] = { mb, PAD + (i - 1) * (BTN4 + GAP), y }; want[mb] = true
             end
-            y = y - 30
+            y = y - BTN_H - GAP
         end
     end
 
     if practice then
-        y = y - 4
-        layout[#layout + 1] = { f.nextBoss, 16, y }; want[f.nextBoss] = true
+        divider()
+        place(f.practiceLabel, PAD); y = y - 14 - 4
+        place(f.nextBoss, PAD)
         f.nextBoss:SetText(m.night and m.night.nextBoss and ("Kill " .. m.night.nextBoss) or "No more bosses")
-        local x = 16 + 164
-        if m.night and (m.night.held or 0) > 0 then layout[#layout + 1] = { f.handOut, x, y }; want[f.handOut] = true; x = x + 134 end
+        local x = PAD + 168 + GAP
+        if m.night and (m.night.held or 0) > 0 then layout[#layout + 1] = { f.handOut, x, y }; want[f.handOut] = true; x = x + 120 + GAP end
         layout[#layout + 1] = { f.wait, x, y }; want[f.wait] = true
-        y = y - 30
-    elseif not v.visible then
-        -- (the start button was placed above)
-    elseif v.state == "result" or v.state == "cancelled" then
-        y = y - 4
-        layout[#layout + 1] = { f.startButton, 16, y }; want[f.startButton] = true
-        y = y - 30
+        y = y - BTN_H - GAP
+    elseif v.visible and (v.state == "result" or v.state == "cancelled") then
+        place(f.startButton, PAD); y = y - BTN_H - GAP
     end
 
     -- apply: show what this state shows, hide the rest, and move things only when the layout changed
@@ -492,17 +520,19 @@ function M.Refresh(f, ctx, ui)
             l[1]:ClearAllPoints()
             l[1]:SetPoint("TOPLEFT", f, "TOPLEFT", l[2], l[3])
         end
-        f:SetHeight(math.max(90, -y + 16))
+        f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.practiceText, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.recipient }
+    local everything = { f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
+    for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end
     for _, t in ipairs(f.rankTitles) do everything[#everything + 1] = t end
     for _, c in ipairs(f.rankConfirms) do everything[#everything + 1] = c end
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
-        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.note; everything[#everything + 1] = r.band; everything[#everything + 1] = r.tick
+        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.status
+        everything[#everything + 1] = r.note; everything[#everything + 1] = r.band
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
     end
     -- A button that is not drawn this time (a new round, a finished session) is cleared, so what was chosen last round never shows on it.

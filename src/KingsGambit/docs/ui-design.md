@@ -180,6 +180,18 @@ Small, optional, and each reachable another way:
 - The timer is a bar plus seconds; it turns amber under ten seconds, and never flashes.
 - Motion is minimal: a short highlight when your turn begins, a fade at the end. No bounce.
 
+### Layout rules (applied to the Loot window, 2026-11-06)
+
+A window that works but looks cramped fails the "professional" bar, so these hold for every window we build:
+
+1. **One grid.** A 16 px margin all round, an 8 px unit of spacing, one content width, and widths that divide it (four equal buttons across a row and across the Master Looter's strip). Nothing is placed by eye.
+2. **Heights follow the text.** A wrapped line is measured, not guessed, so a message that runs to three lines pushes things down instead of overlapping them.
+3. **Proximity and grouping.** What belongs together sits together, groups are separated by thin dividers and a small heading (the turn, your order, the items, the Master Looter, practice), and the space between groups is larger than the space within one.
+4. **Hierarchy.** The item (what is being decided) is the most prominent; status and counts are small and muted; one short sentence says what to do now (long explanations live in tooltips).
+5. **Alignment.** Left edges line up down the window; a status that belongs to an item is right-aligned on the item's own line (name left, what you answered right, the tick set directly against its text), so the eye reads name, status, then choices. No narrow side columns where text has to wrap.
+6. **Consistent controls.** Buttons in a row are one size; the primary action of a group is in the same place every time (Confirm on the right of its heading).
+7. **State is shown by the game's own idioms** (a selected-row band, a toggle button held pressed in), never by a color change of text alone, and a control that isn't drawn is cleared so nothing carries over.
+
 ## 7. How the website simulator stays the same as the game
 
 The rules are already shared: the page runs the addon's real engine files. The window can be shared at the level that matters most by
