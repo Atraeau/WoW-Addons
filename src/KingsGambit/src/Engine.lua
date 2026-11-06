@@ -268,7 +268,9 @@ end
 -- that is the guild master, who is the only one allowed to (see Commands).
 function Engine:CreateList(listId, name)
     if not self.store.id then
-        local g, gerr = self:Genesis("Guild ledger")
+        -- the ledger is the guild's: it takes the guild's name when the game says it
+        local guild = self.client.guildName and self.client:guildName()
+        local g, gerr = self:Genesis(guild or "Guild ledger")
         if not g then return nil, gerr end
     end
     if self.view.lists[listId] then return nil, "exists" end

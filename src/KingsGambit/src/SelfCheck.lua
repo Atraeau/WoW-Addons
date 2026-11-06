@@ -108,7 +108,9 @@ function M.Run(client)
                 Base64Variant = dumpEnum(E.Enum and E.Enum.Base64Variant),
             },
         }
-        client:storage().account.selfcheck = saved
+        local st = client:storage()
+        local target = st.shared or st.account -- (the whole account's: it describes the game, not a ledger)
+        target.selfcheck = saved
         for _, r in ipairs(results) do
             client:print((r.ok and "|cff3fb950ok|r   " or "|cfff85149FAIL|r ") .. r.name .. "  " .. tostring(r.detail))
         end

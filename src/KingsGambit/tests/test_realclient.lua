@@ -120,7 +120,9 @@ test("identity: first and last name, the fullest name wins, and the surname sepa
     eq(c5:me(), "Coreander_Shoeberry", "the surname comes from the second value, so the identity is the whole name")
     eq(c5:normalize("Coreander-Shoeberry"), "Coreander_Shoeberry", "chat names (First-Last) read the same")
     local probe = c5:nameProbe()
-    eq(probe[#probe], "identity = Coreander_Shoeberry")
+    local found
+    for _, l in ipairs(probe) do if l == "identity = Coreander_Shoeberry" then found = true end end
+    assert(found, table.concat(probe, " | "))
 end)
 test("the probe prints what the game says about names, for the in-game field test", function()
     local c = newClient(function(E)
@@ -318,7 +320,8 @@ end)
 test("storage hands back the SavedVariables tables", function()
     local c, E = newClient()
     local s = c:storage(); s.account.x = 1
-    eq(E.KingsGambitDB.x, 1); assert(E.KingsGambitCharDB.ui)
+    local _, world = next(E.KingsGambitDB.worlds)
+    eq(world.x, 1, "the ledger store is this world's, inside the account's file"); assert(s.shared == E.KingsGambitDB); assert(E.KingsGambitCharDB.ui)
 end)
 
 H.section("RealClient: the raid leader and setting the loot method")
@@ -398,4 +401,47 @@ test("tradeableItems reads the loot-trade time from a bound item's tooltip, soon
     eq(items[1].link, "|Hitem:1|h[Soon]|h"); eq(items[1].seconds, 12 * 60)
     eq(items[2].seconds, 3600 + 59 * 60)
     eq(items[3].link, "|Hitem:3|h[Odd]|h"); eq(items[3].seconds, nil, "an unreadable time is nil, and sorts last")
+end)
+
+test("a ledger belongs to a world: another ruleset or faction gets its own store, the same one shares, and the self-check stays account-wide", function()
+    local function client(mode, faction, db, guild)
+        return newClient(function(E)
+            E.C_GameRules = { GetCurrentGameModeRecordID = function() return mode end }
+            E.UnitFactionGroup = function() return faction end
+            E.IsInGuild = function() return guild ~= nil end
+            E.GetGuildInfo = function() return guild end
+            E.KingsGambitDB = db
+        end)
+    end
+    local db = {}
+    local alliancePve = client(1, "Alliance", db):storage()
+    local hordePvp = client(3, "Horde", db):storage()
+    local another = client(1, "Alliance", db):storage()
+    assert(alliancePve.account ~= hordePvp.account, "a different ruleset and faction has its own ledger store")
+    assert(alliancePve.account == another.account, "the same world shares one")
+    assert(alliancePve.shared == db and hordePvp.shared == db, "the account-wide store is common")
+    alliancePve.account.ledger = { chains = { x = {} } }
+    eq(hordePvp.account.ledger, nil, "nothing leaks across")
+    eq(alliancePve.world, "mode1-Alliance-solo:Raidlead", "no guild: a ledger of one's own"); eq(hordePvp.world, "mode3-Horde-solo:Raidlead")
+    -- the ruleset alone, or the faction alone, also separates worlds
+    assert(client(1, "Horde", db):storage().account ~= alliancePve.account)
+    assert(client(3, "Alliance", db):storage().account ~= alliancePve.account)
+    -- the probe says which world the ledger belongs to
+    local text = table.concat(client(1, "Alliance", db):nameProbe(), "\n")
+    assert(text:find("ledger belongs to mode1-Alliance-solo:Raidlead", 1, true), text)
+    -- guilds: each is its own ledger, even in the same world; the name's case doesn't matter; no guild is not a guild
+    local a = client(1, "Alliance", db, "The Rooks"):storage()
+    local b = client(1, "Alliance", db, "Other Guild"):storage()
+    local a2 = client(1, "Alliance", db, "the rooks"):storage()
+    assert(a.account ~= b.account, "two guilds in one world share nothing")
+    assert(a.account == a2.account, "the same guild, whatever the capitals")
+    assert(a.account ~= alliancePve.account, "a guild's ledger is not a guildless character's")
+    eq(a.world, "mode1-Alliance-guild:the rooks")
+    -- the guild's name arrives late: until it does the client says the guild isn't known yet
+    local late = newClient(function(E)
+        E.IsInGuild = function() return true end
+        E.GetGuildInfo = function() return nil end
+    end)
+    eq(late:guildKnown(), false); eq(late:guildName(), nil)
+    eq(client(1, "Alliance", db, "The Rooks"):guildKnown(), true); eq(client(1, "Alliance", db, nil):guildKnown(), true, "not in a guild is settled")
 end)

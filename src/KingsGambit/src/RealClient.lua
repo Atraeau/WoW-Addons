@@ -135,6 +135,7 @@ function M.New(opts)
 
     function c:normalize(name) return normalize(name) end
     -- What the game says about names, raw, for the in-game self-check (`/gambit check`): it is how the real names get confirmed.
+    local worldParts, worldKey -- (defined with the storage, below)
     function c:nameProbe()
         local out = {}
         for _, fn in ipairs(NAME_SOURCES) do
@@ -155,6 +156,8 @@ function M.New(opts)
             out[#out + 1] = "learned separator(s): " .. (#seps > 0 and ("%q"):format(table.concat(seps, " | ")) or "none")
         end
         out[#out + 1] = "identity = " .. tostring(self:me())
+        local mode, faction = worldParts()
+        out[#out + 1] = ("ledger belongs to %s (game mode %s, faction %s, guild %s)"):format(worldKey(), tostring(mode), tostring(faction), tostring(self:guildName()))
         return out
     end
     -- What the game says about addon messages, raw, for the self-check: whether outgoing ones are restricted (the API documents this as decided realm by
@@ -643,10 +646,54 @@ function M.New(opts)
     end
 
     ---------------------------------------------------------------- environment and storage
+    -- Which world a character plays in: the game's mode (its ruleset: a PvE or a PvP server, for one), its faction and its guild. A ledger belongs to one guild
+    -- in one world, never to the whole account: an Alliance character on a PvE ruleset and a Horde one on a PvP ruleset, or two guilds, share nothing, though they
+    -- share the SavedVariables file.
+    -- FIELD: confirm what C_GameRules.GetCurrentGameModeRecordID returns for each of the rulesets (and that it is there at login).
+    function worldParts()
+        local mode, faction
+        local rules = E.C_GameRules
+        if rules and rules.GetCurrentGameModeRecordID then
+            local ok, id = pcall(rules.GetCurrentGameModeRecordID)
+            if ok and id ~= nil then mode = id end
+        end
+        if E.UnitFactionGroup then
+            local ok, f = pcall(E.UnitFactionGroup, "player")
+            if ok and type(f) == "string" and f ~= "" then faction = f end
+        end
+        return mode, faction
+    end
+    -- The guild this character belongs to, or nil (not in one, or its name hasn't loaded yet: see guildKnown).
+    function c:guildName()
+        if not (E.IsInGuild and E.IsInGuild()) then return nil end
+        if not E.GetGuildInfo then return nil end
+        local ok, name = pcall(E.GetGuildInfo, "player")
+        name = ok and safe(name)
+        if type(name) == "string" and name ~= "" then return name end
+    end
+    -- Is the guild settled: not in one, or its name has loaded? (It arrives a moment after login.)
+    function c:guildKnown()
+        if not (E.IsInGuild and E.IsInGuild()) then return true end
+        return c:guildName() ~= nil
+    end
+    -- A ledger belongs to a GUILD (within a world): a character in no guild has a ledger of their own, so it never mixes with anyone else's.
+    function worldKey()
+        local mode, faction = worldParts()
+        local guild = c:guildName()
+        local scope = guild and ("guild:" .. guild:lower()) or ("solo:" .. tostring(c:me()))
+        return ("mode%s-%s-%s"):format(tostring(mode or "?"), tostring(faction or "?"), scope)
+    end
+    function c:world() return worldKey() end
+
+    -- `account` is this world's store (the ledger, who writes which chain, requests, orphans); `shared` is the whole account's (the self-check, settings).
     function c:storage()
         E.KingsGambitDB = E.KingsGambitDB or {}
         E.KingsGambitCharDB = E.KingsGambitCharDB or { ui = {} }
-        return { account = E.KingsGambitDB, char = E.KingsGambitCharDB }
+        local db = E.KingsGambitDB
+        db.worlds = db.worlds or {}
+        local key = worldKey()
+        db.worlds[key] = db.worlds[key] or {}
+        return { account = db.worlds[key], shared = db, char = E.KingsGambitCharDB, world = key }
     end
 
     function c:playSound(kind)

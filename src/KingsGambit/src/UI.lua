@@ -295,7 +295,9 @@ function M:Refresh()
     local w = self.window
     if not (w and w:IsShown()) then return end
     local ctx = M.Ctx()
-    w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r" or "")
+    local guild = (not M.practice) and ctx.client.guildName and ctx.client:guildName()
+    w.subtitle:SetText(M.practice and "|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r"
+        or (guild and ("|cffaaaaaaLedger of the guild |r" .. guild) or "|cffaaaaaaYour own ledger (you are not in a guild)|r"))
     for _, s in ipairs(GuildBook.SECTIONS) do
         if w.nav and w.nav[s.id] then LootWindow.Mark(w.nav[s.id], M.tab == s.id) end
     end

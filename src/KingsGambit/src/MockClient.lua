@@ -127,6 +127,9 @@ function M.New(opts)
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
     function h:inRaid() return S.inRaid and #S.roster > 0 end
+    -- The guild this character belongs to (a name), or nil.
+    function h:guildName() return S.guildName end
+    function h:setGuildName(name) S.guildName = name end
     -- Inside an instance (a raid or dungeon) rather than the open world: a simulated raid is, unless a test says otherwise.
     function h:inInstance() return S.inInstance ~= false end
     function h:setInInstance(inside) S.inInstance = inside and true or false end

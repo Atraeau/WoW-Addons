@@ -651,3 +651,14 @@ test("practice can't start in a raid group, with a real session running or with 
     UI.practice = nil
     SK.client, SK.engine, SK.host, SK.player = old.client, old.engine, old.host, old.player
 end)
+
+test("a new ledger is founded under the guild's name, and under a plain name for someone in no guild", function()
+    local MockClient, Engine = SK.modules.MockClient, SK.modules.Engine
+    local c = MockClient.New({ name = "Kirk" }); c:setGuildName("The Rooks")
+    local e = Engine.New(c); assert(e:CreateList("main", "Main"))
+    local genesis
+    for _, ev in ipairs(e.store.chains[next(e.store.chains)].events) do if ev.type == "Genesis" then genesis = ev end end
+    eq(genesis.data.name, "The Rooks")
+    local solo = Engine.New(MockClient.New({ name = "Kirk" })); assert(solo:CreateList("main", "Main"))
+    for _, ch in pairs(solo.store.chains) do for _, ev in ipairs(ch.events) do if ev.type == "Genesis" then eq(ev.data.name, "Guild ledger") end end end
+end)
