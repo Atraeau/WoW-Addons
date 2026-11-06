@@ -281,6 +281,18 @@ end
 M.GOOD, M.OK = 0.7, 0.35 -- share of the best spec's score
 M.USEFUL = 0.15 -- the least share of the best spec's score that still makes a class eligible by default
 
+-- What every item of its kind has, so it says nothing about who the item is for: armor, a weapon's damage per second, a shield's block value.
+local BASELINE = { armor = true, dps = true, block = true }
+
+-- Does the item have any stat that could make it more some classes' than others? (A token or other step on the way is judged by what it becomes.)
+function M.HasAffinity(item)
+    if item.into and #item.into > 0 then return true end
+    for k, v in pairs(item.stats or {}) do
+        if not BASELINE[k] and v and v ~= 0 then return true end
+    end
+    return false
+end
+
 -- Does the item have stats worth having for a class? This is the default for who may bid, beside "can they wear it":
 -- a warlock can wield a sword, but a sword of strength and agility does nothing for them. False only when the
 -- heuristic can judge the item (some spec values it) and no spec of the class gets even USEFUL of the best spec's
@@ -290,6 +302,10 @@ M.USEFUL = 0.15 -- the least share of the best spec's score that still makes a c
 -- who can use it: the officer's call is a suggestion, and a guild rule (`eligible`) is how to restrict or open it.
 function M.Worthwhile(item, class)
     if item.suits or not M.SPECS[class] then return true end
+    -- An item with no stats of its own has no affinity: a plain armor piece (only its armor), a plain weapon (only its damage), a shield (armor and block),
+    -- a shirt, a bag, a trinket with only an effect. What it is made of says who can wear it (CanUse), not who it is "for". Only stats and effects that
+    -- some specs value and others don't give an item an affinity.
+    if not M.HasAffinity(item) then return true end
     if item.best == nil then item.best = M.Best(item) end
     if item.best <= 0 then return true end
     for _, s in ipairs(M.SPECS[class]) do

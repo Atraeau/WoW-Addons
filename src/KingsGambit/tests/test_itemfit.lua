@@ -347,3 +347,29 @@ test("the text interface doesn't offer a bid the session would refuse: it says w
     cmd.handle("gift 1 Wara"); eq(host.session.bids["Pria"][1].kind, "gift", "a priest may gift the plate to the warrior")
     cmd.handle("pass 1"); eq(host.session.bids["Pria"][1].kind, "pass")
 end)
+
+H.section("Item fit: an item with no stats of its own has no class affinity")
+test("plain gear (only armor, only weapon damage, only a shield's block) is open to every class that can use it", function()
+    local ItemFit = SK.modules.ItemFit
+    local ARMOR, WEAPON = 4, 2
+    -- white armor: only its armor value
+    local cloth = { class = ARMOR, subclass = 1, slot = "INVTYPE_CHEST", stats = { armor = 30 } }
+    local plate = { class = ARMOR, subclass = 4, slot = "INVTYPE_CHEST", stats = { armor = 400 } }
+    for _, c in ipairs(ItemFit.CLASSES) do
+        assert(ItemFit.Worthwhile(cloth, c), "plain cloth for " .. c)
+        if c == "WARRIOR" or c == "PALADIN" then assert(ItemFit.Worthwhile(plate, c), "plain plate for " .. c) end
+    end
+    -- but what the class can wear still holds
+    eq(select(1, ItemFit.CanUse(plate, "MAGE")), false, "a mage still can't wear plate")
+    -- a plain staff and a plain mace: only damage per second
+    local staff = { class = WEAPON, subclass = 10, slot = "INVTYPE_2HWEAPON", stats = { dps = 20 } }
+    for _, c in ipairs { "MAGE", "PRIEST", "WARLOCK", "DRUID", "WARRIOR", "SHAMAN", "HUNTER" } do assert(ItemFit.Worthwhile(staff, c), "plain staff for " .. c) end
+    -- a plain shield: armor and block value
+    local shield = { class = ARMOR, subclass = 6, slot = "INVTYPE_SHIELD", stats = { armor = 600, block = 30 } }
+    for _, c in ipairs { "WARRIOR", "PALADIN", "SHAMAN" } do assert(ItemFit.Worthwhile(shield, c), "plain shield for " .. c) end
+    -- with a real stat it has an affinity again
+    local sword = { class = WEAPON, subclass = 7, slot = "INVTYPE_WEAPON", stats = { str = 9, agi = 9, dps = 51.6 } }
+    eq(ItemFit.Worthwhile(sword, "WARLOCK"), false, "stats for others give it an affinity")
+    eq(ItemFit.HasAffinity(cloth), false); eq(ItemFit.HasAffinity(sword), true)
+    eq(ItemFit.HasAffinity({ stats = { armor = 5, sta = 2 } }), true, "even a little stamina is a stat")
+end)

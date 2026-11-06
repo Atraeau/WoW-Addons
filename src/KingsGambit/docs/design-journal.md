@@ -2025,6 +2025,16 @@ they start; a damaged saved position falls back to the default. The Loot window 
 options are still to come.) The Loot window sits in a higher layer than the main window (a live session is the time-critical thing and is never hidden behind the lists), and
 clicking either window raises it above others at its own level.
 
+### Fixed: an item with no stats of its own has no class affinity (2026-11-06)
+
+Plain white gear was being refused as "nothing on this helps your class": the stat check (`ItemFit.Worthwhile`) counted an item's armor value and a weapon's damage per second
+as stats that some specs value and others don't, and only feral bear druids weigh armor, so a plain chest piece with nothing but armor looked pointless to every other class, and
+a plain staff (damage only) to every caster. The rule is now: **an item has an affinity only if it has a stat other than the ones every item of its kind has** (armor, a weapon's
+damage per second, a shield's block value). An item with only those, and an item with no stats at all (a shirt, a bag, a trinket with only an effect), is open to every class that
+can wear or wield it; what an item is made of still says who can wear it (a mage can't wear plate), and a guild rule (`eligible`) still restricts or opens a particular item.
+Items with real stats keep the existing check unchanged (a warlock still isn't asked about a blade of strength and agility; even a little stamina counts as a stat).
+This is one rule in the engine, so the game and the web simulator both follow it.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later
