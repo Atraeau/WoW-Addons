@@ -81,7 +81,6 @@
   .lw-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
   .lw-row { padding: 8px 8px; margin: 0 -8px; border-top: 1px solid #3a3020; }
   .lw-row .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .lw-row .status { font-size: 12px; color: var(--text); white-space: nowrap; }
   .lw-row .btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 6px; }
   .lw-row .btns .lw-btn { width: 100%; min-width: 0; }
   .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -7108,12 +7107,6 @@ local function answerButtons(m, row)
     return out
 end
 
--- What the player answered, in as few words as fit beside the item's name.
-local function answerShort(row)
-    if row.mine == "gift" then return row.mineTo and ("Gift to " .. row.mineTo) or "Gift, name later" end
-    return ({ need = "Need", off = "Off-spec", pass = "Pass" })[row.mine]
-end
-
 local function answerText(row)
     if row.mine == "gift" then return "You: Gift" .. (row.mineTo and (" to " .. row.mineTo) or " (you'll choose who if you win)") end
     local word = ({ need = "Need", off = "Off-spec", pass = "Pass" })[row.mine]
@@ -7165,7 +7158,6 @@ function M.Build(m)
             row.state = r.mine and "answered" or "open"
             row.buttons = answerButtons(m, r)
             row.note = answerText(r)
-            row.answer = answerShort(r)
             if r.canBid == false then row.warn = WHY[r.whyNot] or "This isn't for your class." end
         elseif r.winner then
             -- who gets it: the winner, who it is given to if not the winner, which round, and where the winner falls on the list
@@ -8771,9 +8763,8 @@ end
       if (snap.token && (r.state === "open" || r.state === "answered"))
         extra.push('<button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>');
       // the same layout as the game window: the name with, right-aligned on its line, what you answered; then the choices in an equal grid
-      const status = r.answer ? esc(r.answer) : (r.mineWon ? "Yours" : "");
       const grid = r.buttons.length ? '<div class="btns">' + r.buttons.map((b) => lwButton(b)).join("") + "</div>" : "";
-      return '<div class="lw-row ' + r.state + '"><div class="head"><span class="iname">' + esc(r.link) + '</span><span class="status">' + status + "</span></div>" + grid +
+      return '<div class="lw-row ' + r.state + '"><div class="head"><span class="iname">' + esc(r.link) + '</span></div>' + grid +
         (!r.buttons.length && r.note ? '<div class="note">' + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
         (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:6px">' + extra.join(" ") + "</div>" : "") + "</div>";
     }).join("");

@@ -2124,7 +2124,7 @@ pushed, like a push-button toggle, and for other examples to follow. Searched in
 their window is open, and how the **Damage Meter** and **Edit Mode** buttons show what is selected: `SetButtonState("PUSHED", true)`. We already did that, but the game's pressed art is faint on its
 red buttons, so a chosen answer now also gets an **inset bevel** drawn on top (a darker body, a shadow along the top and left edges, a light edge along the bottom), which reads as "pressed in" at a
 glance and is shading, not a change of hue. The text never changes. The status on the item's line is plain text ("Gift, name later"), no mark. The web page does the same (an
-inset shadow, one pixel lower). Removing the bevel on un-choosing is part of the same reset that clears a button between rounds. **Then the label color change was dropped too** ("I don't know that we need to change the text color too"): the bevel alone carries the state, and the label keeps the game's own color, so there is nothing to restore either.
+inset shadow, one pixel lower). Removing the bevel on un-choosing is part of the same reset that clears a button between rounds. **Then the label color change was dropped too** ("I don't know that we need to change the text color too"): the bevel alone carries the state, and the label keeps the game's own color, so there is nothing to restore either. **And the echo was dropped:** the status text beside each item ("Off-spec", "Gift, name later", "Yours") repeated what the pressed button already says, so it is gone from the window, the page and the shared view; an item is now its name on its own line with the choices across the full width beneath it (rule 8, "Say a thing once", in the layout rules).
 
 ### Docs review: wording, flow and links (2026-11-04)
 

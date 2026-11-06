@@ -150,8 +150,8 @@ end
 ---------------------------------------------------------------- layout
 -- One grid for the whole window, so everything lines up: a 16 pixel margin all round, an 8 pixel unit of spacing, one content width, and widths that divide it
 -- (four equal buttons across a row, four across the Master Looter's strip). Heights follow the text (a wrapped line is measured, not guessed), so nothing
--- collides when a message runs to two or three lines. Related things are grouped under thin dividers; the status that belongs to an item is right-aligned on
--- the item's own line, so the eye reads name, then status, then the choices.
+-- collides when a message runs to two or three lines. Related things are grouped under thin dividers; an item is its name on its own line, then the choices across the full
+-- width, and the chosen one is shown by the button itself (held pushed in), never echoed in words.
 local PAD, GAP = 16, 8
 local CW = WIDTH - 2 * PAD          -- the content width (408)
 local BTN_H = 22
@@ -209,10 +209,10 @@ function M.Build(ui)
     for i = 1, MAX do
         local row = { }
         row.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        row.text:SetWidth(CW - 160); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
+        row.text:SetWidth(CW); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
         -- Hover for the item's tooltip; shift-click puts the link in chat, as anywhere in the game.
         row.hit = CreateFrame("Button", nil, f)
-        row.hit:SetSize(CW - 160, 16)
+        row.hit:SetSize(CW, 16)
         row.hit:SetScript("OnEnter", function(self)
             if row.tip and GameTooltip then
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); GameTooltip:SetHyperlink(row.tip); GameTooltip:Show()
@@ -225,7 +225,6 @@ function M.Build(ui)
             local full = get and select(2, get(row.tip)) or row.tip
             if HandleModifiedItemClick then HandleModifiedItemClick(full) end
         end)
-        row.status = text("GameFontHighlightSmall", 152, "RIGHT", false) -- what you answered, right-aligned on the item's own line
         row.note = text("GameFontHighlightSmall", CW, "LEFT", true)      -- a result, or why a choice is unavailable, under the item
         row.buttons = {}
         for j = 1, 4 do
@@ -446,9 +445,6 @@ function M.Refresh(f, ctx, ui)
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
-                local status = vr.answer or (vr.mineWon and "Yours") or ""
-                row.status:SetText(status)
-                if status ~= "" then layout[#layout + 1] = { row.status, PAD + CW - 152, y - 2 }; want[row.status] = true end
                 y = y - 18 - 4
                 local hasButtons = #vr.buttons > 0
                 if hasButtons then
@@ -523,7 +519,7 @@ function M.Refresh(f, ctx, ui)
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
-        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit; everything[#everything + 1] = r.status
+        everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit
         everything[#everything + 1] = r.note
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
     end

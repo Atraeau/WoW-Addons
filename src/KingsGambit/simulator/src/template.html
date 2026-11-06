@@ -81,7 +81,6 @@
   .lw-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
   .lw-row { padding: 8px 8px; margin: 0 -8px; border-top: 1px solid #3a3020; }
   .lw-row .head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .lw-row .status { font-size: 12px; color: var(--text); white-space: nowrap; }
   .lw-row .btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 6px; }
   .lw-row .btns .lw-btn { width: 100%; min-width: 0; }
   .lw-row .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -228,9 +227,8 @@
       if (snap.token && (r.state === "open" || r.state === "answered"))
         extra.push('<button class="lw-btn b-need" data-act="bid" data-a="' + r.id + '" data-b="needready" title="Need it, and you can turn it in (say so if your materials are in the bank)">Need, ready</button>');
       // the same layout as the game window: the name with, right-aligned on its line, what you answered; then the choices in an equal grid
-      const status = r.answer ? esc(r.answer) : (r.mineWon ? "Yours" : "");
       const grid = r.buttons.length ? '<div class="btns">' + r.buttons.map((b) => lwButton(b)).join("") + "</div>" : "";
-      return '<div class="lw-row ' + r.state + '"><div class="head"><span class="iname">' + esc(r.link) + '</span><span class="status">' + status + "</span></div>" + grid +
+      return '<div class="lw-row ' + r.state + '"><div class="head"><span class="iname">' + esc(r.link) + '</span></div>' + grid +
         (!r.buttons.length && r.note ? '<div class="note">' + (r.segments ? segsHtml(r.segments) : esc(r.note)) + "</div>" : "") +
         (r.warn ? '<div class="warn">' + esc(r.warn) + "</div>" : "") + (extra.length ? '<div class="row" style="margin-top:6px">' + extra.join(" ") + "</div>" : "") + "</div>";
     }).join("");
