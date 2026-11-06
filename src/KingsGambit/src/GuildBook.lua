@@ -7,11 +7,13 @@
 --   M.SECTIONS                            the navigation column, in order
 --   M.History(ctx, filter)                the ledger as readable sentences, newest first, filtered (the Ledger section)
 --   M.Detail(ctx, id)                     one entry as the raw record: kind, writer, time, id, chain and every field it carries
+--   M.Stats(ctx, listId)                  who held which place for how long, wins and last win, by replaying the list with timestamps
 --   M.Segments(text, people)              a sentence cut into plain words and people (a person carries their class color)
 --   M.Ago(now, ts)                        "3 days ago"
 local _, SK = ...
-local LootView, Identity
-local M = SK:NewModule("GuildBook", { "LootView", "Identity" }, function(d) LootView, Identity = d.LootView, d.Identity end)
+local LootView, Identity, Standings, Migrations
+local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migrations" },
+    function(d) LootView, Identity, Standings, Migrations = d.LootView, d.Identity, d.Standings, d.Migrations end)
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
 -- `gap` puts a space above its button: Admin is the guild master's and maintenance corner, kept apart from the everyday sections.
@@ -19,6 +21,7 @@ local M = SK:NewModule("GuildBook", { "LootView", "Identity" }, function(d) Loot
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "ledger", label = "Ledger", tip = "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
+    { id = "stats", label = "Stats", tip = "Who is at which place and for how long, who has won and when, from the record." },
     { id = "awards", label = "Awards", tip = "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased.",
         actions = { "award", "undo", "trade", "salvaged", "disenchanted" } },
     { id = "raids", label = "Raids", tip = "Open and close a raid, choose its Master Looter, its list and its disenchanter.",
@@ -44,7 +47,8 @@ end
 
 -- Which group of the record an entry belongs to, for the filter.
 -- "happened" (the default) is what happened to items, lists, rules and raids: it leaves out passes, which are the most common entries by far and say what
--- could have happened, not what did (they stay in the record, under "Passes" and "Everything").
+-- could have happened, not what did, and attendance (who was in a raid), which has its own place in Stats (both stay in the record, under their own
+-- filter and "Everything").
 M.KINDS = {
     { id = "happened", label = "What happened" },
     { id = "loot", label = "Loot" },
@@ -52,13 +56,14 @@ M.KINDS = {
     { id = "rules", label = "Rules" },
     { id = "raid", label = "Raids" },
     { id = "passes", label = "Passes" },
+    { id = "attendance", label = "Attendance" },
     { id = "all", label = "Everything" },
 }
 local KIND_OF = {
     Award = "loot", Disenchant = "loot", DisenchantResult = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
-    SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",
+    SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid", Attendance = "attendance",
 }
 -- Which group an entry belongs to. A pass is its own group, except one that records an outcome: a gift won but not given to anyone ("undecided") is what
 -- happened to the item.
@@ -152,7 +157,7 @@ local function valueText(v)
     return table.concat(parts, ", ")
 end
 
-local KIND_LABEL = { loot = "loot", list = "list change", rules = "rules", raid = "raid", passes = "pass" }
+local KIND_LABEL = { loot = "loot", list = "list change", rules = "rules", raid = "raid", passes = "pass", attendance = "attendance" }
 
 -- The item an entry is about, as something the game can show or dress a character in: an item link, or "item:ID" (an id with nothing else), or nil
 -- (a plain name has nothing to look up). What disenchanting gave belongs to the item that was disenchanted.
@@ -230,7 +235,7 @@ function M.History(ctx, filter)
         if ev.type == "Disenchant" then
             if results[ev.id] then shownEv = results[ev.id] else waiting = true end
         end
-        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k or (kind == "happened" and k ~= "passes")) then
+        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k or (kind == "happened" and k ~= "passes" and k ~= "attendance")) then
             local text = ctx.commands.describe(shownEv) .. (waiting and " (waiting for the result)" or "")
             ev = shownEv
             if not want or text:lower():find(want, 1, true) then
@@ -246,6 +251,172 @@ function M.History(ctx, filter)
     if out.total == 0 then
         out.empty = (#all == 0) and "Nothing has happened yet. Awards, moves and rule changes will appear here."
             or "Nothing matches. Clear the filter to see everything."
+    end
+    return out
+end
+
+---------------------------------------------------------------- stats: what the record already knows
+-- A length of time in words: "3 days", "2 hours", "45 minutes", "under a minute".
+function M.Span(seconds)
+    seconds = math.max(0, seconds or 0)
+    local function plural(n, unit) return ("%d %s%s"):format(n, unit, n == 1 and "" or "s") end
+    if seconds < 60 then return "under a minute" end
+    if seconds < 3600 then return plural(math.floor(seconds / 60), "minute") end
+    if seconds < 86400 then return plural(math.floor(seconds / 3600), "hour") end
+    return plural(math.floor(seconds / 86400), "day")
+end
+
+local statsCache = setmetatable({}, { __mode = "k" })
+
+-- Replay one list from the record, remembering for every player each place they held and from when to when. Cached until the ledger changes.
+local function replay(ctx, listId)
+    local engine = ctx.engine
+    local key = tostring(engine:Fingerprint()) .. "|" .. tostring(listId)
+    local cached = statsCache[engine]
+    if cached and cached.key == key then return cached.value end
+    local s = Standings.New()
+    local cur, hist, joined = {}, {}, {}
+    local function close(who, ts, left)
+        local c = cur[who]
+        hist[who] = hist[who] or {}
+        hist[who][#hist[who] + 1] = { place = c.place, from = c.from, to = ts, left = left or nil }
+        cur[who] = nil
+    end
+    local function sync(ts)
+        local present = {}
+        for i, who in ipairs(s.order) do
+            present[who] = true
+            local c = cur[who]
+            if not c then
+                cur[who] = { place = i, from = ts }
+                joined[who] = joined[who] or ts
+            elseif c.place ~= i then
+                close(who, ts)
+                cur[who] = { place = i, from = ts }
+            end
+        end
+        local gone = {}
+        for who in pairs(cur) do if not present[who] then gone[#gone + 1] = who end end
+        table.sort(gone)
+        for _, who in ipairs(gone) do close(who, ts, true) end
+    end
+    for _, ev in ipairs(engine:View().applied) do
+        if ev.list == listId then
+            local up = Migrations.Up(engine.rules, ev)
+            if up and Standings.Apply(s, up, engine.rules.handlers) then sync(ev.ts) end
+        end
+    end
+    local value = { state = s, cur = cur, hist = hist, joined = joined }
+    statsCache[engine] = { key = key, value = value }
+    return value
+end
+
+-- The list as a table of stats, in order: place, how long they have held it, wins, when they last won; a sentence or two about the whole list; and each
+-- player's earlier places (`M.PlaceHistory`). Times are from the entries' own timestamps, so they are the same for everyone with the same ledger.
+function M.Stats(ctx, listId)
+    local now = ctx.client:serverTime()
+    local r = replay(ctx, listId)
+    local att = M.Attendance(ctx, listId)
+    local out = { list = listId, rows = {}, total = #r.state.order, summary = {}, now = now, attendance = att }
+    local mostWins, waiting
+    for i, who in ipairs(r.state.order) do
+        local m, c = r.state.members[who], r.cur[who]
+        local row = { who = who, name = Identity.Display(who), class = m.class, place = i, since = c and c.from, wins = m.wins or 0, lastWin = m.lastWinTs,
+            joined = r.joined[who] }
+        row.heldText = c and M.Span(now - c.from) or ""
+        row.lastWinText = m.lastWinTs and (M.Ago(now, m.lastWinTs)) or "never"
+        local a = att.byPlayer[who]
+        row.raids, row.raidsText = a and a.attended or 0, att.total == 0 and "-" or ("%d/%d"):format(a and a.attended or 0, att.total)
+        out.rows[i] = row
+        if row.wins > 0 and (not mostWins or row.wins > mostWins.wins) then mostWins = row end
+        if row.wins == 0 and row.joined and (not waiting or row.joined < waiting.joined) then waiting = row end
+    end
+    local first = out.rows[1]
+    if first then out.summary[#out.summary + 1] = ("%s is first, and has been for %s."):format(first.name, first.heldText) end
+    if mostWins then out.summary[#out.summary + 1] = ("Most wins: %s (%d)."):format(mostWins.name, mostWins.wins) end
+    if waiting and waiting.joined then
+        out.summary[#out.summary + 1] = ("Waiting longest without a win: %s, on the list for %s."):format(waiting.name, M.Span(now - waiting.joined))
+    end
+    if #out.rows == 0 then out.summary[1] = "Nobody is on this list yet." end
+    out.hist, out.cur = r.hist, r.cur
+    return out
+end
+
+-- One player's places, newest first: { place, from, to (nil while they still hold it), left, text }.
+function M.PlaceHistory(stats, who)
+    local out = {}
+    local c = stats.cur[who]
+    if c then out[1] = { place = c.place, from = c.from, text = ("place %d for %s (now)"):format(c.place, M.Span(stats.now - c.from)) } end
+    local hist = stats.hist[who] or {}
+    for i = #hist, 1, -1 do
+        local h = hist[i]
+        out[#out + 1] = { place = h.place, from = h.from, to = h.to, left = h.left,
+            text = ("place %d for %s, until %s%s"):format(h.place, M.Span(h.to - h.from), M.Ago(stats.now, h.to), h.left and " (taken off the list)" or "") }
+    end
+    return out
+end
+
+---------------------------------------------------------------- attendance: who was in which raid, and for how long
+-- Every raid on this list that has attendance entries, with how long each player was in it: { total = raids, raids = { { id, start, finish, length,
+-- present = { [who] = seconds }, leftEarly = { [who] = true } } }, byPlayer = { [who] = { attended, seconds, length, percent, leftEarly } } }.
+-- A raid with no attendance entries (one from before they were written) isn't counted, so nobody is marked absent from it. A player who was there at
+-- some point attended; leaving before the raid ended is "left early".
+function M.Attendance(ctx, listId)
+    local engine = ctx.engine
+    local view = engine:View()
+    local now = ctx.client:serverTime()
+    local out = { total = 0, raids = {}, byPlayer = {} }
+    local ids = {}
+    for id, r in pairs(view.auth.raids) do
+        if engine:ListOfRaid(r) == listId and view.attendance[id] then ids[#ids + 1] = id end
+    end
+    table.sort(ids, function(a, b) return view.auth.raids[a].start < view.auth.raids[b].start end)
+    for _, id in ipairs(ids) do
+        local r = view.auth.raids[id]
+        local finish = r.ended or math.min(r.expires, now)
+        local raid = { id = id, start = r.start, finish = finish, length = math.max(finish - r.start, 1), present = {}, leftEarly = {} }
+        local since = {}
+        local function close(who, ts)
+            if since[who] then raid.present[who] = (raid.present[who] or 0) + math.max(0, math.min(ts, finish) - since[who]); since[who] = nil end
+        end
+        for _, ev in ipairs(view.attendance[id]) do
+            for _, who in ipairs(ev.data.joined or {}) do if not since[who] then since[who] = math.min(ev.ts, finish); raid.present[who] = raid.present[who] or 0 end end
+            for _, who in ipairs(ev.data.left or {}) do close(who, ev.ts) end
+        end
+        local stillThere = {}
+        for who in pairs(since) do stillThere[who] = true end
+        for who in pairs(stillThere) do close(who, finish) end
+        for who in pairs(raid.present) do if not stillThere[who] then raid.leftEarly[who] = true end end
+        out.total = out.total + 1
+        out.raids[#out.raids + 1] = raid
+        for who, secs in pairs(raid.present) do
+            local p = out.byPlayer[who]
+            if not p then p = { attended = 0, seconds = 0, length = 0, leftEarly = 0 }; out.byPlayer[who] = p end
+            p.attended, p.seconds = p.attended + 1, p.seconds + secs
+            if raid.leftEarly[who] then p.leftEarly = p.leftEarly + 1 end
+        end
+    end
+    local lengthAll = 0
+    for _, raid in ipairs(out.raids) do lengthAll = lengthAll + raid.length end
+    for _, p in pairs(out.byPlayer) do
+        p.length = lengthAll
+        p.percent = lengthAll > 0 and math.floor(100 * p.seconds / lengthAll + 0.5) or 0
+    end
+    return out
+end
+
+-- One player's raids, newest first, in words.
+function M.AttendanceLines(stats, who)
+    local att, out = stats.attendance, {}
+    for i = #att.raids, 1, -1 do
+        local raid = att.raids[i]
+        local secs = raid.present[who]
+        local when = M.Ago(stats.now, raid.start)
+        if secs then
+            out[#out + 1] = ("Raid %s: in for %s of %s%s"):format(when, M.Span(secs), M.Span(raid.length), raid.leftEarly[who] and ", left early" or "")
+        else
+            out[#out + 1] = ("Raid %s: not there"):format(when)
+        end
     end
     return out
 end

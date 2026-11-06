@@ -3,9 +3,9 @@
 -- simple data-driven policies. The learner (the Master Looter) is the one human in it.
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
-local MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?" }, function(d)
-    MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40 = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Identity, d.Tokens, d.MoltenCore, d.AQ40
+local MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40, Attendance
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?", "Attendance?" }, function(d)
+    MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40, Attendance = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Identity, d.Tokens, d.MoltenCore, d.AQ40, d.Attendance
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -85,6 +85,9 @@ function M.NewRaid(opts)
     -- the real addon: loot is not handed out until it is done). Without another raider it is the learner.
     assert(engine:Write("Elevate", { raid = "sim", ml = ml, minutes = 24 * 60 }))
     assert(engine:Write("SetDisenchanter", { raid = "sim", name = (de or ml) }))
+    -- Who is in the raid is written down as in the real addon: everyone there now, then whoever comes or goes.
+    local attendance = Attendance and Attendance.New(engine, client)
+    if attendance then attendance:sync() end
 
     local sim = setmetatable({
         client = client, engine = engine, names = names, learner = learner, ml = ml,

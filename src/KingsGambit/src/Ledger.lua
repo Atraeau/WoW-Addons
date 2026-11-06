@@ -27,7 +27,7 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
-    SetRaidList = true, SetListPolicy = true }
+    SetRaidList = true, SetListPolicy = true, Attendance = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
@@ -336,6 +336,15 @@ end
 
 -- Questions asked "as of the end of second t" (for the interface; replay asks per event).
 M.ActiveRaids = function(view, t) return activeRaids(view.auth, moment(t)) end
+-- Who is in a raid now, as its attendance entries say: a set of names.
+M.Present = function(view, raid)
+    local present = {}
+    for _, ev in ipairs(view.attendance[raid] or {}) do
+        for _, n in ipairs(ev.data.joined or {}) do present[n] = true end
+        for _, n in ipairs(ev.data.left or {}) do present[n] = nil end
+    end
+    return present
+end
 M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
 
@@ -457,6 +466,7 @@ function M.NewView(rules)
         declined = {},     -- recorded declined adjustment requests
         itemRules = {},    -- [itemId] = { classes (nil = any class), by, ts, reason, id }: the guild's eligibility rules
         itemSuits = {},    -- [itemId] = { roles, by, ts, reason, id }: officers' overrides of who an item suits
+        attendance = {},   -- [raidId] = the raid's Attendance events, in order
         last = nil,        -- the last pass-2 event considered (applied or skipped), and its key
         lastKey = nil,
     }
@@ -566,6 +576,18 @@ function M.ApplyToView(view, ev, key)
                 local roles = {}
                 for i, r in ipairs(d.roles) do roles[i] = r end
                 view.itemSuits[d.item] = { roles = roles, by = ev.author, ts = ev.ts, reason = d.reason, id = ev.id }
+            end
+        elseif cur.type == "Attendance" then
+            -- only the raid's own Master Looter says who was in it; the lists must be valid names and say something
+            local d = cur.data
+            local r = view.auth.raids[d.raid]
+            local function names(list) if list == nil then return true end if type(list) ~= "table" then return false end for _, n in ipairs(list) do if not isName(n) then return false end end return true end
+            if not (r and r.ml == ev.author and names(d.joined) and names(d.left) and #(d.joined or {}) + #(d.left or {}) > 0) then
+                ok, why = nil, "badattendance"
+            else
+                local list = view.attendance[d.raid]
+                if not list then list = {}; view.attendance[d.raid] = list end
+                list[#list + 1] = ev
             end
         elseif cur.type == "Migrate" then
             -- recorded by pass 1 (authority); nothing to apply to a list

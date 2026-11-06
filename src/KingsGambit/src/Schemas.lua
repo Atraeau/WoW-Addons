@@ -84,6 +84,9 @@ FORMATS[2] = {
             class = "text", spec = "text" } },
         ItemClasses = { list = false, data = { item = "int!", classes = "classes!", reason = "name!", class = "text", spec = "text", name = "text" } },
         ItemSuits = { list = false, data = { item = "int!", roles = "roles!", reason = "name!" } },
+        -- who was in a raid (0.6.0): written by the raid's Master Looter as the group changes. `joined` and `left` are the players who came and went since
+        -- their last entry for this raid; the first entry's `joined` is everyone there when it started. It moves nobody.
+        Attendance = { list = false, data = { raid = "name!", joined = "names", left = "names" } },
         -- the cutover to a new format (see Migrations.lua): written by the guild master, in the NEW format
         Migrate = { list = false, data = { from = "int!", to = "int!", cut = "table!", digest = "name!", reason = "name!" } },
         -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")

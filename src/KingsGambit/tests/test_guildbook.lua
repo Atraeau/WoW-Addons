@@ -307,3 +307,117 @@ test("passes stay in the record but are left out of 'what happened'; an undecide
     eq(GuildBook.KindOf("Pass", { kind = "upgrade" }), "passes"); eq(GuildBook.KindOf("Pass", { kind = "undecided" }), "loot")
     eq(GuildBook.KINDS[1].id, "happened"); eq(GuildBook.KINDS[#GuildBook.KINDS].id, "all")
 end)
+
+H.section("Stats: who held which place, and for how long")
+test("a player's places are replayed from the entries' own times, with how long each lasted", function()
+    local sim, ctx = raid()
+    local order = {}
+    for i, n in ipairs(sim.engine:Get("main").state.order) do order[i] = n end
+    local who, other = order[5], order[1]
+    sim.client:advance(1000)
+    assert(sim.engine:Append("main", "MovePlayer", { member = who, to = "top", reason = "test" }))
+    sim.client:advance(3600)
+    local stats = GuildBook.Stats(ctx, "main")
+    eq(stats.rows[1].who, who); eq(stats.rows[1].place, 1)
+    eq(stats.rows[1].heldText, "1 hour", "first for an hour")
+    eq(stats.rows[2].who, other, "the one who was first is second now")
+    local h = GuildBook.PlaceHistory(stats, who)
+    eq(h[1].place, 1); assert(h[1].text:find("place 1 for 1 hour") and h[1].text:find("(now)", 1, true), h[1].text)
+    eq(h[2].place, 5); assert(h[2].text:find("place 5 for"), h[2].text)
+    assert(stats.summary[1]:find("is first, and has been for 1 hour"), stats.summary[1])
+end)
+
+test("wins, last win and who has waited longest without one", function()
+    local sim, ctx = raid()
+    local winner = sim.engine:Get("main").state.order[1]
+    sim.client:advance(86400)
+    assert(sim.engine:Append("main", "Award", { member = winner, item = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r" }))
+    sim.client:advance(7200)
+    local stats = GuildBook.Stats(ctx, "main")
+    local row
+    for _, r in ipairs(stats.rows) do if r.who == winner then row = r end end
+    eq(row.wins, 1); eq(row.lastWinText, "2 hours ago"); eq(row.place, stats.total, "a win drops to the bottom")
+    eq(row.heldText, "2 hours")
+    local joined = table.concat(stats.summary, " ")
+    assert(joined:find("Most wins: " .. row.name .. " (1)", 1, true), joined)
+    assert(joined:find("Waiting longest without a win", 1, true), joined)
+    eq(GuildBook.Span(30), "under a minute"); eq(GuildBook.Span(86400 * 3), "3 days"); eq(GuildBook.Span(3600), "1 hour")
+end)
+
+test("a player taken off the list keeps their earlier places in the record", function()
+    local sim, ctx = raid()
+    local who = sim.engine:Get("main").state.order[3]
+    sim.client:advance(600)
+    assert(sim.engine:Append("main", "RemoveMember", { member = who, reason = "left the guild" }))
+    local stats = GuildBook.Stats(ctx, "main")
+    for _, r in ipairs(stats.rows) do assert(r.who ~= who, "no longer in the table") end
+    local h = GuildBook.PlaceHistory(stats, who)
+    eq(#h, 1); assert(h[1].left and h[1].text:find("taken off the list"), h[1].text)
+end)
+
+H.section("Attendance: who was in the raid")
+local function rosterNames(sim)
+    local names = {}
+    for _, m in ipairs(sim.client:roster()) do names[#names + 1] = m.name end
+    return names
+end
+
+test("when a raid opens everyone there is written down, in small entries, and the Ledger's default view leaves them out", function()
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 40 })
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
+    local ctx = { client = sim.client, engine = sim.engine, commands = Commands.New({ client = sim.client, engine = sim.engine, host = host }), sim = sim, host = host }
+    local present = sim.engine:Present("sim")
+    local n = 0
+    for _ in pairs(present) do n = n + 1 end
+    eq(n, #rosterNames(sim), "everyone in the group is in the raid")
+    local entries = sim.engine:View().attendance["sim"]
+    assert(#entries >= 2, "a big group takes several small entries")
+    for _, ev in ipairs(entries) do assert(#(ev.data.joined or {}) + #(ev.data.left or {}) <= 12, "each entry stays small") end
+    eq(GuildBook.History(ctx, { text = "were in the raid" }).total, 0, "not in What happened")
+    assert(GuildBook.History(ctx, { kind = "attendance" }).total >= 2, "but under Attendance")
+    assert(GuildBook.History(ctx, { kind = "all", text = "in the raid" }).total >= 2, "and Everything")
+end)
+
+test("someone who leaves mid-raid is written as having left, and their time in the raid shows in the stats", function()
+    local sim, ctx = raid()
+    local names = rosterNames(sim)
+    local leaver = names[3]
+    sim.client:advance(3600)
+    local keep = {}
+    for _, nm in ipairs(names) do if nm ~= leaver then keep[#keep + 1] = nm end end
+    sim.client:setRaid(keep, { leader = sim:leaderName(), lootMethod = "master", masterLooter = sim.ml })
+    sim.client:advance(10) -- (the change settles a few seconds before it is written)
+    assert(not sim.engine:Present("sim")[leaver], "no longer in the raid")
+    sim.client:advance(3600)
+    local stats = GuildBook.Stats(ctx, sim.engine:RaidList() or "main")
+    eq(stats.attendance.total, 1)
+    local p = stats.attendance.byPlayer[leaver]
+    assert(p and p.attended == 1 and p.leftEarly == 1, "attended, and left early")
+    assert(p.percent >= 40 and p.percent <= 60, "in for about half the raid: " .. tostring(p.percent))
+    local stayer = stats.attendance.byPlayer[keep[1]]
+    assert(stayer.percent >= 95 and stayer.leftEarly == 0, "someone who stayed: " .. tostring(stayer.percent))
+    for _, r in ipairs(stats.rows) do if r.who == leaver then eq(r.raidsText, "1/1") end end
+    local lines = GuildBook.AttendanceLines(stats, leaver)
+    assert(lines[1]:find("left early"), lines[1])
+    local left = GuildBook.History(ctx, { kind = "attendance", text = "left the raid" })
+    eq(left.total, 1)
+end)
+
+test("only the raid's Master Looter can say who was in it, and only for a raid that exists", function()
+    local sim = raid()
+    local ev, why = sim.engine:Write("Attendance", { raid = "no-such-raid", joined = { "Someone_Else" } })
+    eq(ev, nil); eq(why, "badattendance")
+    ev, why = sim.engine:Write("Attendance", { raid = "sim" })
+    eq(ev, nil); eq(why, "badattendance", "an entry that says nobody joined or left says nothing")
+    assert(sim.engine:Write("Attendance", { raid = "sim", joined = { "New_Raider" } }))
+end)
+
+test("a raid from before attendance was written is not counted, so nobody is marked absent from it", function()
+    local sim, ctx = raid()
+    local ml = sim.ml
+    local att = GuildBook.Attendance(ctx, "main")
+    assert(att.total >= 0)
+    local stats = GuildBook.Stats(ctx, "main")
+    for _, r in ipairs(stats.rows) do assert(r.raidsText == "-" or r.raidsText:find("/"), r.raidsText) end
+    assert(ml)
+end)

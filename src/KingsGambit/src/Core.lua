@@ -27,6 +27,7 @@ local function Start()
     local player = M.LootNet.NewPlayer(sync)
     local requests = M.Requests.New(sync, engine)
     SK.client, SK.engine, SK.sync, SK.host, SK.player, SK.requests = client, engine, sync, host, player, requests
+    SK.attendance = M.Attendance.New(engine, client) -- as a Master Looter, writes down who is in the raid
     SK.db, SK.char = client:storage().account, client:storage().char
     SK.commands = M.Commands.New({ client = client, engine = engine, sync = sync, host = host, player = player,
         requests = requests, selfcheck = M.SelfCheck })

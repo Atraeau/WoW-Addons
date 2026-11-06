@@ -6,6 +6,7 @@ return {
         envelope = "e524744b30e6859f",
         types = {
             AddMember = "b297ce8f7bbdc76b",
+            Attendance = "b6a4f73bea4037ff",
             Award = "41dad160b9a33c4c",
             CreateList = "2c34514465856bc8",
             Declined = "63b0c9c95c2cdcfd",

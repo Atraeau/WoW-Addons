@@ -37,6 +37,7 @@ M.TEXT = {
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
     tryon = { "Try it on", "See how this entry's item looks on your character, in the game's dressing room. You can also Ctrl-click an entry. It only shows the item; nothing is recorded or equipped." },
+    navstats = { "Stats", "Who is at which place and for how long, who has won and when, worked out from the record. Click a player to see every place they have held." },
     navledger = { "Ledger", "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
     navawards = { "Awards", "Record a win the session missed, undo an award, note where an item went. Corrections are new entries; nothing is erased." },
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },

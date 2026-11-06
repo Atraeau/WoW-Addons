@@ -118,6 +118,9 @@ function Engine:IsVerified() return next(self.verifying) == nil end
 
 function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.client:serverTime()) end
 -- Who disenchants for the raid this character is Master Looter of (designated by them, in the ledger), or nil.
+-- Who is in a raid, as the Master Looter's attendance entries say (a set of names).
+function Engine:Present(raid) return Ledger.Present(self.view, raid) end
+
 function Engine:RaidDisenchanter()
     local me = self.client:me()
     for _, r in ipairs(self:ActiveRaids()) do

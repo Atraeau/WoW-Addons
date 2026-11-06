@@ -1133,6 +1133,17 @@ function M.New(ctx)
             local item
             for _, e in ipairs(engine:View().applied) do if e.id == d.disenchant then item = e.data and e.data.item end end
             text = ("%s disenchanted %s and got %s"):format(short(d.requestedBy or ev.author), tostring(item or "an item"), Standings.ResultText(d.results))
+        elseif ev.type == "Attendance" then
+            local function some(names)
+                local out = {}
+                for i = 1, math.min(#names, 3) do out[i] = short(names[i]) end
+                local text = table.concat(out, ", ")
+                return #names > 3 and (text .. (" and %d more"):format(#names - 3)) or text
+            end
+            local parts = {}
+            if d.joined and #d.joined > 0 then parts[#parts + 1] = some(d.joined) .. (#d.joined == 1 and " was" or " were") .. " in the raid" end
+            if d.left and #d.left > 0 then parts[#parts + 1] = some(d.left) .. " left the raid" end
+            text = table.concat(parts, "; ")
         elseif ev.type == "CreateList" then text = ("%s started the list %s"):format(by, tostring(d.name or ev.list or "main"))
         elseif ev.type == "RemoveMember" then text = ("%s removed %s"):format(by, who)
         elseif ev.type == "Revert" then text = ("%s undid %s"):format(by, who and (who .. "'s award") or "an award")
