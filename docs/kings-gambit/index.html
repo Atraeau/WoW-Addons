@@ -6774,9 +6774,9 @@ M.TEXT = {
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
-    rankup = { "Move up", "Move this item up your order: higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
-    rankdown = { "Move down", "Move this item down your order: lower means you want it less." },
-    rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right: each move is saved as you make it." },
+    rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
+    rankdown = { "Move down", "Move this item down your order (not saved until you confirm): lower means you want it less." },
+    rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right. Moving only rearranges what you see: nothing is sent until you press Confirm, so you can keep deciding." },
     -- the windows
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings
@@ -6992,11 +6992,33 @@ function M.Model(ctx)
                 if ra ~= rb then return ra < rb end
                 return a.id < b.id
             end)
-            local panel = { kind = kind, items = {}, complete = true }
-            for i, row in ipairs(g) do
+            -- The order shown is the player's draft while they are rearranging (ctx.rankDraft[kind], a list of item ids kept by whatever draws the window),
+            -- as long as it names exactly these items; the order the session holds is only what they last confirmed. Moving an item changes the draft, never
+            -- the session: `dirty` says the draft differs from what is held, and the panel is not "set" until they confirm it themselves.
+            local byId, committed = {}, {}
+            for i, row in ipairs(g) do byId[row.id] = row; committed[i] = row.id end
+            local shown, dirty = g, false
+            local draft = ctx.rankDraft and ctx.rankDraft[kind]
+            if type(draft) == "table" and #draft == #g then
+                local valid, seen = true, {}
+                for _, id in ipairs(draft) do
+                    if not byId[id] or seen[id] then valid = false end
+                    seen[id] = true
+                end
+                if valid then
+                    shown = {}
+                    for i, id in ipairs(draft) do
+                        shown[i] = byId[id]
+                        if id ~= committed[i] then dirty = true end
+                    end
+                end
+            end
+            local panel = { kind = kind, items = {}, complete = true, dirty = dirty }
+            for i, row in ipairs(shown) do
                 panel.items[i] = { id = row.id, link = row.link, tip = row.tip, rank = row.mineRank }
                 if not row.mineRank then panel.complete = false end
             end
+            if dirty then panel.complete = false end
             out.rankings[#out.rankings + 1] = panel
         end
     end
@@ -7195,7 +7217,7 @@ function M.Build(m)
         for _, g in ipairs(m.rankings) do
             local ids = {}
             for i, it in ipairs(g.items) do ids[i] = it.id end
-            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, items = {} }
+            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, dirty = g.dirty, items = {} }
             for i, it in ipairs(g.items) do
                 local function swapped(j)
                     local o = {}
@@ -7204,10 +7226,11 @@ function M.Build(m)
                     return o
                 end
                 panel.items[i] = { id = it.id, link = it.link, tip = it.tip, position = i, ranked = it.rank ~= nil,
-                    up = button("rankup", "Up", { name = "rank", order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
-                    down = button("rankdown", "Down", { name = "rank", order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
+                    -- Up and Down only rearrange the draft (`rankmove`); nothing is held by the session until Confirm (`rank`).
+                    up = button("rankup", "Up", { name = "rankmove", kind = g.kind, order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
+                    down = button("rankdown", "Down", { name = "rankmove", kind = g.kind, order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
             end
-            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", order = ids },
+            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", kind = g.kind, order = ids },
                 { enabled = not g.complete, primary = not g.complete })
             if not g.complete then incomplete = incomplete + 1 end
             v.rankings[#v.rankings + 1] = panel
@@ -8060,8 +8083,15 @@ end
 function api.state() return state() end
 
 -- The Loot window for the player ("You"), exactly the table the game draws (LootView over UILoot.Model). The page only draws it.
-function api.lootView()
+function api.lootView(draft)
     if not sim then return { visible = false, state = "none", rows = {} } end
+    -- the order the player is rearranging but has not confirmed: "need=2,1;gift=3,4"
+    local rankDraft = {}
+    for kind, list in tostring(draft or ""):gmatch("(%a+)=([%d,]+)") do
+        local ids = {}
+        for n in list:gmatch("%d+") do ids[#ids + 1] = tonumber(n) end
+        rankDraft[kind] = ids
+    end
     local session = sim.session
     local me = sim.learner
     local myInfo = sim.info[short(me)]
@@ -8077,6 +8107,7 @@ function api.lootView()
         client = { me = function() return me end, now = function() return sim.client:now() end },
         host = { session = session },
         sim = sim,
+        rankDraft = rankDraft,
         isML = (sim.ml == sim.learner),
         commands = { mayHave = function(itemId) return S.Loot.MayHave(session:fitOf(itemId), myInfo and myInfo.class) end },
         targets = targets,
@@ -8728,6 +8759,7 @@ end
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
+  let rankDraft = {}; // the order being rearranged, not yet confirmed: { need: [ids], ... }. Only Confirm sends it.
   // A line made of pieces (LootView's `segments`): a person's name in their class color with spec and class beside it, as in the standings list.
   function segsHtml(segs) {
     return segs.map((g) => {
@@ -9098,7 +9130,8 @@ end
     const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
     if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
 
-    lw = call("lootView");
+    lw = call("lootView", Object.keys(rankDraft).map((k) => k + "=" + rankDraft[k].join(",")).join(";"));
+    if (!lw.rankings || !lw.rankings.length) rankDraft = {}; // nothing to rank (a new round, a finished session): no draft is carried over
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =
@@ -9396,6 +9429,8 @@ end
       case "w": {
         // a button of the Loot window: its `act` says what it does
         const action = JSON.parse(a);
+        if (action.name === "rankmove") { rankDraft[action.kind] = action.order; render(); break; } // rearranging only: the session hears nothing until Confirm
+        if (action.name === "rank") delete rankDraft[action.kind];
         if (action.name === "withdraw") {
           ask("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.", false, "Give up").then((ok) => { if (ok) act("withdraw"); });
           break;

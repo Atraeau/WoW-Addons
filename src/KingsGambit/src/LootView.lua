@@ -159,7 +159,7 @@ function M.Build(m)
         for _, g in ipairs(m.rankings) do
             local ids = {}
             for i, it in ipairs(g.items) do ids[i] = it.id end
-            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, items = {} }
+            local panel = { kind = g.kind, title = ("Your order for the %s items (most wanted first)"):format(KIND[g.kind] or g.kind), complete = g.complete, dirty = g.dirty, items = {} }
             for i, it in ipairs(g.items) do
                 local function swapped(j)
                     local o = {}
@@ -168,10 +168,11 @@ function M.Build(m)
                     return o
                 end
                 panel.items[i] = { id = it.id, link = it.link, tip = it.tip, position = i, ranked = it.rank ~= nil,
-                    up = button("rankup", "Up", { name = "rank", order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
-                    down = button("rankdown", "Down", { name = "rank", order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
+                    -- Up and Down only rearrange the draft (`rankmove`); nothing is held by the session until Confirm (`rank`).
+                    up = button("rankup", "Up", { name = "rankmove", kind = g.kind, order = i > 1 and swapped(i - 1) or ids }, { enabled = i > 1 }),
+                    down = button("rankdown", "Down", { name = "rankmove", kind = g.kind, order = i < #ids and swapped(i + 1) or ids }, { enabled = i < #ids }) }
             end
-            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", order = ids },
+            panel.confirm = button("rankconfirm", g.complete and "Order set" or "Confirm order", { name = "rank", kind = g.kind, order = ids },
                 { enabled = not g.complete, primary = not g.complete })
             if not g.complete then incomplete = incomplete + 1 end
             v.rankings[#v.rankings + 1] = panel

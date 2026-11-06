@@ -304,10 +304,29 @@ test("wanting two items shows your order, asks you to confirm it, and the sessio
     v = view()
     eq(v.rankings[1].complete, true); eq(v.rankings[1].confirm.enabled, false); eq(v.rankings[1].confirm.label, "Order set")
     assert(v.state ~= "ranking", "the order is set")
-    -- moving an item down saves the new order at once
-    cmd.handle(LootWindow.CommandText(v.rankings[1].items[1].down.act))
+    -- moving an item only rearranges a draft: the session holds nothing new, and the order is no longer "set" until it is confirmed again
+    local held = sim.session:rankingMissing(sim.client:me())
+    local down = v.rankings[1].items[1].down
+    eq(down.act.name, "rankmove", "Down rearranges the draft; it is not a command")
+    eq(LootWindow.CommandText(down.act), nil)
+    ctx.rankDraft = { [down.act.kind] = down.act.order }
+    local moved = LootView.Build(UILoot.Model(ctx))
+    eq(moved.rankings[1].items[2].id, panel.items[1].id, "the first item is now second on screen")
+    eq(moved.rankings[1].dirty, true); eq(moved.rankings[1].complete, false, "not set: they may still be deciding")
+    eq(moved.rankings[1].confirm.label, "Confirm order"); eq(moved.rankings[1].confirm.enabled, true)
+    eq(sim.session:rankingMissing(sim.client:me()), held, "the session was not told anything")
+    eq(moved.state, "ranking")
+    -- a draft that does not name exactly the items is ignored
+    ctx.rankDraft = { [down.act.kind] = { 999, 998 } }
+    eq(LootView.Build(UILoot.Model(ctx)).rankings[1].complete, true, "an invalid draft changes nothing")
+    -- confirming sends the order shown (the new one)
+    ctx.rankDraft = { [down.act.kind] = down.act.order }
+    local confirm = LootView.Build(UILoot.Model(ctx)).rankings[1].confirm
+    cmd.handle(LootWindow.CommandText(confirm.act))
+    ctx.rankDraft = nil
     v = view()
-    eq(v.rankings[1].items[2].id, panel.items[1].id, "the first item is now second")
+    eq(v.rankings[1].items[2].id, panel.items[1].id, "the confirmed order is now the held one")
+    eq(v.rankings[1].complete, true); eq(v.rankings[1].dirty, false)
 end)
 test("a player who answered pass or one need has nothing to rank", function()
     local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })

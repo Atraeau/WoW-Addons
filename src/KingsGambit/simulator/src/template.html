@@ -192,6 +192,7 @@
   // ---- The Loot window: draws the table LootView builds (in the engine bundle). Nothing here decides what is allowed or why;
   // it only draws, and maps a button's `act` to the engine call.
   let lw = null;
+  let rankDraft = {}; // the order being rearranged, not yet confirmed: { need: [ids], ... }. Only Confirm sends it.
   // A line made of pieces (LootView's `segments`): a person's name in their class color with spec and class beside it, as in the standings list.
   function segsHtml(segs) {
     return segs.map((g) => {
@@ -562,7 +563,8 @@
     const key = st.phase + "|" + (st.turn ? st.turn.type + ":" + st.turn.player + ":" + st.turn.item : "");
     if (key !== questionKey) { questionKey = key; giftTo = ""; } // a new question starts blank: nothing carries over
 
-    lw = call("lootView");
+    lw = call("lootView", Object.keys(rankDraft).map((k) => k + "=" + rankDraft[k].join(",")).join(";"));
+    if (!lw.rankings || !lw.rankings.length) rankDraft = {}; // nothing to rank (a new round, a finished session): no draft is carried over
     const sideScen = scenarios.map((s) => '<button class="scen ' + (s.id === current ? "on" : "") + '" data-act="scenario" data-a="' + s.id + '">' + esc(s.title) + "</button>").join("");
     const lesson = st.lesson ? '<div class="card"><h2>' + esc(st.lesson.title) + '</h2><div style="white-space: pre-line">' + esc(st.lesson.text) + "</div></div>" : "";
     $("#app").innerHTML =
@@ -860,6 +862,8 @@
       case "w": {
         // a button of the Loot window: its `act` says what it does
         const action = JSON.parse(a);
+        if (action.name === "rankmove") { rankDraft[action.kind] = action.order; render(); break; } // rearranging only: the session hears nothing until Confirm
+        if (action.name === "rank") delete rankDraft[action.kind];
         if (action.name === "withdraw") {
           ask("Give up this gift? It counts as a pass: you keep your place on the list and the draft goes on without you for this item.", false, "Give up").then((ok) => { if (ok) act("withdraw"); });
           break;

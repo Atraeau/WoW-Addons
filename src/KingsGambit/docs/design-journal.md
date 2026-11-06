@@ -2071,7 +2071,7 @@ and was never asked to prioritize. The guild master chose, from three options, *
   game's host and in the practice raid and the web simulator**, so both play the same.
 - **The command:** `rank 2 1 3` puts the items in order, most wanted first (each must be answered need, off or gift); the window's buttons run it.
 - **The window:** when you want several items of one kind, a panel shows "Your order (most wanted first)" with Up and Down on each item and a **Confirm order** button. Nothing is ranked until you
-  press Confirm or move an item (each move saves the whole order at once); the banner says the session is waiting for your order, and the answered count doesn't include you yet. After that it reads
+  press Confirm (see the correction below: a move does not confirm); the banner says the session is waiting for your order, and the answered count doesn't include you yet. After that it reads
   "Order set". It is in the shared view, so the game and the page show the same panel.
 - **Bots** in the simulation rank the items they want by their preference list, else item number, so a practice raid isn't held up by them.
 - Whispered answers rank in the order written (as before); separate whispers ("1 need", "2 need") are unranked and so keep bidding open to the timer, then fall back to the live pick.
@@ -2125,6 +2125,14 @@ their window is open, and how the **Damage Meter** and **Edit Mode** buttons sho
 red buttons, so a chosen answer now also gets an **inset bevel** drawn on top (a darker body, a shadow along the top and left edges, a light edge along the bottom), which reads as "pressed in" at a
 glance and is shading, not a change of hue. The text never changes. The status on the item's line is plain text ("Gift, name later"), no mark. The web page does the same (an
 inset shadow, one pixel lower). Removing the bevel on un-choosing is part of the same reset that clears a button between rounds. **Then the label color change was dropped too** ("I don't know that we need to change the text color too"): the bevel alone carries the state, and the label keeps the game's own color, so there is nothing to restore either. **And the echo was dropped:** the status text beside each item ("Off-spec", "Gift, name later", "Yours") repeated what the pressed button already says, so it is gone from the window, the page and the shared view; an item is now its name on its own line with the choices across the full width beneath it (rule 8, "Say a thing once", in the layout rules).
+
+### Correction: moving an item in your order does not confirm it (2026-11-06)
+
+The first version of the ranking panel sent the whole order the moment Up or Down was pressed, so a single move turned the panel to "Order set" and counted the player as answered while they were
+still deciding. Moving an item now only rearranges a **draft** kept by whatever draws the window (the game window and the page each hold it, as a list of item ids per kind); the view model takes
+it as `rankDraft` and shows the draft's order with `dirty` set. **Only Confirm sends the order** (the `rank` command), and only then does the panel read "Order set" and the player count as answered.
+Moving an item after confirming un-sets the panel again (the session still holds the last confirmed order until they confirm the new one, so bidding closing on them uses what they last confirmed).
+A draft that doesn't name exactly the items now ranked is ignored, and no draft is carried into a new round. The tooltips say moves aren't saved until Confirm.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

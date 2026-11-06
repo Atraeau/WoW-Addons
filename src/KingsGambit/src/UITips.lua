@@ -31,9 +31,9 @@ M.TEXT = {
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
-    rankup = { "Move up", "Move this item up your order: higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
-    rankdown = { "Move down", "Move this item down your order: lower means you want it less." },
-    rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right: each move is saved as you make it." },
+    rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
+    rankdown = { "Move down", "Move this item down your order (not saved until you confirm): lower means you want it less." },
+    rankconfirm = { "Confirm order", "Confirm the order shown (most wanted first). Wanting several items means saying which you want most; the session waits for that, and on your turn the draft takes your highest-ranked item still available for you, so nobody is asked live.\n\nMove items up or down first if the order isn't right. Moving only rearranges what you see: nothing is sent until you press Confirm, so you can keep deciding." },
     -- the windows
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings

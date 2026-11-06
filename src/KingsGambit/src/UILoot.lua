@@ -157,11 +157,33 @@ function M.Model(ctx)
                 if ra ~= rb then return ra < rb end
                 return a.id < b.id
             end)
-            local panel = { kind = kind, items = {}, complete = true }
-            for i, row in ipairs(g) do
+            -- The order shown is the player's draft while they are rearranging (ctx.rankDraft[kind], a list of item ids kept by whatever draws the window),
+            -- as long as it names exactly these items; the order the session holds is only what they last confirmed. Moving an item changes the draft, never
+            -- the session: `dirty` says the draft differs from what is held, and the panel is not "set" until they confirm it themselves.
+            local byId, committed = {}, {}
+            for i, row in ipairs(g) do byId[row.id] = row; committed[i] = row.id end
+            local shown, dirty = g, false
+            local draft = ctx.rankDraft and ctx.rankDraft[kind]
+            if type(draft) == "table" and #draft == #g then
+                local valid, seen = true, {}
+                for _, id in ipairs(draft) do
+                    if not byId[id] or seen[id] then valid = false end
+                    seen[id] = true
+                end
+                if valid then
+                    shown = {}
+                    for i, id in ipairs(draft) do
+                        shown[i] = byId[id]
+                        if id ~= committed[i] then dirty = true end
+                    end
+                end
+            end
+            local panel = { kind = kind, items = {}, complete = true, dirty = dirty }
+            for i, row in ipairs(shown) do
                 panel.items[i] = { id = row.id, link = row.link, tip = row.tip, rank = row.mineRank }
                 if not row.mineRank then panel.complete = false end
             end
+            if dirty then panel.complete = false end
             out.rankings[#out.rankings + 1] = panel
         end
     end

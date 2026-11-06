@@ -309,8 +309,15 @@ end
 function api.state() return state() end
 
 -- The Loot window for the player ("You"), exactly the table the game draws (LootView over UILoot.Model). The page only draws it.
-function api.lootView()
+function api.lootView(draft)
     if not sim then return { visible = false, state = "none", rows = {} } end
+    -- the order the player is rearranging but has not confirmed: "need=2,1;gift=3,4"
+    local rankDraft = {}
+    for kind, list in tostring(draft or ""):gmatch("(%a+)=([%d,]+)") do
+        local ids = {}
+        for n in list:gmatch("%d+") do ids[#ids + 1] = tonumber(n) end
+        rankDraft[kind] = ids
+    end
     local session = sim.session
     local me = sim.learner
     local myInfo = sim.info[short(me)]
@@ -326,6 +333,7 @@ function api.lootView()
         client = { me = function() return me end, now = function() return sim.client:now() end },
         host = { session = session },
         sim = sim,
+        rankDraft = rankDraft,
         isML = (sim.ml == sim.learner),
         commands = { mayHave = function(itemId) return S.Loot.MayHave(session:fitOf(itemId), myInfo and myInfo.class) end },
         targets = targets,

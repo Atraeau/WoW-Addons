@@ -309,6 +309,13 @@ function M.Build(ui)
 end
 
 function M.Run(act, f, ui)
+    -- Moving an item in your order only rearranges what you see; the session hears nothing until you press Confirm.
+    if act.name == "rankmove" then
+        f.rankDraft = f.rankDraft or {}
+        f.rankDraft[act.kind] = act.order
+        return ui:Refresh()
+    end
+    if act.name == "rank" and f.rankDraft then f.rankDraft[act.kind] = nil end -- confirmed: the session now holds it
     local cmd, problem = M.CommandText(act, f.recipientPick)
     if not cmd then return ui.Say(problem or "That isn't available.") end
     if act.name == "give" or (act.name == "claim" and act.gift) then f.recipientPick = nil end
@@ -320,9 +327,11 @@ end
 function M.Refresh(f, ctx, ui)
     f.ctx = ctx
     local practice = ctx.sim ~= nil
+    ctx.rankDraft = f.rankDraft -- the order being rearranged, not yet confirmed
     local m = UILoot.Model(ctx)
     m.practice = practice
     local v = LootView.Build(m)
+    if not v.rankings or #v.rankings == 0 then f.rankDraft = nil end -- nothing to rank (a new round, a finished session): no draft is carried over
     local layout, want = {}, {}
     local y = -32 -- just under the title bar
 
