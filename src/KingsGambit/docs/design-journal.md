@@ -2022,7 +2022,8 @@ the scenario list, the answers table), and the page's "Need, ready" button and "
 **The windows are the player's to place (2026-11-06).** Both windows (the Loot window and the main window) can be dragged, can't be dragged off the screen, and the
 place they are left is remembered for each character (`KingsGambitCharDB.ui`, which the design had reserved for frame positions). `/gambit window reset` puts both back where
 they start; a damaged saved position falls back to the default. The Loot window starts to the left of the main window so the two don't cover each other. (Size and scale
-options are still to come.)
+options are still to come.) The Loot window sits in a higher layer than the main window (a live session is the time-critical thing and is never hidden behind the lists), and
+clicking either window raises it above others at its own level.
 
 ### Docs review: wording, flow and links (2026-11-04)
 
