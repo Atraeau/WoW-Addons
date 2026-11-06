@@ -43,7 +43,7 @@ M.TEXT = {
     navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
     navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
     navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the guild master's and maintenance steps. (The record itself is the Ledger.)" },
-    historykind = { "Show", "Narrow the record to loot, list changes, rules or raids." },
+    historykind = { "Show", "What happened (the default) leaves out passes: they are the most common entries and say what could have happened to an item, not what did. Passes stay in the record: choose Passes to see only them, or Everything to see all." },
     historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
     -- standings

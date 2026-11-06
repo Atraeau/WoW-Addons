@@ -53,7 +53,7 @@ end
 M.SIZES = { 5, 10, 20, 40 }
 M.size = 40
 M.tab = "lists"
-M.histKind, M.histText = "all", ""
+M.histKind, M.histText = "happened", ""
 
 -- The gear this character has on or carries: item links, each item once (game only).
 function M.GearLinks()

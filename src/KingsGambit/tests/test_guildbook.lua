@@ -286,3 +286,24 @@ test("trying an item on opens the game's dressing room with it, and says so when
     eq(UI.TryOn("item:1"), false); assert(said and said:find("dressing room"), tostring(said))
     UI.Say, _G.DressUpItemLink, _G.DressUpLink = savedSay, saved, savedLink
 end)
+
+H.section("Ledger: passes are kept but not shown by default")
+test("passes stay in the record but are left out of 'what happened'; an undecided gift counts as what happened", function()
+    local sim, ctx = raid()
+    local link = "|cffffffff|Hitem:2589::::::::|h[Linen Cloth]|h|r"
+    local who = sim.engine:Get("main").state.order[1]
+    assert(sim.engine:Append("main", "Pass", { member = who, item = link, kind = "upgrade" }))
+    assert(sim.engine:Append("main", "Pass", { member = who, item = link .. "x", kind = "undecided" }))
+    assert(sim.engine:Append("main", "Award", { member = who, item = link .. "y" }))
+    local function count(kind, text)
+        local h = GuildBook.History(ctx, { kind = kind, text = text })
+        return h.total
+    end
+    eq(count(nil, "passed on"), 1, "by default only the undecided gift, which is an outcome, shows")
+    eq(count("happened", "upgrade"), 0)
+    eq(count("passes", "passed on"), 1, "'Passes' shows the passes")
+    eq(count("all", "passed on"), 2, "'Everything' shows both")
+    eq(count("loot", "won"), 2, "the award and the undecided gift are both loot")
+    eq(GuildBook.KindOf("Pass", { kind = "upgrade" }), "passes"); eq(GuildBook.KindOf("Pass", { kind = "undecided" }), "loot")
+    eq(GuildBook.KINDS[1].id, "happened"); eq(GuildBook.KINDS[#GuildBook.KINDS].id, "all")
+end)

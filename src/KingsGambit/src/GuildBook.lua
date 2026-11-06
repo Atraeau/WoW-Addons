@@ -43,20 +43,29 @@ function M.SectionOf(actionId)
 end
 
 -- Which group of the record an entry belongs to, for the filter.
+-- "happened" (the default) is what happened to items, lists, rules and raids: it leaves out passes, which are the most common entries by far and say what
+-- could have happened, not what did (they stay in the record, under "Passes" and "Everything").
 M.KINDS = {
-    { id = "all", label = "Everything" },
+    { id = "happened", label = "What happened" },
     { id = "loot", label = "Loot" },
     { id = "list", label = "List changes" },
     { id = "rules", label = "Rules" },
     { id = "raid", label = "Raids" },
+    { id = "passes", label = "Passes" },
+    { id = "all", label = "Everything" },
 }
 local KIND_OF = {
-    Award = "loot", Disenchant = "loot", DisenchantResult = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
+    Award = "loot", Disenchant = "loot", DisenchantResult = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
     SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",
 }
-function M.KindOf(eventType) return KIND_OF[eventType] or "list" end
+-- Which group an entry belongs to. A pass is its own group, except one that records an outcome: a gift won but not given to anyone ("undecided") is what
+-- happened to the item.
+function M.KindOf(eventType, data)
+    if eventType == "Pass" then return (type(data) == "table" and data.kind == "undecided") and "loot" or "passes" end
+    return KIND_OF[eventType] or "list"
+end
 
 -- How long ago, in a person's words (a day is the smallest step that reads well past a few hours).
 function M.Ago(now, ts)
@@ -73,7 +82,7 @@ end
 
 -- The record: every change that belongs to a list, a rule or a raid, as a sentence, newest first.
 --   ctx     { engine, client, commands }  (commands.describe turns one entry into words)
---   filter  { kind = "all"|"loot"|"list"|"rules"|"raid", text = "words to find in the sentence", limit = n, list = id }
+--   filter  { kind = "happened"|"loot"|"list"|"rules"|"raid"|"passes"|"all", text = "words to find in the sentence", limit = n, list = id }
 -- Returns { entries = { { id, ts, when, kind, type, text } }, total = how many matched before the limit, shown = how many are in `entries`,
 --           empty = a sentence for when there are none }.
 -- Everyone the record can name, as the sentences write them (First Last), with their class: from every list's members and from the group and guild.
@@ -143,7 +152,7 @@ local function valueText(v)
     return table.concat(parts, ", ")
 end
 
-local KIND_LABEL = { loot = "loot", list = "list change", rules = "rules", raid = "raid" }
+local KIND_LABEL = { loot = "loot", list = "list change", rules = "rules", raid = "raid", passes = "pass" }
 
 -- The item an entry is about, as something the game can show or dress a character in: an item link, or "item:ID" (an id with nothing else), or nil
 -- (a plain name has nothing to look up). What disenchanting gave belongs to the item that was disenchanted.
@@ -173,7 +182,7 @@ function M.Detail(ctx, id)
     local lines = {}
     local function add(label, value) lines[#lines + 1] = { label = label, value = tostring(value) } end
     local item = M.ItemOf(ev, view)
-    add("Entry", ("%s (%s)"):format(ev.type, KIND_LABEL[M.KindOf(ev.type)] or "other"))
+    add("Entry", ("%s (%s)"):format(ev.type, KIND_LABEL[M.KindOf(ev.type, ev.data)] or "other"))
     add("Written by", Identity.Display(ev.author))
     local stamp = ""
     local dateFn = rawget(_G, "date") or (os and os.date)
@@ -213,15 +222,15 @@ function M.History(ctx, filter)
     end
     local now = ctx.client:serverTime()
     local want = (filter.text and filter.text ~= "") and filter.text:lower() or nil
-    local kind = filter.kind or "all"
+    local kind = filter.kind or "happened"
     local out = { entries = {}, total = 0 }
     for _, ev in ipairs(all) do
-        local k = M.KindOf(ev.type)
+        local k = M.KindOf(ev.type, ev.data)
         local shownEv, waiting = ev, false
         if ev.type == "Disenchant" then
             if results[ev.id] then shownEv = results[ev.id] else waiting = true end
         end
-        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k) then
+        if ev.type ~= "DisenchantResult" and (kind == "all" or kind == k or (kind == "happened" and k ~= "passes")) then
             local text = ctx.commands.describe(shownEv) .. (waiting and " (waiting for the result)" or "")
             ev = shownEv
             if not want or text:lower():find(want, 1, true) then
