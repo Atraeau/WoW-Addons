@@ -1055,6 +1055,7 @@ function M.New(ctx)
             end
         elseif ev.type == "MovePlayer" then text = ("%s moved %s to %s"):format(by, who, d.to or ("just above " .. short(d.above)))
         elseif ev.type == "AddMember" then text = ("%s added %s"):format(by, who)
+        elseif ev.type == "Disenchant" then text = ("%s was disenchanted by %s"):format(tostring(d.item), short(d.to))
         elseif ev.type == "CreateList" then text = ("%s started the list %s"):format(by, tostring(d.name or ev.list or "main"))
         elseif ev.type == "RemoveMember" then text = ("%s removed %s"):format(by, who)
         elseif ev.type == "Revert" then text = ("%s undid %s"):format(by, who and (who .. "'s award") or "an award")

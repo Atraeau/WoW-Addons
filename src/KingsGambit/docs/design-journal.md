@@ -2145,6 +2145,11 @@ The Tools tab was one page with an Area dropdown and an Action dropdown over eve
 - **Ledger**: create a list, work on a list, the ledger's format and the move to the next one, versions, sync, the game check. A gap above its button keeps the guild master's and maintenance corner apart from the everyday sections, as the design asks for the rare and permanent steps.
 Decisions: every form lives in exactly one section (a test fails when a form is in none or two, so nothing becomes unreachable); the old History form is gone because the History section replaced it; `GuildBook.SECTIONS` lists each section's forms, so the page can draw the same sections later; "Award..." on the Lists page opens the Awards section (`SectionOf`); a shift-clicked item link goes to the form page on screen. The forms themselves are unchanged and still run the command a player would type, so what each may do is decided as before. The Master Looter's list-change refusal now points to Rules ("Request a list change").
 
+### Correction: the Guild book has one place for the record, History; the guild master's corner is Admin (2026-11-06)
+
+The split of the Tools tab named its corner of maintenance forms "Ledger", right beside a History section that is the ledger's own record: the guild master asked why they were two things. They were not the same thing, but the names said they were. The record is **History** (the ledger in sentences, with nothing to edit); the forms for starting a list, the record's format, versions and sync are **Admin**, still set apart by a gap. The user-facing wording avoids "ledger" for the corner so there is only one place to read the record.
+History rows are also **denser**: one line each (when, then what happened, cut off with the whole sentence in the tooltip) at 20 pixels instead of two lines at 38, so about twice as many entries show without scrolling. The record now has a sentence for a disenchant ("X was disenchanted by Y") instead of a bare event name, and counts it under Loot.
+
 ### Correction: moving an item in your order does not confirm it (2026-11-06)
 
 The first version of the ranking panel sent the whole order the moment Up or Down was pressed, so a single move turned the panel to "Order set" and counted the player as answered while they were

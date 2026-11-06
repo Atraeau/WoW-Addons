@@ -464,17 +464,16 @@ end
 
 -- ---- History: the record in words -------------------------------------------------------------------------------------------------
 
-local HIST_H = 38
+local HIST_H = 20
 
--- One entry: when (muted) and what happened (up to two lines; the whole sentence is in the tooltip).
+-- One entry on one line: when (muted) and what happened (a long sentence is cut off; the whole of it is in the tooltip).
 function M.InitHistoryRow(row, e)
     row.entry = e
     if not row.cells then
         row.when = row:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-        row.when:SetPoint("TOPLEFT", 4, -4); row.when:SetWidth(76); row.when:SetJustifyH("LEFT"); row.when:SetWordWrap(false)
+        row.when:SetPoint("LEFT", 4, 0); row.when:SetWidth(72); row.when:SetJustifyH("LEFT"); row.when:SetWordWrap(false)
         row.text = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-        row.text:SetPoint("TOPLEFT", 84, -4); row.text:SetWidth(300); row.text:SetJustifyH("LEFT"); row.text:SetJustifyV("TOP")
-        if row.text.SetMaxLines then row.text:SetMaxLines(2) end
+        row.text:SetPoint("LEFT", 80, 0); row.text:SetWidth(310); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
         row.cells = true
         if row.SetScript then
             row:SetScript("OnEnter", function(self)

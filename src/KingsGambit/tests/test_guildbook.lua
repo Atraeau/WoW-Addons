@@ -73,13 +73,13 @@ test("every form belongs to exactly one section, and the sections' forms all exi
             if a.id ~= "history" then assert(owner[a.id], "form " .. a.id .. " is in no section, so nobody could reach it") end
         end
     end
-    eq(GuildBook.SectionOf("award").id, "awards"); eq(GuildBook.SectionOf("migrate").id, "ledger")
+    eq(GuildBook.SectionOf("award").id, "awards"); eq(GuildBook.SectionOf("migrate").id, "admin")
     eq(GuildBook.SectionOf("raidopen").id, "raids"); assert(GuildBook.SectionOf("nope") == nil)
 end)
 
-test("the Ledger section is kept apart, and a section's group keeps its order", function()
+test("the Admin section is kept apart, and a section's group keeps its order", function()
     local UITools = SK.modules.UITools
-    eq(GuildBook.Section("ledger").gap, true)
+    eq(GuildBook.Section("admin").gap, true)
     local g = UITools.SectionGroup(GuildBook.Section("awards"))
     eq(g.id, "awards"); eq(g.actions[1].id, "award"); eq(#g.actions, 4)
 end)

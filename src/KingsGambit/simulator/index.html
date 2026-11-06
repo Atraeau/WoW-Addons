@@ -6784,7 +6784,7 @@ M.TEXT = {
     navraids = { "Raids", "Open and close a raid, choose its Master Looter, its list and its disenchanter." },
     navpeople = { "People", "Add, remove and move players; who the officers are; and your own spec." },
     navrules = { "Rules", "Which classes may bid on an item, who it suits, and requests to the Master Looter." },
-    navledger = { "Ledger", "Starting a list, the ledger's format and versions, syncing: the guild master's and maintenance steps." },
+    navadmin = { "Admin", "Starting a list, the record's format and versions, syncing: the guild master's and maintenance steps. (The record itself is History.)" },
     historykind = { "Show", "Narrow the record to loot, list changes, rules or raids." },
     historyfind = { "Find", "Type part of a player's or an item's name to show only the entries that mention it." },
     lootwindow = { "Loot window", "Show or hide the small window for a live loot session. It opens by itself when a session starts, so you only need this to look at it between sessions or to bring it back after closing it." },
@@ -7332,7 +7332,7 @@ local _, SK = ...
 local M = SK:NewModule("GuildBook", {}, function() end)
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
--- `gap` puts a space above its button: the Ledger is the guild master's and maintenance corner, kept apart from the everyday sections.
+-- `gap` puts a space above its button: Admin is the guild master's and maintenance corner, kept apart from the everyday sections.
 -- Every action belongs to exactly one section (the old History form is the History section now).
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
@@ -7345,7 +7345,7 @@ M.SECTIONS = {
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
-    { id = "ledger", label = "Ledger", gap = true, tip = "Starting a list, the ledger's format and versions, syncing: the guild master's and maintenance steps.",
+    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the guild master's and maintenance steps. (The record itself is History.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
 }
 
@@ -7369,7 +7369,7 @@ M.KINDS = {
     { id = "raid", label = "Raids" },
 }
 local KIND_OF = {
-    Award = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
+    Award = "loot", Disenchant = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
     SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",

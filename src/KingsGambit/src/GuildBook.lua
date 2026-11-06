@@ -11,7 +11,7 @@ local _, SK = ...
 local M = SK:NewModule("GuildBook", {}, function() end)
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
--- `gap` puts a space above its button: the Ledger is the guild master's and maintenance corner, kept apart from the everyday sections.
+-- `gap` puts a space above its button: Admin is the guild master's and maintenance corner, kept apart from the everyday sections.
 -- Every action belongs to exactly one section (the old History form is the History section now).
 M.SECTIONS = {
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
@@ -24,7 +24,7 @@ M.SECTIONS = {
         actions = { "add", "remove", "move", "officers", "officersset", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
-    { id = "ledger", label = "Ledger", gap = true, tip = "Starting a list, the ledger's format and versions, syncing: the guild master's and maintenance steps.",
+    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the guild master's and maintenance steps. (The record itself is History.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
 }
 
@@ -48,7 +48,7 @@ M.KINDS = {
     { id = "raid", label = "Raids" },
 }
 local KIND_OF = {
-    Award = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
+    Award = "loot", Disenchant = "loot", Revert = "loot", Salvage = "loot", Transfer = "loot", Pass = "loot",
     MovePlayer = "list", AddMember = "list", RemoveMember = "list",
     ItemSuits = "rules", ItemClasses = "rules",
     SetDisenchanter = "raid", SetRaidList = "raid", SetListPolicy = "raid", Declined = "raid",
