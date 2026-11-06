@@ -89,15 +89,17 @@ end
 function M:StartPractice()
     if not (Sim and Commands) then return end
     local me = SK.client:me()
+    -- You practise as your own class (a warrior is asked about warrior loot, not a priest's); a class the simulation doesn't know falls back to a priest.
+    local class = SK.client.myClass and SK.client:myClass() or nil
     -- Loot: the gear in your bags and on your character, which the game really has (Molten Core's items aren't in this game yet). Molten Core's
     -- loot table is the fallback when there are too few pieces to make a raid of.
     local gear = M.GearItems(SK.client, M.GearLinks(), 24)
     local sim
     if #gear >= 3 then
-        sim = Sim.NewPractice(gear, { learner = me, seed = 1, size = M.size })
+        sim = Sim.NewPractice(gear, { learner = me, seed = 1, size = M.size, learnerClass = class })
         say(("Practice: the loot is %d pieces of gear from your bags and equipment, so it has real tooltips."):format(#gear))
     else
-        sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size })
+        sim = Sim.NewMoltenCore({ learner = me, seed = 1, size = M.size, learnerClass = class })
         say("Practice: you carry fewer than 3 pieces of gear, so the loot is Molten Core's (those items may not exist in this game yet, so no tooltips).")
     end
     -- A simulated guild: the raid's players, and others who are not in the group (some offline).

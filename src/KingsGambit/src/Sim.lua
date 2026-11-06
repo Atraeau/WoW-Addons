@@ -425,11 +425,13 @@ function M.NewRaidNight(data, opts)
         for i = 1, want do picked[i] = members[math.floor((i - 0.5) * #members / want) + 1] end
         members = picked
     end
-    local learnerClass = opts.learnerClass or "PRIEST"
-    local learnerSpec = opts.learnerSpec or (not opts.learnerClass and "Holy") or ItemFit.SPECS[learnerClass][1].name
+    -- The learner's class: the one asked for if the simulation knows it (a real player's class, in the game's practice mode), else a priest.
+    local asked = opts.learnerClass and ItemFit.SPECS[opts.learnerClass] and opts.learnerClass or nil
+    local learnerClass = asked or "PRIEST"
+    local learnerSpec = (asked and opts.learnerSpec and ItemFit.SpecOf(asked, opts.learnerSpec) and opts.learnerSpec) or (not asked and "Holy") or ItemFit.SPECS[learnerClass][1].name
     local sim = M.NewRaid({ members = members, seed = opts.seed or 1, learner = opts.learner or "You",
         learnerClass = learnerClass, learnerSpec = learnerSpec,
-        learnerOffSpec = opts.learnerOffSpec or (not opts.learnerClass and "Shadow") or nil,
+        learnerOffSpec = opts.learnerOffSpec or (not asked and "Shadow") or nil,
         learnerRole = opts.learnerRole or ItemFit.SpecOf(learnerClass, learnerSpec).role,
         shuffle = opts.shuffle ~= false, learnerPosition = opts.learnerPosition or "random",
         masterLooter = opts.masterLooter, leader = opts.leader })

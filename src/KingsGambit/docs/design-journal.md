@@ -2035,6 +2035,13 @@ can wear or wield it; what an item is made of still says who can wear it (a mage
 Items with real stats keep the existing check unchanged (a warlock still isn't asked about a blade of strength and agility; even a little stamina counts as a stat).
 This is one rule in the engine, so the game and the web simulator both follow it.
 
+### Decision: practice mode plays as your own class (2026-11-06)
+
+Practice mode made the player a priest (the simulator's usual learner), so a warrior was asked about priest loot and saw the wrong answers greyed. The client now says what
+class its player is (`myClass`: the game's `UnitClass`, or the roster's entry in the mock), and starting practice passes it to the simulation, so the Loot window and the
+eligibility checks are those of the player's real class. A class the simulation doesn't know falls back to the priest. The simulated spec is the class's first one (a warrior
+practises as Arms); the game doesn't give us the player's talent spec in a way we read yet, so that stays a default for now. The raiders around the player are unchanged.
+
 ### Docs review: wording, flow and links (2026-11-04)
 
 No design change. Every relative link in the hand-written Markdown resolves; what was stale was the wording after the move to `src/<Addon>` and the later

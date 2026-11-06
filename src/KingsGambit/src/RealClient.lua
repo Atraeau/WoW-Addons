@@ -116,6 +116,11 @@ function M.New(opts)
     end
 
     function c:me() return fromGame(unitName("player")) end
+    -- This character's class as the game's file name ("WARRIOR"), or nil if the game doesn't say.
+    function c:myClass()
+        local ok, _, file = pcall(E.UnitClass, "player")
+        return ok and file or nil
+    end
 
     function c:normalize(name) return normalize(name) end
     -- What the game says about names, raw, for the in-game self-check (`/gambit check`): it is how the real names get confirmed.

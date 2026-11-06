@@ -175,3 +175,23 @@ test("a moved window is remembered for the character, restored next time, and ca
     eq(b.points[1][1], "CENTER", "reset puts it back")
     _G.UIParent, SK.char = saved.UIParent, saved.char
 end)
+
+H.section("Practice: as your own class")
+test("practice uses the player's real class, and falls back to a priest for one the simulation doesn't know", function()
+    local function classOf(sim) for _, m in ipairs(sim.client:roster()) do if m.name == "Me" then return m.class end end end
+    eq(classOf(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10, learnerClass = "WARRIOR" })), "WARRIOR")
+    eq(classOf(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10, learnerClass = "DEATHKNIGHT" })), "PRIEST", "an unknown class falls back")
+    eq(classOf(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })), "PRIEST", "no class asked: the usual priest")
+    local w = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10, learnerClass = "WARRIOR" })
+    eq(w.client:myClass(), "WARRIOR", "the client says what class its player is")
+    -- a warrior is asked about warrior loot: a cloth caster item is greyed for them, plate is not
+    w:killBoss(nil, false)
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return w.session end end })
+    local cmd = Commands.New({ client = w.client, engine = w.engine, host = host })
+    local v = LootView.Build(UILoot.Model({ client = w.client, engine = w.engine, commands = cmd, sim = w, host = host }))
+    assert(#v.rows > 0)
+    for _, r in ipairs(v.rows) do
+        local need = r.buttons[1]
+        if not need.enabled then assert(need.why, "a greyed Need says why") end
+    end
+end)

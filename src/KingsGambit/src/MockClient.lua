@@ -117,6 +117,12 @@ function M.New(opts)
 
     ---------------------------------------------------------------- identity, roster
     function h:me() return S.me end
+    -- This character's class: the roster's entry for them, or one set with setMyClass.
+    function h:myClass()
+        if S.myClass then return S.myClass end
+        for _, m in ipairs(S.roster) do if m.name == S.me then return m.class end end
+    end
+    function h:setMyClass(class) S.myClass = class end
     function h:addonVersion() return S.addonVersion or "dev" end
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
