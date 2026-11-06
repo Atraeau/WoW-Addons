@@ -63,21 +63,45 @@ local function setShown(frame, on)
 end
 
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
--- Show a button as the player's current choice without changing its text: the button stays lit (the game's own "pressed in" highlight, which is a shape
--- change, not just a color) and its label turns green. Un-marking puts the label back the way the button's state makes it (normal or grayed out).
+-- Show a button as the player's current choice without changing its text, and without relying on a color change of the text (too little contrast on the
+-- game's red buttons). Three cues together: the whole button turns green, its label turns white (high contrast on the green), and a check mark appears
+-- inside it (a shape, so it reads without color at all). The button stays lit as well. Un-marking puts everything back the way the button's state makes it.
+local PARTS = { "Left", "Middle", "Right" } -- the pieces of the game's panel button
+local function tint(b, r, g, bl)
+    local nt = b.GetNormalTexture and b:GetNormalTexture()
+    if type(nt) == "table" and nt.SetVertexColor then nt:SetVertexColor(r, g, bl) end
+    for _, key in ipairs(PARTS) do
+        local part = b[key]
+        if type(part) == "table" and part.SetVertexColor then part:SetVertexColor(r, g, bl) end
+    end
+end
+
 function M.Mark(b, on)
     on = on and true or false
+    if on == (b.marked or false) and b.markDone then return end
+    b.markDone = true
+    local fs = b.GetFontString and b:GetFontString()
     if on then
         if b.LockHighlight then b:LockHighlight() end
-    elseif b.UnlockHighlight then
-        b:UnlockHighlight()
-    end
-    local fs = b.GetFontString and b:GetFontString()
-    if fs and fs.SetTextColor and on then
-        fs:SetTextColor(0.3, 1, 0.3)
-    elseif fs and b.marked and not on then
-        local font = b.IsEnabled and b:IsEnabled() and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
-        if font and fs.SetFontObject then fs:SetFontObject(font) end
+        tint(b, 0.15, 0.7, 0.25)
+        if fs and fs.SetTextColor then fs:SetTextColor(1, 1, 1) end
+        if not b.check and b.CreateTexture then
+            b.check = b:CreateTexture(nil, "OVERLAY")
+            b.check:SetSize(14, 14)
+            b.check:SetPoint("LEFT", b, "LEFT", 5, 0)
+            b.check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+        end
+        if b.check then b.check:Show() end
+        if fs and fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 7, 0) end -- room for the check mark
+    else
+        if b.UnlockHighlight then b:UnlockHighlight() end
+        tint(b, 1, 1, 1)
+        if b.check then b.check:Hide() end
+        if b.marked and fs then
+            if fs.ClearAllPoints and fs.SetPoint then fs:ClearAllPoints(); fs:SetPoint("CENTER", b, "CENTER", 0, 0) end
+            local font = b.IsEnabled and b:IsEnabled() and b.GetNormalFontObject and b:GetNormalFontObject() or (b.GetDisabledFontObject and b:GetDisabledFontObject())
+            if font and fs.SetFontObject then fs:SetFontObject(font) end
+        end
     end
     b.marked = on
 end
@@ -179,7 +203,7 @@ function M.Build(ui)
         row.note:SetJustifyH("LEFT"); row.note:SetJustifyV("TOP"); row.note:SetWordWrap(true); row.note:SetHeight(32)
         row.buttons = {}
         for j = 1, 4 do
-            local b = button(f, "", 70, 20)
+            local b = button(f, "", 72, 20)
             b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end)
             Tips.Attach(b, tooltipOf(b))
             row.buttons[j] = b
@@ -402,12 +426,12 @@ function M.Refresh(f, ctx, ui)
                     local b = row.buttons[j]
                     if vb then
                         setup(b, vb, vb.label)
-                        layout[#layout + 1] = { b, 16 + (j - 1) * 72, y - 17 }; want[b] = true
+                        layout[#layout + 1] = { b, 16 + (j - 1) * 74, y - 17 }; want[b] = true
                     end
                 end
                 row.note:SetText(vr.warn and ("|cffffaa33" .. vr.warn .. "|r") or (vr.segments and M.Rich(vr.segments)) or vr.note or "")
-                row.note:SetWidth(hasButtons and (WIDTH - 36 - 292) or (WIDTH - 36))
-                layout[#layout + 1] = { row.note, hasButtons and (16 + 292) or 16, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
+                row.note:SetWidth(hasButtons and (WIDTH - 36 - 300) or (WIDTH - 36))
+                layout[#layout + 1] = { row.note, hasButtons and (16 + 300) or 16, hasButtons and (y - 19) or (y - 17) }; want[row.note] = true
                 y = y - ROW
             end
         end

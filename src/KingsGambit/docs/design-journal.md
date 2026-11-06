@@ -2088,10 +2088,12 @@ list changes and drops a choice that is no longer on offer. If nobody in the gro
 
 ### Your choice is shown by highlighting the button, not by changing its text (2026-11-06)
 
-In the game window a chosen answer was shown by wrapping its text in brackets ("[Need]"), which changes the label, can overflow a narrow button, and reads as part of the name. The chosen
-button is now **lit with the game's own highlight (the "pressed in" frame, a shape change, so color is not the only cue) and its label turns green**, and the label itself never changes.
-Un-choosing puts the label back to what the button's state makes it (normal, or grayed out). The line under the item still says "You: Need". This is the same idea the page already uses
-(an outline and a check mark); the shared view only says `selected`, and each place draws it.
+In the game window a chosen answer was shown by wrapping its text in brackets ("[Need]"), which changes the label, can overflow a narrow button, and reads as part of the name. The first
+replacement (a lit button with a green label) was tried in the game and judged **too little contrast**: a green label on the game's red button is hard to read and a color change of text alone
+does not meet good design practice. The chosen button now uses three cues together: **the whole button turns green, its label turns white (high contrast on the green), and a check-mark icon
+appears inside it** (a shape, so it reads without color at all); the game's lit highlight stays on too. The label text itself never changes. Un-choosing puts everything back to what the
+button's state makes it (normal, or grayed out). The line under the item still says "You: Need". The page uses the same idea (an outline and a check mark); the shared view only says
+`selected`, and each place draws it. Rule kept for later work: never mark state by a color change of text alone.
 
 ### Docs review: wording, flow and links (2026-11-04)
 

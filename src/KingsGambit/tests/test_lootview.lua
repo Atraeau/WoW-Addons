@@ -361,7 +361,13 @@ test("a chosen answer is lit and colored, and its text is never changed; un-choo
     local LootWindow = SK.modules.LootWindow
     local calls, color, font = {}, nil, nil
     local fs = { SetTextColor = function(_, r, g, b) color = { r, g, b } end, SetFontObject = function(_, f) font = f end }
-    local b = { enabled = true, text = "Need" }
+    local tinted
+    local part = { SetVertexColor = function(_, r, g, bl) tinted = { r, g, bl } end }
+    local shown = {}
+    local checkTex = { SetSize = function() end, SetPoint = function() end, SetTexture = function(_, t) shown.tex = t end,
+        Show = function() shown.on = true end, Hide = function() shown.on = false end }
+    local b = { enabled = true, text = "Need", Left = part, Middle = part, Right = part }
+    function b:CreateTexture() return checkTex end
     function b:LockHighlight() calls[#calls + 1] = "lock" end
     function b:UnlockHighlight() calls[#calls + 1] = "unlock" end
     function b:GetFontString() return fs end
@@ -369,8 +375,11 @@ test("a chosen answer is lit and colored, and its text is never changed; un-choo
     function b:GetNormalFontObject() return "normalfont" end
     function b:GetDisabledFontObject() return "disabledfont" end
     LootWindow.Mark(b, true)
-    eq(calls[#calls], "lock"); eq(color[2], 1, "green label"); eq(b.text, "Need", "the text is untouched")
+    eq(calls[#calls], "lock"); eq(color[1], 1, "a white label"); eq(b.text, "Need", "the text is untouched")
+    assert(tinted[2] > tinted[1] and tinted[2] > tinted[3], "the button turns green")
+    eq(shown.on, true); assert(shown.tex:find("Check"), "a check mark appears inside it")
     LootWindow.Mark(b, false)
+    eq(tinted[1], 1); eq(tinted[2], 1); eq(shown.on, false, "the check mark goes")
     eq(calls[#calls], "unlock"); eq(font, "normalfont", "the label goes back to the button's own font")
     b.enabled = false
     LootWindow.Mark(b, true); LootWindow.Mark(b, false)
