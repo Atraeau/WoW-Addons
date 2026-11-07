@@ -24,6 +24,20 @@ was decided.*
 That's the whole game. The rest of this document explains the edge cases and the
 reasoning.
 
+### What is different from Suicide Kings
+
+King's Gambit keeps Suicide Kings' one move (win an item, drop to the bottom) and is not a rename of it. What it adds around that move:
+
+- **A ledger, not a kept list.** Every change is an entry in a shared, tamper-evident record each player holds and can verify.
+- **Live decisions by the player**, after the drop. No wishlists; officers run the process and do not decide who deserves loot.
+- **A separate off-spec list**, and main-spec always beats off-spec.
+- **Gifting** as a rule: win, then give to anyone; you pay the place.
+- **A draft** for several drops at once, with your ranking made up front.
+- **A salvage round** instead of a roll when nobody bids: the player at the bottom decides.
+- **Eligibility:** you are only asked about items you could use.
+- **Passing is free**, and your place changes only when you win.
+- **A list per raid**, and every correction and disenchant result recorded in the open.
+
 ---
 
 ## The rules, and why

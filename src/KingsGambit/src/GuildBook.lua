@@ -42,7 +42,20 @@ M.SECTIONS = {
 -- and docs/rationale.md (the rules), in short; those say it all, with the reasons.
 M.WELCOME = {
     { kind = "title", text = "Welcome to King's Gambit" },
-    { kind = "text", text = "King's Gambit shares out raid loot fairly, from one list, with a record the whole guild can check. It is derived from Suicide Kings and named for the chess gambit: a deliberate sacrifice of position for advantage. Whoever wins an item drops to the bottom of the list, and that is the whole price." },
+    { kind = "text", text = "King's Gambit shares out raid loot fairly, from one shared list, with a record the whole guild can check. It starts from Suicide Kings, keeps its one move (win an item and drop to the bottom, a deliberate sacrifice of position for advantage, which is where the name comes from), and is not a rename of it: nearly everything around that move is different." },
+
+    { kind = "heading", text = "What is different from Suicide Kings" },
+    { kind = "bullets", items = {
+        "The list is a ledger, not a spreadsheet. Every change is an entry in a shared, tamper-evident record that every player has a copy of and can verify. Nobody keeps the list for you, and nobody can change it quietly.",
+        "Decisions are made live, after the drop, by each player: Need, Off-spec, Gift or Pass. No wishlists, no officers deciding who deserves what.",
+        "Off-spec has a list of its own, so winning off-spec costs you there only, and a main-spec need always beats an off-spec bid.",
+        "Gifting is part of the rules: win an item and hand it to anyone, in any direction. You pay the place, and the record shows the generosity.",
+        "Several drops at once are a draft: the top player picks first, then the next, and you rank what you want up front so nobody is rushed.",
+        "Nobody asked, nobody wants it: the player at the bottom decides (the salvager), not a roll. Usable loot finds a home before it is disenchanted.",
+        "You are only asked about items you could use, by class and by the stats your spec values.",
+        "Passing is always free, and your place changes only when you win: never by absence, decay or penalty.",
+        "A raid can play on its own list (an older tier does not cost a place that newer loot is worth), and every correction and every disenchant result is written down, never hidden.",
+    } },
 
     { kind = "heading", text = "How it works in 60 seconds" },
     { kind = "numbered", items = {

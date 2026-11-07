@@ -2243,6 +2243,10 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   uses American spelling; when a rule changes, this text changes with the manifesto and the guide.
 - **First launch:** the Guild book opens on Welcome by itself, once per account (`KingsGambitDB.welcomed`), a few seconds after the ready message. After that it waits
   behind its nav button, and `/gambit welcome` (or `about`) opens it. (Whoever already used the addon sees it once, too.)
+- **Not a rename (a correction, same day):** "drop to the bottom when you win" is Suicide Kings, not King's Gambit, so the Welcome says so in its first paragraph and
+  lists what is different right after it, before the 60 seconds: the ledger instead of a kept list, live decisions by each player, a separate off-spec list, gifting,
+  the draft with a ranking made up front, the salvage round instead of a roll, eligibility, free passing, a list per raid, corrections in the open. The same list is in
+  the player guide (rationale.md).
 - **Not a copy of the docs:** it points to the repository and the browser simulator for the reasons behind each rule.
 
 ### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)

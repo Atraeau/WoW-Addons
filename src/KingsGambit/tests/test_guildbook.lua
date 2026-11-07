@@ -679,3 +679,14 @@ test("the Welcome section explains the addon: the 60 seconds, the values, the ru
     local db = {}
     assert(GuildBook.ShouldWelcome(db)); GuildBook.MarkWelcomed(db, 100); assert(not GuildBook.ShouldWelcome(db), "only once")
 end)
+
+test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, and what is different", function()
+    local text = GuildBook.WelcomeText()
+    local at = text:find("What is different from Suicide Kings", 1, true)
+    local sixty = text:find("How it works in 60 seconds", 1, true)
+    assert(at and sixty and at < sixty, "the difference comes before the 60 seconds, near the top")
+    assert(at < 1500, "and early: it is the first thing after the introduction")
+    for _, phrase in ipairs { "not a rename", "ledger", "Off-spec has a list of its own", "Gifting", "draft", "salvager" } do
+        assert(text:find(phrase, 1, true), "the difference names: " .. phrase)
+    end
+end)
