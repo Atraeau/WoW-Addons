@@ -46,7 +46,7 @@ M.WELCOME_PAGES = {
     { id = "start", label = "Start here", blocks = {
         { kind = "title", text = "Welcome to King's Gambit" },
         { kind = "text", text = "Fair raid loot from one shared list, with a record the whole guild can check." },
-        { kind = "callout", text = "It starts from Suicide Kings and keeps its one move: win an item and drop to the bottom, a deliberate sacrifice of position for advantage. That is where the name comes from. It is not a rename: nearly everything around that move is different, and the biggest change is that you can gift what you win." },
+        { kind = "callout", text = "It starts from Suicide Kings: win an item and drop to the bottom, a deliberate sacrifice of position for advantage. But Suicide Kings has a flaw. Someone high on the list passes on an item that would help them, to save their place for something better, and a useful item ends up disenchanted. King's Gambit is not a rename: it keeps that one move and is built so useful loot finds a home, not a shard." },
         { kind = "heading", text = "What is different from Suicide Kings" },
         { kind = "bullets", items = {
             { lead = "Gifting. This is the big one.", text = "Win an item and hand it to anyone, in any direction, even to someone above you. You pay the place, they get the item. A small upgrade is no longer wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible in the record." },
