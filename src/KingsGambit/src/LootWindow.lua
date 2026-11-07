@@ -82,7 +82,7 @@ local function bevel(b)
     end
     -- The face of a held-down button is a little darker, with a shadow fading inward from its top and left edges, as a real inset is lit from above-left. The
     -- button's border keeps its own shade (the game's mouse-down look is the bright one; this one is deliberately different). No light edges: they read as an outline.
-    local body = layer(0.22)
+    local body = layer(0.50) -- (clearly darker: the face of a held-down button is a deep, muted red, its label dimmed with it)
     body:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); body:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
     for i, a in ipairs { 0.30, 0.16, 0.07 } do -- shadow, top
         local t = layer(a); t:SetHeight(1)
