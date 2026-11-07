@@ -319,7 +319,7 @@ function M:Refresh()
         if M.tab == "admin" then M.RefreshLedgers(w.pages.admin, ctx) end
         return
     end
-    if M.tab == "welcome" then return end
+    if M.tab == "welcome" then return M.RefreshWelcome(w.pages.welcome) end
     if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     if M.tab == "stats" then return M.RefreshStats(w.pages.stats, ctx) end
     if M.tab == "thisraid" then return M.RefreshThisRaid(w.pages.thisraid, ctx) end
@@ -1039,24 +1039,107 @@ function M.RefreshLedgers(page, ctx)
     else p.message:Hide() end
 end
 
--- The Welcome section: the addon explained, scrolling. The text is GuildBook.WELCOME.
+-- The Welcome section: the addon explained in four short pages (GuildBook.WELCOME_PAGES), one screenful each, with a row of buttons to move between them.
+-- Each block gets its own text so the page has a hierarchy: a large gold title, gold headings with room above them, a callout with a bar at its left, and
+-- bullets and numbers with a hanging indent and a little air between them; a list item's lead words are white and the rest softer, so it can be skimmed.
+local WELCOME_W = 372
+local SOFT = "|cffc9c9c9"
+
+local function welcomeHeight(fs, text, width)
+    local h = fs.GetStringHeight and fs:GetStringHeight()
+    if type(h) == "number" and h > 0 then return h end
+    return math.ceil(#text / (width / 6.2)) * 13 -- (a guess where the game can't measure)
+end
+
 function M:BuildWelcome(parent)
     local p = CreateFrame("Frame", nil, parent)
     p:SetAllPoints()
+    -- the page buttons, across the top
+    p.pageButtons = {}
+    local x = 0
+    for _, page in ipairs(GuildBook.WELCOME_PAGES) do
+        local b = button(p, page.label, 92, 22)
+        b:SetPoint("TOPLEFT", x, 0)
+        x = x + 96
+        b:SetScript("OnClick", function() M.welcomePage = page.id; M:Refresh() end)
+        p.pageButtons[page.id] = b
+    end
     local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
     if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
-    scroll:SetPoint("TOPLEFT", 0, 0); scroll:SetPoint("BOTTOMRIGHT", -26, 0)
+    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 0)
     local child = CreateFrame("Frame", nil, scroll)
-    child:SetSize(380, 1)
+    child:SetSize(WELCOME_W + 8, 1)
     scroll:SetScrollChild(child)
-    local text = child:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    text:SetPoint("TOPLEFT", 4, -4); text:SetWidth(372)
-    text:SetJustifyH("LEFT"); text:SetJustifyV("TOP"); text:SetWordWrap(true)
-    text:SetText(GuildBook.WelcomeText())
-    local height = text.GetStringHeight and text:GetStringHeight()
-    child:SetHeight((type(height) == "number" and height or 1400) + 24)
-    p.scroll, p.child, p.text = scroll, child, text
+    p.scroll, p.child, p.pool, p.bars = scroll, child, {}, {}
     return p
+end
+
+-- Draw one page: every block under the one before it.
+function M.RenderWelcome(p, pageId)
+    local page
+    for _, pg in ipairs(GuildBook.WELCOME_PAGES) do if pg.id == pageId then page = pg end end
+    page = page or GuildBook.WELCOME_PAGES[1]
+    local used, usedBars, y = 0, 0, 6
+    local function put(font, text, x, width)
+        used = used + 1
+        local fs = p.pool[used]
+        if not fs then fs = p.child:CreateFontString(nil, "OVERLAY", "GameFontHighlight"); p.pool[used] = fs end
+        if fs.SetFontObject then fs:SetFontObject(font) end
+        fs:ClearAllPoints()
+        fs:SetPoint("TOPLEFT", p.child, "TOPLEFT", x, -y)
+        fs:SetWidth(width); fs:SetJustifyH("LEFT"); fs:SetJustifyV("TOP"); fs:SetWordWrap(true)
+        fs:SetText(text)
+        fs:Show()
+        return fs
+    end
+    local function lead(item)
+        if type(item) == "string" then return SOFT .. item .. "|r" end
+        return "|cffffffff" .. item.lead .. "|r" .. (item.text ~= "" and (" " .. SOFT .. item.text .. "|r") or "")
+    end
+    for _, b in ipairs(page.blocks) do
+        if b.kind == "title" then
+            local fs = put("GameFontNormalLarge", b.text, 4, WELCOME_W)
+            y = y + welcomeHeight(fs, b.text, WELCOME_W) + 8
+        elseif b.kind == "heading" then
+            y = y + 12
+            local fs = put("GameFontNormal", b.text, 4, WELCOME_W)
+            y = y + welcomeHeight(fs, b.text, WELCOME_W) + 6
+        elseif b.kind == "text" then
+            local fs = put("GameFontHighlight", SOFT .. b.text .. "|r", 4, WELCOME_W)
+            y = y + welcomeHeight(fs, b.text, WELCOME_W) + 8
+        elseif b.kind == "callout" then
+            local fs = put("GameFontHighlight", b.text, 16, WELCOME_W - 12)
+            local h = welcomeHeight(fs, b.text, WELCOME_W - 12)
+            usedBars = usedBars + 1
+            local bar = p.bars[usedBars]
+            if not bar then bar = p.child:CreateTexture(nil, "ARTWORK"); p.bars[usedBars] = bar end
+            bar:SetColorTexture(1, 0.82, 0, 0.9)
+            bar:ClearAllPoints()
+            bar:SetPoint("TOPLEFT", p.child, "TOPLEFT", 4, -y); bar:SetSize(3, h)
+            bar:Show()
+            y = y + h + 10
+        else
+            for i, item in ipairs(b.items) do
+                local glyph = b.kind == "numbered" and (i .. ".") or "•"
+                local indent = b.kind == "numbered" and 26 or 18
+                put("GameFontNormal", glyph, 4, indent - 4)
+                local fs = put("GameFontHighlight", lead(item), indent, WELCOME_W - indent + 4)
+                y = y + welcomeHeight(fs, GuildBook.ItemText(item), WELCOME_W - indent + 4) + 5
+            end
+            y = y + 3
+        end
+    end
+    for i = used + 1, #p.pool do p.pool[i]:Hide() end
+    for i = usedBars + 1, #p.bars do p.bars[i]:Hide() end
+    p.child:SetHeight(y + 16)
+    if p.scroll.SetVerticalScroll then p.scroll:SetVerticalScroll(0) end
+    p.shown = page.id
+    for id, b in pairs(p.pageButtons) do LootWindow.Mark(b, id == page.id) end
+end
+
+function M.RefreshWelcome(p)
+    local id = M.welcomePage or GuildBook.WELCOME_PAGES[1].id
+    if p.shown ~= id then M.RenderWelcome(p, id) end
 end
 
 -- The first time the addon starts on this account the Guild book opens on Welcome by itself, once.

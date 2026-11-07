@@ -28,10 +28,11 @@ reasoning.
 
 King's Gambit keeps Suicide Kings' one move (win an item, drop to the bottom) and is not a rename of it. What it adds around that move:
 
+- **Gifting as a rule, the biggest difference:** win, then give the item to anyone, in any direction, even upward; you pay the place and they get the item. A minor
+  upgrade is not wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible.
 - **A ledger, not a kept list.** Every change is an entry in a shared, tamper-evident record each player holds and can verify.
 - **Live decisions by the player**, after the drop. No wishlists; officers run the process and do not decide who deserves loot.
 - **A separate off-spec list**, and main-spec always beats off-spec.
-- **Gifting** as a rule: win, then give to anyone; you pay the place.
 - **A draft** for several drops at once, with your ranking made up front.
 - **A salvage round** instead of a roll when nobody bids: the player at the bottom decides.
 - **Eligibility:** you are only asked about items you could use.

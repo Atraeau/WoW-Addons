@@ -2247,6 +2247,10 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   lists what is different right after it, before the 60 seconds: the ledger instead of a kept list, live decisions by each player, a separate off-spec list, gifting,
   the draft with a ranking made up front, the salvage round instead of a roll, eligibility, free passing, a list per raid, corrections in the open. The same list is in
   the player guide (rationale.md).
+- **Gifting leads (the guild master's call):** the biggest difference is gifting, so it is the first item of the list, with its reason, and the callout says so.
+- **Not a wall of text (a second correction):** the Welcome is four short pages (Start here, The rules, Using it, Why) behind buttons at the top, one screenful each. Each
+  block has its own text: a large gold title, gold headings with room above, a callout with a bar at its left, bullets and numbers with a hanging indent and air between
+  them, and a list item's lead words in white with the rest softer so a list can be skimmed. The text is shorter and every item starts with its key words.
 - **Not a copy of the docs:** it points to the repository and the browser simulator for the reasons behind each rule.
 
 ### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)
