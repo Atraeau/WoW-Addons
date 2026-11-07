@@ -7473,9 +7473,8 @@ M.TEXT = {
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
     tryon = { "Try it on", "See how this entry's item looks on your character, in the game's dressing room. You can also Ctrl-click an entry. It only shows the item; nothing is recorded or equipped." },
-    navledgers = { "Ledgers", "Every ledger stored on this computer, one for each guild you have played in. Retire the ones nobody uses any more: its saved data is removed from this computer (it asks first). An officer's retirement is told to the guild: each member can restore it or let it expire in 30 days. The ledger in use now is removed at your next login." },
-    retireledger = { "Retire", "Remove this ledger's saved data from this computer. Nothing in the ledger is erased and nobody else's copy is touched. An officer's retirement is told to the guild, which can restore it or let it expire." },
-    keepledger = { "Keep", "Bring a retired ledger back. Everyone is told, and if its data was removed here it is fetched again from whoever still has it." },
+    navwelcome = { "Welcome", "What King's Gambit is, how loot works, what the guild values and where everything is. It opens by itself the first time; it is always here." },
+    retireledger = { "Retire or keep", "Retire: remove this ledger's saved data from this computer (it asks first; only an officer of its guild can). Nothing in the ledger is erased and nobody else's copy is touched. An officer's retirement is told to the guild: each member can restore it or let it expire in 30 days. The ledger in use now is removed at your next login.\n\nKeep: bring a retired ledger back. Everyone is told, and if its data was removed here it is fetched again from whoever still has it." },
     navstats = { "Stats", "Who is at which place and for how long, who has won and when, worked out from the record. Click a player to see every place they have held." },
     raidautostart = { "Start by itself", "Ticked (the default): the raid starts by itself when the first enemy dies inside an instance, boss or trash. Unticked: you take control, and nothing starts it but Start the raid now. Kept for this character." },
     raidstartnow = { "Start the raid now", "Start the raid yourself, wherever it is (a world boss, for one): everyone in the group at this moment is written down as being there, and the group is followed from then on." },
@@ -8047,6 +8046,7 @@ local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migr
 -- `gap` puts a space above its button: Admin is the ledger owner's and maintenance corner, kept apart from the everyday sections.
 -- Every action belongs to exactly one section (the old History form is the Ledger section now).
 M.SECTIONS = {
+    { id = "welcome", label = "Welcome", tip = "What King's Gambit is, how loot works, what the guild values, and where everything is. Shown the first time you open the addon; always here." },
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "thisraid", label = "This raid", tip = "The raid that is open now: how long it has run, what has been handed out, what is still to hand out and how long it can be traded, and its part of the ledger." },
     { id = "ledger", label = "Ledger", tip = "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
@@ -8059,12 +8059,118 @@ M.SECTIONS = {
         actions = { "add", "remove", "move", "officers", "disregard", "regard", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
-    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
+    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing, and the ledger stored on this computer (retiring it): the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
-    { id = "ledgers", label = "Ledgers", tip = "Every ledger stored on this computer, one for each guild you have played in. Retire the ones nobody uses any more; an officer's retirement is told to the guild, which can restore it or let it expire." },
 }
 
--- The stored ledgers as rows for the Ledgers section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
+-- The Welcome section: what the addon is and how to use it, as plain blocks the game's window (and later the web page) draws:
+-- { kind = "title" | "heading" | "text" | "bullets" | "numbered", text = "..." | items = { "...", ... } }. It mirrors docs/manifesto.md (the values and principles)
+-- and docs/rationale.md (the rules), in short; those say it all, with the reasons.
+M.WELCOME = {
+    { kind = "title", text = "Welcome to King's Gambit" },
+    { kind = "text", text = "King's Gambit shares out raid loot fairly, from one list, with a record the whole guild can check. It is derived from Suicide Kings and named for the chess gambit: a deliberate sacrifice of position for advantage. Whoever wins an item drops to the bottom of the list, and that is the whole price." },
+
+    { kind = "heading", text = "How it works in 60 seconds" },
+    { kind = "numbered", items = {
+        "One list. Everyone has a place on a shared list. The top is whoever has gone longest since winning something.",
+        "Something drops. A small window asks: Need, Off-spec, Gift or Pass. You decide live; nothing is decided beforehand.",
+        "The highest place among those who want it wins, and drops to the bottom. That is the only thing that ever changes your place.",
+        "Passing is always free, for any reason.",
+        "Everything is recorded in a shared ledger that nobody can quietly change, and anyone in the guild can read and verify.",
+    } },
+
+    { kind = "heading", text = "What we value" },
+    { kind = "text", text = "There is value in both sides of each of these, but we value the first more:" },
+    { kind = "bullets", items = {
+        "In-the-moment decisions over plans made before the raid.",
+        "Individual agency over central authority.",
+        "Earned turns over the luck of the roll.",
+        "Transparency and social trust over rules enforced by penalty.",
+        "Effortless fairness over high-maintenance optimization: hard to be unfair, easy to be fair.",
+    } },
+
+    { kind = "heading", text = "The principles behind it" },
+    { kind = "numbered", items = {
+        "A loot system's first job is to be trusted: every decision is visible and verifiable.",
+        "Decisions are made live, after the drop.",
+        "Your place is your only currency. You spend it only when you win; passing is free.",
+        "The highest player who wants an item wins it and returns to the bottom. One rule, every time.",
+        "An item is worth whatever someone will spend on it; the standings show its value.",
+        "Usable loot finds a home, not a shard: it is disenchanted only when truly no one wants it.",
+        "We surface hoarding rather than punish it. Your place changes only when you win.",
+        "Generosity is enabled and seen, never required: you can give an item to anyone, and the cost is yours.",
+        "Mistakes are fixed in the open: corrections are recorded, history is never rewritten.",
+        "Officers run the process; they do not decide who deserves loot. The rules do.",
+        "Success is fairness and trust, not how optimally gear was handed out.",
+    } },
+
+    { kind = "heading", text = "The rules at the table" },
+    { kind = "bullets", items = {
+        "You are only asked about items you could use: your class can equip it and it carries enough of the stats your spec values. An officer can override this for an item, and the override is in the ledger.",
+        "Need: among everyone who needs it, the highest place wins and drops to the bottom.",
+        "Off-spec: a separate off-spec list, so winning off-spec costs you there only. A main-spec need always beats an off-spec bid.",
+        "Several items at once (the draft): the top player picks first and drops to the bottom, then the next. If you want more than one item, you rank them up front and the draft picks your highest-ranked one that is still there.",
+        "Gifting: win an item and hand it to someone else, in any direction. You pay the place; they get the item. Gifts come after everyone who wants the item for themselves.",
+        "When nobody bids: the player at the bottom of the list is the salvager. They keep, give away, sell or disenchant it, or pass it to the designated disenchanter and the guild bank.",
+        "A disenchant is recorded together with what it actually gave.",
+        "Mistakes are corrected with new entries (undo, trade, move, with a reason). Nothing is erased.",
+    } },
+
+    { kind = "heading", text = "Finding your way around" },
+    { kind = "text", text = "Type /gambit to open the Guild book, the larger window. The Loot window is the small one: it opens by itself when a loot session starts, and asks you Need, Off-spec, Gift or Pass." },
+    { kind = "bullets", items = {
+        "Lists: the standings, who is first for what, and the officers' moves (add, remove, move).",
+        "This raid: the raid that is open now, what has been handed out, what is held and how long it can still be traded.",
+        "Ledger: the record of everything that happened, in words. Click an item to try it on; the raw record is one click away.",
+        "Stats: who held which place for how long, wins, and who was at which raid.",
+        "Awards: record a win the session missed, undo an award, say where an item went, say what a disenchant gave.",
+        "Raids: open and close a raid, and choose its Master Looter, its list and its disenchanter.",
+        "People: add, remove and move players; who the officers are; your own spec.",
+        "Rules: which classes may bid on an item, who it suits, and requests to the Master Looter.",
+        "Admin: starting the ledger's lists, versions, syncing, and retiring a ledger you no longer use.",
+    } },
+    { kind = "text", text = "Tick Practice mode at the top of the Guild book to rehearse a whole raid night, loot, several raids and all, on a simulated guild. Nothing in it is recorded or sent. Hover over any button for what it does. /gambit help lists every command." },
+
+    { kind = "heading", text = "Getting started" },
+    { kind = "bullets", items = {
+        "Raider: there is nothing to set up. The ledger reaches you from your officers when you are online with them. Try Practice mode first.",
+        "First officer in a guild: open Lists and press Start the ledger, once, on the character that should be ledger owner. Then add your players. Everyone else gets the ledger by syncing with you.",
+        "Officer: your rank needs the game's Is Officer permission (the Guild Master sets that). The addon asks the game, it does not keep its own list of officers.",
+        "Master Looter: an officer opens a raid for you in Raids. The raid starts by itself at the first enemy killed inside an instance, and the loot session at the first drop.",
+    } },
+
+    { kind = "heading", text = "What this is not" },
+    { kind = "bullets", items = {
+        "Not an optimizer. It guarantees a fair, transparent process, not that the best item reaches the best use.",
+        "Not a replacement for culture. It makes behavior visible; people still choose how to behave.",
+        "Not trustless. It assumes officers act in good faith. The ledger catches mistakes, lost messages and desync, not a determined bad-faith officer. If someone writes who shouldn't, officers are told and can disregard them.",
+    } },
+
+    { kind = "heading", text = "Read more" },
+    { kind = "text", text = "The manifesto, the player guide with the reason for every rule, the ledger owner's guide and every design decision are in the addon's repository: github.com/Atraeau/WoW-Addons (the folder src/KingsGambit/docs). You can also play the whole thing in a browser, no game needed: atraeau.github.io/WoW-Addons/kings-gambit" },
+}
+
+-- The Welcome text as one string with the game's color codes (the title and headings in gold; numbered items and bullets indented).
+function M.WelcomeText()
+    local lines = {}
+    for _, b in ipairs(M.WELCOME) do
+        if b.kind == "title" then lines[#lines + 1] = "|cffffd100" .. b.text .. "|r"; lines[#lines + 1] = ""
+        elseif b.kind == "heading" then lines[#lines + 1] = ""; lines[#lines + 1] = "|cffffd100" .. b.text .. "|r"
+        elseif b.kind == "text" then lines[#lines + 1] = b.text
+        else
+            for i, item in ipairs(b.items) do
+                lines[#lines + 1] = (b.kind == "numbered" and ("|cffffd100%d.|r %s"):format(i, item)) or ("|cffffd100-|r " .. item)
+            end
+        end
+    end
+    return table.concat(lines, "\n")
+end
+
+-- First launch: the Welcome section opens once, by itself (on this account), and then waits behind its button.
+function M.ShouldWelcome(db) return type(db) == "table" and not db.welcomed end
+function M.MarkWelcomed(db, now) if type(db) == "table" then db.welcomed = now or true end end
+
+-- The stored ledgers as rows for the panel at the foot of the Admin section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
 -- Retiring removes the saved data from this computer only (Ledgers.lua); the page asks first and then runs `ledgers retire <n> yes`.
 function M.Ledgers(ctx)
     local client = ctx.client

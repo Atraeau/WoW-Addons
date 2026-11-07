@@ -72,6 +72,10 @@ local function Start(attempt)
     for _ in pairs(engine.view.lists) do lists = lists + 1 end
     SK.world = client:world()
     local guild = client.guildName and client:guildName()
+    -- the first time on this account: the Guild book opens on Welcome by itself (a moment after the ready message), once
+    if M.UI and M.UI.MaybeWelcome then
+        client:after(3, function() local ok, err = pcall(M.UI.MaybeWelcome, M.UI); if not ok then SK:Print("the welcome page failed to open: " .. tostring(err)) end end)
+    end
     local whose = guild and ("the guild " .. guild) or "you (no guild)"
     if engine:LedgerId() then
         SK:Print(("ready: the ledger of %s has %d list%s. Type /gambit to open the window, or /gambit help."):format(whose, lists, lists == 1 and "" or "s"))
@@ -112,6 +116,15 @@ SlashCmdList["KINGSGAMBIT"] = function(msg)
     if (msg or ""):match("^%s*window%s+reset%s*$") and SK.modules.UI and SK.modules.UI.ResetWindows then
         SK.modules.UI:ResetWindows()
         SK:Print("the windows are back where they start")
+        return
+    end
+    if (msg or ""):match("^%s*welcome%s*$") or (msg or ""):match("^%s*about%s*$") then
+        if SK.modules.UI and SK.modules.UI.Open and CreateFrame and UIParent then
+            local ok, err = pcall(SK.modules.UI.Open, SK.modules.UI, "welcome")
+            if not ok then SK:Print("the welcome page failed to open: " .. tostring(err)) end
+        else
+            SK:Print("King's Gambit shares out raid loot from one list: the highest place among those who want an item wins it and drops to the bottom, and everything is recorded in a ledger the guild can verify. Type /gambit help for the commands.")
+        end
         return
     end
     if (msg or ""):match("^%s*window%s*$") and SK.modules.UI and SK.modules.UI.OpenLoot then

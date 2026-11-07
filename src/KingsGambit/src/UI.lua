@@ -319,6 +319,7 @@ function M:Refresh()
         if M.tab == "admin" then M.RefreshLedgers(w.pages.admin, ctx) end
         return
     end
+    if M.tab == "welcome" then return end
     if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     if M.tab == "stats" then return M.RefreshStats(w.pages.stats, ctx) end
     if M.tab == "thisraid" then return M.RefreshThisRaid(w.pages.thisraid, ctx) end
@@ -1038,6 +1039,35 @@ function M.RefreshLedgers(page, ctx)
     else p.message:Hide() end
 end
 
+-- The Welcome section: the addon explained, scrolling. The text is GuildBook.WELCOME.
+function M:BuildWelcome(parent)
+    local p = CreateFrame("Frame", nil, parent)
+    p:SetAllPoints()
+    local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
+    if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
+    scroll:SetPoint("TOPLEFT", 0, 0); scroll:SetPoint("BOTTOMRIGHT", -26, 0)
+    local child = CreateFrame("Frame", nil, scroll)
+    child:SetSize(380, 1)
+    scroll:SetScrollChild(child)
+    local text = child:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    text:SetPoint("TOPLEFT", 4, -4); text:SetWidth(372)
+    text:SetJustifyH("LEFT"); text:SetJustifyV("TOP"); text:SetWordWrap(true)
+    text:SetText(GuildBook.WelcomeText())
+    local height = text.GetStringHeight and text:GetStringHeight()
+    child:SetHeight((type(height) == "number" and height or 1400) + 24)
+    p.scroll, p.child, p.text = scroll, child, text
+    return p
+end
+
+-- The first time the addon starts on this account the Guild book opens on Welcome by itself, once.
+function M:MaybeWelcome()
+    local db = SK.client and SK.client.storage and SK.client:storage().shared
+    if not (CreateFrame and UIParent) or not GuildBook.ShouldWelcome(db) then return false end
+    GuildBook.MarkWelcomed(db, SK.client:serverTime())
+    self:Open("welcome")
+    return true
+end
+
 function M:BuildStandings(parent)
     local p = CreateFrame("Frame", nil, parent)
     p:SetAllPoints()
@@ -1290,7 +1320,7 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content), thisraid = M:BuildThisRaid(content) }
+    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content), thisraid = M:BuildThisRaid(content), welcome = M:BuildWelcome(content) }
     for _, s in ipairs(GuildBook.SECTIONS) do
         if s.actions then
             w.pages[s.id] = UITools.Build(content, M, s)

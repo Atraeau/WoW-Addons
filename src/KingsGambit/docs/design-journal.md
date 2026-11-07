@@ -2233,6 +2233,18 @@ The entry below kept the "upgrade" passes in the record for the transparency sta
 The guild master asked whether passes need to be in the ledger at all, since they are by far the most common entries and the question the Ledger answers is what happened to an item, not what could have happened to it. What is actually written is already small: **plain passes were never recorded** (design: "only passes that carry a kind are written, for the transparency stats"). Only a pass that carries a kind, such as an "upgrade" pass, is written, because passing on an upgrade is the signal the anti-hoarding transparency stats are built on (a member's `passes` and `upgradePasses` are part of the standings digest). So the record keeps them, unchanged, and nothing about the ledger's format or version line changes.
 What changed is the **view**: the Ledger's filter now starts at **What happened**, which leaves passes out, and has **Passes** (only them) and **Everything** (all of it) beside Loot, List changes, Rules and Raids. One kind of pass stays in the default view because it is an outcome: a gift won but never given to anyone (`undecided`), which the Master Looter counts as a pass, is what happened to the item. The practice raiders' upgrade passes (about a quarter of their answers) were the noise in practice. If the stats are ever judged not worth the entries, stopping the writing of kinded passes is a separate, small decision: old ledgers would still read.
 
+### Decision: a Welcome section explains the addon, and opens once on the first launch (2026-11-07)
+
+New users had nothing in the game that said what King's Gambit is or how loot works there. The Guild book now starts with **Welcome**, in short what the manifesto
+(values, principles, what it is not) and the player guide (the 60 seconds, the rules at the table) say, plus where everything is in the Guild book and how to start.
+
+- **Content is data, not frames:** `GuildBook.WELCOME` (title, headings, text, bullets, numbered items), so the game's window and the web simulator can draw the
+  same words later. The window shows it as one scrolling text. A test checks that it says the main things, explains every section of the Guild book by name and
+  uses American spelling; when a rule changes, this text changes with the manifesto and the guide.
+- **First launch:** the Guild book opens on Welcome by itself, once per account (`KingsGambitDB.welcomed`), a few seconds after the ready message. After that it waits
+  behind its nav button, and `/gambit welcome` (or `about`) opens it. (Whoever already used the addon sees it once, too.)
+- **Not a copy of the docs:** it points to the repository and the browser simulator for the reasons behind each rule.
+
 ### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)
 
 A character that has played in several guilds, or a ledger founded to try something, leaves stored ledgers nobody uses (the guild master removed two by hand from

@@ -11,8 +11,8 @@ local function raid()
 end
 
 H.section("Guild book")
-test("the sections start with Lists and the Ledger, each explained", function()
-    eq(GuildBook.SECTIONS[1].id, "lists"); eq(GuildBook.SECTIONS[2].id, "thisraid"); eq(GuildBook.SECTIONS[3].id, "ledger"); eq(GuildBook.SECTIONS[3].label, "Ledger")
+test("the sections start with Welcome, Lists and the Ledger, each explained", function()
+    eq(GuildBook.SECTIONS[1].id, "welcome"); eq(GuildBook.SECTIONS[2].id, "lists"); eq(GuildBook.SECTIONS[3].id, "thisraid"); eq(GuildBook.SECTIONS[4].id, "ledger"); eq(GuildBook.SECTIONS[4].label, "Ledger")
     for _, s in ipairs(GuildBook.SECTIONS) do assert(s.label and s.tip, "every section has a label and a tip") end
 end)
 
@@ -661,4 +661,21 @@ test("a new ledger is founded under the guild's name, and under a plain name for
     eq(genesis.data.name, "The Rooks")
     local solo = Engine.New(MockClient.New({ name = "Kirk" })); assert(solo:CreateList("main", "Main"))
     for _, ch in pairs(solo.store.chains) do for _, ev in ipairs(ch.events) do if ev.type == "Genesis" then eq(ev.data.name, "Guild ledger") end end end
+end)
+
+H.section("Welcome")
+test("the Welcome section explains the addon: the 60 seconds, the values, the rules, the sections, getting started; and opens once on a first launch", function()
+    local text = GuildBook.WelcomeText()
+    for _, phrase in ipairs { "How it works in 60 seconds", "What we value", "The principles behind it", "The rules at the table", "Finding your way around",
+        "Getting started", "What this is not", "Passing is always free", "drops to the bottom", "Start the ledger", "Practice mode", "Is Officer" } do
+        assert(text:find(phrase, 1, true), "the welcome says: " .. phrase)
+    end
+    -- every section of the Guild book is explained, by its own name
+    for _, s in ipairs(GuildBook.SECTIONS) do
+        if s.id ~= "welcome" then assert(text:find(s.label .. ":", 1, true), "the welcome explains " .. s.label) end
+    end
+    for _, b in ipairs(GuildBook.WELCOME) do assert(b.text or (b.items and #b.items > 0), "no empty blocks") end
+    for _, british in ipairs { "colour", "behaviour", "grey", "favour", "organis", "optimis" } do assert(not text:lower():find(british, 1, true), "American spelling: " .. british) end
+    local db = {}
+    assert(GuildBook.ShouldWelcome(db)); GuildBook.MarkWelcomed(db, 100); assert(not GuildBook.ShouldWelcome(db), "only once")
 end)
