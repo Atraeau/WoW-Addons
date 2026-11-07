@@ -178,3 +178,31 @@ test("the Ledgers section lists the stored ledger with Retire or Keep, and the p
     eq(#none.rows, 0); assert(none.note)
     eq(UI.ConfirmRetire({ n = 1, title = "Gray Parse (Horde)", open = true }), false)
 end)
+
+H.section("Retiring needs an officer of that guild")
+test("a guild's ledger is retired only by an officer of that guild; a notice naming another guild's world is ignored; your own ledger is yours", function()
+    local open = "mode18-Horde-guild:gray parse"
+    local db = { worlds = { [open] = world("bbb", "Guild ledger", 2), ["mode18-Horde-solo:Me_Self"] = {} } }
+    local client = setup(open, db)
+    client:setOfficers({ "Boss" }) -- Me is a member, not an officer, of this guild (the game's rank says so)
+    local engine = Engine.New(client)
+    local printed = {}
+    client.print = function(_, text) printed[#printed + 1] = text end
+    local cmds = Commands.New({ client = client, engine = engine, sync = Sync.New(engine) })
+    local function say(text) printed = {}; cmds.handle(text); return table.concat(printed, "\n") end
+    assert(say("ledgers retire 1 yes"):find("only an officer of Gray Parse can retire"), "refused, even with yes")
+    assert(next(db.retired or {}) == nil, "nothing was retired")
+    local m = SK.modules.GuildBook.Ledgers({ client = client, engine = engine })
+    assert(not m.rows[1].canRetire and m.rows[1].why:find("only an officer"), "the button is off and says why")
+    client:setOfficers({ "Me" })
+    assert(say("ledgers retire 1 yes"):find("Retired"), "an officer of this guild may")
+    -- the ledger of another guild is never the one in view, so it can't be retired by being an officer elsewhere
+    local row = { kind = "guild", key = "mode18-Horde-guild:other", who = "other" }
+    local ok, why = Ledgers.MayRetire(client, row)
+    assert(not ok and why:find("isn't the ledger of the guild you are in"))
+    -- a notice that names another guild's world is not about this one
+    local now = client:serverTime()
+    eq(#Ledgers.Hear(db, { bbb = { t = now, r = 1, b = "Boss", n = "x", w = "mode18-Horde-guild:other" } }, now, open), 0)
+    -- a character in no guild owns the ledger of their own
+    assert(Ledgers.MayRetire(client, { kind = "solo", key = "mode18-Horde-solo:Me_Self" }))
+end)

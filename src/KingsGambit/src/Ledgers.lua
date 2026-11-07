@@ -92,6 +92,18 @@ function M.IsRetired(db, id)
     return t ~= nil and t ~= false and t.r == 1
 end
 
+-- May this character retire that ledger? A guild's ledger is retired only by an officer OF THAT GUILD, by pressing the button: the game's "Is Officer" permission
+-- in the guild this character is in now, and the ledger must be that guild's (being an officer or the Guild Master of another guild gives nothing here). A
+-- ledger with no guild (your own, when you are in none) is yours to retire. Returns true, or false and why.
+function M.MayRetire(client, row)
+    if row.kind ~= "guild" then return true end
+    if client.world and row.key ~= client:world() then return false, "that isn't the ledger of the guild you are in" end
+    if not client.isOfficer or client:isOfficer() ~= true then
+        return false, ("only an officer of %s can retire its ledger (a rank with the \"Is Officer\" permission)"):format((tostring(row.who):gsub("(%a)([%w']*)", function(a, b) return a:upper() .. b end)))
+    end
+    return true
+end
+
 -- Retire the stored ledger `key`: remove its data (an empty world is simply removed) and keep a tombstone. The open ledger can't be swapped while it is in
 -- use: it is marked and removed at the next login (`later`). Returns true, tombstone-or-nil, later; or false and why ("unknown").
 function M.Retire(db, key, by, now, openKey)
@@ -162,7 +174,8 @@ function M.Hear(db, x, now, worldKey)
     local told = {}
     if type(x) ~= "table" then return told end
     for id, e in pairs(x) do
-        if sane(id, e, now) then
+        -- only about this guild's own ledger: a notice naming another world (another guild's officer in the same raid, say) is not about us
+        if sane(id, e, now) and (worldKey == nil or e.w == nil or e.w == worldKey) then
             local have = tombs(db)[id]
             local heldKey
             for key, store in pairs(db.worlds or {}) do

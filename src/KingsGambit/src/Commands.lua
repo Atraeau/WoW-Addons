@@ -1041,6 +1041,8 @@ function M.New(ctx)
                 row.held and "" or "; its data is fetched again from whoever still has it"))
         end
         if row.retired then return out(("%s is already retired (%s)."):format(d.title, d.status or "")) end
+        local may, whyNot = Ledgers.MayRetire(client, row)
+        if not may then return out("Not retired: " .. whyNot .. ".") end
         if rest:lower() ~= "yes" then
             return out(("Retire %s (%s)? This removes its saved data from this machine%s%s. Nothing is written to the ledger and nobody else's copy is touched. To go ahead: ledgers retire %d yes"):format(
                 d.title, d.detail, row.open and " at your next login (it is the ledger in use now)" or " at once",

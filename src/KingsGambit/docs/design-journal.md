@@ -2254,6 +2254,11 @@ the saved variables). Now the addon lists every ledger stored on the computer (`
   ledger of the world being played in (the same ruleset, faction and guild). Atraeau never sees Morla's ledgers, nor those of another guild of the same faction.
   A retirement notice is only about the ledger of the receiver's own world. Retiring a ledger of a guild you have left is therefore done by logging in as a
   character of that guild; the saved file itself is the only place all of them can be seen.
+- **Retiring is that guild's officer's act (a second correction):** a guild's ledger is retired only by pressing Retire (or typing `ledgers retire <n> yes`) as an
+  officer of THAT guild: the game's "Is Officer" permission in the guild the character is in now, with the ledger being that guild's. Being the Guild Master or an
+  officer of another guild gives nothing; a plain member is refused (the button is off and says why). A ledger with no guild is its owner's. Notices from other
+  guilds' officers (the heartbeat also travels in a shared raid) are ignored: the sender must be an officer of this guild and the notice must name this guild's world.
+  Nothing retires a ledger on its own: the expiry after 30 days only follows an officer's press, and a member can Keep it.
 - **Not done:** the web simulator doesn't draw this page (the Guild book page isn't in it yet); cross-guild lists are still later.
 
 ### Ledger: an entry's item can be tried on (2026-11-06)

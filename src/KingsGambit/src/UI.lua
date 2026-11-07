@@ -1013,7 +1013,7 @@ function M.RefreshLedgers(p, ctx)
         local row, r = p.rows[i], model.rows[i]
         row.model = r
         if r then
-            row.text:SetText(("|cffffd100%s|r\n%s%s"):format(r.title, r.detail, r.status and ("\n|cff9fd0ff" .. r.status .. "|r") or ""))
+            row.text:SetText(("|cffffd100%s|r\n%s%s%s"):format(r.title, r.detail, r.status and ("\n|cff9fd0ff" .. r.status .. "|r") or "", r.why and ("\n|cff999999" .. r.why .. "|r") or ""))
             row.button:SetText(r.canKeep and "Keep" or "Retire")
             if r.canKeep or r.canRetire then row.button:Show() else row.button:Hide() end
             row:Show()

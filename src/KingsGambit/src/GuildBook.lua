@@ -47,8 +47,10 @@ function M.Ledgers(ctx)
     local out = { rows = {} }
     for _, r in ipairs(Ledgers.Stored(db, client.world and client:world() or nil, client.world ~= nil)) do
         local d = Ledgers.Describe(r, now, Identity.Display)
+        local may, whyNot = Ledgers.MayRetire(client, r)
         out.rows[#out.rows + 1] = { n = r.n, key = r.key, id = r.id, title = d.title, detail = d.detail, status = d.status, held = r.held, open = r.open,
-            retired = r.retired ~= nil, canRetire = r.held and r.retired == nil, canKeep = r.retired ~= nil and r.id ~= nil }
+            retired = r.retired ~= nil, canRetire = r.held and r.retired == nil and may, why = (r.held and r.retired == nil and not may) and whyNot or nil,
+            canKeep = r.retired ~= nil and r.id ~= nil }
     end
     if #out.rows == 0 then out.note = "No ledgers are stored on this computer." end
     return out
