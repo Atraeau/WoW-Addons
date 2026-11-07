@@ -85,20 +85,21 @@ local function bevel(b)
     -- over a few along the bottom and right, each with its crisp outermost line; under it a body only a little darker than the button.
     local body = layer(0, 0, 0, 0.20)
     body:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); body:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
-    for i, a in ipairs { 0.42, 0.26, 0.14, 0.06 } do -- shadow, top
+    for i, a in ipairs { 0.38, 0.22, 0.10, 0.04 } do -- shadow, top
         local t = layer(0, 0, 0, a); t:SetHeight(1)
         t:SetPoint("TOPLEFT", b, "TOPLEFT", I, -(I + i - 1)); t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -I, -(I + i - 1))
     end
-    for i, a in ipairs { 0.30, 0.15, 0.06 } do -- shadow, left
+    for i, a in ipairs { 0.26, 0.12, 0.04 } do -- shadow, left
         local t = layer(0, 0, 0, a); t:SetWidth(1)
         t:SetPoint("TOPLEFT", b, "TOPLEFT", I + i - 1, -I); t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I + i - 1, I)
     end
-    for i, a in ipairs { 0.42, 0.20, 0.10, 0.04 } do -- light, bottom
-        local t = layer(1, 1, 1, a); t:SetHeight(1)
+    -- (the light is a soft warm tint of the red button, not white, and has no crisp bright line: a white line along the bottom looked like an underline)
+    for i, a in ipairs { 0.16, 0.09, 0.04 } do -- light, bottom
+        local t = layer(1, 0.82, 0.78, a); t:SetHeight(1)
         t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I + i - 1); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I + i - 1)
     end
-    for i, a in ipairs { 0.30, 0.14, 0.05 } do -- light, right
-        local t = layer(1, 1, 1, a); t:SetWidth(1)
+    for i, a in ipairs { 0.12, 0.06, 0.03 } do -- light, right
+        local t = layer(1, 0.82, 0.78, a); t:SetWidth(1)
         t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -(I + i - 1), -I); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -(I + i - 1), I)
     end
     b.bevel = list
