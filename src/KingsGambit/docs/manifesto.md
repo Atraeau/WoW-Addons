@@ -41,7 +41,7 @@ runs with less debate and drama.
 8. **Generosity is enabled and seen, never required.** You can give an item to anyone, in any direction; the cost is yours.
 9. **Mistakes are fixed in the open.** Corrections are recorded, never hidden; history is never rewritten.
 10. **Officers run the process; they don't decide who deserves loot.** The rules do — and the record outlasts memory.
-11. **We judge success by fairness and trust, not by how optimally gear was handed out** — a trade we make on purpose.
+11. **Success comes from fairness and trust, not how to distribute loot for optimal performance** — a trade we make on purpose.
 
 ---
 
