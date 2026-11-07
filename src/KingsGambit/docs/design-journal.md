@@ -2265,6 +2265,8 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
 - **The flaw it answers (a third correction):** the callout now names what is wrong with Suicide Kings: someone high on the list passes on an item that would help them,
   to save their place for something better, and a useful item is disenchanted. King's Gambit is built so useful loot finds a home, not a shard (gifting lets it be passed on at a
   cost, the salvager takes what nobody bids on, and the draft asks everyone who wants it). The same sentence is in the player guide.
+- **Gifting is the fix, said so (the guild master's call):** the callout and the first bullet now tie gifting to that flaw: when the player who would use an item sits too high
+  to spend their place on it, someone near the bottom wins it cheaply and passes it up.
 - **Gifting leads (the guild master's call):** the biggest difference is gifting, so it is the first item of the list, with its reason, and the callout says so.
 - **Not a wall of text (a second correction):** the Welcome is four short pages (Start here, The rules, Using it, Why) behind buttons at the top, one screenful each. Each
   block has its own text: a large gold title, gold headings with room above, a callout with a bar at its left, bullets and numbers with a hanging indent and air between

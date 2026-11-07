@@ -698,7 +698,7 @@ test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, 
     local sixty = text:find("How it works in 60 seconds", 1, true)
     assert(at and sixty and at < sixty, "the difference comes before the 60 seconds, near the top")
     assert(at < 1500, "and early: it is the first thing after the introduction")
-    local gift = text:find("Gifting. This is the big one.", 1, true)
+    local gift = text:find("Gifting. This is the big one, the fix for that flaw.", 1, true)
     assert(gift and gift < text:find("A ledger, not a kept list.", 1, true), "gifting leads the list: it is the most significant difference")
     for _, phrase in ipairs { "not a rename", "ledger", "Off-spec has its own list", "Gifting", "draft", "Salvage" } do
         assert(text:find(phrase, 1, true), "the difference names: " .. phrase)
