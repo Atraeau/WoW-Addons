@@ -1068,7 +1068,7 @@ function M:BuildWelcome(parent)
     if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
     scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 30)
     -- the first-run setting: on until it is turned off here
-    local label = "Open King's Gambit on this page"
+    local label = "Show the welcome page first"
     local function toggle(on) GuildBook.SetWelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared, on); M:Refresh() end
     local okc, check = pcall(CreateFrame, "CheckButton", nil, p, "UICheckButtonTemplate")
     if okc and check then
@@ -1158,7 +1158,7 @@ function M.RefreshWelcome(p)
     local id = M.welcomePage or GuildBook.WELCOME_PAGES[1].id
     if p.shown ~= id then M.RenderWelcome(p, id) end
     p.firstOn = GuildBook.WelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared)
-    if p.firstIsButton then p.firstCheck:SetText("Open on this page: " .. (p.firstOn and "on" or "off"))
+    if p.firstIsButton then p.firstCheck:SetText("Welcome page first: " .. (p.firstOn and "on" or "off"))
     elseif p.firstCheck.SetChecked then p.firstCheck:SetChecked(p.firstOn) end
 end
 

@@ -2254,7 +2254,7 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   same words later. The window shows it as one scrolling text. A test checks that it says the main things, explains every section of the Guild book by name and
   uses American spelling; when a rule changes, this text changes with the manifesto and the guide.
 - **First run is a setting, and nothing opens by itself (a correction):** someone may open the addon and close it at once, in the middle of something else, so
-  "seen once" was wrong. The addon says in chat that `/gambit` opens it (and that it starts on Welcome). While **Open King's Gambit on this page** (a checkbox at the foot
+  "seen once" was wrong. The addon says in chat that `/gambit` opens it (and that it starts on Welcome). While **Show the welcome page first** (a checkbox at the foot
   of the Welcome page, or `/gambit welcome off` / `on`) is ticked, `/gambit` opens on Welcome, however often it is closed unread. Once it is off, the window opens on the
   section it was on when last closed (Lists the first time). The switch is per account (`KingsGambitDB.welcomeOff`), the last section per character
   (`KingsGambitCharDB.lastTab`). `/gambit welcome` still opens the page directly.
