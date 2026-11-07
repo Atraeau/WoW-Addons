@@ -2233,6 +2233,12 @@ The entry below kept the "upgrade" passes in the record for the transparency sta
 The guild master asked whether passes need to be in the ledger at all, since they are by far the most common entries and the question the Ledger answers is what happened to an item, not what could have happened to it. What is actually written is already small: **plain passes were never recorded** (design: "only passes that carry a kind are written, for the transparency stats"). Only a pass that carries a kind, such as an "upgrade" pass, is written, because passing on an upgrade is the signal the anti-hoarding transparency stats are built on (a member's `passes` and `upgradePasses` are part of the standings digest). So the record keeps them, unchanged, and nothing about the ledger's format or version line changes.
 What changed is the **view**: the Ledger's filter now starts at **What happened**, which leaves passes out, and has **Passes** (only them) and **Everything** (all of it) beside Loot, List changes, Rules and Raids. One kind of pass stays in the default view because it is an outcome: a gift won but never given to anyone (`undecided`), which the Master Looter counts as a pass, is what happened to the item. The practice raiders' upgrade passes (about a quarter of their answers) were the noise in practice. If the stats are ever judged not worth the entries, stopping the writing of kinded passes is a separate, small decision: old ledgers would still read.
 
+### Correction: the pressed-in button is shaded from both sides (2026-11-07)
+
+The inset bevel had a heavy shadow along the top, a thinner one on the left and one light pixel on the bottom, so a held-down button read as "darker at the top", not
+as pressed in. It is now mirrored, as a real inset is lit from above-left: a shadow fading inward over a few pixels along the top and left, a light fading inward
+along the bottom and right (each with its crisp outer line), and a body only a little darker than the button. Still shading only: the label and its color are untouched.
+
 ### Decision: a Welcome section explains the addon, and opens once on the first launch (2026-11-07)
 
 New users had nothing in the game that said what King's Gambit is or how loot works there. The Guild book now starts with **Welcome**, in short what the manifesto

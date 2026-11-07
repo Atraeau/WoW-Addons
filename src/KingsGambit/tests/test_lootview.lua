@@ -392,11 +392,13 @@ test("a chosen answer is held pressed in with an inset bevel; its label and text
     eq(state.name, nil, "a button that was never marked is left alone")
     LootWindow.Mark(b, true)
     eq(state.name, "PUSHED"); eq(state.locked, true, "held pressed in")
-    eq(made, 4, "an inset bevel: body, top shadow, left shadow, bottom edge")
+    local layers = made
+    assert(layers >= 10, "an inset bevel: a body, a shadow fading along the top and left, a light fading along the bottom and right")
+    eq(#b.bevel, layers)
     for _, t in ipairs(b.bevel) do eq(t.on, true) end
     eq(b.text, "Need", "the text is untouched"); eq(colored, false, "and so is the label color")
     LootWindow.Mark(b, true)
-    eq(made, 4, "marking again does not build another bevel")
+    eq(made, layers, "marking again does not build another bevel")
     LootWindow.Mark(b, false)
     eq(state.name, "NORMAL"); eq(state.locked, false, "released")
     for _, t in ipairs(b.bevel) do eq(t.on, false, "the bevel goes") end

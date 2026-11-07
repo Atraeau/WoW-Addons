@@ -64,29 +64,44 @@ end
 -- A button drawn from a view button: its label, its grayed-out state, and a tooltip that also says why it is grayed.
 -- Show a button as the player's current choice: a push-button toggle that stays pushed in, the way the game's own interface does it (its micro-menu
 -- buttons stay pressed while their window is open, as do the Damage Meter's and Edit Mode's: SetButtonState("PUSHED", true)). The game's pressed art is faint
--- on its red buttons, so the pushed-in look is reinforced with an inset bevel drawn on top: a darker body, a shadow along the top and left edges and a light
--- edge along the bottom, which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label is left exactly as it is: the
+-- on its red buttons, so the pushed-in look is reinforced with an inset bevel drawn on top: a slightly darker body, a shadow fading inward along the top and left
+-- edges and a light fading inward along the bottom and right (mirrored, so it isn't just a button that is darker at the top), which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label is left exactly as it is: the
 -- text and its color are never changed. Un-marking puts the button back completely (released, the bevel gone), so nothing of a previous round is left on a
 -- button that is reused for the next one.
 local BEVEL_INSET = 3
 local function bevel(b)
     if b.bevel then return b.bevel end
     if not b.CreateTexture then return nil end
+    local I = BEVEL_INSET
+    local list = {}
     local function layer(r, g, bl, a)
         local t = b:CreateTexture(nil, "OVERLAY")
         if t.SetColorTexture then t:SetColorTexture(r, g, bl, a) end
+        list[#list + 1] = t
         return t
     end
-    local I = BEVEL_INSET
-    local body = layer(0, 0, 0, 0.30)
+    -- An inset reads as pressed in when the light falls from above-left: the top and left inner edges are in shadow, fading inward, and the bottom and right inner
+    -- edges catch the light. So the shading is mirrored, not one dark top: a shadow that fades over a few pixels along the top and left, and a light that fades
+    -- over a few along the bottom and right, each with its crisp outermost line; under it a body only a little darker than the button.
+    local body = layer(0, 0, 0, 0.20)
     body:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); body:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
-    local top = layer(0, 0, 0, 0.55); top:SetHeight(3)
-    top:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); top:SetPoint("TOPRIGHT", b, "TOPRIGHT", -I, -I)
-    local left = layer(0, 0, 0, 0.40); left:SetWidth(2)
-    left:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); left:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I)
-    local edge = layer(1, 1, 1, 0.22); edge:SetHeight(1)
-    edge:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I); edge:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
-    b.bevel = { body, top, left, edge }
+    for i, a in ipairs { 0.42, 0.26, 0.14, 0.06 } do -- shadow, top
+        local t = layer(0, 0, 0, a); t:SetHeight(1)
+        t:SetPoint("TOPLEFT", b, "TOPLEFT", I, -(I + i - 1)); t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -I, -(I + i - 1))
+    end
+    for i, a in ipairs { 0.30, 0.15, 0.06 } do -- shadow, left
+        local t = layer(0, 0, 0, a); t:SetWidth(1)
+        t:SetPoint("TOPLEFT", b, "TOPLEFT", I + i - 1, -I); t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I + i - 1, I)
+    end
+    for i, a in ipairs { 0.42, 0.20, 0.10, 0.04 } do -- light, bottom
+        local t = layer(1, 1, 1, a); t:SetHeight(1)
+        t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I + i - 1); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I + i - 1)
+    end
+    for i, a in ipairs { 0.30, 0.14, 0.05 } do -- light, right
+        local t = layer(1, 1, 1, a); t:SetWidth(1)
+        t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -(I + i - 1), -I); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -(I + i - 1), I)
+    end
+    b.bevel = list
     return b.bevel
 end
 
