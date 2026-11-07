@@ -1066,20 +1066,26 @@ function M:BuildWelcome(parent)
     end
     local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
     if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
-    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 30)
-    -- the first-run setting: on until it is turned off here
+    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 44)
+    -- the first-run setting, in a footer of its own under the scrolling text, set off by a line: on until it is turned off here
+    local footer = CreateFrame("Frame", nil, p)
+    footer:SetPoint("BOTTOMLEFT", 0, 0); footer:SetPoint("BOTTOMRIGHT", 0, 0); footer:SetHeight(36)
+    local rule = footer:CreateTexture(nil, "ARTWORK")
+    rule:SetColorTexture(1, 1, 1, 0.12); rule:SetHeight(1)
+    rule:SetPoint("TOPLEFT", 0, 0); rule:SetPoint("TOPRIGHT", 0, 0)
+    p.footer = footer
     local label = "Show the welcome page first"
     local function toggle(on) GuildBook.SetWelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared, on); M:Refresh() end
-    local okc, check = pcall(CreateFrame, "CheckButton", nil, p, "UICheckButtonTemplate")
+    local okc, check = pcall(CreateFrame, "CheckButton", nil, footer, "UICheckButtonTemplate")
     if okc and check then
-        check:SetPoint("BOTTOMLEFT", 0, 2)
+        check:SetPoint("LEFT", footer, "LEFT", 0, -2)
         check:SetScript("OnClick", function(self) toggle(self:GetChecked() and true or false) end)
-        local text = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        local text = footer:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         text:SetPoint("LEFT", check, "RIGHT", 2, 1); text:SetText(label)
         p.firstCheck = check
     else
-        p.firstCheck = button(p, label, 220)
-        p.firstCheck:SetPoint("BOTTOMLEFT", 2, 4)
+        p.firstCheck = button(footer, label, 220)
+        p.firstCheck:SetPoint("LEFT", footer, "LEFT", 2, -2)
         p.firstCheck:SetScript("OnClick", function() toggle(not p.firstOn) end)
         p.firstIsButton = true
     end
