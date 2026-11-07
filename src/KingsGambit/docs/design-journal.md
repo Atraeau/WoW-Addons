@@ -2239,6 +2239,12 @@ The inset bevel had a heavy shadow along the top, a thinner one on the left and 
 as pressed in. It is now mirrored, as a real inset is lit from above-left: a shadow fading inward over a few pixels along the top and left, a light fading inward
 along the bottom and right (each with its crisp outer line), and a body only a little darker than the button. Still shading only: the label and its color are untouched.
 
+### Correction: the pressed-in button changes its face, never its border (2026-11-07)
+
+The bevel was drawn over the button's own border, so the outline changed shade. It is now inset inside the border and only the face changes: a little darker, with a shadow
+fading in from the top and left; the light edges along the bottom and right are gone (they read as an outline). The game's mouse-down look stays the bright one, so a
+held-down button is clearly not a button being pressed.
+
 ### Decision: a Welcome section explains the addon, and opens once on the first launch (2026-11-07)
 
 New users had nothing in the game that said what King's Gambit is or how loot works there. The Guild book now starts with **Welcome**, in short what the manifesto

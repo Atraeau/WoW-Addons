@@ -393,7 +393,7 @@ test("a chosen answer is held pressed in with an inset bevel; its label and text
     LootWindow.Mark(b, true)
     eq(state.name, "PUSHED"); eq(state.locked, true, "held pressed in")
     local layers = made
-    assert(layers >= 10, "an inset bevel: a body, a shadow fading along the top and left, a light fading along the bottom and right")
+    assert(layers >= 5, "an inset bevel on the face: a body and a shadow fading along the top and left")
     eq(#b.bevel, layers)
     for _, t in ipairs(b.bevel) do eq(t.on, true) end
     eq(b.text, "Need", "the text is untouched"); eq(colored, false, "and so is the label color")

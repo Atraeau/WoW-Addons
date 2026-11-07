@@ -68,39 +68,29 @@ end
 -- edges and a light fading inward along the bottom and right (mirrored, so it isn't just a button that is darker at the top), which reads as "pressed in" at a glance and, being shading, does not rely on a change of hue. The label is left exactly as it is: the
 -- text and its color are never changed. Un-marking puts the button back completely (released, the bevel gone), so nothing of a previous round is left on a
 -- button that is reused for the next one.
-local BEVEL_INSET = 3
+local BEVEL_INSET = 5 -- (inside the button's own border: the border is never shaded, only the face)
 local function bevel(b)
     if b.bevel then return b.bevel end
     if not b.CreateTexture then return nil end
     local I = BEVEL_INSET
     local list = {}
-    local function layer(r, g, bl, a)
+    local function layer(a)
         local t = b:CreateTexture(nil, "OVERLAY")
-        if t.SetColorTexture then t:SetColorTexture(r, g, bl, a) end
+        if t.SetColorTexture then t:SetColorTexture(0, 0, 0, a) end
         list[#list + 1] = t
         return t
     end
-    -- An inset reads as pressed in when the light falls from above-left: the top and left inner edges are in shadow, fading inward, and the bottom and right inner
-    -- edges catch the light. So the shading is mirrored, not one dark top: a shadow that fades over a few pixels along the top and left, and a light that fades
-    -- over a few along the bottom and right, each with its crisp outermost line; under it a body only a little darker than the button.
-    local body = layer(0, 0, 0, 0.20)
+    -- The face of a held-down button is a little darker, with a shadow fading inward from its top and left edges, as a real inset is lit from above-left. The
+    -- button's border keeps its own shade (the game's mouse-down look is the bright one; this one is deliberately different). No light edges: they read as an outline.
+    local body = layer(0.22)
     body:SetPoint("TOPLEFT", b, "TOPLEFT", I, -I); body:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I)
-    for i, a in ipairs { 0.38, 0.22, 0.10, 0.04 } do -- shadow, top
-        local t = layer(0, 0, 0, a); t:SetHeight(1)
+    for i, a in ipairs { 0.30, 0.16, 0.07 } do -- shadow, top
+        local t = layer(a); t:SetHeight(1)
         t:SetPoint("TOPLEFT", b, "TOPLEFT", I, -(I + i - 1)); t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -I, -(I + i - 1))
     end
-    for i, a in ipairs { 0.26, 0.12, 0.04 } do -- shadow, left
-        local t = layer(0, 0, 0, a); t:SetWidth(1)
+    for i, a in ipairs { 0.20, 0.10 } do -- shadow, left
+        local t = layer(a); t:SetWidth(1)
         t:SetPoint("TOPLEFT", b, "TOPLEFT", I + i - 1, -I); t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I + i - 1, I)
-    end
-    -- (the light is a soft warm tint of the red button, not white, and has no crisp bright line: a white line along the bottom looked like an underline)
-    for i, a in ipairs { 0.16, 0.09, 0.04 } do -- light, bottom
-        local t = layer(1, 0.82, 0.78, a); t:SetHeight(1)
-        t:SetPoint("BOTTOMLEFT", b, "BOTTOMLEFT", I, I + i - 1); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -I, I + i - 1)
-    end
-    for i, a in ipairs { 0.12, 0.06, 0.03 } do -- light, right
-        local t = layer(1, 0.82, 0.78, a); t:SetWidth(1)
-        t:SetPoint("TOPRIGHT", b, "TOPRIGHT", -(I + i - 1), -I); t:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -(I + i - 1), I)
     end
     b.bevel = list
     return b.bevel
