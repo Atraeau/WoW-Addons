@@ -163,7 +163,7 @@ end)
 H.section("Guild book: Ledgers")
 test("the Ledgers section lists the stored ledger with Retire or Keep, and the page asks before retiring", function()
     local GuildBook, UI = SK.modules.GuildBook, SK.modules.UI
-    assert(GuildBook.Section("ledgers"), "a section for it")
+    assert(not GuildBook.Section("ledgers"), "no section of its own: it is a panel in Admin")
     local open = "mode18-Horde-guild:gray parse"
     local db = { worlds = { [open] = world("bbb", "Guild ledger"), ["mode15-Alliance-guild:blue parse"] = world("aaa", "Guild ledger") } }
     local client = setup(open, db)

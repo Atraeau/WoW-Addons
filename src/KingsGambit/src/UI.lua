@@ -316,11 +316,11 @@ function M:Refresh()
     if section and section.actions then
         UITools.Refresh(w.pages[M.tab], ctx, M)
         if M.tab == "raids" then M.RefreshRaidStart(w.pages.raids, ctx) end
+        if M.tab == "admin" then M.RefreshLedgers(w.pages.admin, ctx) end
         return
     end
     if M.tab == "ledger" then return M.RefreshHistory(w.pages.ledger, ctx) end
     if M.tab == "stats" then return M.RefreshStats(w.pages.stats, ctx) end
-    if M.tab == "ledgers" then return M.RefreshLedgers(w.pages.ledgers, ctx) end
     if M.tab == "thisraid" then return M.RefreshThisRaid(w.pages.thisraid, ctx) end
     local p = w.pages.lists
     local model = M.Model(ctx.engine, ctx.client, self.list)
@@ -962,8 +962,9 @@ function M.RefreshStats(p, ctx)
     if #stats.rows == 0 then p.message:SetText("Nobody is on this list yet."); p.message:Show() else p.message:Hide() end
 end
 
--- The Ledgers section: every stored ledger with what it holds and a Retire (or Keep) button. Retiring asks first, in the game's own confirmation dialog.
-local LEDGER_ROWS = 8
+-- The panel at the foot of the Admin section: the ledger stored on this computer for this guild, with a Retire (or Keep) button. Retiring asks first, in the game's
+-- own confirmation dialog. (Only this guild's ledger is ever shown, and a removed one that is waiting to be kept; three rows are plenty.)
+local LEDGER_ROWS = 3
 function M.ConfirmRetire(row)
     local text = ("Retire %s?\n\nIts saved data is removed from this computer%s. Nothing in the ledger is erased and nobody else's copy is touched. If you are an officer the guild is told, and each member can restore it or let it expire."):format(
         row.title, row.open and " at your next login (it is the ledger in use now)" or " at once")
@@ -983,22 +984,24 @@ function M.ConfirmRetire(row)
     return false -- no confirmation dialog here: nothing is retired
 end
 
-function M:BuildLedgers(parent)
-    local p = CreateFrame("Frame", nil, parent)
-    p:SetAllPoints()
-    p.intro = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    p.intro:SetPoint("TOPLEFT", 4, 0); p.intro:SetWidth(410); p.intro:SetHeight(40)
-    p.intro:SetJustifyH("LEFT"); p.intro:SetJustifyV("TOP"); p.intro:SetWordWrap(true)
-    p.intro:SetText("Every ledger stored on this computer: one for each guild you have played in. Retire the ones nobody uses any more.")
+function M.BuildLedgers(page)
+    local p = CreateFrame("Frame", nil, page)
+    p:SetPoint("BOTTOMLEFT", 0, 0); p:SetPoint("BOTTOMRIGHT", 0, 0); p:SetHeight(190)
+    local line = p:CreateTexture(nil, "ARTWORK")
+    line:SetColorTexture(1, 1, 1, 0.12); line:SetHeight(1)
+    line:SetPoint("TOPLEFT", 0, 0); line:SetPoint("TOPRIGHT", 0, 0)
+    local title = p:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    title:SetPoint("TOPLEFT", 4, -10); title:SetText("This guild's ledger, stored on this computer")
     p.rows = {}
     for i = 1, LEDGER_ROWS do
         local row = CreateFrame("Frame", nil, p)
-        row:SetSize(410, 44); row:SetPoint("TOPLEFT", 0, -46 - (i - 1) * 46)
+        row:SetSize(410, 44); row:SetPoint("TOPLEFT", 0, -32 - (i - 1) * 46)
         row.text = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         row.text:SetPoint("TOPLEFT", 4, -2); row.text:SetWidth(320); row.text:SetHeight(40)
         row.text:SetJustifyH("LEFT"); row.text:SetJustifyV("TOP"); row.text:SetWordWrap(true)
         row.button = button(row, "Retire", 70, 22)
         row.button:SetPoint("TOPRIGHT", -4, -8)
+        Tips.Attach(row.button, "retireledger")
         row.button:SetScript("OnClick", function()
             local r = row.model
             if not r then return end
@@ -1008,11 +1011,14 @@ function M:BuildLedgers(parent)
         p.rows[i] = row
     end
     p.message = p:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    p.message:SetPoint("TOPLEFT", 14, -60); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
+    p.message:SetPoint("TOPLEFT", 14, -40); p.message:SetWidth(360); p.message:SetJustifyH("LEFT"); p.message:Hide()
+    page.ledgerPanel = p
     return p
 end
 
-function M.RefreshLedgers(p, ctx)
+function M.RefreshLedgers(page, ctx)
+    local p = page.ledgerPanel
+    if not p then return end
     local model = GuildBook.Ledgers(ctx)
     for i = 1, LEDGER_ROWS do
         local row, r = p.rows[i], model.rows[i]
@@ -1028,7 +1034,7 @@ function M.RefreshLedgers(p, ctx)
     end
     local extra = #model.rows - LEDGER_ROWS
     if model.note then p.message:SetText(model.note); p.message:Show()
-    elseif extra > 0 then p.message:SetText(("(%d more: use /gambit ledgers)"):format(extra)); p.message:SetPoint("TOPLEFT", 14, -46 - LEDGER_ROWS * 46); p.message:Show()
+    elseif extra > 0 then p.message:SetText(("(%d more: use /gambit ledgers)"):format(extra)); p.message:SetPoint("TOPLEFT", 14, -34 - LEDGER_ROWS * 46); p.message:Show()
     else p.message:Hide() end
 end
 
@@ -1284,11 +1290,12 @@ function M:Build()
     local content = CreateFrame("Frame", nil, w)
     content:SetPoint("TOPLEFT", 144, -112)
     content:SetPoint("BOTTOMRIGHT", -16, 92)
-    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content), thisraid = M:BuildThisRaid(content), ledgers = M:BuildLedgers(content) }
+    w.pages = { lists = M:BuildStandings(content), ledger = M:BuildHistory(content), stats = M:BuildStats(content), thisraid = M:BuildThisRaid(content) }
     for _, s in ipairs(GuildBook.SECTIONS) do
         if s.actions then
             w.pages[s.id] = UITools.Build(content, M, s)
             if s.id == "raids" then M.BuildRaidStart(w.pages.raids) end
+            if s.id == "admin" then M.BuildLedgers(w.pages.admin) end
         end
     end
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.

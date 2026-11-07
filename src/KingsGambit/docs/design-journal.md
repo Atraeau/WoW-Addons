@@ -2236,7 +2236,7 @@ What changed is the **view**: the Ledger's filter now starts at **What happened*
 ### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)
 
 A character that has played in several guilds, or a ledger founded to try something, leaves stored ledgers nobody uses (the guild master removed two by hand from
-the saved variables). Now the addon lists every ledger stored on the computer (`ledgers`, and the Guild book's **Ledgers** section) and can **retire** one, after asking.
+the saved variables). Now the addon lists every ledger stored on the computer (`ledgers`, and the foot of the Guild book's **Admin** section) and can **retire** one, after asking.
 
 - **Identity is the Genesis entry's id**, a hash that includes who founded the ledger and when, never the name. A ledger founded again for the same guild after a
   retirement is a different ledger and does not meet the retired one (the "main" list and the name "Guild ledger" are not unique, and need not be).

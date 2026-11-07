@@ -48,7 +48,7 @@ local function Start(attempt)
     local engine = M.Engine.New(client)
     local sync = M.Sync.New(engine)
     sync:on("ledgerRetired", function(t)
-        SK:Print(("%s retired the ledger \"%s\" (stored here as %s). It stays on this machine until %s, then is removed. To keep it, type /gambit ledgers keep (or use Ledgers in the Guild book): everyone is told and fetches it again from whoever has it."):format(
+        SK:Print(("%s retired the ledger \"%s\" (stored here as %s). It stays on this machine until %s, then is removed. To keep it, type /gambit ledgers keep (or use Admin in the Guild book): everyone is told and fetches it again from whoever has it."):format(
             M.Identity.Display(t.by), tostring(t.name or "ledger"), t.key, (date or os.date)("%Y-%m-%d", t.due)))
     end)
     sync:on("ledgerRestored", function(t)

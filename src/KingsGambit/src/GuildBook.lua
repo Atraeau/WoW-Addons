@@ -32,12 +32,11 @@ M.SECTIONS = {
         actions = { "add", "remove", "move", "officers", "disregard", "regard", "spec", "hints" } },
     { id = "rules", label = "Rules", tip = "Which classes may bid on an item, who it suits, and requests to the Master Looter.",
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
-    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
+    { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing, and the ledger stored on this computer (retiring it): the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
-    { id = "ledgers", label = "Ledgers", tip = "Every ledger stored on this computer, one for each guild you have played in. Retire the ones nobody uses any more; an officer's retirement is told to the guild, which can restore it or let it expire." },
 }
 
--- The stored ledgers as rows for the Ledgers section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
+-- The stored ledgers as rows for the panel at the foot of the Admin section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
 -- Retiring removes the saved data from this computer only (Ledgers.lua); the page asks first and then runs `ledgers retire <n> yes`.
 function M.Ledgers(ctx)
     local client = ctx.client
