@@ -972,7 +972,12 @@ function M.ConfirmRetire(row)
             text = "%s", button1 = "Retire", button2 = "Cancel", timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
             OnAccept = function(_, data) if data then M:Command(("ledgers retire %d yes"):format(data)) end end,
         }
-        StaticPopup_Show("KINGSGAMBIT_RETIRE_LEDGER", text, nil, row.n)
+        local dialog = StaticPopup_Show("KINGSGAMBIT_RETIRE_LEDGER", text, nil, row.n)
+        -- the game puts its dialogs at the top of the screen; a question about removing data belongs front and center
+        if dialog and dialog.ClearAllPoints and UIParent then
+            dialog:ClearAllPoints()
+            dialog:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+        end
         return true
     end
     return false -- no confirmation dialog here: nothing is retired
