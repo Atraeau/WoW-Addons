@@ -45,7 +45,7 @@ function M.Ledgers(ctx)
     if not db then return { rows = {}, note = "This client doesn't keep stored ledgers (practice mode, for one)." } end
     local now = client:serverTime()
     local out = { rows = {} }
-    for _, r in ipairs(Ledgers.Stored(db, client.world and client:world() or nil)) do
+    for _, r in ipairs(Ledgers.Stored(db, client.world and client:world() or nil, client.world ~= nil)) do
         local d = Ledgers.Describe(r, now, Identity.Display)
         out.rows[#out.rows + 1] = { n = r.n, key = r.key, id = r.id, title = d.title, detail = d.detail, status = d.status, held = r.held, open = r.open,
             retired = r.retired ~= nil, canRetire = r.held and r.retired == nil, canKeep = r.retired ~= nil and r.id ~= nil }

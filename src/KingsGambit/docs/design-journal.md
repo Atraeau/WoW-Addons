@@ -2250,6 +2250,10 @@ the saved variables). Now the addon lists every ledger stored on the computer (`
   30 days**, at a login, as it was on the retirer's. The newest decision about a ledger wins. A restoration is forgotten after 60 days.
 - **Confirmation:** the page uses the game's own dialog; the command asks and then wants `ledgers retire <n> yes`.
 - **Wording:** the load message says "the ledger of the guild X has N lists" (it said "list(s)" for what is the ledger), and says so when there is no ledger yet.
+- **Only your own world is visible (a correction, same day):** the saved file holds every world on the account, but a character sees, retires and restores only the
+  ledger of the world being played in (the same ruleset, faction and guild). Atraeau never sees Morla's ledgers, nor those of another guild of the same faction.
+  A retirement notice is only about the ledger of the receiver's own world. Retiring a ledger of a guild you have left is therefore done by logging in as a
+  character of that guild; the saved file itself is the only place all of them can be seen.
 - **Not done:** the web simulator doesn't draw this page (the Guild book page isn't in it yet); cross-guild lists are still later.
 
 ### Ledger: an entry's item can be tried on (2026-11-06)

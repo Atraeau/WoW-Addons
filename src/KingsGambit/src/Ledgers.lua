@@ -52,11 +52,15 @@ local function inspect(store)
     return info
 end
 
+-- With `onlyOpen` the rows are limited to the world being played in (the ruleset, the faction and the guild): a character never sees, lists, retires or
+-- restores a ledger of another ruleset, faction or guild, though they sit in the same saved file.
 -- Every stored ledger, then every retired one whose data is gone, as rows: { n, key, held (data is stored here), open (the one in use now), id, name,
 -- mode, faction, kind, who, events, lists, lastTs, retired = tombstone or nil }. Held rows are sorted by key.
-function M.Stored(db, openKey)
+function M.Stored(db, openKey, onlyOpen)
     local keys = {}
-    for key in pairs(db.worlds or {}) do keys[#keys + 1] = key end
+    for key in pairs(db.worlds or {}) do
+        if not onlyOpen or key == openKey then keys[#keys + 1] = key end
+    end
     table.sort(keys)
     local rows, seen = {}, {}
     for _, key in ipairs(keys) do
@@ -71,7 +75,7 @@ function M.Stored(db, openKey)
     end
     local gone = {}
     for id, t in pairs(tombs(db)) do
-        if t.r == 1 and not seen[id] then gone[#gone + 1] = t end
+        if t.r == 1 and not seen[id] and (not onlyOpen or t.world == openKey) then gone[#gone + 1] = t end
     end
     table.sort(gone, function(a, b) return (a.t or 0) < (b.t or 0) end)
     for _, t in ipairs(gone) do
@@ -154,7 +158,7 @@ end
 
 -- An officer's heartbeat said these ledgers are retired (r = 1) or restored (r = 0). The caller has checked the sender is an officer. The newest decision
 -- for a ledger wins. Returns what to tell the player: { { kind = "retired"|"restored", id, name, by, due, held, key } } (only for ledgers kept here).
-function M.Hear(db, x, now)
+function M.Hear(db, x, now, worldKey)
     local told = {}
     if type(x) ~= "table" then return told end
     for id, e in pairs(x) do
@@ -162,7 +166,7 @@ function M.Hear(db, x, now)
             local have = tombs(db)[id]
             local heldKey
             for key, store in pairs(db.worlds or {}) do
-                if inspect(store).id == id then heldKey = key end
+                if (worldKey == nil or key == worldKey) and inspect(store).id == id then heldKey = key end -- only the ledger of the world being played in
             end
             if not have or have.t < e.t then
                 if e.r == 1 then
@@ -170,7 +174,7 @@ function M.Hear(db, x, now)
                     local count = 0
                     for _ in pairs(tombs(db)) do count = count + 1 end
                     if have or heldKey or count < M.MAX_TOMBSTONES then
-                        tombs(db)[id] = { id = id, name = e.n or "ledger", world = e.w or (heldKey or ""), by = e.b, t = e.t, r = 1, mine = false, due = e.t + M.EXPIRES }
+                        tombs(db)[id] = { id = id, name = e.n or "ledger", world = worldKey or e.w or (heldKey or ""), by = e.b, t = e.t, r = 1, mine = false, due = e.t + M.EXPIRES }
                         if heldKey then told[#told + 1] = { kind = "retired", id = id, name = e.n, by = e.b, due = e.t + M.EXPIRES, key = heldKey } end
                     end
                 elseif have then

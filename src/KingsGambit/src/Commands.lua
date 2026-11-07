@@ -1019,7 +1019,7 @@ function M.New(ctx)
         local db = client.storage and client:storage().shared
         if not db then return out("This client doesn't keep stored ledgers.") end
         local now = client:serverTime()
-        local rows = Ledgers.Stored(db, client.world and client:world() or nil)
+        local rows = Ledgers.Stored(db, client.world and client:world() or nil, client.world ~= nil) -- only this ruleset, faction and guild
         local sub, num, rest = args:match("^(%S*)%s*(%d*)%s*(.-)$")
         sub = sub:lower()
         if sub == "" or sub == "list" then

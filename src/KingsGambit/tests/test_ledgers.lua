@@ -112,46 +112,69 @@ test("a retirement from someone who isn't an officer is ignored, and a retired l
 end)
 
 H.section("Commands: ledgers")
-test("ledgers lists, asks before retiring, retires on yes, and keep brings it back", function()
-    local key = "mode15-Alliance-guild:blue parse"
-    local open = "mode18-Horde-guild:gray parse"
-    local db = { worlds = { [key] = world("aaa", "Guild ledger", 2), [open] = world("bbb", "Guild ledger") } }
+local function setup(open, db)
     local client = MockClient.New({ name = "Me" })
     client.storage = function() return { account = db.worlds[open], char = {}, shared = db, world = open } end
     client.world = function() return open end
+    return client
+end
+test("ledgers lists, asks before retiring, retires on yes, and keep brings it back", function()
+    local open = "mode18-Horde-guild:gray parse"
+    local db = { worlds = { [open] = world("bbb", "Guild ledger", 2) } }
+    local client = setup(open, db)
     local engine = Engine.New(client)
     local printed = {}
     client.print = function(_, text) printed[#printed + 1] = text end
     local cmds = Commands.New({ client = client, engine = engine, sync = Sync.New(engine) })
     local function say(text) printed = {}; cmds.handle(text); return table.concat(printed, "\n") end
     local listing = say("ledgers")
-    assert(listing:find("1. Blue Parse %(Alliance%)") and listing:find("2. Gray Parse %(Horde%)") and listing:find("in use now"), listing)
+    assert(listing:find("1. Gray Parse %(Horde%)") and listing:find("in use now"), listing)
     local ask = say("ledgers retire 1")
-    assert(ask:find("ledgers retire 1 yes") and db.worlds[key], ask)
-    assert(say("ledgers retire 1 yes"):find("Retired Blue Parse")); eq(db.worlds[key], nil)
+    assert(ask:find("ledgers retire 1 yes") and db.worlds[open], ask)
+    assert(say("ledgers retire 1 yes"):find("next login")); assert(db.worlds[open], "in use: removed at the next login")
     assert(say("ledgers"):find("retired by you"))
-    assert(say("ledgers keep 2"):find("not retired any more"))
+    assert(say("ledgers keep 1"):find("not retired any more"))
     assert(say("ledgers retire 9"):find("No such ledger"))
 end)
 
+H.section("Ledgers stay within their ruleset, faction and guild")
+test("a character sees, retires and restores only the ledger of the world being played in, though every world sits in the same saved file", function()
+    local blue, gray, sameFaction = "mode15-Alliance-guild:blue parse", "mode18-Horde-guild:gray parse", "mode15-Alliance-guild:other guild"
+    local db = { worlds = { [blue] = world("aaa", "Guild ledger", 3), [gray] = world("bbb", "Guild ledger"), [sameFaction] = world("ccc", "Guild ledger") },
+        retired = { zzz = { id = "zzz", name = "Old", world = gray, by = "Me", t = 5, r = 1, mine = true, due = 5 } } }
+    local client = setup(blue, db)
+    local engine = Engine.New(client)
+    local printed = {}
+    client.print = function(_, text) printed[#printed + 1] = text end
+    local cmds = Commands.New({ client = client, engine = engine, sync = Sync.New(engine) })
+    local function say(text) printed = {}; cmds.handle(text); return table.concat(printed, "\n") end
+    local listing = say("ledgers")
+    assert(listing:find("Blue Parse") and not listing:find("Gray Parse") and not listing:find("Other Guild") and not listing:find("Old"), listing)
+    local rows = SK.modules.GuildBook.Ledgers({ client = client, engine = engine }).rows
+    eq(#rows, 1); eq(rows[1].key, blue)
+    assert(say("ledgers retire 2 yes"):find("No such ledger"), "another world's ledger can't be named")
+    assert(say("ledgers keep 2"):find("No such ledger"))
+    assert(db.worlds[gray] and db.worlds[sameFaction] and db.retired.zzz.r == 1, "nothing of another world was touched")
+    local now = client:serverTime()
+    eq(#Ledgers.Hear(db, { bbb = { t = now, r = 1, b = "Boss", n = "x" } }, now, blue), 0, "a notice for another world's ledger is not about us")
+    eq(#Ledgers.Hear(db, { aaa = { t = now, r = 1, b = "Boss", n = "x" } }, now, blue), 1)
+end)
+
 H.section("Guild book: Ledgers")
-test("the Ledgers section lists the stored ledgers with Retire or Keep, and the page asks before retiring", function()
+test("the Ledgers section lists the stored ledger with Retire or Keep, and the page asks before retiring", function()
     local GuildBook, UI = SK.modules.GuildBook, SK.modules.UI
     assert(GuildBook.Section("ledgers"), "a section for it")
-    local key, open = "mode15-Alliance-guild:blue parse", "mode18-Horde-guild:gray parse"
-    local db = { worlds = { [key] = world("aaa", "Guild ledger", 2), [open] = world("bbb", "Guild ledger") } }
-    local client = MockClient.New({ name = "Me" })
-    client.storage = function() return { account = db.worlds[open], char = {}, shared = db, world = open } end
-    client.world = function() return open end
+    local open = "mode18-Horde-guild:gray parse"
+    local db = { worlds = { [open] = world("bbb", "Guild ledger"), ["mode15-Alliance-guild:blue parse"] = world("aaa", "Guild ledger") } }
+    local client = setup(open, db)
     local engine = Engine.New(client)
     local m = GuildBook.Ledgers({ client = client, engine = engine })
-    eq(#m.rows, 2); eq(m.rows[1].title, "Blue Parse (Alliance)"); assert(m.rows[1].canRetire and not m.rows[1].canKeep)
-    assert(m.rows[2].open and m.rows[2].status == "in use now")
-    Ledgers.Retire(db, key, "Me", client:serverTime(), open)
+    eq(#m.rows, 1); eq(m.rows[1].title, "Gray Parse (Horde)"); assert(m.rows[1].canRetire and not m.rows[1].canKeep and m.rows[1].open)
+    eq(m.rows[1].status, "in use now")
+    Ledgers.Retire(db, open, "Me", client:serverTime(), open)
     m = GuildBook.Ledgers({ client = client, engine = engine })
-    assert(m.rows[2].canKeep and not m.rows[2].canRetire and not m.rows[2].held, "a removed ledger can only be kept (restored)")
+    assert(m.rows[1].canKeep and not m.rows[1].canRetire, "marked for removal: it can only be kept")
     local none = GuildBook.Ledgers({ client = MockClient.New({ name = "Me" }), engine = engine })
     eq(#none.rows, 0); assert(none.note)
-    -- without the game's dialog nothing is retired: the page never retires without asking
-    eq(UI.ConfirmRetire({ n = 2, title = "Gray Parse (Horde)", open = true }), false)
+    eq(UI.ConfirmRetire({ n = 1, title = "Gray Parse (Horde)", open = true }), false)
 end)

@@ -311,7 +311,7 @@ function Sync:onRetirements(x, sender)
     local c = self.client
     local db = c.storage and c:storage().shared
     if not db or not (c.isOfficer and c:isOfficer(sender) == true) then return end
-    for _, told in ipairs(Ledgers.Hear(db, x, c:serverTime())) do
+    for _, told in ipairs(Ledgers.Hear(db, x, c:serverTime(), c.world and c:world() or nil)) do
         self:emit(told.kind == "retired" and "ledgerRetired" or "ledgerRestored", told)
     end
 end
