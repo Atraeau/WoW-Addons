@@ -2,9 +2,9 @@
 -- manage lists, run a loot session as Master Looter, and answer as a player. Output goes through
 -- client:print. This is the first usable UI and stays useful alongside the real frames later.
 local _, SK = ...
-local Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests
-local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Version", "Identity", "Tokens?", "Requests?" }, function(d)
-    Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Version, d.Identity, d.Tokens, d.Requests
+local Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests, Ledgers
+local M = SK:NewModule("Commands", { "Standings", "ItemFit", "Loot", "Ledger", "Version", "Identity", "Ledgers", "Tokens?", "Requests?" }, function(d)
+    Standings, ItemFit, Loot, Ledger, Version, Identity, Tokens, Requests, Ledgers = d.Standings, d.ItemFit, d.Loot, d.Ledger, d.Version, d.Identity, d.Tokens, d.Requests, d.Ledgers
 end)
 
 local WHY = {
@@ -111,6 +111,7 @@ local HELP = {
     "  eligible <item> <classes|any> <reason> - which classes may bid on an item",
     "  suits <item> <roles|auto> <reason> - who an item suits: tank, melee, hunter, caster, healer",
     "Ledger owner",
+    "  ledgers - the ledgers stored on this account; ledgers retire <n> (removes a stale one, asks first) | ledgers keep <n> (brings it back)",
     "  officers - who the officers are (the game's \"Is Officer\" rank permission) and who is being disregarded",
     "  disregard <name> <reason> | regard <name> - an officer: ignore a player's entries from now on, for everyone; or stop",
     "  raid policy [choose|perraid] - how raids pick their list",
@@ -1011,6 +1012,43 @@ function M.New(ctx)
         local fn = raid[sub ~= "" and sub:lower() or "show"]
         if not fn then return out("raid [open [name] [hours] [list <id>] | list [id] | policy [choose|perraid] | start | autostart [on|off] | close | extend [name] [hours] | revoke [name]]") end
         fn(rest)
+    end
+
+    -- The ledgers stored on this account (one per world: ruleset, faction and guild), and retiring the stale ones (Ledgers.lua).
+    function cmds.ledgers(args)
+        local db = client.storage and client:storage().shared
+        if not db then return out("This client doesn't keep stored ledgers.") end
+        local now = client:serverTime()
+        local rows = Ledgers.Stored(db, client.world and client:world() or nil)
+        local sub, num, rest = args:match("^(%S*)%s*(%d*)%s*(.-)$")
+        sub = sub:lower()
+        if sub == "" or sub == "list" then
+            if #rows == 0 then return out("No ledgers are stored on this account.") end
+            for _, r in ipairs(rows) do
+                local d = Ledgers.Describe(r, now, short)
+                out(("%d. %s: %s%s"):format(r.n, d.title, d.detail, d.status and (" [" .. d.status .. "]") or ""))
+            end
+            return out("ledgers retire <n> removes a stale one from this machine (it asks first); ledgers keep <n> brings a retired one back. An officer's retirement is told to the guild, which can restore it or let it expire (30 days).")
+        end
+        local row = rows[tonumber(num) or 0]
+        if sub ~= "retire" and sub ~= "keep" then return out("ledgers | ledgers retire <n> [yes] | ledgers keep <n>") end
+        if not row then return out("No such ledger: type ledgers to see the numbers.") end
+        local d = Ledgers.Describe(row, now, short)
+        if sub == "keep" then
+            if not row.retired then return out(("%s isn't retired."):format(d.title)) end
+            if not Ledgers.Keep(db, row.id, now) then return out("That ledger isn't retired.") end
+            return out(("%s is not retired any more. The guild is told%s."):format(d.title,
+                row.held and "" or "; its data is fetched again from whoever still has it"))
+        end
+        if row.retired then return out(("%s is already retired (%s)."):format(d.title, d.status or "")) end
+        if rest:lower() ~= "yes" then
+            return out(("Retire %s (%s)? This removes its saved data from this machine%s%s. Nothing is written to the ledger and nobody else's copy is touched. To go ahead: ledgers retire %d yes"):format(
+                d.title, d.detail, row.open and " at your next login (it is the ledger in use now)" or " at once",
+                (row.id and client.isOfficer and client:isOfficer() == true) and ", and tells the guild so they can restore it or let it expire" or "", row.n))
+        end
+        local ok, t, later = Ledgers.Retire(db, row.key, client:me(), now, client.world and client:world() or nil)
+        if not ok then return out("That ledger is gone already.") end
+        out(("Retired %s.%s"):format(d.title, later and " It is in use now, so it is removed at your next login (/reload); then you can start a new ledger for the guild." or " Its data is removed from this machine."))
     end
 
     -- Officers are the game's: the members of the guild whose rank has the "Is Officer" permission, which the guild's Guild Master sets in the game.

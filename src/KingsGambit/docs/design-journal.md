@@ -2233,6 +2233,25 @@ The entry below kept the "upgrade" passes in the record for the transparency sta
 The guild master asked whether passes need to be in the ledger at all, since they are by far the most common entries and the question the Ledger answers is what happened to an item, not what could have happened to it. What is actually written is already small: **plain passes were never recorded** (design: "only passes that carry a kind are written, for the transparency stats"). Only a pass that carries a kind, such as an "upgrade" pass, is written, because passing on an upgrade is the signal the anti-hoarding transparency stats are built on (a member's `passes` and `upgradePasses` are part of the standings digest). So the record keeps them, unchanged, and nothing about the ledger's format or version line changes.
 What changed is the **view**: the Ledger's filter now starts at **What happened**, which leaves passes out, and has **Passes** (only them) and **Everything** (all of it) beside Loot, List changes, Rules and Raids. One kind of pass stays in the default view because it is an outcome: a gift won but never given to anyone (`undecided`), which the Master Looter counts as a pass, is what happened to the item. The practice raiders' upgrade passes (about a quarter of their answers) were the noise in practice. If the stats are ever judged not worth the entries, stopping the writing of kinded passes is a separate, small decision: old ledgers would still read.
 
+### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)
+
+A character that has played in several guilds, or a ledger founded to try something, leaves stored ledgers nobody uses (the guild master removed two by hand from
+the saved variables). Now the addon lists every ledger stored on the computer (`ledgers`, and the Guild book's **Ledgers** section) and can **retire** one, after asking.
+
+- **Identity is the Genesis entry's id**, a hash that includes who founded the ledger and when, never the name. A ledger founded again for the same guild after a
+  retirement is a different ledger and does not meet the retired one (the "main" list and the name "Guild ledger" are not unique, and need not be).
+- **Retiring is local data removal plus a tombstone** (`KingsGambitDB.retired[id]`: name, world, who, when, retired or restored, when this machine removes it).
+  Nothing is written to the ledger and nobody else's copy is touched. The ledger in use can't be swapped while it is in use: it is marked and removed at the
+  next login, then **Start the ledger** founds a new one.
+- **The tombstone stops the nagging:** a machine that retired a ledger never fetches it again from a peer who still has it.
+- **Told to the guild in the heartbeat** (field `x`, an addition older clients ignore; no new message type and no ledger entry, so the version line stays 0.7).
+  Only an officer's retirement counts (the receiver checks the game's rank, as everywhere now). Each member is told once and can **keep** it (a restoration is
+  told to everyone, and a retired ledger whose data was removed is fetched again from whoever has it) or do nothing: it is **removed on their machine after
+  30 days**, at a login, as it was on the retirer's. The newest decision about a ledger wins. A restoration is forgotten after 60 days.
+- **Confirmation:** the page uses the game's own dialog; the command asks and then wants `ledgers retire <n> yes`.
+- **Wording:** the load message says "the ledger of the guild X has N lists" (it said "list(s)" for what is the ledger), and says so when there is no ledger yet.
+- **Not done:** the web simulator doesn't draw this page (the Guild book page isn't in it yet); cross-guild lists are still later.
+
 ### Ledger: an entry's item can be tried on (2026-11-06)
 
 The guild master wanted to click an item in the Ledger and see it on their own paper doll. An entry that is about an item now carries it (`GuildBook.ItemOf`: an item link, or `item:ID`; what disenchanting gave belongs to the item that was disenchanted; a plain name has nothing to look up, so nothing is offered). Three ways in, all through the game's own dressing room (`DressUpItemLink`, else `DressUpLink`; it only shows the item, nothing is equipped or recorded):

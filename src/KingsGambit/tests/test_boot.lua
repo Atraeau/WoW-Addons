@@ -65,7 +65,7 @@ test("the addon loads in TOC order, starts at login, and answers slash commands"
         core.onEvent(core, "PLAYER_LOGIN")
         assert(SK.client and SK.engine and SK.sync and SK.host and SK.player and SK.commands, "everything was built at login")
         local ready = false
-        for i = before + 1, #printed do if printed[i]:find("ready: 0 list") then ready = true end end
+        for i = before + 1, #printed do if printed[i]:find("ready: there is no ledger") then ready = true end end
         assert(ready, "it reports it is ready: " .. table.concat(printed, " | "))
         assert(SK.sync.running, "sync started")
 

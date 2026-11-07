@@ -19,10 +19,12 @@
 -- through, and the ledger's own checks still refuse what it cannot read.
 --   R  request    { t="R", c = chain, from = seq }      -> reply E starting at `from`
 --   E  events     { t="E", c = chain, n = sender's count, events = { ... } }
+--   H also carries x = { [ledger id] = { t, r (1 retired, 0 restored), b (by), n (name), w (world) } } when an officer here has retired a stored ledger
+--   (Ledgers.lua): the others are told once, can restore it or let it expire on their machine too, and never fetch a retired ledger again.
 -- Other modules plug in their own message types with Sync:register (two or more letters).
 local _, SK = ...
-local Hash, Version
-local M = SK:NewModule("Sync", { "Hash", "Version" }, function(d) Hash, Version = d.Hash, d.Version end)
+local Hash, Version, Ledgers
+local M = SK:NewModule("Sync", { "Hash", "Version", "Ledgers" }, function(d) Hash, Version, Ledgers = d.Hash, d.Version, d.Ledgers end)
 
 M.PREFIX = "KGAMBIT"
 
@@ -185,7 +187,12 @@ function Sync:heartbeat()
     local store = self.engine.store
     local c = {}
     for cid, chain in pairs(store.chains) do c[cid] = { n = #chain.events, h = chain.head } end
-    broadcast(self, { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion(), f = self.engine:Readable() })
+    local msg = { t = "H", l = store.id or "", g = store.genesisChain or "", c = c, a = self.client:addonVersion(), f = self.engine:Readable() }
+    local db = self.client.storage and self.client:storage().shared
+    if db and self.client.isOfficer and self.client:isOfficer() == true then
+        msg.x = Ledgers.Announce(db, self.client.world and self.client:world() or "") -- only an officer's retirement is told (the others ignore anyone else's)
+    end
+    broadcast(self, msg)
     local now = self.client:now()
     for key, buf in pairs(self.partial) do
         if now - buf.at > self.cfg.partialTimeout then self.partial[key] = nil end
@@ -299,8 +306,19 @@ function Sync:peerVersions()
     return out
 end
 
+-- An officer says a stored ledger is retired or restored: remember it (so it is never fetched again) and tell the player once (Core prints it).
+function Sync:onRetirements(x, sender)
+    local c = self.client
+    local db = c.storage and c:storage().shared
+    if not db or not (c.isOfficer and c:isOfficer(sender) == true) then return end
+    for _, told in ipairs(Ledgers.Hear(db, x, c:serverTime())) do
+        self:emit(told.kind == "retired" and "ledgerRetired" or "ledgerRestored", told)
+    end
+end
+
 function Sync:onHeartbeat(msg, sender)
     if type(msg.c) ~= "table" then return end
+    if type(msg.x) == "table" then self:onRetirements(msg.x, sender) end
     if type(msg.f) == "table" and self.peers[sender] then
         local formats = {}
         for _, f in ipairs(msg.f) do
@@ -314,6 +332,8 @@ function Sync:onHeartbeat(msg, sender)
         return
     end
     if not store.id then
+        local db = self.client.storage and self.client:storage().shared
+        if db and Ledgers.IsRetired(db, msg.l) then return end -- retired here: not fetched again
         if type(msg.g) == "string" and msg.g ~= "" then self:request(msg.g, 1, sender) end -- learn the ledger first
         return
     end

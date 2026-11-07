@@ -12,9 +12,9 @@
 --   M.Segments(text, people)              a sentence cut into plain words and people (a person carries their class color)
 --   M.Ago(now, ts)                        "3 days ago"
 local _, SK = ...
-local LootView, Identity, Standings, Migrations
-local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migrations" },
-    function(d) LootView, Identity, Standings, Migrations = d.LootView, d.Identity, d.Standings, d.Migrations end)
+local LootView, Identity, Standings, Migrations, Ledgers
+local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migrations", "Ledgers" },
+    function(d) LootView, Identity, Standings, Migrations, Ledgers = d.LootView, d.Identity, d.Standings, d.Migrations, d.Ledgers end)
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
 -- `gap` puts a space above its button: Admin is the ledger owner's and maintenance corner, kept apart from the everyday sections.
@@ -34,7 +34,25 @@ M.SECTIONS = {
         actions = { "eligibles", "eligible", "suits", "reqelig", "request", "requests", "accept", "decline" } },
     { id = "admin", label = "Admin", gap = true, tip = "Starting a list, the record's format and versions, syncing: the ledger owner's and maintenance steps. (The record itself is the Ledger.)",
         actions = { "create", "listuse", "migratestatus", "migrate", "version", "sync", "check" } },
+    { id = "ledgers", label = "Ledgers", tip = "Every ledger stored on this computer, one for each guild you have played in. Retire the ones nobody uses any more; an officer's retirement is told to the guild, which can restore it or let it expire." },
 }
+
+-- The stored ledgers as rows for the Ledgers section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
+-- Retiring removes the saved data from this computer only (Ledgers.lua); the page asks first and then runs `ledgers retire <n> yes`.
+function M.Ledgers(ctx)
+    local client = ctx.client
+    local db = client.storage and client:storage().shared
+    if not db then return { rows = {}, note = "This client doesn't keep stored ledgers (practice mode, for one)." } end
+    local now = client:serverTime()
+    local out = { rows = {} }
+    for _, r in ipairs(Ledgers.Stored(db, client.world and client:world() or nil)) do
+        local d = Ledgers.Describe(r, now, Identity.Display)
+        out.rows[#out.rows + 1] = { n = r.n, key = r.key, id = r.id, title = d.title, detail = d.detail, status = d.status, held = r.held, open = r.open,
+            retired = r.retired ~= nil, canRetire = r.held and r.retired == nil, canKeep = r.retired ~= nil and r.id ~= nil }
+    end
+    if #out.rows == 0 then out.note = "No ledgers are stored on this computer." end
+    return out
+end
 
 function M.Section(id)
     for _, s in ipairs(M.SECTIONS) do if s.id == id then return s end end

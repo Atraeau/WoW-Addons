@@ -38,8 +38,22 @@ local function Start(attempt)
         return
     end
     SK.pendingClient = nil
+    -- ledgers that were retired are removed now, before the open one is read (a retired one that was in use when it was retired goes here)
+    local shared = client:storage().shared
+    if shared then
+        for _, gone in ipairs(M.Ledgers.Sweep(shared, client:serverTime())) do
+            SK:Print(("removed the retired ledger \"%s\" (%s)%s"):format(tostring(gone.name or "ledger"), gone.key, gone.mine and "" or (" retired by " .. tostring(gone.by))))
+        end
+    end
     local engine = M.Engine.New(client)
     local sync = M.Sync.New(engine)
+    sync:on("ledgerRetired", function(t)
+        SK:Print(("%s retired the ledger \"%s\" (stored here as %s). It stays on this machine until %s, then is removed. To keep it, type /gambit ledgers keep (or use Ledgers in the Guild book): everyone is told and fetches it again from whoever has it."):format(
+            M.Identity.Display(t.by), tostring(t.name or "ledger"), t.key, (date or os.date)("%Y-%m-%d", t.due)))
+    end)
+    sync:on("ledgerRestored", function(t)
+        SK:Print(("%s restored the ledger \"%s\": it is not retired any more."):format(M.Identity.Display(t.by), tostring(t.name or "ledger")))
+    end)
     sync:start()
     local host = M.LootNet.NewHost(sync, engine)
     local player = M.LootNet.NewPlayer(sync)
@@ -58,7 +72,12 @@ local function Start(attempt)
     for _ in pairs(engine.view.lists) do lists = lists + 1 end
     SK.world = client:world()
     local guild = client.guildName and client:guildName()
-    SK:Print(("ready: %d list(s) for %s. Type /gambit to open the window, or /gambit help."):format(lists, guild and ("the guild " .. guild) or "you (no guild)"))
+    local whose = guild and ("the guild " .. guild) or "you (no guild)"
+    if engine:LedgerId() then
+        SK:Print(("ready: the ledger of %s has %d list%s. Type /gambit to open the window, or /gambit help."):format(whose, lists, lists == 1 and "" or "s"))
+    else
+        SK:Print(("ready: there is no ledger for %s yet. Type /gambit and press Start the ledger, or /gambit help."):format(whose))
+    end
 end
 
 local frame = CreateFrame("Frame")
