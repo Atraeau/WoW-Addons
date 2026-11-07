@@ -1066,7 +1066,24 @@ function M:BuildWelcome(parent)
     end
     local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
     if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
-    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 0)
+    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 30)
+    -- the first-run setting: on until it is turned off here
+    local label = "Open King's Gambit on this page"
+    local function toggle(on) GuildBook.SetWelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared, on); M:Refresh() end
+    local okc, check = pcall(CreateFrame, "CheckButton", nil, p, "UICheckButtonTemplate")
+    if okc and check then
+        check:SetPoint("BOTTOMLEFT", 0, 2)
+        check:SetScript("OnClick", function(self) toggle(self:GetChecked() and true or false) end)
+        local text = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        text:SetPoint("LEFT", check, "RIGHT", 2, 1); text:SetText(label)
+        p.firstCheck = check
+    else
+        p.firstCheck = button(p, label, 220)
+        p.firstCheck:SetPoint("BOTTOMLEFT", 2, 4)
+        p.firstCheck:SetScript("OnClick", function() toggle(not p.firstOn) end)
+        p.firstIsButton = true
+    end
+    Tips.Attach(p.firstCheck, "welcomefirst")
     local child = CreateFrame("Frame", nil, scroll)
     child:SetSize(WELCOME_W + 8, 1)
     scroll:SetScrollChild(child)
@@ -1140,15 +1157,9 @@ end
 function M.RefreshWelcome(p)
     local id = M.welcomePage or GuildBook.WELCOME_PAGES[1].id
     if p.shown ~= id then M.RenderWelcome(p, id) end
-end
-
--- The first time the addon starts on this account the Guild book opens on Welcome by itself, once.
-function M:MaybeWelcome()
-    local db = SK.client and SK.client.storage and SK.client:storage().shared
-    if not (CreateFrame and UIParent) or not GuildBook.ShouldWelcome(db) then return false end
-    GuildBook.MarkWelcomed(db, SK.client:serverTime())
-    self:Open("welcome")
-    return true
+    p.firstOn = GuildBook.WelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared)
+    if p.firstIsButton then p.firstCheck:SetText("Open on this page: " .. (p.firstOn and "on" or "off"))
+    elseif p.firstCheck.SetChecked then p.firstCheck:SetChecked(p.firstOn) end
 end
 
 function M:BuildStandings(parent)
@@ -1419,6 +1430,7 @@ function M:Build()
     -- Keep it current while it is open: the ledger changes as other players' updates arrive, and a practice raid's clock runs.
     w:SetScript("OnUpdate", function() M:Tick() end)
     w:SetScript("OnShow", function() M:Refresh() end)
+    w:SetScript("OnHide", function() GuildBook.RememberTab(SK.char, M.tab) end) -- (the section it was on, for next time)
     -- Escape closes it.
     if UISpecialFrames then table.insert(UISpecialFrames, "KingsGambitWindow") end
     w:Hide()
@@ -1450,7 +1462,12 @@ end
 function M:Toggle()
     if not (CreateFrame and UIParent) then return false end
     local w = self:Window()
-    if w:IsShown() then w:Hide() else w:Show() end
+    if w:IsShown() then w:Hide()
+    else
+        -- /gambit opens on Welcome while that is on, else on the section it was closed on
+        M.tab = GuildBook.StartTab(SK.client and SK.client.storage and SK.client:storage().shared, SK.char)
+        w:Show()
+    end
     return true
 end
 

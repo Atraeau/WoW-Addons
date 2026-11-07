@@ -676,8 +676,20 @@ test("the Welcome section explains the addon: the 60 seconds, the values, the ru
     end
     for _, b in ipairs(GuildBook.WELCOME) do assert(b.text or (b.items and #b.items > 0), "no empty blocks") end
     for _, british in ipairs { "colour", "behaviour", "grey", "favour", "organis", "optimis" } do assert(not text:lower():find(british, 1, true), "American spelling: " .. british) end
-    local db = {}
-    assert(GuildBook.ShouldWelcome(db)); GuildBook.MarkWelcomed(db, 100); assert(not GuildBook.ShouldWelcome(db), "only once")
+end)
+
+test("the first-run Welcome is a setting that stays on until it is turned off; then the window opens where it was last closed", function()
+    local db, char = {}, {}
+    eq(GuildBook.StartTab(db, char), "welcome", "on by default")
+    GuildBook.RememberTab(char, "stats")
+    eq(GuildBook.StartTab(db, char), "welcome", "looking around or closing the window at once doesn't turn it off")
+    GuildBook.SetWelcomeFirst(db, false)
+    eq(GuildBook.StartTab(db, char), "stats", "off: the section it was last closed on")
+    GuildBook.RememberTab(char, "nonsense"); eq(char.lastTab, "stats", "only a real section is remembered")
+    eq(GuildBook.StartTab(db, {}), "lists", "the first time: Lists")
+    GuildBook.SetWelcomeFirst(db, true)
+    eq(GuildBook.StartTab(db, char), "welcome", "and it can be turned back on")
+    assert(db.welcomeOff == nil)
 end)
 
 test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, and what is different", function()

@@ -7473,7 +7473,8 @@ M.TEXT = {
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
     tryon = { "Try it on", "See how this entry's item looks on your character, in the game's dressing room. You can also Ctrl-click an entry. It only shows the item; nothing is recorded or equipped." },
-    navwelcome = { "Welcome", "What King's Gambit is, how loot works, what the guild values and where everything is. It opens by itself the first time; it is always here." },
+    navwelcome = { "Welcome", "What King's Gambit is, how loot works, what the guild values and where everything is. The addon opens on this page until you turn that off (the checkbox at its foot); it is always here." },
+    welcomefirst = { "Open on this page", "While this is ticked, King's Gambit opens on Welcome. Untick it when you have read it: from then on it opens on the section you last had open." },
     retireledger = { "Retire or keep", "Retire: remove this ledger's saved data from this computer (it asks first; only an officer of its guild can). Nothing in the ledger is erased and nobody else's copy is touched. An officer's retirement is told to the guild: each member can restore it or let it expire in 30 days. The ledger in use now is removed at your next login.\n\nKeep: bring a retired ledger back. Everyone is told, and if its data was removed here it is fetched again from whoever still has it." },
     navstats = { "Stats", "Who is at which place and for how long, who has won and when, worked out from the record. Click a player to see every place they have held." },
     raidautostart = { "Start by itself", "Ticked (the default): the raid starts by itself when the first enemy dies inside an instance, boss or trash. Unticked: you take control, and nothing starts it but Start the raid now. Kept for this character." },
@@ -8046,7 +8047,7 @@ local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migr
 -- `gap` puts a space above its button: Admin is the ledger owner's and maintenance corner, kept apart from the everyday sections.
 -- Every action belongs to exactly one section (the old History form is the Ledger section now).
 M.SECTIONS = {
-    { id = "welcome", label = "Welcome", tip = "What King's Gambit is, how loot works, what the guild values, and where everything is. Shown the first time you open the addon; always here." },
+    { id = "welcome", label = "Welcome", tip = "What King's Gambit is, how loot works, what the guild values, and where everything is. The addon opens here until you turn that off (the checkbox at the foot of the page); always here." },
     { id = "lists", label = "Lists", tip = "The standings: who is first for what, and the officers' moves." },
     { id = "thisraid", label = "This raid", tip = "The raid that is open now: how long it has run, what has been handed out, what is still to hand out and how long it can be traded, and its part of the ledger." },
     { id = "ledger", label = "Ledger", tip = "The record of everything that happened to the lists, in words: who won what, who moved whom, and why. Nothing in it can be edited or erased." },
@@ -8203,9 +8204,20 @@ function M.WelcomeText(pageId)
     return table.concat(lines, "\n")
 end
 
--- First launch: the Welcome section opens once, by itself (on this account), and then waits behind its button.
-function M.ShouldWelcome(db) return type(db) == "table" and not db.welcomed end
-function M.MarkWelcomed(db, now) if type(db) == "table" then db.welcomed = now or true end end
+-- The first-run experience is a setting, on until someone turns it off (the checkbox on the Welcome page, or `/gambit welcome off`): while it is on, opening the
+-- Guild book starts on Welcome. Looking at it, or closing the window at once, changes nothing: someone who opened the addon in the middle of something else
+-- still gets it next time. Once it is off the window opens on the section it was on when it was last closed (Lists the first time).
+-- (Nothing opens by itself: the addon says in chat that /gambit opens it.) The setting is per account (KingsGambitDB.welcomeOff); the last section per character.
+function M.WelcomeFirst(db) return type(db) == "table" and not db.welcomeOff end
+function M.SetWelcomeFirst(db, on) if type(db) == "table" then db.welcomeOff = (not on) or nil end end
+function M.StartTab(db, char)
+    if M.WelcomeFirst(db) then return "welcome" end
+    local tab = type(char) == "table" and char.lastTab
+    return (tab and M.Section(tab)) and tab or "lists"
+end
+function M.RememberTab(char, tab)
+    if type(char) == "table" and tab and M.Section(tab) then char.lastTab = tab end
+end
 
 -- The stored ledgers as rows for the panel at the foot of the Admin section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
 -- Retiring removes the saved data from this computer only (Ledgers.lua); the page asks first and then runs `ledgers retire <n> yes`.

@@ -72,15 +72,13 @@ local function Start(attempt)
     for _ in pairs(engine.view.lists) do lists = lists + 1 end
     SK.world = client:world()
     local guild = client.guildName and client:guildName()
-    -- the first time on this account: the Guild book opens on Welcome by itself (a moment after the ready message), once
-    if M.UI and M.UI.MaybeWelcome then
-        client:after(3, function() local ok, err = pcall(M.UI.MaybeWelcome, M.UI); if not ok then SK:Print("the welcome page failed to open: " .. tostring(err)) end end)
-    end
     local whose = guild and ("the guild " .. guild) or "you (no guild)"
+    -- nothing opens by itself: the first-run experience is the Welcome page, which /gambit opens first until it is turned off there
+    local first = M.GuildBook.WelcomeFirst(client:storage().shared) and " It starts on the Welcome page." or ""
     if engine:LedgerId() then
-        SK:Print(("ready: the ledger of %s has %d list%s. Type /gambit to open the window, or /gambit help."):format(whose, lists, lists == 1 and "" or "s"))
+        SK:Print(("ready: the ledger of %s has %d list%s. Type /gambit to open King's Gambit.%s"):format(whose, lists, lists == 1 and "" or "s", first))
     else
-        SK:Print(("ready: there is no ledger for %s yet. Type /gambit and press Start the ledger, or /gambit help."):format(whose))
+        SK:Print(("ready: there is no ledger for %s yet. Type /gambit to open King's Gambit and press Start the ledger.%s"):format(whose, first))
     end
 end
 
@@ -116,6 +114,12 @@ SlashCmdList["KINGSGAMBIT"] = function(msg)
     if (msg or ""):match("^%s*window%s+reset%s*$") and SK.modules.UI and SK.modules.UI.ResetWindows then
         SK.modules.UI:ResetWindows()
         SK:Print("the windows are back where they start")
+        return
+    end
+    local welcomeSwitch = (msg or ""):lower():match("^%s*welcome%s+(o[nf]+)%s*$")
+    if welcomeSwitch == "on" or welcomeSwitch == "off" then
+        SK.modules.GuildBook.SetWelcomeFirst(SK.client:storage().shared, welcomeSwitch == "on")
+        SK:Print(welcomeSwitch == "on" and "King's Gambit opens on the Welcome page again." or "King's Gambit no longer opens on the Welcome page: it opens on the section you last had open. /gambit welcome opens it; /gambit welcome on turns it back on.")
         return
     end
     if (msg or ""):match("^%s*welcome%s*$") or (msg or ""):match("^%s*about%s*$") then
