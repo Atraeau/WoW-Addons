@@ -75,7 +75,8 @@ local function bevel(b)
     local I = BEVEL_INSET
     local list = {}
     local function layer(a)
-        local t = b:CreateTexture(nil, "OVERLAY")
+        -- (ARTWORK, above the button's own art and below its label, which is drawn in OVERLAY: the shading darkens the face and never the text)
+        local t = b:CreateTexture(nil, "ARTWORK", nil, 7)
         if t.SetColorTexture then t:SetColorTexture(0, 0, 0, a) end
         list[#list + 1] = t
         return t

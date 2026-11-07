@@ -2243,7 +2243,7 @@ along the bottom and right (each with its crisp outer line), and a body only a l
 
 The bevel was drawn over the button's own border, so the outline changed shade. It is now inset inside the border and only the face changes: a little darker, with a shadow
 fading in from the top and left; the light edges along the bottom and right are gone (they read as an outline). The game's mouse-down look stays the bright one, so a
-held-down button is clearly not a button being pressed. (Too subtle at first, by the guild master's reference picture: the face is now a clearly darker, muted red, its label dimmed with it.)
+held-down button is clearly not a button being pressed. The shading is drawn under the label (it was over it, which dimmed the text), so a held-down button's label is exactly as bright as any other's. (Too subtle at first, by the guild master's reference picture: the face is now a clearly darker, muted red, its label dimmed with it.)
 
 ### Decision: a Welcome section explains the addon, and opens once on the first launch (2026-11-07)
 
