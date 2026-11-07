@@ -2262,6 +2262,8 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   lists what is different right after it, before the 60 seconds: the ledger instead of a kept list, live decisions by each player, a separate off-spec list, gifting,
   the draft with a ranking made up front, the salvage round instead of a roll, eligibility, free passing, a list per raid, corrections in the open. The same list is in
   the player guide (rationale.md).
+- **Its strengths first:** before the flaw, the callout says what Suicide Kings does well and King's Gambit keeps: one simple rule, turns that are earned rather than rolled,
+  and loot that spreads evenly across everyone who shows up (the manifesto's "earned turns over the luck of the roll").
 - **The flaw it answers (a third correction):** the callout now names what is wrong with Suicide Kings: someone high on the list passes on an item that would help them,
   to save their place for something better, and a useful item is disenchanted. King's Gambit is built so useful loot finds a home, not a shard (gifting lets it be passed on at a
   cost, the salvager takes what nobody bids on, and the draft asks everyone who wants it). The same sentence is in the player guide.

@@ -26,7 +26,7 @@ reasoning.
 
 ### What is different from Suicide Kings
 
-King's Gambit keeps Suicide Kings' one move (win an item, drop to the bottom) and is not a rename of it. Suicide Kings' flaw is that someone high on the list passes on an item that would help them, to save their place for something better, and a useful item ends up disenchanted. King's Gambit answers this with gifting, which gives every player the agency to decide where loot goes: whoever wins an item can distribute it to the player who would use it, and someone near the bottom can do that at little or no cost to their place. Useful loot finds a home, not a shard. What it adds around that move:
+King's Gambit keeps what makes Suicide Kings good: one simple rule (win an item, drop to the bottom), turns that are earned rather than rolled, and loot that spreads evenly across everyone who shows up. It is not a rename of it. Suicide Kings' flaw is that someone high on the list passes on an item that would help them, to save their place for something better, and a useful item ends up disenchanted. King's Gambit answers this with gifting, which gives every player the agency to decide where loot goes: whoever wins an item can distribute it to the player who would use it, and someone near the bottom can do that at little or no cost to their place. Useful loot finds a home, not a shard. What it adds around that move:
 
 - **Gifting as a rule, the biggest difference:** win, then give the item to anyone, in any direction, even upward; you pay the place and they get the item. A minor
   upgrade is not wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible.
