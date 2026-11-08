@@ -676,6 +676,8 @@ FORMATS[2] = {
         -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")
         SetRaidList = { list = false, data = { raid = "name!", list = "name!" } },
         SetListPolicy = { list = false, data = { mode = "name!" } },
+        -- a member's spec for one raid (0.8.0): written by the raid's Master Looter the first time (it then holds for the whole raid), or by an officer to correct it
+        SetSpec = { list = false, data = { raid = "name!", member = "name!", spec = "name!", role = "text", class = "text" } },
     },
 }
 M.FORMATS = FORMATS
@@ -1245,9 +1247,9 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
-    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true }
+    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true, SetSpec = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true, SetSpec = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 -- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
@@ -1568,6 +1570,11 @@ M.Present = function(view, raid)
     end
     return present
 end
+-- The spec recorded for a member in a raid: { spec, role, class, by, corrected }, or nil.
+M.SpecOf = function(view, raid, member)
+    local r = view.auth.raids[raid]
+    return r and r.specs and r.specs[member] or nil
+end
 M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
 M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
@@ -1662,6 +1669,23 @@ function auth.SetRaidList(a, ev, d)
     if r.listEv then return nil, "listset" end
     if r.dedicated and d.list == M.MAIN then return nil, "needsownlist" end
     return function() r.list, r.listEv = d.list, ev end
+end
+
+-- A member's spec for one raid (0.8.0). It decides whether an item is main-spec or off-spec for them, so it must hold for the whole raid: the raid's Master
+-- Looter records it the first time (from what the player told their addon, or what the Master Looter entered for a player without the addon), and that
+-- first entry stands. Anyone else's entry is an officer's correction (their own addon checks the game's rank when they write it, as for Disregard) and
+-- replaces it, at any time.
+function auth.SetSpec(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev) then return nil, "notactive" end
+    if not (isName(d.member) and isName(d.spec)) then return nil, "badname" end
+    local was = r.specs and r.specs[d.member]
+    if ev.author == r.ml and was then return nil, "specset" end
+    return function()
+        r.specs = r.specs or {}
+        r.specs[d.member] = { spec = d.spec, role = d.role, class = d.class, by = ev.author, ev = ev, corrected = (ev.author ~= r.ml) or nil }
+    end
 end
 
 function auth.Revoke(a, ev, d)
@@ -2129,6 +2153,9 @@ function M.New(opts)
         for _, m in ipairs(S.roster) do if m.name == S.me then return m.class end end
     end
     function h:setMyClass(class) S.myClass = class end
+    -- The spec the talents say this character is (name, role), or nil; tests and practice set it.
+    function h:mySpec() return S.mySpec, S.mySpecRole end
+    function h:setMySpec(name, role) S.mySpec, S.mySpecRole = name, role end
     function h:addonVersion() return S.addonVersion or "dev" end
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end
@@ -2587,6 +2614,9 @@ function Engine:ActiveRaids(t) return Ledger.ActiveRaids(self.view, t or self.cl
 -- Who disenchants for the raid this character is Master Looter of (designated by them, in the ledger), or nil.
 -- Who is in a raid, as the Master Looter's attendance entries say (a set of names).
 function Engine:Present(raid) return Ledger.Present(self.view, raid) end
+
+-- The spec recorded for a member in a raid, or nil (see Ledger.lua, auth.SetSpec).
+function Engine:SpecOf(raid, member) return Ledger.SpecOf(self.view, raid, member) end
 
 function Engine:RaidDisenchanter()
     local me = self.client:me()
@@ -3469,6 +3499,28 @@ function M.ForPlayer(item, class, specName)
     return { usable = true, spec = mine.spec, role = mine.role, score = mine.score, rating = rating }
 end
 
+-- A class's spec names, in order ("Arms", "Fury", "Protection").
+function M.SpecNames(class)
+    local out = {}
+    for _, s in ipairs(M.SPECS[class] or {}) do out[#out + 1] = s.name end
+    return out
+end
+
+-- The class's spec called `name` (any case), as { name, role }, or nil.
+function M.FindSpec(class, name)
+    local want = tostring(name or ""):lower()
+    for _, s in ipairs(M.SPECS[class] or {}) do if s.name:lower() == want then return s end end
+end
+
+-- Is the item a main-spec upgrade for this spec? A Need is only open to a spec the item suits: a Fury Warrior's Need on a tanking item is an Off-spec.
+-- Unknown or unrated items are given the benefit of the doubt. Returns true, or false + "notspec".
+function M.NeedOk(item, class, specName)
+    if not (item and class and specName) then return true end
+    local f = M.ForPlayer(item, class, specName)
+    if f.usable and f.rating == "poor" then return false, "notspec" end
+    return true
+end
+
 -- Display helpers.
 local CLASS_NAMES = { WARRIOR = "Warrior", PALADIN = "Paladin", HUNTER = "Hunter", ROGUE = "Rogue", PRIEST = "Priest",
     SHAMAN = "Shaman", MAGE = "Mage", WARLOCK = "Warlock", DRUID = "Druid" }
@@ -3518,6 +3570,8 @@ local DEFAULTS = {
     requireRanking = false, -- a player who wants two or more items of one kind (needs, off-spec, gifts) must rank them before they count as
                          -- having answered, so bidding can't close early on them. Off here so a bare session behaves as before; the game's
                          -- host (LootNet) and the practice raid turn it on.
+    requireSpec = false, -- a player must have a spec on record for the raid (see Ledger.lua, SetSpec) before they may bid; a Need must suit that spec. Off in a
+                         -- bare session; the game's host and the practice raid turn it on.
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
     deHandler = nil,     -- who disenchants when nobody wants an item. Normally the raid's designated disenchanter (the
                          -- Master Looter chooses one per raid, in the ledger); a session cannot start without one
@@ -3772,6 +3826,31 @@ end
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
 -- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most),
 -- ready = "ready" | "says" | "notready" (tokens only: can they redeem it? A hint; never enforced) }.
+-- The raid this session is for (the one its Master Looter runs), and a player's spec on record for it.
+function Session:raidId()
+    local me = self.client:me()
+    for _, r in ipairs(self.engine:ActiveRaids()) do if r.ml == me then return r.id end end
+end
+function Session:specOf(player)
+    local id = self:raidId()
+    return id and self.engine:SpecOf(id, norm(self, player)) or nil
+end
+
+-- Record a player's spec for the raid: the first one stands for the whole raid (an officer corrects a mistake). Returns true, or false + why.
+function Session:setSpec(player, name)
+    player = norm(self, player)
+    local class = self.class[player]
+    local spec = ItemFit.FindSpec(class, name)
+    if not spec then return false, "badspec" end
+    local id = self:raidId()
+    if not id then return false, "noraid" end
+    if self.engine:SpecOf(id, player) then return false, "specset" end
+    local ev, err = self.engine:Write("SetSpec", { raid = id, member = player, spec = spec.name, role = spec.role, class = class })
+    if not ev then return false, err or "refused" end
+    self:emit("spec", { player = player, spec = spec.name })
+    return true
+end
+
 function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
@@ -3780,6 +3859,15 @@ function Session:bid(player, itemId, kind, extra)
     if not self.eligible[player] or self.away[player] then return false, "ineligible" end
     if not self.items[itemId] then return false, "noitem" end
     if not (kind == "need" or kind == "off" or kind == "gift" or kind == "pass") then return false, "badkind" end
+    -- With a spec required: no spec on record, no answer but a pass; and a Need has to suit the spec (otherwise it is an Off-spec)
+    if self.cfg.requireSpec and kind ~= "pass" then
+        local sp = self:specOf(player)
+        if not sp then return false, "needspec" end
+        if kind == "need" then
+            local ok, why = ItemFit.NeedOk(self:fitOf(itemId), self.class[player], sp.spec)
+            if not ok then return false, why end
+        end
+    end
     -- A gift names who gets it, or leaves that open: if the bidder wins and still hasn't said, the draft waits for them
     -- (see the "recipient" turn) rather than guessing.
     local to
@@ -3862,6 +3950,16 @@ end
 -- Handle a whispered answer from `sender`. Replies by whisper. Returns the applied answers
 -- or nil + reason.
 function Session:handleWhisper(sender, text)
+    -- 'spec fury': the spec this player is for the raid (they have no addon to ask them)
+    local specWord = tostring(text or ""):match("^%s*spec%s+([%a%-]+)%s*$")
+    if specWord then
+        local ok, why = self:setSpec(sender, specWord)
+        local names = table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]), ", ")
+        self.client:whisper(sender, ok and ("Your spec for this raid is " .. specWord .. ". Now answer the items.")
+            or why == "specset" and "Your spec is already set for this raid; ask an officer to change it."
+            or ("I don't know that spec. Your choices: " .. names .. "."))
+        return ok and {} or nil, why
+    end
     local answers, why = M.ParseWhisper(text, #self.items)
     if not answers then
         self.client:whisper(sender, whisperProblem(why))
@@ -3884,6 +3982,10 @@ function Session:handleWhisper(sender, text)
                     lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
                 elseif err == "nostats" or err == "nostatsto" then
                     lines[#lines + 1] = ("item %d has no stats that help %s"):format(id, err == "nostats" and "your class" or "theirs")
+                elseif err == "needspec" then
+                    lines[#lines + 1] = ("item %d: tell me your spec first (whisper 'spec %s')"):format(id, (ItemFit.SpecNames(self.class[norm(self, sender)])[1] or "fury"):lower())
+                elseif err == "notspec" then
+                    lines[#lines + 1] = ("item %d isn't for your spec: answer 'off' instead"):format(id)
                 elseif err == "wrongclass" or err == "wrongclassto" then
                     lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
                 else
@@ -4405,8 +4507,10 @@ function Session:confirm()
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end
             if ok then
+                -- the winner's spec for this raid goes on the entry (an extra field older clients ignore): "Fury Warrior won it" stays true after a respec
+                local sp = self:specOf(a.member)
                 local ev, err = engine:Append(a.list, "Award",
-                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil, seen = a.item.seen })
+                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil, seen = a.item.seen, spec = sp and sp.spec or nil })
                 if not ev then fail(a, "ledger", err) end
             else
                 fail(a, "give", why)
@@ -6527,6 +6631,17 @@ function Sim:openRaid()
     return self.raidNo
 end
 
+-- Write each simulated raider's spec for the current raid into the ledger (as the Master Looter would), except the learner's when specs are required.
+function Sim:recordSpecs()
+    for _, n in ipairs(self.names) do
+        local info = self.info[n]
+        local sp = info and info.spec and ItemFit.FindSpec(info.class, info.spec)
+        if sp and not (self.requireSpec and n == self.learner) and not self.engine:SpecOf(self.raidId, n) then
+            self.engine:Write("SetSpec", { raid = self.raidId, member = n, spec = sp.name, role = sp.role, class = info.class })
+        end
+    end
+end
+
 function Sim:note(text) self.log[#self.log + 1] = { t = self.client:now(), text = text } end
 
 function Sim:isBot(fullName)
@@ -6549,6 +6664,14 @@ end
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
 -- ids (optional): each link's item id (the simulator's links are plain names).
 function Sim:drop(links, cfg, seen, ids)
+    -- With specs required (the game's rule, practice's raid nights), the bots' specs are on record for the raid; the learner's is theirs to choose.
+    if self.requireSpec then
+        local c = {}
+        for k, v in pairs(cfg or {}) do c[k] = v end
+        if c.requireSpec == nil then c.requireSpec = true end
+        cfg = c
+        self:recordSpecs()
+    end
     -- A simulation that plays as the game does (practice mode, the web page) asks for rankings, like the game's host.
     if self.rankingRequired then
         local c = {}
@@ -7511,6 +7634,8 @@ M.TEXT = {
     lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
     lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     statssort = { "Sort the stats", "Click a heading to sort by it: a name from A to Z, a count with the most at the top, the places from first. Click it again to reverse the order. It opens with the most active (most wins) at the top." },
+    specpick = { "Your spec for this raid", "Which spec you are playing in this raid. It decides what counts as a main-spec Need for you (a Fury Warrior's Need on a tanking item is an Off-spec), it is written in the ledger, and it holds until the raid ends. An officer can correct a mistake." },
+    specauto = { "Auto-detect", "On: your spec is taken from your talent points (the tree with the most points spent) the first time you answer in each raid, without asking. Off: you are asked every raid, with the talents' pick marked." },
     bidspick = { "Select this item", "Click an item (it turns gray) to see every player's answer on it in a window beside this one: who wants it, who passed, who has not answered yet, each with their place on the list. One item at a time; click it again to close." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
@@ -7610,8 +7735,8 @@ do local chunk = function(...)
 -- The buttons that answer it are in LootWindow, drawn from LootView; every button runs the same command a player would type, so the rules and the
 -- ledger are exactly those of the commands. The Master Looter's own session and a player's view of someone else's are read from the same place the commands read.
 local _, SK = ...
-local Identity, Sim, Tips
-local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips" }, function(d) Identity, Sim, Tips = d.Identity, d.Sim, d.UITips end)
+local Identity, Sim, Tips, ItemFit
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips", "ItemFit" }, function(d) Identity, Sim, Tips, ItemFit = d.Identity, d.Sim, d.UITips, d.ItemFit end)
 
 M.MAX_ITEMS = 24
 
@@ -7707,13 +7832,32 @@ function M.Model(ctx)
     -- Who a name is: their display name, class (from the group) and spec (only where the practice raid knows it; the game doesn't tell us others' specs).
     local classOf = {}
     for _, member in ipairs((ctx.client.roster and ctx.client:roster()) or {}) do classOf[member.name] = member.class end
+    -- The spec on record for a player in this raid (the ledger's, from the host; a player's window is told it with the session).
+    local function recordedSpec(full)
+        if mode == "ml" then
+            local sp = s.specOf and s:specOf(full)
+            return sp and sp.spec
+        end
+        return s.specs and s.specs[full]
+    end
     local function whoOf(full)
         if not full then return nil end
         local name = show(full)
         local info = { name = name, class = classOf[full] }
         local known = ctx.sim and ctx.sim.info and (ctx.sim.info[full] or ctx.sim.info[name])
         if known then info.class, info.spec = info.class or known.class, known.spec end
+        info.spec = recordedSpec(full) or info.spec
         return info
+    end
+    -- Is a spec needed before this player may answer? Then the window asks (the choices are their class's specs; the talents' pick comes first).
+    local needSpec = (mode == "ml" and (s.cfg or {}).requireSpec) or (mode == "player" and s.requireSpec)
+    if needSpec then
+        local myClass = ctx.client.myClass and ctx.client:myClass()
+        local detected = ctx.client.mySpec and ctx.client:mySpec()
+        local mine = recordedSpec(me)
+        out.spec = { mine = mine, class = myClass, options = myClass and ItemFit.SpecNames(myClass) or {},
+            detected = detected and ItemFit.FindSpec(myClass or "", detected) and ItemFit.FindSpec(myClass, detected).name or nil,
+            auto = ctx.autoSpec and ctx.autoSpec() or false }
     end
     -- Who may be given an item (only those who can have it): the context's own list (the practice page), else the commands'.
     local targetsFn = ctx.targets or (ctx.commands and ctx.commands.giftTargets)
@@ -7752,6 +7896,10 @@ function M.Model(ctx)
             if ctx.commands and ctx.commands.mayHave then
                 local ok, whyNot = ctx.commands.mayHave(row.id)
                 if ok == false then row.canBid, row.whyNot = false, whyNot end
+            end
+            -- with a spec on record, a Need has to suit it (a Fury Warrior's Need on a tanking item is an Off-spec)
+            if row.canBid and out.spec and out.spec.mine and ctx.commands and ctx.commands.needOk then
+                row.needOk = ctx.commands.needOk(row.id, out.spec.mine)
             end
             out.items[#out.items + 1] = row
         end
@@ -7907,6 +8055,8 @@ local WHY = {
     cantequip = "Your class can't wear or wield this. You can still gift it or pass.",
     nostats = "Nothing on this helps your class. You can still gift it or pass.",
     wrongclass = "This isn't for your class. You can still gift it or pass.",
+    needspec = "Choose your spec above first. You can still pass.",
+    notspec = "Not a main-spec item for your spec: choose Off-spec instead.",
 }
 
 local function tipOf(id)
@@ -7926,6 +8076,10 @@ local function answerButtons(m, row)
         local enabled, why = true, nil
         if (a.key == "need" or a.key == "off") and row.canBid == false then
             enabled, why = false, WHY[row.whyNot] or "This isn't for your class."
+        elseif a.key ~= "pass" and m.spec and not m.spec.mine then
+            enabled, why = false, WHY.needspec
+        elseif a.key == "need" and row.needOk == false then
+            enabled, why = false, WHY.notspec
         end
         out[#out + 1] = button(a.key, a.label, { name = "bid", item = row.id, kind = a.key },
             { letter = a.letter, enabled = enabled, why = why, selected = row.mine == a.key })
@@ -7948,6 +8102,7 @@ function M.Build(m)
         return v
     end
     v.night = m.night
+    v.spec = m.spec -- (when a spec is required: { mine, class, options, detected, auto })
     v.visible = true
     v.title = "King's Gambit"
     v.subtitle = m.phaseText
