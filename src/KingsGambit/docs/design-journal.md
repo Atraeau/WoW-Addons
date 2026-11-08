@@ -2489,3 +2489,5 @@ shared, so the page could draw the same lines.
   (`bidsHidden`), are gone: the per-item Everyone tick box is the only control. The status line under each item shows while bidding is open; the side panel opens when an item is ticked.
 - **Answering an item ticks its Everyone box (the guild master's call, same day):** pressing Need, Off-spec, Gift or Pass on an item opens the side panel for that item (and moves it from any other),
   so everyone's answers on it are in view as you decide. It can still be unticked.
+- **Tooltips keep off the Everyone panel (the guild master's call, same day):** hovering an answer button put its tooltip over the open side panel, hiding the list. While the panel is open
+  beside a window, that window's tooltips now open to the left (`ANCHOR_LEFT`) instead of the right.
