@@ -38,3 +38,16 @@ GitHub Pages serves the repository's `docs/` folder, so the build also writes th
 Commit both copies together. CI (`.github/workflows/tests.yml`) fails a pull request if either is out of date, and on a push
 to `main` rebuilds the page itself and commits it back if it changed. If King's Gambit moves
 to its own repository, give the build the folder to publish into: `lua scripts/build-simulator.lua <folder>`.
+
+## Checking the page before you push
+
+CI's `page` job plays every lesson in a headless browser, so run the same check first (it needs Node.js and `npm install --no-save playwright@1.49.1` in this folder;
+`node_modules` is ignored by git). With Chrome or Edge already installed there is no browser to download: point `KG_BROWSER` at it (PowerShell):
+
+```
+lua scripts/build-simulator.lua
+node scripts/check-simulator.mjs simulator/index.html
+$env:KG_BROWSER = "C:\Program Files\Google\Chrome\Application\chrome.exe"; node simulator/test/smoke.mjs simulator/index.html
+```
+
+Without `KG_BROWSER` the script uses Playwright's own Chromium (`npx playwright install chromium`), as CI does.

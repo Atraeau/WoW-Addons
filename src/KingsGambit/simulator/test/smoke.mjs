@@ -1,6 +1,8 @@
 // Opens the built simulator page in headless Chromium and plays every lesson (see smoke-driver.js).
 // Usage (from the KingsGambit folder; needs `npm install playwright` and `npx playwright install chromium`):
 //   node simulator/test/smoke.mjs [simulator/index.html]
+// With Chrome or Edge already installed, skip the browser download by pointing KG_BROWSER at it (PowerShell):
+//   $env:KG_BROWSER = "C:\Program Files\Google\Chrome\Application\chrome.exe"; node simulator/test/smoke.mjs simulator/index.html
 import { readFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { resolve, dirname } from "node:path";
@@ -25,7 +27,7 @@ const server = createServer(async (req, res) => {
 await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const url = `http://127.0.0.1:${server.address().port}/`;
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.KG_BROWSER ? { executablePath: process.env.KG_BROWSER } : {});
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push("page error: " + e.message));
