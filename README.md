@@ -30,14 +30,14 @@ machine-readable (tools can fetch [`api.json`](https://atraeau.github.io/WoW-Add
 | --- | --- | --- |
 | HelloForever | [`src/HelloForever`](src/HelloForever) | Example addon produced by the scaffolder (`/hf`) |
 | WowBagSorter | [`src/WowBagSorter`](src/WowBagSorter) | Bag/bank sorter (originally Classic 1.13; may need 12.0 fixes) |
-| KingsGambit | [`src/KingsGambit`](src/KingsGambit/README.md) | King's Gambit raid loot ledger (derived from Suicide Kings); the addon itself is in its `src/` |
+| KingsGambit | [`src/KingsGambit`](src/KingsGambit/README.md) | King's Gambit raid loot ledger (inspired by Suicide Kings: keeps what works, fixes what does not); the addon itself is in its `src/` |
 | WowApiExport | [`src/WowApiExport`](src/WowApiExport) | Dev tool — dumps the client's own API docs (`/apiexport`) |
 | BTPCompatCheck | [`src/BTPCompatCheck`](src/BTPCompatCheck) | Dev tool — probes which APIs exist on the client (`/btpcheck`) |
 | BlizzThreatPlates | [`vendor/BlizzThreatPlates`](vendor/BlizzThreatPlates) | Patched third-party addon (MIT) — see [PATCHES.md](vendor/BlizzThreatPlates/PATCHES.md) |
 
 ### King's Gambit
 
-A full-featured raid loot system (Suicide Kings–derived) with a tamper-evident shared ledger. The
+A full-featured raid loot system, inspired by Suicide Kings, that keeps what works and fixes what does not (gifting), with a tamper-evident shared ledger. The
 engine is plain Lua with no game dependency, so it is fully tested outside WoW.
 
 Everything about it lives in [`src/KingsGambit/`](src/KingsGambit/README.md): the addon (its `src/`, with the training and

@@ -1,6 +1,6 @@
 # King's Gambit — Design Journal
 
-*King's Gambit is derived from the classic Suicide Kings strategy and named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
+*King's Gambit is inspired by the classic Suicide Kings strategy: it keeps what works (one simple rule, earned turns, loot spread evenly) and fixes what does not (useful loot lost to disenchanting) with gifting. It is named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
 
 *A compressed record of the design conversation behind the SK loot addon: the
 decisions we made, the alternatives we weighed, and why we landed where we did.
@@ -2274,6 +2274,7 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   which is nothing from the bottom.
 - **Gifting is the fix, said so (the guild master's call):** the callout and the first bullet now tie gifting to that flaw: when the player who would use an item sits too high
   to spend their place on it, someone near the bottom wins it cheaply and passes it up.
+- **The READMEs say the same (the guild master's call):** "derived from Suicide Kings" in the READMEs, the manifesto, the guide and this journal became the Welcome's idea: inspired by Suicide Kings, it keeps what works and fixes what does not (gifting).
 - **Gifting leads (the guild master's call):** the biggest difference is gifting, so it is the first item of the list, with its reason, and the callout says so.
 - **Not a wall of text (a second correction):** the Welcome is four short pages (Start here, The rules, Using it, Why) behind buttons at the top, one screenful each. Each
   block has its own text: a large gold title, gold headings with room above, a callout with a bar at its left, bullets and numbers with a hanging indent and air between

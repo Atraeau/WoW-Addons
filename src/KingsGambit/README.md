@@ -1,6 +1,6 @@
 # King's Gambit
 
-Raid loot by King's Gambit (a Suicide Kings derivative) on a transparent, tamper-evident ledger, for
+Raid loot by King's Gambit, inspired by Suicide Kings: it keeps what works and fixes what does not (with gifting), on a transparent, tamper-evident ledger, for
 WoW: Forever (Interface 16001). Named for the chess gambit, a deliberate sacrifice of position for advantage.
 
 Everything about King's Gambit lives in this folder, so it can move to its own repository unchanged

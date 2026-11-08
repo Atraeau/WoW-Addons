@@ -1,6 +1,6 @@
 # King's Gambit: documentation
 
-A raid loot system for WoW: Forever, derived from Suicide Kings, with a shared ledger anyone can verify.
+A raid loot system for WoW: Forever, inspired by Suicide Kings (it keeps what works and fixes what does not), with a shared ledger anyone can verify.
 
 | Read this | If you want to know |
 |---|---|
