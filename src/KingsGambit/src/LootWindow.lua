@@ -225,10 +225,37 @@ function M.Build(ui)
     f.banner = text("GameFontHighlight")
     f.turnText = text("GameFontNormal")
     f.more = text("GameFontHighlightSmall")
-    -- a lesson (practice mode's tutorials): its title and text at the top, and how it went at the end
-    f.lessonTitle = text("GameFontNormal")
-    f.lessonText = text("GameFontHighlightSmall")
-    f.lessonVerdict = text("GameFontHighlight")
+    -- a lesson (practice mode's tutorials) has a window of its own, left of this one, so the bidding here looks exactly as it does in a real raid:
+    -- the title, the text (it scrolls), how it went, and Start / Try again / Next
+    local okLw, lw = pcall(CreateFrame, "Frame", nil, f, "BasicFrameTemplateWithInset")
+    if not okLw or not lw then lw = CreateFrame("Frame", nil, f) end
+    lw:SetSize(340, 430)
+    lw:SetPoint("TOPRIGHT", f, "TOPLEFT", -4, 0)
+    if lw.TitleText then lw.TitleText:SetText("Practice lesson") end
+    f.lessonWin = lw
+    f.lessonTitle = lw:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    f.lessonTitle:SetPoint("TOPLEFT", 14, -32); f.lessonTitle:SetWidth(298); f.lessonTitle:SetJustifyH("LEFT"); f.lessonTitle:SetWordWrap(true)
+    local okLs, lsc = pcall(CreateFrame, "ScrollFrame", nil, lw, "UIPanelScrollFrameTemplate")
+    if not (okLs and lsc) then lsc = CreateFrame("ScrollFrame", nil, lw) end
+    lsc:SetPoint("TOPLEFT", 10, -70); lsc:SetPoint("BOTTOMRIGHT", -30, 118)
+    lw.child = CreateFrame("Frame", nil, lsc)
+    lw.child:SetSize(296, 1)
+    lsc:SetScrollChild(lw.child)
+    lw.scroll = lsc
+    f.lessonText = lw.child:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    f.lessonText:SetPoint("TOPLEFT", 4, 0); f.lessonText:SetWidth(288); f.lessonText:SetJustifyH("LEFT"); f.lessonText:SetWordWrap(true)
+    f.lessonVerdict = lw:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    f.lessonVerdict:SetPoint("BOTTOMLEFT", 14, 46); f.lessonVerdict:SetWidth(298); f.lessonVerdict:SetHeight(64); f.lessonVerdict:SetJustifyH("LEFT"); f.lessonVerdict:SetJustifyV("BOTTOM"); f.lessonVerdict:SetWordWrap(true)
+    f.lessonStart = button(lw, "Start the lesson", 168, BTN_H)
+    f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
+    attach(f.lessonStart, "lessonstart")
+    f.lessonAgain = button(lw, "Try again", 120, BTN_H)
+    f.lessonAgain:SetScript("OnClick", function() ui:LessonAgain() end)
+    attach(f.lessonAgain, "lessonagain")
+    f.lessonNext = button(lw, "Next lesson", 120, BTN_H)
+    f.lessonNext:SetScript("OnClick", function() ui:LessonNext() end)
+    attach(f.lessonNext, "lessonnext")
+    lw:Hide()
 
     -- thin dividers between the groups (the turn, your order, the items, the Master Looter, practice)
     f.dividers = {}
@@ -380,15 +407,6 @@ function M.Build(ui)
     if type(side.CloseButton) == "table" then side.CloseButton:SetScript("OnClick", function() ui.bidItem = nil; ui:Refresh() end) end
     side:Hide()
     f.side = side
-    f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
-    f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
-    attach(f.lessonStart, "lessonstart")
-    f.lessonAgain = button(f, "Try again", 120, BTN_H)
-    f.lessonAgain:SetScript("OnClick", function() ui:LessonAgain() end)
-    attach(f.lessonAgain, "lessonagain")
-    f.lessonNext = button(f, "Next lesson", 120, BTN_H)
-    f.lessonNext:SetScript("OnClick", function() ui:LessonNext() end)
-    attach(f.lessonNext, "lessonnext")
     f.wait = button(f, "Wait 10 s", 80, BTN_H)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
     attach(f.wait, "wait")
@@ -497,10 +515,25 @@ function M.Refresh(f, ctx, ui)
     local lesson = m.lesson
     if lesson then
         f.lessonTitle:SetText((lesson.index and lesson.count) and ("Lesson %d of %d: %s"):format(lesson.index, lesson.count, lesson.title) or lesson.title)
-        place(f.lessonTitle, PAD); y = y - textH(f.lessonTitle, 14) - 4
-        f.lessonText:SetText(M.GameText(lesson.text))
-        place(f.lessonText, PAD); y = y - textH(f.lessonText, 12) - GAP
+        local lt = M.GameText(lesson.text)
+        if f.lessonShown ~= lesson.title then
+            f.lessonShown = lesson.title
+            if f.lessonWin.scroll.SetVerticalScroll then f.lessonWin.scroll:SetVerticalScroll(0) end
+        end
+        f.lessonText:SetText(lt)
+        f.lessonWin.child:SetHeight(textH(f.lessonText, 12) + 8)
+        local verdict = lesson.verdict
+        if verdict then
+            local head = verdict.pending and "|cffffd100Not finished yet:|r " or (verdict.ok and "|cff40ff40Matches the lesson:|r " or "|cffff6040Different from the lesson:|r ")
+            f.lessonVerdict:SetText(head .. M.GameText(verdict.message or ""))
+        else f.lessonVerdict:SetText("") end
+        local x = 14
+        local function put(b, on, w) setShown(b, on); if on then b:ClearAllPoints(); b:SetPoint("BOTTOMLEFT", f.lessonWin, "BOTTOMLEFT", x, 14); x = x + w + GAP end end
+        put(f.lessonStart, not lesson.started, 168)
+        put(f.lessonAgain, lesson.started, 120)
+        put(f.lessonNext, (lesson.index or 0) < (lesson.count or 0), 120)
     end
+    setShown(f.lessonWin, lesson ~= nil)
 
     if not v.visible then
         f.banner:SetText(lesson and (lesson.started and "No loot is up." or "Read the lesson, then press Start the lesson. Bids and timers begin when you do.")
@@ -672,18 +705,7 @@ function M.Refresh(f, ctx, ui)
     end
 
     if lesson then
-        divider()
-        local verdict = lesson.verdict
-        if verdict then
-            local head = verdict.pending and "|cffffd100Not finished yet:|r " or (verdict.ok and "|cff40ff40Matches the lesson:|r " or "|cffff6040Different from the lesson:|r ")
-            f.lessonVerdict:SetText(head .. M.GameText(verdict.message or ""))
-            place(f.lessonVerdict, PAD); y = y - textH(f.lessonVerdict, 14) - GAP
-        end
-        local x = PAD
-        if not lesson.started then layout[#layout + 1] = { f.lessonStart, x, y }; want[f.lessonStart] = true; x = x + 168 + GAP end
-        if lesson.started then layout[#layout + 1] = { f.lessonAgain, x, y }; want[f.lessonAgain] = true; x = x + 120 + GAP end
-        if (lesson.index or 0) < (lesson.count or 0) then layout[#layout + 1] = { f.lessonNext, x, y }; want[f.lessonNext] = true; x = x + 120 + GAP end
-        y = y - BTN_H - GAP
+        -- (the lesson's own window carries its verdict and buttons)
     elseif practice then
         divider()
         place(f.practiceLabel, PAD); y = y - 14 - 4
@@ -724,7 +746,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.hint, f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.hint, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     everything[#everything + 1] = f.scroll; everything[#everything + 1] = f.list
