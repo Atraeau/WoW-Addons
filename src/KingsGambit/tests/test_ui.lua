@@ -94,10 +94,13 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:PracticeKill()
         UI:Refresh()
         UI:PracticeWait(5); UI:Refresh();
-        UI:SelectBidItem(UI.lootWindow.rows[1].id or 1); UI:Refresh(); eq(UI.bidItem ~= nil, true, "an item is ticked"); UI:SelectBidItem(UI.bidItem); UI:Refresh(); eq(UI.bidItem, nil, "ticked again, it closes")
+        eq(UI.bidItem ~= nil, true, "the first item still to answer is opened for you"); UI:SelectBidItem(UI.bidItem); UI:Refresh(); eq(UI.bidItem, nil, "selected again, it closes")
         UI.bidItem = nil
         SK.modules.LootWindow.Run({ name = "bid", item = 2, kind = "pass" }, UI.lootWindow, UI)
-        eq(UI.bidItem, 2, "answering an item ticks its Everyone box"); UI.bidItem = nil
+        UI:Refresh()
+        eq(UI.bidItem ~= 2, true, "once item 2 is answered, the panel moves on to the next item still to answer")
+        eq(UI.lootWindow.rows[1].id ~= 2, true, "and the answered item drops to the bottom of the list")
+        UI.bidItem = nil
         UI:SelectBidItem(1); UI:SelectBidItem(2); eq(UI.bidItem, 2, "ticking another item moves the panel to it (one at a time)"); UI:Refresh()
         UI:SelectBidItem(2); eq(UI.bidItem, nil, "unticking hides it"); UI:Refresh()
         UI:PracticeWait(10)
