@@ -1071,7 +1071,7 @@ function M:BuildWelcome(parent)
     local footer = CreateFrame("Frame", nil, p)
     local win = parent.GetParent and parent:GetParent() or parent
     footer:SetHeight(26); footer:SetWidth(260)
-    footer:SetPoint("BOTTOMLEFT", win, "BOTTOMLEFT", 140, 4)
+    footer:SetPoint("BOTTOM", win, "BOTTOM", 0, 4)
     p.footer = footer
     local label = "Show the welcome page first"
     local function toggle(on) GuildBook.SetWelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared, on); M:Refresh() end
@@ -1081,6 +1081,8 @@ function M:BuildWelcome(parent)
         check:SetScript("OnClick", function(self) toggle(self:GetChecked() and true or false) end)
         local text = footer:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         text:SetPoint("LEFT", check, "RIGHT", 2, 1); text:SetText(label)
+        local tw = text:GetStringWidth()
+        if type(tw) == "number" and tw > 0 then footer:SetWidth(check:GetWidth() + 2 + tw) end -- (so the pair is centered as a whole)
         p.firstCheck = check
     else
         p.firstCheck = button(footer, label, 220)
