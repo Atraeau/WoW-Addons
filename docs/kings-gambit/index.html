@@ -7571,7 +7571,12 @@ function M.Attach(frame, tip, extra)
         if not GameTooltip then return end
         local title, text = M.Resolve(tip)
         if not title then return end
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        -- Keep the tooltip off the Everyone panel: when it is open beside this window, the tip opens to the left instead.
+        local anchor, root = "ANCHOR_RIGHT", self
+        while root.GetParent and root:GetParent() and root:GetParent() ~= UIParent do root = root:GetParent() end
+        local side = type(root) == "table" and root.side
+        if type(side) == "table" and side.IsShown and side:IsShown() then anchor = "ANCHOR_LEFT" end
+        GameTooltip:SetOwner(self, anchor)
         GameTooltip:SetText(title, 1, 1, 1)
         if text then GameTooltip:AddLine(text, 0.85, 0.85, 0.85, true) end
         local more = extra and extra()
