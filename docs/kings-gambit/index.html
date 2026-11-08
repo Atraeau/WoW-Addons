@@ -7678,6 +7678,7 @@ function M.Model(ctx)
     end
     if not s then return out end
     out.mode, out.phase = mode, s.phase
+    out.sessionKey = tostring(s)
     out.phaseText = PHASES[s.phase] or tostring(s.phase)
     local now = ctx.client:now()
     local deadline = (mode == "ml" and s.deadline) or (s.turn and s.turn.deadline) or s.deadline
@@ -8088,8 +8089,9 @@ function M.Build(m)
     end
 
     -- who has bid on what, as it happens (answers are public): while bidding is open, a line for each item. The window lets it be hidden.
-    if (v.state == "bidding" or v.state == "waiting") and m.board and #m.board > 0 then
-        v.bids = { items = {}, answered = m.answered, eligible = m.eligible }
+    v.sessionKey = m.sessionKey
+    if m.board and #m.board > 0 then
+        v.bids = { items = {}, answered = m.answered, eligible = m.eligible, live = (v.state == "bidding" or v.state == "waiting") }
         for _, e in ipairs(m.board) do
             local b = line()
             local any = false
@@ -8110,19 +8112,18 @@ function M.Build(m)
             if e.waiting > 0 then rest[#rest + 1] = ("waiting on %d"):format(e.waiting) end
             if #rest > 0 then b.text((any and "   " or "") .. table.concat(rest, ", ")) end
             if not any and #rest == 0 then b.text("Nobody to answer.") end
-            -- everyone's answer on this item (the side panel, scrollable): one row per player, those who want it first, each with their place on the list
+            -- everyone's answer on this item (the side panel, scrollable): one row per player in a fixed order, their place on the list, and what they said
+            -- (the rows never move as answers come in: only a row's status changes)
+            local STATUS = { need = { "Need", "40ff40" }, off = { "Off-spec", "69b4ff" }, gift = { "Gift", "c080ff" }, pass = { "Pass", "999999" },
+                waiting = { "not answered yet", "777777" }, away = { "away", "777777" } }
             local people = {}
-            for _, k in ipairs({ { "need", "Need", "40ff40" }, { "off", "Off-spec", "69b4ff" }, { "gift", "Gift", "c080ff" }, { "pass", "Pass", "999999" },
-                                 { "waiting", "not answered yet", "777777" }, { "away", "away", "777777" } }) do
-                for _, p in ipairs(e.all or {}) do
-                    if p.kind == k[1] then
-                        local g = line()
-                        g.text(p.place .. ". ")
-                        g.who(p.who, nil, true)
-                        g.text("  |cff" .. k[3] .. k[2] .. ((k[1] == "gift" and p.to) and (" to " .. p.to) or "") .. "|r")
-                        people[#people + 1] = { place = p.place, kind = k[1], segments = g.segments, text = g.plain() }
-                    end
-                end
+            for _, p in ipairs(e.all or {}) do
+                local st = STATUS[p.kind] or STATUS.waiting
+                local g = line()
+                g.text(p.place .. ". ")
+                g.who(p.who, nil, true)
+                g.text("  |cff" .. st[2] .. st[1] .. ((p.kind == "gift" and p.to) and (" to " .. p.to) or "") .. "|r")
+                people[#people + 1] = { place = p.place, kind = p.kind, segments = g.segments, text = g.plain() }
             end
             v.bids.items[#v.bids.items + 1] = { id = e.id, link = e.link, segments = b.segments, text = b.plain(), people = people }
         end
