@@ -206,6 +206,19 @@ function M.Build(ui)
         if not title then f.hint:SetText("") else f.hint:SetText("|cffffd100" .. title .. "|r\n|cffcccccc" .. (body or "") .. "|r") end
     end
     local function attach(fr, tip, extra) Tips.Attach(fr, tip, extra, sink) end
+    -- Your spec for this raid (it decides what is a main-spec Need, so it is asked for before your first answer and then holds for the whole raid):
+    -- one button per spec of your class, the talents' pick marked, and a switch to take that pick every time
+    f.specLabel = text("GameFontNormalSmall")
+    f.specButtons = {}
+    for i = 1, 4 do
+        local b = button(f, "", 96, BTN_H)
+        b:SetScript("OnClick", function(self) if self.specName then ui:ChooseSpec(self.specName) end end)
+        attach(b, "specpick")
+        f.specButtons[i] = b
+    end
+    f.specAuto = button(f, "", 168, BTN_H)
+    f.specAuto:SetScript("OnClick", function() ui:ToggleAutoSpec() end)
+    attach(f.specAuto, "specauto")
     local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); attach(b, tooltipOf(b)) end
 
     f.practiceText = text("GameFontNormalSmall")
@@ -474,6 +487,11 @@ function M.Refresh(f, ctx, ui)
     local v = LootView.Build(m)
     if not v.rankings or #v.rankings == 0 then f.rankDraft = nil end -- nothing to rank (a new round, a finished session): no draft is carried over
     if v.sessionKey ~= ui.bidSession then ui.bidSession, ui.bidItem, ui.bidFollow = v.sessionKey, nil, true end -- (a new session: nothing is ticked, and the panel follows you down the list)
+    -- With "Auto-detect" on, the talents' spec is taken the first time you would be asked in a session
+    if v.spec and not v.spec.mine and v.spec.auto and v.spec.detected and f.autoSpecFor ~= v.sessionKey then
+        f.autoSpecFor = v.sessionKey
+        ui:ChooseSpec(v.spec.detected)
+    end
     -- Items still to answer come first, in their own order; an answered one drops to the bottom. While following, the panel shows the first item still to answer.
     local order, open = {}, {}
     for i, vr in ipairs(v.rows) do
@@ -542,6 +560,32 @@ function M.Refresh(f, ctx, ui)
         place(f.banner, PAD); y = y - textH(f.banner, 14) - GAP
         if not practice then place(f.startButton, PAD); y = y - BTN_H - GAP end
     else
+        -- your spec: asked for until it is on record, then a line saying what it is (it holds for the whole raid)
+        local sp = v.spec
+        if sp and not sp.mine then
+            f.specLabel:SetText("|cffffd100Which spec are you for this raid?|r  It holds until the raid ends" .. (sp.detected and ("  (your talents say " .. sp.detected .. ")") or "") .. ".")
+            place(f.specLabel, PAD); y = y - textH(f.specLabel, 12) - 4
+            local x = PAD
+            for i = 1, 4 do
+                local b, name = f.specButtons[i], sp.options[i]
+                if name then
+                    b.specName = name
+                    b:SetText(name)
+                    layout[#layout + 1] = { b, x, y }; want[b] = true
+                    M.Mark(b, sp.detected == name)
+                    x = x + 96 + 6
+                end
+            end
+            y = y - BTN_H - 4
+            f.specAuto:SetText(sp.auto and "Auto-detect: on" or "Auto-detect: off")
+            layout[#layout + 1] = { f.specAuto, PAD, y }; want[f.specAuto] = true
+            y = y - BTN_H - GAP
+            divider()
+        elseif sp then
+            f.specLabel:SetText("Your spec this raid: |cffffffff" .. sp.mine .. "|r")
+            place(f.specLabel, PAD); y = y - 12 - GAP
+        end
+
         -- the clock and the count: a bar, then progress on the left and time and your place on the right
         if v.timer then
             local fraction = math.max(0, math.min(1, v.timer.fraction or 1))
@@ -746,7 +790,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.hint, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.hint, f.specLabel, f.specAuto, f.specButtons[1], f.specButtons[2], f.specButtons[3], f.specButtons[4], f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     everything[#everything + 1] = f.scroll; everything[#everything + 1] = f.list

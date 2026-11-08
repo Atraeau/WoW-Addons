@@ -214,6 +214,17 @@ function Sim:openRaid()
     return self.raidNo
 end
 
+-- Write each simulated raider's spec for the current raid into the ledger (as the Master Looter would), except the learner's when specs are required.
+function Sim:recordSpecs()
+    for _, n in ipairs(self.names) do
+        local info = self.info[n]
+        local sp = info and info.spec and ItemFit.FindSpec(info.class, info.spec)
+        if sp and not (self.requireSpec and n == self.learner) and not self.engine:SpecOf(self.raidId, n) then
+            self.engine:Write("SetSpec", { raid = self.raidId, member = n, spec = sp.name, role = sp.role, class = info.class })
+        end
+    end
+end
+
 function Sim:note(text) self.log[#self.log + 1] = { t = self.client:now(), text = text } end
 
 function Sim:isBot(fullName)
@@ -236,6 +247,14 @@ end
 -- seen (optional): for each link, when that loot became visible (held loot dropped earlier).
 -- ids (optional): each link's item id (the simulator's links are plain names).
 function Sim:drop(links, cfg, seen, ids)
+    -- With specs required (the game's rule, practice's raid nights), the bots' specs are on record for the raid; the learner's is theirs to choose.
+    if self.requireSpec then
+        local c = {}
+        for k, v in pairs(cfg or {}) do c[k] = v end
+        if c.requireSpec == nil then c.requireSpec = true end
+        cfg = c
+        self:recordSpecs()
+    end
     -- A simulation that plays as the game does (practice mode, the web page) asks for rankings, like the game's host.
     if self.rankingRequired then
         local c = {}

@@ -668,6 +668,13 @@ function M.New(ctx)
         return Loot.MayHave(myFit(link), myClass())
     end
 
+    -- Does item n suit this spec, so that a Need on it is a main-spec Need? (The window grays Need out when not; the Master Looter enforces it too.)
+    function c.needOk(item, spec)
+        local link = linkOf(item)
+        if not link then return true end
+        return ItemFit.NeedOk(myFit(link), myClass(), spec)
+    end
+
     -- Who in the group may be given item n: those whose class may have it (the same rule the session applies to a gift's recipient), never yourself.
     -- The window offers only these, so a gift to someone who can't have it can't be chosen. Names as the roster has them.
     function c.giftTargets(item)

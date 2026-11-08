@@ -30,6 +30,7 @@ return {
             SetListPolicy = "cf2e25c217604b4e",
             SetOfficers = "8075563460935228",
             SetRaidList = "5895642b8c4c802f",
+            SetSpec = "e12a0ec757b884eb",
             Transfer = "15f195a8bd1bda7c",
         },
     },

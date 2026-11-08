@@ -2,8 +2,8 @@
 -- The buttons that answer it are in LootWindow, drawn from LootView; every button runs the same command a player would type, so the rules and the
 -- ledger are exactly those of the commands. The Master Looter's own session and a player's view of someone else's are read from the same place the commands read.
 local _, SK = ...
-local Identity, Sim, Tips
-local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips" }, function(d) Identity, Sim, Tips = d.Identity, d.Sim, d.UITips end)
+local Identity, Sim, Tips, ItemFit
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips", "ItemFit" }, function(d) Identity, Sim, Tips, ItemFit = d.Identity, d.Sim, d.UITips, d.ItemFit end)
 
 M.MAX_ITEMS = 24
 
@@ -99,13 +99,32 @@ function M.Model(ctx)
     -- Who a name is: their display name, class (from the group) and spec (only where the practice raid knows it; the game doesn't tell us others' specs).
     local classOf = {}
     for _, member in ipairs((ctx.client.roster and ctx.client:roster()) or {}) do classOf[member.name] = member.class end
+    -- The spec on record for a player in this raid (the ledger's, from the host; a player's window is told it with the session).
+    local function recordedSpec(full)
+        if mode == "ml" then
+            local sp = s.specOf and s:specOf(full)
+            return sp and sp.spec
+        end
+        return s.specs and s.specs[full]
+    end
     local function whoOf(full)
         if not full then return nil end
         local name = show(full)
         local info = { name = name, class = classOf[full] }
         local known = ctx.sim and ctx.sim.info and (ctx.sim.info[full] or ctx.sim.info[name])
         if known then info.class, info.spec = info.class or known.class, known.spec end
+        info.spec = recordedSpec(full) or info.spec
         return info
+    end
+    -- Is a spec needed before this player may answer? Then the window asks (the choices are their class's specs; the talents' pick comes first).
+    local needSpec = (mode == "ml" and (s.cfg or {}).requireSpec) or (mode == "player" and s.requireSpec)
+    if needSpec then
+        local myClass = ctx.client.myClass and ctx.client:myClass()
+        local detected = ctx.client.mySpec and ctx.client:mySpec()
+        local mine = recordedSpec(me)
+        out.spec = { mine = mine, class = myClass, options = myClass and ItemFit.SpecNames(myClass) or {},
+            detected = detected and ItemFit.FindSpec(myClass or "", detected) and ItemFit.FindSpec(myClass, detected).name or nil,
+            auto = ctx.autoSpec and ctx.autoSpec() or false }
     end
     -- Who may be given an item (only those who can have it): the context's own list (the practice page), else the commands'.
     local targetsFn = ctx.targets or (ctx.commands and ctx.commands.giftTargets)
@@ -144,6 +163,10 @@ function M.Model(ctx)
             if ctx.commands and ctx.commands.mayHave then
                 local ok, whyNot = ctx.commands.mayHave(row.id)
                 if ok == false then row.canBid, row.whyNot = false, whyNot end
+            end
+            -- with a spec on record, a Need has to suit it (a Fury Warrior's Need on a tanking item is an Off-spec)
+            if row.canBid and out.spec and out.spec.mine and ctx.commands and ctx.commands.needOk then
+                row.needOk = ctx.commands.needOk(row.id, out.spec.mine)
             end
             out.items[#out.items + 1] = row
         end

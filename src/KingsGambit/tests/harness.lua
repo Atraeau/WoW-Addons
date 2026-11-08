@@ -22,6 +22,8 @@ SK.modules.Loot.NewSession = function(engine, opts)
     local o = {}
     for k, v in pairs(opts or {}) do o[k] = v end
     if o.deHandler == nil and not engine:RaidDisenchanter() then o.deHandler = engine.client:me() end
+    -- Most tests are about other rules too, so the game's "a spec must be on record" rule is off unless a test sets H.requireSpec (the spec tests do).
+    if not H.requireSpec then o.requireSpec = false end
     return H.rawNewSession(engine, o)
 end
 

@@ -94,6 +94,8 @@ FORMATS[2] = {
         -- how raids pick their list (see the design journal, "a raid chooses its list when it opens")
         SetRaidList = { list = false, data = { raid = "name!", list = "name!" } },
         SetListPolicy = { list = false, data = { mode = "name!" } },
+        -- a member's spec for one raid (0.8.0): written by the raid's Master Looter the first time (it then holds for the whole raid), or by an officer to correct it
+        SetSpec = { list = false, data = { raid = "name!", member = "name!", spec = "name!", role = "text", class = "text" } },
     },
 }
 M.FORMATS = FORMATS

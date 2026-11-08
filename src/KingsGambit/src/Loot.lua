@@ -22,6 +22,8 @@ local DEFAULTS = {
     requireRanking = false, -- a player who wants two or more items of one kind (needs, off-spec, gifts) must rank them before they count as
                          -- having answered, so bidding can't close early on them. Off here so a bare session behaves as before; the game's
                          -- host (LootNet) and the practice raid turn it on.
+    requireSpec = false, -- a player must have a spec on record for the raid (see Ledger.lua, SetSpec) before they may bid; a Need must suit that spec. Off in a
+                         -- bare session; the game's host and the practice raid turn it on.
     autoEnroll = true,   -- unlisted raiders are added to the bottom of the main list
     deHandler = nil,     -- who disenchants when nobody wants an item. Normally the raid's designated disenchanter (the
                          -- Master Looter chooses one per raid, in the ledger); a session cannot start without one
@@ -276,6 +278,31 @@ end
 -- kind: need | off | gift | pass. extra: { to = recipient (gift), passKind = "upgrade" (pass),
 -- rank = 1, 2, ... (ranked choice: when a player wants several items, which they want most; 1 = most),
 -- ready = "ready" | "says" | "notready" (tokens only: can they redeem it? A hint; never enforced) }.
+-- The raid this session is for (the one its Master Looter runs), and a player's spec on record for it.
+function Session:raidId()
+    local me = self.client:me()
+    for _, r in ipairs(self.engine:ActiveRaids()) do if r.ml == me then return r.id end end
+end
+function Session:specOf(player)
+    local id = self:raidId()
+    return id and self.engine:SpecOf(id, norm(self, player)) or nil
+end
+
+-- Record a player's spec for the raid: the first one stands for the whole raid (an officer corrects a mistake). Returns true, or false + why.
+function Session:setSpec(player, name)
+    player = norm(self, player)
+    local class = self.class[player]
+    local spec = ItemFit.FindSpec(class, name)
+    if not spec then return false, "badspec" end
+    local id = self:raidId()
+    if not id then return false, "noraid" end
+    if self.engine:SpecOf(id, player) then return false, "specset" end
+    local ev, err = self.engine:Write("SetSpec", { raid = id, member = player, spec = spec.name, role = spec.role, class = class })
+    if not ev then return false, err or "refused" end
+    self:emit("spec", { player = player, spec = spec.name })
+    return true
+end
+
 function Session:bid(player, itemId, kind, extra)
     extra = extra or {}
     if self.phase ~= "bidding" then return false, "closed" end
@@ -284,6 +311,15 @@ function Session:bid(player, itemId, kind, extra)
     if not self.eligible[player] or self.away[player] then return false, "ineligible" end
     if not self.items[itemId] then return false, "noitem" end
     if not (kind == "need" or kind == "off" or kind == "gift" or kind == "pass") then return false, "badkind" end
+    -- With a spec required: no spec on record, no answer but a pass; and a Need has to suit the spec (otherwise it is an Off-spec)
+    if self.cfg.requireSpec and kind ~= "pass" then
+        local sp = self:specOf(player)
+        if not sp then return false, "needspec" end
+        if kind == "need" then
+            local ok, why = ItemFit.NeedOk(self:fitOf(itemId), self.class[player], sp.spec)
+            if not ok then return false, why end
+        end
+    end
     -- A gift names who gets it, or leaves that open: if the bidder wins and still hasn't said, the draft waits for them
     -- (see the "recipient" turn) rather than guessing.
     local to
@@ -366,6 +402,16 @@ end
 -- Handle a whispered answer from `sender`. Replies by whisper. Returns the applied answers
 -- or nil + reason.
 function Session:handleWhisper(sender, text)
+    -- 'spec fury': the spec this player is for the raid (they have no addon to ask them)
+    local specWord = tostring(text or ""):match("^%s*spec%s+([%a%-]+)%s*$")
+    if specWord then
+        local ok, why = self:setSpec(sender, specWord)
+        local names = table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]), ", ")
+        self.client:whisper(sender, ok and ("Your spec for this raid is " .. specWord .. ". Now answer the items.")
+            or why == "specset" and "Your spec is already set for this raid; ask an officer to change it."
+            or ("I don't know that spec. Your choices: " .. names .. "."))
+        return ok and {} or nil, why
+    end
     local answers, why = M.ParseWhisper(text, #self.items)
     if not answers then
         self.client:whisper(sender, whisperProblem(why))
@@ -388,6 +434,10 @@ function Session:handleWhisper(sender, text)
                     lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
                 elseif err == "nostats" or err == "nostatsto" then
                     lines[#lines + 1] = ("item %d has no stats that help %s"):format(id, err == "nostats" and "your class" or "theirs")
+                elseif err == "needspec" then
+                    lines[#lines + 1] = ("item %d: tell me your spec first (whisper 'spec %s')"):format(id, (ItemFit.SpecNames(self.class[norm(self, sender)])[1] or "fury"):lower())
+                elseif err == "notspec" then
+                    lines[#lines + 1] = ("item %d isn't for your spec: answer 'off' instead"):format(id)
                 elseif err == "wrongclass" or err == "wrongclassto" then
                     lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
                 else
@@ -909,8 +959,10 @@ function Session:confirm()
             local ok, why = true, nil
             if a.item.slot then ok, why = client:give(a.item.slot, a.to) end
             if ok then
+                -- the winner's spec for this raid goes on the entry (an extra field older clients ignore): "Fury Warrior won it" stays true after a respec
+                local sp = self:specOf(a.member)
                 local ev, err = engine:Append(a.list, "Award",
-                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil, seen = a.item.seen })
+                    { member = a.member, item = a.item.link, to = (a.to ~= a.member) and a.to or nil, seen = a.item.seen, spec = sp and sp.spec or nil })
                 if not ev then fail(a, "ledger", err) end
             else
                 fail(a, "give", why)

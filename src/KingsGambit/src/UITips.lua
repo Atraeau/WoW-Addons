@@ -34,6 +34,8 @@ M.TEXT = {
     lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
     lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     statssort = { "Sort the stats", "Click a heading to sort by it: a name from A to Z, a count with the most at the top, the places from first. Click it again to reverse the order. It opens with the most active (most wins) at the top." },
+    specpick = { "Your spec for this raid", "Which spec you are playing in this raid. It decides what counts as a main-spec Need for you (a Fury Warrior's Need on a tanking item is an Off-spec), it is written in the ledger, and it holds until the raid ends. An officer can correct a mistake." },
+    specauto = { "Auto-detect", "On: your spec is taken from your talent points (the tree with the most points spent) the first time you answer in each raid, without asking. Off: you are asked every raid, with the talents' pick marked." },
     bidspick = { "Select this item", "Click an item (it turns gray) to see every player's answer on it in a window beside this one: who wants it, who passed, who has not answered yet, each with their place on the list. One item at a time; click it again to close." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking

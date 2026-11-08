@@ -347,6 +347,28 @@ function M.ForPlayer(item, class, specName)
     return { usable = true, spec = mine.spec, role = mine.role, score = mine.score, rating = rating }
 end
 
+-- A class's spec names, in order ("Arms", "Fury", "Protection").
+function M.SpecNames(class)
+    local out = {}
+    for _, s in ipairs(M.SPECS[class] or {}) do out[#out + 1] = s.name end
+    return out
+end
+
+-- The class's spec called `name` (any case), as { name, role }, or nil.
+function M.FindSpec(class, name)
+    local want = tostring(name or ""):lower()
+    for _, s in ipairs(M.SPECS[class] or {}) do if s.name:lower() == want then return s end end
+end
+
+-- Is the item a main-spec upgrade for this spec? A Need is only open to a spec the item suits: a Fury Warrior's Need on a tanking item is an Off-spec.
+-- Unknown or unrated items are given the benefit of the doubt. Returns true, or false + "notspec".
+function M.NeedOk(item, class, specName)
+    if not (item and class and specName) then return true end
+    local f = M.ForPlayer(item, class, specName)
+    if f.usable and f.rating == "poor" then return false, "notspec" end
+    return true
+end
+
 -- Display helpers.
 local CLASS_NAMES = { WARRIOR = "Warrior", PALADIN = "Paladin", HUNTER = "Hunter", ROGUE = "Rogue", PRIEST = "Priest",
     SHAMAN = "Shaman", MAGE = "Mage", WARLOCK = "Warlock", DRUID = "Druid" }

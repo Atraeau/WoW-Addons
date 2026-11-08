@@ -45,6 +45,8 @@ local WHY = {
     cantequip = "Your class can't wear or wield this. You can still gift it or pass.",
     nostats = "Nothing on this helps your class. You can still gift it or pass.",
     wrongclass = "This isn't for your class. You can still gift it or pass.",
+    needspec = "Choose your spec above first. You can still pass.",
+    notspec = "Not a main-spec item for your spec: choose Off-spec instead.",
 }
 
 local function tipOf(id)
@@ -64,6 +66,10 @@ local function answerButtons(m, row)
         local enabled, why = true, nil
         if (a.key == "need" or a.key == "off") and row.canBid == false then
             enabled, why = false, WHY[row.whyNot] or "This isn't for your class."
+        elseif a.key ~= "pass" and m.spec and not m.spec.mine then
+            enabled, why = false, WHY.needspec
+        elseif a.key == "need" and row.needOk == false then
+            enabled, why = false, WHY.notspec
         end
         out[#out + 1] = button(a.key, a.label, { name = "bid", item = row.id, kind = a.key },
             { letter = a.letter, enabled = enabled, why = why, selected = row.mine == a.key })
@@ -86,6 +92,7 @@ function M.Build(m)
         return v
     end
     v.night = m.night
+    v.spec = m.spec -- (when a spec is required: { mine, class, options, detected, auto })
     v.visible = true
     v.title = "King's Gambit"
     v.subtitle = m.phaseText

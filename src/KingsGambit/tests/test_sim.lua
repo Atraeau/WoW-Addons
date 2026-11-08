@@ -720,3 +720,24 @@ test("cancelling a session keeps the loot: it goes back to held, to be handed ou
     assert(sim:runUntil("review", 200)); assert(sim.session:confirm())
     eq(sim.handedOut, nil)
 end)
+
+H.section("Sim: a spec on record (0.8.0)")
+test("with specs required, the bots' specs are on record and the learner is asked for theirs; a Need has to suit it", function()
+    H.requireSpec = true
+    local sim = Sim.NewMoltenCore({ seed = 1 })
+    sim.requireSpec = true
+    sim:killBoss()
+    H.requireSpec = nil
+    local s = sim.session
+    assert(s and s.cfg.requireSpec, "the session asks for specs")
+    local me = sim.learner
+    local ok, why = s:bid(me, 1, "need"); eq(ok, false); eq(why, "needspec", "the learner has not chosen")
+    assert(s:bid(me, 1, "pass"), "a pass is always open")
+    local bots = 0
+    for _, n in ipairs(sim.names) do if n ~= me and sim.engine:SpecOf(sim.raidId, n) then bots = bots + 1 end end
+    assert(bots >= 20, "the bots' specs are written down: " .. bots)
+    local class = sim.client:myClass()
+    local first = SK.modules.ItemFit.SpecNames(class)[1]
+    assert(s:setSpec(me, first), "the learner chooses")
+    eq(sim.engine:SpecOf(sim.raidId, me).spec, first)
+end)

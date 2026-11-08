@@ -123,6 +123,9 @@ function M.New(opts)
         for _, m in ipairs(S.roster) do if m.name == S.me then return m.class end end
     end
     function h:setMyClass(class) S.myClass = class end
+    -- The spec the talents say this character is (name, role), or nil; tests and practice set it.
+    function h:mySpec() return S.mySpec, S.mySpecRole end
+    function h:setMySpec(name, role) S.mySpec, S.mySpecRole = name, role end
     function h:addonVersion() return S.addonVersion or "dev" end
     function h:setAddonVersion(v) S.addonVersion = v end -- tests and the simulator: pretend to run another build
     function h:normalize(name) return normalize(name) end

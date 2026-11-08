@@ -47,7 +47,8 @@ end
 -- in-memory ledger: nothing in it is saved, sent to anyone, or mixed with the real one.
 function M.Ctx()
     if M.practice then return M.practice end
-    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks, attendance = SK.attendance }
+    return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks, attendance = SK.attendance,
+        autoSpec = M.AutoSpec }
 end
 
 -- The practice lessons are the web page's tutorials (Scenarios), played in the game: M.lesson is the one chosen (nil: a raid night on your own gear).
@@ -138,6 +139,11 @@ function M:StartPractice()
         say("Practice: you carry fewer than 3 pieces of gear, so the loot is Molten Core's (those items may not exist in this game yet, so no tooltips).")
     end
     sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
+    if not lessonSc then -- a raid night asks for your spec, as the game does (a lesson has its own cast); your talents' pick is your own main spec here
+        sim.requireSpec = true
+        local li = sim.info and sim.info[sim.learner]
+        if li and li.spec and sim.client.setMySpec then sim.client:setMySpec(li.spec) end
+    end
     -- A simulated guild: the raid's players, and others who are not in the group (some offline).
     local guild = {}
     for _, m in ipairs(sim.client:roster()) do guild[#guild + 1] = { name = m.name, class = m.class } end
@@ -152,7 +158,7 @@ function M:StartPractice()
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host, attendance = sim.attendance })
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host, attendance = sim.attendance,
-        lessonIndex = lessonSc and M.LessonIndex(lessonSc.id) or nil, lessonCount = lessonSc and #M.Lessons() or nil }
+        lessonIndex = lessonSc and M.LessonIndex(lessonSc.id) or nil, lessonCount = lessonSc and #M.Lessons() or nil, autoSpec = M.AutoSpec }
     -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
     local total, unknown = 0, 0
     for id in pairs(sim.raid and sim.raid.items or {}) do
@@ -168,6 +174,27 @@ function M:StartPractice()
 end
 
 -- Click an item to see everyone's answer on it, and again to close it.
+-- Your spec for this raid: tell the session (the host's own, or the Master Looter's over the network). The first answer stands for the whole raid.
+function M:ChooseSpec(name)
+    local ctx = M.Ctx()
+    local s = ctx.host and ctx.host.session
+    if s and s.setSpec and s.phase ~= "idle" then
+        local ok, why = s:setSpec(ctx.client:me(), name)
+        if not ok then M.Say("Your spec could not be recorded (" .. tostring(why) .. ").") end
+    elseif ctx.player and ctx.player.spec then
+        ctx.player:spec(name)
+    end
+    M:Refresh()
+end
+
+-- "Auto-detect": take the talents' spec every time, without asking (kept for this character).
+function M:ToggleAutoSpec()
+    local char = SK.char
+    if char then char.autoSpec = not char.autoSpec end
+    M:Refresh()
+end
+function M.AutoSpec() return SK.char and SK.char.autoSpec == true or false end
+
 function M:SelectBidItem(id)
     M.bidItem = (M.bidItem ~= id) and id or nil
     M.bidFollow = false -- you chose where to look: the panel stays until you answer something

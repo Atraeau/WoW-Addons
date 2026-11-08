@@ -67,6 +67,16 @@ function M.NewHost(sync, engine)
         send(extra, "WHISPER", sender)
     end
 
+    -- every raider's spec on record for this raid (a map name -> spec), for their windows: a Need has to suit it, and nobody answers without one
+    local function specMap(session)
+        local out = {}
+        for _, name in ipairs(session.eligibleList) do
+            local sp = session:specOf(name)
+            if sp then out[name] = sp.spec end
+        end
+        return out
+    end
+
     local function flush()
         h.flushing = false
         if #h.answers == 0 or not h.sid then return end
@@ -101,7 +111,7 @@ function M.NewHost(sync, engine)
         local list, who = {}, {}
         for i, it in ipairs(s.items) do list[i] = { id = it.id, link = it.link } end
         for _, name in ipairs(s.eligibleList) do who[#who + 1] = name end
-        send({ t = "LS", sid = h.sid, items = list, bid = s.cfg.bidSeconds, left = remaining(client, s.deadline), who = who, a = client:addonVersion() })
+        send({ t = "LS", sid = h.sid, items = list, bid = s.cfg.bidSeconds, left = remaining(client, s.deadline), who = who, a = client:addonVersion(), rs = s.cfg.requireSpec or nil, sp = s.cfg.requireSpec and specMap(s) or nil })
         send({ t = "LP", sid = h.sid, phase = s.phase })
         if s.turn then
             send({ t = "LT", sid = h.sid, left = remaining(client, s.deadline),
@@ -122,6 +132,7 @@ function M.NewHost(sync, engine)
         local withRanking = {}
         for k, v in pairs(cfg or {}) do withRanking[k] = v end
         if withRanking.requireRanking == nil then withRanking.requireRanking = true end
+        if withRanking.requireSpec == nil then withRanking.requireSpec = true end
         local session = Loot.NewSession(self.engine, withRanking)
         local ok, why = session:start(items)
         if not ok then return false, why end
@@ -138,6 +149,10 @@ function M.NewHost(sync, engine)
             send({ t = "LT", sid = h.sid, left = remaining(client, session.deadline),
                 turn = { type = turn.type, player = turn.player, options = turn.options, item = turn.item, tier = turn.tier } })
             h.ev.emit("turn", turn)
+        end)
+        session:on("spec", function(sp)
+            send({ t = "LY", sid = h.sid, a = {}, sp = { [sp.player] = sp.spec } })
+            h.ev.emit("spec", sp)
         end)
         session:on("bid", function(b)
             local bid = session.bids[b.player][b.item]
@@ -159,7 +174,7 @@ function M.NewHost(sync, engine)
         local list, who = {}, {}
         for i, it in ipairs(session.items) do list[i] = { id = it.id, link = it.link } end
         for _, name in ipairs(session.eligibleList) do who[#who + 1] = name end
-        send({ t = "LS", sid = self.sid, items = list, bid = session.cfg.bidSeconds, left = remaining(client, session.deadline), who = who, a = client:addonVersion() })
+        send({ t = "LS", sid = self.sid, items = list, bid = session.cfg.bidSeconds, left = remaining(client, session.deadline), who = who, a = client:addonVersion(), rs = session.cfg.requireSpec or nil, sp = session.cfg.requireSpec and specMap(session) or nil })
         if self.beaconTimer then client:cancel(self.beaconTimer) end
         self.beaconTimer = client:every(h.beaconSeconds, stateBeacon)
         return true
@@ -183,6 +198,8 @@ function M.NewHost(sync, engine)
         -- a gift won without a recipient: name one, keep it, or withdraw (counts as a pass)
         elseif msg.action == "recipient" then ok, why = s:chooseRecipient(sender, msg.to)
         elseif msg.action == "keep" then ok, why = s:keepGift(sender)
+        -- the spec this player is for the raid (their window asks; the first answer holds for the whole raid)
+        elseif msg.action == "spec" then ok, why = s:setSpec(sender, msg.spec)
         elseif msg.action == "withdraw" then ok, why = s:withdrawGift(sender)
         else ok, why = false, "badaction" end
         ack(sender, { ok = ok and true or false, why = why, action = msg.action })
@@ -212,7 +229,10 @@ function M.NewPlayer(sync)
         local ml = client:masterLooter()
         if not ml or sender ~= ml then return end -- only the Master Looter can open a session
         if type(msg.sid) ~= "string" or type(msg.items) ~= "table" then return end
-        if p.session and p.session.sid == msg.sid then return end -- a repeat of the announcement
+        if p.session and p.session.sid == msg.sid then -- a repeat of the announcement (it may bring specs recorded since)
+            if type(msg.sp) == "table" then for k, v in pairs(msg.sp) do p.session.specs[k] = v end; p.ev.emit("answers") end
+            return
+        end
         local theirs = type(msg.a) == "string" and msg.a or nil
         local rel = Version.Relation(client:addonVersion(), theirs)
         if not rel.compatible then
@@ -223,7 +243,7 @@ function M.NewPlayer(sync)
             return
         end
         p.session = { sid = msg.sid, host = sender, items = msg.items, phase = "bidding", turn = nil, results = nil,
-            answers = {}, mine = {}, who = msg.who or {}, deadline = msg.left and (client:now() + msg.left) or nil }
+            answers = {}, mine = {}, who = msg.who or {}, requireSpec = msg.rs and true or false, specs = type(msg.sp) == "table" and msg.sp or {}, deadline = msg.left and (client:now() + msg.left) or nil }
         p.ev.emit("session", p.session)
     end)
 
@@ -243,6 +263,7 @@ function M.NewPlayer(sync)
 
     sync:register("LY", function(msg, sender)
         if not fromHost(msg, sender) or type(msg.a) ~= "table" then return end
+        if type(msg.sp) == "table" then for k, v in pairs(msg.sp) do p.session.specs[k] = v end end
         for _, a in ipairs(msg.a) do
             local row = p.session.answers[a.player]
             if not row then row = {}; p.session.answers[a.player] = row end
@@ -290,6 +311,7 @@ function M.NewPlayer(sync)
     function p:decline() return toHost({ t = "LX", action = "decline" }) end
     function p:recipient(to) return toHost({ t = "LX", action = "recipient", to = to }) end
     function p:keep() return toHost({ t = "LX", action = "keep" }) end
+    function p:spec(name) return toHost({ t = "LX", action = "spec", spec = name }) end
     function p:withdraw() return toHost({ t = "LX", action = "withdraw" }) end
 
     -- Is it this player's turn, and for what?

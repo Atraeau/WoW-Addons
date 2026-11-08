@@ -2504,3 +2504,18 @@ shared, so the page could draw the same lines.
   exists in a real raid. They now sit in a "Practice lesson" window to the left of the Loot window (the text scrolls), so the Loot window shows only what a real one shows plus the practice banner.
 - **Spec and class beside each name in the side panel (the guild master's call, same day):** each row of "everyone's answer on this item" now shows the player's spec and class in gray after the name
   (for example "Aldric (Arms Warrior)"), as the standings list does; the panel is wider (330) to fit. The short status lines under each item still use names alone.
+
+## Spec is a property of each raider, on record for the whole raid (0.8.0, the guild master's call)
+
+A Fury Warrior's Need on a tanking item is an Off-spec, so what spec a player is matters to the rules, not just to hints. Decisions:
+
+- **Where it lives:** a new ledger-wide event `SetSpec { raid, member, spec, role, class }` (a ledger-surface change: the version line moves to 0.8). Each award also carries the winner's `spec` as an extra field
+  older clients ignore, so history says "Fury Warrior won it" after a respec.
+- **Who writes it, and when it locks:** the raid's Master Looter's addon writes it, because not everyone has the addon (a player without it tells the Master Looter by whisper: `spec fury`). The first entry
+  for a (raid, member) stands for the whole raid; the Master Looter's second entry is refused (`specset`). Anyone else's entry is an officer's correction (their own addon checks the game's rank, as for
+  Disregard) and replaces it at any time.
+- **Asked at the first answer:** a player cannot answer Need, Off-spec or Gift in a raid until a spec is on record (Pass is always open). Everyone gets the same question in the Loot window. With the addon the
+  choice is marked with what the talents say (the tree with the most points spent, from `C_SpecializationInfo.GetSpecializationInfo`), and an **Auto-detect** switch takes that pick every time without asking.
+- **Main or off:** with a spec on record, a Need must suit it (`ItemFit.NeedOk`: the item's rating for that spec is not "poor"); the window grays Need out with the reason, and the Master Looter refuses it too
+  (`notspec`). Items with no data get the benefit of the doubt.
+- **Not yet done:** the Guild book's history lines do not show the spec yet; there is no officer command for corrections yet; whisper players' experience is being designed (next entry).

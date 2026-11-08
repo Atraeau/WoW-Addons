@@ -27,9 +27,9 @@ M.SEEN_WINDOW = 24 * 3600 -- `seen` may be at most this long before the event wa
 -- Event types that are not about one list. AUTHORITY ones are replayed in pass 1.
 local GLOBAL = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
     RaidClose = true, SetDisenchanter = true, Declined = true, ItemClasses = true, ItemSuits = true, Migrate = true,
-    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true }
+    SetRaidList = true, SetListPolicy = true, Attendance = true, Disregard = true, SetSpec = true }
 local AUTHORITY = { Genesis = true, SetGuildMaster = true, SetOfficers = true, Elevate = true, Revoke = true,
-    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true }
+    RaidClose = true, SetDisenchanter = true, Migrate = true, SetRaidList = true, SetListPolicy = true, Disregard = true, SetSpec = true }
 M.GLOBAL, M.AUTHORITY = GLOBAL, AUTHORITY
 
 -- Which list a raid plays on. `main` is the guild's list for everything; a raid's off-spec list is derived from its list, so a raid can't be
@@ -350,6 +350,11 @@ M.Present = function(view, raid)
     end
     return present
 end
+-- The spec recorded for a member in a raid: { spec, role, class, by, corrected }, or nil.
+M.SpecOf = function(view, raid, member)
+    local r = view.auth.raids[raid]
+    return r and r.specs and r.specs[member] or nil
+end
 M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
 M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
@@ -444,6 +449,23 @@ function auth.SetRaidList(a, ev, d)
     if r.listEv then return nil, "listset" end
     if r.dedicated and d.list == M.MAIN then return nil, "needsownlist" end
     return function() r.list, r.listEv = d.list, ev end
+end
+
+-- A member's spec for one raid (0.8.0). It decides whether an item is main-spec or off-spec for them, so it must hold for the whole raid: the raid's Master
+-- Looter records it the first time (from what the player told their addon, or what the Master Looter entered for a player without the addon), and that
+-- first entry stands. Anyone else's entry is an officer's correction (their own addon checks the game's rank when they write it, as for Disregard) and
+-- replaces it, at any time.
+function auth.SetSpec(a, ev, d)
+    if a.disregarded[ev.author] then return nil, "disregarded" end
+    local r = a.raids[d.raid]
+    if not r or raidOver(r, ev) then return nil, "notactive" end
+    if not (isName(d.member) and isName(d.spec)) then return nil, "badname" end
+    local was = r.specs and r.specs[d.member]
+    if ev.author == r.ml and was then return nil, "specset" end
+    return function()
+        r.specs = r.specs or {}
+        r.specs[d.member] = { spec = d.spec, role = d.role, class = d.class, by = ev.author, ev = ev, corrected = (ev.author ~= r.ml) or nil }
+    end
 end
 
 function auth.Revoke(a, ev, d)

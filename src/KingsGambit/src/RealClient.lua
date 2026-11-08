@@ -133,7 +133,26 @@ function M.New(opts)
         return ok and file or nil
     end
 
-    function c:normalize(name) return normalize(name) end
+-- The spec this character is, read from the talent points: the tree with the most points spent. Returns its name and role ("tank", "healer", "damage"),
+-- or nil when the game won't say or no points are spent (the player then chooses). C_SpecializationInfo.GetSpecializationInfo(index) gives, per tree,
+-- name (2nd), role (5th) and points spent (7th); the number of trees comes from the class.
+function c:mySpec()
+    local S = E.C_SpecializationInfo
+    if type(S) ~= "table" or not S.GetSpecializationInfo then return nil end
+    local ok, n = pcall(function()
+        local classId = select(3, E.UnitClass("player"))
+        return S.GetNumSpecializationsForClassID and classId and S.GetNumSpecializationsForClassID(classId) or 3
+    end)
+    n = (ok and tonumber(n)) or 3
+    local bestName, bestRole, bestPoints = nil, nil, 0
+    for i = 1, n do
+        local good, _, name, _, _, role, _, points = pcall(S.GetSpecializationInfo, i, false, false)
+        if good and type(name) == "string" and (tonumber(points) or 0) > bestPoints then bestName, bestRole, bestPoints = name, role, tonumber(points) end
+    end
+    return bestName, bestRole
+end
+
+function c:normalize(name) return normalize(name) end
     -- What the game says about names, raw, for the in-game self-check (`/gambit check`): it is how the real names get confirmed.
     local worldParts, worldKey -- (defined with the storage, below)
     function c:nameProbe()
