@@ -42,7 +42,7 @@ function M.Rich(segments)
         elseif seg.who then
             local w = seg.who
             local name = w.color and ("|cff" .. w.color .. w.name .. "|r") or w.name
-            local detail = ((w.spec and (w.spec .. " ") or "") .. (w.className or "")):gsub("%s+$", "")
+            local detail = w.short and "" or ((w.spec and (w.spec .. " ") or "") .. (w.className or "")):gsub("%s+$", "")
             out[#out + 1] = detail ~= "" and (name .. " |cff999999(" .. detail .. ")|r") or name
         end
     end
@@ -332,6 +332,12 @@ function M.Build(ui)
     f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
+    -- who has bid on what, live: a button that hides or shows it, and a line for each item
+    f.bidsToggle = button(f, "Hide who has bid", 150, 20)
+    f.bidsToggle:SetScript("OnClick", function() ui:ToggleBids() end)
+    Tips.Attach(f.bidsToggle, "bidstoggle")
+    f.bidLines = {}
+    for i = 1, MAX do f.bidLines[i] = text("GameFontHighlightSmall") end
     f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
     f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
     Tips.Attach(f.lessonStart, "lessonstart")
@@ -531,6 +537,23 @@ function M.Refresh(f, ctx, ui)
             place(f.more, PAD); y = y - 14 - GAP
         end
 
+        -- who has bid on what, as it happens: each item with who said what (hidden or shown at the player's choice, and remembered)
+        if v.bids then
+            divider()
+            local shown = ui.BidsShown and ui.BidsShown() ~= false
+            f.bidsToggle:SetText(shown and "Hide who has bid" or "Show who has bid")
+            place(f.bidsToggle, PAD); y = y - 20 - 4
+            if shown then
+                for i, it in ipairs(v.bids.items) do
+                    local fs = f.bidLines[i]
+                    if fs then
+                        fs:SetText(("|cffffd100%d.|r %s\n%s"):format(i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
+                        place(fs, PAD); y = y - textH(fs, 26) - 4
+                    end
+                end
+            end
+        end
+
         -- the Master Looter's strip
         if v.ml then
             divider()
@@ -594,9 +617,10 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.bidsToggle, f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
+    for _, b in ipairs(f.bidLines) do everything[#everything + 1] = b end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end
     for _, t in ipairs(f.rankTitles) do everything[#everything + 1] = t end
     for _, c in ipairs(f.rankConfirms) do everything[#everything + 1] = c end

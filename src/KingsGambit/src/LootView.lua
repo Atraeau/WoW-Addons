@@ -20,11 +20,11 @@ M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROG
 local function line()
     local b = { segments = {}, parts = {} }
     function b.text(t) b.segments[#b.segments + 1] = { text = t }; b.parts[#b.parts + 1] = t end
-    function b.who(w, label)
+    function b.who(w, label, short)
         label = label or (w and w.name) or "?"
         if not w then return b.text(label) end
         b.segments[#b.segments + 1] = { who = { name = label, class = w.class, className = (ItemFit and ItemFit.CLASS_NAMES or {})[w.class],
-            spec = w.spec, color = M.CLASS_COLOR[w.class] } }
+            spec = w.spec, color = M.CLASS_COLOR[w.class], short = short or nil } }
         b.parts[#b.parts + 1] = label
     end
     function b.plain() return table.concat(b.parts) end
@@ -236,6 +236,33 @@ function M.Build(m)
         local won = {}
         for _, row in ipairs(v.rows) do if row.mineWon then won[#won + 1] = row.link end end
         v.banner = { kind = "good", text = #won > 0 and ("You won: " .. table.concat(won, ", ")) or "Finished. Nothing for you this time." }
+    end
+
+    -- who has bid on what, as it happens (answers are public): while bidding is open, a line for each item. The window lets it be hidden.
+    if (v.state == "bidding" or v.state == "waiting") and m.board and #m.board > 0 then
+        v.bids = { items = {}, answered = m.answered, eligible = m.eligible }
+        for _, e in ipairs(m.board) do
+            local b = line()
+            local any = false
+            for _, k in ipairs({ { "need", "Need" }, { "off", "Off-spec" }, { "gift", "Gift" } }) do
+                local list = e[k[1]]
+                if #list > 0 then
+                    if any then b.text("   ") end
+                    b.text(k[2] .. ": ")
+                    for i, w in ipairs(list) do
+                        if i > 1 then b.text(", ") end
+                        b.who(w, nil, true)
+                    end
+                    any = true
+                end
+            end
+            local rest = {}
+            if e.pass > 0 then rest[#rest + 1] = ("Pass %d"):format(e.pass) end
+            if e.waiting > 0 then rest[#rest + 1] = ("waiting on %d"):format(e.waiting) end
+            if #rest > 0 then b.text((any and "   " or "") .. table.concat(rest, ", ")) end
+            if not any and #rest == 0 then b.text("Nobody to answer.") end
+            v.bids.items[#v.bids.items + 1] = { id = e.id, link = e.link, segments = b.segments, text = b.plain() }
+        end
     end
 
     -- the Master Looter's strip

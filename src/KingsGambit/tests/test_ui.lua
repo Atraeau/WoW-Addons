@@ -93,6 +93,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:OpenLoot(); UI:Refresh()
         UI:PracticeKill()
         UI:Refresh()
+        UI:PracticeWait(5); UI:Refresh(); UI:ToggleBids(); UI:Refresh(); UI:ToggleBids(); UI:Refresh() -- (who has bid: hidden, then shown)
         UI:PracticeWait(10)
         UI:Command("pass 1")
         UI:Command("resolve"); UI:PracticeWait(30); UI:Refresh()
@@ -269,7 +270,7 @@ H.section("Window: tooltips")
 test("every button has a tooltip with a title and an explanation, and a grayed-out one can say why", function()
     local Tips = SK.modules.UITips
     for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
-        "kill", "handout", "wait", "practice", "practicesize", "statssort", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
+        "kill", "handout", "wait", "practice", "practicesize", "statssort", "bidstoggle", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
         local title, text = Tips.Resolve(id)
         assert(title and title ~= "" and text and #text > 30, "tooltip text for " .. id)
     end

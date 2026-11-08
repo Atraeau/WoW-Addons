@@ -453,3 +453,44 @@ test("a lesson shows its text before it starts, and the cancelled banner says wh
     assert(night.session:cancel("test"))
     assert(view().banner.text:find("still on the boss", 1, true), "the loot is still there to hand out")
 end)
+
+H.section("Loot view: who has bid on what")
+test("while bidding, each item lists who said what as the answers come in, and who has not answered", function()
+    local sim, _, view = practice(10)
+    sim:killBoss(nil, false)
+    local v = view()
+    assert(v.bids and #v.bids.items == #v.rows, "a line for each item")
+    local first = v.bids.items[1]
+    assert(first.text:find("waiting on", 1, true), "at first nobody has answered: " .. first.text)
+    sim:advance(20) -- the raiders answer over the first seconds
+    v = view()
+    local text = v.bids.items[1].text .. (v.bids.items[2] and v.bids.items[2].text or "")
+    assert(text:find("Need:", 1, true) or text:find("Pass", 1, true), "answers show: " .. text)
+    for _, it in ipairs(v.bids.items) do assert(#it.segments > 0) end
+    -- a name is drawn short (no spec or class beside it)
+    for _, seg in ipairs(v.bids.items[1].segments) do if seg.who then assert(seg.who.short, "names are short in the list") end end
+    -- once bidding is over the list goes away
+    sim:advance(60)
+    v = view()
+    eq(v.bids, nil, "no live list after bidding")
+end)
+
+test("a player (not the Master Looter) sees everyone's answers too, from the host's announcements", function()
+    local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })
+    sim:killBoss(nil, false); sim:advance(20)
+    local s = sim.session
+    -- what a player's copy of the session carries: the eligible names and the public answers
+    local ps = { phase = "bidding", items = {}, mine = {}, who = s.eligibleList, answers = {}, deadline = nil }
+    for i, it in ipairs(s.items) do ps.items[i] = { id = it.id, link = it.link } end
+    for name, row in pairs(s.bids) do
+        ps.answers[name] = {}
+        for id, b in pairs(row) do ps.answers[name][id] = { kind = b.kind, to = b.to } end
+    end
+    local ctx = { client = sim.client, player = { session = ps }, host = { phase = "idle" } }
+    local m = UILoot.Model(ctx)
+    eq(m.mode, "player")
+    local board = assert(m.board, "the board is there for a player")
+    local answered = 0
+    for _, e in ipairs(board) do answered = answered + #e.need + #e.off + #e.gift + e.pass end
+    assert(answered > 0, "the answers are listed")
+end)

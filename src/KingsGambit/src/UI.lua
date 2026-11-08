@@ -167,6 +167,16 @@ function M:StartPractice()
     if lessonSc then M:OpenLoot() end -- the lesson is read there
 end
 
+-- Who has bid on what (the loot window's live list of answers): shown unless this character has hidden it; the choice is remembered per character.
+function M.BidsShown()
+    local c = SK.char
+    return not (c and c.bidsHidden)
+end
+function M:ToggleBids()
+    if SK.char then SK.char.bidsHidden = M.BidsShown() or nil end
+    M:Refresh()
+end
+
 -- Practice lessons: pick one (nil: back to a raid night), start it, run it again, or go on to the next.
 function M:ChooseLesson(id)
     M.lesson = id

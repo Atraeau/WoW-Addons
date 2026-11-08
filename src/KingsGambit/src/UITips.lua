@@ -34,6 +34,7 @@ M.TEXT = {
     lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
     lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     statssort = { "Sort the stats", "Click a heading to sort by it: a name from A to Z, a count with the most at the top, the places from first. Click it again to reverse the order. It opens with the most active (most wins) at the top." },
+    bidstoggle = { "Who has bid", "Answers are public: this lists, for each item, who said Need, Off-spec or Gift, how many passed and how many have yet to answer, as it happens. Hide it if you would rather not watch; your choice is remembered." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
     rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },

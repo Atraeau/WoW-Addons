@@ -2467,3 +2467,12 @@ button: click one to sort by it, click it again to reverse it. A name starts A t
 top; "#" starts from first place. The heading sorted by shows `^` (ascending) or `v` (descending). Ties always fall back to the most active. The sort is a pure function
 (`GuildBook.SortStats`), tested; the choice lasts while the window is open and the table opens on activity again next session. "Most activity" was read as wins first; say if it
 should weigh raids attended more.
+
+### Decision: the loot window shows who has bid on what, live, and it can be hidden (2026-11-08)
+
+Answers are public by design (the manifesto and the guide say so), and the web page already shows them as they come in; the game's loot window showed only your own. It now lists, while
+bidding is open, a line for each item: who said **Need**, **Off-spec** and **Gift** (names in their class colors, in list order), how many **passed**, and how many are **waiting
+on**. The Master Looter reads it from the session; any other player from the host's public answers (which the host already sends to the raid), so everyone sees the same.
+It is a list by item, not a grid of everyone by item, so a 40-player raid stays readable. A **Hide who has bid / Show who has bid** button above it turns it off for anyone who would rather
+not watch, and the choice is remembered per character (`KingsGambitCharDB.bidsHidden`). It goes away when bidding closes (the draft shows who wins). The model (`UILoot` board, `LootView` `bids`) is
+shared, so the page could draw the same lines.

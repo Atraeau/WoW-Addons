@@ -147,6 +147,25 @@ function M.Model(ctx)
             out.items[#out.items + 1] = row
         end
     end
+    -- Everyone's answers, which are public: for each item, who said Need, Off-spec and Gift (in list order), how many passed and how many have not answered yet.
+    -- The Master Looter reads them from the session; a player has them from the host's announcements.
+    do
+        local people = mode == "ml" and s.eligibleList or s.who or {}
+        local board = (mode == "ml" and s.bids) or s.answers or {}
+        out.board = {}
+        for _, row in ipairs(out.items) do
+            local entry = { id = row.id, link = row.link, need = {}, off = {}, gift = {}, pass = 0, waiting = 0 }
+            for _, name in ipairs(people) do
+                local b = board[name] and board[name][row.id]
+                if not b then
+                    if not (s.away and s.away[name]) then entry.waiting = entry.waiting + 1 end
+                elseif b.kind == "pass" then entry.pass = entry.pass + 1
+                elseif type(entry[b.kind]) == "table" then table.insert(entry[b.kind], whoOf(name))
+                end
+            end
+            out.board[#out.board + 1] = entry
+        end
+    end
     -- Where the player wants several items of one kind (needs, off-spec, gifts), the order they want them in: ranked ones first, in rank order, then the
     -- ones not yet ranked by item number. `complete` is true once every one has a rank.
     out.rankings = {}
