@@ -172,6 +172,11 @@ function M.BidsShown()
     local c = SK.char
     return not (c and c.bidsHidden)
 end
+-- Click an item to see everyone's answer on it, and again to close it.
+function M:SelectBidItem(id)
+    M.bidItem = (M.bidItem ~= id) and id or nil
+    M:Refresh()
+end
 function M:ToggleBids()
     if SK.char then SK.char.bidsHidden = M.BidsShown() or nil end
     M:Refresh()

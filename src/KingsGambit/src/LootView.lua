@@ -261,7 +261,21 @@ function M.Build(m)
             if e.waiting > 0 then rest[#rest + 1] = ("waiting on %d"):format(e.waiting) end
             if #rest > 0 then b.text((any and "   " or "") .. table.concat(rest, ", ")) end
             if not any and #rest == 0 then b.text("Nobody to answer.") end
-            v.bids.items[#v.bids.items + 1] = { id = e.id, link = e.link, segments = b.segments, text = b.plain() }
+            -- everyone's answer on this item (the side panel, scrollable): one row per player, those who want it first, each with their place on the list
+            local people = {}
+            for _, k in ipairs({ { "need", "Need", "40ff40" }, { "off", "Off-spec", "69b4ff" }, { "gift", "Gift", "c080ff" }, { "pass", "Pass", "999999" },
+                                 { "waiting", "not answered yet", "777777" }, { "away", "away", "777777" } }) do
+                for _, p in ipairs(e.all or {}) do
+                    if p.kind == k[1] then
+                        local g = line()
+                        g.text(p.place .. ". ")
+                        g.who(p.who, nil, true)
+                        g.text("  |cff" .. k[3] .. k[2] .. ((k[1] == "gift" and p.to) and (" to " .. p.to) or "") .. "|r")
+                        people[#people + 1] = { place = p.place, kind = k[1], segments = g.segments, text = g.plain() }
+                    end
+                end
+            end
+            v.bids.items[#v.bids.items + 1] = { id = e.id, link = e.link, segments = b.segments, text = b.plain(), people = people }
         end
     end
 

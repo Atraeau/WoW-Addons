@@ -2476,3 +2476,8 @@ on**. The Master Looter reads it from the session; any other player from the hos
 It is a list by item, not a grid of everyone by item, so a 40-player raid stays readable. A **Hide who has bid / Show who has bid** button above it turns it off for anyone who would rather
 not watch, and the choice is remembered per character (`KingsGambitCharDB.bidsHidden`). It goes away when bidding closes (the draft shows who wins). The model (`UILoot` board, `LootView` `bids`) is
 shared, so the page could draw the same lines.
+- **Everyone's answer on an item: a tick box and a side panel (the guild master's call, same day):** the first version was a single compact line per item, which was too concise. Each item's name
+  line now has an **Everyone** tick box (one item at a time), and ticking it opens a window beside the loot window that scrolls: a row per player, those who want it first (Need, Off-spec,
+  Gift with who it is for, Pass, then those yet to answer), each with their place on the list. Unticking it, the panel's close button, hiding the bids, or bidding closing, shuts it. The
+  per-item summary lines stay as the "bidding in progress" status. Still open: the loot window itself grows with the items (and stops at eight, mentioning the rest); the guild master
+  pictures its item list scrolling instead.

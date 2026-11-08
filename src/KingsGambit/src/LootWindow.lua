@@ -248,8 +248,23 @@ function M.Build(ui)
             if not row.tip then return end
             local get = (C_Item and C_Item.GetItemInfo) or GetItemInfo
             local full = get and select(2, get(row.tip)) or row.tip
-            if HandleModifiedItemClick then HandleModifiedItemClick(full) end
+            if HandleModifiedItemClick and HandleModifiedItemClick(full) then return end -- (shift-click: the link goes to chat)
+            if row.id and ui.SelectBidItem then ui:SelectBidItem(row.id) end
         end)
+        -- "Everyone": tick it to open the side panel with every player's answer on this item (one item at a time)
+        local okPick, pick = pcall(CreateFrame, "CheckButton", nil, f, "UICheckButtonTemplate")
+        if okPick and pick then
+            pick:SetSize(22, 22)
+            pick.label = pick:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+            pick.label:SetPoint("LEFT", pick, "RIGHT", 0, 1); pick.label:SetText("Everyone")
+            pick:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
+        else
+            pick = button(f, "Everyone", 72, 18)
+            pick.isButton = true
+            pick:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
+        end
+        Tips.Attach(pick, "bidspick")
+        row.pick = pick
         row.note = text("GameFontHighlightSmall", CW, "LEFT", true)      -- a result, or why a choice is unavailable, under the item
         row.buttons = {}
         for j = 1, 4 do
@@ -336,8 +351,31 @@ function M.Build(ui)
     f.bidsToggle = button(f, "Hide who has bid", 150, 20)
     f.bidsToggle:SetScript("OnClick", function() ui:ToggleBids() end)
     Tips.Attach(f.bidsToggle, "bidstoggle")
-    f.bidLines = {}
-    for i = 1, MAX do f.bidLines[i] = text("GameFontHighlightSmall") end
+    f.bidLines, f.bidHits = {}, {}
+    for i = 1, MAX do
+        f.bidLines[i] = text("GameFontHighlightSmall")
+        local hit = CreateFrame("Button", nil, f)
+        hit:SetSize(CW, 26)
+        hit:SetScript("OnClick", function() if hit.itemId then ui:SelectBidItem(hit.itemId) end end)
+        f.bidHits[i] = hit
+    end
+    -- the side panel: everyone's answer on the one item that is ticked, in a list that scrolls
+    local okSide, side = pcall(CreateFrame, "Frame", nil, f, "BasicFrameTemplateWithInset")
+    if not okSide or not side then side = CreateFrame("Frame", nil, f) end
+    side:SetWidth(262)
+    side:SetPoint("TOPLEFT", f, "TOPRIGHT", 4, 0)
+    side.title = side:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    side.title:SetPoint("TOPLEFT", 12, -30); side.title:SetWidth(222); side.title:SetJustifyH("LEFT"); side.title:SetWordWrap(false)
+    local okScroll, scroll = pcall(CreateFrame, "ScrollFrame", nil, side, "UIPanelScrollFrameTemplate")
+    if not (okScroll and scroll) then scroll = CreateFrame("ScrollFrame", nil, side) end
+    scroll:SetPoint("TOPLEFT", 10, -52); scroll:SetPoint("BOTTOMRIGHT", -30, 10)
+    side.child = CreateFrame("Frame", nil, scroll)
+    side.child:SetSize(218, 1)
+    scroll:SetScrollChild(side.child)
+    side.lines = {}
+    if type(side.CloseButton) == "table" then side.CloseButton:SetScript("OnClick", function() ui.bidItem = nil; ui:Refresh() end) end
+    side:Hide()
+    f.side = side
     f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
     f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
     Tips.Attach(f.lessonStart, "lessonstart")
@@ -373,6 +411,37 @@ end
 
 -- Draw the view. `want` is every frame this state shows; frames are shown or hidden only when that changes (hiding and re-showing every second
 -- would close an open dropdown), and they are moved only when the layout changes.
+-- The side panel: everyone's answer on the ticked item (only while the list of bids is shown and the item is still up), one row a player, scrolling.
+function M.RefreshSide(f, v, ui)
+    local side = f.side
+    if not side then return end
+    local picked
+    if v.bids and ui.BidsShown and ui.BidsShown() ~= false then
+        for _, it in ipairs(v.bids.items) do if it.id == ui.bidItem then picked = it end end
+    end
+    if not picked then
+        if not v.bids then ui.bidItem = nil end -- (bidding is over: nothing stays ticked)
+        setShown(side, false)
+        return
+    end
+    side.title:SetText("Everyone on " .. UILoot.Display(picked.link, nil))
+    for i, p in ipairs(picked.people) do
+        local fs = side.lines[i]
+        if not fs then
+            fs = side.child:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+            fs:SetPoint("TOPLEFT", 0, -(i - 1) * 14)
+            fs:SetWidth(216); fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
+            side.lines[i] = fs
+        end
+        fs:SetText(M.Rich(p.segments)); fs:Show()
+    end
+    for i = #picked.people + 1, #side.lines do side.lines[i]:Hide() end
+    side.child:SetHeight(math.max(#picked.people * 14, 1))
+    local h = f.GetHeight and f:GetHeight()
+    side:SetHeight(type(h) == "number" and math.max(h, 240) or 240)
+    setShown(side, true)
+end
+
 function M.Refresh(f, ctx, ui)
     f.ctx = ctx
     local practice = ctx.sim ~= nil
@@ -502,6 +571,7 @@ function M.Refresh(f, ctx, ui)
         end
 
         -- the items: the name and, right-aligned on the same line, what you answered; then the choices across the full width
+        local showPick = v.bids ~= nil and (ui.BidsShown and ui.BidsShown() ~= false)
         if #v.rows > 0 then divider() end
         for i = 1, MAX do
             local row, vr = f.rows[i], v.rows[i]
@@ -510,6 +580,11 @@ function M.Refresh(f, ctx, ui)
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
+                if showPick then
+                    layout[#layout + 1] = { row.pick, PAD + CW - 82, y + 3 }; want[row.pick] = true
+                    if row.pick.SetChecked then row.pick:SetChecked(ui.bidItem == vr.id) end
+                    if row.pick.isButton then M.Mark(row.pick, ui.bidItem == vr.id) end
+                end
                 y = y - 18 - 4
                 local hasButtons = #vr.buttons > 0
                 if hasButtons then
@@ -542,13 +617,17 @@ function M.Refresh(f, ctx, ui)
             divider()
             local shown = ui.BidsShown and ui.BidsShown() ~= false
             f.bidsToggle:SetText(shown and "Hide who has bid" or "Show who has bid")
-            place(f.bidsToggle, PAD); y = y - 20 - 4
+            place(f.bidsToggle, PAD)
+            y = y - 20 - 4
             if shown then
                 for i, it in ipairs(v.bids.items) do
-                    local fs = f.bidLines[i]
+                    local fs, hit = f.bidLines[i], f.bidHits[i]
                     if fs then
-                        fs:SetText(("|cffffd100%d.|r %s\n%s"):format(i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
-                        place(fs, PAD); y = y - textH(fs, 26) - 4
+                        local on = ui.bidItem == it.id
+                        fs:SetText(("%s%d.|r %s\n%s"):format(on and "|cff40ff40" or "|cffffd100", i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
+                        hit.itemId = it.id
+                        place(fs, PAD); place(hit, PAD)
+                        y = y - textH(fs, 26) - 4
                     end
                 end
             end
@@ -621,12 +700,14 @@ function M.Refresh(f, ctx, ui)
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     for _, b in ipairs(f.bidLines) do everything[#everything + 1] = b end
+    for _, b in ipairs(f.bidHits) do everything[#everything + 1] = b end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end
     for _, t in ipairs(f.rankTitles) do everything[#everything + 1] = t end
     for _, c in ipairs(f.rankConfirms) do everything[#everything + 1] = c end
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
+        everything[#everything + 1] = r.pick
         everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit
         everything[#everything + 1] = r.note
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
@@ -638,6 +719,7 @@ function M.Refresh(f, ctx, ui)
         end
     end
     for _, el in ipairs(everything) do setShown(el, want[el] == true) end
+    M.RefreshSide(f, v, ui)
     return v
 end
 

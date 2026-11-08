@@ -494,3 +494,17 @@ test("a player (not the Master Looter) sees everyone's answers too, from the hos
     for _, e in ipairs(board) do answered = answered + #e.need + #e.off + #e.gift + e.pass end
     assert(answered > 0, "the answers are listed")
 end)
+
+test("everyone's answer on an item: those who want it first, each with their place on the list", function()
+    local sim, _, view = practice(10)
+    sim:killBoss(nil, false); sim:advance(20)
+    local v = view()
+    local it = v.bids.items[1]
+    assert(it.people and #it.people > 0, "a row per player")
+    local rank = { need = 1, off = 2, gift = 3, pass = 4, waiting = 5, away = 6 }
+    for i = 2, #it.people do
+        assert(rank[it.people[i - 1].kind] <= rank[it.people[i].kind], "grouped: wanting first, then passes, then those yet to answer")
+        if it.people[i - 1].kind == it.people[i].kind then assert(it.people[i - 1].place < it.people[i].place, "list order within a group") end
+    end
+    assert(it.people[1].text:match("^%d+%. "), "each row starts with the place on the list")
+end)

@@ -154,14 +154,17 @@ function M.Model(ctx)
         local board = (mode == "ml" and s.bids) or s.answers or {}
         out.board = {}
         for _, row in ipairs(out.items) do
-            local entry = { id = row.id, link = row.link, need = {}, off = {}, gift = {}, pass = 0, waiting = 0 }
-            for _, name in ipairs(people) do
+            local entry = { id = row.id, link = row.link, need = {}, off = {}, gift = {}, pass = 0, waiting = 0, all = {} }
+            for place, name in ipairs(people) do
                 local b = board[name] and board[name][row.id]
+                local kind = b and b.kind or "waiting"
                 if not b then
-                    if not (s.away and s.away[name]) then entry.waiting = entry.waiting + 1 end
+                    if not (s.away and s.away[name]) then entry.waiting = entry.waiting + 1 else kind = "away" end
                 elseif b.kind == "pass" then entry.pass = entry.pass + 1
                 elseif type(entry[b.kind]) == "table" then table.insert(entry[b.kind], whoOf(name))
                 end
+                -- everyone, for the detail: their place on the list, what they said and (for a gift) who to
+                entry.all[#entry.all + 1] = { who = whoOf(name), place = place, kind = kind, to = b and b.to and show(b.to) or nil }
             end
             out.board[#out.board + 1] = entry
         end
