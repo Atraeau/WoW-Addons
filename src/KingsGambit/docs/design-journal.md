@@ -2519,3 +2519,18 @@ A Fury Warrior's Need on a tanking item is an Off-spec, so what spec a player is
 - **Main or off:** with a spec on record, a Need must suit it (`ItemFit.NeedOk`: the item's rating for that spec is not "poor"); the window grays Need out with the reason, and the Master Looter refuses it too
   (`notspec`). Items with no data get the benefit of the doubt.
 - **Not yet done:** the Guild book's history lines do not show the spec yet; there is no officer command for corrections yet; whisper players' experience is being designed (next entry).
+
+## Answering by whisper at raid scale, and a practice mode for it (the guild master's call, same day)
+
+Not everyone has the addon, and one whisper carries one message, so the Master Looter's addon handles the whispers rather than the Master Looter:
+
+- **One message answers every item:** `1 need, 2 pass, 3 off`, or `1n 2p 3o`, or `pass all`. The order written is the order ranked. (`Loot.ParseWhisper`.)
+- **A menu, once:** when bidding opens, each player without the addon (anyone whose heartbeat the Master Looter has not heard) is whispered how to answer and what is up (a few short messages). Ten seconds before
+  the close, anyone with items still open gets one reminder naming them.
+- **One reply per burst:** a few seconds after a player's last whisper they get one confirmation ("Got: 1 need, 2 pass. Still open: item 3."). All outgoing whispers go through one queue, 0.4 s apart, so a
+  40-person raid cannot flood the sender or hit the game's limits.
+- **Quiet for the Master Looter:** whispers to and from the players it is serving are kept out of the chat window (a chat filter), and a line at the end says how many answers were handled and who was not understood.
+- **Spec is asked as a follow-up, not typed each time:** the menu does not mention it. A first answer with a Need/Off-spec/Gift and no spec on record is held, and the player is whispered "which spec are you for this raid?
+  Reply with just one: Arms, Fury, Protection". Their reply is recorded for the rest of the raid, the held answers are taken at once, and later answers are never held up. (`spec fury` or `fury: 1n` still work.)
+- **Practice: "Play without the addon":** a raider-without-the-addon mode in practice. The loot master's whispers appear in a Whisper window, you type replies, and the same parser and replies run; the Loot window's
+  answer buttons are off meanwhile. It is the test bench for whether the instructions are clear item by item.

@@ -260,6 +260,9 @@ function Sim:drop(links, cfg, seen, ids)
         local c = {}
         for k, v in pairs(cfg or {}) do c[k] = v end
         if c.requireRanking == nil then c.requireRanking = true end
+        -- whispered replies as in the game: one reply per burst, one message at a time
+        if c.whisperSettle == nil then c.whisperSettle = 3 end
+        if c.whisperGap == nil then c.whisperGap = 0.4 end
         cfg = c
     end
     local drops, items = {}, {}
@@ -280,6 +283,7 @@ function Sim:drop(links, cfg, seen, ids)
     local ok, why = session:start(items)
     if not ok then return false, why end -- (e.g. the loot method is not Master Looter: nothing is started)
     self.session = session
+    if self.onSession then self.onSession(session) end -- (practice's raider-without-the-addon mode whispers its menu from here)
     self:wireBots()
     return true
 end

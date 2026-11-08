@@ -393,7 +393,7 @@ test("a whispered answer is recorded for the sender and acknowledged", function(
     local applied = assert(s:handleWhisper("C", "1 need, 2 pass"))
     eq(#applied, 2); eq(s.bids["C"][1].kind, "need"); eq(s.bids["C"][2].kind, "pass")
     local reply = client.sent[#client.sent]
-    eq(reply.kind, "whisper"); eq(reply.target, "C"); assert(reply.text:find("Got it"))
+    eq(reply.kind, "whisper"); eq(reply.target, "C"); assert(reply.text:find("Got"))
 end)
 test("a whisper that cannot be understood gets help, and changes nothing", function()
     local s, _, client = setup({ nitems = 2 })
@@ -836,6 +836,79 @@ test("a player without the addon whispers 'spec fury', then answers", function()
         eq(engine:SpecOf("r1", "A").spec, "Protection")
         s:handleWhisper("A", "1 need")
         eq(s.bids.A[1].kind, "need")
+    end)
+    H.requireSpec = nil
+    assert(ok, err)
+end)
+
+H.section("Loot: whispers for a raid of players without the addon")
+test("one whisper can answer every item: letters, spaces, a spec first, 'pass all'", function()
+    local P = Loot.ParseWhisper
+    local a = assert(P("1n 2p 3o", 3)); eq(#a, 3); eq(a[1].kind, "need"); eq(a[2].kind, "pass"); eq(a[3].kind, "off"); eq(a[3].item, 3)
+    a = assert(P("1 need 2 pass 3 gift Aldric", 3)); eq(#a, 3); eq(a[3].kind, "gift"); eq(a[3].to, "aldric")
+    local b, _, spec = P("Fury: 1n, 2p", 2); eq(#b, 2); eq(spec, "fury")
+    b, _, spec = P("spec protection 1 need", 2); eq(#b, 1); eq(spec, "protection")
+    b, _, spec = P("spec fury", 2); eq(#b, 0); eq(spec, "fury", "a spec alone is fine")
+    a = assert(P("pass all", 4)); eq(#a, 1); eq(a[1].kind, "pass"); eq(a[1].item, nil)
+    local _, why = P("need all", 3); eq(why, "needitem")
+end)
+test("the menu says how to answer and what is up; a reminder lists only what is still open; one reply per burst", function()
+    local s, _, client = setup({ nitems = 3, cfg = { whisperSettle = 3 } })
+    s:sendMenu("C"); s:sendMenu("C")
+    local sent = {}
+    for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then sent[#sent + 1] = m.text end end
+    assert(#sent >= 2 and sent[1]:find("ONE whisper") and sent[#sent]:find("1%) item:1"), "a menu, once")
+    local n = #sent
+    s:handleWhisper("C", "1 need"); s:handleWhisper("C", "2 pass")
+    eq(#client.sent == nil, false)
+    local before = #client.sent
+    client:advance(4)
+    local replies = {}
+    for i = before + 1, #client.sent do local m = client.sent[i]; if m.kind == "whisper" and m.target == "C" then replies[#replies + 1] = m.text end end
+    eq(#replies, 1, "one reply for the burst"); assert(replies[1]:find("1 need") and replies[1]:find("2 pass") and replies[1]:find("Still open: item 3"), replies[1])
+    s:remind()
+    local last = client.sent[#client.sent].text
+    assert(last:find("Still open for you: item 3"), last)
+end)
+test("outgoing whispers go one at a time with a gap, so a big raid can't flood the sender", function()
+    local s, _, client = setup({ nitems = 1, cfg = { whisperGap = 0.5 } })
+    local before = #client.sent
+    s:sendMenu("A"); s:sendMenu("B"); s:sendMenu("D")
+    local now = 0
+    for i = before + 1, #client.sent do if client.sent[i].kind == "whisper" then now = now + 1 end end
+    eq(now, 1, "only the first goes at once")
+    client:advance(1)
+    local later = 0
+    for i = before + 1, #client.sent do if client.sent[i].kind == "whisper" then later = later + 1 end end
+    assert(later > 1, "the rest follow")
+end)
+test("with no spec on record, a whisper player is asked once; their answer is recorded, the waiting answers are taken, and later answers are not held up", function()
+    H.requireSpec = true
+    local ok, err = pcall(function()
+        local client = MockClient.New({ name = "Raidlead" })
+        local engine = Engine.New(client)
+        engine:CreateList("main", "Main")
+        engine:Append("main", "AddMember", { member = "A", class = "WARRIOR" })
+        client:setRaid({ "A" }, { leader = "A", lootMethod = "master", masterLooter = "Raidlead" })
+        assert(engine:Write("Elevate", { raid = "r1", ml = "Raidlead", minutes = 60 }))
+        client:dropLoot({ { link = "item:1" }, { link = "item:2" } })
+        local s = Loot.NewSession(engine, { requireSpec = true })
+        assert(s:start({ { link = "item:1", slot = 1 }, { link = "item:2", slot = 2 } }))
+        for _, line in ipairs(s:menuLines("A")) do assert(not line:find("which spec") and not line:find("fury"), "the menu does not ask for a spec: " .. line) end
+        local function lastWhisper() for i = #client.sent, 1, -1 do if client.sent[i].kind == "whisper" then return client.sent[i].text end end end
+        local r, why = s:handleWhisper("A", "1n"); eq(r, nil); eq(why, "needspec")
+        assert(lastWhisper():find("which spec") and lastWhisper():find("Fury"), lastWhisper())
+        eq(s.bids.A, nil, "nothing is taken before the spec")
+        local applied = s:handleWhisper("A", "fury")
+        eq(engine:SpecOf("r1", "A").spec, "Fury"); eq(#applied, 1)
+        eq(s.bids.A[1].kind, "need")
+        assert(lastWhisper():find("spec Fury"), lastWhisper())
+        local n = #client.sent
+        s:handleWhisper("A", "2 off")
+        eq(s.bids.A[2].kind, "off", "no second question")
+        for i = n + 1, #client.sent do assert(not client.sent[i].text:find("which spec")) end
+        -- a pass alone never needs a spec
+        local s2 = Loot.NewSession(engine, { requireSpec = true })
     end)
     H.requireSpec = nil
     assert(ok, err)

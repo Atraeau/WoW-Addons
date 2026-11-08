@@ -94,6 +94,12 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:PracticeKill()
         UI:Refresh()
         UI:PracticeWait(5); UI:Refresh();
+        -- playing a raider without the addon: the menu arrives by whisper, answers are typed back, the buttons are off
+        UI:SetWhisperMode(true); UI:Refresh()
+        assert(#UI.whisperLog >= 2, "the loot master's menu is whispered to you")
+        UI:WhisperSend("2 pass"); UI:PracticeWait(5)
+        assert(#UI.whisperLog >= 4, "and your answer is confirmed by whisper")
+        UI:SetWhisperMode(false); UI:Refresh()
         eq(UI.bidItem ~= nil, true, "the first item still to answer is opened for you"); UI:SelectBidItem(UI.bidItem); UI:Refresh(); eq(UI.bidItem, nil, "selected again, it closes")
         UI.bidItem = nil
         SK.modules.LootWindow.Run({ name = "bid", item = 2, kind = "pass" }, UI.lootWindow, UI)
@@ -279,7 +285,7 @@ H.section("Window: tooltips")
 test("every button has a tooltip with a title and an explanation, and a grayed-out one can say why", function()
     local Tips = SK.modules.UITips
     for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
-        "kill", "handout", "wait", "practice", "practicesize", "statssort", "bidspick", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
+        "kill", "handout", "wait", "practice", "practicesize", "statssort", "bidspick", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "whispermode", "specpick", "specauto", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
         local title, text = Tips.Resolve(id)
         assert(title and title ~= "" and text and #text > 30, "tooltip text for " .. id)
     end

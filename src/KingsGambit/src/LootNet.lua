@@ -133,6 +133,9 @@ function M.NewHost(sync, engine)
         for k, v in pairs(cfg or {}) do withRanking[k] = v end
         if withRanking.requireRanking == nil then withRanking.requireRanking = true end
         if withRanking.requireSpec == nil then withRanking.requireSpec = true end
+        -- players without the addon answer by whisper: replies are one per burst, and sent one at a time (the game's limits)
+        if withRanking.whisperSettle == nil then withRanking.whisperSettle = 3 end
+        if withRanking.whisperGap == nil then withRanking.whisperGap = 0.4 end
         local session = Loot.NewSession(self.engine, withRanking)
         local ok, why = session:start(items)
         if not ok then return false, why end
@@ -163,7 +166,32 @@ function M.NewHost(sync, engine)
             end
             h.ev.emit("bid", b)
         end)
+        -- Players without the addon are whispered how to answer (one message answers every item), reminded with ten seconds to go, and kept out of the
+        -- Master Looter's chat window: the answers are handled here, and a line at the end says how it went.
+        local function whisperEnd()
+            if client.muteWhispers then client:muteWhispers(nil) end
+            local st = session.whisperStats
+            if st and (st.handled > 0 or next(st.unclear)) then
+                local bad = {}
+                for name in pairs(st.unclear) do bad[#bad + 1] = name end
+                table.sort(bad)
+                client:print(("Loot whispers: %d answer(s) handled%s."):format(st.handled, #bad > 0 and ("; not understood from " .. table.concat(bad, ", ")) or ""))
+            end
+        end
+        session:on("phase", function(p) if p.phase == "cancelled" then whisperEnd() end end)
+        client:after(2, function()
+            if not (running() and h.session == session) then return end
+            local me = client:me()
+            for _, name in ipairs(session.eligibleList) do
+                if name ~= me and not (sync.peers and sync.peers[name]) then session:sendMenu(name) end
+            end
+            if client.muteWhispers then
+                client:muteWhispers(function(name) return running() and h.session == session and session.menued and session.menued[name] or false end)
+            end
+        end)
+        if (session.cfg.bidSeconds or 0) > 15 then client:after(session.cfg.bidSeconds - 10, function() if h.session == session then session:remind() end end) end
         session:on("done", function(d)
+            whisperEnd()
             flush()
             local r = results(session)
             r.failed = #d.failures

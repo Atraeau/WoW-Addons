@@ -119,6 +119,7 @@ function M:StartPractice()
         say("Practice is off while you are in the middle of a raid: " .. busy .. ".")
         return M:Refresh()
     end
+    if M.whisperWin then M.whisperWin:Hide() end -- (a fresh practice starts with the buttons)
     local lessonSc = M.lesson and Scenarios and Scenarios.find(M.lesson)
     if M.lesson and not lessonSc then M.lesson = nil end
     local me = SK.client:me()
@@ -157,6 +158,17 @@ function M:StartPractice()
     -- The commands find the running loot session through `host.session`: here it is whatever the simulation is running.
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host, attendance = sim.attendance })
+    -- Playing a raider without the addon: what the Master Looter whispers the learner shows in the Whisper window, and a loot session whispers its menu on start.
+    local learnerName = sim.learner
+    local origWhisper = sim.client.whisper
+    sim.client.whisper = function(self, name, text)
+        local r, why = origWhisper(self, name, text)
+        if M.practice and M.practice.whisperMode and (name == learnerName or self:normalize(name) == learnerName) then M:WhisperLog("ml", text) end
+        return r, why
+    end
+    sim.onSession = function(s)
+        if M.practice and M.practice.whisperMode then s:sendMenu(learnerName) end
+    end
     M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host, attendance = sim.attendance,
         lessonIndex = lessonSc and M.LessonIndex(lessonSc.id) or nil, lessonCount = lessonSc and #M.Lessons() or nil, autoSpec = M.AutoSpec }
     -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
@@ -174,6 +186,83 @@ function M:StartPractice()
 end
 
 -- Click an item to see everyone's answer on it, and again to close it.
+-- Practice as a raider who has no addon: a Whisper window shows what the Master Looter whispers you, and you type your answers back, one message at a time, exactly
+-- as in the game. The loot window's answer buttons are off while it is on.
+local function whisperLines() return M.whisperLog or {} end
+function M:WhisperLog(who, text)
+    M.whisperLog = M.whisperLog or {}
+    local line = who == "ml" and ("|cffff80ffMaster Looter whispers: " .. text .. "|r") or ("|cffff80ffTo Master Looter: " .. text .. "|r")
+    M.whisperLog[#M.whisperLog + 1] = line
+    while #M.whisperLog > 14 do table.remove(M.whisperLog, 1) end
+    M:RefreshWhisper()
+end
+
+function M:RefreshWhisper()
+    local f = M.whisperWin
+    if not f then return end
+    f.log:SetText(table.concat(whisperLines(), "\n"))
+end
+
+function M:WhisperSend(text)
+    text = tostring(text or ""):match("^%s*(.-)%s*$")
+    if text == "" then return end
+    local p = M.practice
+    if not (p and p.whisperMode) then return end
+    M:WhisperLog("you", text)
+    local s = p.host and p.host.session
+    if s and s.phase == "bidding" then s:handleWhisper(p.sim.learner, text)
+    else M:WhisperLog("ml", "(Nothing is up for bids right now.)") end
+    M:Refresh()
+end
+
+function M:BuildWhisperWindow()
+    if M.whisperWin then return M.whisperWin end
+    local ok, f = pcall(CreateFrame, "Frame", "KingsGambitWhisperWindow", UIParent, "BasicFrameTemplateWithInset")
+    if not ok or not f then f = CreateFrame("Frame", "KingsGambitWhisperWindow", UIParent) end
+    f:SetSize(430, 250)
+    f:SetFrameStrata("DIALOG")
+    LootWindow.Movable(f, "whisper", { "CENTER", -440, -330 })
+    if f.TitleText then f.TitleText:SetText("Whispers (a raider without the addon)") end
+    f.help = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    f.help:SetPoint("TOPLEFT", 14, -30); f.help:SetWidth(400); f.help:SetJustifyH("LEFT"); f.help:SetWordWrap(true)
+    f.help:SetText("You are playing a raider who does not have the addon. Type what you would whisper the loot master, then press Enter.")
+    f.log = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    f.log:SetPoint("TOPLEFT", 14, -62); f.log:SetWidth(400); f.log:SetHeight(140); f.log:SetJustifyH("LEFT"); f.log:SetJustifyV("TOP"); f.log:SetWordWrap(true)
+    local okBox, box = pcall(CreateFrame, "EditBox", nil, f, "InputBoxTemplate")
+    if not okBox or not box then box = CreateFrame("EditBox", nil, f) end
+    box:SetSize(320, 24); box:SetPoint("BOTTOMLEFT", 20, 14); box:SetAutoFocus(false)
+    if box.SetMaxLetters then box:SetMaxLetters(240) end
+    local function send() M:WhisperSend(box:GetText()); box:SetText("") end
+    box:SetScript("OnEnterPressed", send)
+    box:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+    f.box = box
+    local sendBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    sendBtn:SetSize(70, 22); sendBtn:SetPoint("BOTTOMRIGHT", -14, 15); sendBtn:SetText("Send")
+    sendBtn:SetScript("OnClick", send)
+    f.sendBtn = sendBtn
+    f:Hide()
+    M.whisperWin = f
+    return f
+end
+
+-- Turn the mode on or off (practice only).
+function M:SetWhisperMode(on)
+    local p = M.practice
+    if not p then return end
+    p.whisperMode = on and true or nil
+    local f = M:BuildWhisperWindow()
+    if on then
+        M.whisperLog = {}
+        M:WhisperLog("ml", "(Whispers from the loot master appear here when loot drops. Reply the way you would in the game.)")
+        f:Show()
+        local s = p.host and p.host.session
+        if s and s.phase == "bidding" then s:sendMenu(p.sim.learner) end
+    else
+        f:Hide()
+    end
+    M:Refresh()
+end
+
 -- Your spec for this raid: tell the session (the host's own, or the Master Looter's over the network). The first answer stands for the whole raid.
 function M:ChooseSpec(name)
     local ctx = M.Ctx()
@@ -228,6 +317,7 @@ end
 
 function M:LeavePractice()
     M.practice = nil
+    if M.whisperWin then M.whisperWin:Hide() end
     M.list = nil
     M:Refresh()
 end
@@ -379,6 +469,10 @@ function M:Refresh()
     -- The group size and the lesson only mean something inside practice mode (a lesson has a raid of its own).
     setShown(w.sizeButton, M.practice ~= nil and not M.lesson)
     setShown(w.lessonButton, M.practice ~= nil)
+    if w.whisperButton then
+        setShown(w.whisperButton, M.practice ~= nil)
+        w.whisperButton:SetText((M.practice and M.practice.whisperMode) and "Play with the addon" or "Play without the addon")
+    end
     if w.lessonButton then
         if w.lessonButton.GenerateMenu then
             if w.shownLesson ~= (M.lesson or "") then w.shownLesson = M.lesson or ""; w.lessonButton:GenerateMenu() end
@@ -1514,6 +1608,12 @@ function M:Build()
         end)
     end
     Tips.Attach(w.lessonButton, "practicelesson")
+
+    -- Practice as a raider who has no addon: whispers instead of buttons.
+    w.whisperButton = button(w, "Play without the addon", 200)
+    w.whisperButton:SetPoint("TOPLEFT", 16, -78)
+    w.whisperButton:SetScript("OnClick", function() M:SetWhisperMode(not (M.practice and M.practice.whisperMode)) end)
+    Tips.Attach(w.whisperButton, "whispermode")
 
     -- The Loot window opens by itself when a session starts; this brings it back, or shows it between sessions.
     w.lootButton = button(w, "Loot window", 96)

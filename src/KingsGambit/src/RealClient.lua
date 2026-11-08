@@ -661,6 +661,22 @@ function c:normalize(name) return normalize(name) end
         return true
     end
 
+-- Keep whispers with some players out of the chat window while a loot session answers them (the addon reads and replies; the Master Looter sees a count at
+-- the end instead). `isMuted(name)` says who; nil stops it. Both directions: what they send, and our replies to them.
+function c:muteWhispers(isMuted)
+    c.muted = isMuted
+    if c.muteInstalled then return end
+    local add = E.ChatFrame_AddMessageEventFilter or _G.ChatFrame_AddMessageEventFilter
+    if type(add) ~= "function" then return end
+    local function filter(_, _, msg, sender, ...)
+        if c.muted and sender and c.muted(fromGame(sender)) then return true end
+        return false, msg, sender, ...
+    end
+    pcall(add, "CHAT_MSG_WHISPER", filter)
+    pcall(add, "CHAT_MSG_WHISPER_INFORM", filter)
+    c.muteInstalled = true
+end
+
     function c:announce(text, channel)
         if E.C_ChatInfo.InChatMessagingLockdown and E.C_ChatInfo.InChatMessagingLockdown() then
             return false, "restricted"

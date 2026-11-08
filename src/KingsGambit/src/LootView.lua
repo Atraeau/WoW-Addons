@@ -66,6 +66,8 @@ local function answerButtons(m, row)
         local enabled, why = true, nil
         if (a.key == "need" or a.key == "off") and row.canBid == false then
             enabled, why = false, WHY[row.whyNot] or "This isn't for your class."
+        elseif m.whisperOnly then
+            enabled, why = false, "You are playing a raider without the addon: answer by whisper (see the Whisper window)."
         elseif a.key ~= "pass" and m.spec and not m.spec.mine then
             enabled, why = false, WHY.needspec
         elseif a.key == "need" and row.needOk == false then
@@ -92,6 +94,7 @@ function M.Build(m)
         return v
     end
     v.night = m.night
+    v.whisperOnly = m.whisperOnly
     v.spec = m.spec -- (when a spec is required: { mine, class, options, detected, auto })
     v.visible = true
     v.title = "King's Gambit"

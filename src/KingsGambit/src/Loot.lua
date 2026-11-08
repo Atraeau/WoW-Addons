@@ -356,69 +356,225 @@ end
 --   "1 need"  "need 1"  "#2 pass"  "2: off"  "1 gift Name"   (item number, either side)
 --   "pass"                                         (several items: passes on all of them)
 --   "1 need ready"                                 (a token: I have what it takes to turn it in)
-local WORDS = { need = "need", n = "need", greed = "off", off = "off", os = "off", offspec = "off",
+local WORDS = { need = "need", n = "need", greed = "off", off = "off", o = "off", os = "off", offspec = "off",
     ["off-spec"] = "off", pass = "pass", p = "pass", gift = "gift", g = "gift" }
 
--- Returns an array of { item, kind, to, ready } (item may be nil = "all items", only for pass), or
--- nil + a reason ("empty", "unclear", "needitem", "needtarget").
+-- Returns an array of { item, kind, to, ready } (item may be nil = "all items", only for pass), a reason when it can't be read ("empty", "unclear",
+-- "needitem", "needtarget"; then the array is nil), and the spec the player named, if any ("fury: 1n 2p" or "spec fury 1n 2p"). One message can answer
+-- every item: "1 need 2 pass 3 off", "1n, 2p, 3o", "pass all". The order the answers are written in is the order they are ranked in.
 function M.ParseWhisper(text, itemCount)
     if type(text) ~= "string" then return nil, "empty" end
-    local answers = {}
+    local answers, spec = {}, nil
+    local function finish(cur)
+        if not cur then return true end
+        if not cur.kind then
+            if cur.all then cur.kind = "pass" else return nil, "unclear" end
+        end
+        if cur.kind == "gift" and not cur.to then return nil, "needtarget" end
+        local item = cur.item
+        if cur.all then
+            if cur.kind ~= "pass" then return nil, "needitem" end
+            item = nil
+        elseif not item then
+            if itemCount == 1 then item = 1
+            elseif cur.kind == "pass" then item = nil -- all items
+            else return nil, "needitem" end
+        end
+        answers[#answers + 1] = { item = item, kind = cur.kind, to = cur.to, ready = cur.ready }
+        return true
+    end
     for part in text:lower():gmatch("[^,;]+") do
         local words = {}
         for w in part:gmatch("[^%s]+") do words[#words + 1] = w end
-        if #words > 0 then
-            local item, kind, to, ready
-            for _, w in ipairs(words) do
-                local num = w:match("^#?(%d+):?$")
-                if num and not item then item = tonumber(num)
-                elseif w == "ready" and not ready then ready = true
-                elseif WORDS[w] and not kind then kind = WORDS[w]
-                elseif kind == "gift" and not to and w:match("^[%a%-']+$") then to = w
-                else return nil, "unclear" end
-            end
-            if not kind then return nil, "unclear" end
-            if kind == "gift" and not to then return nil, "needtarget" end
-            if not item then
-                if itemCount == 1 then item = 1
-                elseif kind == "pass" then item = nil -- all items
-                else return nil, "needitem" end
-            end
-            answers[#answers + 1] = { item = item, kind = kind, to = to, ready = ready }
+        local cur
+        local i = 1
+        while i <= #words do
+            local w = words[i]
+            local num, letter = w:match("^#?(%d+)([nogp])$")
+            local plain = w:match("^#?(%d+):?$")
+            local specName = w:match("^([%a%-]+):$")
+            if w == "spec" and words[i + 1] and not spec then
+                spec = words[i + 1]; i = i + 1
+            elseif specName and not WORDS[specName] and not spec then
+                spec = specName
+            elseif num then
+                local ok, why = finish(cur); if not ok then return nil, why end
+                cur = { item = tonumber(num), kind = WORDS[letter] }
+            elseif plain then
+                if cur and cur.item == nil and not cur.all then cur.item = tonumber(plain)
+                else
+                    local ok, why = finish(cur); if not ok then return nil, why end
+                    cur = { item = tonumber(plain) }
+                end
+            elseif w == "all" then
+                cur = cur or {}
+                if cur.item or cur.all then return nil, "unclear" end
+                cur.all = true
+            elseif w == "ready" and not (cur and cur.ready) then cur = cur or {}; cur.ready = true
+            elseif WORDS[w] and (not cur or not cur.kind) then
+                cur = cur or {}
+                cur.kind = WORDS[w]
+            elseif cur and cur.kind == "gift" and not cur.to and w:match("^[%a%-']+$") then cur.to = w
+            else return nil, "unclear" end
+            i = i + 1
         end
+        local ok, why = finish(cur); if not ok then return nil, why end
     end
-    if #answers == 0 then return nil, "empty" end
-    return answers
+    if #answers == 0 then
+        if spec then return answers, nil, spec end
+        return nil, "empty"
+    end
+    return answers, nil, spec
 end
 
-local WHISPER_HELP = "Whisper me one answer per item, e.g. '1 need', '2 off', '1 pass', '1 gift Name'. 'pass' alone passes on everything."
+local WHISPER_HELP = "Answer every item in ONE message, e.g. '1 need, 2 pass, 3 off' (n = need, o = off-spec, g = gift, p = pass). 'pass all' passes on everything. You can change answers until the timer ends."
 
 local function whisperProblem(reason)
-    if reason == "needitem" then return "Which item? Put its number first, e.g. '1 need'." end
+    if reason == "needitem" then return "Which item? Put its number first, e.g. '1 need'. " .. WHISPER_HELP end
     if reason == "needtarget" then return "Who should get it? e.g. '1 gift Name'." end
     return "I didn't understand that. " .. WHISPER_HELP
 end
 
--- Handle a whispered answer from `sender`. Replies by whisper. Returns the applied answers
--- or nil + reason.
-function Session:handleWhisper(sender, text)
-    -- 'spec fury': the spec this player is for the raid (they have no addon to ask them)
-    local specWord = tostring(text or ""):match("^%s*spec%s+([%a%-]+)%s*$")
-    if specWord then
-        local ok, why = self:setSpec(sender, specWord)
-        local names = table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]), ", ")
-        self.client:whisper(sender, ok and ("Your spec for this raid is " .. specWord .. ". Now answer the items.")
-            or why == "specset" and "Your spec is already set for this raid; ask an officer to change it."
-            or ("I don't know that spec. Your choices: " .. names .. "."))
-        return ok and {} or nil, why
+-- Everything this Master Looter says to a player by whisper goes through here: one message at a time, with a gap between them (`cfg.whisperGap`, the game's
+-- limits), so a raid full of players without the addon can't flood the sender. With no gap, it is sent at once.
+function Session:say(to, text)
+    local gap = self.cfg.whisperGap or 0
+    if gap <= 0 then return self.client:whisper(to, text) end
+    self.wq = self.wq or {}
+    self.wq[#self.wq + 1] = { to = to, text = text }
+    if self.wpump then return end
+    self.wpump = true
+    local function pump()
+        local m = table.remove(self.wq, 1)
+        if not m then self.wpump = false; return end
+        self.client:whisper(m.to, m.text)
+        self.client:after(gap, pump)
     end
-    local answers, why = M.ParseWhisper(text, #self.items)
+    pump()
+end
+
+-- What a player who answers by whisper is told when bidding opens: how to answer, and what is up (a few messages, each under the chat limit).
+function Session:menuLines(player)
+    local class = self.class[norm(self, player)]
+    local lines = { "King's Gambit loot: answer EVERY item in ONE whisper to me, e.g. '1 need, 2 pass, 3 off' (n = need, o = off-spec, g = gift, p = pass). 'pass all' passes on everything. You can change answers until the timer ends." }
+    local cur = "Up for grabs:"
+    for _, it in ipairs(self.items) do
+        local piece = (" %d) %s"):format(it.id, it.link)
+        if #cur + #piece > 230 then lines[#lines + 1] = cur; cur = "More:" end
+        cur = cur .. piece
+    end
+    lines[#lines + 1] = cur
+    return lines
+end
+
+-- Whisper the menu to a player who has no addon (so they are not left guessing); remembers who, for the reminder and the summary.
+function Session:sendMenu(player)
+    player = norm(self, player)
+    self.menued = self.menued or {}
+    if self.menued[player] then return end
+    self.menued[player] = true
+    for _, line in ipairs(self:menuLines(player)) do self:say(player, line) end
+end
+
+-- Ten seconds before bidding closes, whoever was sent the menu and has items left open is told which, once.
+function Session:remind()
+    if self.phase ~= "bidding" then return end
+    for player in pairs(self.menued or {}) do
+        local open = {}
+        for _, it in ipairs(self.items) do
+            if not (self.bids[player] and self.bids[player][it.id]) then open[#open + 1] = tostring(it.id) end
+        end
+        if #open > 0 and not (self.reminded and self.reminded[player]) then
+            self.reminded = self.reminded or {}
+            self.reminded[player] = true
+            self:say(player, ("Still open for you: item %s. Whisper e.g. '%s pass' before time runs out; no answer counts as a pass."):format(table.concat(open, ", "), open[1]))
+        end
+    end
+end
+
+-- One confirmation per player, a moment after their last whisper (`cfg.whisperSettle` seconds; none: at once), saying what was taken and what is still open.
+function Session:confirmWhisper(sender, lines, problems)
+    local function send()
+        local out = {}
+        if #lines > 0 then out[#out + 1] = "Got: " .. table.concat(lines, ", ") .. "." end
+        for _, p in ipairs(problems) do out[#out + 1] = p end
+        local open = {}
+        for _, it in ipairs(self.items) do
+            if not (self.bids[sender] and self.bids[sender][it.id]) then open[#open + 1] = tostring(it.id) end
+        end
+        if #open > 0 and self.phase == "bidding" then out[#out + 1] = "Still open: item " .. table.concat(open, ", ") .. ". Change any answer by whispering again." end
+        if #open == 0 and self.phase == "bidding" and #lines > 0 then out[#out + 1] = "That's every item." end
+        self:say(sender, table.concat(out, " "))
+    end
+    local settle = self.cfg.whisperSettle or 0
+    if settle <= 0 then return send() end
+    self.pendingWhisper = self.pendingWhisper or {}
+    local p = self.pendingWhisper[sender]
+    if p then
+        for _, l in ipairs(lines) do p.lines[#p.lines + 1] = l end
+        for _, l in ipairs(problems) do p.problems[#p.problems + 1] = l end
+        return
+    end
+    p = { lines = {}, problems = {} }
+    for _, l in ipairs(lines) do p.lines[#p.lines + 1] = l end
+    for _, l in ipairs(problems) do p.problems[#p.problems + 1] = l end
+    self.pendingWhisper[sender] = p
+    self.client:after(settle, function()
+        self.pendingWhisper[sender] = nil
+        lines, problems = p.lines, p.problems
+        send()
+    end)
+end
+
+-- Handle a whispered answer from `sender`. Replies by whisper (one reply per burst). Returns the applied answers or nil + reason.
+function Session:handleWhisper(sender, text, specNote)
+    self.askedSpec, self.stash = self.askedSpec or {}, self.stash or {}
+    -- the answer to "which spec are you?": recorded for the rest of the raid, and the answers that were waiting for it are taken now
+    if self.askedSpec[sender] then
+        local class = self.class[norm(self, sender)]
+        local sp = ItemFit.FindSpec(class, (tostring(text):lower():match("^%s*(.-)%s*$")))
+        if sp then
+            self.askedSpec[sender] = nil
+            local ok, err = self:setSpec(sender, sp.name)
+            local waiting = self.stash[sender]; self.stash[sender] = nil
+            if not ok and err ~= "specset" then self:say(sender, "I couldn't record that spec (" .. tostring(err) .. ").") return nil, err end
+            if waiting then return self:handleWhisper(sender, waiting, sp.name) end
+            self:say(sender, "Your spec for this raid is " .. sp.name .. ". Now answer the items.")
+            return {}
+        end
+    end
+    local answers, why, specWord = M.ParseWhisper(text, #self.items)
+    self.whisperStats = self.whisperStats or { handled = 0, unclear = {} }
     if not answers then
-        self.client:whisper(sender, whisperProblem(why))
+        self.whisperStats.unclear[sender] = true
+        self:say(sender, whisperProblem(why))
         return nil, why
     end
-    local applied, lines = {}, {}
+    self.whisperStats.handled = self.whisperStats.handled + 1
+    local applied, lines, problems = {}, {}, {}
+    local function fail(msg) problems[#problems + 1] = msg end
+    -- No spec on record yet and something other than a pass is wanted: ask for it (once for the raid), keep what they wrote, and take it when they answer.
+    if self.cfg.requireSpec and not specWord and not self:specOf(sender) then
+        local wants = false
+        for _, a in ipairs(answers) do if a.kind ~= "pass" then wants = true end end
+        if wants then
+            self.askedSpec[sender], self.stash[sender] = true, text
+            local names = table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]) or {}, ", ")
+            self:say(sender, ("Before I take that: which spec are you for this raid? Reply with just one: %s. (Asked once; it holds for the whole raid, then I'll take your answers.)"):format(names))
+            return nil, "needspec"
+        end
+    end
+    if specNote then lines[#lines + 1] = "spec " .. specNote end
+    -- a spec named in the message is recorded first (it holds for the whole raid)
+    if specWord then
+        local ok, err = self:setSpec(sender, specWord)
+        if not ok then
+            if err == "specset" then fail("Your spec is already set for this raid; ask an officer to change it.")
+            else fail("I don't know that spec. Your choices: " .. table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]), ", ") .. ".") end
+        else lines[#lines + 1] = "spec " .. specWord:sub(1, 1):upper() .. specWord:sub(2) end
+    end
     local nextRank = 1 -- items wanted are ranked in the order they were written
+    local needSpecOnce = false
     for _, a in ipairs(answers) do
         local ids = {}
         if a.item then ids[1] = a.item else for _, it in ipairs(self.items) do ids[#ids + 1] = it.id end end
@@ -428,25 +584,31 @@ function Session:handleWhisper(sender, text)
             local ok, err = self:bid(sender, id, a.kind, { to = a.to, rank = rank, ready = a.ready and "says" or nil })
             if ok then
                 applied[#applied + 1] = { item = id, kind = a.kind, to = a.to }
-                lines[#lines + 1] = ("%s on item %d"):format(a.kind, id)
-            else
-                if err == "cantequip" or err == "cantequipto" then
-                    lines[#lines + 1] = ("item %d can't be worn or wielded by %s"):format(id, err == "cantequip" and "your class" or "theirs")
-                elseif err == "nostats" or err == "nostatsto" then
-                    lines[#lines + 1] = ("item %d has no stats that help %s"):format(id, err == "nostats" and "your class" or "theirs")
-                elseif err == "needspec" then
-                    lines[#lines + 1] = ("item %d: tell me your spec first (whisper 'spec %s')"):format(id, (ItemFit.SpecNames(self.class[norm(self, sender)])[1] or "fury"):lower())
-                elseif err == "notspec" then
-                    lines[#lines + 1] = ("item %d isn't for your spec: answer 'off' instead"):format(id)
-                elseif err == "wrongclass" or err == "wrongclassto" then
-                    lines[#lines + 1] = ("item %d is only for %s"):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes")
-                else
-                    lines[#lines + 1] = ("could not record item %d (%s)"):format(id, tostring(err))
+                lines[#lines + 1] = ("%d %s"):format(id, a.kind)
+            elseif err == "needspec" then
+                if not needSpecOnce then
+                    needSpecOnce = true
+                    local names = table.concat(ItemFit.SpecNames(self.class[norm(self, sender)]) or {}, "/")
+                    fail(("Tell me your spec first, once for the raid: start your message with it, e.g. 'fury: 1 need, 2 pass'. Yours: %s."):format(names))
                 end
+            elseif err == "notspec" then
+                fail(("item %d isn't a main-spec item for your spec: answer '%d off' instead."):format(id, id))
+            elseif err == "cantequip" or err == "cantequipto" then
+                fail(("item %d can't be worn or wielded by %s."):format(id, err == "cantequip" and "your class" or "theirs"))
+            elseif err == "nostats" or err == "nostatsto" then
+                fail(("item %d has no stats that help %s."):format(id, err == "nostats" and "your class" or "theirs"))
+            elseif err == "wrongclass" or err == "wrongclassto" then
+                fail(("item %d is only for %s."):format(id, ItemFit.ClassList(self:fitOf(id)) or "other classes"))
+            elseif err == "noitem" then
+                fail(("there is no item %d."):format(id))
+            elseif err == "closed" then
+                fail("bidding is closed.")
+            else
+                fail(("could not record item %d (%s)."):format(id, tostring(err)))
             end
         end
     end
-    self.client:whisper(sender, "Got it: " .. table.concat(lines, "; ") .. ".")
+    self:confirmWhisper(sender, lines, problems)
     return applied
 end
 

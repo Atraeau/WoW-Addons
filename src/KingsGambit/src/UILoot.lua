@@ -118,7 +118,9 @@ function M.Model(ctx)
     end
     -- Is a spec needed before this player may answer? Then the window asks (the choices are their class's specs; the talents' pick comes first).
     local needSpec = (mode == "ml" and (s.cfg or {}).requireSpec) or (mode == "player" and s.requireSpec)
-    if needSpec then
+    -- Playing a raider without the addon (practice): answers go by whisper, not by buttons, and the spec question comes by whisper too.
+    out.whisperOnly = ctx.whisperMode and true or nil
+    if needSpec and not out.whisperOnly then
         local myClass = ctx.client.myClass and ctx.client:myClass()
         local detected = ctx.client.mySpec and ctx.client:mySpec()
         local mine = recordedSpec(me)

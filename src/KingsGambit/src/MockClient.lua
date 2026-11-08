@@ -378,6 +378,10 @@ function M.New(opts)
         return true
     end
 
+    -- who's whispers are kept out of the chat window (tests read it back)
+    function h:muteWhispers(isMuted) S.muted = isMuted end
+    function h:isMuted(name) return S.muted and S.muted(name) or false end
+
     function h:announce(text, channel)
         self.sent[#self.sent + 1] = { kind = "announce", channel = channel or "RAID", text = text, from = S.me, t = clock }
         return true

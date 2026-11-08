@@ -113,12 +113,34 @@ test("the draft is played live: turn is broadcast, the right player picks", func
 end)
 test("a raider without the addon answers by whisper and gets a reply", function()
     local w = build()
+    w.net:advance(8) -- (the addon users' heartbeats are heard: they are not whispered)
     assert(w.host:start(drop(w, 1)))
     w.net:advance(1)
     w.host.client:whisperFrom("Zed", "need")
-    local reply = w.ml.client.sent[#w.ml.client.sent]
-    eq(reply.kind, "whisper"); eq(reply.target, "Zed"); assert(reply.text:find("Got it"))
+    w.net:advance(4) -- (one reply per burst, a few seconds after the last whisper)
+    local reply
+    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Zed" and m.text:find("Got") then reply = m end end
+    assert(reply, "Zed was told what was taken")
     eq(w.host.session.bids["Zed"][1].kind, "need")
+end)
+test("a player without the addon is whispered how to answer, once; one burst of whispers gets one reply; the Master Looter's chat is kept quiet", function()
+    local w = build()
+    w.net:advance(8)
+    assert(w.host:start(drop(w, 2)))
+    w.net:advance(3)
+    local menus = 0
+    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Zed" and m.text:find("ONE whisper") then menus = menus + 1 end end
+    eq(menus, 1, "the menu went to Zed once")
+    local toAddonUser = 0
+    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Aldric" then toAddonUser = toAddonUser + 1 end end
+    eq(toAddonUser, 0, "players with the addon are not whispered")
+    eq(w.ml.client:isMuted("Zed"), true, "Zed's whispers stay out of the Master Looter's chat window")
+    w.host.client:whisperFrom("Zed", "1 need")
+    w.host.client:whisperFrom("Zed", "2 pass")
+    w.net:advance(4)
+    local replies = 0
+    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Zed" and m.text:find("Got") then replies = replies + 1 end end
+    eq(replies, 1, "two whispers in a burst, one reply")
 end)
 test("only the Master Looter can open a session on a player's addon", function()
     local w = build()
