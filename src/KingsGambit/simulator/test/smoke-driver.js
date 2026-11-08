@@ -28,6 +28,11 @@ async () => {
   const fire = (b) => b.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
   const buttons = () => [...document.querySelectorAll("button")];
   const btn = (act, text) => buttons().find((b) => b.dataset.act === act && (!text || b.textContent.includes(text)));
+  // The Loot window's own buttons carry their action as JSON (data-act="w", data-a='{"name":"confirm"}'); a grayed-out one is marked data-off.
+  const lw = (name) => buttons().find((b) => {
+    if (b.dataset.act !== "w" || b.dataset.off) return false;
+    try { return JSON.parse(b.dataset.a).name === name; } catch (e) { return false; }
+  });
   const byText = (text) => buttons().find((b) => b.textContent.trim() === text);
   const waitFor = async (fn, ms) => {
     const end = Date.now() + ms;
@@ -91,11 +96,11 @@ async () => {
     // play on until the confirm button: a learner who is offered a leftover or a gift declines
     const confirm = await waitFor(() => {
       answerModal();
-      const c = btn("confirm");
+      const c = lw("confirm");
       if (c) return c;
-      const d = btn("decline");
+      const d = lw("decline") || btn("decline");
       if (d) fire(d);
-      const w = btn("withdraw") || btn("giveUp");
+      const w = lw("withdraw") || btn("withdraw") || btn("giveUp");
       if (w) fire(w);
       return null;
     }, 30000);

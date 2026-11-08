@@ -2438,3 +2438,10 @@ best cases). One event is about 280 bytes serialized.
 - Verification leans on **deterministic replay unit checks** (replay a crafted
   event log, assert the standings), multi-engine convergence tests, and
   validating every WoW API call against the exported `docs/api.json`.
+
+### Fix: the page's smoke test looked for buttons the page no longer has (2026-11-08)
+
+The `tests` workflow's `page` job had failed on every push since 2026-11-06, when the page began drawing the Loot window from the same table as the game (buttons that carry their
+action as JSON, `data-act="w"`). The smoke driver still looked for the old `confirm`, `decline` and `withdraw` buttons, so every lesson "never reached the confirm button" and the
+job ran out its 30-second waits (about six minutes) before failing; each failed push mailed "deployment failed". The driver now finds those buttons by the action in their JSON
+and skips grayed-out ones. (The page itself was working: the unit suite plays every lesson headlessly and passed throughout.)
