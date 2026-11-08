@@ -400,6 +400,8 @@ function M.Run(act, f, ui)
         return ui:Refresh()
     end
     if act.name == "rank" and f.rankDraft then f.rankDraft[act.kind] = nil end -- confirmed: the session now holds it
+    -- answering an item ticks its Everyone box, so the answers on that item are in view as you decide
+    if act.name == "bid" and act.item then ui.bidItem = act.item end
     local cmd, problem = M.CommandText(act, f.recipientPick)
     if not cmd then return ui.Say(problem or "That isn't available.") end
     if act.name == "give" or (act.name == "claim" and act.gift) then f.recipientPick = nil end

@@ -2487,3 +2487,5 @@ shared, so the page could draw the same lines.
   someone, Pass). The summary lines above the items are still only for while bidding is open.
 - **No separate hide button (the guild master's call, same day):** a "Hide who has bid" button next to a tick box per item was two ways to do one thing. The button, and its remembered setting
   (`bidsHidden`), are gone: the per-item Everyone tick box is the only control. The status line under each item shows while bidding is open; the side panel opens when an item is ticked.
+- **Answering an item ticks its Everyone box (the guild master's call, same day):** pressing Need, Off-spec, Gift or Pass on an item opens the side panel for that item (and moves it from any other),
+  so everyone's answers on it are in view as you decide. It can still be unticked.
