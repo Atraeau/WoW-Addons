@@ -420,7 +420,6 @@ function M.RefreshSide(f, v, ui)
         for _, it in ipairs(v.bids.items) do if it.id == ui.bidItem then picked = it end end
     end
     if not picked then
-        if not v.bids then ui.bidItem = nil end -- (bidding is over: nothing stays ticked)
         setShown(side, false)
         return
     end
@@ -450,6 +449,7 @@ function M.Refresh(f, ctx, ui)
     m.practice = practice
     local v = LootView.Build(m)
     if not v.rankings or #v.rankings == 0 then f.rankDraft = nil end -- nothing to rank (a new round, a finished session): no draft is carried over
+    if v.sessionKey ~= ui.bidSession then ui.bidSession, ui.bidItem = v.sessionKey, nil end -- (a new session: nothing is ticked)
     local layout, want = {}, {}
     local y = -32 -- just under the title bar
 
@@ -613,7 +613,7 @@ function M.Refresh(f, ctx, ui)
         end
 
         -- who has bid on what, as it happens: each item with who said what (hidden or shown at the player's choice, and remembered)
-        if v.bids then
+        if v.bids and v.bids.live then
             divider()
             local shown = ui.BidsShown and ui.BidsShown() ~= false
             f.bidsToggle:SetText(shown and "Hide who has bid" or "Show who has bid")

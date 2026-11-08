@@ -82,6 +82,7 @@ function M.Model(ctx)
     end
     if not s then return out end
     out.mode, out.phase = mode, s.phase
+    out.sessionKey = tostring(s)
     out.phaseText = PHASES[s.phase] or tostring(s.phase)
     local now = ctx.client:now()
     local deadline = (mode == "ml" and s.deadline) or (s.turn and s.turn.deadline) or s.deadline

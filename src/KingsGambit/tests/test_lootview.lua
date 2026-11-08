@@ -469,10 +469,12 @@ test("while bidding, each item lists who said what as the answers come in, and w
     for _, it in ipairs(v.bids.items) do assert(#it.segments > 0) end
     -- a name is drawn short (no spec or class beside it)
     for _, seg in ipairs(v.bids.items[1].segments) do if seg.who then assert(seg.who.short, "names are short in the list") end end
-    -- once bidding is over the list goes away
+    eq(v.bids.live, true)
+    -- once bidding is over the summary goes away, but the answers stay to look at (the side panel stays open)
     sim:advance(60)
     v = view()
-    eq(v.bids, nil, "no live list after bidding")
+    assert(v.bids and v.bids.live == false, "the answers stay after bidding, no longer live")
+    assert(#v.bids.items[1].people > 0)
 end)
 
 test("a player (not the Master Looter) sees everyone's answers too, from the host's announcements", function()
@@ -495,16 +497,18 @@ test("a player (not the Master Looter) sees everyone's answers too, from the hos
     assert(answered > 0, "the answers are listed")
 end)
 
-test("everyone's answer on an item: those who want it first, each with their place on the list", function()
+test("everyone's answer on an item: a fixed order, each with their place on the list and their status", function()
     local sim, _, view = practice(10)
     sim:killBoss(nil, false); sim:advance(20)
     local v = view()
     local it = v.bids.items[1]
     assert(it.people and #it.people > 0, "a row per player")
-    local rank = { need = 1, off = 2, gift = 3, pass = 4, waiting = 5, away = 6 }
-    for i = 2, #it.people do
-        assert(rank[it.people[i - 1].kind] <= rank[it.people[i].kind], "grouped: wanting first, then passes, then those yet to answer")
-        if it.people[i - 1].kind == it.people[i].kind then assert(it.people[i - 1].place < it.people[i].place, "list order within a group") end
-    end
+    for i = 2, #it.people do assert(it.people[i - 1].place < it.people[i].place, "a fixed order: the list's own") end
+    -- the order does not change as more answers come in; only the statuses do
+    local before = {}
+    for i, p in ipairs(it.people) do before[i] = p.place end
+    sim:advance(5)
+    local after = view().bids.items[1].people
+    for i, p in ipairs(after) do eq(p.place, before[i], "row " .. i .. " stays where it was") end
     assert(it.people[1].text:match("^%d+%. "), "each row starts with the place on the list")
 end)

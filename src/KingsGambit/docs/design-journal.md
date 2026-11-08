@@ -2481,3 +2481,7 @@ shared, so the page could draw the same lines.
   Gift with who it is for, Pass, then those yet to answer), each with their place on the list. Unticking it, the panel's close button, hiding the bids, or bidding closing, shuts it. The
   per-item summary lines stay as the "bidding in progress" status. Still open: the loot window itself grows with the items (and stops at eight, mentioning the rest); the guild master
   pictures its item list scrolling instead.
+- **The panel stays open, and its rows hold still (the guild master's call, same day):** it used to close when bidding did, and its rows were grouped by answer, so people jumped around
+  as they bid. Now a ticked item's panel stays through the draft, the review and the result (until it is unticked or the next session starts, which clears the tick), so the answers can
+  be read against who won. The rows are in a fixed order, the list's own, with each person's place; only the status on a row changes ("not answered yet", Need, Off-spec, Gift to
+  someone, Pass). The summary lines above the items are still only for while bidding is open.
