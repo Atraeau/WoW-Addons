@@ -7511,6 +7511,7 @@ M.TEXT = {
     lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
     lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     statssort = { "Sort the stats", "Click a heading to sort by it: a name from A to Z, a count with the most at the top, the places from first. Click it again to reverse the order. It opens with the most active (most wins) at the top." },
+    bidstoggle = { "Who has bid", "Answers are public: this lists, for each item, who said Need, Off-spec or Gift, how many passed and how many have yet to answer, as it happens. Hide it if you would rather not watch; your choice is remembered." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
     rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
@@ -7741,6 +7742,25 @@ function M.Model(ctx)
             out.items[#out.items + 1] = row
         end
     end
+    -- Everyone's answers, which are public: for each item, who said Need, Off-spec and Gift (in list order), how many passed and how many have not answered yet.
+    -- The Master Looter reads them from the session; a player has them from the host's announcements.
+    do
+        local people = mode == "ml" and s.eligibleList or s.who or {}
+        local board = (mode == "ml" and s.bids) or s.answers or {}
+        out.board = {}
+        for _, row in ipairs(out.items) do
+            local entry = { id = row.id, link = row.link, need = {}, off = {}, gift = {}, pass = 0, waiting = 0 }
+            for _, name in ipairs(people) do
+                local b = board[name] and board[name][row.id]
+                if not b then
+                    if not (s.away and s.away[name]) then entry.waiting = entry.waiting + 1 end
+                elseif b.kind == "pass" then entry.pass = entry.pass + 1
+                elseif type(entry[b.kind]) == "table" then table.insert(entry[b.kind], whoOf(name))
+                end
+            end
+            out.board[#out.board + 1] = entry
+        end
+    end
     -- Where the player wants several items of one kind (needs, off-spec, gifts), the order they want them in: ranked ones first, in rank order, then the
     -- ones not yet ranked by item number. `complete` is true once every one has a rank.
     out.rankings = {}
@@ -7845,11 +7865,11 @@ M.CLASS_COLOR = { WARRIOR = "c79c6e", PALADIN = "f58cba", HUNTER = "abd473", ROG
 local function line()
     local b = { segments = {}, parts = {} }
     function b.text(t) b.segments[#b.segments + 1] = { text = t }; b.parts[#b.parts + 1] = t end
-    function b.who(w, label)
+    function b.who(w, label, short)
         label = label or (w and w.name) or "?"
         if not w then return b.text(label) end
         b.segments[#b.segments + 1] = { who = { name = label, class = w.class, className = (ItemFit and ItemFit.CLASS_NAMES or {})[w.class],
-            spec = w.spec, color = M.CLASS_COLOR[w.class] } }
+            spec = w.spec, color = M.CLASS_COLOR[w.class], short = short or nil } }
         b.parts[#b.parts + 1] = label
     end
     function b.plain() return table.concat(b.parts) end
@@ -8061,6 +8081,33 @@ function M.Build(m)
         local won = {}
         for _, row in ipairs(v.rows) do if row.mineWon then won[#won + 1] = row.link end end
         v.banner = { kind = "good", text = #won > 0 and ("You won: " .. table.concat(won, ", ")) or "Finished. Nothing for you this time." }
+    end
+
+    -- who has bid on what, as it happens (answers are public): while bidding is open, a line for each item. The window lets it be hidden.
+    if (v.state == "bidding" or v.state == "waiting") and m.board and #m.board > 0 then
+        v.bids = { items = {}, answered = m.answered, eligible = m.eligible }
+        for _, e in ipairs(m.board) do
+            local b = line()
+            local any = false
+            for _, k in ipairs({ { "need", "Need" }, { "off", "Off-spec" }, { "gift", "Gift" } }) do
+                local list = e[k[1]]
+                if #list > 0 then
+                    if any then b.text("   ") end
+                    b.text(k[2] .. ": ")
+                    for i, w in ipairs(list) do
+                        if i > 1 then b.text(", ") end
+                        b.who(w, nil, true)
+                    end
+                    any = true
+                end
+            end
+            local rest = {}
+            if e.pass > 0 then rest[#rest + 1] = ("Pass %d"):format(e.pass) end
+            if e.waiting > 0 then rest[#rest + 1] = ("waiting on %d"):format(e.waiting) end
+            if #rest > 0 then b.text((any and "   " or "") .. table.concat(rest, ", ")) end
+            if not any and #rest == 0 then b.text("Nobody to answer.") end
+            v.bids.items[#v.bids.items + 1] = { id = e.id, link = e.link, segments = b.segments, text = b.plain() }
+        end
     end
 
     -- the Master Looter's strip
