@@ -170,6 +170,7 @@ end
 -- Click an item to see everyone's answer on it, and again to close it.
 function M:SelectBidItem(id)
     M.bidItem = (M.bidItem ~= id) and id or nil
+    M.bidFollow = false -- you chose where to look: the panel stays until you answer something
     M:Refresh()
 end
 

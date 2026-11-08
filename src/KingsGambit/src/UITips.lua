@@ -88,9 +88,17 @@ function M.Resolve(tip)
     if type(tip) == "table" then return tip[1], tip[2] end
 end
 
-function M.Attach(frame, tip, extra)
+-- `sink` (optional, a function): the text goes to it instead of a tooltip (sink(title, text) on entering, sink(nil) on leaving), so it can show somewhere that covers nothing.
+function M.Attach(frame, tip, extra, sink)
     if not frame then return end
     local function enter(self)
+        if sink then
+            local title, text = M.Resolve(tip)
+            if not title then return end
+            local more = extra and extra()
+            sink(title, (text or "") .. (more and ("\n|cffff8040" .. more .. "|r") or ""))
+            return
+        end
         if not GameTooltip then return end
         local title, text = M.Resolve(tip)
         if not title then return end
@@ -106,7 +114,7 @@ function M.Attach(frame, tip, extra)
         if more then GameTooltip:AddLine("\n" .. more, 1, 0.5, 0.25, true) end
         GameTooltip:Show()
     end
-    local function leave() if GameTooltip then GameTooltip:Hide() end end
+    local function leave() if sink then sink(nil) elseif GameTooltip then GameTooltip:Hide() end end
     -- A grayed-out button should still explain itself.
     if frame.SetMotionScriptsWhileDisabled then frame:SetMotionScriptsWhileDisabled(true) end
     if frame.HookScript then

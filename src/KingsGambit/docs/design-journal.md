@@ -2496,3 +2496,7 @@ shared, so the page could draw the same lines.
 - **The item list scrolls (the guild master's call, same day):** the big hand-out (ten items) made the Loot window taller than the screen, and it stopped at 8 items. The items now sit in a scroll
   view (up to 330 px high, with a scroll bar in the right margin; the window is 464 wide, content still 408), so any number of items fit (the cap is 24). Each item's live "who has bid" line moved
   inside its own block, so it scrolls with the item; the separate summary section is gone. Clicking an item still selects it for the side panel.
+- **Prompted item by item; hints in the window, not tooltips (the guild master's call, same day):** (1) Answering an item drops it to the bottom of the list (items still to answer stay on top, in their
+  own order, with their real numbers) and the side panel moves to the first item still to answer, so you are walked down the list. Clicking any item (say, one already answered) to look at it holds the
+  panel there until your next answer. (2) What a button does is no longer a game tooltip, which kept covering the side panel: it shows in a fixed strip at the foot of the Loot window while you hover.
+  (The item's own tooltip still opens beside the window, to the left while the side panel is open.) (3) The answer buttons are raised above the item's select band so a click always reaches them.

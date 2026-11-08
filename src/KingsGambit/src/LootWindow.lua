@@ -8,6 +8,7 @@ local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips" }, functio
 
 local WIDTH = 464   -- 408 of content, 28 each side; the item list's scroll bar sits in the right margin
 local MAX = 24         -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
+local HINT_H = 62      -- the strip at the foot that says what a button does
 local SCROLL_H = 330   -- the item list scrolls past this height
 
 -- What a button's `act` types. Returns the command, or nil and what to tell the player.
@@ -198,7 +199,14 @@ function M.Build(ui)
         s:SetWidth(w or CW); s:SetJustifyH(justify or "LEFT"); s:SetWordWrap(wrap ~= false)
         return s
     end
-    local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); Tips.Attach(b, tooltipOf(b)) end
+    -- what a button says (its tip) shows in the strip at the foot of this window, not in a tooltip, so it can never cover the list beside it
+    f.hint = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    f.hint:SetWidth(CW); f.hint:SetHeight(HINT_H); f.hint:SetJustifyH("LEFT"); f.hint:SetJustifyV("TOP"); f.hint:SetWordWrap(true)
+    local function sink(title, body)
+        if not title then f.hint:SetText("") else f.hint:SetText("|cffffd100" .. title .. "|r\n|cffcccccc" .. (body or "") .. "|r") end
+    end
+    local function attach(fr, tip, extra) Tips.Attach(fr, tip, extra, sink) end
+    local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); attach(b, tooltipOf(b)) end
 
     f.practiceText = text("GameFontNormalSmall")
     -- The countdown bar is drawn from two plain colored textures (a track and a fill as wide as the time left), not a StatusBar: it needs no
@@ -251,7 +259,7 @@ function M.Build(ui)
         row.hit:SetSize(CW, 16)
         row.hit:SetScript("OnEnter", function(self)
             if row.tip and GameTooltip then
-                GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); GameTooltip:SetHyperlink(row.tip); GameTooltip:Show()
+                GameTooltip:SetOwner(self, (f.side and f.side.IsShown and f.side:IsShown()) and "ANCHOR_LEFT" or "ANCHOR_RIGHT"); GameTooltip:SetHyperlink(row.tip); GameTooltip:Show()
             end
         end)
         row.hit:SetScript("OnLeave", function() if GameTooltip then GameTooltip:Hide() end end)
@@ -267,7 +275,7 @@ function M.Build(ui)
         if row.bg.SetColorTexture then row.bg:SetColorTexture(1, 1, 1, 0.12) end
         row.sel = CreateFrame("Button", nil, list)
         row.sel:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
-        Tips.Attach(row.sel, "bidspick")
+        attach(row.sel, "bidspick")
         local lvl = row.sel.GetFrameLevel and row.sel:GetFrameLevel()
         if type(lvl) == "number" and row.hit.SetFrameLevel then row.hit:SetFrameLevel(lvl + 1) end -- (the name stays above the band, for its item tooltip)
         row.note = list:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.note:SetWidth(CW); row.note:SetJustifyH("LEFT"); row.note:SetWordWrap(true)
@@ -276,6 +284,8 @@ function M.Build(ui)
         for j = 1, 4 do
             local b = button(list, "", BTN4, BTN_H)
             onClick(b)
+            local bl = row.sel.GetFrameLevel and row.sel:GetFrameLevel()
+            if type(bl) == "number" and b.SetFrameLevel then b:SetFrameLevel(bl + 2) end
             row.buttons[j] = b
         end
         f.rows[i] = row
@@ -333,26 +343,26 @@ function M.Build(ui)
     end
     f.startButton = button(f, "Start from the loot window", 190, BTN_H)
     f.startButton:SetScript("OnClick", function() ui:Command("loot") end)
-    Tips.Attach(f.startButton, "start")
+    attach(f.startButton, "start")
 
     -- practice only
     f.practiceLabel = text("GameFontNormalSmall", CW, "LEFT", false)
     f.practiceLabel:SetText("Practice")
     f.nextBoss = button(f, "Next boss", 168, BTN_H)
     f.nextBoss:SetScript("OnClick", function() ui:PracticeKill() end)
-    Tips.Attach(f.nextBoss, "kill")
+    attach(f.nextBoss, "kill")
     f.handOut = button(f, "Hand out the loot", 120, BTN_H)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
-    Tips.Attach(f.handOut, "handout")
+    attach(f.handOut, "handout")
     f.raidButton = button(f, "End the raid", 150, BTN_H)
     f.raidButton:SetScript("OnClick", function() if f.raidIsOpen then ui:PracticeEndRaid() else ui:PracticeOpenRaid() end end)
-    Tips.Attach(f.raidButton, "raidtoggle")
+    attach(f.raidButton, "raidtoggle")
     f.leaveButton = button(f, "Someone leaves", 116, BTN_H)
     f.leaveButton:SetScript("OnClick", function() ui:PracticeLeave() end)
-    Tips.Attach(f.leaveButton, "leaveraid")
+    attach(f.leaveButton, "leaveraid")
     f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
-    Tips.Attach(f.rejoinButton, "rejoinraid")
+    attach(f.rejoinButton, "rejoinraid")
     -- the side panel: everyone's answer on the one item that is selected, in a list that scrolls
     local okSide, side = pcall(CreateFrame, "Frame", nil, f, "BasicFrameTemplateWithInset")
     if not okSide or not side then side = CreateFrame("Frame", nil, f) end
@@ -372,16 +382,16 @@ function M.Build(ui)
     f.side = side
     f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
     f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
-    Tips.Attach(f.lessonStart, "lessonstart")
+    attach(f.lessonStart, "lessonstart")
     f.lessonAgain = button(f, "Try again", 120, BTN_H)
     f.lessonAgain:SetScript("OnClick", function() ui:LessonAgain() end)
-    Tips.Attach(f.lessonAgain, "lessonagain")
+    attach(f.lessonAgain, "lessonagain")
     f.lessonNext = button(f, "Next lesson", 120, BTN_H)
     f.lessonNext:SetScript("OnClick", function() ui:LessonNext() end)
-    Tips.Attach(f.lessonNext, "lessonnext")
+    attach(f.lessonNext, "lessonnext")
     f.wait = button(f, "Wait 10 s", 80, BTN_H)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
-    Tips.Attach(f.wait, "wait")
+    attach(f.wait, "wait")
 
     f:SetScript("OnUpdate", function() ui:Tick() end)
     if UISpecialFrames then table.insert(UISpecialFrames, "KingsGambitLootWindow") end
@@ -398,7 +408,7 @@ function M.Run(act, f, ui)
     end
     if act.name == "rank" and f.rankDraft then f.rankDraft[act.kind] = nil end -- confirmed: the session now holds it
     -- answering an item selects it, so the answers on that item are in view as you decide
-    if act.name == "bid" and act.item then ui.bidItem = act.item end
+    if act.name == "bid" and act.item then ui.bidItem, ui.bidFollow = act.item, true end
     local cmd, problem = M.CommandText(act, f.recipientPick)
     if not cmd then return ui.Say(problem or "That isn't available.") end
     if act.name == "give" or (act.name == "claim" and act.gift) then f.recipientPick = nil end
@@ -445,7 +455,27 @@ function M.Refresh(f, ctx, ui)
     m.practice = practice
     local v = LootView.Build(m)
     if not v.rankings or #v.rankings == 0 then f.rankDraft = nil end -- nothing to rank (a new round, a finished session): no draft is carried over
-    if v.sessionKey ~= ui.bidSession then ui.bidSession, ui.bidItem = v.sessionKey, nil end -- (a new session: nothing is ticked)
+    if v.sessionKey ~= ui.bidSession then ui.bidSession, ui.bidItem, ui.bidFollow = v.sessionKey, nil, true end -- (a new session: nothing is ticked, and the panel follows you down the list)
+    -- Items still to answer come first, in their own order; an answered one drops to the bottom. While following, the panel shows the first item still to answer.
+    local order, open = {}, {}
+    for i, vr in ipairs(v.rows) do
+        local answered = false
+        for _, vb in ipairs(vr.buttons) do if vb.selected then answered = true end end
+        if #vr.buttons == 0 or answered then order[#order + 1] = i else open[#open + 1] = i end
+    end
+    for _, i in ipairs(order) do open[#open + 1] = i end
+    order = open
+    local firstOpen
+    for _, i in ipairs(order) do
+        local vr = v.rows[i]
+        local answered = #vr.buttons == 0
+        for _, vb in ipairs(vr.buttons) do if vb.selected then answered = true end end
+        if not answered then firstOpen = vr.id; break end
+    end
+    if ui.bidFollow and firstOpen then
+        if ui.bidItem ~= firstOpen and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0) end
+        ui.bidItem = firstOpen
+    end
     local layout, want = {}, {}
     local y = -32 -- just under the title bar
 
@@ -572,10 +602,11 @@ function M.Refresh(f, ctx, ui)
         local listFrom, outerY = #layout + 1, y
         y = 0 -- (inside the scrolling list, y counts down from its top)
         for i = 1, MAX do
-            local row, vr = f.rows[i], v.rows[i]
+            local ri = order[i]
+            local row, vr = f.rows[i], ri and v.rows[ri]
             if vr then
                 row.id, row.tip = vr.id, vr.tip
-                local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
+                local label = ("%d. %s"):format(ri, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
                 local top = y
@@ -598,8 +629,10 @@ function M.Refresh(f, ctx, ui)
                     row.note:SetText((vr.segments and M.Rich(vr.segments)) or vr.note or "")
                     place(row.note, PAD); y = y - textH(row.note, 12)
                 end
-                if v.bids and v.bids.live and v.bids.items[i] then
-                    row.bid:SetText(M.Rich(v.bids.items[i].segments)); y = y - 2; place(row.bid, PAD); y = y - textH(row.bid, 12)
+                local bidItem
+                if v.bids and v.bids.live then for _, it in ipairs(v.bids.items) do if it.id == vr.id then bidItem = it end end end
+                if bidItem then
+                    row.bid:SetText(M.Rich(bidItem.segments)); y = y - 2; place(row.bid, PAD); y = y - textH(row.bid, 12)
                 else row.bid:SetText("") end
                 y = y - 6 - 4
                 if showPick then
@@ -676,6 +709,9 @@ function M.Refresh(f, ctx, ui)
         place(f.startButton, PAD); y = y - BTN_H - GAP
     end
 
+    divider()
+    place(f.hint, PAD); y = y - HINT_H
+
     -- apply: show what this state shows, hide the rest, and move things only when the layout changed
     local sig = {}
     for _, l in ipairs(layout) do sig[#sig + 1] = tostring(l[1]) .. "@" .. l[2] .. "," .. l[3] end
@@ -688,7 +724,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.hint, f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     everything[#everything + 1] = f.scroll; everything[#everything + 1] = f.list
