@@ -271,7 +271,7 @@ function M.Build(m)
                 local st = STATUS[p.kind] or STATUS.waiting
                 local g = line()
                 g.text(p.place .. ". ")
-                g.who(p.who, nil, true)
+                g.who(p.who)
                 g.text("  |cff" .. st[2] .. st[1] .. ((p.kind == "gift" and p.to) and (" to " .. p.to) or "") .. "|r")
                 people[#people + 1] = { place = p.place, kind = p.kind, segments = g.segments, text = g.plain() }
             end

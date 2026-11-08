@@ -393,15 +393,15 @@ function M.Build(ui)
     -- the side panel: everyone's answer on the one item that is selected, in a list that scrolls
     local okSide, side = pcall(CreateFrame, "Frame", nil, f, "BasicFrameTemplateWithInset")
     if not okSide or not side then side = CreateFrame("Frame", nil, f) end
-    side:SetWidth(262)
+    side:SetWidth(330)
     side:SetPoint("TOPLEFT", f, "TOPRIGHT", 4, 0)
     side.title = side:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    side.title:SetPoint("TOPLEFT", 12, -30); side.title:SetWidth(222); side.title:SetJustifyH("LEFT"); side.title:SetWordWrap(false)
+    side.title:SetPoint("TOPLEFT", 12, -30); side.title:SetWidth(290); side.title:SetJustifyH("LEFT"); side.title:SetWordWrap(false)
     local okScroll, scroll = pcall(CreateFrame, "ScrollFrame", nil, side, "UIPanelScrollFrameTemplate")
     if not (okScroll and scroll) then scroll = CreateFrame("ScrollFrame", nil, side) end
     scroll:SetPoint("TOPLEFT", 10, -52); scroll:SetPoint("BOTTOMRIGHT", -30, 10)
     side.child = CreateFrame("Frame", nil, scroll)
-    side.child:SetSize(218, 1)
+    side.child:SetSize(286, 1)
     scroll:SetScrollChild(side.child)
     side.lines = {}
     if type(side.CloseButton) == "table" then side.CloseButton:SetScript("OnClick", function() ui.bidItem = nil; ui:Refresh() end) end
@@ -453,7 +453,7 @@ function M.RefreshSide(f, v, ui)
         if not fs then
             fs = side.child:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
             fs:SetPoint("TOPLEFT", 0, -(i - 1) * 14)
-            fs:SetWidth(216); fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
+            fs:SetWidth(284); fs:SetJustifyH("LEFT"); fs:SetWordWrap(false)
             side.lines[i] = fs
         end
         fs:SetText(M.Rich(p.segments)); fs:Show()

@@ -2502,3 +2502,5 @@ shared, so the page could draw the same lines.
   (The item's own tooltip still opens beside the window, to the left while the side panel is open.) (3) The answer buttons are raised above the item's select band so a click always reaches them.
 - **The lesson has its own window (the guild master's call, same day):** a lesson's title, text, verdict and Start / Try again / Next buttons took most of the Loot window's height, and none of it
   exists in a real raid. They now sit in a "Practice lesson" window to the left of the Loot window (the text scrolls), so the Loot window shows only what a real one shows plus the practice banner.
+- **Spec and class beside each name in the side panel (the guild master's call, same day):** each row of "everyone's answer on this item" now shows the player's spec and class in gray after the name
+  (for example "Aldric (Arms Warrior)"), as the standings list does; the panel is wider (330) to fit. The short status lines under each item still use names alone.
