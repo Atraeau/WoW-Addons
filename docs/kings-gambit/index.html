@@ -7510,6 +7510,7 @@ M.TEXT = {
     lessonstart = { "Start the lesson", "Bids and timers begin when you press this. Read the lesson first." },
     lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
     lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
+    statssort = { "Sort the stats", "Click a heading to sort by it: a name from A to Z, a count with the most at the top, the places from first. Click it again to reverse the order. It opens with the most active (most wins) at the top." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
     rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
@@ -8584,6 +8585,7 @@ function M.Stats(ctx, listId)
         local row = { who = who, name = Identity.Display(who), class = m.class, place = i, since = c and c.from, wins = m.wins or 0, lastWin = m.lastWinTs,
             joined = r.joined[who] }
         row.heldText = c and M.Span(now - c.from) or ""
+        row.heldSeconds = c and (now - c.from) or nil
         row.lastWinText = m.lastWinTs and (M.Ago(now, m.lastWinTs)) or "never"
         local a = att.byPlayer[who]
         row.raids, row.raidsText = a and a.attended or 0, att.total == 0 and "-" or ("%d/%d"):format(a and a.attended or 0, att.total)
@@ -8599,6 +8601,58 @@ function M.Stats(ctx, listId)
     end
     if #out.rows == 0 then out.summary[1] = "Nobody is on this list yet." end
     out.hist, out.cur = r.hist, r.cur
+    return out
+end
+
+-- The Stats table's columns, and how it is sorted. Opened, it shows the most active first (most wins, then the latest win, then the most raids); clicking a heading
+-- sorts by it (a name A to Z, a count with the most at the top, the places from first), and clicking the same heading again reverses it.
+M.STATS_COLUMNS = {
+    { id = "place", label = "#", first = "asc" },
+    { id = "player", label = "Player", first = "asc" },
+    { id = "held", label = "At this place", first = "desc" },
+    { id = "wins", label = "Wins", first = "desc" },
+    { id = "lastwin", label = "Last win", first = "desc" },
+    { id = "raids", label = "Raids", first = "desc" },
+}
+function M.StatsDefaultSort() return { key = "activity", dir = "desc" } end
+
+-- What a click on a heading does: the same heading flips the direction; another starts the way that column reads first.
+function M.NextStatsSort(current, key)
+    if current and current.key == key then return { key = key, dir = current.dir == "asc" and "desc" or "asc" } end
+    for _, c in ipairs(M.STATS_COLUMNS) do
+        if c.id == key then return { key = key, dir = c.first } end
+    end
+    return M.StatsDefaultSort()
+end
+
+-- The rows in the order asked for (a new table; the rows are the same). Ties always fall back to the most active, then the list's own order, so the order is the same everywhere.
+function M.SortStats(rows, sort)
+    sort = sort or M.StatsDefaultSort()
+    local function value(r, key)
+        if key == "place" then return r.place
+        elseif key == "player" then return (r.name or ""):lower()
+        elseif key == "held" then return r.heldSeconds or -1
+        elseif key == "wins" then return r.wins or 0
+        elseif key == "lastwin" then return r.lastWin or 0
+        elseif key == "raids" then return r.raids or 0 end
+    end
+    local out = {}
+    for i, r in ipairs(rows) do out[i] = r end
+    local sign = sort.dir == "asc" and 1 or -1
+    table.sort(out, function(a, b)
+        if sort.key ~= "activity" then
+            local va, vb = value(a, sort.key), value(b, sort.key)
+            if va ~= vb then return (va < vb) == (sign == 1) end
+        end
+        -- the most active: wins, then the latest win, then raids attended; then the list's own order
+        local wa, wb = a.wins or 0, b.wins or 0
+        if wa ~= wb then return wa > wb end
+        local la, lb = a.lastWin or 0, b.lastWin or 0
+        if la ~= lb then return la > lb end
+        local ra, rb = a.raids or 0, b.raids or 0
+        if ra ~= rb then return ra > rb end
+        return a.place < b.place
+    end)
     return out
 end
 
