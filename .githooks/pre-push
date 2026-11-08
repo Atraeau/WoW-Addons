@@ -1,0 +1,42 @@
+#!/bin/sh
+# Before a push that changes King's Gambit: the Lua tests, then the simulator page (built from its sources, its JavaScript parsed, every
+# lesson played in a real browser), the same checks CI runs, so a broken page never reaches main. Skip once with:  git push --no-verify
+# One-time setup in a clone:  git config core.hooksPath .githooks
+cd "$(git rev-parse --show-toplevel)" || exit 0
+
+# only when something under src/KingsGambit is being pushed
+base=$(git rev-parse --verify -q '@{u}' || echo "")
+if [ -n "$base" ]; then
+  git diff --name-only "$base"..HEAD | grep -q '^src/KingsGambit/' || exit 0
+fi
+
+cd src/KingsGambit || exit 0
+echo "pre-push: Lua tests..."
+lua tests/run.lua > /tmp/kg-tests.log 2>&1 || { tail -15 /tmp/kg-tests.log; echo "pre-push: the Lua tests fail; push stopped (git push --no-verify to override)."; exit 1; }
+tail -1 /tmp/kg-tests.log
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-push: Node.js is not installed, so the simulator page was not checked."; exit 0
+fi
+if [ ! -d node_modules/playwright ]; then
+  echo "pre-push: Playwright is not installed (npm install --no-save playwright@1.49.1 in src/KingsGambit), so the page was not played."; exit 0
+fi
+# a machine's own Chrome or Edge, so no browser has to be downloaded
+if [ -z "$KG_BROWSER" ]; then
+  for p in "/c/Program Files/Google/Chrome/Application/chrome.exe" "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe" \
+           "/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe" /usr/bin/google-chrome /usr/bin/chromium; do
+    [ -x "$p" ] && { KG_BROWSER="$p"; break; }
+  done
+  export KG_BROWSER
+fi
+
+echo "pre-push: building the simulator page..."
+lua scripts/build-simulator.lua > /dev/null || { echo "pre-push: the page does not build; push stopped."; exit 1; }
+node scripts/check-simulator.mjs simulator/index.html || { echo "pre-push: the page's JavaScript does not parse; push stopped."; exit 1; }
+echo "pre-push: playing every lesson in the page..."
+node simulator/test/smoke.mjs simulator/index.html > /tmp/kg-smoke.log 2>&1 || { tail -25 /tmp/kg-smoke.log; echo "pre-push: the page's lessons fail; push stopped (git push --no-verify to override)."; exit 1; }
+tail -1 /tmp/kg-smoke.log
+if ! git diff --quiet -- simulator/index.html ../../docs/kings-gambit/index.html; then
+  echo "pre-push: note: the rebuilt page differs from the committed one (CI rebuilds and commits it on main; to commit it yourself: git add the two index.html files)."
+fi
+exit 0

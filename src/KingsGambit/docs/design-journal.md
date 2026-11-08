@@ -2445,3 +2445,13 @@ The `tests` workflow's `page` job had failed on every push since 2026-11-06, whe
 action as JSON, `data-act="w"`). The smoke driver still looked for the old `confirm`, `decline` and `withdraw` buttons, so every lesson "never reached the confirm button" and the
 job ran out its 30-second waits (about six minutes) before failing; each failed push mailed "deployment failed". The driver now finds those buttons by the action in their JSON
 and skips grayed-out ones. (The page itself was working: the unit suite plays every lesson headlessly and passed throughout.)
+
+### Decision: a pre-push check keeps a broken page off main; no pull-request rule yet (2026-11-08)
+
+After the page's smoke test sat red for two days, the guild master wants broken pages prevented as the work iterates, without the overhead of a pull request for every change
+(they are the only one working on the repository, so a required review would only slow things down; it can come later if others join).
+- **`.githooks/pre-push`** (turned on with `git config core.hooksPath .githooks`, set in this clone) runs only when the push changes `src/KingsGambit`: the Lua tests, then the
+  simulator page built from its sources, its JavaScript parsed, and every lesson played in a real browser (the machine's own Chrome or Edge, found automatically or named in
+  `KG_BROWSER`). About 45 seconds. A failure stops the push and shows the end of the log; `git push --no-verify` skips it once.
+- It says so, and does not block, when Node.js or Playwright is missing, so a clone without them still pushes (CI is the backstop either way).
+- **Not done, on purpose:** requiring a pull request to change `main`. Revisit when someone else commits.

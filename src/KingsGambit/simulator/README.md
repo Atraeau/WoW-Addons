@@ -51,3 +51,6 @@ $env:KG_BROWSER = "C:\Program Files\Google\Chrome\Application\chrome.exe"; node 
 ```
 
 Without `KG_BROWSER` the script uses Playwright's own Chromium (`npx playwright install chromium`), as CI does.
+
+A git hook (`.githooks/pre-push`) runs all of this for you before a push that changes King's Gambit and stops the push if anything fails. Turn it on once in a clone with
+`git config core.hooksPath .githooks`; `git push --no-verify` skips it for one push.
