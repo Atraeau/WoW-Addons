@@ -347,10 +347,7 @@ function M.Build(ui)
     f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
-    -- who has bid on what, live: a button that hides or shows it, and a line for each item
-    f.bidsToggle = button(f, "Hide who has bid", 150, 20)
-    f.bidsToggle:SetScript("OnClick", function() ui:ToggleBids() end)
-    Tips.Attach(f.bidsToggle, "bidstoggle")
+    -- who has bid on what, live: a line for each item (and the Everyone tick box on each item opens the side panel)
     f.bidLines, f.bidHits = {}, {}
     for i = 1, MAX do
         f.bidLines[i] = text("GameFontHighlightSmall")
@@ -416,7 +413,7 @@ function M.RefreshSide(f, v, ui)
     local side = f.side
     if not side then return end
     local picked
-    if v.bids and ui.BidsShown and ui.BidsShown() ~= false then
+    if v.bids then
         for _, it in ipairs(v.bids.items) do if it.id == ui.bidItem then picked = it end end
     end
     if not picked then
@@ -571,7 +568,7 @@ function M.Refresh(f, ctx, ui)
         end
 
         -- the items: the name and, right-aligned on the same line, what you answered; then the choices across the full width
-        local showPick = v.bids ~= nil and (ui.BidsShown and ui.BidsShown() ~= false)
+        local showPick = v.bids ~= nil
         if #v.rows > 0 then divider() end
         for i = 1, MAX do
             local row, vr = f.rows[i], v.rows[i]
@@ -612,23 +609,17 @@ function M.Refresh(f, ctx, ui)
             place(f.more, PAD); y = y - 14 - GAP
         end
 
-        -- who has bid on what, as it happens: each item with who said what (hidden or shown at the player's choice, and remembered)
+        -- who has bid on what, as it happens: each item with who said what (the Everyone tick box beside an item opens every player's answer)
         if v.bids and v.bids.live then
             divider()
-            local shown = ui.BidsShown and ui.BidsShown() ~= false
-            f.bidsToggle:SetText(shown and "Hide who has bid" or "Show who has bid")
-            place(f.bidsToggle, PAD)
-            y = y - 20 - 4
-            if shown then
-                for i, it in ipairs(v.bids.items) do
-                    local fs, hit = f.bidLines[i], f.bidHits[i]
-                    if fs then
-                        local on = ui.bidItem == it.id
-                        fs:SetText(("%s%d.|r %s\n%s"):format(on and "|cff40ff40" or "|cffffd100", i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
-                        hit.itemId = it.id
-                        place(fs, PAD); place(hit, PAD)
-                        y = y - textH(fs, 26) - 4
-                    end
+            for i, it in ipairs(v.bids.items) do
+                local fs, hit = f.bidLines[i], f.bidHits[i]
+                if fs then
+                    local on = ui.bidItem == it.id
+                    fs:SetText(("%s%d.|r %s\n%s"):format(on and "|cff40ff40" or "|cffffd100", i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
+                    hit.itemId = it.id
+                    place(fs, PAD); place(hit, PAD)
+                    y = y - textH(fs, 26) - 4
                 end
             end
         end
@@ -696,7 +687,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.bidsToggle, f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     for _, b in ipairs(f.bidLines) do everything[#everything + 1] = b end

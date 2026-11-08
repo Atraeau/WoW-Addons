@@ -2485,3 +2485,5 @@ shared, so the page could draw the same lines.
   as they bid. Now a ticked item's panel stays through the draft, the review and the result (until it is unticked or the next session starts, which clears the tick), so the answers can
   be read against who won. The rows are in a fixed order, the list's own, with each person's place; only the status on a row changes ("not answered yet", Need, Off-spec, Gift to
   someone, Pass). The summary lines above the items are still only for while bidding is open.
+- **No separate hide button (the guild master's call, same day):** a "Hide who has bid" button next to a tick box per item was two ways to do one thing. The button, and its remembered setting
+  (`bidsHidden`), are gone: the per-item Everyone tick box is the only control. The status line under each item shows while bidding is open; the side panel opens when an item is ticked.
