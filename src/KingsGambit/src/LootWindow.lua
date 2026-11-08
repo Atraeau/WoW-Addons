@@ -323,13 +323,13 @@ function M.Build(ui)
     f.handOut = button(f, "Hand out the loot", 120, BTN_H)
     f.handOut:SetScript("OnClick", function() ui:PracticeHandOut() end)
     Tips.Attach(f.handOut, "handout")
-    f.raidButton = button(f, "End the raid", 168, BTN_H)
+    f.raidButton = button(f, "End the raid", 150, BTN_H)
     f.raidButton:SetScript("OnClick", function() if f.raidIsOpen then ui:PracticeEndRaid() else ui:PracticeOpenRaid() end end)
     Tips.Attach(f.raidButton, "raidtoggle")
-    f.leaveButton = button(f, "Someone leaves", 120, BTN_H)
+    f.leaveButton = button(f, "Someone leaves", 116, BTN_H)
     f.leaveButton:SetScript("OnClick", function() ui:PracticeLeave() end)
     Tips.Attach(f.leaveButton, "leaveraid")
-    f.rejoinButton = button(f, "Someone returns", 104, BTN_H)
+    f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
     f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
@@ -574,8 +574,8 @@ function M.Refresh(f, ctx, ui)
         f.raidButton:SetText(label)
         if f.raidButton.SetEnabled then f.raidButton:SetEnabled(not (night.raidOpen and (night.busy or (night.held or 0) > 0))) end
         layout[#layout + 1] = { f.raidButton, PAD, y }; want[f.raidButton] = true
-        x = PAD + 168 + GAP
-        if night.canLeave then layout[#layout + 1] = { f.leaveButton, x, y }; want[f.leaveButton] = true; x = x + 120 + GAP end
+        x = PAD + 150 + GAP
+        if night.canLeave then layout[#layout + 1] = { f.leaveButton, x, y }; want[f.leaveButton] = true; x = x + 116 + GAP end
         if (night.absent or 0) > 0 and night.raidOpen then layout[#layout + 1] = { f.rejoinButton, x, y }; want[f.rejoinButton] = true end
         y = y - BTN_H - GAP
     elseif v.visible and (v.state == "result" or v.state == "cancelled") then

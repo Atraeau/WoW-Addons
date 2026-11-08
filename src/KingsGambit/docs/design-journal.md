@@ -2455,3 +2455,5 @@ After the page's smoke test sat red for two days, the guild master wants broken 
   `KG_BROWSER`). About 45 seconds. A failure stops the push and shows the end of the log; `git push --no-verify` skips it once.
 - It says so, and does not block, when Node.js or Playwright is missing, so a clone without them still pushes (CI is the backstop either way).
 - **Not done, on purpose:** requiring a pull request to change `main`. Revisit when someone else commits.
+
+- **Practice's second row of buttons fits (a correction, 2026-11-08):** "Someone returns" was wider than its 104-pixel button and its label ran over the edge. The row is now 150 + 116 + 126 pixels (End the raid, Someone leaves, Someone returns), exactly the content width with the gaps.
