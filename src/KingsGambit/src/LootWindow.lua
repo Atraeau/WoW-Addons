@@ -6,8 +6,9 @@ local _, SK = ...
 local UILoot, LootView, Tips
 local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips" }, function(d) UILoot, LootView, Tips = d.UILoot, d.LootView, d.UITips end)
 
-local WIDTH = 440
-local MAX = 8          -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
+local WIDTH = 464   -- 408 of content, 28 each side; the item list's scroll bar sits in the right margin
+local MAX = 24         -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
+local SCROLL_H = 330   -- the item list scrolls past this height
 
 -- What a button's `act` types. Returns the command, or nil and what to tell the player.
 function M.CommandText(act, target)
@@ -159,8 +160,8 @@ end
 -- (four equal buttons across a row, four across the Master Looter's strip). Heights follow the text (a wrapped line is measured, not guessed), so nothing
 -- collides when a message runs to two or three lines. Related things are grouped under thin dividers; an item is its name on its own line, then the choices across the full
 -- width, and the chosen one is shown by the button itself (held pushed in), never echoed in words.
-local PAD, GAP = 16, 8
-local CW = WIDTH - 2 * PAD          -- the content width (408)
+local PAD, GAP = 28, 8
+local CW = 408                      -- the content width
 local BTN_H = 22
 local BTN4 = (CW - 3 * GAP) / 4     -- four equal buttons across the content width (96)
 
@@ -230,13 +231,23 @@ function M.Build(ui)
         f.dividers[i] = d
     end
 
+    -- the items live in a scrolling list, so any number of them fit (the window stops growing at SCROLL_H)
+    local okScroll0, scroll0 = pcall(CreateFrame, "ScrollFrame", nil, f, "UIPanelScrollFrameTemplate")
+    if not (okScroll0 and scroll0) then scroll0 = CreateFrame("ScrollFrame", nil, f) end
+    f.scroll = scroll0
+    f.list = CreateFrame("Frame", nil, scroll0)
+    f.list:SetSize(PAD + CW + 4, 1)
+    scroll0:SetScrollChild(f.list)
+    if scroll0.EnableMouseWheel then scroll0:EnableMouseWheel(true) end
+    local list = f.list
+
     f.rows = {}
     for i = 1, MAX do
         local row = { }
-        row.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        row.text = list:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         row.text:SetWidth(CW); row.text:SetJustifyH("LEFT"); row.text:SetWordWrap(false)
         -- Hover for the item's tooltip; shift-click puts the link in chat, as anywhere in the game.
-        row.hit = CreateFrame("Button", nil, f)
+        row.hit = CreateFrame("Button", nil, list)
         row.hit:SetSize(CW, 16)
         row.hit:SetScript("OnEnter", function(self)
             if row.tip and GameTooltip then
@@ -252,17 +263,18 @@ function M.Build(ui)
             if row.id and ui.SelectBidItem then ui:SelectBidItem(row.id) end
         end)
         -- Click an item to select it: a gray band behind it, and the side panel lists every player's answer on it (one item at a time)
-        row.bg = f:CreateTexture(nil, "BACKGROUND")
+        row.bg = list:CreateTexture(nil, "BACKGROUND")
         if row.bg.SetColorTexture then row.bg:SetColorTexture(1, 1, 1, 0.12) end
-        row.sel = CreateFrame("Button", nil, f)
+        row.sel = CreateFrame("Button", nil, list)
         row.sel:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
         Tips.Attach(row.sel, "bidspick")
         local lvl = row.sel.GetFrameLevel and row.sel:GetFrameLevel()
         if type(lvl) == "number" and row.hit.SetFrameLevel then row.hit:SetFrameLevel(lvl + 1) end -- (the name stays above the band, for its item tooltip)
-        row.note = text("GameFontHighlightSmall", CW, "LEFT", true)      -- a result, or why a choice is unavailable, under the item
+        row.note = list:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.note:SetWidth(CW); row.note:SetJustifyH("LEFT"); row.note:SetWordWrap(true)
+        row.bid = list:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall"); row.bid:SetWidth(CW); row.bid:SetJustifyH("LEFT"); row.bid:SetWordWrap(true)      -- a result, or why a choice is unavailable, under the item
         row.buttons = {}
         for j = 1, 4 do
-            local b = button(f, "", BTN4, BTN_H)
+            local b = button(list, "", BTN4, BTN_H)
             onClick(b)
             row.buttons[j] = b
         end
@@ -341,16 +353,7 @@ function M.Build(ui)
     f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
-    -- who has bid on what, live: a line for each item (and clicking an item opens the side panel)
-    f.bidLines, f.bidHits = {}, {}
-    for i = 1, MAX do
-        f.bidLines[i] = text("GameFontHighlightSmall")
-        local hit = CreateFrame("Button", nil, f)
-        hit:SetSize(CW, 26)
-        hit:SetScript("OnClick", function() if hit.itemId then ui:SelectBidItem(hit.itemId) end end)
-        f.bidHits[i] = hit
-    end
-    -- the side panel: everyone's answer on the one item that is ticked, in a list that scrolls
+    -- the side panel: everyone's answer on the one item that is selected, in a list that scrolls
     local okSide, side = pcall(CreateFrame, "Frame", nil, f, "BasicFrameTemplateWithInset")
     if not okSide or not side then side = CreateFrame("Frame", nil, f) end
     side:SetWidth(262)
@@ -566,6 +569,8 @@ function M.Refresh(f, ctx, ui)
         -- the items: the name and, right-aligned on the same line, what you answered; then the choices across the full width
         local showPick = v.bids ~= nil
         if #v.rows > 0 then divider() end
+        local listFrom, outerY = #layout + 1, y
+        y = 0 -- (inside the scrolling list, y counts down from its top)
         for i = 1, MAX do
             local row, vr = f.rows[i], v.rows[i]
             if vr then
@@ -593,6 +598,9 @@ function M.Refresh(f, ctx, ui)
                     row.note:SetText((vr.segments and M.Rich(vr.segments)) or vr.note or "")
                     place(row.note, PAD); y = y - textH(row.note, 12)
                 end
+                if v.bids and v.bids.live and v.bids.items[i] then
+                    row.bid:SetText(M.Rich(v.bids.items[i].segments)); y = y - 2; place(row.bid, PAD); y = y - textH(row.bid, 12)
+                else row.bid:SetText("") end
                 y = y - 6 - 4
                 if showPick then
                     -- the selectable block: from just above the name to just under the last line, 4 px wider than the text on each side
@@ -603,24 +611,18 @@ function M.Refresh(f, ctx, ui)
                 end
             end
         end
+        for i = listFrom, #layout do layout[i][4] = f.list end
+        if #v.rows > 0 then
+            local content = math.max(1, -y)
+            local view = math.min(content, SCROLL_H)
+            f.scroll:SetSize(PAD + CW + 4, view); f.list:SetSize(PAD + CW + 4, content)
+            if content <= view and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0) end
+            layout[#layout + 1] = { f.scroll, 0, outerY }; want[f.scroll] = true; want[f.list] = true
+            y = outerY - view - GAP
+        else y = outerY end
         if (v.hidden or 0) > 0 then
             f.more:SetText(("(and %d more items: use the need/off/pass commands for them)"):format(v.hidden))
             place(f.more, PAD); y = y - 14 - GAP
-        end
-
-        -- who has bid on what, as it happens: each item with who said what (clicking an item opens every player's answer)
-        if v.bids and v.bids.live then
-            divider()
-            for i, it in ipairs(v.bids.items) do
-                local fs, hit = f.bidLines[i], f.bidHits[i]
-                if fs then
-                    local on = ui.bidItem == it.id
-                    fs:SetText(("%s%d.|r %s\n%s"):format(on and "|cff40ff40" or "|cffffd100", i, UILoot.Display(it.link, nil), M.Rich(it.segments)))
-                    hit.itemId = it.id
-                    place(fs, PAD); place(hit, PAD)
-                    y = y - textH(fs, 26) - 4
-                end
-            end
         end
 
         -- the Master Looter's strip
@@ -682,15 +684,14 @@ function M.Refresh(f, ctx, ui)
         f.signature = signature
         for _, l in ipairs(layout) do
             l[1]:ClearAllPoints()
-            l[1]:SetPoint("TOPLEFT", f, "TOPLEFT", l[2], l[3])
+            l[1]:SetPoint("TOPLEFT", l[4] or f, "TOPLEFT", l[2], l[3])
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
     local everything = { f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
-    for _, b in ipairs(f.bidLines) do everything[#everything + 1] = b end
-    for _, b in ipairs(f.bidHits) do everything[#everything + 1] = b end
+    everything[#everything + 1] = f.scroll; everything[#everything + 1] = f.list
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end
     for _, t in ipairs(f.rankTitles) do everything[#everything + 1] = t end
     for _, c in ipairs(f.rankConfirms) do everything[#everything + 1] = c end
@@ -699,7 +700,7 @@ function M.Refresh(f, ctx, ui)
     for _, r in ipairs(f.rows) do
         everything[#everything + 1] = r.bg; everything[#everything + 1] = r.sel
         everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit
-        everything[#everything + 1] = r.note
+        everything[#everything + 1] = r.note; everything[#everything + 1] = r.bid
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end
     end
     -- A button that is not drawn this time (a new round, a finished session) is cleared, so what was chosen last round never shows on it.

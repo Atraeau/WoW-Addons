@@ -5,7 +5,7 @@ local _, SK = ...
 local Identity, Sim, Tips
 local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips" }, function(d) Identity, Sim, Tips = d.Identity, d.Sim, d.UITips end)
 
-M.MAX_ITEMS = 8
+M.MAX_ITEMS = 24
 
 local PHASES = {
     bidding = "Bidding is open",

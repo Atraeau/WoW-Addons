@@ -2493,3 +2493,6 @@ shared, so the page could draw the same lines.
   beside a window, that window's tooltips now open to the left (`ANCHOR_LEFT`) instead of the right.
 - **Click an item to select it; no Everyone tick box (the guild master's call, same day):** the tick box and its label are gone. Clicking anywhere on an item's block (its name or empty space beside the
   answer buttons) selects it: a gray band shows behind it and the side panel lists every player's answer on it. Clicking again, or the panel's close button, clears it. Answering an item still selects it.
+- **The item list scrolls (the guild master's call, same day):** the big hand-out (ten items) made the Loot window taller than the screen, and it stopped at 8 items. The items now sit in a scroll
+  view (up to 330 px high, with a scroll bar in the right margin; the window is 464 wide, content still 408), so any number of items fit (the cap is 24). Each item's live "who has bid" line moved
+  inside its own block, so it scrolls with the item; the separate summary section is gone. Clicking an item still selects it for the side panel.
