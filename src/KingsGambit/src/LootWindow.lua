@@ -251,20 +251,14 @@ function M.Build(ui)
             if HandleModifiedItemClick and HandleModifiedItemClick(full) then return end -- (shift-click: the link goes to chat)
             if row.id and ui.SelectBidItem then ui:SelectBidItem(row.id) end
         end)
-        -- "Everyone": tick it to open the side panel with every player's answer on this item (one item at a time)
-        local okPick, pick = pcall(CreateFrame, "CheckButton", nil, f, "UICheckButtonTemplate")
-        if okPick and pick then
-            pick:SetSize(22, 22)
-            pick.label = pick:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-            pick.label:SetPoint("LEFT", pick, "RIGHT", 0, 1); pick.label:SetText("Everyone")
-            pick:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
-        else
-            pick = button(f, "Everyone", 72, 18)
-            pick.isButton = true
-            pick:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
-        end
-        Tips.Attach(pick, "bidspick")
-        row.pick = pick
+        -- Click an item to select it: a gray band behind it, and the side panel lists every player's answer on it (one item at a time)
+        row.bg = f:CreateTexture(nil, "BACKGROUND")
+        if row.bg.SetColorTexture then row.bg:SetColorTexture(1, 1, 1, 0.12) end
+        row.sel = CreateFrame("Button", nil, f)
+        row.sel:SetScript("OnClick", function() if row.id then ui:SelectBidItem(row.id) end end)
+        Tips.Attach(row.sel, "bidspick")
+        local lvl = row.sel.GetFrameLevel and row.sel:GetFrameLevel()
+        if type(lvl) == "number" and row.hit.SetFrameLevel then row.hit:SetFrameLevel(lvl + 1) end -- (the name stays above the band, for its item tooltip)
         row.note = text("GameFontHighlightSmall", CW, "LEFT", true)      -- a result, or why a choice is unavailable, under the item
         row.buttons = {}
         for j = 1, 4 do
@@ -347,7 +341,7 @@ function M.Build(ui)
     f.rejoinButton = button(f, "Someone returns", 126, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
-    -- who has bid on what, live: a line for each item (and the Everyone tick box on each item opens the side panel)
+    -- who has bid on what, live: a line for each item (and clicking an item opens the side panel)
     f.bidLines, f.bidHits = {}, {}
     for i = 1, MAX do
         f.bidLines[i] = text("GameFontHighlightSmall")
@@ -400,7 +394,7 @@ function M.Run(act, f, ui)
         return ui:Refresh()
     end
     if act.name == "rank" and f.rankDraft then f.rankDraft[act.kind] = nil end -- confirmed: the session now holds it
-    -- answering an item ticks its Everyone box, so the answers on that item are in view as you decide
+    -- answering an item selects it, so the answers on that item are in view as you decide
     if act.name == "bid" and act.item then ui.bidItem = act.item end
     local cmd, problem = M.CommandText(act, f.recipientPick)
     if not cmd then return ui.Say(problem or "That isn't available.") end
@@ -579,11 +573,7 @@ function M.Refresh(f, ctx, ui)
                 local label = ("%d. %s"):format(i, UILoot.Display(vr.link, vr.tip))
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
-                if showPick then
-                    layout[#layout + 1] = { row.pick, PAD + CW - 82, y + 3 }; want[row.pick] = true
-                    if row.pick.SetChecked then row.pick:SetChecked(ui.bidItem == vr.id) end
-                    if row.pick.isButton then M.Mark(row.pick, ui.bidItem == vr.id) end
-                end
+                local top = y
                 y = y - 18 - 4
                 local hasButtons = #vr.buttons > 0
                 if hasButtons then
@@ -604,6 +594,13 @@ function M.Refresh(f, ctx, ui)
                     place(row.note, PAD); y = y - textH(row.note, 12)
                 end
                 y = y - 6 - 4
+                if showPick then
+                    -- the selectable block: from just above the name to just under the last line, 4 px wider than the text on each side
+                    local h = top - y
+                    layout[#layout + 1] = { row.bg, PAD - 4, top + 3 }; layout[#layout + 1] = { row.sel, PAD - 4, top + 3 }
+                    want[row.sel] = true; want[row.bg] = ui.bidItem == vr.id
+                    row.bg:SetSize(CW + 8, h); row.sel:SetSize(CW + 8, h)
+                end
             end
         end
         if (v.hidden or 0) > 0 then
@@ -611,7 +608,7 @@ function M.Refresh(f, ctx, ui)
             place(f.more, PAD); y = y - 14 - GAP
         end
 
-        -- who has bid on what, as it happens: each item with who said what (the Everyone tick box beside an item opens every player's answer)
+        -- who has bid on what, as it happens: each item with who said what (clicking an item opens every player's answer)
         if v.bids and v.bids.live then
             divider()
             for i, it in ipairs(v.bids.items) do
@@ -700,7 +697,7 @@ function M.Refresh(f, ctx, ui)
     for _, r in ipairs(f.rankRows) do everything[#everything + 1] = r.text; everything[#everything + 1] = r.up; everything[#everything + 1] = r.down end
     for _, b in ipairs(f.mlButtons) do everything[#everything + 1] = b end
     for _, r in ipairs(f.rows) do
-        everything[#everything + 1] = r.pick
+        everything[#everything + 1] = r.bg; everything[#everything + 1] = r.sel
         everything[#everything + 1] = r.text; everything[#everything + 1] = r.hit
         everything[#everything + 1] = r.note
         for _, b in ipairs(r.buttons) do everything[#everything + 1] = b end

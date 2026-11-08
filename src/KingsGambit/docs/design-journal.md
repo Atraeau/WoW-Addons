@@ -2491,3 +2491,5 @@ shared, so the page could draw the same lines.
   so everyone's answers on it are in view as you decide. It can still be unticked.
 - **Tooltips keep off the Everyone panel (the guild master's call, same day):** hovering an answer button put its tooltip over the open side panel, hiding the list. While the panel is open
   beside a window, that window's tooltips now open to the left (`ANCHOR_LEFT`) instead of the right.
+- **Click an item to select it; no Everyone tick box (the guild master's call, same day):** the tick box and its label are gone. Clicking anywhere on an item's block (its name or empty space beside the
+  answer buttons) selects it: a gray band shows behind it and the side panel lists every player's answer on it. Clicking again, or the panel's close button, clears it. Answering an item still selects it.
