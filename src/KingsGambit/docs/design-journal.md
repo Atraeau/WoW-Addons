@@ -2458,3 +2458,12 @@ After the page's smoke test sat red for two days, the guild master wants broken 
 
 - **Practice's second row of buttons fits (a correction, 2026-11-08):** "Someone returns" was wider than its 104-pixel button and its label ran over the edge. The row is now 150 + 116 + 126 pixels (End the raid, Someone leaves, Someone returns), exactly the content width with the gaps.
 - **"Wait 10 s" only while loot is out (the guild master's call, 2026-11-08):** waiting does nothing between bosses, so the button shows only while a session is running (its timers are what time moves).
+
+### Decision: the stats open with the most active first, and a heading sorts (2026-11-08)
+
+The Stats table listed players in their place on the list, which puts whoever has just won at the bottom, so the most active players were the hardest to see. It now opens sorted
+by **activity**: most wins first, ties broken by the latest win, then the most raids attended, then the list's own order (so it is the same on every machine). Every heading is a
+button: click one to sort by it, click it again to reverse it. A name starts A to Z (ignoring case); a count (wins, raids, time at the place, last win) starts with the most at the
+top; "#" starts from first place. The heading sorted by shows `^` (ascending) or `v` (descending). Ties always fall back to the most active. The sort is a pure function
+(`GuildBook.SortStats`), tested; the choice lasts while the window is open and the table opens on activity again next session. "Most activity" was read as wins first; say if it
+should weigh raids attended more.

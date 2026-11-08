@@ -704,3 +704,32 @@ test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, 
         assert(text:find(phrase, 1, true), "the difference names: " .. phrase)
     end
 end)
+
+H.section("Guild book: sorting the stats")
+local function rowsFor()
+    return {
+        { name = "Cass", place = 1, wins = 0, raids = 3, heldSeconds = 900 },
+        { name = "Aldric", place = 2, wins = 2, lastWin = 500, raids = 1, heldSeconds = 100 },
+        { name = "Brann", place = 3, wins = 2, lastWin = 800, raids = 2, heldSeconds = 50 },
+        { name = "dara", place = 4, wins = 1, lastWin = 300, raids = 3, heldSeconds = 400 },
+    }
+end
+local function names(rows) local t = {} for i, r in ipairs(rows) do t[i] = r.name end return table.concat(t, ",") end
+test("the stats open with the most active first: most wins, then the latest win, then raids", function()
+    eq(names(GuildBook.SortStats(rowsFor())), "Brann,Aldric,dara,Cass")
+    -- the rows given are left as they were
+    local rows = rowsFor(); GuildBook.SortStats(rows); eq(names(rows), "Cass,Aldric,Brann,dara")
+end)
+test("a heading sorts by that column, and the same heading again reverses it", function()
+    local sort = GuildBook.NextStatsSort(GuildBook.StatsDefaultSort(), "player")
+    eq(sort.dir, "asc"); eq(names(GuildBook.SortStats(rowsFor(), sort)), "Aldric,Brann,Cass,dara", "A to Z, ignoring case")
+    sort = GuildBook.NextStatsSort(sort, "player")
+    eq(sort.dir, "desc"); eq(names(GuildBook.SortStats(rowsFor(), sort)), "dara,Cass,Brann,Aldric", "Z to A")
+    sort = GuildBook.NextStatsSort(sort, "wins")
+    eq(sort.dir, "desc", "a count starts with the most at the top"); eq(names(GuildBook.SortStats(rowsFor(), sort)), "Brann,Aldric,dara,Cass")
+    sort = GuildBook.NextStatsSort(sort, "wins"); eq(sort.dir, "asc"); eq(names(GuildBook.SortStats(rowsFor(), sort)), "Cass,dara,Brann,Aldric", "ties keep the most active first")
+    eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "place"))), "Cass,Aldric,Brann,dara", "places start from first")
+    eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "raids"))), "dara,Cass,Brann,Aldric", "raids: most first, ties the most active")
+    eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "held"))), "Cass,dara,Aldric,Brann", "longest at the place first")
+    eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "lastwin"))), "Brann,Aldric,dara,Cass", "latest win first, never last")
+end)

@@ -99,7 +99,8 @@ test("the window builds and refreshes on every tab, in practice and out, without
         UI:ToggleLoot(); UI:ToggleLoot(); UI:Tick()
         UI.tab = "ledger"; UI:Refresh(); UI.histKind = "list"; UI.histText = "added"; UI:Refresh(); UI.histKind, UI.histText = "happened", ""
         for _, s in ipairs(SK.modules.GuildBook.SECTIONS) do UI.tab = s.id; UI:Refresh() end
-        UI.OpenTool("award", "Me"); assert(UI.tab == "awards", "Award... opens the Awards section")
+UI.tab = "stats"; UI.statsSort = SK.modules.GuildBook.NextStatsSort(nil, "player"); UI:Refresh(); UI.statsSort = nil -- (a heading sorts it)
+                UI.OpenTool("award", "Me"); assert(UI.tab == "awards", "Award... opens the Awards section")
         UI.tab = "lists"; UI:Refresh()
         -- the lessons: choose one, read it, start it, cancel it, try again, go on to the next, and back to a raid night
         UI:ChooseLesson(UI.Lessons()[1].id)
@@ -268,7 +269,7 @@ H.section("Window: tooltips")
 test("every button has a tooltip with a title and an explanation, and a grayed-out one can say why", function()
     local Tips = SK.modules.UITips
     for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
-        "kill", "handout", "wait", "practice", "practicesize", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
+        "kill", "handout", "wait", "practice", "practicesize", "statssort", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
         local title, text = Tips.Resolve(id)
         assert(title and title ~= "" and text and #text > 30, "tooltip text for " .. id)
     end

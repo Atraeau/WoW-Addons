@@ -927,10 +927,18 @@ function M:BuildStats(parent)
     p.summary = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.summary:SetPoint("TOPLEFT", 4, -20); p.summary:SetWidth(410); p.summary:SetHeight(40)
     p.summary:SetJustifyH("LEFT"); p.summary:SetJustifyV("TOP"); p.summary:SetWordWrap(true)
-    local heads = { "#", "Player", "At this place", "Wins", "Last win", "Raids" }
-    for i, h in ipairs(heads) do
-        local fs = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        fs:SetPoint("TOPLEFT", STAT_X[i] + 4, -64); fs:SetText(h)
+    -- The headings are buttons: click one to sort by it, again to reverse it.
+    p.heads = {}
+    for i, col in ipairs(GuildBook.STATS_COLUMNS) do
+        local b = CreateFrame("Button", nil, p)
+        b:SetSize(STAT_W[i] + (i < 6 and (STAT_X[i + 1] - STAT_X[i] - STAT_W[i]) or 0), 14)
+        b:SetPoint("TOPLEFT", STAT_X[i] + 4, -63)
+        local fs = b:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        fs:SetPoint("LEFT", 0, 0); fs:SetText(col.label)
+        b.text, b.col = fs, col
+        b:SetScript("OnClick", function() M.statsSort = GuildBook.NextStatsSort(M.statsSort or GuildBook.StatsDefaultSort(), col.id); M:Refresh() end)
+        Tips.Attach(b, "statssort")
+        p.heads[i] = b
     end
     p.detailTitle = p:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     p.detailTitle:SetPoint("BOTTOMLEFT", 4, 112); p.detailTitle:SetText("Places held")
@@ -972,6 +980,12 @@ function M.RefreshStats(p, ctx)
     for _, r in ipairs(stats.rows) do r.mine = r.who == me end
     p.listText:SetText(("List: %s"):format(listId))
     p.summary:SetText(table.concat(stats.summary, "\n"))
+    -- sorted: the most active first until a heading is clicked; the heading sorted by shows which way
+    local sort = M.statsSort or GuildBook.StatsDefaultSort()
+    for _, b in ipairs(p.heads or {}) do
+        b.text:SetText(b.col.label .. (sort.key == b.col.id and (sort.dir == "asc" and " ^" or " v") or ""))
+    end
+    stats.rows = GuildBook.SortStats(stats.rows, sort)
     if p.scrollBox then
         local data = CreateDataProvider()
         for _, r in ipairs(stats.rows) do data:Insert(r) end
