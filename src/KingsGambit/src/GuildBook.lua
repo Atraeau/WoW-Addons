@@ -98,7 +98,7 @@ M.WELCOME_PAGES = {
             { lead = "Rules:", text = "which classes may bid on an item, and requests to the Master Looter." },
             { lead = "Admin:", text = "versions, syncing, and retiring a ledger you no longer use." },
         } },
-        { kind = "text", text = "Tick Practice mode at the top to rehearse a whole raid night on a simulated guild. Nothing in it is recorded or sent. Hover over any button for what it does; /gambit help lists every command." },
+        { kind = "text", text = "Tick Practice mode at the top to rehearse on a simulated guild: a whole raid night, or one of the lessons from the web page (a set raid and drop, with a verdict at the end). Nothing in it is recorded or sent. Hover over any button for what it does; /gambit help lists every command." },
         { kind = "heading", text = "Getting started" },
         { kind = "bullets", items = {
             { lead = "Raider:", text = "nothing to set up. The ledger reaches you from your officers when you are online with them. Try Practice mode first." },

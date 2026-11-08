@@ -2283,6 +2283,25 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
   them, and a list item's lead words in white with the rest softer so a list can be skimmed. The text is shorter and every item starts with its key words.
 - **Not a copy of the docs:** it points to the repository and the browser simulator for the reasons behind each rule.
 
+### Decision: practice mode teaches with the web page's lessons, cancel keeps the loot, the bar is drawn by hand (2026-11-08)
+
+The guild master found practice mode thin: kill a boss, hand out loot, and that was all, where the web page teaches with worked examples that each say what should happen.
+Cancel threw the loot away, and the countdown bar looked broken.
+
+- **The lessons come to the game:** the web page's tutorials are the `Scenarios` list, and practice mode now plays the same ones (a lesson picker beside the group size,
+  "Raid night (your gear)" first, then the lessons in teaching order). A lesson shows its title and text at the top of the loot window and waits: nothing starts, and
+  the clock does not run, until **Start the lesson** (read it first, as on the page). When the hand-out is confirmed the window says whether what happened **matches the
+  lesson**, or **what step is still to do** (undoing a mistake, a regret-trade); **Try again** runs it again from the start and **Next lesson** goes on. The check is the
+  scenario's own `todo` and `expect`, so the lessons and the rules cannot drift apart (the tests play every lesson through this path). The lessons' "Corrections card" is
+  the Awards section in the game, so the window says that.
+- **A lesson bug the page had too:** the bots were asked to rank by a default order even where a scenario gave a raider's own rank, so "Two items, one player who wants
+  both" came out different from its lesson once rankings were required. A rank the scenario gives itself is now the raider's choice.
+- **Cancel keeps the loot:** cancelling records nothing, and the loot is still on the boss, so it goes back to held and **Hand out the loot** offers it again (the banner
+  says so); in a lesson it says to press Try again. Before, the loot simply vanished and the next boss came up.
+- **The countdown bar is two colored textures:** a track and a fill whose width is the time left (amber, orange in the last ten seconds), not a StatusBar. The model
+  gave the right seconds and fraction every tick, so the fault was in drawing; a bar that needs no template or texture file looks the same in every client.
+  Unverified in the game until the guild master has seen it.
+
 ### Decision: stored ledgers can be retired, and an officer's retirement is told to the guild (2026-11-07)
 
 A character that has played in several guilds, or a ledger founded to try something, leaves stored ledgers nobody uses (the guild master removed two by hand from

@@ -430,3 +430,26 @@ test("the 40-player roster has shamans (the Alliance has them now) and still mak
     eq(total, 39, "39 raiders and the learner make 40"); assert(shamans >= 3, "shamans in the raid: " .. shamans)
     for _, n in ipairs(Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 40 }).names) do assert(n == "Me" or n:find("_", 1, true), n .. " has no last name") end
 end)
+
+H.section("Loot view: practice lessons")
+test("a lesson shows its text before it starts, and the cancelled banner says what happens to the loot", function()
+    local Scenarios = SK.modules.Scenarios
+    local sc = Scenarios.list[1]
+    local sim = Sim.NewLesson(sc)
+    local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, host = host })
+    local ctx = { client = sim.client, engine = sim.engine, commands = cmd, sim = sim, host = host, lessonIndex = 1, lessonCount = #Scenarios.list }
+    local v = LootView.Build(UILoot.Model(ctx))
+    eq(v.visible, false); assert(v.lesson and v.lesson.title == sc.title and v.lesson.started == false and v.lesson.verdict == nil)
+    sim:startLesson()
+    v = LootView.Build(UILoot.Model(ctx))
+    eq(v.visible, true); eq(v.lesson.started, true)
+    assert(sim.session:cancel("test"))
+    v = LootView.Build(UILoot.Model(ctx))
+    eq(v.state, "cancelled"); assert(v.banner.text:find("Try again", 1, true), "a lesson says to try again")
+    -- a raid night keeps the loot on the boss
+    local night, _, view = practice()
+    night:killBoss(nil, false)
+    assert(night.session:cancel("test"))
+    assert(view().banner.text:find("still on the boss", 1, true), "the loot is still there to hand out")
+end)

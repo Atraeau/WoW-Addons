@@ -6580,6 +6580,13 @@ end
 
 function Sim:wireBots()
     local s, client = self.session, self.client
+    -- Cancelling records nothing, and the loot is still on the boss: what was handed out goes back to held, to be handed out again.
+    s:on("phase", function(p)
+        if p.phase == "cancelled" and self.handedOut and #self.held == 0 then
+            self.held, self.handedOut = self.handedOut, nil
+        end
+    end)
+    s:on("done", function() self.handedOut = nil end)
     -- Bids trickle in over the first part of the timer, in a repeatable order.
     local window = math.max(2, math.min((s.cfg.bidSeconds or 30) - 4, 14))
     for _, name in ipairs(s.eligibleList) do
@@ -6611,7 +6618,7 @@ function Sim:wireBots()
                 client:after(1 + client:random() * window, function()
                     if s.phase ~= "bidding" then return end
                     local kind, extra = wantedKind(policy, it.link)
-                    if ranks[it.id] then
+                    if ranks[it.id] and not (extra and extra.rank) then -- (a rank the scenario gives itself is the raider's own choice)
                         local e = {}
                         for k, v in pairs(extra or {}) do e[k] = v end
                         e.rank = ranks[it.id]
@@ -6731,6 +6738,40 @@ function M.RunScenario(sc, opts)
     if sc.after then sc.after(sim) end
     local passed, message = sc.expect(sim)
     return sim, passed and true or false, message
+end
+
+-- A lesson a person plays (the web page's tutorials, in the game's practice mode): the scenario's raid and drop, with the learner answering for themselves.
+-- Nothing starts until `startLesson` (read it first); the clock should not run before that either. `verdict` says whether what they did matches the lesson.
+function M.NewLesson(sc, opts)
+    opts = opts or {}
+    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = opts.learner or "You",
+        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
+    sim.policies = sc.policies or {}
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
+    sim.lesson, sim.lessonStarted = sc, false
+    return sim
+end
+
+function Sim:startLesson()
+    local sc = self.lesson
+    if not sc or self.lessonStarted then return false, "started" end
+    -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
+    local cfg = { pickSeconds = 60, claimSeconds = 60 }
+    for k, v in pairs(sc.config or {}) do cfg[k] = v end
+    local ok, why = self:drop(sc.items, cfg)
+    if ok then self.lessonStarted = true end
+    return ok, why
+end
+
+-- Where the learner stands: { ok, pending, message }. A lesson with a step still to do (undoing a mistake, say) is not judged yet; `pending` says what is left.
+-- Nil until the session has been confirmed (or for something that is not a lesson).
+function Sim:verdict()
+    local sc = self.lesson
+    if not (sc and self.session and self.session.phase == "done") then return nil end
+    local hint = sc.todo and sc.todo(self)
+    if hint then return { ok = false, pending = true, message = hint } end
+    local ok, message = sc.expect(self)
+    return { ok = ok and true or false, message = message }
 end
 
 ---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
@@ -7465,6 +7506,10 @@ M.TEXT = {
     handout = { "Hand out the held loot", "Practice only: put loot that was held back up for bidding." },
     wait = { "Wait 10 seconds", "Practice only: let 10 simulated seconds pass, so bid timers run out and the simulated raiders answer." },
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
+    practicelesson = { "Practice lesson", "Choose what to practice: a raid night on the gear you carry (the default), or one of the lessons from the web page. A lesson is a set raid and a set drop with a known right answer: you play it, and at the end it says whether what happened matches the lesson. Changing it restarts practice." },
+    lessonstart = { "Start the lesson", "Bids and timers begin when you press this. Read the lesson first." },
+    lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
+    lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
     rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },
@@ -7621,6 +7666,12 @@ function M.Model(ctx)
         local busy = sim.session and sim.session.phase ~= "done" and sim.session.phase ~= "cancelled"
         out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held, raidOpen = sim:raidOpen(), raidNo = sim.raidNo or 1,
             absent = sim:absentCount(), busy = busy and true or false, canLeave = sim:raidOpen() and #sim.roster - sim:absentCount() > 6 }
+    end
+    -- A lesson (practice mode's tutorials): its text, whether it has started, and, when the hand-out is over, whether what was done matches it.
+    if ctx.sim and ctx.sim.lesson then
+        local sc = ctx.sim.lesson
+        out.lesson = { id = sc.id, title = sc.title, text = sc.lesson, started = ctx.sim.lessonStarted and true or false, verdict = ctx.sim:verdict(),
+            index = ctx.lessonIndex, count = ctx.lessonCount }
     end
     if not s then return out end
     out.mode, out.phase = mode, s.phase
@@ -7853,10 +7904,12 @@ end
 -- The window, for one player. `m` is UILoot.Model's table.
 function M.Build(m)
     local v = { visible = false, state = "none", rows = {}, practice = m.practice or false }
+    v.lesson = m.lesson
     if m.mode == "none" then
         v.night = m.night
         return v
     end
+    v.night = m.night
     v.visible = true
     v.title = "King's Gambit"
     v.subtitle = m.phaseText
@@ -8000,7 +8053,9 @@ function M.Build(m)
             and "Review: this is who gets what. Nothing is handed out or recorded until you confirm."
             or "The Master Looter is reviewing the loot. Who gets what is shown below." }
     elseif v.state == "cancelled" then
-        v.banner = { kind = "warn", text = "Cancelled. Nothing was recorded." }
+        local again = (m.lesson and "Nothing was recorded. Press Try again to run the lesson again.")
+            or ((m.night and (m.night.held or 0) > 0) and "Nothing was recorded, and the loot is still on the boss: hand it out again whenever you are ready.")
+        v.banner = { kind = "warn", text = again and ("Cancelled. " .. again) or "Cancelled. Nothing was recorded." }
     elseif v.state == "result" then
         local won = {}
         for _, row in ipairs(v.rows) do if row.mineWon then won[#won + 1] = row.link end end
@@ -8125,7 +8180,7 @@ M.WELCOME_PAGES = {
             { lead = "Rules:", text = "which classes may bid on an item, and requests to the Master Looter." },
             { lead = "Admin:", text = "versions, syncing, and retiring a ledger you no longer use." },
         } },
-        { kind = "text", text = "Tick Practice mode at the top to rehearse a whole raid night on a simulated guild. Nothing in it is recorded or sent. Hover over any button for what it does; /gambit help lists every command." },
+        { kind = "text", text = "Tick Practice mode at the top to rehearse on a simulated guild: a whole raid night, or one of the lessons from the web page (a set raid and drop, with a verdict at the end). Nothing in it is recorded or sent. Hover over any button for what it does; /gambit help lists every command." },
         { kind = "heading", text = "Getting started" },
         { kind = "bullets", items = {
             { lead = "Raider:", text = "nothing to set up. The ledger reaches you from your officers when you are online with them. Try Practice mode first." },

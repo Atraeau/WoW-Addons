@@ -8,9 +8,9 @@
 --   M.Model(engine, client, listId)        pure: what the Lists section shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook
+local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook", "Scenarios?" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook, d.Scenarios
 end)
 
 local function say(text)
@@ -48,6 +48,12 @@ end
 function M.Ctx()
     if M.practice then return M.practice end
     return { engine = SK.engine, client = SK.client, commands = SK.commands, host = SK.host, player = SK.player, bagLinks = UITools.BagLinks, attendance = SK.attendance }
+end
+
+-- The practice lessons are the web page's tutorials (Scenarios), played in the game: M.lesson is the one chosen (nil: a raid night on your own gear).
+function M.Lessons() return (Scenarios and Scenarios.list) or {} end
+function M.LessonIndex(id)
+    for i, sc in ipairs(M.Lessons()) do if sc.id == id then return i end end
 end
 
 M.SIZES = { 5, 10, 20, 40 }
@@ -112,14 +118,19 @@ function M:StartPractice()
         say("Practice is off while you are in the middle of a raid: " .. busy .. ".")
         return M:Refresh()
     end
+    local lessonSc = M.lesson and Scenarios and Scenarios.find(M.lesson)
+    if M.lesson and not lessonSc then M.lesson = nil end
     local me = SK.client:me()
     -- You practise as your own class (a warrior is asked about warrior loot, not a priest's); a class the simulation doesn't know falls back to a priest.
     local class = SK.client.myClass and SK.client:myClass() or nil
     -- Loot: the gear in your bags and on your character, which the game really has (Molten Core's items aren't in this game yet). Molten Core's
     -- loot table is the fallback when there are too few pieces to make a raid of.
-    local gear = M.GearItems(SK.client, M.GearLinks(), 24)
+    local gear = lessonSc and {} or M.GearItems(SK.client, M.GearLinks(), 24)
     local sim
-    if #gear >= 3 then
+    if lessonSc then
+        sim = Sim.NewLesson(lessonSc, { seed = 1 })
+        say(("Practice lesson: %s. Read it in the loot window, then press Start the lesson."):format(lessonSc.title))
+    elseif #gear >= 3 then
         sim = Sim.NewPractice(gear, { learner = me, seed = 1, size = M.size, learnerClass = class })
         say(("Practice: the loot is %d pieces of gear from your bags and equipment, so it has real tooltips."):format(#gear))
     else
@@ -140,7 +151,8 @@ function M:StartPractice()
     -- The commands find the running loot session through `host.session`: here it is whatever the simulation is running.
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
     local commands = Commands.New({ client = sim.client, engine = sim.engine, host = host, attendance = sim.attendance })
-    M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host, attendance = sim.attendance }
+    M.practice = { engine = sim.engine, client = sim.client, commands = commands, sim = sim, host = host, attendance = sim.attendance,
+        lessonIndex = lessonSc and M.LessonIndex(lessonSc.id) or nil, lessonCount = lessonSc and #M.Lessons() or nil }
     -- The practice loot uses real item ids; say how many this game knows (the rest show as plain names, with no tooltip).
     local total, unknown = 0, 0
     for id in pairs(sim.raid and sim.raid.items or {}) do
@@ -152,6 +164,32 @@ function M:StartPractice()
     end
     M.list = nil
     M:Refresh()
+    if lessonSc then M:OpenLoot() end -- the lesson is read there
+end
+
+-- Practice lessons: pick one (nil: back to a raid night), start it, run it again, or go on to the next.
+function M:ChooseLesson(id)
+    M.lesson = id
+    if M.practice then M:StartPractice() else M:Refresh() end
+end
+function M:LessonStart()
+    local p = M.practice
+    if not (p and p.sim.lesson) then return end
+    local ok, why = p.sim:startLesson()
+    if not ok and why ~= "started" then say("Practice: the lesson could not start (" .. tostring(why) .. ").") end
+    M:OpenLoot()
+end
+function M:LessonAgain()
+    if not (M.practice and M.practice.sim.lesson) then return end
+    M:StartPractice()
+    M:LessonStart()
+end
+function M:LessonNext()
+    local p = M.practice
+    if not (p and p.sim.lesson) then return end
+    local lessons = M.Lessons()
+    local nextSc = lessons[(M.LessonIndex(p.sim.lesson.id) or 0) + 1]
+    if nextSc then M:ChooseLesson(nextSc.id) end
 end
 
 function M:LeavePractice()
@@ -285,7 +323,8 @@ function M:Tick()
     local now = GetTime and GetTime() or 0
     if now - (M.lastTick or 0) < 1 then return end
     M.lastTick = now
-    if M.practice then M.practice.sim:advance(1) end
+    -- (a lesson's clock waits until it is started: read it first)
+    if M.practice and not (M.practice.sim.lesson and not M.practice.sim.lessonStarted) then M.practice.sim:advance(1) end
     M:Refresh()
 end
 
@@ -303,8 +342,17 @@ function M:Refresh()
     end
     if w.practiceCheck then w.practiceCheck:SetChecked(M.practice ~= nil) end
     if w.practiceButton then w.practiceButton:SetText(M.practice and "Leave practice" or "Practice mode") end
-    -- The group size only means something inside practice mode.
-    setShown(w.sizeButton, M.practice ~= nil)
+    -- The group size and the lesson only mean something inside practice mode (a lesson has a raid of its own).
+    setShown(w.sizeButton, M.practice ~= nil and not M.lesson)
+    setShown(w.lessonButton, M.practice ~= nil)
+    if w.lessonButton then
+        if w.lessonButton.GenerateMenu then
+            if w.shownLesson ~= (M.lesson or "") then w.shownLesson = M.lesson or ""; w.lessonButton:GenerateMenu() end
+        else
+            local i = M.lesson and M.LessonIndex(M.lesson)
+            w.lessonButton:SetText(i and ("Lesson " .. i) or "Raid night")
+        end
+    end
     if w.sizeButton.GenerateMenu then
         if w.shownSize ~= M.size then w.shownSize = M.size; w.sizeButton:GenerateMenu() end
     else
@@ -1395,6 +1443,29 @@ function M:Build()
             if M.practice then M:StartPractice() end
         end)
     end
+
+    -- Which practice: a raid night on your own gear (the default), or one of the lessons from the web page (a set raid, a set drop, what should happen).
+    local okLesson, lessonDrop = pcall(CreateFrame, "DropdownButton", nil, w, "WowStyle1DropdownTemplate")
+    if okLesson and lessonDrop then
+        lessonDrop:SetWidth(150)
+        lessonDrop:SetPoint("TOPLEFT", 306, -48)
+        lessonDrop:SetupMenu(function(_, root)
+            root:CreateRadio("Raid night (your gear)", function() return M.lesson == nil end, function() M:ChooseLesson(nil) end)
+            for i, sc in ipairs(M.Lessons()) do
+                root:CreateRadio(("%d. %s"):format(i, sc.title), function() return M.lesson == sc.id end, function() M:ChooseLesson(sc.id) end)
+            end
+        end)
+        w.lessonButton = lessonDrop
+    else
+        w.lessonButton = button(w, "Raid night", 150)
+        w.lessonButton:SetPoint("TOPLEFT", 306, -48)
+        w.lessonButton:SetScript("OnClick", function()
+            local list = M.Lessons()
+            local i = M.lesson and M.LessonIndex(M.lesson) or 0
+            M:ChooseLesson(list[i + 1] and list[i + 1].id or nil)
+        end)
+    end
+    Tips.Attach(w.lessonButton, "practicelesson")
 
     -- The Loot window opens by itself when a session starts; this brings it back, or shows it between sessions.
     w.lootButton = button(w, "Loot window", 96)

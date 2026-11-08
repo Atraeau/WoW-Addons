@@ -29,6 +29,10 @@ M.TEXT = {
     handout = { "Hand out the held loot", "Practice only: put loot that was held back up for bidding." },
     wait = { "Wait 10 seconds", "Practice only: let 10 simulated seconds pass, so bid timers run out and the simulated raiders answer." },
     practice = { "Practice mode", "Run everything in this window on a simulated raid and guild, with loot from your own gear.\n\nNothing in practice mode is saved, sent to anyone or recorded: your real ledger is untouched. Untick it to go back." },
+    practicelesson = { "Practice lesson", "Choose what to practice: a raid night on the gear you carry (the default), or one of the lessons from the web page. A lesson is a set raid and a set drop with a known right answer: you play it, and at the end it says whether what happened matches the lesson. Changing it restarts practice." },
+    lessonstart = { "Start the lesson", "Bids and timers begin when you press this. Read the lesson first." },
+    lessonagain = { "Try again", "Run the lesson again from the start, with the same raid and the same drop." },
+    lessonnext = { "Next lesson", "Go on to the next lesson (simple ones first, harder ones later)." },
     practicesize = { "Practice group size", "How many players the simulated group has, from a 5-player party to a 40-player raid. Changing it restarts practice." },
     -- ranking
     rankup = { "Move up", "Move this item up your order (not saved until you confirm): higher means you want it more. On your turn in the draft you get the highest-ranked item still available, with no prompt." },

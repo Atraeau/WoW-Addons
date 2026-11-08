@@ -680,3 +680,43 @@ test("another raider as Master Looter: their addon runs the loot and the learner
     local sim2 = Sim.NewRaid({ members = { "Aldric", "Brann" }, masterLooter = "Aldric" })
     assert(sim2:drop({ "Quick Strike Ring" })); assert(sim2.session:bid("You", 1, "need"))
 end)
+
+H.section("Sim: practice lessons (the web page's tutorials, in the game)")
+test("a lesson waits to be started, runs, and its verdict matches the lesson", function()
+    for _, sc in ipairs(Scenarios.list) do
+        local sim = Sim.NewLesson(sc)
+        eq(sim.session, nil, sc.id .. ": nothing is running before the lesson is started")
+        eq(sim:verdict(), nil, sc.id .. ": no verdict yet")
+        -- the learner plays it as the scenario's own answers say (set before it starts, as the bots are wired when it does)
+        sim.policies["You"] = sc.you or {}
+        sim.autoLearner = true
+        assert(sim:startLesson(), sc.id .. ": starts")
+        eq(sim:startLesson(), false, "it starts once")
+        assert(sim:runUntil("review", 400), sc.id .. ": reaches review")
+        assert(sim.session:confirm(), sc.id .. ": confirms")
+        local v = sim:verdict()
+        if sc.todo and sc.todo(sim) then
+            assert(v and v.pending and v.message, sc.id .. ": a step is left to do, and the verdict says which")
+            sc.after(sim) -- (the step, done for the learner here)
+            v = sim:verdict()
+        end
+        assert(v and v.ok and not v.pending, sc.id .. ": matches the lesson (" .. tostring(v and v.message) .. ")")
+    end
+end)
+
+test("cancelling a session keeps the loot: it goes back to held, to be handed out again", function()
+    local sim = Sim.NewMoltenCore({ learner = "You", seed = 1, size = 10 })
+    local boss = assert(sim:killBoss(nil, false))
+    local n = #sim.session.items
+    eq(#sim.held, 0, "everything is up for loot")
+    assert(sim.session:cancel("test"))
+    eq(sim.session.phase, "cancelled")
+    eq(#sim.held, n, "the loot is still on the boss")
+    -- nothing was recorded
+    for _, ev in ipairs(sim.engine:View().applied) do assert(ev.type ~= "Award" and ev.type ~= "Disenchant", "no award was written") end
+    assert(sim:handOut(), "it can be handed out again")
+    eq(sim.session.phase, "bidding"); eq(#sim.held, 0)
+    -- a finished session's loot does not come back on a later cancel
+    assert(sim:runUntil("review", 200)); assert(sim.session:confirm())
+    eq(sim.handedOut, nil)
+end)

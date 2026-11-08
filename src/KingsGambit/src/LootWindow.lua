@@ -165,6 +165,13 @@ local BTN_H = 22
 local BTN4 = (CW - 3 * GAP) / 4     -- four equal buttons across the content width (96)
 
 -- The height a (wrapped) line of text takes, never less than `min` (the game gives the real number; a stand-in gives none).
+-- The lessons were written for the web page; in the game their "Corrections card" is the Awards section.
+function M.GameText(t)
+    t = tostring(t or "")
+    t = t:gsub("the Corrections card below", "the Awards section"):gsub("the Corrections card", "the Awards section"):gsub("The Corrections card", "The Awards section")
+    return t
+end
+
 local function textH(fs, min)
     local h = fs.GetStringHeight and fs:GetStringHeight()
     if type(h) ~= "number" then h = min end
@@ -193,19 +200,30 @@ function M.Build(ui)
     local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); Tips.Attach(b, tooltipOf(b)) end
 
     f.practiceText = text("GameFontNormalSmall")
-    f.bar = CreateFrame("StatusBar", nil, f)
+    -- The countdown bar is drawn from two plain colored textures (a track and a fill as wide as the time left), not a StatusBar: it needs no
+    -- texture file or template, so it looks the same in every client, and it drains from the right as the time runs out.
+    f.bar = CreateFrame("Frame", nil, f)
     f.bar:SetSize(CW, 8)
-    f.bar:SetMinMaxValues(0, 1)
-    if f.bar.SetStatusBarTexture then f.bar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar") end
+    f.bar.track = f.bar:CreateTexture(nil, "BACKGROUND")
+    f.bar.track:SetAllPoints(f.bar)
+    f.bar.track:SetColorTexture(1, 1, 1, 0.10)
+    f.bar.fill = f.bar:CreateTexture(nil, "ARTWORK")
+    f.bar.fill:SetPoint("TOPLEFT", f.bar, "TOPLEFT", 0, 0)
+    f.bar.fill:SetPoint("BOTTOMLEFT", f.bar, "BOTTOMLEFT", 0, 0)
+    f.bar.fill:SetWidth(CW)
     f.meta = text("GameFontHighlightSmall", CW - 170, "LEFT", false)
     f.metaRight = text("GameFontHighlightSmall", 170, "RIGHT", false)
     f.banner = text("GameFontHighlight")
     f.turnText = text("GameFontNormal")
     f.more = text("GameFontHighlightSmall")
+    -- a lesson (practice mode's tutorials): its title and text at the top, and how it went at the end
+    f.lessonTitle = text("GameFontNormal")
+    f.lessonText = text("GameFontHighlightSmall")
+    f.lessonVerdict = text("GameFontHighlight")
 
     -- thin dividers between the groups (the turn, your order, the items, the Master Looter, practice)
     f.dividers = {}
-    for i = 1, 5 do
+    for i = 1, 7 do
         local d = f:CreateTexture(nil, "ARTWORK")
         d:SetSize(CW, 1)
         if d.SetColorTexture then d:SetColorTexture(1, 1, 1, 0.15) end
@@ -314,6 +332,15 @@ function M.Build(ui)
     f.rejoinButton = button(f, "Someone returns", 104, BTN_H)
     f.rejoinButton:SetScript("OnClick", function() ui:PracticeRejoin() end)
     Tips.Attach(f.rejoinButton, "rejoinraid")
+    f.lessonStart = button(f, "Start the lesson", 168, BTN_H)
+    f.lessonStart:SetScript("OnClick", function() ui:LessonStart() end)
+    Tips.Attach(f.lessonStart, "lessonstart")
+    f.lessonAgain = button(f, "Try again", 120, BTN_H)
+    f.lessonAgain:SetScript("OnClick", function() ui:LessonAgain() end)
+    Tips.Attach(f.lessonAgain, "lessonagain")
+    f.lessonNext = button(f, "Next lesson", 120, BTN_H)
+    f.lessonNext:SetScript("OnClick", function() ui:LessonNext() end)
+    Tips.Attach(f.lessonNext, "lessonnext")
     f.wait = button(f, "Wait 10 s", 80, BTN_H)
     f.wait:SetScript("OnClick", function() ui:PracticeWait(10) end)
     Tips.Attach(f.wait, "wait")
@@ -366,19 +393,26 @@ function M.Refresh(f, ctx, ui)
         f.practiceText:SetText("|cffffaa00PRACTICE: a simulated raid. Nothing here is recorded or sent.|r")
         place(f.practiceText, PAD); y = y - 14 - 4
     end
+    local lesson = m.lesson
+    if lesson then
+        f.lessonTitle:SetText((lesson.index and lesson.count) and ("Lesson %d of %d: %s"):format(lesson.index, lesson.count, lesson.title) or lesson.title)
+        place(f.lessonTitle, PAD); y = y - textH(f.lessonTitle, 14) - 4
+        f.lessonText:SetText(M.GameText(lesson.text))
+        place(f.lessonText, PAD); y = y - textH(f.lessonText, 12) - GAP
+    end
 
     if not v.visible then
-        f.banner:SetText(practice and (v.night and v.night.nextBoss and ("No loot yet. Next boss: " .. v.night.nextBoss .. ((v.night.held or 0) > 0 and (".  Held loot: " .. v.night.held) or "")) or "No loot yet.")
+        f.banner:SetText(lesson and (lesson.started and "No loot is up." or "Read the lesson, then press Start the lesson. Bids and timers begin when you do.")
+            or practice and (v.night and v.night.nextBoss and ("No loot yet. Next boss: " .. v.night.nextBoss .. ((v.night.held or 0) > 0 and (".  Held loot: " .. v.night.held) or "")) or "No loot yet.")
             or "No loot session is running. A session starts when the Master Looter opens the loot window on a boss and starts it.")
         place(f.banner, PAD); y = y - textH(f.banner, 14) - GAP
         if not practice then place(f.startButton, PAD); y = y - BTN_H - GAP end
     else
         -- the clock and the count: a bar, then progress on the left and time and your place on the right
         if v.timer then
-            f.bar:SetValue(v.timer.fraction or 1)
-            if f.bar.SetStatusBarColor then
-                if v.timer.urgent then f.bar:SetStatusBarColor(1, 0.6, 0.1) else f.bar:SetStatusBarColor(0.9, 0.75, 0.2) end
-            end
+            local fraction = math.max(0, math.min(1, v.timer.fraction or 1))
+            f.bar.fill:SetWidth(math.max(1, CW * fraction))
+            if v.timer.urgent then f.bar.fill:SetColorTexture(1, 0.45, 0.1, 0.95) else f.bar.fill:SetColorTexture(0.9, 0.75, 0.2, 0.95) end
             place(f.bar, PAD); y = y - 8 - 4
         end
         f.meta:SetText(v.progress or v.subtitle or "")
@@ -510,7 +544,20 @@ function M.Refresh(f, ctx, ui)
         end
     end
 
-    if practice then
+    if lesson then
+        divider()
+        local verdict = lesson.verdict
+        if verdict then
+            local head = verdict.pending and "|cffffd100Not finished yet:|r " or (verdict.ok and "|cff40ff40Matches the lesson:|r " or "|cffff6040Different from the lesson:|r ")
+            f.lessonVerdict:SetText(head .. M.GameText(verdict.message or ""))
+            place(f.lessonVerdict, PAD); y = y - textH(f.lessonVerdict, 14) - GAP
+        end
+        local x = PAD
+        if not lesson.started then layout[#layout + 1] = { f.lessonStart, x, y }; want[f.lessonStart] = true; x = x + 168 + GAP end
+        if lesson.started then layout[#layout + 1] = { f.lessonAgain, x, y }; want[f.lessonAgain] = true; x = x + 120 + GAP end
+        if (lesson.index or 0) < (lesson.count or 0) then layout[#layout + 1] = { f.lessonNext, x, y }; want[f.lessonNext] = true; x = x + 120 + GAP end
+        y = y - BTN_H - GAP
+    elseif practice then
         divider()
         place(f.practiceLabel, PAD); y = y - 14 - 4
         place(f.nextBoss, PAD)
@@ -547,7 +594,7 @@ function M.Refresh(f, ctx, ui)
         end
         f:SetHeight(math.max(90, -y + PAD - GAP))
     end
-    local everything = { f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
+    local everything = { f.lessonTitle, f.lessonText, f.lessonVerdict, f.lessonStart, f.lessonAgain, f.lessonNext, f.practiceText, f.practiceLabel, f.bar, f.meta, f.metaRight, f.banner, f.turnText, f.more, f.mlLabel, f.startButton, f.nextBoss, f.handOut, f.wait, f.raidButton, f.leaveButton, f.rejoinButton, f.recipient }
     if f.drop then everything[#everything + 1] = f.drop end
     for _, d in ipairs(f.dividers) do everything[#everything + 1] = d end
     for _, b in ipairs(f.turnButtons) do everything[#everything + 1] = b end

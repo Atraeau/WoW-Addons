@@ -267,6 +267,13 @@ end
 
 function Sim:wireBots()
     local s, client = self.session, self.client
+    -- Cancelling records nothing, and the loot is still on the boss: what was handed out goes back to held, to be handed out again.
+    s:on("phase", function(p)
+        if p.phase == "cancelled" and self.handedOut and #self.held == 0 then
+            self.held, self.handedOut = self.handedOut, nil
+        end
+    end)
+    s:on("done", function() self.handedOut = nil end)
     -- Bids trickle in over the first part of the timer, in a repeatable order.
     local window = math.max(2, math.min((s.cfg.bidSeconds or 30) - 4, 14))
     for _, name in ipairs(s.eligibleList) do
@@ -298,7 +305,7 @@ function Sim:wireBots()
                 client:after(1 + client:random() * window, function()
                     if s.phase ~= "bidding" then return end
                     local kind, extra = wantedKind(policy, it.link)
-                    if ranks[it.id] then
+                    if ranks[it.id] and not (extra and extra.rank) then -- (a rank the scenario gives itself is the raider's own choice)
                         local e = {}
                         for k, v in pairs(extra or {}) do e[k] = v end
                         e.rank = ranks[it.id]
@@ -418,6 +425,40 @@ function M.RunScenario(sc, opts)
     if sc.after then sc.after(sim) end
     local passed, message = sc.expect(sim)
     return sim, passed and true or false, message
+end
+
+-- A lesson a person plays (the web page's tutorials, in the game's practice mode): the scenario's raid and drop, with the learner answering for themselves.
+-- Nothing starts until `startLesson` (read it first); the clock should not run before that either. `verdict` says whether what they did matches the lesson.
+function M.NewLesson(sc, opts)
+    opts = opts or {}
+    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = opts.learner or "You",
+        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
+    sim.policies = sc.policies or {}
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
+    sim.lesson, sim.lessonStarted = sc, false
+    return sim
+end
+
+function Sim:startLesson()
+    local sc = self.lesson
+    if not sc or self.lessonStarted then return false, "started" end
+    -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
+    local cfg = { pickSeconds = 60, claimSeconds = 60 }
+    for k, v in pairs(sc.config or {}) do cfg[k] = v end
+    local ok, why = self:drop(sc.items, cfg)
+    if ok then self.lessonStarted = true end
+    return ok, why
+end
+
+-- Where the learner stands: { ok, pending, message }. A lesson with a step still to do (undoing a mistake, say) is not judged yet; `pending` says what is left.
+-- Nil until the session has been confirmed (or for something that is not a lesson).
+function Sim:verdict()
+    local sc = self.lesson
+    if not (sc and self.session and self.session.phase == "done") then return nil end
+    local hint = sc.todo and sc.todo(self)
+    if hint then return { ok = false, pending = true, message = hint } end
+    local ok, message = sc.expect(self)
+    return { ok = ok and true or false, message = message }
 end
 
 ---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)

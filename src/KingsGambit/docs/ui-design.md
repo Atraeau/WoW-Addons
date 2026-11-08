@@ -159,7 +159,10 @@ confirmable place, never next to everyday ones.
 
 Not a tab. A persistent, obvious **banner** on every window ("Practice: nothing here is saved or sent") and a way out in one click, so a
 person never wonders whether the action was real. It drives the same Loot window with simulated raiders, so what you practise is
-exactly what you will use.
+exactly what you will use. Beside the raid night on your own gear it offers the **lessons** the web page teaches with (the same scenarios: a set raid,
+a set drop and a known right answer). A lesson shows its text first and starts when the learner presses Start, and when the hand-out is confirmed
+it says whether what happened matches the lesson, or what step is still to do (fixing a mistake is done in the Awards section). Cancelling a session
+records nothing, and the loot stays on the boss to be handed out again.
 
 ### 5.4 In-place helpers (from the Gargul-style approach)
 

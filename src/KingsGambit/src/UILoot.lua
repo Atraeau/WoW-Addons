@@ -74,6 +74,12 @@ function M.Model(ctx)
         out.night = { nextBoss = nextBoss and nextBoss.name, killed = sim.bossIndex, held = #sim.held, raidOpen = sim:raidOpen(), raidNo = sim.raidNo or 1,
             absent = sim:absentCount(), busy = busy and true or false, canLeave = sim:raidOpen() and #sim.roster - sim:absentCount() > 6 }
     end
+    -- A lesson (practice mode's tutorials): its text, whether it has started, and, when the hand-out is over, whether what was done matches it.
+    if ctx.sim and ctx.sim.lesson then
+        local sc = ctx.sim.lesson
+        out.lesson = { id = sc.id, title = sc.title, text = sc.lesson, started = ctx.sim.lessonStarted and true or false, verdict = ctx.sim:verdict(),
+            index = ctx.lessonIndex, count = ctx.lessonCount }
+    end
     if not s then return out end
     out.mode, out.phase = mode, s.phase
     out.phaseText = PHASES[s.phase] or tostring(s.phase)

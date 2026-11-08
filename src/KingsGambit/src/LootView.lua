@@ -80,10 +80,12 @@ end
 -- The window, for one player. `m` is UILoot.Model's table.
 function M.Build(m)
     local v = { visible = false, state = "none", rows = {}, practice = m.practice or false }
+    v.lesson = m.lesson
     if m.mode == "none" then
         v.night = m.night
         return v
     end
+    v.night = m.night
     v.visible = true
     v.title = "King's Gambit"
     v.subtitle = m.phaseText
@@ -227,7 +229,9 @@ function M.Build(m)
             and "Review: this is who gets what. Nothing is handed out or recorded until you confirm."
             or "The Master Looter is reviewing the loot. Who gets what is shown below." }
     elseif v.state == "cancelled" then
-        v.banner = { kind = "warn", text = "Cancelled. Nothing was recorded." }
+        local again = (m.lesson and "Nothing was recorded. Press Try again to run the lesson again.")
+            or ((m.night and (m.night.held or 0) > 0) and "Nothing was recorded, and the loot is still on the boss: hand it out again whenever you are ready.")
+        v.banner = { kind = "warn", text = again and ("Cancelled. " .. again) or "Cancelled. Nothing was recorded." }
     elseif v.state == "result" then
         local won = {}
         for _, row in ipairs(v.rows) do if row.mineWon then won[#won + 1] = row.link end end
