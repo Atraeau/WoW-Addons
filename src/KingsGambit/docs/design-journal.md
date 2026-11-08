@@ -2457,3 +2457,4 @@ After the page's smoke test sat red for two days, the guild master wants broken 
 - **Not done, on purpose:** requiring a pull request to change `main`. Revisit when someone else commits.
 
 - **Practice's second row of buttons fits (a correction, 2026-11-08):** "Someone returns" was wider than its 104-pixel button and its label ran over the edge. The row is now 150 + 116 + 126 pixels (End the raid, Someone leaves, Someone returns), exactly the content width with the gaps.
+- **"Wait 10 s" only while loot is out (the guild master's call, 2026-11-08):** waiting does nothing between bosses, so the button shows only while a session is running (its timers are what time moves).

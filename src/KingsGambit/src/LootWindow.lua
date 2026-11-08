@@ -566,7 +566,7 @@ function M.Refresh(f, ctx, ui)
         if f.nextBoss.SetEnabled then f.nextBoss:SetEnabled(night.raidOpen and night.nextBoss ~= nil and not night.busy) end
         local x = PAD + 168 + GAP
         if (night.held or 0) > 0 then layout[#layout + 1] = { f.handOut, x, y }; want[f.handOut] = true; x = x + 120 + GAP end
-        layout[#layout + 1] = { f.wait, x, y }; want[f.wait] = true
+        if night.busy then layout[#layout + 1] = { f.wait, x, y }; want[f.wait] = true end -- (time only matters while loot is being handed out)
         y = y - BTN_H - GAP
         -- the raid itself: end it (then open the next one, days later), and people leaving and coming back
         f.raidIsOpen = night.raidOpen
