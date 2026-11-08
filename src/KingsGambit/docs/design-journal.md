@@ -2275,6 +2275,7 @@ New users had nothing in the game that said what King's Gambit is or how loot wo
 - **Gifting is the fix, said so (the guild master's call):** the callout and the first bullet now tie gifting to that flaw: when the player who would use an item sits too high
   to spend their place on it, someone near the bottom wins it cheaply and passes it up.
 - **The READMEs say the same (the guild master's call):** "derived from Suicide Kings" in the READMEs, the manifesto, the guide and this journal became the Welcome's idea: inspired by Suicide Kings, it keeps what works and fixes what does not (gifting).
+- **The checkbox is at the very bottom of the window (the guild master's call):** it moved out of the page into the strip below the command output, at the window's bottom edge (shown only with the Welcome page); the output text sits a little higher to make room. The buttons were confirmed good.
 - **Gifting leads (the guild master's call):** the biggest difference is gifting, so it is the first item of the list, with its reason, and the callout says so.
 - **Not a wall of text (a second correction):** the Welcome is four short pages (Start here, The rules, Using it, Why) behind buttons at the top, one screenful each. Each
   block has its own text: a large gold title, gold headings with room above, a callout with a bar at its left, bullets and numbers with a hanging indent and air between

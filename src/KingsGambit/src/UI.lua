@@ -1066,19 +1066,18 @@ function M:BuildWelcome(parent)
     end
     local ok, scroll = pcall(CreateFrame, "ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
     if not (ok and scroll) then scroll = CreateFrame("ScrollFrame", nil, p) end
-    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 44)
-    -- the first-run setting, in a footer of its own under the scrolling text, set off by a line: on until it is turned off here
+    scroll:SetPoint("TOPLEFT", 0, -30); scroll:SetPoint("BOTTOMRIGHT", -26, 0)
+    -- the first-run setting, at the very bottom of the window (below the command output), shown only with this page: on until it is turned off here
     local footer = CreateFrame("Frame", nil, p)
-    footer:SetPoint("BOTTOMLEFT", 0, 0); footer:SetPoint("BOTTOMRIGHT", 0, 0); footer:SetHeight(36)
-    local rule = footer:CreateTexture(nil, "ARTWORK")
-    rule:SetColorTexture(1, 1, 1, 0.12); rule:SetHeight(1)
-    rule:SetPoint("TOPLEFT", 0, 0); rule:SetPoint("TOPRIGHT", 0, 0)
+    local win = parent.GetParent and parent:GetParent() or parent
+    footer:SetHeight(26); footer:SetWidth(260)
+    footer:SetPoint("BOTTOMLEFT", win, "BOTTOMLEFT", 140, 4)
     p.footer = footer
     local label = "Show the welcome page first"
     local function toggle(on) GuildBook.SetWelcomeFirst(SK.client and SK.client.storage and SK.client:storage().shared, on); M:Refresh() end
     local okc, check = pcall(CreateFrame, "CheckButton", nil, footer, "UICheckButtonTemplate")
     if okc and check then
-        check:SetPoint("LEFT", footer, "LEFT", 0, -2)
+        check:SetPoint("LEFT", footer, "LEFT", 0, 0)
         check:SetScript("OnClick", function(self) toggle(self:GetChecked() and true or false) end)
         local text = footer:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         text:SetPoint("LEFT", check, "RIGHT", 2, 1); text:SetText(label)
@@ -1430,7 +1429,7 @@ function M:Build()
     end
     -- Output: what the last command said (a refusal says why), so nobody has to watch the chat window.
     w.output = w:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    w.output:SetPoint("BOTTOMLEFT", 144, 18); w.output:SetWidth(420); w.output:SetHeight(66)
+    w.output:SetPoint("BOTTOMLEFT", 144, 34); w.output:SetWidth(420); w.output:SetHeight(50)
     w.output:SetJustifyH("LEFT"); w.output:SetJustifyV("TOP"); w.output:SetWordWrap(true)
 
     -- Keep it current while it is open: the ledger changes as other players' updates arrive, and a practice raid's clock runs.
