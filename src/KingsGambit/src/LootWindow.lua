@@ -689,6 +689,14 @@ function M.Refresh(f, ctx, ui)
             if vr then
                 row.id, row.tip = vr.id, vr.tip
                 local label = ("%d. %s"):format(ri, UILoot.Display(vr.link, vr.tip))
+                -- What is left to decide stands out: an item you have answered shows a check and what you said, in gray; one still to answer is marked in gold.
+                local said
+                for _, vb in ipairs(vr.buttons) do if vb.selected then said = vb.label or vb.letter end end
+                if said then
+                    label = "|TInterface\\Buttons\\UI-CheckBox-Check:14:14|t |cff8a8a8a" .. label:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") .. "  - " .. tostring(said) .. "|r"
+                elseif #vr.buttons > 0 then
+                    label = "|cffffd100>|r " .. label .. "  |cffffd100(your answer)|r"
+                end
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
                 local top = y

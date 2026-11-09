@@ -17,6 +17,8 @@ local DEFAULTS = {
     listId = nil,        -- the list the raid plays on: normally the one its raid named (the engine knows), else main
     offListId = nil,     -- ... and its off-spec list (derived from it)
     bidSeconds = 30,     -- 0 = open-ended: the Master Looter calls resolveNow()
+    bidSecondsPerItem = 0, -- more items, more time: each item after the first adds this many seconds (up to bidSecondsMax). 0 = a flat bidSeconds. The Master Looter can always end early. The game's host and the practice raid use 8.
+    bidSecondsMax = 300,
     pickSeconds = 20,    -- a draft turn that times out counts as a skip
     claimSeconds = 10,   -- a salvage offer that times out counts as a decline
     requireRanking = false, -- a player who wants two or more items of one kind (needs, off-spec, gifts) must rank them before they count as
@@ -166,6 +168,10 @@ function Session:start(items)
     end
     self.order.main = copy(main.state.order)
     self.phase = "bidding"
+    -- Many items need more time to read and answer: the time grows with the number of items (the Master Looter can end it early).
+    if (cfg.bidSeconds or 0) > 0 and (cfg.bidSecondsPerItem or 0) > 0 and #self.items > 1 then
+        cfg.bidSeconds = math.min(math.max(cfg.bidSecondsMax or 300, cfg.bidSeconds), cfg.bidSeconds + cfg.bidSecondsPerItem * (#self.items - 1))
+    end
     self:armTimer(cfg.bidSeconds, function() self:closeBidding() end)
     self.unwatch = self.client:on("roster.changed", function() self:rosterChanged() end)
     self.unwatchLoot = self.client:on("lootMethod.changed", function() self:lootMethodChanged() end)

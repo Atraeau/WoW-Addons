@@ -263,6 +263,7 @@ function Sim:drop(links, cfg, seen, ids)
         -- whispered replies as in the game: one reply per burst, one message at a time
         if c.whisperSettle == nil then c.whisperSettle = 3 end
         if c.whisperGap == nil then c.whisperGap = 0.4 end
+        if c.bidSecondsPerItem == nil then c.bidSecondsPerItem = 8 end
         cfg = c
     end
     local drops, items = {}, {}

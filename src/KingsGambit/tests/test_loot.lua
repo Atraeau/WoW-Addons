@@ -913,3 +913,15 @@ test("with no spec on record, a whisper player is asked once; their answer is re
     H.requireSpec = nil
     assert(ok, err)
 end)
+
+H.section("Loot: the bid timer grows with the number of items")
+test("with a per-item time, each item after the first adds to the bid timer (up to a cap); a bare session stays flat", function()
+    local s = setup({ nitems = 5, cfg = { bidSecondsPerItem = 8 } })
+    eq(s.cfg.bidSeconds, 30 + 8 * 4, "5 items: 30 + 4 x 8")
+    local flat = setup({ nitems = 5 })
+    eq(flat.cfg.bidSeconds, 30, "no per-item time: a flat timer")
+    local capped = setup({ nitems = 5, cfg = { bidSecondsPerItem = 100, bidSecondsMax = 200 } })
+    eq(capped.cfg.bidSeconds, 200, "capped")
+    local one = setup({ nitems = 1, cfg = { bidSecondsPerItem = 8 } })
+    eq(one.cfg.bidSeconds, 30, "one item: the base time")
+end)

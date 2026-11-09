@@ -2558,3 +2558,8 @@ Undoing an award is now done from the Ledger pane: click the award you made, and
 Answered items no longer move: the list stays in the drop's order, and only the selection moves. After you answer an item the panel goes down to the next item still unanswered (after the one you are on, wrapping to the first one still open) and scrolls it into view; once everything is answered it stays where it is. Click any row to look back at it and watch how it progresses. (The earlier reorder made the list jump under the mouse.)
 
 **Only your own choice moves the selection (a correction, same day):** the panel advanced to the next open item on every refresh, so another player's answer could move it. Now the move is a one-time flag set by your own answer (or a session's start) and spent when used; other players' answers, timers and refreshes never change which item is selected.
+
+## More items, more time; answered vs still-to-answer
+
+- **The bid timer scales with the number of items** (instead of Gargul's timer per item): the first item gets the base time (30 s) and each further item adds 8 s (`bidSecondsPerItem`), up to 300 s (`bidSecondsMax`). 5 items = 62 s, 20 items = 182 s. The game's host and the practice raid use it; a bare session stays flat. The Master Looter can still end bidding early (resolve), and `extend` still adds time. Players are sent the scaled time with the session.
+- **What is left to decide stands out in the item list:** an item you have answered shows a check mark and what you said, all in gray; an item still to answer is marked with a gold ">" and "(your answer)". The panel selection (the gray background) is separate and still only moves on your own answer.

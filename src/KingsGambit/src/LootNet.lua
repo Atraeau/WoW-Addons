@@ -136,6 +136,7 @@ function M.NewHost(sync, engine)
         -- players without the addon answer by whisper: replies are one per burst, and sent one at a time (the game's limits)
         if withRanking.whisperSettle == nil then withRanking.whisperSettle = 3 end
         if withRanking.whisperGap == nil then withRanking.whisperGap = 0.4 end
+        if withRanking.bidSecondsPerItem == nil then withRanking.bidSecondsPerItem = 8 end
         local session = Loot.NewSession(self.engine, withRanking)
         local ok, why = session:start(items)
         if not ok then return false, why end
