@@ -38,6 +38,7 @@ Scenarios.lua
 UI.lua
 UILoot.lua
 UITips.lua
+UISkin.lua
 LootView.lua
 GuildBook.lua
 LootWindow.lua

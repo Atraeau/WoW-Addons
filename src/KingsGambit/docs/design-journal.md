@@ -2574,3 +2574,7 @@ The item list is one line per item: the name on the left and the four choices on
 
 - **Your own progress first:** the line under the title now starts with "Your items: 3 of 8" (gold while something is left to decide, green when you are done), then the raid's "Raid: 4 of 12 answered".
 - **Keyboard (pointer over the window, nothing being typed):** N, O, G, P answer the selected item (Need, Off-spec, Gift, Pass); Up, Down and Tab move between items. Answering moves on as with a click. Any other key, and every key with a modifier, goes on to the game, so movement and bindings are untouched.
+
+## A skin for the addon's own controls (UISkin)
+
+The stock red `UIPanelButtonTemplate` button read as a default addon. Buttons are now plain frames in a flat dark look (`UISkin.lua`): a dark face with a thin muted-gold edge, a gold wash under the pointer, darker while held, gray and dim when unavailable, and for a chosen answer (or the open tab) a warm face with a bright gold edge, still held pushed. No game templates, so no stock art can show through; every button in the Loot window, the main window's tabs and action buttons, and the whisper window uses it (`Skin.Button`, falling back to the stock button if the module is missing). The chosen button no longer uses the inset bevel (the skin shows it instead). Colors are one table (`UISkin.COLORS`) so the whole look can be tuned in one place. Not yet restyled: the window frames themselves and the dropdowns, which are the game's own.

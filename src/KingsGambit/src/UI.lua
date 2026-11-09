@@ -8,9 +8,9 @@
 --   M.Model(engine, client, listId)        pure: what the Lists section shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook", "Scenarios?" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook, d.Scenarios
+local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, Skin
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook", "Scenarios?", "UISkin?" }, function(d)
+    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, Skin = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook, d.Scenarios, d.UISkin
 end)
 
 local function say(text)
@@ -236,7 +236,7 @@ function M:BuildWhisperWindow()
     box:SetScript("OnEnterPressed", send)
     box:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
     f.box = box
-    local sendBtn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    local sendBtn = Skin and Skin.Button(f, "Send", 70, 22) or CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     sendBtn:SetSize(70, 22); sendBtn:SetPoint("BOTTOMRIGHT", -14, 15); sendBtn:SetText("Send")
     sendBtn:SetScript("OnClick", send)
     f.sendBtn = sendBtn
@@ -699,6 +699,7 @@ function M.FillRows(p, rows)
 end
 
 local function button(parent, text, w, h)
+    if Skin then return Skin.Button(parent, text, w, h) end
     local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
     b:SetSize(w, h or 22)
     b:SetText(text)

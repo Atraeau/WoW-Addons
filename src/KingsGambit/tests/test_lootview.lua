@@ -376,32 +376,24 @@ test("a gift with nobody who can have it says so, and Keep or Withdraw remain", 
 end)
 
 H.section("Loot window: showing your choice")
-test("a chosen answer is held pressed in with an inset bevel; its label and text are never touched; un-choosing releases it completely", function()
+test("a chosen answer is held pressed in and shown by the skin's gold edge; its label and text are never touched; un-choosing releases it completely", function()
     local LootWindow = SK.modules.LootWindow
     local state = {}
-    local made = 0
-    local function tex() local t = {}; function t:SetColorTexture() end; function t:SetPoint() end; function t:SetHeight() end; function t:SetWidth() end
-        function t:Show() self.on = true end; function t:Hide() self.on = false end; made = made + 1; return t end
     local colored = false
     local fs = { SetTextColor = function() colored = true end, SetFontObject = function() colored = true end }
     local b = { text = "Need" }
-    function b:CreateTexture() return tex() end
+    function b:CreateTexture() local t = {}; function t:SetColorTexture() end; function t:SetPoint() end; function t:SetHeight() end; function t:SetWidth() end; return t end
     function b:SetButtonState(name, locked) state.name, state.locked = name, locked end
     function b:GetFontString() return fs end
     LootWindow.Mark(b, false)
     eq(state.name, nil, "a button that was never marked is left alone")
     LootWindow.Mark(b, true)
     eq(state.name, "PUSHED"); eq(state.locked, true, "held pressed in")
-    local layers = made
-    assert(layers >= 5, "an inset bevel on the face: a body and a shadow fading along the top and left")
-    eq(#b.bevel, layers)
-    for _, t in ipairs(b.bevel) do eq(t.on, true) end
+    eq(b.skinMarked, true, "and the skin shows it chosen")
     eq(b.text, "Need", "the text is untouched"); eq(colored, false, "and so is the label color")
-    LootWindow.Mark(b, true)
-    eq(made, layers, "marking again does not build another bevel")
     LootWindow.Mark(b, false)
     eq(state.name, "NORMAL"); eq(state.locked, false, "released")
-    for _, t in ipairs(b.bevel) do eq(t.on, false, "the bevel goes") end
+    eq(b.skinMarked, false)
     eq(colored, false)
 end)
 

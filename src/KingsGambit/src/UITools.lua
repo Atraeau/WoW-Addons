@@ -2,8 +2,14 @@
 -- Keep this file Lua 5.1-safe. A form only COMPOSES the command a person would have typed (Compose, pure and tested) and runs it, so a form can
 -- never do what the command could not, and the commands' own checks and messages apply unchanged.
 local _, SK = ...
-local Tips
-local M = SK:NewModule("UITools", { "UITips" }, function(d) Tips = d.UITips end)
+local Tips, Skin
+local M = SK:NewModule("UITools", { "UITips", "UISkin?" }, function(d) Tips, Skin = d.UITips, d.UISkin end)
+
+-- a button in the addon's own look (the game's stock one if the skin isn't there)
+local function newButton(parent)
+    if Skin then return Skin.Button(parent, "", 100, 24) end
+    return CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
+end
 
 -- Field: key, label, optional (may be left empty), default, name (a character: spaces become the First_Last form).
 -- cmd: pieces joined by spaces. "@key" is the field's text; a { ... } piece is dropped when its fields are empty.
@@ -358,7 +364,7 @@ function M.Build(parent, ui, section)
     else
         -- Without the game's dropdowns: two buttons that step through the choices.
         f.groupDrop, f.actionDrop = nil, nil
-        f.groupStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+        f.groupStep = newButton(f)
         f.groupStep:SetSize(250, 24); f.groupStep:SetPoint("TOPLEFT", 70, -2)
         if single then f.groupStep:Hide() end
         f.groupStep:SetScript("OnClick", function()
@@ -367,7 +373,7 @@ function M.Build(parent, ui, section)
             end
             chooseAction(f, ui, nil)
         end)
-        f.actionStep = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+        f.actionStep = newButton(f)
         f.actionStep:SetSize(250, 24); f.actionStep:SetPoint("TOPLEFT", 70, -36 + up)
         f.actionStep:SetScript("OnClick", function()
             local g = groupById(f, f.group)
@@ -437,7 +443,7 @@ function M.Build(parent, ui, section)
             f.drops[i] = d
         end
     end
-    f.run = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
+    f.run = newButton(f)
     f.run:SetSize(100, 24); f.run:SetText("Do it")
     Tips.Attach(f.run, "dothis")
     f.run:SetPoint("TOPLEFT", 4, -172 + up - MAX_FIELDS * 32 - 6)

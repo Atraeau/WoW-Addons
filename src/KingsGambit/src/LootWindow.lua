@@ -3,8 +3,8 @@
 -- could type, so every rule, message and ledger entry is the one the commands already have. It opens by itself when a session starts.
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
-local UILoot, LootView, Tips
-local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips" }, function(d) UILoot, LootView, Tips = d.UILoot, d.LootView, d.UITips end)
+local UILoot, LootView, Tips, Skin
+local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips", "UISkin?" }, function(d) UILoot, LootView, Tips, Skin = d.UILoot, d.LootView, d.UITips, d.UISkin end)
 
 local WIDTH = 464   -- 408 of content, 28 each side; the item list's scroll bar sits in the right margin
 local MAX = 24         -- the most items drawn (UILoot.MAX_ITEMS); more are mentioned
@@ -52,6 +52,7 @@ function M.Rich(segments)
 end
 
 local function button(parent, text, w, h)
+    if Skin then return Skin.Button(parent, text, w, h) end
     local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
     b:SetSize(w, h or 22)
     b:SetText(text)
@@ -104,12 +105,13 @@ function M.Mark(b, on)
     if not on and not b.marked then return end -- never marked: nothing to undo
     if on then
         if b.SetButtonState then b:SetButtonState("PUSHED", true) end -- (true: stays pressed until code releases it)
-        for _, t in ipairs(bevel(b) or {}) do t:Show() end
+        if not Skin then for _, t in ipairs(bevel(b) or {}) do t:Show() end end -- (the skin shows the chosen one by its gold face and edge instead)
     else
         if b.SetButtonState then b:SetButtonState("NORMAL", false) end
         for _, t in ipairs(b.bevel or {}) do t:Hide() end
     end
     b.marked = on
+    if Skin then Skin.Mark(b, on) end
 end
 
 local function setup(b, vb, label)
