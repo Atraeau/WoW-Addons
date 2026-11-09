@@ -2544,3 +2544,7 @@ Not everyone has the addon, and one whisper carries one message, so the Master L
 - **A start of the name** works when it is unambiguous and at least three letters ("beast", "destr"). Three letters so that a bare "p" or "n" in an answer is never taken for a spec.
 - **A name that fits two specs asks:** "feral" fits Feral (bear) and Feral (cat), so the follow-up whisper replies "Which one: Feral (bear) or Feral (cat)?" and the question stays open.
 - Specs are still stored by their full display name; shorthand only affects what is accepted when typing, so nothing in the ledger changes.
+
+## A person's class and spec in their class color
+
+Wherever a person is named in the Loot window (banner, results, the people lists), the "(Fury Warrior)" after their name is now in their class color, not gray, on the game window and the page alike. The standings' Class column is colored too. Your own spec is shown from the talents' pick even before you have answered, since the addon can see it; another player's spec shows once it is on record (they answered, or an officer set it), because the game does not tell us anyone else's.

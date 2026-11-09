@@ -199,7 +199,7 @@
       if (g.text !== undefined) return esc(g.text);
       const w = g.who, detail = ((w.spec ? w.spec + " " : "") + (w.className || "")).trim();
       return '<span style="color:' + (w.color ? "#" + w.color : "inherit") + '">' + esc(w.name) + "</span>" +
-        (detail ? ' <span class="spec2">(' + esc(detail) + ")</span>" : "");
+        (detail ? ' <span class="spec2"' + (w.color ? ' style="color:#' + w.color + '"' : "") + ">(" + esc(detail) + ")</span>" : "");
     }).join("");
   }
   const tipText = (b) => (b.tip ? b.tip.title + "\n\n" + b.tip.text : b.label) + (b.why ? "\n\nUnavailable: " + b.why : "");

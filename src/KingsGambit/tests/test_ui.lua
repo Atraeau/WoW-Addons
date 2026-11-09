@@ -200,7 +200,7 @@ test("columns sort on a header click and again to reverse; the list's own order 
             return function() end end }) end end
     end })
     UI.InitRow(row, { pos = 7, name = "Ann", class = "MAGE", wins = 3, mine = true })
-    eq(row.cells[1].t, "7"); eq(row.cells[3].t, "Mage"); eq(row.cells[4].t, "3")
+    eq(row.cells[1].t, "7"); assert(row.cells[3].t:find("Mage", 1, true), row.cells[3].t); eq(row.cells[4].t, "3")
     assert(row.cells[2].t:find("Ann", 1, true) and row.cells[2].t:find("(you)", 1, true), row.cells[2].t)
 end)
 

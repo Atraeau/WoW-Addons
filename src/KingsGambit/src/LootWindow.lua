@@ -45,7 +45,7 @@ function M.Rich(segments)
             local w = seg.who
             local name = w.color and ("|cff" .. w.color .. w.name .. "|r") or w.name
             local detail = w.short and "" or ((w.spec and (w.spec .. " ") or "") .. (w.className or "")):gsub("%s+$", "")
-            out[#out + 1] = detail ~= "" and (name .. " |cff999999(" .. detail .. ")|r") or name
+            out[#out + 1] = detail ~= "" and (name .. " |cff" .. (w.color or "999999") .. "(" .. detail .. ")|r") or name
         end
     end
     return table.concat(out)

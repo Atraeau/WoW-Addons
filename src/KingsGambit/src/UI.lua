@@ -590,7 +590,7 @@ function M.InitRow(row, r)
     end
     row.cells[1]:SetText(tostring(r.shown or r.pos))
     row.cells[2]:SetText(classColor(r.class) .. r.name .. "|r" .. (r.mine and "  (you)" or "") .. (r.moving and ("  |cff66aaff(from " .. r.pos .. ")|r") or ""))
-    row.cells[3]:SetText(className(r.class))
+    row.cells[3]:SetText(classColor(r.class) .. className(r.class) .. "|r")
     row.cells[4]:SetText(tostring(r.wins))
 end
 

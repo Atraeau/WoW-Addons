@@ -114,6 +114,11 @@ function M.Model(ctx)
         local known = ctx.sim and ctx.sim.info and (ctx.sim.info[full] or ctx.sim.info[name])
         if known then info.class, info.spec = info.class or known.class, known.spec end
         info.spec = recordedSpec(full) or info.spec
+        -- Your own spec is known before you answer: the talents' pick.
+        if not info.spec and full == me and ctx.client.mySpec and info.class then
+            local sp = ItemFit.FindSpec(info.class, ctx.client:mySpec() or "")
+            info.spec = sp and sp.name or nil
+        end
         return info
     end
     -- Is a spec needed before this player may answer? Then the window asks (the choices are their class's specs; the talents' pick comes first).

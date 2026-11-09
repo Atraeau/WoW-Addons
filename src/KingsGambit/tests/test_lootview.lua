@@ -271,8 +271,8 @@ test("another player's win is drawn with their class color, name and spec; a gif
     local r = v.rows[1]
     eq(r.note, "Brann wins (gift draft) and gives it to Cass " .. "·" .. " moves from place 4 to the bottom of the list")
     local rich = LootWindow.Rich(r.segments)
-    assert(rich:find("|cffc79c6eBrann|r |cff999999(Fury Warrior)|r", 1, true), rich)
-    assert(rich:find("|cff69ccf0Cass|r |cff999999(Mage)|r", 1, true), "a recipient with no known spec shows the class alone: " .. rich)
+    assert(rich:find("|cffc79c6eBrann|r |cffc79c6e(Fury Warrior)|r", 1, true), rich)
+    assert(rich:find("|cff69ccf0Cass|r |cff69ccf0(Mage)|r", 1, true), "a recipient with no known spec shows the class alone: " .. rich)
 end)
 
 H.section("Loot window: ranking what you want most")
