@@ -508,9 +508,13 @@ function M.Refresh(f, ctx, ui)
         local i = ((cur - 1 + k) % #v.rows) + 1
         if isOpen(v.rows[i]) then nextOpen = v.rows[i].id; break end
     end
-    if ui.bidFollow and nextOpen and ui.bidItem ~= nextOpen then
-        ui.bidItem = nextOpen
-        f.scrollToSelected = true
+    -- Only your own choice moves the panel (and a new session's start): other players' answers never do. The flag is spent once it has been used.
+    if ui.bidFollow and #v.rows > 0 then
+        if nextOpen and ui.bidItem ~= nextOpen then
+            ui.bidItem = nextOpen
+            f.scrollToSelected = true
+        end
+        ui.bidFollow = false
     end
     local layout, want = {}, {}
     local y = -32 -- just under the title bar

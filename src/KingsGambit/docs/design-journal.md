@@ -2556,3 +2556,5 @@ Undoing an award is now done from the Ledger pane: click the award you made, and
 ## The item list keeps its order (changes the earlier "answered items drop to the bottom")
 
 Answered items no longer move: the list stays in the drop's order, and only the selection moves. After you answer an item the panel goes down to the next item still unanswered (after the one you are on, wrapping to the first one still open) and scrolls it into view; once everything is answered it stays where it is. Click any row to look back at it and watch how it progresses. (The earlier reorder made the list jump under the mouse.)
+
+**Only your own choice moves the selection (a correction, same day):** the panel advanced to the next open item on every refresh, so another player's answer could move it. Now the move is a one-time flag set by your own answer (or a session's start) and spent when used; other players' answers, timers and refreshes never change which item is selected.

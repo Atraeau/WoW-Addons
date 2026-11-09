@@ -107,6 +107,7 @@ test("the window builds and refreshes on every tab, in practice and out, without
         eq(UI.bidItem ~= 2, true, "once item 2 is answered, the panel moves on to the next item still to answer")
         eq(UI.lootWindow.rows[1].id, 1, "and the list keeps its order: answered items stay where they are")
         UI.bidItem = nil
+        UI:SelectBidItem(1); UI:Refresh(); UI:PracticeWait(2); UI:Refresh(); eq(UI.bidItem, 1, "the panel stays on the item you chose while other players answer")
         UI:SelectBidItem(1); UI:SelectBidItem(2); eq(UI.bidItem, 2, "ticking another item moves the panel to it (one at a time)"); UI:Refresh()
         UI:SelectBidItem(2); eq(UI.bidItem, nil, "unticking hides it"); UI:Refresh()
         UI:PracticeWait(10)
