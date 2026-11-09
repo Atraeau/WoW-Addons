@@ -2569,3 +2569,8 @@ Answered items no longer move: the list stays in the drop's order, and only the 
 The item list is one line per item: the name on the left and the four choices on the same line, right-aligned (the chosen one still shown pushed in, and an answered item still checked and gray; an open one marked with a gold ">"). That roughly halves a row's height, so more items fit before the list scrolls. The list no longer scrolls by itself when the selection moves; it stays where you left it (the earlier scroll-into-view was disorienting). Long item names are cut to fit; hover for the item.
 
 **Practice bots answer faster:** simulated raiders now spread their answers over the first 6 seconds (was up to 14), so the practice no longer waits on bots now that the timer scales with the item count. The real timer is unchanged.
+
+## Progress and keyboard in the Loot window
+
+- **Your own progress first:** the line under the title now starts with "Your items: 3 of 8" (gold while something is left to decide, green when you are done), then the raid's "Raid: 4 of 12 answered".
+- **Keyboard (pointer over the window, nothing being typed):** N, O, G, P answer the selected item (Need, Off-spec, Gift, Pass); Up, Down and Tab move between items. Answering moves on as with a click. Any other key, and every key with a modifier, goes on to the game, so movement and bindings are untouched.

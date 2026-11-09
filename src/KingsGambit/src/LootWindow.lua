@@ -223,6 +223,17 @@ function M.Build(ui)
     attach(f.specAuto, "specauto")
     local function onClick(b) b:SetScript("OnClick", function() if b.view and b.view.enabled then M.Run(b.view.act, f, ui) end end); attach(b, tooltipOf(b)) end
 
+    -- Keyboard, while the pointer is over this window and nothing is being typed: N, O, G, P answer the selected item (Need, Off-spec, Gift, Pass); Up/Down
+    -- or Tab, move between items. Every other key goes on to the game as usual.
+    if f.EnableKeyboard then
+        f:EnableKeyboard(true)
+        if f.SetPropagateKeyboardInput then f:SetPropagateKeyboardInput(true) end
+        f:SetScript("OnKeyDown", function(self, key)
+            local handled = M.Key(self, ui, key)
+            if self.SetPropagateKeyboardInput then self:SetPropagateKeyboardInput(not handled) end
+        end)
+    end
+
     f.practiceText = text("GameFontNormalSmall")
     -- The countdown bar is drawn from two plain colored textures (a track and a fill as wide as the time left), not a StatusBar: it needs no
     -- texture file or template, so it looks the same in every client, and it drains from the right as the time runs out.
@@ -480,6 +491,35 @@ function M.RefreshSide(f, v, ui)
     setShown(side, true)
 end
 
+-- A key pressed over the window: answer or move. Returns true when it was used (so the game does not also act on it).
+local ANSWER_KEY = { N = "need", O = "off", G = "gift", P = "pass" }
+function M.Key(f, ui, key)
+    local rows = f.keyRows
+    if not rows or #rows == 0 or not f.IsShown or not f:IsShown() then return false end
+    if f.IsMouseOver and not f:IsMouseOver() then return false end
+    if GetCurrentKeyBoardFocus and GetCurrentKeyBoardFocus() then return false end -- typing somewhere
+    if IsModifierKeyDown and IsModifierKeyDown() then return false end
+    local at = 0
+    for i, r in ipairs(rows) do if r.id == ui.bidItem then at = i end end
+    local kind = ANSWER_KEY[key]
+    if kind then
+        local r = rows[at > 0 and at or 1]
+        for _, vb in ipairs(r.buttons) do
+            if vb.key == kind and vb.enabled then M.Run(vb.act, f, ui); return true end
+        end
+        return true -- (that choice isn't on offer for this item: the key is still ours)
+    end
+    local step = (key == "DOWN" or key == "TAB") and 1 or (key == "UP") and -1 or nil
+    if step then
+        local to = at == 0 and 1 or (((at - 1 + step) % #rows) + 1)
+        ui.bidFollow = false
+        ui.bidItem = rows[to].id
+        if ui.Refresh then ui:Refresh() end
+        return true
+    end
+    return false
+end
+
 function M.Refresh(f, ctx, ui)
     f.ctx = ctx
     local practice = ctx.sim ~= nil
@@ -487,6 +527,8 @@ function M.Refresh(f, ctx, ui)
     local m = UILoot.Model(ctx)
     m.practice = practice
     local v = LootView.Build(m)
+    f.keyRows = {}
+    for _, vr in ipairs(v.rows or {}) do if #vr.buttons > 0 then f.keyRows[#f.keyRows + 1] = { id = vr.id, buttons = vr.buttons } end end
     if not v.rankings or #v.rankings == 0 then f.rankDraft = nil end -- nothing to rank (a new round, a finished session): no draft is carried over
     if v.sessionKey ~= ui.bidSession then ui.bidSession, ui.bidItem, ui.bidFollow = v.sessionKey, nil, true end -- (a new session: nothing is ticked, and the panel follows you down the list)
     -- With "Auto-detect" on, the talents' spec is taken the first time you would be asked in a session
@@ -598,7 +640,17 @@ function M.Refresh(f, ctx, ui)
             if v.timer.urgent then f.bar.fill:SetColorTexture(1, 0.45, 0.1, 0.95) else f.bar.fill:SetColorTexture(0.9, 0.75, 0.2, 0.95) end
             place(f.bar, PAD); y = y - 8 - 4
         end
-        f.meta:SetText(v.progress or v.subtitle or "")
+        local mineDone, mineAll = 0, 0
+        for _, vr in ipairs(v.rows or {}) do
+            if vr.state == "answered" then mineDone, mineAll = mineDone + 1, mineAll + 1 elseif vr.state == "open" then mineAll = mineAll + 1 end
+        end
+        if mineAll > 0 then
+            -- what is left for you, first: gold while there is something to decide, green when you are done
+            local color = mineDone == mineAll and "|cff40ff40" or "|cffffd100"
+            f.meta:SetText(("%sYour items: %d of %d|r   %s"):format(color, mineDone, mineAll, v.progress and ("Raid: " .. v.progress) or ""))
+        else
+            f.meta:SetText(v.progress or v.subtitle or "")
+        end
         f.metaRight:SetText((v.timer and (v.timer.seconds .. "s") or "") .. ((v.timer and v.place) and "   " or "") .. (v.place and ("Your place: " .. v.place) or ""))
         place(f.meta, PAD); place(f.metaRight, PAD + CW - 170); y = y - 14 - GAP
 

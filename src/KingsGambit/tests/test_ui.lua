@@ -408,3 +408,22 @@ test("in practice, Record a win offers the practice gear even before any boss ha
     local _, stats = UITools.BagLinks()
     assert(stats and stats.unavailable, "no bags outside the game")
 end)
+
+H.section("Loot window: keyboard")
+test("Up, Down and Tab move between items, N/O/G/P answer the selected one, other keys are left to the game", function()
+    local LootWindow = SK.modules.LootWindow
+    local ran = {}
+    local real = LootWindow.Run
+    LootWindow.Run = function(act) ran[#ran + 1] = act end
+    local function row(id) return { id = id, buttons = { { key = "need", enabled = true, act = { kind = "need", item = id } }, { key = "pass", enabled = true, act = { kind = "pass", item = id } } } } end
+    local f = { keyRows = { row(1), row(2), row(3) }, IsShown = function() return true end }
+    local ui = { bidItem = 1, Refresh = function() end }
+    eq(LootWindow.Key(f, ui, "DOWN"), true); eq(ui.bidItem, 2)
+    eq(LootWindow.Key(f, ui, "TAB"), true); eq(ui.bidItem, 3)
+    eq(LootWindow.Key(f, ui, "DOWN"), true); eq(ui.bidItem, 1, "wraps")
+    eq(LootWindow.Key(f, ui, "UP"), true); eq(ui.bidItem, 3)
+    eq(LootWindow.Key(f, ui, "P"), true); eq(ran[1].kind, "pass"); eq(ran[1].item, 3)
+    eq(LootWindow.Key(f, ui, "W"), false, "movement keys go to the game")
+    eq(LootWindow.Key({ keyRows = {} , IsShown = function() return true end }, ui, "P"), false, "nothing to answer")
+    LootWindow.Run = real
+end)
