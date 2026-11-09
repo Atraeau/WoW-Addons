@@ -6938,7 +6938,7 @@ function Sim:wireBots()
     end)
     s:on("done", function() self.handedOut = nil end)
     -- Bids trickle in over the first part of the timer, in a repeatable order.
-    local window = math.max(2, math.min((s.cfg.bidSeconds or 30) - 4, 14))
+    local window = math.max(2, math.min((s.cfg.bidSeconds or 30) - 4, 6)) -- (simulated raiders answer within a few seconds: nobody waits on a bot)
     for _, name in ipairs(s.eligibleList) do
         if self:isBot(name) then
             local policy = self:policyFor(name)
