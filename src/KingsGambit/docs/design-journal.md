@@ -2567,3 +2567,5 @@ Answered items no longer move: the list stays in the drop's order, and only the 
 ## A denser list, and no auto-scroll
 
 The item list is one line per item: the name on the left and the four choices on the same line, right-aligned (the chosen one still shown pushed in, and an answered item still checked and gray; an open one marked with a gold ">"). That roughly halves a row's height, so more items fit before the list scrolls. The list no longer scrolls by itself when the selection moves; it stays where you left it (the earlier scroll-into-view was disorienting). Long item names are cut to fit; hover for the item.
+
+**Practice bots answer faster:** simulated raiders now spread their answers over the first 6 seconds (was up to 14), so the practice no longer waits on bots now that the timer scales with the item count. The real timer is unchanged.
