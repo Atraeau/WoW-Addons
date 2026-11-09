@@ -164,6 +164,8 @@ end
 local PAD, GAP = 28, 8
 local CW = 408                      -- the content width
 local BTN_H = 22
+local INL_W, INL_GAP = 56, 4              -- the four choices on a row's own line (dense list)
+local NAME_W = CW - 4 * INL_W - 3 * INL_GAP - 8
 local BTN4 = (CW - 3 * GAP) / 4     -- four equal buttons across the content width (96)
 
 -- The height a (wrapped) line of text takes, never less than `min` (the game gives the real number; a stand-in gives none).
@@ -512,7 +514,6 @@ function M.Refresh(f, ctx, ui)
     if ui.bidFollow and #v.rows > 0 then
         if nextOpen and ui.bidItem ~= nextOpen then
             ui.bidItem = nextOpen
-            f.scrollToSelected = true
         end
         ui.bidFollow = false
     end
@@ -693,22 +694,25 @@ function M.Refresh(f, ctx, ui)
                 local said
                 for _, vb in ipairs(vr.buttons) do if vb.selected then said = vb.label or vb.letter end end
                 if said then
-                    label = "|TInterface\\Buttons\\UI-CheckBox-Check:14:14|t |cff8a8a8a" .. label:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") .. "  - " .. tostring(said) .. "|r"
+                    label = "|TInterface\\Buttons\\UI-CheckBox-Check:14:14|t |cff8a8a8a" .. label:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "") .. "|r"
                 elseif #vr.buttons > 0 then
-                    label = "|cffffd100>|r " .. label .. "  |cffffd100(your answer)|r"
+                    label = "|cffffd100>|r " .. label
                 end
                 row.text:SetText(label)
-                place(row.text, PAD); place(row.hit, PAD)
+                local hasButtons = #vr.buttons > 0
                 local top = y
                 if vr.id == ui.bidItem then selTop = top end
-                y = y - 18 - 4
-                local hasButtons = #vr.buttons > 0
                 if hasButtons then
+                    -- dense: the name on the left and the four choices on the same line, right-aligned
+                    row.text:SetWidth(NAME_W); row.hit:SetSize(NAME_W, 16)
+                    layout[#layout + 1] = { row.text, PAD, y - 5 }; want[row.text] = true
+                    layout[#layout + 1] = { row.hit, PAD, y - 4 }; want[row.hit] = true
                     for j = 1, 4 do
                         local vb, b = vr.buttons[j], row.buttons[j]
                         if vb then
                             setup(b, vb, vb.label)
-                            layout[#layout + 1] = { b, PAD + (j - 1) * (BTN4 + GAP), y }; want[b] = true
+                            b:SetSize(INL_W, BTN_H)
+                            layout[#layout + 1] = { b, PAD + CW - 4 * INL_W - 3 * INL_GAP + (j - 1) * (INL_W + INL_GAP), y }; want[b] = true
                         end
                     end
                     y = y - BTN_H
@@ -717,6 +721,9 @@ function M.Refresh(f, ctx, ui)
                         y = y - 4; place(row.note, PAD); y = y - textH(row.note, 12)
                     end
                 else
+                    row.text:SetWidth(CW); row.hit:SetSize(CW, 16)
+                    place(row.text, PAD); place(row.hit, PAD)
+                    y = y - 18 - 4
                     row.note:SetText((vr.segments and M.Rich(vr.segments)) or vr.note or "")
                     place(row.note, PAD); y = y - textH(row.note, 12)
                 end
@@ -725,7 +732,7 @@ function M.Refresh(f, ctx, ui)
                 if bidItem then
                     row.bid:SetText(M.Rich(bidItem.segments)); y = y - 2; place(row.bid, PAD); y = y - textH(row.bid, 12)
                 else row.bid:SetText("") end
-                y = y - 6 - 4
+                y = y - 3 - 3
                 if showPick then
                     -- the selectable block: from just above the name to just under the last line, 4 px wider than the text on each side
                     local h = top - y
@@ -741,14 +748,7 @@ function M.Refresh(f, ctx, ui)
             local view = math.min(content, SCROLL_H)
             f.scroll:SetSize(PAD + CW + 4, view); f.list:SetSize(PAD + CW + 4, content)
             if content <= view and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0)
-            elseif f.scrollToSelected and selTop and f.scroll.SetVerticalScroll then
-                -- the item the panel moved to is brought into view
-                local at = f.scroll.GetVerticalScroll and f.scroll:GetVerticalScroll() or 0
-                if type(at) ~= "number" then at = 0 end
-                local want0 = -selTop
-                if want0 < at or want0 + 90 > at + view then f.scroll:SetVerticalScroll(math.max(0, math.min(want0 - 6, content - view))) end
             end
-            f.scrollToSelected = nil
             layout[#layout + 1] = { f.scroll, 0, outerY }; want[f.scroll] = true; want[f.list] = true
             y = outerY - view - GAP
         else y = outerY end

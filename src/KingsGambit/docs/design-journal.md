@@ -2563,3 +2563,7 @@ Answered items no longer move: the list stays in the drop's order, and only the 
 
 - **The bid timer scales with the number of items** (instead of Gargul's timer per item): the first item gets the base time (30 s) and each further item adds 8 s (`bidSecondsPerItem`), up to 300 s (`bidSecondsMax`). 5 items = 62 s, 20 items = 182 s. The game's host and the practice raid use it; a bare session stays flat. The Master Looter can still end bidding early (resolve), and `extend` still adds time. Players are sent the scaled time with the session.
 - **What is left to decide stands out in the item list:** an item you have answered shows a check mark and what you said, all in gray; an item still to answer is marked with a gold ">" and "(your answer)". The panel selection (the gray background) is separate and still only moves on your own answer.
+
+## A denser list, and no auto-scroll
+
+The item list is one line per item: the name on the left and the four choices on the same line, right-aligned (the chosen one still shown pushed in, and an answered item still checked and gray; an open one marked with a gold ">"). That roughly halves a row's height, so more items fit before the list scrolls. The list no longer scrolls by itself when the selection moves; it stays where you left it (the earlier scroll-into-view was disorienting). Long item names are cut to fit; hover for the item.
