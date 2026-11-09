@@ -3511,9 +3511,55 @@ function M.SpecNames(class)
 end
 
 -- The class's spec called `name` (any case), as { name, role }, or nil.
+-- Shorthand a player might type for a spec, per class (lowercase, no punctuation). The full names and unambiguous prefixes work without being listed.
+M.SPEC_ALIASES = {
+    WARRIOR = { prot = "Protection", tank = "Protection" },
+    PALADIN = { prot = "Protection", ret = "Retribution", retri = "Retribution" },
+    HUNTER = { bm = "Beast Mastery", beastmastery = "Beast Mastery", beast = "Beast Mastery", mm = "Marksmanship", marks = "Marksmanship", sv = "Survival", surv = "Survival" },
+    ROGUE = { assa = "Assassination", sin = "Assassination", combat = "Combat", sub = "Subtlety" },
+    PRIEST = { disc = "Discipline", shadow = "Shadow" },
+    SHAMAN = { ele = "Elemental", elemental = "Elemental", enh = "Enhancement", enhance = "Enhancement", resto = "Restoration", rest = "Restoration" },
+    MAGE = {},
+    WARLOCK = { aff = "Affliction", affli = "Affliction", demo = "Demonology", destro = "Destruction", dest = "Destruction" },
+    DRUID = { cat = "Feral (cat)", kitty = "Feral (cat)", feralcat = "Feral (cat)", bear = "Feral (bear)", feralbear = "Feral (bear)",
+        resto = "Restoration", boomkin = "Balance", boomie = "Balance", moonkin = "Balance", balance = "Balance" },
+}
+
+-- Words that may surround a spec in a reply ("I'm fury please") and are ignored.
+local FILLER = { i = true, im = true, am = true, its = true, it = true, is = true, my = true, a = true, an = true, the = true, spec = true,
+    please = true, pls = true, thanks = true, thx = true, ["for"] = true, this = true, raid = true }
+
+-- Lowercase, letters and spaces only, filler words dropped, spaces collapsed: "I'm Feral (Cat), please." -> "feral cat"
+local function clean(text)
+    local words = {}
+    for w in tostring(text or ""):lower():gsub("'", ""):gsub("[^%a%s]", " "):gmatch("%S+") do
+        if not FILLER[w] then words[#words + 1] = w end
+    end
+    return table.concat(words, " ")
+end
+
+-- Find a spec by what a player typed: any case, the full name, shorthand ("prot", "bm", "cat"), or an unambiguous start of the name ("beast", "resto").
+-- Returns the spec, or nil + "ambiguous" + the matching names ("feral" fits both Feral specs), or nil when nothing fits.
 function M.FindSpec(class, name)
-    local want = tostring(name or ""):lower()
-    for _, s in ipairs(M.SPECS[class] or {}) do if s.name:lower() == want then return s end end
+    local want = clean(name)
+    local list = M.SPECS[class] or {}
+    if want == "" then return nil end
+    for _, s in ipairs(list) do if clean(s.name) == want then return s end end
+    local squashed = want:gsub(" ", "")
+    local alias = (M.SPEC_ALIASES[class] or {})[squashed]
+    if alias then for _, s in ipairs(list) do if s.name == alias then return s end end end
+    local hits = {}
+    for _, s in ipairs(list) do
+        local full = clean(s.name)
+        -- (three letters at least, so an answer like "p" or "n" is never taken for a spec)
+        if #squashed >= 3 and (full:sub(1, #want) == want or full:gsub(" ", ""):sub(1, #squashed) == squashed) then hits[#hits + 1] = s end
+    end
+    if #hits == 1 then return hits[1] end
+    if #hits > 1 then
+        local names = {}
+        for _, s in ipairs(hits) do names[#names + 1] = s.name end
+        return nil, "ambiguous", names
+    end
 end
 
 -- Is the item a main-spec upgrade for this spec? A Need is only open to a spec the item suits: a Fury Warrior's Need on a tanking item is an Off-spec.
@@ -4084,7 +4130,11 @@ function Session:handleWhisper(sender, text, specNote)
     -- the answer to "which spec are you?": recorded for the rest of the raid, and the answers that were waiting for it are taken now
     if self.askedSpec[sender] then
         local class = self.class[norm(self, sender)]
-        local sp = ItemFit.FindSpec(class, (tostring(text):lower():match("^%s*(.-)%s*$")))
+        local sp, problem, choices = ItemFit.FindSpec(class, text)
+        if problem == "ambiguous" then
+            self:say(sender, "Which one: " .. table.concat(choices, " or ") .. "? (Type the full name.)")
+            return nil, "ambiguous"
+        end
         if sp then
             self.askedSpec[sender] = nil
             local ok, err = self:setSpec(sender, sp.name)
