@@ -158,7 +158,7 @@ M.list = {
         -- What the learner still has to do before the lesson can be judged: the page shows this instead of a verdict.
         todo = function(sim)
             if not lastEvent(sim, "main", "Revert") then
-                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: in the Corrections card below, press \"Undo this\" on Brann's award. The undo is written as its own event, so the history shows what happened."
+                return "Brann won the staff and it has been handed out, but that was a mistake. Now fix it: in the game, open the Ledger tab, click Brann's award, and press \"Undo this award\" (on the page: press \"Undo this\" in the Corrections card). The undo is written as its own event, so the history shows what happened."
             end
         end,
         after = function(sim)

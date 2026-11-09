@@ -347,7 +347,11 @@ function M.New(ctx)
             if w:lower() == "yes" then confirmed = true else words[#words + 1] = w end
         end
         local target
-        if #words == 0 then
+        if words[1] and words[1]:lower() == "id" then
+            -- an entry picked in the Ledger pane: that very award (the entry's id)
+            for i = #stack, 1, -1 do if tostring(stack[i].id) == tostring(words[2]) then target = stack[i]; break end end
+            if not target then return out("That award can't be undone from here (only awards you made, and only until you move the list by hand).") end
+        elseif #words == 0 then
             target = stack[#stack]
         else
             local who = name(words[1])

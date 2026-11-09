@@ -46,6 +46,7 @@ M.TEXT = {
     -- the windows
     navlists = { "Lists", "The standings: who is first for what. Officers (and a raid's Master Looter) move players here." },
     tryon = { "Try it on", "See how this entry's item looks on your character, in the game's dressing room. You can also Ctrl-click an entry. It only shows the item; nothing is recorded or equipped." },
+    undoentry = { "Undo this award", "Reverses this award, which you made. The winner goes back up the list as if it had never happened. The undo is written as its own entry, so the history shows what happened; nothing is erased. Awards made since stay as they are." },
     navwelcome = { "Welcome", "What King's Gambit is, how loot works, what the guild values and where everything is. The addon opens on this page until you turn that off (the checkbox at its foot); it is always here." },
     welcomefirst = { "Show the welcome page first", "While this is ticked, King's Gambit opens on the Welcome page. Untick it when you have read it: from then on it opens on the section you last had open." },
     retireledger = { "Retire or keep", "Retire: remove this ledger's saved data from this computer (it asks first; only an officer of its guild can). Nothing in the ledger is erased and nobody else's copy is touched. An officer's retirement is told to the guild: each member can restore it or let it expire in 30 days. The ledger in use now is removed at your next login.\n\nKeep: bring a retired ledger back. Everyone is told, and if its data was removed here it is fetched again from whoever still has it." },

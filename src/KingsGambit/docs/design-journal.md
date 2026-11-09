@@ -2548,3 +2548,7 @@ Not everyone has the addon, and one whisper carries one message, so the Master L
 ## A person's class and spec in their class color
 
 Wherever a person is named in the Loot window (banner, results, the people lists), the "(Fury Warrior)" after their name is now in their class color, not gray, on the game window and the page alike. The standings' Class column is colored too. Your own spec is shown from the talents' pick even before you have answered, since the addon can see it; another player's spec shows once it is on record (they answered, or an officer set it), because the game does not tell us anyone else's.
+
+## Undo from the entry itself
+
+Undoing an award is now done from the Ledger pane: click the award you made, and an "Undo this award" button appears beside "Try it on" (only for an award on your own undo stack, so not someone else's, and not one already undone). It runs `undo id <entry id> yes`, which reverses that very award (the older `undo` and `undo <name>` still work). The undo is a new entry; nothing is erased. Lesson 7 ("Fixing a mistake") now points there. A learner reported the Awards tab's "Undo the last award" saying "Nothing can be undone" in that lesson; a headless run of the same lesson (auto and by hand) undoes fine, so the cause in the game is not yet found (the likeliest is pressing it before the session was confirmed and the award written). Picking the entry removes any doubt about which award is meant.

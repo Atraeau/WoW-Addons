@@ -379,7 +379,14 @@ function M.Detail(ctx, id)
     for k in pairs(ev.data or {}) do keys[#keys + 1] = k end
     table.sort(keys)
     for _, k in ipairs(keys) do add(k, valueText(ev.data[k])) end
-    return lines, item
+    -- Can the reader undo this very entry? (an award they made, still on their undo stack)
+    local canUndo = false
+    if ev.type == "Award" and ev.list then
+        local chain = ctx.engine:Get(ev.list)
+        local stack = chain and chain.state.undo and chain.state.undo[ctx.engine:MyChain()]
+        for _, e in ipairs(stack or {}) do if e.id == ev.id then canUndo = true end end
+    end
+    return lines, item, canUndo, ev
 end
 
 function M.History(ctx, filter)

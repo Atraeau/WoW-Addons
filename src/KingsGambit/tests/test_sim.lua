@@ -741,3 +741,37 @@ test("with specs required, the bots' specs are on record and the learner is aske
     assert(s:setSpec(me, first), "the learner chooses")
     eq(sim.engine:SpecOf(sim.raidId, me).spec, first)
 end)
+
+test("lesson 'Fixing a mistake': the learner's undo (the Awards tab's button) reverses the award", function()
+    local Commands = SK.modules.Commands
+    local sc = Scenarios.find("fix-a-mistake")
+    local sim = Sim.NewLesson(sc)
+    assert(sim:startLesson()) -- (played as a person: the learner answers by hand)
+    assert(sim.session:bid("You", 1, "pass"))
+    assert(sim:runUntil("review", 400)); assert(sim.session:confirm())
+    local lines = {}
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine, })
+    sim.client.print = function(_, t) lines[#lines + 1] = t end
+    cmd.handle("undo yes")
+    assert(sim.engine:View().applied[#sim.engine:View().applied].type == "Revert", "undo wrote a Revert: " .. table.concat(lines, " | "))
+end)
+
+test("an award is undone from its own ledger entry: the entry says it can be, and 'undo id' reverses that one", function()
+    local Commands, GuildBook = SK.modules.Commands, SK.modules.GuildBook
+    local sc = Scenarios.find("fix-a-mistake")
+    local sim = Sim.NewLesson(sc)
+    assert(sim:startLesson()); assert(sim.session:bid("You", 1, "pass"))
+    assert(sim:runUntil("review", 400)); assert(sim.session:confirm())
+    local ctx = { engine = sim.engine, client = sim.client }
+    local award
+    for _, ev in ipairs(sim.engine:View().applied) do if ev.type == "Award" then award = ev end end
+    assert(award, "an award was written")
+    local _, _, canUndo = GuildBook.Detail(ctx, award.id)
+    eq(canUndo, true, "the entry offers the undo")
+    local cmd = Commands.New({ client = sim.client, engine = sim.engine })
+    cmd.handle("undo id " .. tostring(award.id) .. " yes")
+    local last = sim.engine:View().applied[#sim.engine:View().applied]
+    eq(last.type, "Revert"); eq(last.data.target, award.id)
+    local _, _, again = GuildBook.Detail(ctx, award.id)
+    eq(again, false, "and once undone it no longer offers it")
+end)

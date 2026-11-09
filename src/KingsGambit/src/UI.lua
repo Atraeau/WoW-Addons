@@ -812,7 +812,15 @@ function M:BuildHistory(parent)
     p.tryOn:SetScript("OnClick", function() M.TryOn(p.tryOnItem) end)
     Tips.Attach(p.tryOn, "tryon")
     p.tryOn:Hide()
-    p.detail = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    -- An award you made can be undone right here, from the entry itself (the undo is a new entry; nothing is erased).
+    p.undoBtn = button(p, "Undo this award", 110, 20)
+    p.undoBtn:SetPoint("BOTTOMRIGHT", -92, 108)
+    p.undoBtn:SetScript("OnClick", function()
+        if p.undoId then M:Command("undo id " .. tostring(p.undoId) .. " yes") end
+    end)
+    Tips.Attach(p.undoBtn, "undoentry")
+    p.undoBtn:Hide()
+    p.detail =p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     p.detail:SetPoint("TOPLEFT", p, "BOTTOMLEFT", 4, 108); p.detail:SetWidth(390); p.detail:SetHeight(104)
     p.detail:SetJustifyH("LEFT"); p.detail:SetJustifyV("TOP"); p.detail:SetWordWrap(true)
     local okInset, inset = pcall(CreateFrame, "Frame", nil, p, "InsetFrameTemplate")
@@ -891,11 +899,13 @@ function M.RefreshHistory(p, ctx)
         for i = #h.entries + 1, #p.lines do p.lines[i]:Hide() end
         p.child:SetHeight(math.max(#h.entries * HIST_H, 1))
     end
-    local detail, item
-    if M.ledgerSelected then detail, item = GuildBook.Detail(ctx, M.ledgerSelected) end
+    local detail, item, canUndo, selEv
+    if M.ledgerSelected then detail, item, canUndo, selEv = GuildBook.Detail(ctx, M.ledgerSelected) end
     if not detail then M.ledgerSelected = nil end
     p.tryOnItem = item
     setShown(p.tryOn, item ~= nil)
+    p.undoId = canUndo and selEv and selEv.id or nil
+    if p.undoBtn then setShown(p.undoBtn, p.undoId ~= nil) end
     p.detail:SetText(detail and M.DetailText(detail) or "Click an entry to see exactly what was written: who wrote it, when, its id and every field.")
     p.countText:SetText(h.total > h.shown and ("Showing the newest %d of %d"):format(h.shown, h.total) or ("%d entries"):format(h.total))
     if h.empty then p.message:SetText(h.empty); p.message:Show() else p.message:Hide() end

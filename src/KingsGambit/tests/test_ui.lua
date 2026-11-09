@@ -285,7 +285,7 @@ H.section("Window: tooltips")
 test("every button has a tooltip with a title and an explanation, and a grayed-out one can say why", function()
     local Tips = SK.modules.UITips
     for _, id in ipairs { "need", "off", "pass", "gift", "resolve", "extend", "confirm", "cancel", "start", "pick", "skip", "claim", "decline", "give", "keep", "withdraw",
-        "kill", "handout", "wait", "practice", "practicesize", "statssort", "bidspick", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "whispermode", "specpick", "specauto", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
+        "kill", "handout", "wait", "practice", "practicesize", "statssort", "bidspick", "practicelesson", "lessonstart", "lessonagain", "lessonnext", "whispermode", "specpick", "specauto", "undoentry", "listpick", "sort", "top", "up", "down", "bottom", "remove", "award", "addall", "startledger", "dothis" } do
         local title, text = Tips.Resolve(id)
         assert(title and title ~= "" and text and #text > 30, "tooltip text for " .. id)
     end
