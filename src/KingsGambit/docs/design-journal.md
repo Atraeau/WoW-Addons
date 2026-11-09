@@ -2552,3 +2552,7 @@ Wherever a person is named in the Loot window (banner, results, the people lists
 ## Undo from the entry itself
 
 Undoing an award is now done from the Ledger pane: click the award you made, and an "Undo this award" button appears beside "Try it on" (only for an award on your own undo stack, so not someone else's, and not one already undone). It runs `undo id <entry id> yes`, which reverses that very award (the older `undo` and `undo <name>` still work). The undo is a new entry; nothing is erased. Lesson 7 ("Fixing a mistake") now points there. A learner reported the Awards tab's "Undo the last award" saying "Nothing can be undone" in that lesson; a headless run of the same lesson (auto and by hand) undoes fine, so the cause in the game is not yet found (the likeliest is pressing it before the session was confirmed and the award written). Picking the entry removes any doubt about which award is meant.
+
+## The item list keeps its order (changes the earlier "answered items drop to the bottom")
+
+Answered items no longer move: the list stays in the drop's order, and only the selection moves. After you answer an item the panel goes down to the next item still unanswered (after the one you are on, wrapping to the first one still open) and scrolls it into view; once everything is answered it stays where it is. Click any row to look back at it and watch how it progresses. (The earlier reorder made the list jump under the mouse.)

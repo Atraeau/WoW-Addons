@@ -492,25 +492,25 @@ function M.Refresh(f, ctx, ui)
         f.autoSpecFor = v.sessionKey
         ui:ChooseSpec(v.spec.detected)
     end
-    -- Items still to answer come first, in their own order; an answered one drops to the bottom. While following, the panel shows the first item still to answer.
-    local order, open = {}, {}
-    for i, vr in ipairs(v.rows) do
-        local answered = false
-        for _, vb in ipairs(vr.buttons) do if vb.selected then answered = true end end
-        if #vr.buttons == 0 or answered then order[#order + 1] = i else open[#open + 1] = i end
+    -- The list keeps its order. While following, the panel moves down to the next item still to answer (after the one you are on, wrapping to the first), and stays
+    -- where it is once everything is answered; click any item to look back at it.
+    local order = {}
+    for i = 1, #v.rows do order[i] = i end
+    local function isOpen(vr)
+        if #vr.buttons == 0 then return false end
+        for _, vb in ipairs(vr.buttons) do if vb.selected then return false end end
+        return true
     end
-    for _, i in ipairs(order) do open[#open + 1] = i end
-    order = open
-    local firstOpen
-    for _, i in ipairs(order) do
-        local vr = v.rows[i]
-        local answered = #vr.buttons == 0
-        for _, vb in ipairs(vr.buttons) do if vb.selected then answered = true end end
-        if not answered then firstOpen = vr.id; break end
+    local cur = 0
+    for i, vr in ipairs(v.rows) do if vr.id == ui.bidItem then cur = i end end
+    local nextOpen
+    for k = 1, #v.rows do
+        local i = ((cur - 1 + k) % #v.rows) + 1
+        if isOpen(v.rows[i]) then nextOpen = v.rows[i].id; break end
     end
-    if ui.bidFollow and firstOpen then
-        if ui.bidItem ~= firstOpen and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0) end
-        ui.bidItem = firstOpen
+    if ui.bidFollow and nextOpen and ui.bidItem ~= nextOpen then
+        ui.bidItem = nextOpen
+        f.scrollToSelected = true
     end
     local layout, want = {}, {}
     local y = -32 -- just under the title bar
@@ -677,6 +677,7 @@ function M.Refresh(f, ctx, ui)
         local showPick = v.bids ~= nil
         if #v.rows > 0 then divider() end
         local listFrom, outerY = #layout + 1, y
+        local selTop
         y = 0 -- (inside the scrolling list, y counts down from its top)
         for i = 1, MAX do
             local ri = order[i]
@@ -687,6 +688,7 @@ function M.Refresh(f, ctx, ui)
                 row.text:SetText(label)
                 place(row.text, PAD); place(row.hit, PAD)
                 local top = y
+                if vr.id == ui.bidItem then selTop = top end
                 y = y - 18 - 4
                 local hasButtons = #vr.buttons > 0
                 if hasButtons then
@@ -726,7 +728,15 @@ function M.Refresh(f, ctx, ui)
             local content = math.max(1, -y)
             local view = math.min(content, SCROLL_H)
             f.scroll:SetSize(PAD + CW + 4, view); f.list:SetSize(PAD + CW + 4, content)
-            if content <= view and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0) end
+            if content <= view and f.scroll.SetVerticalScroll then f.scroll:SetVerticalScroll(0)
+            elseif f.scrollToSelected and selTop and f.scroll.SetVerticalScroll then
+                -- the item the panel moved to is brought into view
+                local at = f.scroll.GetVerticalScroll and f.scroll:GetVerticalScroll() or 0
+                if type(at) ~= "number" then at = 0 end
+                local want0 = -selTop
+                if want0 < at or want0 + 90 > at + view then f.scroll:SetVerticalScroll(math.max(0, math.min(want0 - 6, content - view))) end
+            end
+            f.scrollToSelected = nil
             layout[#layout + 1] = { f.scroll, 0, outerY }; want[f.scroll] = true; want[f.list] = true
             y = outerY - view - GAP
         else y = outerY end
