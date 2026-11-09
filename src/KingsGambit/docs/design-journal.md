@@ -2534,3 +2534,13 @@ Not everyone has the addon, and one whisper carries one message, so the Master L
   Reply with just one: Arms, Fury, Protection". Their reply is recorded for the rest of the raid, the held answers are taken at once, and later answers are never held up. (`spec fury` or `fury: 1n` still work.)
 - **Practice: "Play without the addon":** a raider-without-the-addon mode in practice. The loot master's whispers appear in a Whisper window, you type replies, and the same parser and replies run; the Loot window's
   answer buttons are off meanwhile. It is the test bench for whether the instructions are clear item by item.
+
+## Typing a spec (case, shorthand, filler)
+
+`ItemFit.SPECS` is the one list of specs per class; whispers now find a spec by what a player typed (`ItemFit.FindSpec`), not only by the exact name:
+
+- **Any case, punctuation and filler ignored:** "FURY", "Fury.", "I'm fury please" all find Fury.
+- **Shorthand per class** (`ItemFit.SPEC_ALIASES`): prot, ret, bm, mm, sv, assa, sub, disc, ele, enh, resto, cat, bear, boomkin, and so on.
+- **A start of the name** works when it is unambiguous and at least three letters ("beast", "destr"). Three letters so that a bare "p" or "n" in an answer is never taken for a spec.
+- **A name that fits two specs asks:** "feral" fits Feral (bear) and Feral (cat), so the follow-up whisper replies "Which one: Feral (bear) or Feral (cat)?" and the question stays open.
+- Specs are still stored by their full display name; shorthand only affects what is accepted when typing, so nothing in the ledger changes.

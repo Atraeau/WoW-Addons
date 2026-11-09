@@ -532,7 +532,11 @@ function Session:handleWhisper(sender, text, specNote)
     -- the answer to "which spec are you?": recorded for the rest of the raid, and the answers that were waiting for it are taken now
     if self.askedSpec[sender] then
         local class = self.class[norm(self, sender)]
-        local sp = ItemFit.FindSpec(class, (tostring(text):lower():match("^%s*(.-)%s*$")))
+        local sp, problem, choices = ItemFit.FindSpec(class, text)
+        if problem == "ambiguous" then
+            self:say(sender, "Which one: " .. table.concat(choices, " or ") .. "? (Type the full name.)")
+            return nil, "ambiguous"
+        end
         if sp then
             self.askedSpec[sender] = nil
             local ok, err = self:setSpec(sender, sp.name)

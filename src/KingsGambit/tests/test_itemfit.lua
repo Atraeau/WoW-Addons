@@ -30,6 +30,33 @@ local function suited(item)
     return out
 end
 
+H.section("Item fit: finding a spec from what a player typed")
+test("any case, the full name, shorthand, and filler words all find the spec", function()
+    local function name(class, text) local s = ItemFit.FindSpec(class, text); return s and s.name end
+    eq(name("WARRIOR", "FURY"), "Fury"); eq(name("WARRIOR", "fury"), "Fury"); eq(name("WARRIOR", "  Fury. "), "Fury")
+    eq(name("WARRIOR", "I'm fury please"), "Fury"); eq(name("WARRIOR", "prot"), "Protection")
+    eq(name("HUNTER", "beast mastery"), "Beast Mastery"); eq(name("HUNTER", "BeastMastery"), "Beast Mastery"); eq(name("HUNTER", "bm"), "Beast Mastery")
+    eq(name("DRUID", "feral (cat)"), "Feral (cat)"); eq(name("DRUID", "cat"), "Feral (cat)"); eq(name("DRUID", "bear"), "Feral (bear)")
+    eq(name("DRUID", "resto"), "Restoration"); eq(name("PALADIN", "ret"), "Retribution"); eq(name("SHAMAN", "enh"), "Enhancement")
+    eq(name("PRIEST", "holy"), "Holy", "an exact name wins")
+end)
+test("a name that fits two specs asks which; a spec of another class, or a bare letter, finds nothing", function()
+    local s, why, choices = ItemFit.FindSpec("DRUID", "feral")
+    eq(s, nil); eq(why, "ambiguous"); eq(#choices, 2)
+    eq(ItemFit.FindSpec("WARRIOR", "fire"), nil, "a mage's spec is not a warrior's")
+    eq(ItemFit.FindSpec("WARRIOR", "p"), nil, "'p' is a pass, not Protection")
+    eq(ItemFit.FindSpec("WARRIOR", "pass"), nil)
+    eq(ItemFit.FindSpec("WARRIOR", ""), nil)
+end)
+test("every alias points at a real spec of its class", function()
+    for class, map in pairs(ItemFit.SPEC_ALIASES) do
+        for alias, full in pairs(map) do
+            local s = ItemFit.FindSpec(class, alias)
+            assert(s and s.name == full, class .. " alias '" .. alias .. "' -> " .. full)
+        end
+    end
+end)
+
 H.section("Item fit: suggestions from stats")
 test("plate with strength suits the plate melee specs; a priest can't wear it", function()
     local s = suited(ITEMS.plateDps)
