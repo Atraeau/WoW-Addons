@@ -10,7 +10,7 @@ local SRC = "src/"
 local DIR = "simulator/"
 local MODULES = { "ledger/Hash", "ledger/Identity", "ledger/Version", "ledger/Schemas", "ledger/Migrations", "ledger/Standings", "ledger/Ledger", "client/Client", "client/MockClient",
     "ledger/Engine", "ledger/Ledgers", "loot/ItemFit", "loot/Loot", "loot/LootWhispers", "loot/LootDraft", "loot/LootFinish", "ledger/Requests", "sim/SimNetwork", "ledger/Sync", "data/MoltenCore", "data/AQ40", "loot/Tokens", "loot/Attendance",
-    "sim/Sim", "sim/Scenarios", "ui/UITips", "ui/UILoot", "ui/LootView", "ui/guildbook/GuildBookPages", "ui/guildbook/GuildBookHistory", "ui/guildbook/GuildBookStats", "ui/guildbook/GuildBookRaid", "ui/guildbook/GuildBookStage", "ui/GuildBook" }
+    "sim/Sim", "sim/Scenarios", "sim/ScenarioBasics", "sim/ScenarioDraft", "sim/ScenarioHandout", "ui/UITips", "ui/UILoot", "ui/LootView", "ui/guildbook/GuildBookPages", "ui/guildbook/GuildBookHistory", "ui/guildbook/GuildBookStats", "ui/guildbook/GuildBookRaid", "ui/guildbook/GuildBookStage", "ui/GuildBook" }
 
 -- The Lua-in-JS runtime (fengari-web, MIT) is vendored in simulator/vendor/ and inlined, so the page needs no network and
 -- no CDN. See simulator/vendor/README.md for its source and the hash it was verified against.

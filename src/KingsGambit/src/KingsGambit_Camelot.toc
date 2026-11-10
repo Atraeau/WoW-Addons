@@ -46,6 +46,9 @@ loot/Attendance.lua
 ledger/Guard.lua
 sim/Sim.lua
 sim/Scenarios.lua
+sim/ScenarioBasics.lua
+sim/ScenarioDraft.lua
+sim/ScenarioHandout.lua
 ui/UI.lua
 ui/UILoot.lua
 ui/UITips.lua
