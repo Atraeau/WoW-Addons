@@ -2634,3 +2634,7 @@ The Lua files moved into folders by component (`core/ ledger/ client/ loot/ comm
 ## Code audit and tidy-up, phases 4 and 5: code map and test review (2026-11-09)
 
 `docs/code-map.md` says where each component lives (one line per folder and file, with its main entry points) and is linked from the README, `src/README.md` and `docs/README.md`; a test fails if a file is added without being listed there. The tests were reviewed (`docs/test-review.md`): none were deleted, three spots were adjusted for the removed code, four tests were added to guard the reorganization (every file in the TOC and the map; the simulator page's module list is complete; every text command is installed; the shared emitter). 728 tests pass.
+
+## The rationale leads with why King's Gambit beats Suicide Kings (2026-11-10)
+
+**Asked by the guild leader:** drop the explanation of the name; make a convincing case that King's Gambit is the better loot system. `docs/rationale.md` now opens with a one-paragraph claim (everything good about Suicide Kings kept, what wastes loot and invites gaming fixed), then why SK is worth keeping, where it breaks down (useful loot disenchanted, the free-roll loophole, trust in one officer's list, everyone asked about everything), and a table of each failure, what King's Gambit does, and why that is better. The later "what is different" section is now just the list of additions. The claims are limited to what the rules do; the "what this system does not do" section stays as the honest counterweight.

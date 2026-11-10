@@ -1,17 +1,43 @@
 # King's Gambit — Rationale & Player Guide
 
-For some, Suicide Kings (SK) is a low-maintenance loot system which rewards loyalty and attendance, with a simple-to-follow ruleset which is consistent for every raid and every raider. It is low-effort for leadership to apply consistent, transparent and fair rules for loot distribution by simply giving everyone in the raid a chance to win a bid. Other loot systems tend to require more maintenance such as keeping track of everyone's dragon kill points (DKP), or using more traditional corporate performance review structure (via loot council(s)) to reward the best players to optimize raid performance - often with fairness being fully dependent on the organization of the council. Finally, Blizzard itself uses probability and chance to fairly distribute loot, which some loot systems lean on such as "soft reserve" (SR). Random chance, while 'fair', often doesn't feel consistent as it is not uncommon for a player to win multiple rolls in a row, while other players lose multiple rolls. Over time it usually will distribute out, but it feels bad when the same person won twice in consecutive raids over someone who simply had bad luck. Suicide kings is effectively like the "round robin" loot system, except that your position in the robin persists across raids. When executed well, loot efficiently and evenly distributes across all raid members.
+**King's Gambit keeps everything good about Suicide Kings (SK) and fixes what makes it quietly waste loot and invite gaming.** The rule stays one
+sentence long: win an item, drop to the bottom. What changes is that useful loot no longer gets thrown away, nobody can game a pass, and the whole list is
+something every raider can verify instead of something one officer keeps.
 
-Suicide Kings has a flaw however, and it comes from how loot position is valued. Experience shows that veteran players looking to optimize their gear, will hold out for their best-in-slot (BiS) items - sacrificing items which could be useful for them, but are not that one item they have their eyes on. In the worst case, a piece of valuable loot which could be useful for someone, gets passed on in order to preserve relative position for the most contested items - often resulting in disenchanting that item which could have been useful and feels like a waste of loot. In the past, attempts have been made to try and compensate for this by adding a free-roll for that item if everyone passes, but this results in a loophole in the entire loot system - where a group could conspire to pass and get a 'free' item.
+## Why Suicide Kings is worth keeping
 
-Kings Gambit attempts to resolve this flaw by adding a new mechanic: Gifting. Normally, in Suicide Kings, one privileged position can sometimes be the so-called 
-'bottom-feeder'. When a player is already near the bottom of the list, they have very little to lose by taking items, since they are already at the bottom. This can cause incentive to collect all the side-grade gear which drops, but this only works for items that player can use. Gifting allows for this player to now choose how to distribute that item free-of-charge to another player through a specifically designated role: The Salvager. Anyone in the raid can gift any item to any other player - but it will be paid by the givers' position in the list. Effectively, this gives the salvager the role of bottom feeder, but allows them to 'feed up' items which could be side-grades. This solves the hoarding issue by allowing someone to be gifted an item without any sacrifice in relative position - enabling so-called 'side-grade' or lower-quality upgrades to be distributed to the players that could use them, it also is up to the salvager to decide what to do with that item, and that position rotates as folks win items so it doesn't always fall on the same person. It adds further incentive to be at the bottom because you get to decide what is done with that loot - whether to keep it for yourself, give it, disenchant it or sell it. It's like having a temporary loot council veto, but only for items that clearly nobody 'wants' because they didn't want to bid on it.
+SK is a low-maintenance system that rewards loyalty and attendance. Everyone in the raid gets a real chance at every item, the rules are the same for every raid
+and every raider, and leadership only has to apply them rather than argue them. Compare the alternatives: DKP means somebody keeps points for everyone;
+a loot council makes fairness depend on the council; random rolls and "soft reserve" lean on chance, which is fair on paper but feels bad when the same
+player wins twice in a row while another loses ten. SK is effectively round robin with your place remembered between raids, so over time loot spreads evenly
+across everyone who shows up. King's Gambit does not give any of that up.
 
-*King's Gambit is inspired by the classic Suicide Kings strategy: it keeps what works (one simple rule, earned turns, loot spread evenly) and fixes what does not (useful loot lost to disenchanting) with gifting. It is named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
+## Where Suicide Kings breaks down
 
-*How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the
-values behind it and the [design journal](design-journal.md) for how each rule
-was decided.*
+1. **Useful loot gets thrown away.** Because winning costs your place, a veteran holds out for the best-in-slot (BiS) piece and passes on everything else,
+   including items that would help them. If nobody lower on the list bids, a good item is disenchanted. Every raid has seen it.
+2. **The usual fix creates a loophole.** Adding a free roll when everyone passes means a group can agree to pass together and roll for a "free" item.
+3. **Every decision is made on trust.** In most guilds the list is a spreadsheet or an addon note held by one officer. When someone's place looks wrong,
+   or a trade happens after the raid, there is nothing to check it against and no clean way to fix it.
+4. **Everyone is asked about everything.** Players are asked about gear they can't use, so the real decisions get buried.
+
+## How King's Gambit fixes it
+
+| Where SK fails | What King's Gambit does | Why it is better |
+|---|---|---|
+| A player passes on a side-grade to save their place, and it is disenchanted | **Gifting:** win the item and hand it to anyone, in any direction. You pay the place; they get the item. | A minor upgrade finds a home even when the player who needs it sits too high to bid. Generosity is cheap, never required, and visible. |
+| Nobody bids, so the item is rolled or lost | **Salvage:** the item goes to whoever is at the bottom at that moment. They keep it, gift it, sell it, disenchant it or bank it. | Not a roll, so there is nothing to win by conspiring. The beneficiary is set by the list, not chosen by the group. The bottom position rotates as people win. |
+| The list is whatever the officer says it is | **A shared, tamper-evident ledger.** Every win, move and correction is an entry each player holds and can verify. | Trust is checkable. Anyone can see why the list looks the way it does. |
+| A mistake means editing history | **Fix forward:** any of the Master Looter's awards can be undone exactly; an after-the-fact trade is detected and recorded either as a correction or as a gift. | Corrections are as visible as the original decisions, and the default matches what usually happened. |
+| Players are asked about gear they can't use | **Eligibility:** you are only asked about items your class and spec could use. | Fewer prompts, and the real choices stand out. Eligibility filters who is asked and never decides who wins. |
+| Wishlists and officers decide ahead of time | **Live decisions by the player,** after the drop. Officers run the process and do not decide who deserves loot. | The choice is made with the facts of this drop, by the person it affects. |
+| Several drops at once are fought over | **A draft** with your ranking made up front, a **separate off-spec list**, and main-spec always beating off-spec. | Fair order of picks, no benefit from item order, and off-spec can never jump someone who needs it for their main. |
+
+Passing stays free, and your place changes only when you win. Nothing here makes the system harder to follow: a raider still needs to know one rule and four
+buttons.
+
+*How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the values behind it and the [design journal](design-journal.md) for how each
+rule was decided.*
 
 ---
 
@@ -31,9 +57,9 @@ was decided.*
 That's the whole game. The rest of this document explains the edge cases and the
 reasoning.
 
-### What is different from Suicide Kings
+### What King's Gambit adds to Suicide Kings
 
-King's Gambit keeps what makes Suicide Kings good: one simple rule (win an item, drop to the bottom), turns that are earned rather than rolled, and loot that spreads evenly across everyone who shows up. It is not a rename of it. Suicide Kings' flaw is that someone high on the list passes on an item that would help them, to save their place for something better, and a useful item ends up disenchanted. King's Gambit answers this with gifting, which gives every player the agency to decide where loot goes: whoever wins an item can distribute it to the player who would use it, and someone near the bottom can do that at little or no cost to their place. Useful loot finds a home, not a shard. What it adds around that move:
+The table above says why; this is the list, with a line each on what to expect.
 
 - **Gifting as a rule, the biggest difference:** win, then give the item to anyone, in any direction, even upward; you pay the place and they get the item. A minor
   upgrade is not wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible.
