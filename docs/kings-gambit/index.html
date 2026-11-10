@@ -4060,14 +4060,11 @@ end
 -- What a player who answers by whisper is told when bidding opens: how to answer, and what is up (a few messages, each under the chat limit).
 function Session:menuLines(player)
     local class = self.class[norm(self, player)]
-    local lines = { "King's Gambit loot: answer EVERY item in ONE whisper to me, e.g. '1 need, 2 pass, 3 off' (n = need, o = off-spec, g = gift, p = pass). 'pass all' passes on everything. You can change answers until the timer ends." }
-    local cur = "Up for grabs:"
-    for _, it in ipairs(self.items) do
-        local piece = (" %d) %s"):format(it.id, it.link)
-        if #cur + #piece > 230 then lines[#lines + 1] = cur; cur = "More:" end
-        cur = cur .. piece
-    end
-    lines[#lines + 1] = cur
+    -- A list, one item to a message (each a clickable link, which carries the item id), then how to answer last, nearest the box they type in.
+    local n = #self.items
+    local lines = { ("King's Gambit loot: %d item%s up for grabs"):format(n, n == 1 and "" or "s") }
+    for _, it in ipairs(self.items) do lines[#lines + 1] = ("%d) %s"):format(it.id, it.link) end
+    lines[#lines + 1] = "Whisper me ONE message answering every item, e.g. '1 n, 2 p, 3 o'  (n = need, o = off-spec, g = gift, p = pass; 'pass all' passes everything). You can change answers until the timer ends."
     return lines
 end
 
