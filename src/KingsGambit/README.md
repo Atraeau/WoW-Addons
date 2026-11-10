@@ -14,7 +14,6 @@ Everything about King's Gambit lives in this folder, so it can move to its own r
 | [`simulator/`](simulator/README.md) | The real engine over a simulated raid, in a browser page, with training scenarios, a sync lab and a migration lab. **[Play it online](https://atraeau.github.io/WoW-Addons/kings-gambit/)** |
 | [`tools/`](tools/README.md) | Verify a saved ledger and print standings and history, without the game |
 | [`scripts/`](scripts/) | Build the simulator page; generate the raid training data; extract facts from the CMaNGOS database |
-| [`archive/`](archive/) | The earlier SuicideKings prototype, kept for reference |
 
 Run everything from this folder:
 
