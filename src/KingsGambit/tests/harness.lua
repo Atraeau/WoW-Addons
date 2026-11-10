@@ -1,13 +1,15 @@
 -- Shared test harness: loads the addon modules the way WoW does (addonName, namespace).
 local H = { passed = 0, failed = 0 }
--- The registry first; the modules in any order (they declare their dependencies; see Registry.lua).
-H.MODULES = { "Hash", "Identity", "Version", "Schemas", "Migrations", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "Ledgers", "ItemFit", "Loot", "SimNetwork", "Sync",
-    "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Attendance", "Guard", "Sim", "Scenarios", "UILoot", "UITools", "UITips", "UISkin", "LootView", "GuildBook", "LootWindow", "UI" }
--- Where each module lives: the TOC is the one list of files (src/<folder>/<Name>.lua), so a module is found by its name.
-H.PATHS = {}
+-- Where each module lives: the TOC is the one list of files (src/<folder>/<Name>.lua), so a module is found by its name, and every file the
+-- TOC lists is loaded: the registry first, then the modules in TOC order (they declare their dependencies, so the order does not matter; see Registry.lua).
+-- Core (the composition root, which needs the game) and SelfCheck (the in-game probe) are not loaded by the tests that use H.load.
+H.PATHS, H.MODULES = {}, {}
 for line in io.lines("src/KingsGambit.toc") do
     local path, name = line:gsub("\r", ""):match("^(%S-([%w_]+)%.lua)$")
-    if path then H.PATHS[name] = "src/" .. path end
+    if path then
+        H.PATHS[name] = "src/" .. path
+        if name ~= "Registry" and name ~= "Core" and name ~= "SelfCheck" then H.MODULES[#H.MODULES + 1] = name end
+    end
 end
 function H.path(name) return (assert(H.PATHS[name], "no such module file: " .. tostring(name))) end
 function H.load(files)

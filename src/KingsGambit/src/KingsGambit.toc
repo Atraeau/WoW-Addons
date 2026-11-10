@@ -28,6 +28,14 @@ loot/Loot.lua
 loot/LootNet.lua
 ledger/Requests.lua
 commands/Commands.lua
+commands/CmdLedger.lua
+commands/CmdLists.lua
+commands/CmdSession.lua
+commands/CmdAnswer.lua
+commands/CmdRaids.lua
+commands/CmdRequests.lua
+commands/CmdRules.lua
+commands/CmdEvents.lua
 data/MoltenCore.lua
 data/AQ40.lua
 loot/Tokens.lua
