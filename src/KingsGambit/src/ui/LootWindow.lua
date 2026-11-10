@@ -3,10 +3,10 @@
 -- could type, so every rule, message and ledger entry is the one the commands already have. It opens by itself when a session starts.
 -- Design: docs/ui-design.md, section 5.1.
 local _, SK = ...
-local UILoot, LootView, Tips, Skin
+local UILoot, LootView, Tips, Skin, UIButton
 local installParts -- defined at the end of the file: what the window does once built is in lootwindow/LootWindowLive.lua
-local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips", "UISkin?", "LootWindowLive" }, function(d)
-    UILoot, LootView, Tips, Skin = d.UILoot, d.LootView, d.UITips, d.UISkin
+local M = SK:NewModule("LootWindow", { "UILoot", "LootView", "UITips", "UISkin?", "UIButton", "LootWindowLive" }, function(d)
+    UILoot, LootView, Tips, Skin, UIButton = d.UILoot, d.LootView, d.UITips, d.UISkin, d.UIButton
     installParts(d)
 end)
 
@@ -55,13 +55,7 @@ function M.Rich(segments)
     return table.concat(out)
 end
 
-local function button(parent, text, w, h)
-    if Skin then return Skin.Button(parent, text, w, h) end
-    local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-    b:SetSize(w, h or 22)
-    b:SetText(text)
-    return b
-end
+local function button(parent, text, w, h) return UIButton.New(parent, text, w, h) end
 
 local function setShown(frame, on)
     local now = frame.IsShown and frame:IsShown()

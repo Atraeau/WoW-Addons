@@ -27,8 +27,8 @@
 --                                 recorded with the reason. Eligibility is by class (what the game can check); the
 --                                 requester's spec is part of the record.
 local _, SK = ...
-local Standings, ItemFit, Identity
-local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity" }, function(d) Standings, ItemFit, Identity = d.Standings, d.ItemFit, d.Identity end)
+local Standings, ItemFit, Identity, Emitter
+local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity", "Emitter" }, function(d) Standings, ItemFit, Identity, Emitter = d.Standings, d.ItemFit, d.Identity, d.Emitter end)
 
 M.LIST = "main"
 M.MAX_REASON = 200
@@ -170,29 +170,11 @@ function M.EventFor(state, r, chainId)
 end
 
 ---------------------------------------------------------------- the live side
-local function newEmitter()
-    local handlers = {}
-    return {
-        on = function(event, fn)
-            local list = handlers[event] or {}
-            handlers[event] = list
-            local entry = { fn = fn, active = true }
-            list[#list + 1] = entry
-            return function() entry.active = false end
-        end,
-        emit = function(event, payload)
-            local snapshot = {}
-            for i, x in ipairs(handlers[event] or {}) do snapshot[i] = x end
-            for _, x in ipairs(snapshot) do if x.active then x.fn(payload) end end
-        end,
-    }
-end
-
 -- Events: request {req} (Master Looter: a new one), received {req} (requester: acknowledged), refused {req, why},
 -- unanswered {req}, decided {req?, ev, accepted, by} (anyone: an event carrying a request's outcome arrived).
 function M.New(sync, engine)
     local client = engine.client
-    local em = newEmitter()
+    local em = Emitter.New()
     local q = { sync = sync, engine = engine, client = client, on = em.on, sent = {}, counter = 0 }
     engine.db.requests = engine.db.requests or {}
 

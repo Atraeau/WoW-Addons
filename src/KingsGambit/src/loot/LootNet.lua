@@ -24,28 +24,8 @@
 -- Only the Master Looter's messages are believed (players check the sender against the client's
 -- masterLooter()); the host only accepts bids and actions through the Loot session's own rules.
 local _, SK = ...
-local Loot, Version
-local M = SK:NewModule("LootNet", { "Loot", "Version" }, function(d) Loot, Version = d.Loot, d.Version end)
-
-local function newEmitter()
-    local handlers = {}
-    local e = {}
-    function e.on(event, fn)
-        local list = handlers[event]
-        if not list then list = {}; handlers[event] = list end
-        local entry = { fn = fn, active = true }
-        list[#list + 1] = entry
-        return function() entry.active = false end
-    end
-    function e.emit(event, payload)
-        local snapshot = {}
-        for i, x in ipairs(handlers[event] or {}) do snapshot[i] = x end
-        for _, x in ipairs(snapshot) do
-            if x.active then x.fn(payload) end
-        end
-    end
-    return e
-end
+local Loot, Version, Emitter
+local M = SK:NewModule("LootNet", { "Loot", "Version", "Emitter" }, function(d) Loot, Version, Emitter = d.Loot, d.Version, d.Emitter end)
 
 local function remaining(client, deadline)
     if not deadline then return nil end
@@ -57,7 +37,7 @@ end
 function M.NewHost(sync, engine)
     local client = engine.client
     local h = { sync = sync, engine = engine, client = client, session = nil, sid = nil, counter = 0,
-        answers = {}, flushing = false, ev = newEmitter(), beaconSeconds = 10 }
+        answers = {}, flushing = false, ev = Emitter.New(), beaconSeconds = 10 }
     h.on = h.ev.on
 
     local function send(msg, channel, target) sync:send(msg, channel or "RAID", target) end
@@ -246,7 +226,7 @@ end
 -- Events: session {session}, phase {phase}, turn {turn}, answers {}, result {results}, ack {ok, why, ...}
 function M.NewPlayer(sync)
     local client = sync.client
-    local p = { sync = sync, client = client, session = nil, ev = newEmitter() }
+    local p = { sync = sync, client = client, session = nil, ev = Emitter.New() }
     p.on = p.ev.on
 
     local function fromHost(msg, sender)

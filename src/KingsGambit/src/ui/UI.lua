@@ -8,11 +8,11 @@
 --   M.Model(engine, client, listId)        pure: what the Lists section shows (every row, the lists, the raid and its list)
 --   M:Toggle() / M:Refresh()               the frames, built the first time they are needed (game only)
 local _, SK = ...
-local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, Skin
+local Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, UIButton
 local installParts -- defined at the end of the file: most of the window's code is in ui/panes/ (one file per pane)
-local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook", "Scenarios?", "UISkin?",
+local M = SK:NewModule("UI", { "Identity", "Sim?", "Commands?", "UILoot", "UITools", "UITips", "LootWindow", "GuildBook", "Scenarios?", "UIButton",
     "UIPractice", "UIStandings", "UILedger", "UIRaidPanes", "UIStats", "UIWelcome" }, function(d)
-    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, Skin = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook, d.Scenarios, d.UISkin
+    Identity, Sim, Commands, UILoot, UITools, Tips, LootWindow, GuildBook, Scenarios, UIButton = d.Identity, d.Sim, d.Commands, d.UILoot, d.UITools, d.UITips, d.LootWindow, d.GuildBook, d.Scenarios, d.UIButton
     installParts(d)
 end)
 
@@ -290,13 +290,7 @@ function M:Refresh()
     end
 end
 
-local function button(parent, text, w, h)
-    if Skin then return Skin.Button(parent, text, w, h) end
-    local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-    b:SetSize(w, h or 22)
-    b:SetText(text)
-    return b
-end
+local function button(parent, text, w, h) return UIButton.New(parent, text, w, h) end
 
 function M:Build()
     -- BasicFrameTemplateWithInset gives a title bar and close button; fall back to a plain frame if this client lacks it.

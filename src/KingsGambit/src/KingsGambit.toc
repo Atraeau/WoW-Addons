@@ -8,6 +8,7 @@
 
 core/Registry.lua
 core/Core.lua
+core/Emitter.lua
 ledger/Hash.lua
 ledger/Identity.lua
 ledger/Version.lua
@@ -64,6 +65,7 @@ ui/panes/UIWelcome.lua
 ui/UILoot.lua
 ui/UITips.lua
 ui/UISkin.lua
+ui/UIButton.lua
 ui/LootView.lua
 ui/GuildBook.lua
 ui/guildbook/GuildBookPages.lua
