@@ -1,8 +1,6 @@
 # King's Gambit — Rationale & Player Guide
 
-**King's Gambit keeps everything good about Suicide Kings (SK) and fixes what makes it quietly waste loot and invite gaming.** The rule stays one
-sentence long: win an item, drop to the bottom. What changes is that useful loot no longer gets thrown away, nobody can game a pass, and the whole list is
-something every raider can verify instead of something one officer keeps.
+Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where King's Gambit is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot.
 
 ## Why Suicide Kings is worth keeping
 
