@@ -1,4 +1,4 @@
--- The record of every event type in every published format (src/Schemas.lua), frozen by a baseline, and the golden ledgers that prove
+-- The record of every event type in every published format (src/ledger/Schemas.lua), frozen by a baseline, and the golden ledgers that prove
 -- any ledger written in an old format can still be loaded, verified and replayed to the same standings. See the design journal
 -- ("Decision: ledger migration").
 local H = ...

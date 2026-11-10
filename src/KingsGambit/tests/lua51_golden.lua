@@ -19,8 +19,9 @@ local function check(cond, what, detail)
 end
 local function same(got, want, what) check(got == want, what, "expected " .. tostring(want) .. ", got " .. tostring(got)) end
 
+local FOLDER = { Registry = "core", Hash = "ledger", Identity = "ledger", Version = "ledger", Schemas = "ledger", Migrations = "ledger", Standings = "ledger", Ledger = "ledger" }
 local function load(name)
-    local chunk = assert(loadfile("src/" .. name .. ".lua"))
+    local chunk = assert(loadfile("src/" .. FOLDER[name] .. "/" .. name .. ".lua"))
     chunk("KingsGambit", SK)
 end
 load("Registry")

@@ -211,10 +211,10 @@ The ledger is never rewritten, so a change to what events look like or mean can'
 that is the point). Instead:
 
 - **Every event keeps its format.** `v` is the format it was written in, for ever. Hashes and chains stay valid however old.
-- **Every published event type has a schema** (`src/Schemas.lua`): the fields of each type in each format, which are required, and their types. A published
+- **Every published event type has a schema** (`src/ledger/Schemas.lua`): the fields of each type in each format, which are required, and their types. A published
   (format, type) schema is frozen: `tests/schema_baseline.lua` holds a hash of each, and a test fails if one changes or disappears. To change an event, make a new
   format and an **upcaster** from the old one.
-- **Upcasters read old ledgers** (`src/Migrations.lua`). For each old format there is a pure function mapping an event to the next format's equivalent; replaying
+- **Upcasters read old ledgers** (`src/ledger/Migrations.lua`). For each old format there is a pure function mapping an event to the next format's equivalent; replaying
   a ledger runs every event through the chain to the newest format, so current code reads any old ledger. An upcaster makes the old *meaning* explicit where the new
   rules would differ (a changed default becomes an explicit value), so a past outcome is never re-decided.
 - **A golden ledger per published format** (`tests/ledgers/format_2.lua`, 41 real events covering every event type) must always load, verify and replay to the

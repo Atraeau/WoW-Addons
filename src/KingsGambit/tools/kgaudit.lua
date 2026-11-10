@@ -4,13 +4,13 @@
 -- run this to check the record independently. See tools/kg.lua for the command line.
 local M = {}
 
-local MODULES = { "Hash", "Identity", "Migrations", "Standings", "Ledger" }
+local MODULES = { "ledger/Hash", "ledger/Identity", "ledger/Migrations", "ledger/Standings", "ledger/Ledger" }
 
 -- Load the engine modules from a repo checkout. root = the KingsGambit folder (default ".").
 function M.loadEngine(root)
     root = root or "."
     local SK = {}
-    for _, name in ipairs({ "Registry", table.unpack(MODULES) }) do
+    for _, name in ipairs({ "core/Registry", table.unpack(MODULES) }) do
         local chunk = assert(loadfile(root .. "/src/" .. name .. ".lua"))
         chunk("KingsGambit", SK)
     end
@@ -59,7 +59,7 @@ function M.verify(db, mods)
     return out, view, mods.Ledger.Fingerprint(store), orphans
 end
 
-local function short(name) return (tostring(name):gsub("_", " ")) end -- an identity's display form (see src/Identity.lua)
+local function short(name) return (tostring(name):gsub("_", " ")) end -- an identity's display form (see src/ledger/Identity.lua)
 local function date(ts) return os.date("!%Y-%m-%d %H:%M", ts) end
 
 -- The standings of one list, top first (or nil + reason if any chain fails to verify).

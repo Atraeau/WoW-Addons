@@ -1,4 +1,4 @@
--- Who a character is: first and last name (src/Identity.lua). There are no realms in WoW: Forever.
+-- Who a character is: first and last name (src/ledger/Identity.lua). There are no realms in WoW: Forever.
 local H = ...
 local SK, test, eq = H.SK, H.test, H.eq
 local Identity, MockClient, Engine, Commands = SK.modules.Identity, SK.modules.MockClient, SK.modules.Engine, SK.modules.Commands

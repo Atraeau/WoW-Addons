@@ -28,7 +28,7 @@ key, one unused dependency, write-only frame fields, two copy-pasted helpers, an
 
 | # | Item | Evidence | Action |
 |---|---|---|---|
-| A1 | `scratch_bevel.lua` (repo folder root) | A one-off script that patched `src/LootWindow.lua` (`patch(...)` of the bevel code, since moved to `UISkin`). Nothing runs it; last touched in the commit that added the bevel. | delete |
+| A1 | `scratch_bevel.lua` (repo folder root) | A one-off script that patched `src/ui/LootWindow.lua` (`patch(...)` of the bevel code, since moved to `UISkin`). Nothing runs it; last touched in the commit that added the bevel. | delete |
 | A2 | `archive/SuicideKings-legacy/` | The earlier prototype. Referenced only by the README table and one journal line, never loaded, built or tested. Git history keeps it (`git log -- src/KingsGambit/archive`). | delete, drop the README row |
 | A3 | `Commands.lua` `WHY.notml` defined twice | Lines 12 and 22 of the table; in Lua the later one wins, so the first text ("you are not the Master Looter") is dead. | remove the dead first line (the later text is what the game shows) |
 | A4 | `Engine:AllItemSuits` | One definition, zero callers anywhere (src, tests, simulator). | delete |

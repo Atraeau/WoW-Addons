@@ -1,4 +1,4 @@
--- The guard for Semantic Versioning (see src/Version.lua): the parts of the addon that decide whether two clients can share a
+-- The guard for Semantic Versioning (see src/ledger/Version.lua): the parts of the addon that decide whether two clients can share a
 -- ledger are written down in tests/compat_baseline.lua, and this test fails when they change without a decision.
 --
 -- The surface: the ledger format number, every event type (what a list entry can be), every global event type, every request
@@ -25,7 +25,7 @@ end
 -- Every two-letter message type the addon sends or registers a handler for, found in the source.
 local function messageTypes()
     local set = {}
-    for _, f in ipairs { "src/Sync.lua", "src/LootNet.lua", "src/Requests.lua" } do
+    for _, f in ipairs { H.path("Sync"), H.path("LootNet"), H.path("Requests") } do
         local fh = assert(io.open(f, "rb"), f)
         local text = fh:read("a"); fh:close()
         for t in text:gmatch('t%s*=%s*"([A-Z][A-Z]?)"') do set[t] = true end

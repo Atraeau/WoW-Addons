@@ -3,11 +3,18 @@ local H = { passed = 0, failed = 0 }
 -- The registry first; the modules in any order (they declare their dependencies; see Registry.lua).
 H.MODULES = { "Hash", "Identity", "Version", "Schemas", "Migrations", "Standings", "Ledger", "Client", "MockClient", "RealClient", "Engine", "Ledgers", "ItemFit", "Loot", "SimNetwork", "Sync",
     "LootNet", "Requests", "Commands", "MoltenCore", "AQ40", "Tokens", "Attendance", "Guard", "Sim", "Scenarios", "UILoot", "UITools", "UITips", "UISkin", "LootView", "GuildBook", "LootWindow", "UI" }
+-- Where each module lives: the TOC is the one list of files (src/<folder>/<Name>.lua), so a module is found by its name.
+H.PATHS = {}
+for line in io.lines("src/KingsGambit.toc") do
+    local path, name = line:gsub("\r", ""):match("^(%S-([%w_]+)%.lua)$")
+    if path then H.PATHS[name] = "src/" .. path end
+end
+function H.path(name) return (assert(H.PATHS[name], "no such module file: " .. tostring(name))) end
 function H.load(files)
     local SK = {}
-    assert(loadfile("src/Registry.lua"))("KingsGambit", SK)
+    assert(loadfile(H.path("Registry")))("KingsGambit", SK)
     for _, f in ipairs(files or H.MODULES) do
-        assert(loadfile("src/" .. f .. ".lua"))("KingsGambit", SK)
+        assert(loadfile(H.path(f)))("KingsGambit", SK)
     end
     return SK
 end

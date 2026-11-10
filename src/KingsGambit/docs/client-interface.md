@@ -142,7 +142,7 @@ training scenarios use them to play the part of the world:
 
 1. **Throttling:** the Client exposes `pending()` (queue depth) so sync can pace itself. MockClient
    reports `pendingCount`, which tests can set.
-2. **Names:** a character is its first and last name, written `First_Last` everywhere inside the addon and `First Last` for people. The game's own spelling is remembered and sent back exactly (whispers, loot candidates). Case is kept; comparing ignores it. See `src/Identity.lua`.
+2. **Names:** a character is its first and last name, written `First_Last` everywhere inside the addon and `First Last` for people. The game's own spelling is remembered and sent back exactly (whispers, loot candidates). Case is kept; comparing ignores it. See `src/ledger/Identity.lua`.
 3. **Item info:** `itemInfo(link)` may return nil until the item is cached; the Client then emits
    `item.info` (from `GET_ITEM_INFO_RECEIVED`). MockClient reproduces this with
    `setItemInfo(link, info, {delayed = true})` and `cacheItem(link)`.

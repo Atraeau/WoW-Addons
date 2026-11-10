@@ -1,5 +1,5 @@
 -- The frozen record of every published (format, event type) schema: a hash of each. tests/test_schemas.lua fails if a published
--- one changes or disappears (make a new format and an upcaster instead: see src/Migrations.lua), and when a type is ADDED so its
+-- one changes or disappears (make a new format and an upcaster instead: see src/ledger/Migrations.lua), and when a type is ADDED so its
 -- hash is recorded here on purpose. Edit only to record a new event type or a new format.
 return {
     [2] = {

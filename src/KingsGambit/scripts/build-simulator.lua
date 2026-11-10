@@ -2,13 +2,15 @@
 -- Usage (from the KingsGambit folder):  lua scripts/build-simulator.lua
 --
 -- It inlines the REAL engine modules (no RealClient, SelfCheck, Core or UI) with the module registry, which
--- then injects their dependencies (see src/Registry.lua), a small JSON API
+-- then injects their dependencies (see src/core/Registry.lua), a small JSON API
 -- layer, and the page template into simulator/index.html. The page runs the
 -- engine over a MockClient in the browser with fengari (Lua in JavaScript), so there is no second
 -- implementation of the rules to drift. Inlined so it works from file:// and GitHub Pages alike.
 local SRC = "src/"
 local DIR = "simulator/"
-local MODULES = { "Hash", "Identity", "Version", "Schemas", "Migrations", "Standings", "Ledger", "Client", "MockClient", "Engine", "Ledgers", "ItemFit", "Loot", "Requests", "SimNetwork", "Sync", "MoltenCore", "AQ40", "Tokens", "Attendance", "Sim", "Scenarios", "UITips", "UILoot", "LootView", "GuildBook" }
+local MODULES = { "ledger/Hash", "ledger/Identity", "ledger/Version", "ledger/Schemas", "ledger/Migrations", "ledger/Standings", "ledger/Ledger", "client/Client", "client/MockClient",
+    "ledger/Engine", "ledger/Ledgers", "loot/ItemFit", "loot/Loot", "ledger/Requests", "sim/SimNetwork", "ledger/Sync", "data/MoltenCore", "data/AQ40", "loot/Tokens", "loot/Attendance",
+    "sim/Sim", "sim/Scenarios", "ui/UITips", "ui/UILoot", "ui/LootView", "ui/GuildBook" }
 
 -- The Lua-in-JS runtime (fengari-web, MIT) is vendored in simulator/vendor/ and inlined, so the page needs no network and
 -- no CDN. See simulator/vendor/README.md for its source and the hash it was verified against.
@@ -29,8 +31,8 @@ local parts = {
     "local SK = {}",
     "KG_SK = SK",
 }
-for _, name in ipairs({ "Registry", table.unpack(MODULES) }) do
-    parts[#parts + 1] = ("-- ===== %s.lua ====="):format(name)
+for _, name in ipairs({ "core/Registry", table.unpack(MODULES) }) do
+    parts[#parts + 1] = ("-- ===== %s.lua ====="):format(name:match("[^/]+$"))
     parts[#parts + 1] = "do local chunk = function(...)"
     parts[#parts + 1] = read(SRC .. name .. ".lua")
     parts[#parts + 1] = 'end; chunk("KingsGambit", SK) end'
