@@ -1506,7 +1506,6 @@ function M:BuildStandings(parent)
     if p.pending.SetMaxLines then p.pending:SetMaxLines(2) end
     local rl = p:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     rl:SetPoint("BOTTOMLEFT", 6, 52); rl:SetText("Reason:")
-    p.barLabel = rl
     p.reason = CreateFrame("EditBox", nil, p, "InputBoxTemplate")
     p.reason:SetSize(190, 20); p.reason:SetPoint("BOTTOMLEFT", 56, 48); p.reason:SetAutoFocus(false)
     p.apply = button(p, "Apply all", 76, 22)

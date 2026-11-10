@@ -86,7 +86,7 @@ M.SPECS = {
 }
 
 ---------------------------------------------------------------- proficiency (what a class can equip at 60)
-local ARMOR, WEAPON, MISC = 4, 2, 0
+local ARMOR, WEAPON = 4, 2
 -- Armor subclasses: 1 cloth, 2 leather, 3 mail, 4 plate, 6 shield, 7 libram, 8 idol, 9 totem.
 local ARMOR_RANK = { [1] = 1, [2] = 2, [3] = 3, [4] = 4 }
 M.ARMOR_NAMES = { [1] = "cloth", [2] = "leather", [3] = "mail", [4] = "plate", [6] = "shield", [7] = "libram", [8] = "idol", [9] = "totem" }

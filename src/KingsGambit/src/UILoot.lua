@@ -2,8 +2,8 @@
 -- The buttons that answer it are in LootWindow, drawn from LootView; every button runs the same command a player would type, so the rules and the
 -- ledger are exactly those of the commands. The Master Looter's own session and a player's view of someone else's are read from the same place the commands read.
 local _, SK = ...
-local Identity, Sim, Tips, ItemFit
-local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips", "ItemFit" }, function(d) Identity, Sim, Tips, ItemFit = d.Identity, d.Sim, d.UITips, d.ItemFit end)
+local Identity, Sim, ItemFit
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "ItemFit" }, function(d) Identity, Sim, ItemFit = d.Identity, d.Sim, d.ItemFit end)
 
 M.MAX_ITEMS = 24
 

@@ -112,7 +112,6 @@ function Engine:ItemRules() return self.view.itemRules end
 
 -- An officer's override of who an item suits (by item id), or nil: { roles, by, ts, reason }.
 function Engine:ItemSuits(itemId) return self.view.itemSuits[tonumber(itemId)] end
-function Engine:AllItemSuits() return self.view.itemSuits end
 
 function Engine:IsVerified() return next(self.verifying) == nil end
 

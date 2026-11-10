@@ -11,7 +11,7 @@ local WHY = {
     closed = "bidding is closed", ineligible = "you are not eligible for this drop", noitem = "there is no such item",
     badkind = "answer with need, off, gift or pass", badtarget = "name who should get the gift",
     notyourturn = "it is not your turn", noturn = "nothing is waiting for you", badpick = "you didn't bid on that item",
-    nosession = "no loot session is running", busy = "a session is already running", notml = "you are not the Master Looter",
+    nosession = "no loot session is running", busy = "a session is already running",
     nolist = "no such list", notreview = "the session is not ready to confirm",
     cantkeep = "you can't keep it: it isn't for your class. Name who gets it, or withdraw", unreachable = "they are out of loot range",
     norecipient = "no one was named to receive it",

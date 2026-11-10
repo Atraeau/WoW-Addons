@@ -31,7 +31,6 @@ local function indexOf(order, name)
         if order[i] == name then return i end
     end
 end
-M.IndexOf = indexOf
 
 -- Where to put a player: d.to = "top" | "bottom" (default bottom), or d.above = an active member.
 -- Returns the insertion index in `order` (which must not contain the player), or nil + reason.

@@ -156,27 +156,6 @@ local function itemText(item)
 end
 M.ItemText = itemText
 
--- The text of one page (or of all of them) as one string, plain: headings on their own line, bullets and numbers as lines. The game's window draws the blocks
--- itself (UI.lua); this is for the chat fallback and for tests.
-function M.WelcomeText(pageId)
-    local lines = {}
-    for _, page in ipairs(M.WELCOME_PAGES) do
-        if pageId == nil or page.id == pageId then
-            for _, b in ipairs(page.blocks) do
-                if b.kind == "title" then lines[#lines + 1] = b.text; lines[#lines + 1] = ""
-                elseif b.kind == "heading" then lines[#lines + 1] = ""; lines[#lines + 1] = b.text
-                elseif b.kind == "text" or b.kind == "callout" then lines[#lines + 1] = b.text
-                else
-                    for i, item in ipairs(b.items) do
-                        lines[#lines + 1] = (b.kind == "numbered" and (i .. ". ") or "- ") .. itemText(item)
-                    end
-                end
-            end
-        end
-    end
-    return table.concat(lines, "\n")
-end
-
 -- The first-run experience is a setting, on until someone turns it off (the checkbox on the Welcome page, or `/gambit welcome off`): while it is on, opening the
 -- Guild book starts on Welcome. Looking at it, or closing the window at once, changes nothing: someone who opened the addon in the middle of something else
 -- still gets it next time. Once it is off the window opens on the section it was on when it was last closed (Lists the first time).
@@ -753,22 +732,6 @@ function M.Attendance(ctx, listId)
     return out
 end
 
--- One player's raids, newest first, in words.
-function M.AttendanceLines(stats, who)
-    local att, out = stats.attendance, {}
-    for i = #att.raids, 1, -1 do
-        local raid = att.raids[i]
-        local secs = raid.present[who]
-        local when = M.Ago(stats.now, raid.start)
-        if secs then
-            out[#out + 1] = ("Raid %s: in for %s of %s%s"):format(when, M.Span(secs), M.Span(raid.length), raid.leftEarly[who] and ", left early" or "")
-        else
-            out[#out + 1] = ("Raid %s: not there"):format(when)
-        end
-    end
-    return out
-end
-
 ---------------------------------------------------------------- staged list changes
 -- Changes to a list are STAGED first: a list of operations the table previews, applied together with one reason. `ops` is an array of
 -- { kind = "move", who, to } (to = the place the player takes once they are taken out of the line) and { kind = "remove", who }. They are
@@ -842,13 +805,6 @@ function M.StageRemove(ops, who)
     for i = #ops, 1, -1 do ops[i] = nil end
     for i, op in ipairs(kept) do ops[i] = op end
     ops[#ops + 1] = { kind = "remove", who = who }
-end
-
--- Drop everything staged for `who`.
-function M.Unstage(ops, who)
-    local kept = without(ops, who)
-    for i = #ops, 1, -1 do ops[i] = nil end
-    for i, op in ipairs(kept) do ops[i] = op end
 end
 
 function M.Staged(ops, who)

@@ -503,8 +503,6 @@ local MC_NAMES = { "Aldric_Stormwind", "Brann_Ironforge", "Cass_Dunmere", "Dara_
     "Pell_Redmane", "Quill_Tanglewood", "Rhea_Silverbrook", "Soren_Oakhaven", "Tavi_Larkspur", "Ulf_Frostbeard", "Vera_Copperfield", "Wren_Highmoor",
     "Xan_Nightshade", "Yara_Goldleaf", "Zed_Ravenscar", "Ansel_Wyndham", "Bryn_Coldwell", "Corin_Ashford", "Delia_Moonbrook", "Emrys_Hartley",
     "Fia_Stoneridge", "Gideon_Blackwood", "Halia_Brightmoor", "Ivo_Fenwick", "Jessa_Thorne", "Kael_Ravenwood", "Lysa_Dawnwhisper", "Moro_Stonefist" }
-local ARMOR = { WARRIOR = "plate", PALADIN = "plate", HUNTER = "mail", SHAMAN = "mail", ROGUE = "leather",
-    DRUID = "leather", PRIEST = "cloth", MAGE = "cloth", WARLOCK = "cloth" }
 -- Hybrids can also use the other role's gear as off-spec.
 local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { healer = "melee", melee = "healer" },
     WARRIOR = { tank = "melee", melee = "tank" }, PRIEST = { healer = "caster" },

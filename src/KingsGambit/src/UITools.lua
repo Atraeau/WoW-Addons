@@ -349,7 +349,6 @@ function M.Build(parent, ui, section)
     if single then
         -- (no Area choice: a stand-in that does nothing, so the code below treats this like the two-dropdown case)
         f.groupDrop = setmetatable({}, { __index = function() return function() end end })
-        f.groupDropNone = true
     end
     if f.groupDrop and f.actionDrop then
         if not single then

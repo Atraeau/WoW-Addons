@@ -3,6 +3,24 @@ local H = ...
 local SK, test, eq = H.SK, H.test, H.eq
 local Sim, Commands, GuildBook = SK.modules.Sim, SK.modules.Commands, SK.modules.GuildBook
 
+-- The welcome pages as plain text (headings on their own line, bullets and numbers as lines): the tests read the copy through this.
+local function welcomeText()
+    local lines = {}
+    for _, page in ipairs(GuildBook.WELCOME_PAGES) do
+        for _, b in ipairs(page.blocks) do
+            if b.kind == "title" then lines[#lines + 1] = b.text; lines[#lines + 1] = ""
+            elseif b.kind == "heading" then lines[#lines + 1] = ""; lines[#lines + 1] = b.text
+            elseif b.kind == "text" or b.kind == "callout" then lines[#lines + 1] = b.text
+            else
+                for i, item in ipairs(b.items) do
+                    lines[#lines + 1] = (b.kind == "numbered" and (i .. ". ") or "- ") .. GuildBook.ItemText(item)
+                end
+            end
+        end
+    end
+    return table.concat(lines, "\n")
+end
+
 local function raid()
     local sim = Sim.NewMoltenCore({ learner = "Me", seed = 1, size = 10 })
     local host = setmetatable({ on = function() end }, { __index = function(_, k) if k == "session" then return sim.session end end })
@@ -233,8 +251,7 @@ test("staged moves and removals are simulated in order, so the preview is what w
     assert(GuildBook.StageMove(ops, order0, "C", 4)); eq(#ops, 3)
     eq(table.concat(GuildBook.Simulate(order0, ops), ""), "EBDC", "C now goes to 4, where it stood in the sequence, so E and the removal still follow it")
     eq(GuildBook.StageMove(ops, order0, "C", 3), false, "C already holds place 3 where its move stood: that clears it"); eq(#ops, 2)
-    GuildBook.Unstage(ops, "A"); GuildBook.Unstage(ops, "E"); eq(#ops, 0)
-    eq(GuildBook.StageMove(ops, order0, "B", 2), false, "staging the place they hold stages nothing"); eq(#ops, 0)
+    eq(GuildBook.StageMove(ops, order0, "B", 2), false, "staging the place they hold stages nothing"); eq(#ops, 2)
 end)
 
 test("the preview marks a moved player and drops a removed one; the pending line and commands say exactly what will be written", function()
@@ -402,8 +419,6 @@ test("someone who leaves mid-raid is written as having left, and their time in t
     local stayer = stats.attendance.byPlayer[keep[1]]
     assert(stayer.percent >= 95 and stayer.leftEarly == 0, "someone who stayed: " .. tostring(stayer.percent))
     for _, r in ipairs(stats.rows) do if r.who == leaver then eq(r.raidsText, "1/1") end end
-    local lines = GuildBook.AttendanceLines(stats, leaver)
-    assert(lines[1]:find("left early"), lines[1])
     local left = GuildBook.History(ctx, { kind = "attendance", text = "left the raid" })
     eq(left.total, 1)
 end)
@@ -665,7 +680,7 @@ end)
 
 H.section("Welcome")
 test("the Welcome section explains the addon: the 60 seconds, the values, the rules, the sections, getting started; and opens once on a first launch", function()
-    local text = GuildBook.WelcomeText()
+    local text = welcomeText()
     for _, phrase in ipairs { "How it works in 60 seconds", "What we value", "The principles behind it", "The rules at the table", "Finding your way around",
         "Getting started", "What this is not", "Passing is always free", "drops to the bottom", "Start the ledger", "Practice mode", "Is Officer" } do
         assert(text:find(phrase, 1, true), "the welcome says: " .. phrase)
@@ -693,7 +708,7 @@ test("the first-run Welcome is a setting that stays on until it is turned off; t
 end)
 
 test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, and what is different", function()
-    local text = GuildBook.WelcomeText()
+    local text = welcomeText()
     local at = text:find("What is different from Suicide Kings", 1, true)
     local sixty = text:find("How it works in 60 seconds", 1, true)
     assert(at and sixty and at < sixty, "the difference comes before the 60 seconds, near the top")

@@ -26,7 +26,7 @@ local function dumpEnum(e)
 end
 
 function M.Run(client)
-    local results, order = {}, {}
+    local results = {}
     local function add(name, ok, detail)
         results[#results + 1] = { name = name, ok = ok and true or false, detail = detail }
     end

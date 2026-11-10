@@ -54,7 +54,6 @@ local function seenOf(ev)
     local s = type(ev.data) == "table" and ev.data.seen
     if type(s) == "number" and s <= ev.ts and s >= ev.ts - M.SEEN_WINDOW then return s end
 end
-M.SeenOf = seenOf
 
 -- The sort key of an event that follows `prevKey` in its chain.
 local function keyAfter(prevKey, ev)
@@ -70,7 +69,6 @@ local function byTs(a, b)
     if a.chain ~= b.chain then return a.chain < b.chain end
     return a.seq < b.seq
 end
-M.ByWrite = byTs
 
 -- A stand-in event for "the end of second t" (after every real event written in that second).
 local function moment(t) return { ts = t, chain = "\255", seq = math.huge } end
@@ -356,7 +354,6 @@ M.SpecOf = function(view, raid, member)
     return r and r.specs and r.specs[member] or nil
 end
 M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
-M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
 
 -- Authority events, applied in write-time order: each returns a commit function, or nil + reason.
