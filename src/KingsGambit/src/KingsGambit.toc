@@ -18,6 +18,9 @@ ledger/Ledger.lua
 client/Client.lua
 client/MockClient.lua
 client/RealClient.lua
+client/RealLoot.lua
+client/RealChat.lua
+client/RealTrade.lua
 ledger/Engine.lua
 sim/SimNetwork.lua
 ledger/Ledgers.lua
