@@ -2602,3 +2602,7 @@ The whisper to a raider without the addon was a wall of text. It is now a short 
 ## Whisper menu: whitespace, fewer messages (2026-11-09)
 
 The guild leader liked the list look but not needing one message per item. Chat has no line breaks and caps a message near 255 characters (a real item link is about 70), so the items are now packed as many to a message as fit, with wide spaces between them, the count in the first message's lead, and the how-to-answer line last. Three short items are one message plus the instructions; ten real links are about four plus the instructions.
+
+## Whispers one item at a time (2026-11-09)
+
+**Asked by the guild leader:** instead of the whole list in one go, whisper one item, wait for the answer, then the next. Done. The first whisper is the lead-in plus item 1 ("Item 1 of 10: [link]"); the player replies with just a letter (n, o, g, p, or the words, "gift Name"), and the reply is "Got: 1 need. Item 2 of 10: [link]", one whisper per step. A bare answer applies to the item last asked about; a numbered answer ("3 p"), "pass all" and spec answers still work and can change earlier items. If an answer is refused (wrong spec, can't equip), the item stays current and the reason is given; the ten-seconds-left reminder is unchanged. This replaces the packed list from earlier today; the answer rules, ranking and the ledger are untouched.

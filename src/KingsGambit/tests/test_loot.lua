@@ -398,7 +398,7 @@ end)
 test("a whisper that cannot be understood gets help, and changes nothing", function()
     local s, _, client = setup({ nitems = 2 })
     local ok, why = s:handleWhisper("C", "gimme"); assert(not ok); eq(why, "unclear")
-    assert(client.sent[#client.sent].text:find("1 need"), "the reply explains the format")
+    assert(client.sent[#client.sent].text:find("3 p"), "the reply explains the format")
     eq(s.bids["C"], nil)
 end)
 test("whispers from people who are not eligible are refused politely", function()
@@ -857,7 +857,7 @@ test("the menu says how to answer and what is up; a reminder lists only what is 
     s:sendMenu("C"); s:sendMenu("C")
     local sent = {}
     for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then sent[#sent + 1] = m.text end end
-    assert(#sent == 2 and sent[1]:find("3 items") and sent[1]:find("1%) item:1") and sent[1]:find("3%) item:3") and sent[2]:find("ONE message"), "a menu, once")
+    assert(#sent == 1 and sent[1]:find("one at a time") and sent[1]:find("Item 1 of 3: item:1"), "the first item, once")
     local n = #sent
     s:handleWhisper("C", "1 need"); s:handleWhisper("C", "2 pass")
     eq(#client.sent == nil, false)
@@ -865,7 +865,7 @@ test("the menu says how to answer and what is up; a reminder lists only what is 
     client:advance(4)
     local replies = {}
     for i = before + 1, #client.sent do local m = client.sent[i]; if m.kind == "whisper" and m.target == "C" then replies[#replies + 1] = m.text end end
-    eq(#replies, 1, "one reply for the burst"); assert(replies[1]:find("1 need") and replies[1]:find("2 pass") and replies[1]:find("Still open: item 3"), replies[1])
+    eq(#replies, 1, "one reply for the burst"); assert(replies[1]:find("Got: 1 need, 2 pass") and replies[1]:find("Item 3 of 3: item:3"), replies[1])
     s:remind()
     local last = client.sent[#client.sent].text
     assert(last:find("Still open for you: item 3"), last)
@@ -926,18 +926,28 @@ test("with a per-item time, each item after the first adds to the bid timer (up 
     eq(one.cfg.bidSeconds, 30, "one item: the base time")
 end)
 
-H.section("Loot: the whisper menu fits chat")
-test("a big drop with long links splits into messages under the limit, items in order, how to answer last", function()
+H.section("Loot: whispers one item at a time")
+test("each item is whispered when the one before is answered; a bare letter answers the item asked about", function()
+    local s, _, client = setup({ nitems = 3 })
+    local function mine() local t = {} for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then t[#t + 1] = m.text end end return t end
+    s:sendMenu("C")
+    eq(#mine(), 1); assert(mine()[1]:find("Item 1 of 3"))
+    s:handleWhisper("C", "n")
+    eq(s.bids["C"][1].kind, "need")
+    local t = mine(); eq(#t, 2); assert(t[2]:find("Got: 1 need") and t[2]:find("Item 2 of 3"), t[2])
+    s:handleWhisper("C", "pass")
+    eq(s.bids["C"][2].kind, "pass")
+    t = mine(); assert(t[3]:find("Item 3 of 3"), t[3])
+    s:handleWhisper("C", "off")
+    eq(s.bids["C"][3].kind, "off")
+    t = mine(); assert(t[4]:find("every item"), t[4])
+    s:handleWhisper("C", "1 p")
+    eq(s.bids["C"][1].kind, "pass", "a numbered answer still changes an earlier item")
+end)
+test("a long item link still fits one whisper with its lead-in", function()
     local s = setup({ nitems = 10 })
     local long = "|cffa335ee|Hitem:12345:0:0:0:0:0:0:0:60:0:0:0|h[A Rather Long Item Name]|h|r"
     for _, it in ipairs(s.items) do it.link = long end
-    local lines = s:menuLines("A")
-    assert(#lines >= 4, "many items need several messages: " .. #lines)
-    for _, l in ipairs(lines) do assert(#l <= 255, "within the chat limit: " .. #l) end
-    assert(lines[#lines]:find("ONE message"))
-    assert(lines[1]:find("10 items") and lines[1]:find("1%) "))
-    local joined = table.concat(lines, " ")
-    local last = 0
-    for n in joined:gmatch("(%d+)%) |c") do assert(tonumber(n) == last + 1, "in order"); last = tonumber(n) end
-    eq(last, 10)
+    for i = 1, 10 do assert(#s:itemPrompt(i) <= 255) end
+    assert(#s:menuLines("A")[1] <= 255, #s:menuLines("A")[1])
 end)
