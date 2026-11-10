@@ -857,7 +857,7 @@ test("the menu says how to answer and what is up; a reminder lists only what is 
     s:sendMenu("C"); s:sendMenu("C")
     local sent = {}
     for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then sent[#sent + 1] = m.text end end
-    assert(#sent == 5 and sent[1]:find("3 items") and sent[2]:find("^1%) item:1") and sent[3]:find("^2%) item:2") and sent[5]:find("ONE message"), "a menu, once")
+    assert(#sent == 2 and sent[1]:find("3 items") and sent[1]:find("1%) item:1") and sent[1]:find("3%) item:3") and sent[2]:find("ONE message"), "a menu, once")
     local n = #sent
     s:handleWhisper("C", "1 need"); s:handleWhisper("C", "2 pass")
     eq(#client.sent == nil, false)
@@ -924,4 +924,20 @@ test("with a per-item time, each item after the first adds to the bid timer (up 
     eq(capped.cfg.bidSeconds, 200, "capped")
     local one = setup({ nitems = 1, cfg = { bidSecondsPerItem = 8 } })
     eq(one.cfg.bidSeconds, 30, "one item: the base time")
+end)
+
+H.section("Loot: the whisper menu fits chat")
+test("a big drop with long links splits into messages under the limit, items in order, how to answer last", function()
+    local s = setup({ nitems = 10 })
+    local long = "|cffa335ee|Hitem:12345:0:0:0:0:0:0:0:60:0:0:0|h[A Rather Long Item Name]|h|r"
+    for _, it in ipairs(s.items) do it.link = long end
+    local lines = s:menuLines("A")
+    assert(#lines >= 4, "many items need several messages: " .. #lines)
+    for _, l in ipairs(lines) do assert(#l <= 255, "within the chat limit: " .. #l) end
+    assert(lines[#lines]:find("ONE message"))
+    assert(lines[1]:find("10 items") and lines[1]:find("1%) "))
+    local joined = table.concat(lines, " ")
+    local last = 0
+    for n in joined:gmatch("(%d+)%) |c") do assert(tonumber(n) == last + 1, "in order"); last = tonumber(n) end
+    eq(last, 10)
 end)

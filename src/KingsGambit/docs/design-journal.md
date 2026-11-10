@@ -2598,3 +2598,7 @@ The first `/gambit check` in a Master Looter party showed the game's loot-method
 ## Whisper menu as a list (2026-11-09)
 
 The whisper to a raider without the addon was a wall of text. It is now a short header ("N items up for grabs"), one message per item ("1) [link]", the link carries the item id and is clickable), then how to answer last, nearest the box they type in. Sent through the same throttle (0.4 s apart).
+
+## Whisper menu: whitespace, fewer messages (2026-11-09)
+
+The guild leader liked the list look but not needing one message per item. Chat has no line breaks and caps a message near 255 characters (a real item link is about 70), so the items are now packed as many to a message as fit, with wide spaces between them, the count in the first message's lead, and the how-to-answer line last. Three short items are one message plus the instructions; ten real links are about four plus the instructions.
