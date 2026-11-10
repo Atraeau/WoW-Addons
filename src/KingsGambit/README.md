@@ -8,7 +8,7 @@ Everything about King's Gambit lives in this folder, so it can move to its own r
 
 | Path | What's there |
 | --- | --- |
-| [`src/`](src/) | The addon's game files (TOC and Lua): the build ships exactly the ones its TOC loads, as `AddOns/KingsGambit` (see `build.lua` here) |
+| [`src/`](src/) | The addon's game files (TOC and Lua, in folders by component: `core`, `ledger`, `client`, `loot`, `commands`, `data`, `sim`, `ui`): the build ships exactly the ones its TOC loads, as `AddOns/KingsGambit` (see `build.lua` here). **[Code map](docs/code-map.md)**: where each component lives |
 | [`docs/`](docs/README.md) | Manifesto, player guide, design journal (every decision and why), client interface, ledger format |
 | [`tests/`](tests/) | The test suite (pure Lua 5.4, no game needed) |
 | [`simulator/`](simulator/README.md) | The real engine over a simulated raid, in a browser page, with training scenarios, a sync lab and a migration lab. **[Play it online](https://atraeau.github.io/WoW-Addons/kings-gambit/)** |

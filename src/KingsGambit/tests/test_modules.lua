@@ -63,7 +63,8 @@ end)
 test("raid data is optional: without it tokens are simply unknown", function()
     local files = {}
     for _, f in ipairs(H.MODULES) do
-        if f ~= "AQ40" and f ~= "MoltenCore" and f ~= "Sim" and f ~= "Scenarios" then files[#files + 1] = f end
+        local raidData = f == "AQ40" or f == "MoltenCore" or f == "Sim" or f == "SimBots" or f == "SimNights" or f == "Scenarios" or f:find("^Scenario[A-Z]")
+        if not raidData then files[#files + 1] = f end
     end
     local SK = H.load(files)
     SK:Resolve()

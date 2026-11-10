@@ -104,3 +104,12 @@ The same module list exists in five places, and they will drift unless they shar
 - the individual tests that `loadfile("src/X.lua")`
 
 The reorganization adds a check that the two TOCs list the same files and that every shipped `src/**/*.lua` is in the TOC and in the harness (the existing `test_boot`/`test_modules` partly do this).
+
+## Outcome (what was done, 2026-11-09)
+
+- **A1-A15 removed**, in two commits (the leftover files; the code), 724 tests green after each.
+- **B1, B2 consolidated**: `core/Emitter.lua` (used by `LootNet` and `Requests`; the other event buses in `Client`, `Engine`, `Sync` and `Loot` are methods on their own objects with different shapes and stay) and `ui/UIButton.lua` (used by `UI` and `LootWindow`). `UI.lua` no longer depends on `UISkin`.
+- **Reorganized** into `core/ ledger/ client/ loot/ commands/ data/ sim/ ui/` and split along natural seams (`docs/code-map.md`): `Commands` (1578 lines) into a 225-line core and eight command files; `Loot` (1221) into the Session class and three parts; `UI` (1734) into the window and six panes; `LootWindow`, `UITools`, `GuildBook`, `Scenarios`, `Sim` and `RealClient` likewise. Every file is now about 520 lines or fewer except `ledger/Ledger.lua` (721).
+- **Kept whole on purpose: `ledger/Ledger.lua`.** It is the replay engine every ledger depends on, its locals (`moment`, `byKey`, the authority pass, `applyAuthority`) are used all through it, and it is the file the ledger rules freeze. A verbatim split is possible (the authority pass is about 250 lines) but would put the one file the guild's record depends on behind a new seam for the sake of tidiness. Left for the owner to decide.
+- **Docs** (section F): `docs/README.md` indexes `ui-design.md`, `code-map.md` and this audit and says what the sketch is; the top README points at the code map and drops `archive/`; the journal's status line is current.
+- **Left for the owner** (sections D and E): the missing `rank`/`bid` help text; whether to delete `docs/ui-sketch.html`; whether to trim the `MockClient` hooks nothing calls; and the decision on `Ledger.lua` above.

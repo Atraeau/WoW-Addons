@@ -82,3 +82,80 @@ test("the addon loads in TOC order, starts at login, and answers slash commands"
     for _, k in ipairs { "KingsGambit", "KingsGambitDB", "KingsGambitCharDB", "SLASH_KINGSGAMBIT1", "SLASH_KINGSGAMBIT2" } do _G[k] = nil end
     assert(ok, tostring(err))
 end)
+
+-- The files on disk, relative to src/ (nil when the platform can't list a folder).
+local function srcFiles()
+    if not io.popen then return nil end
+    local windows = package.config:sub(1, 1) == "\\"
+    local p = io.popen(windows and "dir /b /s src\\*.lua 2>nul" or "find src -name '*.lua' 2>/dev/null")
+    if not p then return nil end
+    local out = {}
+    for line in p:lines() do
+        line = line:gsub("\r", ""):gsub("\\", "/")
+        local rel = line:match("^.*src/(.+%.lua)$")
+        if rel then out[#out + 1] = rel end
+    end
+    p:close()
+    return out
+end
+
+test("every Lua file under src/ is in the TOC (nothing is left out of the game), and the code map names each one", function()
+    local files = srcFiles()
+    if not files then return end
+    local listed = {}
+    for _, f in ipairs(tocFiles("src/KingsGambit.toc")) do listed[f] = true end
+    assert(#files > 0, "the file listing found nothing")
+    for _, f in ipairs(files) do assert(listed[f], f .. " is under src/ but not in the TOC") end
+    local map = assert(io.open("docs/code-map.md", "rb")):read("a")
+    for f in pairs(listed) do
+        local base = f:match("([^/]+)$")
+        assert(map:find(base, 1, true), "docs/code-map.md does not mention " .. f)
+    end
+end)
+
+test("the simulator page inlines a dependency-complete set of real files, each in the TOC", function()
+    local text = assert(io.open("scripts/build-simulator.lua", "rb")):read("a")
+    local list = assert(text:match("local MODULES = {(.-)}"), "MODULES not found in scripts/build-simulator.lua")
+    local listed = {}
+    for _, f in ipairs(tocFiles("src/KingsGambit.toc")) do listed[f] = true end
+    local SK = {}
+    assert(loadfile("src/core/Registry.lua"))("KingsGambit", SK)
+    local n = 0
+    for path in list:gmatch('"([^"]+)"') do
+        n = n + 1
+        assert(listed[path .. ".lua"], "the simulator build lists " .. path .. ", which is not in the TOC")
+        assert(loadfile("src/" .. path .. ".lua"))("KingsGambit", SK)
+    end
+    assert(n > 20, "the simulator module list looks empty")
+    local ok, err = pcall(SK.Resolve, SK) -- a part or a dependency missing from the page's list stops here, as it would in the browser
+    assert(ok, tostring(err))
+end)
+
+test("the text interface installs every command (a split-up Commands lost none)", function()
+    local SK = H.load()
+    SK:Resolve()
+    local MockClient, Engine, Commands = SK.modules.MockClient, SK.modules.Engine, SK.modules.Commands
+    local client = MockClient.New({ name = "Raidlead" })
+    local c = Commands.New({ client = client, engine = Engine.New(client) })
+    for _, name in ipairs { "help", "migrate", "version", "standings", "list", "create", "newlist", "add", "addall", "remove", "move", "undo", "award", "trade",
+        "disenchanted", "salvaged", "masterloot", "loot", "announce", "resolve", "extend", "confirm", "cancel", "need", "off", "pass", "gift", "bid", "ready", "rank",
+        "pick", "skip", "recipient", "override", "keep", "withdraw", "claim", "disenchanter", "raid", "ledgers", "officers", "disregard", "regard", "request",
+        "requests", "accept", "decline", "history", "eligible", "suits", "spec", "hints", "sync", "check" } do
+        assert(type(c.commands[name]) == "function", "the command '" .. name .. "' is missing")
+    end
+end)
+
+test("Emitter: listeners get what is emitted, can stop listening, and a listener added during an emit waits for the next one", function()
+    local SK = H.load()
+    SK:Resolve()
+    local ev = SK.modules.Emitter.New()
+    local got = {}
+    local off = ev.on("x", function(p) got[#got + 1] = "a" .. p end)
+    ev.on("x", function(p) got[#got + 1] = "b" .. p; ev.on("x", function(q) got[#got + 1] = "late" .. q end) end)
+    ev.emit("x", 1)
+    eq(table.concat(got, ","), "a1,b1")
+    off(); got = {}
+    ev.emit("x", 2)
+    eq(table.concat(got, ","), "b2,late2", "the stopped listener is silent; the one added during the first emit hears the second")
+    ev.emit("nobody listens", 3)
+end)

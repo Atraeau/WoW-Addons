@@ -11,7 +11,11 @@ A raid loot system for WoW: Forever, inspired by Suicide Kings (it keeps what wo
 | [ledger-v2-design.md](ledger-v2-design.md) | Why the ledger is one chain per writer, so two raids can run at once (built). |
 | [ledger-owner.md](ledger-owner.md) | Everything the ledger owner configures, what it is for, and the commands to use it. |
 | [client-interface.md](client-interface.md) | How the engine talks to the game (and how we fake the game for tests and training). |
-| [ui-sketch.html](ui-sketch.html) | A rough sketch of the planned screens. Open it in a browser. |
+| [ui-design.md](ui-design.md) | How people meet the rules on screen: the Loot window and the Guild book (proposal and layout rules). |
+| [ui-sketch.html](ui-sketch.html) | The rough sketch the windows were designed from (2026-11-01, before any frames). Open it in a browser. |
+| [code-map.md](code-map.md) | Where each component lives in the source: one line per folder and file. Start here to find code. |
+| [test-review.md](test-review.md) | The 2026-11-09 review of the tests: what changed, what was added, and what protects each rule that must not break. |
+| [audit.md](audit.md) | The 2026-11-09 audit for dead and stale code: what was removed and what was kept, and why. |
 
 Also in the repository:
 
