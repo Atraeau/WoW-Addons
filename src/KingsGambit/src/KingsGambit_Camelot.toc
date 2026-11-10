@@ -74,3 +74,4 @@ ui/guildbook/GuildBookStage.lua
 ui/LootWindow.lua
 ui/lootwindow/LootWindowLive.lua
 ui/UITools.lua
+ui/tools/UIToolsFrames.lua
