@@ -1,7 +1,5 @@
 # The King's Gambit Loot Manifesto
 
-*King's Gambit is inspired by the classic Suicide Kings strategy: it keeps what works (one simple rule, earned turns, loot spread evenly) and fixes what does not (useful loot lost to disenchanting) with gifting. It is named for the chess gambit: a deliberate sacrifice of position for advantage. "Suicide" below still means dropping to the bottom after a win, and the player at the bottom is the "salvager".*
-
 Through years of experience distributing loot in World of Warcraft from Vanilla, to Classic, SoD and now Forever, we have come to value:
 
 ### In‑the‑moment decisions — over — plans made before the raid
