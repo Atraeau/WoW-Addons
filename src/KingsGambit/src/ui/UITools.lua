@@ -556,4 +556,3 @@ function M.Refresh(f, ctx, ui)
     f.run:Show()
 end
 
-function M:OnInit() end

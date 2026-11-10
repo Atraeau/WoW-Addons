@@ -302,4 +302,3 @@ function M.Build(m)
     return v
 end
 
-function M:OnInit() end

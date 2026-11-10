@@ -838,6 +838,5 @@ function M.Commands(ops, reason)
     return out
 end
 
-function M:OnInit() end
 
 return M

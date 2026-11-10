@@ -130,6 +130,5 @@ function M.New(engine, client, host)
     return a
 end
 
-function M:OnInit() end
 
 return M

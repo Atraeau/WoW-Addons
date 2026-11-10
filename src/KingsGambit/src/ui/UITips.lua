@@ -128,4 +128,3 @@ function M.Attach(frame, tip, extra, sink)
     end
 end
 
-function M:OnInit() end

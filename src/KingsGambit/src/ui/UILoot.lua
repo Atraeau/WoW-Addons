@@ -277,4 +277,3 @@ function M.Model(ctx)
     return out
 end
 
-function M:OnInit() end

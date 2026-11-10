@@ -892,4 +892,3 @@ function M.Refresh(f, ctx, ui)
     return v
 end
 
-function M:OnInit() end

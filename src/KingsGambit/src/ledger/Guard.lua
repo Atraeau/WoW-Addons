@@ -38,6 +38,5 @@ function M.New(engine, client, opts)
     return g
 end
 
-function M:OnInit() end
 
 return M

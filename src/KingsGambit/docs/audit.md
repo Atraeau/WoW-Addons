@@ -42,6 +42,7 @@ key, one unused dependency, write-only frame fields, two copy-pasted helpers, an
 | A12 | `SelfCheck.lua` local `order` | `local results, order = {}, {}`; `order` never used. | drop |
 | A13 | `GuildBook.AttendanceLines`, `GuildBook.Unstage` | No caller in the game, the page or the tools; one test line each. The UI builds attendance rows another way (`Stats`) and unstages through `StageMove`/`StageRemove`. | delete, with the test lines (see the test report) |
 | A14 | `GuildBook.WelcomeText` | No caller in the game ("for the chat fallback" is not true: `Core.lua` prints its own sentence). Two tests use it to check the welcome copy. | move to the tests as a helper; delete from the addon |
+| A15 | Empty `function M:OnInit() end` in `Guard`, `Attendance`, `GuildBook`, `LootView`, `LootWindow`, `UILoot`, `UITips`, `UITools` | `Core.lua` calls `m:OnInit()` only `if m.OnInit`; only `UI` has a real one. Found while splitting the files. | delete the eight no-op stubs |
 
 ### B. Duplicated helpers (consolidate, behavior identical)
 
