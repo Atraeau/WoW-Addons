@@ -2590,3 +2590,11 @@ The Guild book forms take a reason as free text, so the same one (a regret trade
 ## Master Looter detection: an in-game check (2026-11-09)
 
 The addon already reads the loot method and the Master Looter from the game (`C_PartyInfo.GetLootMethod`: method, party id, raid id), so nothing has to be named in the addon. But that read was only tested against a stand-in shaped from the documentation, and the id meanings were marked FIELD (unconfirmed). `/gambit check` now has a "loot" block (`RealClient:lootProbe`): the raw answers of the game's loot-method calls and `IsMasterLooter`, what the addon makes of them (method, who the Master Looter is, whether it is you), and a verdict. The verdict is FAIL when Master Looter is set but nobody is found, or when the name and `IsMasterLooter` disagree. Read-only; writes nothing.
+
+## Found by the in-game check: the game spells the enum "Masterlooter" (2026-11-09)
+
+The first `/gambit check` in a Master Looter party showed the game's loot-method enum is `Masterlooter=2` (also `Roundrobin=1`, `Needbeforegreed=4`), so the addon read the method as "masterlooter", never "master", and every Master Looter check failed. Nothing named it in the addon's stand-in, which had said `Master`. `RealClient` now maps the game's spelling to the addon's "master" (reading and setting), and the stand-in uses the game's real names. The party id came back 0, which is the player, as assumed. The raid-index case is still unconfirmed.
+
+## Whisper menu as a list (2026-11-09)
+
+The whisper to a raider without the addon was a wall of text. It is now a short header ("N items up for grabs"), one message per item ("1) [link]", the link carries the item id and is clickable), then how to answer last, nearest the box they type in. Sent through the same throttle (0.4 s apart).

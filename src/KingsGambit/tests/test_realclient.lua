@@ -26,7 +26,7 @@ local function newEnv(over)
         { "Brann" .. SEP .. "Ironforge", 0, 2, 80, "Paladin", "PALADIN", "Zone", false } }
     E.GetRaidRosterInfo = function(i) return (table.unpack or unpack)(raid[i]) end
     E.Enum = {
-        LootMethod = { Freeforall = 0, Master = 2, Group = 3, NeedBeforeGreed = 4, Personal = 5 },
+        LootMethod = { Freeforall = 0, Roundrobin = 1, Masterlooter = 2, Group = 3, NeedBeforeGreed = 4, Personal = 5 },
         SendAddonMessageResult = { Success = 0, InvalidPrefix = 1, AddonMessageThrottle = 3, GeneralError = 9, AddOnMessageLockdown = 11 },
         RegisterAddonMessagePrefixResult = { Success = 0, DuplicatePrefix = 1, InvalidPrefix = 2 },
         Base64Variant = { Standard = 0 },

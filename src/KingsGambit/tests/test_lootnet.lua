@@ -127,9 +127,9 @@ test("a player without the addon is whispered how to answer, once; one burst of 
     local w = build()
     w.net:advance(8)
     assert(w.host:start(drop(w, 2)))
-    w.net:advance(3)
+    w.net:advance(8)
     local menus = 0
-    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Zed" and m.text:find("ONE whisper") then menus = menus + 1 end end
+    for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Zed" and m.text:find("ONE message") then menus = menus + 1 end end
     eq(menus, 1, "the menu went to Zed once")
     local toAddonUser = 0
     for _, m in ipairs(w.ml.client.sent) do if m.kind == "whisper" and m.target == "Aldric" then toAddonUser = toAddonUser + 1 end end

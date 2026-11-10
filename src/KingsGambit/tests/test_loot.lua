@@ -857,7 +857,7 @@ test("the menu says how to answer and what is up; a reminder lists only what is 
     s:sendMenu("C"); s:sendMenu("C")
     local sent = {}
     for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then sent[#sent + 1] = m.text end end
-    assert(#sent >= 2 and sent[1]:find("ONE whisper") and sent[#sent]:find("1%) item:1"), "a menu, once")
+    assert(#sent == 5 and sent[1]:find("3 items") and sent[2]:find("^1%) item:1") and sent[3]:find("^2%) item:2") and sent[5]:find("ONE message"), "a menu, once")
     local n = #sent
     s:handleWhisper("C", "1 need"); s:handleWhisper("C", "2 pass")
     eq(#client.sent == nil, false)

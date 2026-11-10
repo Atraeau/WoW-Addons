@@ -384,16 +384,18 @@ function c:normalize(name) return normalize(name) end
     end
 
     ---------------------------------------------------------------- loot
+    -- (the game spells its enum "Masterlooter", which the addon calls "master"; seen in the game's own /gambit check)
+    local LOOT_NAMES = { masterlooter = "master" }
     -- Returns "master", "group", "freeforall", "needbeforegreed", "personal", ...
     function c:lootMethod()
         if E.C_PartyInfo and E.C_PartyInfo.GetLootMethod then
             local method = E.C_PartyInfo.GetLootMethod()
             local name = enumName(E.Enum and E.Enum.LootMethod, method)
-            if name then return name:lower() end
-            if type(method) == "string" then return method:lower() end
+            if name then return LOOT_NAMES[name:lower()] or name:lower() end
+            if type(method) == "string" then return LOOT_NAMES[method:lower()] or method:lower() end
         elseif E.GetLootMethod then
             local method = E.GetLootMethod()
-            if type(method) == "string" then return method:lower() end
+            if type(method) == "string" then return LOOT_NAMES[method:lower()] or method:lower() end
         end
         return "group"
     end
@@ -406,7 +408,7 @@ function c:normalize(name) return normalize(name) end
         local enumValue
         if E.Enum and E.Enum.LootMethod then
             for k, v in pairs(E.Enum.LootMethod) do
-                if k:lower() == method then enumValue = v end
+                if k:lower() == method or LOOT_NAMES[k:lower()] == method then enumValue = v end
             end
         end
         if enumValue == nil then return false, "badmethod" end
