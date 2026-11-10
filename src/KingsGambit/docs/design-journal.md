@@ -2606,3 +2606,7 @@ The guild leader liked the list look but not needing one message per item. Chat 
 ## Whispers one item at a time (2026-11-09)
 
 **Asked by the guild leader:** instead of the whole list in one go, whisper one item, wait for the answer, then the next. Done. The first whisper is the lead-in plus item 1 ("Item 1 of 10: [link]"); the player replies with just a letter (n, o, g, p, or the words, "gift Name"), and the reply is "Got: 1 need. Item 2 of 10: [link]", one whisper per step. A bare answer applies to the item last asked about; a numbered answer ("3 p"), "pass all" and spec answers still work and can change earlier items. If an answer is refused (wrong spec, can't equip), the item stays current and the reason is given; the ten-seconds-left reminder is unchanged. This replaces the packed list from earlier today; the answer rules, ranking and the ledger are untouched.
+
+## Admin: "Do it" no longer lands on the ledger panel (2026-11-09)
+
+A form's "Do it" button was always placed below room for four fields, so on a form with none or few (Admin's "Ledger format") it fell inside the stored-ledger panel at the foot of the page and overlapped its text. It now sits right under the form's last field.

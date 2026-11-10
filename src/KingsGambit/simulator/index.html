@@ -4031,7 +4031,7 @@ function M.ParseWhisper(text, itemCount)
     return answers, nil, spec
 end
 
-local WHISPER_HELP = "Answer every item in ONE message, e.g. '1 need, 2 pass, 3 off' (n = need, o = off-spec, g = gift, p = pass). 'pass all' passes on everything. You can change answers until the timer ends."
+local WHISPER_HELP = "Reply n (need), o (off-spec), g (gift) or p (pass) to the item I sent; '3 p' answers item 3, 'pass all' passes everything. You can change answers until the timer ends."
 
 local function whisperProblem(reason)
     if reason == "needitem" then return "Which item? Put its number first, e.g. '1 need'. " .. WHISPER_HELP end
@@ -4057,29 +4057,44 @@ function Session:say(to, text)
     pump()
 end
 
--- What a player who answers by whisper is told when bidding opens: how to answer, and what is up (a few messages, each under the chat limit).
-function Session:menuLines(player)
-    local class = self.class[norm(self, player)]
-    -- The items as a list with room between them, as few messages as will hold them (chat has no line breaks and caps a message near 255 characters,
-    -- and a real item link is about 70 of them), then how to answer last, nearest the box they type in.
-    local n = #self.items
-    local lines, cur = {}, ("King's Gambit loot, %d item%s:"):format(n, n == 1 and "" or "s")
-    for _, it in ipairs(self.items) do
-        local piece = ("%d) %s"):format(it.id, it.link)
-        if #cur + #piece + 6 > 230 then lines[#lines + 1] = cur; cur = piece else cur = cur .. "      " .. piece end
-    end
-    lines[#lines + 1] = cur
-    lines[#lines + 1] = "Whisper me ONE message answering every item, e.g. '1 n, 2 p, 3 o'  (n = need, o = off-spec, g = gift, p = pass; 'pass all' passes everything). You can change answers until the timer ends."
-    return lines
+-- One item at a time: a whisper per item, and the next goes out when the player has answered the one before. Their reply to an item is just the
+-- letter (n, o, g, p, or the words); a numbered answer ("3 p"), "pass all" and the rest still work.
+local HINT = "(n = need, o = off-spec, g = gift, p = pass)"
+
+function Session:itemPrompt(idx)
+    local it = self.items[idx]
+    return ("Item %d of %d: %s  %s"):format(it.id, #self.items, it.link, HINT)
 end
 
--- Whisper the menu to a player who has no addon (so they are not left guessing); remembers who, for the reminder and the summary.
+-- The first whisper: what this is and the first item, together (so it is one message). Returned as a list for the callers that count messages.
+function Session:menuLines(player)
+    local n = #self.items
+    local intro = ("King's Gambit loot, %d item%s, one at a time. Reply to each with n, o, g or p ('pass all' passes everything). "):format(n, n == 1 and "" or "s")
+    return { intro .. self:itemPrompt(1) }
+end
+
+-- Whisper the first item to a player who has no addon (so they are not left guessing); remembers who, for the reminder and the summary.
 function Session:sendMenu(player)
     player = norm(self, player)
     self.menued = self.menued or {}
     if self.menued[player] then return end
     self.menued[player] = true
+    self.cursor = self.cursor or {}
+    self.cursor[player] = 1
     for _, line in ipairs(self:menuLines(player)) do self:say(player, line) end
+end
+
+-- After an answer: the item to whisper next, or nil (and why: "done" when every item is answered, "stay" while the current one is still open).
+function Session:nextPrompt(player)
+    local cur = self.cursor and self.cursor[player]
+    if not cur then return nil end
+    local function open(idx) return not (self.bids[player] and self.bids[player][self.items[idx].id]) end
+    if open(cur) then return cur, "stay" end
+    for k = 1, #self.items do
+        local idx = (cur + k - 1) % #self.items + 1
+        if open(idx) then self.cursor[player] = idx; return idx end
+    end
+    return nil, "done"
 end
 
 -- Ten seconds before bidding closes, whoever was sent the menu and has items left open is told which, once.
@@ -4104,6 +4119,14 @@ function Session:confirmWhisper(sender, lines, problems)
         local out = {}
         if #lines > 0 then out[#out + 1] = "Got: " .. table.concat(lines, ", ") .. "." end
         for _, p in ipairs(problems) do out[#out + 1] = p end
+        if self.cursor and self.cursor[sender] and self.phase == "bidding" then
+            -- one item at a time: what was taken and the next item, in one whisper (the current one again only if nothing was wrong with it)
+            local idx, why = self:nextPrompt(sender)
+            if idx and (why ~= "stay" or #problems == 0) then out[#out + 1] = self:itemPrompt(idx)
+            elseif why == "done" then out[#out + 1] = "That's every item. Change any answer by whispering it again, e.g. '3 p'." end
+            self:say(sender, table.concat(out, " "))
+            return
+        end
         local open = {}
         for _, it in ipairs(self.items) do
             if not (self.bids[sender] and self.bids[sender][it.id]) then open[#open + 1] = tostring(it.id) end
@@ -4152,6 +4175,12 @@ function Session:handleWhisper(sender, text, specNote)
             self:say(sender, "Your spec for this raid is " .. sp.name .. ". Now answer the items.")
             return {}
         end
+    end
+    -- a bare answer ("need", "p", "gift Name") is about the item they were last asked about
+    local cursor = self.cursor and self.cursor[sender]
+    if cursor and not text:find("%d") then
+        local bare = M.ParseWhisper(text, 1)
+        if bare and #bare == 1 and bare[1].item == 1 then text = ("%d %s"):format(self.items[cursor].id, text) end
     end
     local answers, why, specWord = M.ParseWhisper(text, #self.items)
     self.whisperStats = self.whisperStats or { handled = 0, unclear = {} }

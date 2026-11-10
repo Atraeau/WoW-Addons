@@ -469,6 +469,7 @@ function M.Build(parent, ui, section)
     f.run = newButton(f)
     f.run:SetSize(100, 24); f.run:SetText("Do it")
     Tips.Attach(f.run, "dothis")
+    f.up = up
     f.run:SetPoint("TOPLEFT", 4, -172 + up - MAX_FIELDS * 32 - 6)
     f.problem = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     f.problem:SetPoint("LEFT", f.run, "RIGHT", 10, 0)
@@ -550,6 +551,9 @@ function M.Refresh(f, ctx, ui)
             if f.reasonDrops[i] then f.reasonDrops[i]:Hide() end
         end
     end
+    -- "Do it" sits right under the last field (not at the foot of the form's room), so a form with few fields never reaches into a panel below it
+    local y = math.min(-150 + (f.up or 0), -172 + (f.up or 0) - #action.fields * 32 - 6)
+    f.run:ClearAllPoints(); f.run:SetPoint("TOPLEFT", 4, y)
     f.run:Show()
 end
 
