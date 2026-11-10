@@ -2610,3 +2610,7 @@ The guild leader liked the list look but not needing one message per item. Chat 
 ## Admin: "Do it" no longer lands on the ledger panel (2026-11-09)
 
 A form's "Do it" button was always placed below room for four fields, so on a form with none or few (Admin's "Ledger format") it fell inside the stored-ledger panel at the foot of the page and overlapped its text. It now sits right under the form's last field.
+
+## Whispers: the first item is a whisper of its own (2026-11-09)
+
+The lead-in and item 1 were one message. They are now two: the lead-in, then "Item 1 of N: [link]" like every later item, so each item whisper has the same shape and its link (a real game item link) can be hovered for the tooltip.

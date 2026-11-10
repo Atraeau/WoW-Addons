@@ -468,11 +468,11 @@ function Session:itemPrompt(idx)
     return ("Item %d of %d: %s  %s"):format(it.id, #self.items, it.link, HINT)
 end
 
--- The first whisper: what this is and the first item, together (so it is one message). Returned as a list for the callers that count messages.
+-- The first two whispers: what this is, then the first item as a whisper of its own (the item link in it can be hovered for the tooltip).
 function Session:menuLines(player)
     local n = #self.items
-    local intro = ("King's Gambit loot, %d item%s, one at a time. Reply to each with n, o, g or p ('pass all' passes everything). "):format(n, n == 1 and "" or "s")
-    return { intro .. self:itemPrompt(1) }
+    local intro = ("King's Gambit loot, %d item%s, one at a time. Reply to each with n, o, g or p ('pass all' passes everything)."):format(n, n == 1 and "" or "s")
+    return { intro, self:itemPrompt(1) }
 end
 
 -- Whisper the first item to a player who has no addon (so they are not left guessing); remembers who, for the reminder and the summary.

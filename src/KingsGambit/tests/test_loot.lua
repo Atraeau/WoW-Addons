@@ -857,7 +857,7 @@ test("the menu says how to answer and what is up; a reminder lists only what is 
     s:sendMenu("C"); s:sendMenu("C")
     local sent = {}
     for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then sent[#sent + 1] = m.text end end
-    assert(#sent == 1 and sent[1]:find("one at a time") and sent[1]:find("Item 1 of 3: item:1"), "the first item, once")
+    assert(#sent == 2 and sent[1]:find("one at a time") and sent[2]:find("^Item 1 of 3: item:1"), "the lead-in and the first item, once")
     local n = #sent
     s:handleWhisper("C", "1 need"); s:handleWhisper("C", "2 pass")
     eq(#client.sent == nil, false)
@@ -931,16 +931,16 @@ test("each item is whispered when the one before is answered; a bare letter answ
     local s, _, client = setup({ nitems = 3 })
     local function mine() local t = {} for _, m in ipairs(client.sent) do if m.kind == "whisper" and m.target == "C" then t[#t + 1] = m.text end end return t end
     s:sendMenu("C")
-    eq(#mine(), 1); assert(mine()[1]:find("Item 1 of 3"))
+    eq(#mine(), 2); assert(mine()[1]:find("one at a time") and mine()[2]:find("^Item 1 of 3"))
     s:handleWhisper("C", "n")
     eq(s.bids["C"][1].kind, "need")
-    local t = mine(); eq(#t, 2); assert(t[2]:find("Got: 1 need") and t[2]:find("Item 2 of 3"), t[2])
+    local t = mine(); eq(#t, 3); assert(t[3]:find("Got: 1 need") and t[3]:find("Item 2 of 3"), t[3])
     s:handleWhisper("C", "pass")
     eq(s.bids["C"][2].kind, "pass")
-    t = mine(); assert(t[3]:find("Item 3 of 3"), t[3])
+    t = mine(); assert(t[4]:find("Item 3 of 3"), t[4])
     s:handleWhisper("C", "off")
     eq(s.bids["C"][3].kind, "off")
-    t = mine(); assert(t[4]:find("every item"), t[4])
+    t = mine(); assert(t[5]:find("every item"), t[5])
     s:handleWhisper("C", "1 p")
     eq(s.bids["C"][1].kind, "pass", "a numbered answer still changes an earlier item")
 end)
@@ -949,5 +949,5 @@ test("a long item link still fits one whisper with its lead-in", function()
     local long = "|cffa335ee|Hitem:12345:0:0:0:0:0:0:0:60:0:0:0|h[A Rather Long Item Name]|h|r"
     for _, it in ipairs(s.items) do it.link = long end
     for i = 1, 10 do assert(#s:itemPrompt(i) <= 255) end
-    assert(#s:menuLines("A")[1] <= 255, #s:menuLines("A")[1])
+    for _, l in ipairs(s:menuLines("A")) do assert(#l <= 255, #l) end
 end)
