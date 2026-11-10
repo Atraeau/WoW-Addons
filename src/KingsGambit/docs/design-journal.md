@@ -2654,3 +2654,7 @@ The "is worth learning" opener was dropped. The Welcome's Start here page and `d
 ## A more formal register for the opening (2026-11-10)
 
 **Asked by the guild leader:** a more professional, academic tone ("fixes what goes wrong with it" read as loose English). The Welcome's Start here page and the opening sections of `docs/rationale.md` were rewritten with the same content in a formal register: "The strengths of Suicide Kings", "The limitations of Suicide Kings" (including "the conventional remedy introduces an exploit"), and "How King's Gambit responds", with the table's columns now Limitation, Mechanism and Effect. No rule or claim changed; the rest of the player guide below "How it works in 60 seconds" keeps its plainer voice for now.
+
+## The formal register throughout the player guide (2026-11-10)
+
+**Asked by the guild leader:** carry the more academic tone through the rest of the guide. `docs/rationale.md` below the opening is rewritten in the same register ("Rationale" for "Why", "the highest-ranked player", "specialization", defined terms), and the Welcome's rules page matches it. One real wording fix came with it: the "Position is the only currency" section now says that other players' wins raise a player's relative position, which is a consequence of their wins and not a cost to the player who passes. The Welcome's practical "Using it" page and the values page (`docs/manifesto.md` wording) are left as written. No rule changed.

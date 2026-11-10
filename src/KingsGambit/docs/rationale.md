@@ -42,200 +42,169 @@ rule was decided.*
 
 ## How it works in 60 seconds
 
-1. **One list.** Everyone in the guild has a position on a single, shared list.
-   Top of the list = longest since you last won something.
-2. **Something drops.** A small, unobtrusive popup asks: **Need**, **Off-spec**,
-   **Gift**, or **Pass**. You make the call live. Nothing is decided in advance.
-3. **Highest position among those who want it wins.** If you win, you move to the
-   **bottom** of the list. That is the *only* thing that ever changes your
-   position.
-4. **Passing is always free.** Pass for any reason: it doesn't cost you anything.
-5. **Everything is recorded** in a shared, tamper-evident log the whole guild can
-   see and verify.
+1. **One list.** Every member of the guild holds a position on a single, shared list. The top of the list belongs to the player who has gone longest without
+   winning an item.
+2. **An item drops.** A small, unobtrusive window asks each eligible player to respond: **Need**, **Off-spec**, **Gift** or **Pass**. Responses are made at the
+   time of the drop; nothing is decided in advance.
+3. **The highest position among those who want the item wins.** The winner moves to the **bottom** of the list. Winning is the only way a player's position
+   falls.
+4. **Passing is always free.** A player may pass for any reason at no cost.
+5. **Every action is recorded** in a shared, tamper-evident log that the whole guild can inspect and verify.
 
-That's the whole game. The rest of this document explains the edge cases and the
-reasoning.
+This is the complete procedure. The remainder of this document sets out the edge cases and the reasoning.
 
 ### What King's Gambit adds to Suicide Kings
 
 The table above gives the reasoning; the list below summarizes what King's Gambit adds.
 
-- **Gifting as a rule, the biggest difference:** win, then give the item to anyone, in any direction, even upward; you pay the place and they get the item. A minor
-  upgrade is not wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible.
-- **A ledger, not a kept list.** Every change is an entry in a shared, tamper-evident record each player holds and can verify.
-- **Live decisions by the player**, after the drop. No wishlists; officers run the process and do not decide who deserves loot.
-- **A separate off-spec list**, and main-spec always beats off-spec.
-- **A draft** for several drops at once, with your ranking made up front.
-- **A salvage round** instead of a roll when nobody bids: the player at the bottom decides.
-- **Eligibility:** you are only asked about items you could use.
-- **Passing is free**, and you only ever drop a place by winning; other players' wins move you up.
-- **A list per raid**, and every correction and disenchant result recorded in the open.
+- **Gifting as a rule (the principal difference).** A winner may give the item to any player, in any direction, including upward. The winner pays the positional
+  cost and the recipient receives the item. A minor upgrade is not wasted because the player who would use it sits too high to bid, and generosity is
+  inexpensive, never required, and visible.
+- **A ledger rather than a maintained list.** Every change is an entry in a shared, tamper-evident record that each player holds and can verify.
+- **Live decisions by the player,** made after the drop. There are no wishlists, and officers administer the process without deciding who deserves loot.
+- **A separate off-spec list,** with main-spec always taking precedence over off-spec.
+- **A draft** for several simultaneous drops, with each player's ranking submitted in advance.
+- **A salvage round** in place of a roll when no one bids: the player at the bottom of the list decides.
+- **Eligibility:** a player is asked only about items they could use.
+- **Free passing,** with a player's position falling only through a win.
+- **A list per raid,** and every correction and disenchant result recorded in the open.
 
 ---
 
-## The rules, and why
+## The rules, and the reasoning behind them
 
-### Your position is your currency
-You only ever move down by winning an item; every other player's win moves you up. No decay for being
-absent, no bonus for attendance, no penalty for passing.
+### Position is the only currency
+A player's position falls only through winning an item. There is no decay for absence, no bonus for attendance, and no penalty for passing. (Other players'
+wins raise a player's position relative to the winners; this is a consequence of their wins, not a cost to the player who passes.)
 
-**Why:** It keeps the system predictable and drama-free. Anyone can look at the
-list and know exactly why it looks the way it does.
+**Rationale:** The system remains predictable and free of dispute. Anyone can examine the list and understand exactly why it appears as it does.
 
 ### Needing an item
-Among everyone who bid *Need*, the highest position wins and drops to
-the bottom.
+Among all players who responded *Need*, the highest position wins and drops to the bottom.
 
-**Why:** One rule, applied the same way every time, is easy to follow and hard to
-game. Nobody has to argue about who "deserves" it.
+**Rationale:** One rule, applied identically every time, is easy to follow and difficult to exploit. No one has to argue about who "deserves" the item.
 
 ### Who is asked about an item
-Only players who could actually use it. The addon checks that the item is equippable by your class, and also that it carries
-enough of the stats your class and spec value (a warlock is not asked about a blade made of strength and agility). The
-threshold is generous (15% of the item's stat weight), because a small upgrade is still a choice you may want to make. An
-officer can override the default for an item, and the override is a visible entry in the record. The same check applies to a
-*gift*: it only requires that the person receiving the item is eligible, never the giver.
+Only players who could actually use it. The addon verifies that the item is equippable by the player's class and that it carries a sufficient share of the
+stats that the player's specialization values (a warlock is not asked about a blade made of strength and agility). The threshold is deliberately generous (15% of
+the item's stat weight), because a small upgrade can still be a choice a player wishes to make. An officer may override the default for a particular item, and the
+override is a visible entry in the record. The same check applies to a *gift*: it requires only that the recipient be eligible, never the giver.
 
-**Why:** Asking everyone about everything buries the real decisions. Eligibility is a filter on who is asked; it never
-decides who wins.
+**Rationale:** Asking every player about every item obscures the decisions that matter. Eligibility filters who is asked; it never determines who wins.
 
 ### Several items at once (the draft)
-When a boss drops multiple items, the top remaining needer picks any
-available item, claims it, and drops to the bottom; then the next player up picks.
-There's no cap, so if the room passes you can win again from the bottom.
+When a boss drops multiple items, the highest-ranked remaining player who needs an item chooses any available item, claims it, and drops to the bottom; the next
+player then chooses. There is no cap, so if the room passes, a player may win again from the bottom.
 
-**You rank what you want most, up front.** If you answer *Need* (or *Off-spec*, or *Gift*) on two or more items, the addon asks you to put them in order, most
-wanted first, and to confirm it; the session waits for that, so bidding can't close early on you. Then when it's your turn, the draft takes your
-highest-ranked item that is still available, with no prompt and no time pressure. (If the timer runs out before you've ranked, you're asked live
-on your turn, as before.) Whispering the Master Looter works too: the order you write is your ranking ("need 3, need 1" ranks item 3 first).
+**Players rank their preferences in advance.** A player who responds *Need* (or *Off-spec*, or *Gift*) on two or more items is asked to place them in order,
+most wanted first, and to confirm the order; the session waits for this, so bidding cannot close before the player has ranked. When the player's turn arrives,
+the draft takes the highest-ranked item that remains available, without a prompt and without time pressure. (If the timer expires before the player has
+ranked, the player is asked at the time of their turn, as before.) Whispering the Master Looter is equivalent: the order written is the ranking ("need 3, need 1"
+ranks item 3 first).
 
-**Why:** The first pick is an *earned* choice, and there is no arbitrary
-item order for anyone to benefit from.
+**Rationale:** The first pick is an *earned* choice, and no arbitrary item order confers an advantage.
 
 ### Off-spec
-Off-spec bids use a separate, persistent off-spec list. Winning off-spec
-moves you down *that* list only. A main-spec bid always beats an off-spec bid.
+Off-spec bids use a separate, persistent off-spec list. Winning off-spec moves a player down that list only. A main-spec bid always takes precedence over an
+off-spec bid.
 
-**Why:** Off-spec has a real cost (your off-list position), but it can never
-jump ahead of someone who needs the item for their main. Otherwise it would be a
-free way to dodge spending your main position.
+**Rationale:** Off-spec carries a genuine cost (a player's position on the off-spec list), yet it can never displace a player who needs the item for their main
+specialization. Otherwise it would be a free means of avoiding the cost of spending one's main position.
 
 ### Gifting
-Gifting is *winning and then handing the item to someone else*, in any
-direction, including upward. You pay the position cost; the recipient gets the
-item. You can change the target before the item resolves, or re-route it
-afterward. You may also leave the target open and choose if you win: the draft then waits
-for you.
+Gifting is *winning an item and then giving it to another player*, in any direction, including upward. The giver pays the positional cost; the recipient
+receives the item. The giver may change the target before the item resolves, or re-route it afterward, and may also leave the target open and choose upon
+winning, in which case the draft waits for the choice.
 
-A gift is a proxy, not a want, so it comes **after** everyone who wants the item: main
-(need) bids are drafted first, then off-spec, then gifts. Even a gift from the bottom of the
-list, which costs nothing, can't override an off-spec bid.
+A gift is a proxy rather than a want, so it ranks **after** every player who wants the item: main-spec (need) bids are drafted first, then off-spec, then gifts.
+Even a gift from the bottom of the list, which costs nothing, cannot override an off-spec bid.
 
-**Why:** A minor upgrade shouldn't be wasted just because the player who'd use
-it sits too high to bid economically. A player near the bottom can claim it cheaply
-and pass it up. Because the cost is real, it can't be gamed, and generosity is
-recognized in the record.
+**Rationale:** A minor upgrade should not be wasted merely because the player who would use it sits too high on the list to bid economically. A player near
+the bottom can claim it at little cost and pass it upward. Because the cost is real, the mechanism resists abuse, and generosity is recognized in the record.
 
-### When nobody bids (the salvage round)
-Items with no Need or Off-spec bids go to the *salvager*, the player at the bottom of the
-list at that moment, whether or not they can use the item. The salvager decides: they claim it
-(and can keep it, gift it on, sell it, disenchant it, or donate it to the guild bank), or decline,
-and then it goes to the designated disenchanter and the guild bank. Nobody else is asked: there is
-no second round of offers up the list.
+### When no one bids (the salvage round)
+Items that receive no Need or Off-spec bids go to the *salvager*, the player at the bottom of the list at that moment, whether or not that player can use the
+item. The salvager decides: claim it (and keep it, gift it onward, sell it, disenchant it, or donate it to the guild bank) or decline, in which case it goes to
+the designated disenchanter and the guild bank. No one else is asked, and there is no second round of offers up the list.
 
-**Why:** Usable loot should find a home, not a shard. The player at the bottom is the
-salvager because dropping to the bottom costs them no position; no one higher up is asked to
-give up a place for something nobody wanted. We rejected a free roll because a
-costless roll can be gamed by collusion.
+**Rationale:** Usable loot should find a home rather than become a shard. The player at the bottom serves as salvager because dropping to the bottom costs them
+no position, and no one higher on the list is asked to give up a place for an item that no one wanted. A free roll was rejected because a costless roll can be
+exploited through collusion.
 
 ### Which list a raid plays on
-Normally everything is one list, `main`. When an officer opens a raid they can name another (say `20man`), and that raid's Master Looter then
-writes only to it: wins, passes and the draft all happen on that list, and the winner drops to the bottom of **that** list, not the others. A
-new list starts in `main`'s order, so "who has waited longest" carries over. The ledger owner can require every raid to have a list of its own
-([ledger owner's guide](ledger-owner.md)), so nobody can spend the wrong list by accident.
+By default there is a single list, `main`. When an officer opens a raid, the officer may name another list (for example `20man`), and that raid's Master Looter
+then writes only to it: wins, passes and the draft all occur on that list, and the winner drops to the bottom of **that** list, not the others. A new list begins in
+`main`'s order, so the record of who has waited longest carries over. The ledger owner may require every raid to have a list of its own
+([ledger owner's guide](ledger-owner.md)), so that no one can spend the wrong list by accident.
 
-**Why:** a raid has a quality ceiling, and old-tier loot should not cost a place that newer-tier loot is worth. The choice is made once, at
-the start, by an officer, and is in the record; it never changes part-way through a raid.
+**Rationale:** A raid has a quality ceiling, and loot from an earlier tier should not cost a place that loot from a later tier is worth. The choice is made once,
+at the start, by an officer, and is recorded; it does not change part-way through a raid.
 
 ### Item value
-We don't assign items a score or rank.
+Items are not assigned a score or rank.
 
-**Why:** An item is worth whatever someone will spend on it. Minor items clear
-cheap, best-in-slot clears dear, and the standings reveal the difference.
+**Rationale:** An item is worth whatever a player is willing to spend on it. Minor items clear cheaply, best-in-slot items clear dearly, and the standings reveal
+the difference.
 
 ### Hoarding
-We don't penalize it. We make it visible: last win, passes on upgrades,
-raids since last win, time at position, and an officer "camp-watch" flag.
+Hoarding is not penalized. It is made visible: last win, passes on upgrades, raids since last win, time at position, and an officer "camp-watch" flag.
 
-**Why:** Penalties punish legitimate passes (an item that doesn't fit your
-playstyle, or one you're leaving for a friend). Visibility lets the guild hold
-itself accountable without a mechanic that punishes the wrong thing.
+**Rationale:** Penalties punish legitimate passes (an item that does not suit a player's playstyle, or one left for a friend). Visibility lets the guild hold
+itself accountable without a mechanism that penalizes the wrong behavior.
 
 ### Mistakes and regret-trades
-Mistakes are fixed forward. Any award of the Master Looter's own can be undone exactly, alone, without disturbing the awards made since; awards from before a manual move
-are corrected by an officer with a visible correction event. If someone
-trades an item away after winning it, the addon detects it: if the recipient had
-bid, it's treated as a *mistake correction* (the giver is restored, the recipient
-pays); if they hadn't, it's a *gift* (standings unchanged). Either can be
-overridden.
+Mistakes are corrected forward. Any award by the Master Looter can be undone exactly, in isolation, without disturbing the awards made since; awards from before
+a manual move are corrected by an officer through a visible correction entry. If a player trades an item away after winning it, the addon detects the trade: if
+the recipient had bid, it is treated as a *mistake correction* (the giver is restored and the recipient pays); if not, it is treated as a *gift* (standings
+unchanged). Either interpretation can be overridden.
 
-**Why:** History is never silently rewritten, so corrections are as visible as
-the original decisions, and the default matches what usually happened.
+**Rationale:** History is never silently rewritten, so corrections are as visible as the original decisions, and the default matches what usually occurred.
 
 ### The record and the officers
-Every decision is an entry in an append-only, hash-chained log, synced
-across the guild. Officers run the process; they don't decide who deserves loot.
+Every decision is an entry in an append-only, hash-chained log that is synchronized across the guild. Officers administer the process; they do not decide who
+deserves loot.
 
-**Why:** Trust comes first. Anyone can verify that their copy matches everyone
-else's.
+**Rationale:** Trust comes first. Any player can verify that their copy matches everyone else's.
 
 ---
 
 ## Running a loot session (for the Master Looter)
 
-This is what happens, in order, when a boss drops loot. Practice it in the
-[simulator](../simulator/README.md) before the real thing.
+This section describes what occurs, in order, when a boss drops loot. Practice it in the [simulator](../simulator/README.md) before the real thing.
 
-1. **Put the items up.** The addon picks up what the Master Looter sees in the loot window (or you can
-   add an item by link). Raiders without the addon get a short announcement in raid chat and answer
-   by whisper ("1 need", "2 off", "1 pass", "1 gift Name").
-2. **Bidding.** Everyone answers each item: Need, Off-spec, Gift or Pass. Answers are public. The timer
-   ends early the moment every eligible player has answered; anyone who hasn't answered when it runs
-   out counts as a pass. You can add time, or close it yourself.
-3. **The draft.** The highest player who wants something goes first. If they want only one item it is
-   theirs automatically; if they want several, they pick one (a pick that times out counts as a skip).
-   Then the next player is up, and so on, until nobody wants what is left. Off-spec bids only come into
-   play for items no main-spec player wanted, and gifts come after that, for items nobody wanted for themselves.
-4. **Salvage.** Items nobody wanted go to the salvager, the player at the bottom of the list, whether or not they
-   could use them. They decide: claim it, or decline and the disenchanter takes it. Nobody else is asked. This happens as the
-   draft executes: every pick drops its winner to the bottom, so the next unwanted item goes to the player who just
-   picked, and the salvagers rotate in the order of the draft. Unwanted items left after the draft (more than there were picks)
-   go to the lowest player, and since claiming at the bottom costs no position, they may take several. They were lucky that
-   nobody wanted so many items.
-5. **Review, then confirm.** You see exactly what will be recorded. Nothing is written to the ledger
-   and nothing is handed out until you confirm. If handing an item over fails, that award is not
-   recorded and you are told, so the record never claims something that didn't happen.
-6. **Fix mistakes in the open.** Any one of the Master Looter's awards can be undone exactly, without disturbing the ones made since. Anything older is fixed
+1. **Put the items up.** The addon picks up what the Master Looter sees in the loot window (an item may also be added by link). Raiders without the addon receive
+   a short announcement in raid chat and answer by whisper ("1 need", "2 off", "1 pass", "1 gift Name").
+2. **Bidding.** Each player responds to each item: Need, Off-spec, Gift or Pass. Responses are public. The timer ends early as soon as every eligible player has
+   responded; a player who has not responded when it expires is counted as passing. The Master Looter may add time or close bidding.
+3. **The draft.** The highest-ranked player who wants an item goes first. If that player wants only one item, it is awarded automatically; if several, the player
+   chooses one (a choice that times out counts as a skip). The next player then proceeds, and so on, until no one wants what remains. Off-spec bids come into
+   play only for items that no main-spec player wanted, and gifts follow, for items that no one wanted for themselves.
+4. **Salvage.** Items that no one wanted go to the salvager, the player at the bottom of the list, whether or not that player could use them. The salvager
+   claims the item or declines, in which case the disenchanter takes it. No one else is asked. This occurs as the draft executes: every pick drops its winner to
+   the bottom, so the next unwanted item goes to the player who has just picked, and the salvager role rotates in the order of the draft. Unwanted items remaining
+   after the draft (more than there were picks) go to the lowest player, who, because claiming at the bottom costs no position, may take several.
+5. **Review, then confirm.** The Master Looter sees exactly what will be recorded. Nothing is written to the ledger and nothing is handed out until the Master
+   Looter confirms. If handing over an item fails, that award is not recorded and the Master Looter is informed, so the record never claims something that did not
+   happen.
+6. **Correct mistakes in the open.** Any one of the Master Looter's awards can be undone exactly, without disturbing those made since. Older awards are corrected
    by an officer's correction, which is itself a visible entry in the history.
 
 ## What this system does *not* do
 
-- **It is not an optimizer.** It won't guarantee that the "best" item reaches the
-  "best" use. It guarantees a fair, transparent process.
-- **It doesn't replace culture.** It makes behavior visible; people still choose
-  how to behave.
-- **It isn't trustless.** It assumes officers act in good faith. The log catches
-  mistakes, dropped messages, and desync, not a determined bad-faith officer.
+- **It is not an optimizer.** It does not guarantee that the "best" item reaches the "best" use. It guarantees a fair, transparent process.
+- **It does not replace culture.** It makes behavior visible; people still choose how to behave.
+- **It is not trustless.** It assumes that officers act in good faith. The log detects mistakes, dropped messages and desynchronization, but not a determined
+  bad-faith officer.
 
 ---
 
 ## Glossary
 
 - **Suicide:** moving to the bottom of the list after winning.
-- **Position / standing:** where you sit on the list.
-- **Need / Off-spec / Gift / Pass:** your response when an item drops.
-- **Draft:** the ordered picking when several items drop at once.
-- **Salvage round:** the lowest-first offer for items nobody bid on.
-- **Salvager:** whoever claims a salvage item and decides its fate.
+- **Position / standing:** a player's place on the list.
+- **Need / Off-spec / Gift / Pass:** a player's response when an item drops.
+- **Draft:** the ordered selection that takes place when several items drop at once.
+- **Salvage round:** the offer, to the lowest-ranked player first, of items that no one bid on.
+- **Salvager:** the player who claims a salvage item and decides its fate.
 - **Camp-watch:** an officer flag for players whose pattern suggests hoarding.
-- **Fix-forward:** correcting mistakes with new visible entries, not edits.
+- **Fix-forward:** correcting mistakes with new visible entries rather than edits.
