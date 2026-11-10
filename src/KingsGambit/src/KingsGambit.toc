@@ -48,6 +48,8 @@ loot/Tokens.lua
 loot/Attendance.lua
 ledger/Guard.lua
 sim/Sim.lua
+sim/SimBots.lua
+sim/SimNights.lua
 sim/Scenarios.lua
 sim/ScenarioBasics.lua
 sim/ScenarioDraft.lua
