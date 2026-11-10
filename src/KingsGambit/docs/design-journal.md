@@ -2638,3 +2638,7 @@ The Lua files moved into folders by component (`core/ ledger/ client/ loot/ comm
 ## The rationale leads with why King's Gambit beats Suicide Kings (2026-11-10)
 
 **Asked by the guild leader:** drop the explanation of the name; make a convincing case that King's Gambit is the better loot system. `docs/rationale.md` now opens with a one-paragraph claim (everything good about Suicide Kings kept, what wastes loot and invites gaming fixed), then why SK is worth keeping, where it breaks down (useful loot disenchanted, the free-roll loophole, trust in one officer's list, everyone asked about everything), and a table of each failure, what King's Gambit does, and why that is better. The later "what is different" section is now just the list of additions. The claims are limited to what the rules do; the "what this system does not do" section stays as the honest counterweight.
+
+## "Your place changes only when you win" was not accurate (2026-11-10)
+
+**Corrected by the guild leader:** your relative position also changes when anyone else wins, since the winner drops below you (the salvager, already at the bottom, excepted). The wording in the rationale, manifesto, Welcome pages and UI sketch now says what is true: you only ever *drop* by winning (never by decay, absence, passing or judgment), and other players' wins move you up. Wording only; no rule changed.

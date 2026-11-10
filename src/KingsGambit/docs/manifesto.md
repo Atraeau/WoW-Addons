@@ -37,7 +37,7 @@ runs with less debate and drama.
 4. **The highest player who wants an item wins it, and pays by returning to the bottom.** One rule, for everyone, every time — easy to follow, hard to game.
 5. **An item is worth whatever someone will spend on it** — the standings reveal its value; we don't score or rank it.
 6. **Usable loot finds a home, not a shard.** If anyone will take an item, it reaches them — through the draft, the cascade, or the salvage round. It's disenchanted only when truly no one wants it.
-7. **We surface hoarding rather than punish it.** Your standing changes only when you win — never by decay, absence, or judgment — and the record makes the patterns visible.
+7. **We surface hoarding rather than punish it.** You only ever drop when you win — never by decay, absence, or judgment — and the record makes the patterns visible.
 8. **Generosity is enabled and seen, never required.** You can give an item to anyone, in any direction; the cost is yours.
 9. **Mistakes are fixed in the open.** Corrections are recorded, never hidden; history is never rewritten.
 10. **Officers run the process; they don't decide who deserves loot.** The rules do — and the record outlasts memory.

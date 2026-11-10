@@ -33,7 +33,7 @@ across everyone who shows up. King's Gambit does not give any of that up.
 | Wishlists and officers decide ahead of time | **Live decisions by the player,** after the drop. Officers run the process and do not decide who deserves loot. | The choice is made with the facts of this drop, by the person it affects. |
 | Several drops at once are fought over | **A draft** with your ranking made up front, a **separate off-spec list**, and main-spec always beating off-spec. | Fair order of picks, no benefit from item order, and off-spec can never jump someone who needs it for their main. |
 
-Passing stays free, and your place changes only when you win. Nothing here makes the system harder to follow: a raider still needs to know one rule and four
+Passing stays free, and you only ever drop a place by winning (every other player's win moves you up). Nothing here makes the system harder to follow: a raider still needs to know one rule and four
 buttons.
 
 *How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the values behind it and the [design journal](design-journal.md) for how each
@@ -69,7 +69,7 @@ The table above says why; this is the list, with a line each on what to expect.
 - **A draft** for several drops at once, with your ranking made up front.
 - **A salvage round** instead of a roll when nobody bids: the player at the bottom decides.
 - **Eligibility:** you are only asked about items you could use.
-- **Passing is free**, and your place changes only when you win.
+- **Passing is free**, and you only ever drop a place by winning; other players' wins move you up.
 - **A list per raid**, and every correction and disenchant result recorded in the open.
 
 ---
@@ -77,7 +77,7 @@ The table above says why; this is the list, with a line each on what to expect.
 ## The rules, and why
 
 ### Your position is your currency
-Your position changes only when you win an item. No decay for being
+You only ever move down by winning an item; every other player's win moves you up. No decay for being
 absent, no bonus for attendance, no penalty for passing.
 
 **Why:** It keeps the system predictable and drama-free. Anyone can look at the
