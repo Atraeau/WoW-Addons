@@ -733,3 +733,19 @@ test("a heading sorts by that column, and the same heading again reverses it", f
     eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "held"))), "Cass,dara,Aldric,Brann", "longest at the place first")
     eq(names(GuildBook.SortStats(rowsFor(), GuildBook.NextStatsSort(nil, "lastwin"))), "Brann,Aldric,dara,Cass", "latest win first, never last")
 end)
+
+H.section("Forms: common reasons")
+do
+    local Tools = SK.modules.UITools
+    local seen = {}
+    for _, r in ipairs(Tools.REASONS) do
+        eq(seen[r], nil, "no reason listed twice: " .. r)
+        seen[r] = true
+    end
+    test("Regret trade is among the common reasons", function() eq(seen["Regret trade"], true) end)
+    test("a chosen common reason composes into the command like typed text", function()
+        local action = Tools.Find("move")
+        local text = Tools.Compose(action, { name = "Aldric", pos = "bottom", reason = Tools.REASONS[1] })
+        eq(text, "move Aldric bottom " .. Tools.REASONS[1])
+    end)
+end

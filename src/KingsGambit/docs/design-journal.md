@@ -2582,3 +2582,7 @@ The stock red `UIPanelButtonTemplate` button read as a default addon. Buttons ar
 ## Skinned buttons: label stays put when chosen (2026-11-09)
 
 The chosen answer is held pressed, and the game moves a pressed button's label down and right, so chosen buttons looked misaligned next to the others. UISkin now sets the pressed text offset to zero. A button held down with the pointer no longer shifts its label either; the darkened face is the only pressed cue.
+
+## Common reasons beside every Reason box (2026-11-09)
+
+The Guild book forms take a reason as free text, so the same one (a regret trade, a wrong player) was being spelled many ways in the record. Each Reason box now has a "Common" menu next to it (`UITools.REASONS`: Regret trade, Gift, Wrong player, Mistake, Duplicate, Left the raid, Late to the raid, Disconnected, Requested by the player, Officer decision). Choosing one fills the box; the text can still be typed or edited, so nothing is forced. It is only a way to fill the box, so the command and the ledger are unchanged. Without the game's dropdown widget the box is typed as before.

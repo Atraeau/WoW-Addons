@@ -133,6 +133,13 @@ function M.Players(ctx, source, listId)
     return out
 end
 
+-- Reasons people give most often, offered next to every Reason box so the usual ones are always spelled the same way. Choosing one fills the box;
+-- the text can still be typed or changed freely.
+M.REASONS = {
+    "Regret trade", "Gift", "Wrong player", "Mistake", "Duplicate", "Left the raid",
+    "Late to the raid", "Disconnected", "Requested by the player", "Officer decision",
+}
+
 local function shown(name) return (tostring(name):gsub("_", " ")) end
 
 -- Something to choose from rather than type: a player, or an item you hold.
@@ -443,6 +450,22 @@ function M.Build(parent, ui, section)
             f.drops[i] = d
         end
     end
+    -- A "Common" menu of usual reasons beside each Reason box (the game's dropdown only; without it the box is just typed in).
+    f.reasonDrops = {}
+    for i = 1, MAX_FIELDS do
+        local d = dropdown(f, 84)
+        if d then
+            d:SetPoint("TOPLEFT", 296, -172 + up - (i - 1) * 32 + 6)
+            d:SetDefaultText("Common")
+            d:SetupMenu(function(_, root)
+                for _, reason in ipairs(M.REASONS) do
+                    root:CreateButton(reason, function() f.boxes[i]:SetText(reason) end)
+                end
+            end)
+            d:Hide()
+            f.reasonDrops[i] = d
+        end
+    end
     f.run = newButton(f)
     f.run:SetSize(100, 24); f.run:SetText("Do it")
     Tips.Attach(f.run, "dothis")
@@ -495,7 +518,11 @@ function M.Refresh(f, ctx, ui)
         for i, a in ipairs(group.actions) do names[i] = a.label end
         f.help:SetText((f.groups[2] and "Choose an action above." or ("Choose an action above: " .. table.concat(names, ", ") .. ".")) ..
             " Each one runs the matching command, so who may do it is decided exactly as it is for the command; if you can't, the output at the foot of the window says why.")
-        for i = 1, MAX_FIELDS do f.labels[i]:Hide(); f.boxes[i]:Hide(); if f.drops[i] then f.drops[i]:Hide() end end
+        for i = 1, MAX_FIELDS do
+            f.labels[i]:Hide(); f.boxes[i]:Hide()
+            if f.drops[i] then f.drops[i]:Hide() end
+            if f.reasonDrops[i] then f.reasonDrops[i]:Hide() end
+        end
         f.run:Hide()
         return
     end
@@ -514,8 +541,13 @@ function M.Refresh(f, ctx, ui)
             else
                 f.boxes[i]:Show(); if f.drops[i] then f.drops[i]:Hide() end
             end
+            -- a Reason box is a little narrower to make room for the Common menu
+            local withMenu = fld.key == "reason" and f.reasonDrops[i] ~= nil
+            f.boxes[i]:SetWidth(withMenu and 124 or 200)
+            if f.reasonDrops[i] then if withMenu then f.reasonDrops[i]:Show() else f.reasonDrops[i]:Hide() end end
         else
             f.labels[i]:Hide(); f.boxes[i]:Hide(); if f.drops[i] then f.drops[i]:Hide() end
+            if f.reasonDrops[i] then f.reasonDrops[i]:Hide() end
         end
     end
     f.run:Show()
