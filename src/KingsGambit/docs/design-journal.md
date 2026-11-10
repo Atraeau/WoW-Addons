@@ -2662,3 +2662,7 @@ The "is worth learning" opener was dropped. The Welcome's Start here page and `d
 ## Manifesto and README accuracy (2026-11-10)
 
 With the manifesto's introduction removed by the guild leader, two leftovers were corrected: principle 6 no longer names "the cascade" (loot reaches players through the draft or the salvage round, with no second round of offers), and the README no longer explains the name. Wording only.
+
+## A release checklist (2026-11-10)
+
+The guild leader asked for a short list of what remains before publishing. `docs/release-checklist.md` records it: in-game verification of everything so far checked only headlessly, a real multi-player test, one real dry run, upgrade safety, packaging, and a support path, with the known gaps carried over. Recommended order: a guild beta before any public listing.

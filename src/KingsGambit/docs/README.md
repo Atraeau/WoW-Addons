@@ -16,6 +16,7 @@ A raid loot system for WoW: Forever, inspired by Suicide Kings (it keeps what wo
 | [code-map.md](code-map.md) | Where each component lives in the source: one line per folder and file. Start here to find code. |
 | [test-review.md](test-review.md) | The 2026-11-09 review of the tests: what changed, what was added, and what protects each rule that must not break. |
 | [audit.md](audit.md) | The 2026-11-09 audit for dead and stale code: what was removed and what was kept, and why. |
+| [release-checklist.md](release-checklist.md) | What remains before the addon is published: in-game verification, a real multi-player test, upgrade safety, packaging and support. |
 
 Also in the repository:
 
