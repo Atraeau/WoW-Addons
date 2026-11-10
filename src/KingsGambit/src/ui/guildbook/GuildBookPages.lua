@@ -32,7 +32,7 @@ M.SECTIONS = {
 M.WELCOME_PAGES = {
     { id = "start", label = "Start here", blocks = {
         { kind = "title", text = "Welcome to King's Gambit" },
-        { kind = "text", text = "Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where King's Gambit is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot." },
+        { kind = "text", text = "Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where it is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot." },
         { kind = "callout", text = "Suicide Kings is worth keeping: win an item and drop to the bottom, turns that are earned rather than rolled, loot that spreads evenly across everyone who shows up, and almost no upkeep. King's Gambit keeps all of that and fixes what goes wrong with it." },
         { kind = "heading", text = "Where Suicide Kings breaks down" },
         { kind = "bullets", items = {

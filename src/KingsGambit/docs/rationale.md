@@ -1,6 +1,6 @@
 # King's Gambit — Rationale & Player Guide
 
-Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where King's Gambit is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot.
+Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where it is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot.
 
 ## Why Suicide Kings is worth keeping
 

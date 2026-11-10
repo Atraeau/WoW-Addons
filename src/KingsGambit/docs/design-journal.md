@@ -2649,4 +2649,4 @@ The Lua files moved into folders by component (`core/ ledger/ client/ loot/ comm
 
 ## The opening sentence, in the guild leader's words (2026-11-10)
 
-The "is worth learning" opener was dropped. The Welcome's Start here page and `docs/rationale.md` now both open with: "Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where King's Gambit is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot." The case below it is unchanged.
+The "is worth learning" opener was dropped. The Welcome's Start here page and `docs/rationale.md` now both open with: "Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where it is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot." The case below it is unchanged.
