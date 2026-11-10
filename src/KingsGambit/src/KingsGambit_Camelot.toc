@@ -25,6 +25,9 @@ ledger/Sync.lua
 client/SelfCheck.lua
 loot/ItemFit.lua
 loot/Loot.lua
+loot/LootWhispers.lua
+loot/LootDraft.lua
+loot/LootFinish.lua
 loot/LootNet.lua
 ledger/Requests.lua
 commands/Commands.lua
