@@ -2642,3 +2642,7 @@ The Lua files moved into folders by component (`core/ ledger/ client/ loot/ comm
 ## "Your place changes only when you win" was not accurate (2026-11-10)
 
 **Corrected by the guild leader:** your relative position also changes when anyone else wins, since the winner drops below you (the salvager, already at the bottom, excepted). The wording in the rationale, manifesto, Welcome pages and UI sketch now says what is true: you only ever *drop* by winning (never by decay, absence, passing or judgment), and other players' wins move you up. Wording only; no rule changed.
+
+## The Welcome opens with the case for King's Gambit (2026-11-10)
+
+**Asked by the guild leader:** the Welcome should mirror the rationale, and its first sentence should answer "why should I bother learning another loot system?". The Start here page now opens with that sentence (you already know the one rule; it is worth learning because useful gear is not thrown away, nobody can game a pass, and you can check the list yourself), then the same case as `docs/rationale.md`: why Suicide Kings is worth keeping, where it breaks down, and how King's Gambit fixes each. "How it works in 60 seconds" and the rule details moved to the top of The rules page. The test that pinned the old "what is different" copy now pins this order and first sentence. Copy only; no rule changed.

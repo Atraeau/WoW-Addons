@@ -707,17 +707,20 @@ test("the first-run Welcome is a setting that stays on until it is turned off; t
     assert(db.welcomeOff == nil)
 end)
 
-test("the Welcome says early that King's Gambit is not a renamed Suicide Kings, and what is different", function()
+test("the Welcome opens with why this loot system is worth learning, then where Suicide Kings breaks down and how this fixes it", function()
     local text = welcomeText()
-    local at = text:find("What is different from Suicide Kings", 1, true)
+    local first = text:match("Welcome to King's Gambit\n\n([^\n]+)")
+    assert(first and first:find("worth learning", 1, true), "the first sentence says why it is worth the player's time")
+    assert(first:find("one rule", 1, true) and first:find("thrown away", 1, true) and first:find("game a pass", 1, true) and first:find("check the list", 1, true), "and gives the reasons")
+    local breaks = text:find("Where Suicide Kings breaks down", 1, true)
+    local fixes = text:find("How King's Gambit fixes it", 1, true)
     local sixty = text:find("How it works in 60 seconds", 1, true)
-    assert(at and sixty and at < sixty, "the difference comes before the 60 seconds, near the top")
-    assert(at < 1500, "and early: it is the first thing after the introduction")
-    local gift = text:find("Gifting. This is the big one, the fix for that flaw.", 1, true)
-    assert(gift and gift < text:find("A ledger, not a kept list.", 1, true), "gifting leads the list: it is the most significant difference")
-    for _, phrase in ipairs { "builds on the success of Suicide Kings", "ledger", "Off-spec has its own list", "Gifting", "draft", "Salvage" } do
-        assert(text:find(phrase, 1, true), "the difference names: " .. phrase)
+    assert(breaks and fixes and sixty and breaks < fixes and fixes < sixty, "the case comes before the rules")
+    assert(breaks < 1500, "and early")
+    for _, phrase in ipairs { "Useful loot gets thrown away", "loophole", "Gifting", "Salvage, not a roll", "A shared ledger", "draft", "off-spec" } do
+        assert(text:find(phrase, 1, true), "the case names: " .. phrase)
     end
+    assert(not text:find("changes only when you win", 1, true) and not text:find("Nothing else ever changes your place", 1, true), "no claim that only your own win moves your place")
 end)
 
 H.section("Guild book: sorting the stats")
