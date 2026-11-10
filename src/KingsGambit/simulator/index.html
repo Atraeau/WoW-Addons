@@ -920,7 +920,6 @@ local function indexOf(order, name)
         if order[i] == name then return i end
     end
 end
-M.IndexOf = indexOf
 
 -- Where to put a player: d.to = "top" | "bottom" (default bottom), or d.above = an active member.
 -- Returns the insertion index in `order` (which must not contain the player), or nil + reason.
@@ -1274,7 +1273,6 @@ local function seenOf(ev)
     local s = type(ev.data) == "table" and ev.data.seen
     if type(s) == "number" and s <= ev.ts and s >= ev.ts - M.SEEN_WINDOW then return s end
 end
-M.SeenOf = seenOf
 
 -- The sort key of an event that follows `prevKey` in its chain.
 local function keyAfter(prevKey, ev)
@@ -1290,7 +1288,6 @@ local function byTs(a, b)
     if a.chain ~= b.chain then return a.chain < b.chain end
     return a.seq < b.seq
 end
-M.ByWrite = byTs
 
 -- A stand-in event for "the end of second t" (after every real event written in that second).
 local function moment(t) return { ts = t, chain = "\255", seq = math.huge } end
@@ -1576,7 +1573,6 @@ M.SpecOf = function(view, raid, member)
     return r and r.specs and r.specs[member] or nil
 end
 M.IsOfficer = function(view, name) return isOfficerNow(view.auth, name) end -- (not being disregarded: see above)
-M.Disregarded = function(view) return snapshotSet(view.auth.disregarded) end
 M.MayWrite = function(view, author, t) return mayWrite(view.auth, author, moment(t)) end
 
 -- Authority events, applied in write-time order: each returns a commit function, or nil + reason.
@@ -2610,7 +2606,6 @@ function Engine:ItemRules() return self.view.itemRules end
 
 -- An officer's override of who an item suits (by item id), or nil: { roles, by, ts, reason }.
 function Engine:ItemSuits(itemId) return self.view.itemSuits[tonumber(itemId)] end
-function Engine:AllItemSuits() return self.view.itemSuits end
 
 function Engine:IsVerified() return next(self.verifying) == nil end
 
@@ -3242,7 +3237,7 @@ M.SPECS = {
 }
 
 ---------------------------------------------------------------- proficiency (what a class can equip at 60)
-local ARMOR, WEAPON, MISC = 4, 2, 0
+local ARMOR, WEAPON = 4, 2
 -- Armor subclasses: 1 cloth, 2 leather, 3 mail, 4 plate, 6 shield, 7 libram, 8 idol, 9 totem.
 local ARMOR_RANK = { [1] = 1, [2] = 2, [3] = 3, [4] = 4 }
 M.ARMOR_NAMES = { [1] = "cloth", [2] = "leather", [3] = "mail", [4] = "plate", [6] = "shield", [7] = "libram", [8] = "idol", [9] = "totem" }
@@ -3609,7 +3604,11 @@ do local chunk = function(...)
 -- scratch order exactly as the ledger will replay them.
 local _, SK = ...
 local Tokens, ItemFit
-local M = SK:NewModule("Loot", { "ItemFit", "Tokens?" }, function(d) Tokens, ItemFit = d.Tokens, d.ItemFit end)
+local installParts -- defined at the end of the file: the Session methods live in LootWhispers.lua, LootDraft.lua and LootFinish.lua
+local M = SK:NewModule("Loot", { "ItemFit", "Tokens?", "LootWhispers", "LootDraft", "LootFinish" }, function(d)
+    Tokens, ItemFit = d.Tokens, d.ItemFit
+    installParts(d)
+end)
 
 local DEFAULTS = {
     listId = nil,        -- the list the raid plays on: normally the one its raid named (the engine knows), else main
@@ -3953,6 +3952,99 @@ function Session:bid(player, itemId, kind, extra)
     return true
 end
 
+
+
+-- Tell the raid what is up for grabs and how to answer without the addon. One announcement
+-- per item keeps each line under the chat limit. Returns the lines sent.
+function Session:announce(channel)
+    local lines = { "Loot: whisper me to answer (for example '1 need', '1 off', '1 pass')." }
+    for _, it in ipairs(self.items) do lines[#lines + 1] = ("%d) %s"):format(it.id, it.link) end
+    for _, line in ipairs(lines) do self.client:announce(line, channel or "RAID") end
+    return lines
+end
+
+-- Has this player left two or more answers of one kind (needs, off-spec, gifts) without a rank? Then which they want most is not settled:
+-- with `requireRanking` they don't count as having answered yet.
+function Session:rankingMissing(p)
+    local count, unranked = {}, {}
+    for _, b in pairs(self.bids[p] or {}) do
+        if b.kind ~= "pass" then
+            count[b.kind] = (count[b.kind] or 0) + 1
+            if not b.rank then unranked[b.kind] = true end
+        end
+    end
+    for kind, n in pairs(count) do
+        if n >= 2 and unranked[kind] then return true end
+    end
+    return false
+end
+
+function Session:allAnswered()
+    for _, p in ipairs(self.eligibleList) do
+        if not self.away[p] then
+            for _, it in ipairs(self.items) do
+                if not (self.bids[p] and self.bids[p][it.id]) then return false end
+            end
+            if self.cfg.requireRanking and self:rankingMissing(p) then return false end
+        end
+    end
+    return true
+end
+
+-- Public view of who has answered what, for the Master Looter panel.
+function Session:answerCount()
+    local answered, total = 0, 0
+    for _, p in ipairs(self.eligibleList) do
+        if not self.away[p] then
+            total = total + 1
+            local all = true
+            for _, it in ipairs(self.items) do
+                if not (self.bids[p] and self.bids[p][it.id]) then all = false end
+            end
+            if all and self.cfg.requireRanking and self:rankingMissing(p) then all = false end
+            if all then answered = answered + 1 end
+        end
+    end
+    return answered, total
+end
+
+function Session:extend(sec)
+    if self.phase ~= "bidding" or not self.deadline then return false end
+    local remaining = self.deadline - self.client:now()
+    self:armTimer(math.max(remaining, 0) + sec, function() self:closeBidding() end)
+    return true
+end
+
+function Session:resolveNow()
+    if self.phase ~= "bidding" then return false end
+    self:closeBidding()
+    return true
+end
+
+function Session:closeBidding()
+    if self.phase ~= "bidding" then return end
+    self:clearTimer()
+    self:runDraft("main")
+end
+
+-- Add the other files' methods to the Session class (once every module is loaded: see Registry.lua), handing them the helpers they share.
+function installParts(d)
+    local h = { copy = copy, indexOf = indexOf, moveToBottom = moveToBottom, norm = norm, MayHave = M.MayHave, Shuffle = M.Shuffle }
+    d.LootWhispers.Install(Session, h)
+    d.LootDraft.Install(Session, h)
+    d.LootFinish.Install(Session, h)
+    M.ParseWhisper = d.LootWhispers.ParseWhisper
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== LootWhispers.lua =====
+do local chunk = function(...)
+-- King's Gambit: the loot session, the whisper fallback: how a player without the addon answers, the prompts and menus sent to them, and reading what they whisper back. Keep this file Lua 5.1-safe.
+-- Part of the Loot module (Loot.lua): Loot calls Install, which adds these methods to the Session class.
+local _, SK = ...
+local ItemFit
+local M = SK:NewModule("LootWhispers", { "ItemFit" }, function(d) ItemFit = d.ItemFit end)
+
 ---------------------------------------------------------------- whisper fallback
 -- Players without the addon answer by whispering the Master Looter. Accepted forms (case does
 -- not matter; several answers can be joined with commas or semicolons):
@@ -4030,6 +4122,10 @@ function M.ParseWhisper(text, itemCount)
     end
     return answers, nil, spec
 end
+
+-- Session: the class table to add methods to; h: what Loot.lua shares (and what the parts installed before this one exported).
+function M.Install(Session, h)
+local norm = h.norm
 
 local WHISPER_HELP = "Reply n (need), o (off-spec), g (gift) or p (pass) to the item I sent; '3 p' answers item 3, 'pass all' passes everything. You can change answers until the timer ends."
 
@@ -4250,79 +4346,19 @@ function Session:handleWhisper(sender, text, specNote)
     self:confirmWhisper(sender, lines, problems)
     return applied
 end
-
--- Tell the raid what is up for grabs and how to answer without the addon. One announcement
--- per item keeps each line under the chat limit. Returns the lines sent.
-function Session:announce(channel)
-    local lines = { "Loot: whisper me to answer (for example '1 need', '1 off', '1 pass')." }
-    for _, it in ipairs(self.items) do lines[#lines + 1] = ("%d) %s"):format(it.id, it.link) end
-    for _, line in ipairs(lines) do self.client:announce(line, channel or "RAID") end
-    return lines
 end
 
--- Has this player left two or more answers of one kind (needs, off-spec, gifts) without a rank? Then which they want most is not settled:
--- with `requireRanking` they don't count as having answered yet.
-function Session:rankingMissing(p)
-    local count, unranked = {}, {}
-    for _, b in pairs(self.bids[p] or {}) do
-        if b.kind ~= "pass" then
-            count[b.kind] = (count[b.kind] or 0) + 1
-            if not b.rank then unranked[b.kind] = true end
-        end
-    end
-    for kind, n in pairs(count) do
-        if n >= 2 and unranked[kind] then return true end
-    end
-    return false
-end
+end; chunk("KingsGambit", SK) end
+-- ===== LootDraft.lua =====
+do local chunk = function(...)
+-- King's Gambit: the loot session, the drafts: the main, off-spec and gift rounds, picks and skips, and the gift winner's choices. Keep this file Lua 5.1-safe.
+-- Part of the Loot module (Loot.lua): Loot calls Install, which adds these methods to the Session class.
+local _, SK = ...
+local M = SK:NewModule("LootDraft")
 
-function Session:allAnswered()
-    for _, p in ipairs(self.eligibleList) do
-        if not self.away[p] then
-            for _, it in ipairs(self.items) do
-                if not (self.bids[p] and self.bids[p][it.id]) then return false end
-            end
-            if self.cfg.requireRanking and self:rankingMissing(p) then return false end
-        end
-    end
-    return true
-end
-
--- Public view of who has answered what, for the Master Looter panel.
-function Session:answerCount()
-    local answered, total = 0, 0
-    for _, p in ipairs(self.eligibleList) do
-        if not self.away[p] then
-            total = total + 1
-            local all = true
-            for _, it in ipairs(self.items) do
-                if not (self.bids[p] and self.bids[p][it.id]) then all = false end
-            end
-            if all and self.cfg.requireRanking and self:rankingMissing(p) then all = false end
-            if all then answered = answered + 1 end
-        end
-    end
-    return answered, total
-end
-
-function Session:extend(sec)
-    if self.phase ~= "bidding" or not self.deadline then return false end
-    local remaining = self.deadline - self.client:now()
-    self:armTimer(math.max(remaining, 0) + sec, function() self:closeBidding() end)
-    return true
-end
-
-function Session:resolveNow()
-    if self.phase ~= "bidding" then return false end
-    self:closeBidding()
-    return true
-end
-
-function Session:closeBidding()
-    if self.phase ~= "bidding" then return end
-    self:clearTimer()
-    self:runDraft("main")
-end
+-- Session: the class table to add methods to; h: what Loot.lua shares (and what the parts installed before this one exported).
+function M.Install(Session, h)
+local MayHave, Shuffle, copy, indexOf, moveToBottom, norm = h.MayHave, h.Shuffle, h.copy, h.indexOf, h.moveToBottom, h.norm
 
 ---------------------------------------------------------------- the draft
 local function wants(bid, tier)
@@ -4378,7 +4414,7 @@ function Session:buildOffOrder()
         -- Independent of the main list: if the draw happens to be the main list's own order, draw again (a few tries).
         local mainOrder = table.concat(self.order.main, "\n")
         for _ = 1, 8 do
-            M.Shuffle(self.client, newcomers)
+            Shuffle(self.client, newcomers)
             if #newcomers < 2 or table.concat(newcomers, "\n") ~= mainOrder then break end
         end
     end
@@ -4430,7 +4466,7 @@ end
 function Session:mayKeep(player, itemId)
     local t = self.turn
     if t and t.type == "recipient" and t.item == itemId and t.wasBottom then return true end
-    return (M.MayHave(self:fitOf(itemId), self.class[norm(self, player)]))
+    return (MayHave(self:fitOf(itemId), self.class[norm(self, player)]))
 end
 
 local function resolveRecipient(self, t, to)
@@ -4451,7 +4487,7 @@ function Session:chooseRecipient(player, to)
     to = norm(self, to)
     if not to or not self.eligible[to] or self.away[to] then return false, "badtarget" end
     if to == t.player then return self:keepGift(player) end
-    local ok, why2 = M.MayHave(self:fitOf(t.item), self.class[to])
+    local ok, why2 = MayHave(self:fitOf(t.item), self.class[to])
     if not ok then return false, why2 .. "to" end
     if not self:canReceive(to, self.items[t.item]) then return false, "unreachable" end
     return resolveRecipient(self, t, to)
@@ -4618,6 +4654,19 @@ function Session:skip(player)
     self:continueDraft(t.tier)
     return true
 end
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== LootFinish.lua =====
+do local chunk = function(...)
+-- King's Gambit: the loot session, salvage and disenchant, the review, confirming (hand-out and recording), cancelling and the status for the windows. Keep this file Lua 5.1-safe.
+-- Part of the Loot module (Loot.lua): Loot calls Install, which adds these methods to the Session class.
+local _, SK = ...
+local M = SK:NewModule("LootFinish")
+
+-- Session: the class table to add methods to; h: what Loot.lua shares (and what the parts installed before this one exported).
+function M.Install(Session, h)
+local MayHave, norm = h.MayHave, h.norm
 
 ---------------------------------------------------------------- salvage and disenchant
 -- Items nobody wanted go to the salvager (the lowest on the list), with no usability gate. They decide: claim it, or
@@ -4681,7 +4730,7 @@ function Session:claimItem(player, extra)
         to = norm(self, extra.to)
         if not to or to == player then return false, "badtarget" end
         -- anyone may gift, but the one who receives it must be eligible for the item
-        local ok, why = M.MayHave(self:fitOf(t.item), self.class[to])
+        local ok, why = MayHave(self:fitOf(t.item), self.class[to])
         if not ok then return false, why .. "to" end
     end
     self.turn = nil
@@ -4817,6 +4866,37 @@ function Session:status()
     return { phase = self.phase, turn = self.turn, items = self.items, pending = self.pending, enrollments = self.enrollments,
         answered = answered, eligible = total, deadline = self.deadline }
 end
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== Emitter.lua =====
+do local chunk = function(...)
+-- King's Gambit: a small event emitter, shared by the loot network (LootNet) and requests (Requests). Keep this file Lua 5.1-safe.
+--   local ev = Emitter.New()
+--   local off = ev.on("phase", function(payload) ... end)   -- returns a function that stops listening
+--   ev.emit("phase", payload)                               -- calls the listeners that were registered when it started and are still active
+local _, SK = ...
+local M = SK:NewModule("Emitter")
+
+function M.New()
+    local handlers = {}
+    local e = {}
+    function e.on(event, fn)
+        local list = handlers[event]
+        if not list then list = {}; handlers[event] = list end
+        local entry = { fn = fn, active = true }
+        list[#list + 1] = entry
+        return function() entry.active = false end
+    end
+    function e.emit(event, payload)
+        local snapshot = {}
+        for i, x in ipairs(handlers[event] or {}) do snapshot[i] = x end
+        for _, x in ipairs(snapshot) do
+            if x.active then x.fn(payload) end
+        end
+    end
+    return e
+end
 
 end; chunk("KingsGambit", SK) end
 -- ===== Requests.lua =====
@@ -4850,8 +4930,8 @@ do local chunk = function(...)
 --                                 recorded with the reason. Eligibility is by class (what the game can check); the
 --                                 requester's spec is part of the record.
 local _, SK = ...
-local Standings, ItemFit, Identity
-local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity" }, function(d) Standings, ItemFit, Identity = d.Standings, d.ItemFit, d.Identity end)
+local Standings, ItemFit, Identity, Emitter
+local M = SK:NewModule("Requests", { "Standings", "ItemFit", "Identity", "Emitter" }, function(d) Standings, ItemFit, Identity, Emitter = d.Standings, d.ItemFit, d.Identity, d.Emitter end)
 
 M.LIST = "main"
 M.MAX_REASON = 200
@@ -4993,29 +5073,11 @@ function M.EventFor(state, r, chainId)
 end
 
 ---------------------------------------------------------------- the live side
-local function newEmitter()
-    local handlers = {}
-    return {
-        on = function(event, fn)
-            local list = handlers[event] or {}
-            handlers[event] = list
-            local entry = { fn = fn, active = true }
-            list[#list + 1] = entry
-            return function() entry.active = false end
-        end,
-        emit = function(event, payload)
-            local snapshot = {}
-            for i, x in ipairs(handlers[event] or {}) do snapshot[i] = x end
-            for _, x in ipairs(snapshot) do if x.active then x.fn(payload) end end
-        end,
-    }
-end
-
 -- Events: request {req} (Master Looter: a new one), received {req} (requester: acknowledged), refused {req, why},
 -- unanswered {req}, decided {req?, ev, accepted, by} (anyone: an event carrying a request's outcome arrived).
 function M.New(sync, engine)
     local client = engine.client
-    local em = newEmitter()
+    local em = Emitter.New()
     local q = { sync = sync, engine = engine, client = client, on = em.on, sent = {}, counter = 0 }
     engine.db.requests = engine.db.requests or {}
 
@@ -6661,7 +6723,6 @@ function M.New(engine, client, host)
     return a
 end
 
-function M:OnInit() end
 
 return M
 
@@ -6674,8 +6735,10 @@ do local chunk = function(...)
 -- Runs anywhere Lua runs, including a browser. Keep this file Lua 5.1-safe.
 local _, SK = ...
 local MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40, Attendance
-local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?", "Attendance?" }, function(d)
+local installParts -- defined at the end of the file: the simulated raiders are in SimBots.lua, the raid nights in SimNights.lua
+local M = SK:NewModule("Sim", { "MockClient", "Engine", "Loot", "ItemFit", "Requests", "Identity", "Tokens?", "MoltenCore?", "AQ40?", "Attendance?", "SimBots", "SimNights" }, function(d)
     MockClient, Engine, Loot, ItemFit, Requests, Identity, Tokens, MoltenCore, AQ40, Attendance = d.MockClient, d.Engine, d.Loot, d.ItemFit, d.Requests, d.Identity, d.Tokens, d.MoltenCore, d.AQ40, d.Attendance
+    installParts(d)
 end)
 
 local CLASSES = { "WARRIOR", "PALADIN", "HUNTER", "ROGUE", "PRIEST", "MAGE", "WARLOCK", "DRUID", "SHAMAN" }
@@ -6895,6 +6958,187 @@ function Sim:recordSpecs()
     end
 end
 
+function Sim:advance(sec) self.client:advance(sec) end
+
+-- Advance the clock until the session reaches `phase` (or done), up to maxSeconds.
+function Sim:runUntil(phase, maxSeconds)
+    local waited = 0
+    while self.session.phase ~= phase and waited < (maxSeconds or 300) do
+        self.client:advance(1)
+        waited = waited + 1
+    end
+    return self.session.phase == phase
+end
+
+function Sim:order()
+    local out = {}
+    for i, n in ipairs(self.engine:Get("main").state.order) do out[i] = short(n) end
+    return out
+end
+
+function Sim:orderString() return table.concat(self:order(), ",") end
+
+-- A plain-table view of everything a UI needs to draw.
+function Sim:snapshot()
+    local s = self.session
+    local snap = { order = self:order(), phase = s and s.phase or "idle", head = self.engine:Get("main").head }
+    if s then
+        local status = s:status()
+        snap.answered, snap.eligible, snap.deadline, snap.now = status.answered, status.eligible, status.deadline, self.client:now()
+        snap.items = {}
+        for i, it in ipairs(s.items) do
+            snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
+            -- May the learner bid on it (need, off-spec, gift)? If not, the page offers only a pass, and says why.
+            local fit = s:fitOf(it.id)
+            local me = self.info[self.learner] or self.info[short(self.learner)]
+            local may, why = Loot.MayHave(fit, me and me.class)
+            snap.items[i].youMay, snap.items[i].youWhy = may, why
+            snap.items[i].classes = ItemFit.ClassList(fit or {})
+            -- who the learner may gift it to: raiders who are eligible for it themselves
+            local targets = {}
+            for _, n in ipairs(self.names) do
+                if n ~= self.learner and Loot.MayHave(fit, self.info[n] and self.info[n].class) then targets[#targets + 1] = short(n) end
+            end
+            snap.items[i].giftTargets = targets
+            local rows = s:readiness(it.id)
+            if rows then
+                local wanted = {}
+                for k, r in ipairs(rows) do wanted[k] = { player = short(r.player), kind = r.kind, ready = r.ready, label = Tokens.Label(r.ready) } end
+                snap.items[i].token = { makes = it.token.token.makes, wanted = wanted }
+            end
+        end
+        if s.turn then
+            snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
+            if s.turn.type == "recipient" then snap.turn.canKeep = s:mayKeep(s.turn.player, s.turn.item) end
+        end
+    end
+    return snap
+end
+
+---------------------------------------------------------------- scenarios
+-- sc: { id, title, lesson, members, items, policies = { [name] = policy }, you = policy,
+--       after = function(sim), expect = function(sim) -> ok, message }
+function M.RunScenario(sc, opts)
+    opts = opts or {}
+    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = "You",
+        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
+    sim.policies = sc.policies or {}
+    sim.policies["You"] = sc.you or {}
+    sim.autoLearner = true
+    local ok, why = sim:drop(sc.items, sc.config)
+    if not ok then return sim, false, "could not start: " .. tostring(why) end
+    if not sim:runUntil("review", 400) then return sim, false, "stuck in phase " .. sim.session.phase end
+    local confirmed, failures = sim.session:confirm()
+    if not confirmed then return sim, false, "confirm failed: " .. tostring(failures) end
+    if sc.after then sc.after(sim) end
+    local passed, message = sc.expect(sim)
+    return sim, passed and true or false, message
+end
+
+-- A lesson a person plays (the web page's tutorials, in the game's practice mode): the scenario's raid and drop, with the learner answering for themselves.
+-- Nothing starts until `startLesson` (read it first); the clock should not run before that either. `verdict` says whether what they did matches the lesson.
+function M.NewLesson(sc, opts)
+    opts = opts or {}
+    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = opts.learner or "You",
+        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
+    sim.policies = sc.policies or {}
+    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
+    sim.lesson, sim.lessonStarted = sc, false
+    return sim
+end
+
+function Sim:startLesson()
+    local sc = self.lesson
+    if not sc or self.lessonStarted then return false, "started" end
+    -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
+    local cfg = { pickSeconds = 60, claimSeconds = 60 }
+    for k, v in pairs(sc.config or {}) do cfg[k] = v end
+    local ok, why = self:drop(sc.items, cfg)
+    if ok then self.lessonStarted = true end
+    return ok, why
+end
+
+-- Where the learner stands: { ok, pending, message }. A lesson with a step still to do (undoing a mistake, say) is not judged yet; `pending` says what is left.
+-- Nil until the session has been confirmed (or for something that is not a lesson).
+function Sim:verdict()
+    local sc = self.lesson
+    if not (sc and self.session and self.session.phase == "done") then return nil end
+    local hint = sc.todo and sc.todo(self)
+    if hint then return { ok = false, pending = true, message = hint } end
+    local ok, message = sc.expect(self)
+    return { ok = ok and true or false, message = message }
+end
+
+---------------------------------------------------------------- a raider asks the Master Looter
+-- When a bot is the Master Looter the learner is a raider: they can't write to the ledger, they ask (undo, a regret-trade,
+-- or "it was a gift", for a player's last award), with a reason. The bot Master Looter decides at once, the way the real
+-- addon's accept and decline do: what can be done is written as the Master Looter's entry "at the request of" the
+-- learner, and what can't is declined with the reason in the record. Returns true + a sentence, or false + a reason code
+-- (the request itself was malformed) or false + a sentence (declined).
+local DECLINE = {
+    noaward = "that player has no award that is still standing",
+    notrevertible = "that award can no longer be changed (the list was moved by hand since)",
+    notmember = "the player it went to isn't on the list",
+    samewinner = "that is who it was recorded for already",
+}
+function Sim:ask(kind, member, to, reason)
+    if self.ml == self.learner then return false, "youareml" end
+    if type(reason) ~= "string" or reason:match("^%s*$") then return false, "noreason" end
+    self.asked = (self.asked or 0) + 1
+    local r = { kind = kind, member = member and self.client:normalize(member), reason = reason, by = self.learner,
+        rid = ("sim:%d"):format(self.asked) }
+    if to and to ~= "" then r.to = self.client:normalize(to) end
+    local ok, why = Requests.Validate(r)
+    if not ok then return false, why == "badrequest" and "badtarget" or why end
+    local state = self.engine:Get("main").state
+    local type_, data = Requests.EventFor(state, r, self.engine:MyChain())
+    local ml = short(self.ml)
+    if not type_ then
+        local text = DECLINE[data] or tostring(data)
+        local ev, err = self.engine:Write("Declined", { request = Requests.Describe(r), requestedBy = r.by, declineReason = text,
+            rid = r.rid, kind = r.kind, member = r.member })
+        if not ev then return false, err end
+        return false, ml .. " declined: " .. text
+    end
+    local ev, err = self.engine:Append("main", type_, data)
+    if not ev then return false, err end
+    return true, ml .. " accepted and wrote it to the ledger: " .. Requests.Describe(r)
+end
+
+---------------------------------------------------------------- the raid leader, the loot method
+-- Who the raid leader is (always someone, in a group).
+function Sim:leaderName() return self.client:leader() end
+
+-- Someone changes the loot method. Only the raid leader may; for Master Looter, the looter is named. In the simulator the
+-- Master Looter is chosen when a run starts (it decides whose addon runs the loot), so a different looter is refused here.
+function Sim:setLootMethod(by, method, looter)
+    by = self.client:normalize(by)
+    if method == "master" and looter and self.client:normalize(looter) ~= self.ml then return false, "otherlooter" end
+    return self.client:setLootMethodAs(by, method, looter or self.ml)
+end
+
+function Sim:setLeader(name) return self.client:setLeader(name) end
+
+-- Add the other files' functions to M and the Sim class (once every module is loaded: see Registry.lua), handing them what they share.
+function installParts(d)
+    local h = { short = short }
+    d.SimBots.Install(M, Sim, h)
+    d.SimNights.Install(M, Sim, h)
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== SimBots.lua =====
+do local chunk = function(...)
+-- King's Gambit: the practice raid, the simulated raiders: who is a bot, what each answers, how a drop reaches them, and how they act on a session. Keep this file Lua 5.1-safe.
+-- Part of Sim (sim/Sim.lua): Sim calls Install, which adds these to the Sim class.
+local _, SK = ...
+local Loot
+local P = SK:NewModule("SimBots", { "Loot" }, function(d) Loot = d.Loot end)
+
+-- M, Sim: the table to add to; h: what Sim shares (and what the parts installed before this one exported).
+function P.Install(M, Sim, h)
+local short = h.short
+
 function Sim:note(text) self.log[#self.log + 1] = { t = self.client:now(), text = text } end
 
 function Sim:isBot(fullName)
@@ -7043,118 +7287,19 @@ function Sim:wireBots()
         end)
     end)
 end
-
-function Sim:advance(sec) self.client:advance(sec) end
-
--- Advance the clock until the session reaches `phase` (or done), up to maxSeconds.
-function Sim:runUntil(phase, maxSeconds)
-    local waited = 0
-    while self.session.phase ~= phase and waited < (maxSeconds or 300) do
-        self.client:advance(1)
-        waited = waited + 1
-    end
-    return self.session.phase == phase
 end
 
-function Sim:order()
-    local out = {}
-    for i, n in ipairs(self.engine:Get("main").state.order) do out[i] = short(n) end
-    return out
-end
+end; chunk("KingsGambit", SK) end
+-- ===== SimNights.lua =====
+do local chunk = function(...)
+-- King's Gambit: the practice raid, the raid nights (Molten Core, Ahn'Qiraj), free play and practice: the raiders, their wants, killing a boss and handing out loot. Keep this file Lua 5.1-safe.
+-- Part of Sim (sim/Sim.lua): Sim calls Install, which adds these to the Sim class.
+local _, SK = ...
+local ItemFit, MoltenCore, AQ40
+local P = SK:NewModule("SimNights", { "ItemFit", "MoltenCore?", "AQ40?" }, function(d) ItemFit, MoltenCore, AQ40 = d.ItemFit, d.MoltenCore, d.AQ40 end)
 
-function Sim:orderString() return table.concat(self:order(), ",") end
-
--- A plain-table view of everything a UI needs to draw.
-function Sim:snapshot()
-    local s = self.session
-    local snap = { order = self:order(), phase = s and s.phase or "idle", head = self.engine:Get("main").head }
-    if s then
-        local status = s:status()
-        snap.answered, snap.eligible, snap.deadline, snap.now = status.answered, status.eligible, status.deadline, self.client:now()
-        snap.items = {}
-        for i, it in ipairs(s.items) do
-            snap.items[i] = { id = it.id, link = it.link, status = it.status, winner = it.winner and short(it.winner), to = it.to and short(it.to), tier = it.tier }
-            -- May the learner bid on it (need, off-spec, gift)? If not, the page offers only a pass, and says why.
-            local fit = s:fitOf(it.id)
-            local me = self.info[self.learner] or self.info[short(self.learner)]
-            local may, why = Loot.MayHave(fit, me and me.class)
-            snap.items[i].youMay, snap.items[i].youWhy = may, why
-            snap.items[i].classes = ItemFit.ClassList(fit or {})
-            -- who the learner may gift it to: raiders who are eligible for it themselves
-            local targets = {}
-            for _, n in ipairs(self.names) do
-                if n ~= self.learner and Loot.MayHave(fit, self.info[n] and self.info[n].class) then targets[#targets + 1] = short(n) end
-            end
-            snap.items[i].giftTargets = targets
-            local rows = s:readiness(it.id)
-            if rows then
-                local wanted = {}
-                for k, r in ipairs(rows) do wanted[k] = { player = short(r.player), kind = r.kind, ready = r.ready, label = Tokens.Label(r.ready) } end
-                snap.items[i].token = { makes = it.token.token.makes, wanted = wanted }
-            end
-        end
-        if s.turn then
-            snap.turn = { type = s.turn.type, player = short(s.turn.player), options = s.turn.options, item = s.turn.item, tier = s.turn.tier }
-            if s.turn.type == "recipient" then snap.turn.canKeep = s:mayKeep(s.turn.player, s.turn.item) end
-        end
-    end
-    return snap
-end
-
----------------------------------------------------------------- scenarios
--- sc: { id, title, lesson, members, items, policies = { [name] = policy }, you = policy,
---       after = function(sim), expect = function(sim) -> ok, message }
-function M.RunScenario(sc, opts)
-    opts = opts or {}
-    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = "You",
-        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
-    sim.policies = sc.policies or {}
-    sim.policies["You"] = sc.you or {}
-    sim.autoLearner = true
-    local ok, why = sim:drop(sc.items, sc.config)
-    if not ok then return sim, false, "could not start: " .. tostring(why) end
-    if not sim:runUntil("review", 400) then return sim, false, "stuck in phase " .. sim.session.phase end
-    local confirmed, failures = sim.session:confirm()
-    if not confirmed then return sim, false, "confirm failed: " .. tostring(failures) end
-    if sc.after then sc.after(sim) end
-    local passed, message = sc.expect(sim)
-    return sim, passed and true or false, message
-end
-
--- A lesson a person plays (the web page's tutorials, in the game's practice mode): the scenario's raid and drop, with the learner answering for themselves.
--- Nothing starts until `startLesson` (read it first); the clock should not run before that either. `verdict` says whether what they did matches the lesson.
-function M.NewLesson(sc, opts)
-    opts = opts or {}
-    local sim = M.NewRaid({ members = sc.members, seed = opts.seed or 1, learner = opts.learner or "You",
-        learnerClass = sc.learnerClass, learnerSpec = sc.learnerSpec, learnerRole = sc.learnerRole })
-    sim.policies = sc.policies or {}
-    sim.rankingRequired = true -- as in the game: someone who wants several items ranks them
-    sim.lesson, sim.lessonStarted = sc, false
-    return sim
-end
-
-function Sim:startLesson()
-    local sc = self.lesson
-    if not sc or self.lessonStarted then return false, "started" end
-    -- A person is learning here: give their turns room to read and decide (the engine's defaults suit a raid).
-    local cfg = { pickSeconds = 60, claimSeconds = 60 }
-    for k, v in pairs(sc.config or {}) do cfg[k] = v end
-    local ok, why = self:drop(sc.items, cfg)
-    if ok then self.lessonStarted = true end
-    return ok, why
-end
-
--- Where the learner stands: { ok, pending, message }. A lesson with a step still to do (undoing a mistake, say) is not judged yet; `pending` says what is left.
--- Nil until the session has been confirmed (or for something that is not a lesson).
-function Sim:verdict()
-    local sc = self.lesson
-    if not (sc and self.session and self.session.phase == "done") then return nil end
-    local hint = sc.todo and sc.todo(self)
-    if hint then return { ok = false, pending = true, message = hint } end
-    local ok, message = sc.expect(self)
-    return { ok = ok and true or false, message = message }
-end
-
+-- M, Sim: the table to add to; h: what Sim shares (and what the parts installed before this one exported).
+function P.Install(M, Sim, h)
 ---------------------------------------------------------------- raid nights (Molten Core, Ahn'Qiraj)
 -- A realistic 40-person Alliance raid: class, main spec and off-spec for every bot (the role follows the main
 -- spec). The learner is the 40th: a Holy priest with Shadow as off-spec. { class, spec, off-spec, count }.
@@ -7173,8 +7318,6 @@ local MC_NAMES = { "Aldric_Stormwind", "Brann_Ironforge", "Cass_Dunmere", "Dara_
     "Pell_Redmane", "Quill_Tanglewood", "Rhea_Silverbrook", "Soren_Oakhaven", "Tavi_Larkspur", "Ulf_Frostbeard", "Vera_Copperfield", "Wren_Highmoor",
     "Xan_Nightshade", "Yara_Goldleaf", "Zed_Ravenscar", "Ansel_Wyndham", "Bryn_Coldwell", "Corin_Ashford", "Delia_Moonbrook", "Emrys_Hartley",
     "Fia_Stoneridge", "Gideon_Blackwood", "Halia_Brightmoor", "Ivo_Fenwick", "Jessa_Thorne", "Kael_Ravenwood", "Lysa_Dawnwhisper", "Moro_Stonefist" }
-local ARMOR = { WARRIOR = "plate", PALADIN = "plate", HUNTER = "mail", SHAMAN = "mail", ROGUE = "leather",
-    DRUID = "leather", PRIEST = "cloth", MAGE = "cloth", WARLOCK = "cloth" }
 -- Hybrids can also use the other role's gear as off-spec.
 local OFFSPEC = { DRUID = { healer = "tank", tank = "healer" }, PALADIN = { healer = "melee", melee = "healer" },
     WARRIOR = { tank = "melee", melee = "tank" }, PRIEST = { healer = "caster" },
@@ -7451,56 +7594,7 @@ function Sim:handOut(cfg)
     if ok then self.held = {} end -- (a refused session, e.g. no Master Looter set, keeps the loot to hand out later)
     return ok, why
 end
-
----------------------------------------------------------------- a raider asks the Master Looter
--- When a bot is the Master Looter the learner is a raider: they can't write to the ledger, they ask (undo, a regret-trade,
--- or "it was a gift", for a player's last award), with a reason. The bot Master Looter decides at once, the way the real
--- addon's accept and decline do: what can be done is written as the Master Looter's entry "at the request of" the
--- learner, and what can't is declined with the reason in the record. Returns true + a sentence, or false + a reason code
--- (the request itself was malformed) or false + a sentence (declined).
-local DECLINE = {
-    noaward = "that player has no award that is still standing",
-    notrevertible = "that award can no longer be changed (the list was moved by hand since)",
-    notmember = "the player it went to isn't on the list",
-    samewinner = "that is who it was recorded for already",
-}
-function Sim:ask(kind, member, to, reason)
-    if self.ml == self.learner then return false, "youareml" end
-    if type(reason) ~= "string" or reason:match("^%s*$") then return false, "noreason" end
-    self.asked = (self.asked or 0) + 1
-    local r = { kind = kind, member = member and self.client:normalize(member), reason = reason, by = self.learner,
-        rid = ("sim:%d"):format(self.asked) }
-    if to and to ~= "" then r.to = self.client:normalize(to) end
-    local ok, why = Requests.Validate(r)
-    if not ok then return false, why == "badrequest" and "badtarget" or why end
-    local state = self.engine:Get("main").state
-    local type_, data = Requests.EventFor(state, r, self.engine:MyChain())
-    local ml = short(self.ml)
-    if not type_ then
-        local text = DECLINE[data] or tostring(data)
-        local ev, err = self.engine:Write("Declined", { request = Requests.Describe(r), requestedBy = r.by, declineReason = text,
-            rid = r.rid, kind = r.kind, member = r.member })
-        if not ev then return false, err end
-        return false, ml .. " declined: " .. text
-    end
-    local ev, err = self.engine:Append("main", type_, data)
-    if not ev then return false, err end
-    return true, ml .. " accepted and wrote it to the ledger: " .. Requests.Describe(r)
 end
-
----------------------------------------------------------------- the raid leader, the loot method
--- Who the raid leader is (always someone, in a group).
-function Sim:leaderName() return self.client:leader() end
-
--- Someone changes the loot method. Only the raid leader may; for Master Looter, the looter is named. In the simulator the
--- Master Looter is chosen when a run starts (it decides whose addon runs the loot), so a different looter is refused here.
-function Sim:setLootMethod(by, method, looter)
-    by = self.client:normalize(by)
-    if method == "master" and looter and self.client:normalize(looter) ~= self.ml then return false, "otherlooter" end
-    return self.client:setLootMethodAs(by, method, looter or self.ml)
-end
-
-function Sim:setLeader(name) return self.client:setLeader(name) end
 
 end; chunk("KingsGambit", SK) end
 -- ===== Scenarios.lua =====
@@ -7511,7 +7605,12 @@ do local chunk = function(...)
 -- lessons can never drift from the rules. Keep this file Lua 5.1-safe.
 local _, SK = ...
 local Identity
-local M = SK:NewModule("Scenarios", { "Identity" }, function(d) Identity = d.Identity end)
+local collect -- defined below: the lessons are gathered once every module is loaded (see Registry.lua)
+-- The lessons themselves are in ScenarioBasics.lua, ScenarioDraft.lua and ScenarioHandout.lua; this file is what they share, their order, and find().
+local M = SK:NewModule("Scenarios", { "Identity", "ScenarioBasics", "ScenarioDraft", "ScenarioHandout" }, function(d)
+    Identity = d.Identity
+    collect({ d.ScenarioBasics, d.ScenarioDraft, d.ScenarioHandout })
+end)
 
 -- Top of the list first; You are last. Each has a class, because the loot rules go by class: the item has to be
 -- one their class can wear or wield (and the gloves below are for warriors only).
@@ -7534,7 +7633,42 @@ end
 
 local function short(name) return name and Identity.Display(name) end
 
-M.list = {
+M.list = {}
+
+-- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
+-- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
+-- (The raid nights come after all of these, on the page.)
+local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
+    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout", "regret-after-draft" }
+
+function collect(parts)
+    local helpers = { RAID = RAID, raid = raid, lastEvent = lastEvent, short = short }
+    for _, part in ipairs(parts) do
+        for _, lesson in ipairs(part.Lessons(helpers)) do M.list[#M.list + 1] = lesson end
+    end
+    local rank = {}
+    for i, id in ipairs(ORDER) do rank[id] = i end
+    table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)
+end
+
+function M.find(id)
+    for _, sc in ipairs(M.list) do
+        if sc.id == id then return sc end
+    end
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== ScenarioBasics.lua =====
+do local chunk = function(...)
+-- King's Gambit: training scenarios, the first lessons: one item and one winner, the priority pick, a proxy, a gift and an off-spec bid. Keep this file Lua 5.1-safe.
+-- Part of Scenarios (Scenarios.lua), which collects every part's lessons, puts them in teaching order and finds one by id.
+local _, SK = ...
+local M = SK:NewModule("ScenarioBasics")
+
+-- h: what every lesson shares (Scenarios.lua): the practice raid, a way to find an event, a short name.
+function M.Lessons(h)
+    local RAID, lastEvent, short = h.RAID, h.lastEvent, h.short
+    local lessons = {
     {
         id = "first-drop",
         title = "The first drop",
@@ -7639,6 +7773,22 @@ M.list = {
             return ok, ("seeded off-spec order %s; %s won; main %s; off now %s"):format(table.concat(seeded, ","), tostring(winner), main, off)
         end,
     },
+    }
+    return lessons
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== ScenarioDraft.lua =====
+do local chunk = function(...)
+-- King's Gambit: training scenarios, items nobody wants, fixing a mistake and a regret trade. Keep this file Lua 5.1-safe.
+-- Part of Scenarios (Scenarios.lua), which collects every part's lessons, puts them in teaching order and finds one by id.
+local _, SK = ...
+local M = SK:NewModule("ScenarioDraft")
+
+-- h: what every lesson shares (Scenarios.lua): the practice raid, a way to find an event, a short name.
+function M.Lessons(h)
+    local RAID, raid, lastEvent, short = h.RAID, h.raid, h.lastEvent, h.short
+    local lessons = {
     {
         id = "nobody-wants-it",
         title = "Nobody wants it",
@@ -7714,6 +7864,22 @@ M.list = {
             return ok, ("order is %s; Brann restored, Dara paid %s"):format(sim:orderString(), how)
         end,
     },
+    }
+    return lessons
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== ScenarioHandout.lua =====
+do local chunk = function(...)
+-- King's Gambit: training scenarios, a big hand-out, the lucky salvager and the regret trade after a big hand-out. Keep this file Lua 5.1-safe.
+-- Part of Scenarios (Scenarios.lua), which collects every part's lessons, puts them in teaching order and finds one by id.
+local _, SK = ...
+local M = SK:NewModule("ScenarioHandout")
+
+-- h: what every lesson shares (Scenarios.lua): the practice raid, a way to find an event, a short name.
+function M.Lessons(h)
+    local lastEvent, short = h.lastEvent, h.short
+    local lessons = {
     {
         id = "big-handout",
         title = "A big hand-out: ranked choice, then the salvagers rotate",
@@ -7795,21 +7961,22 @@ M.list = {
                 ("%s | list now %s"):format(got, order)
         end,
     },
-}
+    }
+
 
 -- The regret-trade after a big hand-out: the hardest case for the standings. The first pickers are also the
 -- salvagers, so the winner of the item that went to someone else has also won a leftover since (their place is already
 -- the bottom), and the real recipient may be someone who got nothing at all.
-do
+    do
     local base
-    for _, sc in ipairs(M.list) do if sc.id == "big-handout" then base = sc end end
+    for _, sc in ipairs(lessons) do if sc.id == "big-handout" then base = sc end end
     local WANT = "Eira,You,Aldric,Brann,Cass,Dara,Fenn,Garo,Hale"
     local function blade(sim)
         for _, ev in ipairs(sim.engine:Get("main").events) do
             if ev.type == "Award" and ev.data.item == "Brutality Blade" and short(ev.data.member) == "Brann" then return ev end
         end
     end
-    M.list[#M.list + 1] = {
+    lessons[#lessons + 1] = {
         id = "regret-after-draft",
         title = "The item went to someone else, after a big hand-out",
         lesson = "The same ten items as the big hand-out, and the same draft: pass on everything, press Start, confirm. Afterward Brann tells you: \"I traded the Brutality Blade to Hale at the door.\" Hale ranked it first too, and lost it only because Brann is higher on the list. Fix the list, in the Corrections card.\n\nThis is harder than the single drop. Brann won the blade, and also the Quick Strike Ring (he picked second, so he was the second salvager), and the draft went on after him. Choose Hale in \"It went to\" on Brann's Brutality Blade and press Regret-trade. Notice what does and doesn't change:\n\n1. Brann does not move. He also won the ring after the blade, and that already dropped him to the bottom when his turn came, so he stands in the same place with or without the blade. He just loses that win (and keeps the ring).\n2. Hale, who got nothing in the draft, pays now: he drops to the bottom, as if he had won the blade.\n3. Nobody else moves, and nobody has to hand anything back: the draft is not replayed.\n\n(\"It was a gift\" is for a deliberate gift: nobody would move, which would be unfair to Hale's wait.)",
@@ -7836,21 +8003,8 @@ do
             return ok, ("order is %s; Hale paid for the blade, Brann kept his place (the ring was his later win), %s"):format(sim:orderString(), how)
         end,
     }
-end
-
--- Teaching order: one item and one winner first, then several items and ranking, then the off-spec list, then what
--- happens to items nobody wants (disenchant, salvage, gifting), then fixing a mistake, and last the big hand-outs.
--- (The raid nights come after all of these, on the page.)
-local ORDER = { "first-drop", "pick-a-priority", "off-spec", "nobody-wants-it", "minor-upgrade-proxy", "gift-up",
-    "fix-a-mistake", "regret-trade", "lucky-salvager", "big-handout", "regret-after-draft" }
-local rank = {}
-for i, id in ipairs(ORDER) do rank[id] = i end
-table.sort(M.list, function(a, b) return (rank[a.id] or 99) < (rank[b.id] or 99) end)
-
-function M.find(id)
-    for _, sc in ipairs(M.list) do
-        if sc.id == id then return sc end
     end
+    return lessons
 end
 
 end; chunk("KingsGambit", SK) end
@@ -7986,7 +8140,6 @@ function M.Attach(frame, tip, extra, sink)
     end
 end
 
-function M:OnInit() end
 
 end; chunk("KingsGambit", SK) end
 -- ===== UILoot.lua =====
@@ -7995,8 +8148,8 @@ do local chunk = function(...)
 -- The buttons that answer it are in LootWindow, drawn from LootView; every button runs the same command a player would type, so the rules and the
 -- ledger are exactly those of the commands. The Master Looter's own session and a player's view of someone else's are read from the same place the commands read.
 local _, SK = ...
-local Identity, Sim, Tips, ItemFit
-local M = SK:NewModule("UILoot", { "Identity", "Sim?", "UITips", "ItemFit" }, function(d) Identity, Sim, Tips, ItemFit = d.Identity, d.Sim, d.UITips, d.ItemFit end)
+local Identity, Sim, ItemFit
+local M = SK:NewModule("UILoot", { "Identity", "Sim?", "ItemFit" }, function(d) Identity, Sim, ItemFit = d.Identity, d.Sim, d.ItemFit end)
 
 M.MAX_ITEMS = 24
 
@@ -8270,7 +8423,6 @@ function M.Model(ctx)
     return out
 end
 
-function M:OnInit() end
 
 end; chunk("KingsGambit", SK) end
 -- ===== LootView.lua =====
@@ -8579,28 +8731,14 @@ function M.Build(m)
     return v
 end
 
-function M:OnInit() end
 
 end; chunk("KingsGambit", SK) end
--- ===== GuildBook.lua =====
+-- ===== GuildBookPages.lua =====
 do local chunk = function(...)
--- King's Gambit: what the Guild book shows, as plain tables. Keep this file Lua 5.1-safe.
---
--- The Guild book is the larger, calmer window for the lists, the record of what happened, and the officers' tools (docs/ui-design.md, 5.2). Like the Loot
--- window, its screens are built here from the engine's state with no frames, so the game's window and the web simulator draw the same sections, the same
--- sentences and the same filters. Nothing here changes anything: a section's buttons run the same commands a player would type.
---
---   M.SECTIONS                            the navigation column, in order
---   M.History(ctx, filter)                the ledger as readable sentences, newest first, filtered (the Ledger section)
---   M.Detail(ctx, id)                     one entry as the raw record: kind, writer, time, id, chain and every field it carries
---   M.RaidNow(ctx)                        the open raid: how long, what has been handed out, what is held and for how long it can be traded
---   M.Stats(ctx, listId)                  who held which place for how long, wins and last win, by replaying the list with timestamps
---   M.Segments(text, people)              a sentence cut into plain words and people (a person carries their class color)
---   M.Ago(now, ts)                        "3 days ago"
+-- King's Gambit: the Guild book as tables, its sections and the Welcome pages (the first-run copy). Keep this file Lua 5.1-safe.
+-- Part of GuildBook (ui/GuildBook.lua): GuildBook merges what this module exports, so callers use GuildBook.<name>.
 local _, SK = ...
-local LootView, Identity, Standings, Migrations, Ledgers
-local M = SK:NewModule("GuildBook", { "LootView", "Identity", "Standings", "Migrations", "Ledgers" },
-    function(d) LootView, Identity, Standings, Migrations, Ledgers = d.LootView, d.Identity, d.Standings, d.Migrations, d.Ledgers end)
+local M = SK:NewModule("GuildBookPages")
 
 -- The sections of the navigation column. A section with `actions` is a page of forms (UITools actions, by id): each runs the command a player would type.
 -- `gap` puts a space above its button: Admin is the ledger owner's and maintenance corner, kept apart from the everyday sections.
@@ -8742,27 +8880,6 @@ local function itemText(item)
 end
 M.ItemText = itemText
 
--- The text of one page (or of all of them) as one string, plain: headings on their own line, bullets and numbers as lines. The game's window draws the blocks
--- itself (UI.lua); this is for the chat fallback and for tests.
-function M.WelcomeText(pageId)
-    local lines = {}
-    for _, page in ipairs(M.WELCOME_PAGES) do
-        if pageId == nil or page.id == pageId then
-            for _, b in ipairs(page.blocks) do
-                if b.kind == "title" then lines[#lines + 1] = b.text; lines[#lines + 1] = ""
-                elseif b.kind == "heading" then lines[#lines + 1] = ""; lines[#lines + 1] = b.text
-                elseif b.kind == "text" or b.kind == "callout" then lines[#lines + 1] = b.text
-                else
-                    for i, item in ipairs(b.items) do
-                        lines[#lines + 1] = (b.kind == "numbered" and (i .. ". ") or "- ") .. itemText(item)
-                    end
-                end
-            end
-        end
-    end
-    return table.concat(lines, "\n")
-end
-
 -- The first-run experience is a setting, on until someone turns it off (the checkbox on the Welcome page, or `/gambit welcome off`): while it is on, opening the
 -- Guild book starts on Welcome. Looking at it, or closing the window at once, changes nothing: someone who opened the addon in the middle of something else
 -- still gets it next time. Once it is off the window opens on the section it was on when it was last closed (Lists the first time).
@@ -8777,6 +8894,31 @@ end
 function M.RememberTab(char, tab)
     if type(char) == "table" and tab and M.Section(tab) then char.lastTab = tab end
 end
+
+function M.Section(id)
+    for _, s in ipairs(M.SECTIONS) do if s.id == id then return s end end
+end
+
+-- The section that holds a form (so a button elsewhere can open it).
+function M.SectionOf(actionId)
+    for _, s in ipairs(M.SECTIONS) do
+        for _, a in ipairs(s.actions or {}) do if a == actionId then return s end end
+    end
+end
+
+-- Which group of the record an entry belongs to, for the filter.
+-- "happened" (the default) is what happened to items, lists, rules and raids: it leaves out passes, which are the most common entries by far and say what
+-- could have happened, not what did, and attendance (who was in a raid), which has its own place in Stats (both stay in the record, under their own
+-- filter and "Everything").
+
+end; chunk("KingsGambit", SK) end
+-- ===== GuildBookHistory.lua =====
+do local chunk = function(...)
+-- King's Gambit: the Guild book as tables, the record in words: kinds, filters, the history list, an entry's detail, and the stored-ledger rows. Keep this file Lua 5.1-safe.
+-- Part of GuildBook (ui/GuildBook.lua): GuildBook merges what this module exports, so callers use GuildBook.<name>.
+local _, SK = ...
+local LootView, Identity, Ledgers
+local M = SK:NewModule("GuildBookHistory", { "LootView", "Identity", "Ledgers" }, function(d) LootView, Identity, Ledgers = d.LootView, d.Identity, d.Ledgers end)
 
 -- The stored ledgers as rows for the panel at the foot of the Admin section: { rows = { { n, key, title, detail, status, held, open, retired, canRetire, canKeep } }, note }.
 -- Retiring removes the saved data from this computer only (Ledgers.lua); the page asks first and then runs `ledgers retire <n> yes`.
@@ -8797,21 +8939,7 @@ function M.Ledgers(ctx)
     return out
 end
 
-function M.Section(id)
-    for _, s in ipairs(M.SECTIONS) do if s.id == id then return s end end
-end
 
--- The section that holds a form (so a button elsewhere can open it).
-function M.SectionOf(actionId)
-    for _, s in ipairs(M.SECTIONS) do
-        for _, a in ipairs(s.actions or {}) do if a == actionId then return s end end
-    end
-end
-
--- Which group of the record an entry belongs to, for the filter.
--- "happened" (the default) is what happened to items, lists, rules and raids: it leaves out passes, which are the most common entries by far and say what
--- could have happened, not what did, and attendance (who was in a raid), which has its own place in Stats (both stay in the record, under their own
--- filter and "Everything").
 M.KINDS = {
     { id = "happened", label = "What happened" },
     { id = "loot", label = "Loot" },
@@ -9026,6 +9154,15 @@ function M.History(ctx, filter)
     return out
 end
 
+end; chunk("KingsGambit", SK) end
+-- ===== GuildBookStats.lua =====
+do local chunk = function(...)
+-- King's Gambit: the Guild book as tables, what the record already knows: stats per player, sorting, place history, and attendance. Keep this file Lua 5.1-safe.
+-- Part of GuildBook (ui/GuildBook.lua): GuildBook merges what this module exports, so callers use GuildBook.<name>.
+local _, SK = ...
+local Identity, Standings, Migrations, GuildBookHistory
+local M = SK:NewModule("GuildBookStats", { "Identity", "Standings", "Migrations", "GuildBookHistory" }, function(d) Identity, Standings, Migrations, GuildBookHistory = d.Identity, d.Standings, d.Migrations, d.GuildBookHistory end)
+
 ---------------------------------------------------------------- stats: what the record already knows
 -- A length of time in words: "3 days", "2 hours", "45 minutes", "under a minute".
 function M.Span(seconds)
@@ -9096,7 +9233,7 @@ function M.Stats(ctx, listId)
             joined = r.joined[who] }
         row.heldText = c and M.Span(now - c.from) or ""
         row.heldSeconds = c and (now - c.from) or nil
-        row.lastWinText = m.lastWinTs and (M.Ago(now, m.lastWinTs)) or "never"
+        row.lastWinText = m.lastWinTs and (GuildBookHistory.Ago(now, m.lastWinTs)) or "never"
         local a = att.byPlayer[who]
         row.raids, row.raidsText = a and a.attended or 0, att.total == 0 and "-" or ("%d/%d"):format(a and a.attended or 0, att.total)
         out.rows[i] = row
@@ -9175,10 +9312,71 @@ function M.PlaceHistory(stats, who)
     for i = #hist, 1, -1 do
         local h = hist[i]
         out[#out + 1] = { place = h.place, from = h.from, to = h.to, left = h.left,
-            text = ("place %d for %s, until %s%s"):format(h.place, M.Span(h.to - h.from), M.Ago(stats.now, h.to), h.left and " (taken off the list)" or "") }
+            text = ("place %d for %s, until %s%s"):format(h.place, M.Span(h.to - h.from), GuildBookHistory.Ago(stats.now, h.to), h.left and " (taken off the list)" or "") }
     end
     return out
 end
+
+
+---------------------------------------------------------------- attendance: who was in which raid, and for how long
+-- Every raid on this list that has attendance entries, with how long each player was in it: { total = raids, raids = { { id, start, finish, length,
+-- present = { [who] = seconds }, leftEarly = { [who] = true } } }, byPlayer = { [who] = { attended, seconds, length, percent, leftEarly } } }.
+-- A raid with no attendance entries (one from before they were written) isn't counted, so nobody is marked absent from it. A player who was there at
+-- some point attended; leaving before the raid ended is "left early".
+function M.Attendance(ctx, listId)
+    local engine = ctx.engine
+    local view = engine:View()
+    local now = ctx.client:serverTime()
+    local out = { total = 0, raids = {}, byPlayer = {} }
+    local ids = {}
+    for id, r in pairs(view.auth.raids) do
+        if engine:ListOfRaid(r) == listId and view.attendance[id] then ids[#ids + 1] = id end
+    end
+    table.sort(ids, function(a, b) return view.auth.raids[a].start < view.auth.raids[b].start end)
+    for _, id in ipairs(ids) do
+        local r = view.auth.raids[id]
+        local finish = r.ended or math.min(r.expires, now)
+        -- the raid officially starts at its first kill: the time of its first attendance entry, not when it was opened
+        local start = view.attendance[id][1].ts
+        local raid = { id = id, start = start, finish = finish, length = math.max(finish - start, 1), present = {}, leftEarly = {} }
+        local since = {}
+        local function close(who, ts)
+            if since[who] then raid.present[who] = (raid.present[who] or 0) + math.max(0, math.min(ts, finish) - since[who]); since[who] = nil end
+        end
+        for _, ev in ipairs(view.attendance[id]) do
+            for _, who in ipairs(ev.data.joined or {}) do if not since[who] then since[who] = math.min(ev.ts, finish); raid.present[who] = raid.present[who] or 0 end end
+            for _, who in ipairs(ev.data.left or {}) do close(who, ev.ts) end
+        end
+        local stillThere = {}
+        for who in pairs(since) do stillThere[who] = true end
+        for who in pairs(stillThere) do close(who, finish) end
+        for who in pairs(raid.present) do if not stillThere[who] then raid.leftEarly[who] = true end end
+        out.total = out.total + 1
+        out.raids[#out.raids + 1] = raid
+        for who, secs in pairs(raid.present) do
+            local p = out.byPlayer[who]
+            if not p then p = { attended = 0, seconds = 0, length = 0, leftEarly = 0 }; out.byPlayer[who] = p end
+            p.attended, p.seconds = p.attended + 1, p.seconds + secs
+            if raid.leftEarly[who] then p.leftEarly = p.leftEarly + 1 end
+        end
+    end
+    local lengthAll = 0
+    for _, raid in ipairs(out.raids) do lengthAll = lengthAll + raid.length end
+    for _, p in pairs(out.byPlayer) do
+        p.length = lengthAll
+        p.percent = lengthAll > 0 and math.floor(100 * p.seconds / lengthAll + 0.5) or 0
+    end
+    return out
+end
+
+end; chunk("KingsGambit", SK) end
+-- ===== GuildBookRaid.lua =====
+do local chunk = function(...)
+-- King's Gambit: the Guild book as tables, the raid that is open now and when the next one starts. Keep this file Lua 5.1-safe.
+-- Part of GuildBook (ui/GuildBook.lua): GuildBook merges what this module exports, so callers use GuildBook.<name>.
+local _, SK = ...
+local Identity, GuildBookHistory, GuildBookStats
+local M = SK:NewModule("GuildBookRaid", { "Identity", "GuildBookHistory", "GuildBookStats" }, function(d) Identity, GuildBookHistory, GuildBookStats = d.Identity, d.GuildBookHistory, d.GuildBookStats end)
 
 ---------------------------------------------------------------- the raid that is open now (the This raid section)
 -- What the Master Looter holds to hand out: { { link, seconds (left to trade it, nil if not known) } }, soonest to close first. In practice, the practice
@@ -9238,7 +9436,7 @@ function M.RaidNow(ctx)
     out.present = present
     out.lines[1] = ("Raid %s on the %s list, run by %s."):format(raid.id, list, Identity.Display(raid.ml))
     if out.started then
-        out.lines[2] = ("Started %s ago, at the first kill. %d player%s in the raid now."):format(M.Span(out.elapsed), present, present == 1 and "" or "s")
+        out.lines[2] = ("Started %s ago, at the first kill. %d player%s in the raid now."):format(GuildBookStats.Span(out.elapsed), present, present == 1 and "" or "s")
     else
         out.lines[2] = "Not started yet: it starts at the first enemy killed in an instance, or when the Master Looter says so."
     end
@@ -9254,7 +9452,7 @@ function M.RaidNow(ctx)
             local soonest = out.held[1]
             if soonest and soonest.seconds then
                 out.nextExpiry = { seconds = soonest.seconds, link = soonest.link }
-                out.lines[5] = ("The earliest trade window closes in %s (%s)."):format(M.Span(soonest.seconds), itemName(soonest.link))
+                out.lines[5] = ("The earliest trade window closes in %s (%s)."):format(GuildBookStats.Span(soonest.seconds), itemName(soonest.link))
             end
             if unknown > 0 then out.lines[#out.lines + 1] = ("The trade time of %d item%s can't be read."):format(unknown, unknown == 1 and "" or "s") end
         end
@@ -9276,7 +9474,7 @@ function M.RaidStart(ctx)
         out.text = "You are not running a raid. An officer opens one for you in the form above, and then it can be started here."
     elseif s.started then
         local now = ctx.client:serverTime()
-        out.text = ("Started %s. %d player%s in the raid now."):format(M.Ago(now, s.since or now), s.present or 0, (s.present or 0) == 1 and "" or "s")
+        out.text = ("Started %s. %d player%s in the raid now."):format(GuildBookHistory.Ago(now, s.since or now), s.present or 0, (s.present or 0) == 1 and "" or "s")
     elseif not s.auto then
         out.text = "Waiting for you: the raid starts when you press Start the raid now."
     elseif s.inInstance then
@@ -9288,72 +9486,14 @@ function M.RaidStart(ctx)
     return out
 end
 
----------------------------------------------------------------- attendance: who was in which raid, and for how long
--- Every raid on this list that has attendance entries, with how long each player was in it: { total = raids, raids = { { id, start, finish, length,
--- present = { [who] = seconds }, leftEarly = { [who] = true } } }, byPlayer = { [who] = { attended, seconds, length, percent, leftEarly } } }.
--- A raid with no attendance entries (one from before they were written) isn't counted, so nobody is marked absent from it. A player who was there at
--- some point attended; leaving before the raid ended is "left early".
-function M.Attendance(ctx, listId)
-    local engine = ctx.engine
-    local view = engine:View()
-    local now = ctx.client:serverTime()
-    local out = { total = 0, raids = {}, byPlayer = {} }
-    local ids = {}
-    for id, r in pairs(view.auth.raids) do
-        if engine:ListOfRaid(r) == listId and view.attendance[id] then ids[#ids + 1] = id end
-    end
-    table.sort(ids, function(a, b) return view.auth.raids[a].start < view.auth.raids[b].start end)
-    for _, id in ipairs(ids) do
-        local r = view.auth.raids[id]
-        local finish = r.ended or math.min(r.expires, now)
-        -- the raid officially starts at its first kill: the time of its first attendance entry, not when it was opened
-        local start = view.attendance[id][1].ts
-        local raid = { id = id, start = start, finish = finish, length = math.max(finish - start, 1), present = {}, leftEarly = {} }
-        local since = {}
-        local function close(who, ts)
-            if since[who] then raid.present[who] = (raid.present[who] or 0) + math.max(0, math.min(ts, finish) - since[who]); since[who] = nil end
-        end
-        for _, ev in ipairs(view.attendance[id]) do
-            for _, who in ipairs(ev.data.joined or {}) do if not since[who] then since[who] = math.min(ev.ts, finish); raid.present[who] = raid.present[who] or 0 end end
-            for _, who in ipairs(ev.data.left or {}) do close(who, ev.ts) end
-        end
-        local stillThere = {}
-        for who in pairs(since) do stillThere[who] = true end
-        for who in pairs(stillThere) do close(who, finish) end
-        for who in pairs(raid.present) do if not stillThere[who] then raid.leftEarly[who] = true end end
-        out.total = out.total + 1
-        out.raids[#out.raids + 1] = raid
-        for who, secs in pairs(raid.present) do
-            local p = out.byPlayer[who]
-            if not p then p = { attended = 0, seconds = 0, length = 0, leftEarly = 0 }; out.byPlayer[who] = p end
-            p.attended, p.seconds = p.attended + 1, p.seconds + secs
-            if raid.leftEarly[who] then p.leftEarly = p.leftEarly + 1 end
-        end
-    end
-    local lengthAll = 0
-    for _, raid in ipairs(out.raids) do lengthAll = lengthAll + raid.length end
-    for _, p in pairs(out.byPlayer) do
-        p.length = lengthAll
-        p.percent = lengthAll > 0 and math.floor(100 * p.seconds / lengthAll + 0.5) or 0
-    end
-    return out
-end
-
--- One player's raids, newest first, in words.
-function M.AttendanceLines(stats, who)
-    local att, out = stats.attendance, {}
-    for i = #att.raids, 1, -1 do
-        local raid = att.raids[i]
-        local secs = raid.present[who]
-        local when = M.Ago(stats.now, raid.start)
-        if secs then
-            out[#out + 1] = ("Raid %s: in for %s of %s%s"):format(when, M.Span(secs), M.Span(raid.length), raid.leftEarly[who] and ", left early" or "")
-        else
-            out[#out + 1] = ("Raid %s: not there"):format(when)
-        end
-    end
-    return out
-end
+end; chunk("KingsGambit", SK) end
+-- ===== GuildBookStage.lua =====
+do local chunk = function(...)
+-- King's Gambit: the Guild book as tables, staged list changes: simulate, preview, stage a move or removal, and the commands they become. Keep this file Lua 5.1-safe.
+-- Part of GuildBook (ui/GuildBook.lua): GuildBook merges what this module exports, so callers use GuildBook.<name>.
+local _, SK = ...
+local Identity
+local M = SK:NewModule("GuildBookStage", { "Identity" }, function(d) Identity = d.Identity end)
 
 ---------------------------------------------------------------- staged list changes
 -- Changes to a list are STAGED first: a list of operations the table previews, applied together with one reason. `ops` is an array of
@@ -9430,13 +9570,6 @@ function M.StageRemove(ops, who)
     ops[#ops + 1] = { kind = "remove", who = who }
 end
 
--- Drop everything staged for `who`.
-function M.Unstage(ops, who)
-    local kept = without(ops, who)
-    for i = #ops, 1, -1 do ops[i] = nil end
-    for i, op in ipairs(kept) do ops[i] = op end
-end
-
 function M.Staged(ops, who)
     for _, op in ipairs(ops or {}) do if op.who == who then return op end end
 end
@@ -9468,7 +9601,34 @@ function M.Commands(ops, reason)
     return out
 end
 
-function M:OnInit() end
+end; chunk("KingsGambit", SK) end
+-- ===== GuildBook.lua =====
+do local chunk = function(...)
+-- King's Gambit: what the Guild book shows, as plain tables. Keep this file Lua 5.1-safe.
+--
+-- The Guild book is the larger, calmer window for the lists, the record of what happened, and the officers' tools (docs/ui-design.md, 5.2). Like the Loot
+-- window, its screens are built here from the engine's state with no frames, so the game's window and the web simulator draw the same sections, the same
+-- sentences and the same filters. Nothing here changes anything: a section's buttons run the same commands a player would type.
+--
+--   M.SECTIONS                            the navigation column, in order
+--   M.History(ctx, filter)                the ledger as readable sentences, newest first, filtered (the Ledger section)
+--   M.Detail(ctx, id)                     one entry as the raw record: kind, writer, time, id, chain and every field it carries
+--   M.RaidNow(ctx)                        the open raid: how long, what has been handed out, what is held and for how long it can be traded
+--   M.Stats(ctx, listId)                  who held which place for how long, wins and last win, by replaying the list with timestamps
+--   M.Segments(text, people)              a sentence cut into plain words and people (a person carries their class color)
+--   M.Ago(now, ts)                        "3 days ago"
+--
+-- The code is in ui/guildbook/: GuildBookPages (sections, Welcome copy), GuildBookHistory (the record in words), GuildBookStats (stats, attendance),
+-- GuildBookRaid (the open raid) and GuildBookStage (staged list changes). This module merges what they export, so everything is GuildBook.<name>.
+local _, SK = ...
+local M
+M = SK:NewModule("GuildBook", { "GuildBookPages", "GuildBookHistory", "GuildBookStats", "GuildBookRaid", "GuildBookStage" }, function(d)
+    for _, part in ipairs({ d.GuildBookPages, d.GuildBookHistory, d.GuildBookStats, d.GuildBookRaid, d.GuildBookStage }) do
+        for k, v in pairs(part) do
+            if k ~= "name" then M[k] = v end
+        end
+    end
+end)
 
 return M
 
