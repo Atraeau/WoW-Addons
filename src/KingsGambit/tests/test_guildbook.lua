@@ -707,17 +707,17 @@ test("the first-run Welcome is a setting that stays on until it is turned off; t
     assert(db.welcomeOff == nil)
 end)
 
-test("the Welcome opens with why this loot system is worth learning, then where Suicide Kings breaks down and how this fixes it", function()
+test("the Welcome opens with the system and its values, then the limitations of Suicide Kings and how King's Gambit responds", function()
     local text = welcomeText()
     local first = text:match("Welcome to King's Gambit\n\n([^\n]+)")
     assert(first and first:find("Inspired by Suicide Kings", 1, true) and first:find("transparency, agency and fairness", 1, true), "it opens by placing the system and its values")
     assert(first:find("wasting useful loot", 1, true), "and names the flaw it addresses")
-    local breaks = text:find("Where Suicide Kings breaks down", 1, true)
-    local fixes = text:find("How King's Gambit fixes it", 1, true)
+    local breaks = text:find("Limitations of Suicide Kings", 1, true)
+    local fixes = text:find("How King's Gambit responds", 1, true)
     local sixty = text:find("How it works in 60 seconds", 1, true)
     assert(breaks and fixes and sixty and breaks < fixes and fixes < sixty, "the case comes before the rules")
     assert(breaks < 1500, "and early")
-    for _, phrase in ipairs { "Useful loot gets thrown away", "loophole", "Gifting", "Salvage, not a roll", "A shared ledger", "draft", "off-spec" } do
+    for _, phrase in ipairs { "Useful loot is wasted", "exploit", "Gifting", "Salvage in place of a roll", "A shared ledger", "draft", "off-spec" } do
         assert(text:find(phrase, 1, true), "the case names: " .. phrase)
     end
     assert(not text:find("changes only when you win", 1, true) and not text:find("Nothing else ever changes your place", 1, true), "no claim that only your own win moves your place")

@@ -2650,3 +2650,7 @@ The Lua files moved into folders by component (`core/ ledger/ client/ loot/ comm
 ## The opening sentence, in the guild leader's words (2026-11-10)
 
 The "is worth learning" opener was dropped. The Welcome's Start here page and `docs/rationale.md` now both open with: "Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where it is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot." The case below it is unchanged.
+
+## A more formal register for the opening (2026-11-10)
+
+**Asked by the guild leader:** a more professional, academic tone ("fixes what goes wrong with it" read as loose English). The Welcome's Start here page and the opening sections of `docs/rationale.md` were rewritten with the same content in a formal register: "The strengths of Suicide Kings", "The limitations of Suicide Kings" (including "the conventional remedy introduces an exploit"), and "How King's Gambit responds", with the table's columns now Limitation, Mechanism and Effect. No rule or claim changed; the rest of the player guide below "How it works in 60 seconds" keeps its plainer voice for now.

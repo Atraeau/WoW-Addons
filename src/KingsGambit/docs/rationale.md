@@ -2,37 +2,38 @@
 
 Inspired by Suicide Kings, King's Gambit is a list-centric loot system, valuing transparency, agency and fairness. Where it is distinct is through how it attempts to address one of the most painful flaws in Suicide Kings: wasting useful loot.
 
-## Why Suicide Kings is worth keeping
+## The strengths of Suicide Kings
 
-SK is a low-maintenance system that rewards loyalty and attendance. Everyone in the raid gets a real chance at every item, the rules are the same for every raid
-and every raider, and leadership only has to apply them rather than argue them. Compare the alternatives: DKP means somebody keeps points for everyone;
-a loot council makes fairness depend on the council; random rolls and "soft reserve" lean on chance, which is fair on paper but feels bad when the same
-player wins twice in a row while another loses ten. SK is effectively round robin with your place remembered between raids, so over time loot spreads evenly
-across everyone who shows up. King's Gambit does not give any of that up.
+Suicide Kings (SK) is a low-maintenance system that rewards loyalty and attendance. Every raider has a genuine opportunity at every item, the rules are
+identical from one raid to the next, and leadership applies them rather than adjudicating them. The alternatives each carry a cost. Dragon kill points (DKP)
+require someone to maintain a balance for every player; a loot council makes fairness contingent on the council; and random rolls, including "soft reserve",
+rely on chance, which is fair in aggregate but feels arbitrary when one player wins twice in succession while another loses ten times. SK is, in effect,
+round-robin distribution in which a player's place persists between raids, so loot spreads evenly across those who attend. King's Gambit retains all of this.
 
-## Where Suicide Kings breaks down
+## The limitations of Suicide Kings
 
-1. **Useful loot gets thrown away.** Because winning costs your place, a veteran holds out for the best-in-slot (BiS) piece and passes on everything else,
-   including items that would help them. If nobody lower on the list bids, a good item is disenchanted. Every raid has seen it.
-2. **The usual fix creates a loophole.** Adding a free roll when everyone passes means a group can agree to pass together and roll for a "free" item.
-3. **Every decision is made on trust.** In most guilds the list is a spreadsheet or an addon note held by one officer. When someone's place looks wrong,
-   or a trade happens after the raid, there is nothing to check it against and no clean way to fix it.
-4. **Everyone is asked about everything.** Players are asked about gear they can't use, so the real decisions get buried.
+1. **Useful loot is wasted.** Because a win costs the winner their position, experienced players withhold their bids for the best-in-slot (BiS) item and pass
+   on every other piece, including items that would still benefit them. When no one lower on the list bids, a useful item is disenchanted.
+2. **The conventional remedy introduces an exploit.** Awarding a free roll when all players pass allows a group to coordinate their passes and then roll for an
+   item at no cost.
+3. **Legitimacy rests on a single officer's list.** In most guilds the list is a spreadsheet or an addon note kept by one officer. When a position appears
+   incorrect, or an item is traded after the raid, there is no independent record against which to verify it, and no clean way to correct it.
+4. **Players are asked about everything.** Prompts for equipment a player cannot use obscure the decisions that matter.
 
-## How King's Gambit fixes it
+## How King's Gambit responds
 
-| Where SK fails | What King's Gambit does | Why it is better |
+| Limitation of SK | The King's Gambit mechanism | Effect |
 |---|---|---|
-| A player passes on a side-grade to save their place, and it is disenchanted | **Gifting:** win the item and hand it to anyone, in any direction. You pay the place; they get the item. | A minor upgrade finds a home even when the player who needs it sits too high to bid. Generosity is cheap, never required, and visible. |
-| Nobody bids, so the item is rolled or lost | **Salvage:** the item goes to whoever is at the bottom at that moment. They keep it, gift it, sell it, disenchant it or bank it. | Not a roll, so there is nothing to win by conspiring. The beneficiary is set by the list, not chosen by the group. The bottom position rotates as people win. |
-| The list is whatever the officer says it is | **A shared, tamper-evident ledger.** Every win, move and correction is an entry each player holds and can verify. | Trust is checkable. Anyone can see why the list looks the way it does. |
-| A mistake means editing history | **Fix forward:** any of the Master Looter's awards can be undone exactly; an after-the-fact trade is detected and recorded either as a correction or as a gift. | Corrections are as visible as the original decisions, and the default matches what usually happened. |
-| Players are asked about gear they can't use | **Eligibility:** you are only asked about items your class and spec could use. | Fewer prompts, and the real choices stand out. Eligibility filters who is asked and never decides who wins. |
-| Wishlists and officers decide ahead of time | **Live decisions by the player,** after the drop. Officers run the process and do not decide who deserves loot. | The choice is made with the facts of this drop, by the person it affects. |
-| Several drops at once are fought over | **A draft** with your ranking made up front, a **separate off-spec list**, and main-spec always beating off-spec. | Fair order of picks, no benefit from item order, and off-spec can never jump someone who needs it for their main. |
+| A player passes on a side-grade to preserve their position, and it is disenchanted | **Gifting:** the winner may give the item to any player, in any direction. The winner bears the positional cost; the recipient receives the item. | A minor upgrade reaches a player who can use it, even when that player is too high on the list to bid economically. Gifting is optional and always visible. |
+| No one bids, so the item is rolled or lost | **Salvage:** the item passes to the player at the bottom of the list at that moment, who may keep, gift, sell, disenchant or bank it. | Because there is no roll, collusion yields no advantage. The recipient is determined by the list, not selected by the group, and the position rotates as players win. |
+| The list is whatever the officer reports it to be | **A shared, tamper-evident ledger:** every win, move and correction is an entry that each player holds and can verify. | The record can be audited rather than merely trusted, and anyone can see why the list appears as it does. |
+| A mistake requires rewriting history | **Corrections made forward:** any of the Master Looter's awards can be reversed exactly; an after-the-fact trade is detected and recorded as a correction or as a gift. | Corrections are as visible as the original decisions, and the default reflects what usually occurred. |
+| Players are asked about equipment they cannot use | **Eligibility:** a player is asked only about items their class and specialization could use. | Fewer prompts, so that meaningful decisions are not obscured. Eligibility determines who is asked; it never determines who wins. |
+| Wishlists and officers decide in advance | **Live decisions by the player,** made after the drop. Officers administer the process and do not determine who deserves loot. | Each choice is made with knowledge of that drop, by the person it affects. |
+| Several simultaneous drops are contested | **A draft** with each player's ranking submitted in advance, **a separate off-spec list**, and main-spec always taking precedence over off-spec. | Picks occur in a fair order, item order confers no advantage, and an off-spec bid can never displace a player who needs the item for their main specialization. |
 
-Passing stays free, and you only ever drop a place by winning (every other player's win moves you up). Nothing here makes the system harder to follow: a raider still needs to know one rule and four
-buttons.
+Passing carries no cost. A player's position falls only when that player wins, and every other player's win raises it. None of this complicates the system for the
+raider, who still needs to learn one rule and four responses.
 
 *How loot works in our raids, and why. Read the [manifesto](manifesto.md) for the values behind it and the [design journal](design-journal.md) for how each
 rule was decided.*
@@ -57,7 +58,7 @@ reasoning.
 
 ### What King's Gambit adds to Suicide Kings
 
-The table above says why; this is the list, with a line each on what to expect.
+The table above gives the reasoning; the list below summarizes what King's Gambit adds.
 
 - **Gifting as a rule, the biggest difference:** win, then give the item to anyone, in any direction, even upward; you pay the place and they get the item. A minor
   upgrade is not wasted because the player who would use it sits too high to bid, and generosity is cheap to give, never required, and visible.
