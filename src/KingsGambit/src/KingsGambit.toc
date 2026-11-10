@@ -52,5 +52,10 @@ ui/UITips.lua
 ui/UISkin.lua
 ui/LootView.lua
 ui/GuildBook.lua
+ui/guildbook/GuildBookPages.lua
+ui/guildbook/GuildBookHistory.lua
+ui/guildbook/GuildBookStats.lua
+ui/guildbook/GuildBookRaid.lua
+ui/guildbook/GuildBookStage.lua
 ui/LootWindow.lua
 ui/UITools.lua
