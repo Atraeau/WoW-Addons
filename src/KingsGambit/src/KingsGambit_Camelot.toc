@@ -50,6 +50,12 @@ sim/ScenarioBasics.lua
 sim/ScenarioDraft.lua
 sim/ScenarioHandout.lua
 ui/UI.lua
+ui/panes/UIPractice.lua
+ui/panes/UIStandings.lua
+ui/panes/UILedger.lua
+ui/panes/UIRaidPanes.lua
+ui/panes/UIStats.lua
+ui/panes/UIWelcome.lua
 ui/UILoot.lua
 ui/UITips.lua
 ui/UISkin.lua
