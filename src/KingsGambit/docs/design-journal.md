@@ -2658,3 +2658,7 @@ The "is worth learning" opener was dropped. The Welcome's Start here page and `d
 ## The formal register throughout the player guide (2026-11-10)
 
 **Asked by the guild leader:** carry the more academic tone through the rest of the guide. `docs/rationale.md` below the opening is rewritten in the same register ("Rationale" for "Why", "the highest-ranked player", "specialization", defined terms), and the Welcome's rules page matches it. One real wording fix came with it: the "Position is the only currency" section now says that other players' wins raise a player's relative position, which is a consequence of their wins and not a cost to the player who passes. The Welcome's practical "Using it" page and the values page (`docs/manifesto.md` wording) are left as written. No rule changed.
+
+## Manifesto and README accuracy (2026-11-10)
+
+With the manifesto's introduction removed by the guild leader, two leftovers were corrected: principle 6 no longer names "the cascade" (loot reaches players through the draft or the salvage round, with no second round of offers), and the README no longer explains the name. Wording only.
