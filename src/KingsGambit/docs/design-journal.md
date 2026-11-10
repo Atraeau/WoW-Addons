@@ -2578,3 +2578,7 @@ The item list is one line per item: the name on the left and the four choices on
 ## A skin for the addon's own controls (UISkin)
 
 The stock red `UIPanelButtonTemplate` button read as a default addon. Buttons are now plain frames in a flat dark look (`UISkin.lua`): a dark face with a thin muted-gold edge, a gold wash under the pointer, darker while held, gray and dim when unavailable, and for a chosen answer (or the open tab) a warm face with a bright gold edge, still held pushed. No game templates, so no stock art can show through; every button in the Loot window, the main window's tabs and action buttons, and the whisper window uses it (`Skin.Button`, falling back to the stock button if the module is missing). The chosen button no longer uses the inset bevel (the skin shows it instead). Colors are one table (`UISkin.COLORS`) so the whole look can be tuned in one place. Not yet restyled: the window frames themselves and the dropdowns, which are the game's own.
+
+## Skinned buttons: label stays put when chosen (2026-11-09)
+
+The chosen answer is held pressed, and the game moves a pressed button's label down and right, so chosen buttons looked misaligned next to the others. UISkin now sets the pressed text offset to zero. A button held down with the pointer no longer shifts its label either; the darkened face is the only pressed cue.

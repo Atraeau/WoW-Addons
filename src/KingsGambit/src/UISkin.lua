@@ -60,6 +60,8 @@ function M.Style(b)
                 if p.ClearAllPoints then p:ClearAllPoints(); p:SetPoint("TOPLEFT", b, "TOPLEFT", 1, -1); p:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -1, 1) end
             end
         end
+        -- the game nudges a pressed button's label down and right; the chosen answer is held pressed, so keep the label where it is
+        if b.SetPushedTextOffset then b:SetPushedTextOffset(0, 0) end
         if b.SetNormalFontObject then b:SetNormalFontObject(GameFontNormal or "GameFontNormal") end
         if b.SetHighlightFontObject then b:SetHighlightFontObject(GameFontHighlight or "GameFontHighlight") end
         if b.SetDisabledFontObject then b:SetDisabledFontObject(GameFontDisable or "GameFontDisable") end
