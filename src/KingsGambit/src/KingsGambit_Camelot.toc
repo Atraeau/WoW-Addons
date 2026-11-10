@@ -67,4 +67,5 @@ ui/guildbook/GuildBookStats.lua
 ui/guildbook/GuildBookRaid.lua
 ui/guildbook/GuildBookStage.lua
 ui/LootWindow.lua
+ui/lootwindow/LootWindowLive.lua
 ui/UITools.lua
