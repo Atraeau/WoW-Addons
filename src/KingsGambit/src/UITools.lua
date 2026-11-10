@@ -34,7 +34,7 @@ M.GROUPS = {
     } },
     { id = "list", title = "List", actions = {
         { id = "listuse", label = "Work on a list", help = "Which list add, move, award and undo change (empty = your raid's list, else main).", fields = { F("id", "List", { optional = true }) }, cmd = { "list use", "@id" } },
-        { id = "create", label = "Create a list", help = "A list's id: lower-case letters, digits and _ (up to 24).", fields = { F("id", "List id"), F("name", "Title", { optional = true }) }, cmd = { "create", "@id", "@name" } },
+        { id = "create", label = "Create a list", help = "Give it a name. Its id is made for you from the name, the date and who made it.", fields = { F("name", "Name") }, cmd = { "newlist", "@name" } },
         { id = "add", label = "Add a player", help = "Add one player (the Lists section adds everyone in your group and guild at once).", fields = { F("name", "Player", { name = true, source = "missing" }), F("pos", "top, bottom or a place", { optional = true }) }, cmd = { "add", "@name", "@pos" } },
         { id = "remove", label = "Remove a player", help = "Take a player off the list. They can be put back at the same place.", fields = { F("name", "Player", { name = true }), F("reason", "Reason", { optional = true }) }, cmd = { "remove", "@name", "@reason" } },
         { id = "move", label = "Move a player", help = "A reason is required: it is part of the record.", fields = { F("name", "Player", { name = true }), F("pos", "top, bottom or a place"), F("reason", "Reason") }, cmd = { "move", "@name", "@pos", "@reason" } },

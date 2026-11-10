@@ -101,7 +101,8 @@ local HELP = {
     "  raid extend [hours] | raid revoke [name]",
     "  masterloot [name] - set the loot method to Master Looter",
     "  list use [<id>|main] - the list add, move, award and undo change",
-    "  create <list> [name] - create a list",
+    "  create <list> [name] - create a list with an id you choose",
+    "  newlist <name> - create a list named <name>; the id is made for you (name, date, who made it)",
     "  add <name> [top|bottom|N] - add a player to the list",
     "  addall - add everyone in your group and guild who isn't on the list",
     "  remove <name> - take a player off the list",
@@ -269,6 +270,23 @@ function M.New(ctx)
         if not canWrite() then return out("Only the raid leader or an assistant can create a list.") end
         local chain, err = engine:CreateList(id, title ~= "" and title or id)
         out(chain and ("Created list '" .. id .. "'.") or ("Not created: " .. why(err)))
+    end
+
+    -- A list from just a friendly name: the id is made up of the name, the date and the officer who made it (letters, digits and _, 24 at most), and
+    -- is made unique if that one is taken.
+    function cmds.newlist(args)
+        local title = args:match("^%s*(.-)%s*$")
+        if title == "" then return out("newlist <name>  e.g. newlist Ahn'Qiraj  (the id is made for you)") end
+        if not canWrite() then return out("Only the raid leader or an assistant can create a list.") end
+        local function slug(text, n) return (text:lower():gsub("[^a-z0-9]+", "_"):gsub("^_+", ""):gsub("_+$", "")):sub(1, n):gsub("_+$", "") end
+        local officer = slug((client:me() or ""):match("^([^_]+)") or "", 5)
+        local stamp = ((os and os.date) or date)("%y%m%d", client:serverTime())
+        local base = slug(title, 10); if base == "" then base = "list" end
+        local id = ("%s_%s_%s"):format(base, stamp, officer)
+        local n = 1
+        while engine:Get(id) do n = n + 1; id = (("%s_%s_%s"):format(base, stamp, officer)):sub(1, 22) .. n end
+        local chain, err = engine:CreateList(id, title)
+        out(chain and ("Created the list '" .. title .. "' (id " .. id .. ").") or ("Not created: " .. why(err)))
     end
 
     function cmds.add(args)

@@ -2614,3 +2614,7 @@ A form's "Do it" button was always placed below room for four fields, so on a fo
 ## Whispers: the first item is a whisper of its own (2026-11-09)
 
 The lead-in and item 1 were one message. They are now two: the lead-in, then "Item 1 of N: [link]" like every later item, so each item whisper has the same shape and its link (a real game item link) can be hovered for the tooltip.
+
+## Create a list from just a name (2026-11-09)
+
+The Create a list form asked for a "List id" (letters, digits and _, 24 at most) that nobody knew what to put in. It now asks only for a name; the new `newlist <name>` command makes the id from the name, the date and the officer who made it (for example `ahn_qiraj_261109_kirk`), kept to the 24-character rule and made unique if taken (a counter at the end). The name stays exactly as typed and is the list's title. `create <id> [name]` is still there for choosing an id by hand. The ledger and the list rules are unchanged.
