@@ -494,3 +494,23 @@ test("officer is the game's rank permission: this character by IsGuildOfficer, o
     -- no guild: the ledger is the character's own, so they are its officer
     eq(newClient():isOfficer(), true)
 end)
+
+H.section("RealClient: the loot probe (what /gambit check shows for the Master Looter)")
+test("lootProbe shows the raw answers and an ok verdict when the looter is found", function()
+    local c = newClient()
+    local text = table.concat(c:lootProbe(), "\n")
+    assert(text:find("C_PartyInfo.GetLootMethod = 2", 1, true), text)
+    assert(text:find("Master Looter = Raidlead", 1, true), text)
+    assert(text:find("verdict: ok, you are the Master Looter", 1, true), text)
+end)
+test("lootProbe says so when the method is not Master Looter", function()
+    local c, E = newClient()
+    E.lootMethodId = 3
+    assert(table.concat(c:lootProbe(), "\n"):find("not Master Looter", 1, true))
+end)
+test("lootProbe fails loudly when the looter cannot be found or the two reads disagree", function()
+    local lost = newClient(function(X) X.C_PartyInfo = { GetLootMethod = function() return 2, nil, nil end } end)
+    assert(table.concat(lost:lootProbe(), "\n"):find("verdict: FAIL", 1, true))
+    local split = newClient(function(X) X.IsMasterLooter = function() return false end end)
+    assert(table.concat(split:lootProbe(), "\n"):find("verdict: FAIL", 1, true))
+end)

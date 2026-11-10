@@ -63,6 +63,12 @@ function M.Run(client)
         local first = r[1] and (r[1].name .. " rank=" .. tostring(r[1].rank) .. " " .. tostring(r[1].class)) or "empty"
         return #r .. " members; first: " .. first
     end)
+    -- loot: the raw loot-method answers and who the addon takes to be Master Looter; a FAIL verdict line marks a mismatch
+    if client.lootProbe then
+        for i, line in ipairs(client:lootProbe()) do
+            probe("loot " .. i, function() if line:find("verdict: FAIL", 1, true) then return false, line end return line end)
+        end
+    end
     probe("lootMethod()", function() return client:lootMethod() end)
     probe("isMasterLooter()", function() return tostring(client:isMasterLooter()) end)
     probe("guildRoster()", function() return #client:guildRoster() .. " members" end)

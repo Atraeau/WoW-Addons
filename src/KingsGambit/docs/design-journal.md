@@ -2586,3 +2586,7 @@ The chosen answer is held pressed, and the game moves a pressed button's label d
 ## Common reasons beside every Reason box (2026-11-09)
 
 The Guild book forms take a reason as free text, so the same one (a regret trade, a wrong player) was being spelled many ways in the record. Each Reason box now has a "Common" menu next to it (`UITools.REASONS`: Regret trade, Gift, Wrong player, Mistake, Duplicate, Left the raid, Late to the raid, Disconnected, Requested by the player, Officer decision). Choosing one fills the box; the text can still be typed or edited, so nothing is forced. It is only a way to fill the box, so the command and the ledger are unchanged. Without the game's dropdown widget the box is typed as before.
+
+## Master Looter detection: an in-game check (2026-11-09)
+
+The addon already reads the loot method and the Master Looter from the game (`C_PartyInfo.GetLootMethod`: method, party id, raid id), so nothing has to be named in the addon. But that read was only tested against a stand-in shaped from the documentation, and the id meanings were marked FIELD (unconfirmed). `/gambit check` now has a "loot" block (`RealClient:lootProbe`): the raw answers of the game's loot-method calls and `IsMasterLooter`, what the addon makes of them (method, who the Master Looter is, whether it is you), and a verdict. The verdict is FAIL when Master Looter is set but nobody is found, or when the name and `IsMasterLooter` disagree. Read-only; writes nothing.

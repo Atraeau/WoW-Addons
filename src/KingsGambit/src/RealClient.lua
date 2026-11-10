@@ -448,6 +448,37 @@ function c:normalize(name) return normalize(name) end
         end
     end
 
+    -- What the game says about the loot method and the Master Looter, raw and as the addon reads it, with a verdict on whether they agree. Read-only.
+    -- `/gambit check` prints it: set Master Looter in the party, run it, and the lines show whether the addon finds the looter on its own.
+    function c:lootProbe()
+        local out = {}
+        local function raw(fn, ...)
+            if not fn then return "(not available)" end
+            local r = { pcall(fn, ...) }
+            if not r[1] then return "error: " .. tostring(r[2]) end
+            local parts = {}
+            for i = 2, #r do parts[#parts + 1] = tostring(safe(r[i])) end
+            return #parts > 0 and table.concat(parts, ", ") or "(nothing)"
+        end
+        local api = E.C_PartyInfo or {}
+        out[#out + 1] = "C_PartyInfo.GetLootMethod = " .. raw(api.GetLootMethod) .. "  (method, party id, raid id)"
+        out[#out + 1] = "GetLootMethod (older call) = " .. raw(E.GetLootMethod) .. "  (method, party id, raid id)"
+        out[#out + 1] = "IsMasterLooter = " .. raw(E.IsMasterLooter)
+        out[#out + 1] = "IsInRaid / IsInGroup = " .. raw(E.IsInRaid) .. " / " .. raw(E.IsInGroup)
+        local method, ml, mine = self:lootMethod(), self:masterLooter(), self:isMasterLooter()
+        out[#out + 1] = ("the addon reads: method = %s, Master Looter = %s, am I the Master Looter = %s"):format(tostring(method), tostring(ml), tostring(mine))
+        if method ~= "master" then
+            out[#out + 1] = "verdict: the loot method is not Master Looter (set it in the party, then run this again)"
+        elseif not ml then
+            out[#out + 1] = "verdict: FAIL, Master Looter is set but the addon could not find who it is"
+        elseif (ml == self:me()) ~= mine then
+            out[#out + 1] = ("verdict: FAIL, the two ways of asking disagree (name says %s, IsMasterLooter says %s)"):format(tostring(ml == self:me()), tostring(mine))
+        else
+            out[#out + 1] = "verdict: ok, " .. (mine and "you are the Master Looter" or (tostring(ml) .. " is the Master Looter"))
+        end
+        return out
+    end
+
     local lootOpen = false
 
     local function readSlots()
