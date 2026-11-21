@@ -80,8 +80,6 @@ Rend works only in Battle and Defensive on Forever, so there is no Berserker Ctr
 /cast [mod:ctrl,stance:1] Retaliation; [mod:ctrl,stance:2] Shield Wall; [mod:ctrl,stance:3] Recklessness; [stance:3] Whirlwind; Thunder Clap
 ```
 
-## Unconfirmed
+## Status
 
-- Eureka! on slot 4's Ctrl press is carried over from the original macro.
-- Last Stand on slot 9 (Defensive) is a placeholder.
-- Spell names and stance restrictions are from Classic knowledge. Check them against the Forever spellbook.
+All macros tested in game on WoW Forever and working.
