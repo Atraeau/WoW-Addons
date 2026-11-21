@@ -1,0 +1,8 @@
+## Interface: 16001
+## Title: Spell Dump
+## Notes: Dev tool: dumps the spellbook and talent tree to SavedVariables
+## Author: kirk.lennstrom@gmail.com
+## Version: 0.1.0
+## SavedVariables: SpellDumpDB
+
+Core.lua
