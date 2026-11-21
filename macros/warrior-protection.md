@@ -26,9 +26,10 @@
 ### 3 Berserker
 ```
 #showtooltip
-/cast [nostance:3,mod:ctrl] Berserker Stance; [stance:1] Sweeping Strikes; [stance:2] Shield Block; Berserker Rage
+/cast [nostance:3,mod:ctrl] Berserker Stance; [stance:2] Shield Block; Berserker Rage
 ```
 Berserker Rage stays unmodified so it is quick when stance dancing to avoid fear.
+The Battle press is empty (it falls through to Berserker Rage, which does not fire in Battle). Sweeping Strikes is an Arms talent, so prot cannot use it.
 
 ### 4 Sunder
 ```
