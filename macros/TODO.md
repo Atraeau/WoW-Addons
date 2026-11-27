@@ -1,24 +1,22 @@
 # Warrior macros: next steps
 
-Protection is done and tested (`warrior-protection.md`), except that the slot 3 Sweeping Strikes removal is not yet re-tested in game.
-
-`warrior-arms.md` and `warrior-fury.md` are drafted (not tested in game). Macros are per spec, not per character, and every warrior tanks, so the Defensive slot 2 stays on all of them. The same rules apply to every warrior.
+All warriors share one set, `warrior.md` (W1 to W10 and WQ). It replaced the separate protection, Arms and Fury sets.
 
 ## Next
 
-- Test both drafts in game and fix what misfires. The lists of things to check are in each file's Status section.
-- Decide whether to run `/spelldump` on a higher-level warrior to see Pummel, Whirlwind, Recklessness and the later abilities.
-- Slot 4 carries each character's racial as its own line (`Eureka!` for Atraeau, `Blood Fury` for Morla). A racial the character lacks does nothing. Add a new racial the same way.
+- The set is in the game and tested. Check each talent press as that talent is learned (list in the Status section of `warrior.md`).
 
 ## Decided
 
-- Protection rules carry over unchanged to Arms and Fury (Ctrl = secondary, slots 1 to 3 = Battle/Defensive/Berserker, slot 4 = Sunder Armor, one button per ability, stance-unique abilities on Ctrl).
-- Separate macro sets per spec, no `[spec:n]` conditional.
-- Slot 3's Battle press: Sweeping Strikes on Arms, empty on Fury and protection.
+- One set for every spec. Talents belong to a tree, not a spec, so every talent ability gets its own press, the same in every build; only the bottom talents (Shield Slam, Mortal Strike, Bloodthirst) share plain 2.
+- Ctrl+Shift is for situational abilities only: Death Wish, Spearing Strike, Piercing Howl, Victory Rush, Slam, Last Stand, Challenging Shout.
+- Every warrior tanks, so the Defensive tools stay in the set.
+- Trainer abilities past the current level are checked at the trainer, not dumped; only talents are tracked here.
 
-## New Forever warrior abilities (from the in-game dump of a level 32 warrior)
+## Active talents (from the in-game dump, all 53 talents described)
 
-- Baseline: Victory Rush (on slot 7 Ctrl), Tactical Mastery (passive).
-- Talents, not buttons: Spearing Strike (Arms, 1 point), Bloodthrill, Weaponmaster, Improved Tactical Mastery, Improved Slam, Gore Drinker, Reckless Swings, Vanguard, Bastion, Focused Rage, Lingering Rage. Descriptions were not captured, so what they do is unconfirmed.
-- Spearing Strike is placed on Arms slot 10 Ctrl. The rest are passive or unconfirmed, so they have no button.
-- The dump tool is `src/SpellDump` (`/spelldump`, then `/reload`; read `WTF/Account/<acct>/SavedVariables/SpellDump.lua`).
+Ten talents give a button, and all ten are placed (table in `warrior.md`): Shield Slam, Mortal Strike, Bloodthirst, Sweeping Strikes, Death Wish, Spearing Strike (new in Forever), Concussion Blow, Piercing Howl, Last Stand, Reckless Swings (new in Forever).
+
+Every other talent is passive, including the Forever additions (Bloodthrill, Weaponmaster, Gore Drinker, Furious Precision, Lingering Rage, Vanguard, Bastion, Focused Rage, Improved Tactical Mastery). Vanguard makes Charge usable in Defensive Stance, which plain 9 already covers.
+
+The dump tool is `src/SpellDump` (`/spelldump`, wait for the second message, then `/reload`; read `WTF/Account/<acct>/SavedVariables/SpellDump.lua`).

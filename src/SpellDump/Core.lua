@@ -31,10 +31,18 @@ local function spellName(spellID)
 	return nil
 end
 
+-- Descriptions come back empty until the client has loaded the spell's data, so an empty one asks for it.
+-- The slash command dumps twice: the first pass triggers the loads, the second (a few seconds later) reads them.
 local function spellDescription(spellID)
 	if not (spellID and C_Spell and C_Spell.GetSpellDescription) then return nil end
 	local d = try(C_Spell.GetSpellDescription, spellID)
+	if (d == nil or d == "") and C_Spell.RequestLoadSpellData then try(C_Spell.RequestLoadSpellData, spellID) end
 	return d
+end
+
+local function spellPassive(spellID)
+	if not (spellID and C_Spell and C_Spell.IsSpellPassive) then return nil end
+	return try(C_Spell.IsSpellPassive, spellID)
 end
 
 -- The spellbook: every skill line (general, class, spec, ...) with each spell in it.
@@ -102,11 +110,15 @@ local function dumpTraits(errors)
 						entryID = entryID,
 						spellID = spellID,
 						name = spellName(spellID),
+						passive = spellPassive(spellID),
+						-- A talent that replaces a baseline spell (for example an improved version) names it here.
+						overrides = type(def) == "table" and def.overriddenSpellID and spellName(def.overriddenSpellID) or nil,
 						description = spellDescription(spellID),
 					}
 				end
 				tree.nodes[#tree.nodes + 1] = {
 					nodeID = nodeID,
+					type = node.type, -- single, tiered or a choice between entries
 					x = node.posX, y = node.posY,
 					ranks = node.ranksPurchased, maxRanks = node.maxRanks,
 					canPurchase = node.canPurchaseRank, active = node.activeRank,
@@ -170,11 +182,22 @@ local function run(quiet)
 			if s.passive then passives = passives + 1 end
 		end
 	end
-	local nodes = 0
-	for _, tree in ipairs(db.traits.trees or {}) do nodes = nodes + #tree.nodes end
+	local nodes, active, described, total = 0, {}, 0, 0
+	for _, tree in ipairs(db.traits.trees or {}) do
+		nodes = nodes + #tree.nodes
+		for _, node in ipairs(tree.nodes) do
+			for _, e in ipairs(node.entries) do
+				total = total + 1
+				if e.description and e.description ~= "" then described = described + 1 end
+				if e.passive == false and e.name then active[#active + 1] = e.name end
+			end
+		end
+	end
+	table.sort(active)
 	if not quiet then
-		print(("|cff33ff99Spell Dump|r: %s (%s): %d spellbook entries (%d passive) in %d lines, %d talent nodes, %d problems. /reload to save to disk.")
-			:format(tostring(db.meta.character), tostring(class), spells, passives, #db.spellbook, nodes, #errors))
+		print(("|cff33ff99Spell Dump|r: %s (%s): %d spellbook entries (%d passive) in %d lines, %d talent nodes (%d of %d described), %d problems. /reload to save to disk.")
+			:format(tostring(db.meta.character), tostring(class), spells, passives, #db.spellbook, nodes, described, total, #errors))
+		print("|cff33ff99  Active talents:|r " .. (#active > 0 and table.concat(active, ", ") or "none found"))
 		for _, e in ipairs(errors) do print("|cffff8800  " .. e .. "|r") end
 	end
 end
@@ -182,8 +205,15 @@ end
 SLASH_SPELLDUMP1 = "/spelldump"
 SlashCmdList["SPELLDUMP"] = function(msg)
 	msg = (msg or ""):lower()
-	local ok, err = pcall(run, msg:find("quiet") ~= nil)
-	if not ok then print("|cffff4444Spell Dump failed:|r " .. tostring(err)) end
+	local quiet = msg:find("quiet") ~= nil
+	-- First pass asks the client to load spell data; the real dump runs once it has had time to arrive.
+	local ok, err = pcall(run, true)
+	if not ok then print("|cffff4444Spell Dump failed:|r " .. tostring(err)); return end
+	print("|cff33ff99Spell Dump|r: loading spell data, dumping in 3 seconds...")
+	C_Timer.After(3, function()
+		local ok2, err2 = pcall(run, quiet)
+		if not ok2 then print("|cffff4444Spell Dump failed:|r " .. tostring(err2)) end
+	end)
 end
 
 local frame = CreateFrame("Frame")
