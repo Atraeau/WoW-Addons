@@ -20,7 +20,7 @@ One set for every warrior and every spec. A talent ability has its own press in 
 | Talent | Tree | Press |
 |---|---|---|
 | Shield Slam / Mortal Strike / Bloodthirst | Prot / Arms / Fury (bottom) | 2 |
-| Sweeping Strikes | Arms | 3 in Battle |
+| Sweeping Strikes | Arms | Ctrl+4 in Battle |
 | Death Wish | Fury | Ctrl+Shift+3 |
 | Spearing Strike | Arms | Ctrl+Shift+5 |
 | Concussion Blow | Prot | Ctrl+6 |
@@ -46,17 +46,18 @@ Plain 2 is whichever bottom talent the build has.
 ### W3 Berserker
 ```
 #showtooltip
-/cast [mod:ctrl,mod:shift] Death Wish; [nostance:3,mod:ctrl] Berserker Stance; [stance:2] Shield Block; [stance:1,known:Sweeping Strikes] Sweeping Strikes; [stance:3] Berserker Rage
+/cast [mod:ctrl,mod:shift] Death Wish; [nostance:3,mod:ctrl] Berserker Stance; [stance:2] Shield Block; [stance:1] Overpower; [stance:3] Berserker Rage
 ```
-Berserker Rage stays unmodified so it is quick when stance dancing to avoid fear. Death Wish also grants fear immunity, so it sits on the same button. The Battle press is Sweeping Strikes when learned, otherwise empty (Berserker Rage is limited to `[stance:3]` so its icon does not show in Battle).
+The plain press is each stance's quick reaction: Overpower, Shield Block, Berserker Rage. Berserker Rage stays unmodified so it is quick when stance dancing to avoid fear. Death Wish also grants fear immunity, so it sits on the same button.
 
 ### W4 Sunder
 ```
-#showtooltip [mod:ctrl,stance:1] Overpower; [mod:ctrl,stance:2] Revenge; Sunder Armor
+#showtooltip [mod:ctrl,stance:1] Sweeping Strikes; [mod:ctrl,stance:2] Revenge; Sunder Armor
 /cast [mod:ctrl] Eureka!
 /cast [mod:ctrl] Blood Fury
-/cast [mod:ctrl,stance:1] Overpower; [mod:ctrl,stance:2] Revenge; Sunder Armor
+/cast [mod:ctrl,stance:1] Sweeping Strikes; [mod:ctrl,stance:2] Revenge; Sunder Armor
 ```
+Sweeping Strikes is planned, not a reaction, so it is on Ctrl (Overpower is plain 3 in Battle).
 Each racial is its own line (`Eureka!` for Atraeau, `Blood Fury` for Morla). A racial the character lacks does nothing.
 
 ### W5 Interrupt
