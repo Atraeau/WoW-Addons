@@ -15,6 +15,10 @@ One set for every warrior and every spec. A talent ability has its own press in 
 - Macro names are 16 characters or fewer. Use the `?` icon so `#showtooltip` picks the icon.
 - Macros are account-wide (the warriors are on separate servers). Every name starts with W.
 
+## Key bindings
+
+Unbind Shift+1 to Shift+6 (Keybindings → Action Bars → Action Bar Page 1 to 6). By default they switch the action bar page, and an unbound Ctrl+Shift+3 to 6 drops the Ctrl and lands on them, flipping the bar instead of firing the macro. With them unbound, Ctrl+Shift+number falls through to the action button like Ctrl+Shift+7 to 10 do. Do this on each character if bindings are saved per character.
+
 ## Talent abilities
 
 | Talent | Tree | Press |
