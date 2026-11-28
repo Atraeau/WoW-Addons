@@ -5,6 +5,8 @@ All warriors share one set, `warrior.md` (W1 to W10 and WQ). It replaced the sep
 ## Next
 
 - The set is in the game and tested. Check each talent press as that talent is learned (list in the Status section of `warrior.md`).
+- Paladin set (`paladin.md`, character macros on Bastian): in game, being tested while leveling.
+- Once dual spec is available: switch to a spec without a talent and check `[known:]` follows it. `/run print(SecureCmdOptionParse("[known:Concussion Blow] yes; no"))` on Atraeau should print no in a spec without Concussion Blow. Already confirmed: learned spells and learned talents are known, unlearned talents are not.
 
 ## Decided
 
