@@ -26,8 +26,8 @@ One set for every paladin and every spec, built for holy healing. Laid out like 
 | 4 | Judgement | Swift Judgement | Stoneform |
 | 5 | Purify, later Cleanse | Blessing of Freedom | Turn Undead |
 | 6 | Seal of the Crusader | Hammer of Justice | Blessing of Protection |
-| 7 | Holy Strike | Repentance | |
-| 8 | Seal of Righteousness (Seal of Command if talented) | Seal of Fury, later Seal of Wisdom | Righteous Fury |
+| 7 | Holy Strike | Repentance | Seal of Wisdom |
+| 8 | Seal of Righteousness (Seal of Command if talented) | Seal of Fury | Righteous Fury |
 | 9 | Exorcism | Hammer of Wrath | Templar's Bulwark |
 | 10 | Divine Favor | Holy Shield | Divine Protection, later Divine Shield |
 | Q | Consecration | Lay on Hands | Holy Wrath |
@@ -91,16 +91,17 @@ Seal of the Crusader opens most pulls while leveling, so it is a plain press. Ha
 ### P7 Holy Strike
 ```
 #showtooltip
-/cast [mod:ctrl] Repentance; Holy Strike
+/cast [mod:ctrl,mod:shift] Seal of Wisdom; [mod:ctrl] Repentance; Holy Strike
 ```
+Seal of Wisdom is for a long fight when mana runs low, so it is on Ctrl+Shift, next to the other seals on 8.
 
 ### P8 Seal
 ```
 #showtooltip
-/cast [mod:ctrl,mod:shift] Righteous Fury; [mod:ctrl,known:Seal of Wisdom] Seal of Wisdom; [mod:ctrl] Seal of Fury; [known:Seal of Command] Seal of Command; Seal of Righteousness
+/cast [mod:ctrl,mod:shift] Righteous Fury; [mod:ctrl] Seal of Fury; [known:Seal of Command] Seal of Command; Seal of Righteousness
 ```
 Seal of Command (a Retribution talent) replaces Seal of Righteousness on the plain press when learned, since a build that takes it uses it instead. With dual spec, `[known:]` follows the active spec, so the holy spec keeps Seal of Righteousness.
-Seal of Fury (new in Forever) is for leveling with a shield: hits add Holy damage and a small absorb, and its Judgement taunts. Once Seal of Wisdom is learned, Ctrl casts that instead, since a holy healer has no use for a taunting seal. Righteous Fury (more threat, 30 minutes) goes with Seal of Fury when soloing or tanking.
+Seal of Fury (new in Forever) is for leveling with a shield: hits add Holy damage and a small absorb, and its Judgement taunts. Every spec has it, so it keeps Ctrl+8 for good. Righteous Fury (more threat, 30 minutes) goes with Seal of Fury when soloing or tanking.
 
 ### P9 Exorcism
 ```
