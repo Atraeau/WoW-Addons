@@ -10,7 +10,7 @@ One set for every paladin and every spec, built for holy healing. Laid out like 
 - Heals use the mouseover template: mouseover if it is a living friend, else the target if it is a living friend, else yourself: `[@mouseover,help,nodead][@target,help,nodead][@player]`. Where that does not fit in 255 characters, the short form `[@mouseover,help,nodead][]` does the same job: the empty `[]` casts on a friendly target, or on yourself (auto self-cast) when the target is not friendly.
 - Each ability lives on one button only.
 - Talents belong to a tree, not a spec, so every talent ability gets its own press; a key does nothing until that talent is learned. Spells learned later replace earlier ones with `[known:]` (Cleanse over Purify, Divine Shield over Divine Protection).
-- Buffs set up before a fight are clicked, not keyed: auras (set and forget; unlike stances they limit nothing), the long blessings (Might, Wisdom, Kings), Oath of Light, Redemption. Seals last 30 seconds and are recast in combat, so every seal in use gets a key; seals not in use (Seal of Light, Seal of Justice) are clicked.
+- Every ability used in combat gets a press, including spells not yet learned. Only buffs set up before a fight are clicked: auras (set and forget; unlike stances they limit nothing), the hour-long blessings (Might, Wisdom, Kings), Oath of Light, Redemption (cannot be cast in combat). Turn Undead is also clicked, to free a press for Seal of Justice.
 - A macro body is 255 characters at most; the game cuts off anything past that.
 - Macro names are 16 characters or fewer. Use the `?` icon so `#showtooltip` picks the icon.
 - Macros are character macros on Bastian (not account-wide). Every name starts with P.
@@ -20,11 +20,11 @@ One set for every paladin and every spec, built for holy healing. Laid out like 
 
 | Key | Plain | Ctrl | Ctrl+Shift |
 |---|---|---|---|
-| 1 | Holy Light | Holy Light, lower rank | |
-| 2 | Flash of Light | Flash of Light, lower rank | |
-| 3 | Holy Shock (heals a friend, hits an enemy) | Light's Vigil | |
+| 1 | Holy Light | Holy Light, lower rank | Blessing of Sacrifice |
+| 2 | Flash of Light | Flash of Light, lower rank | Divine Intervention |
+| 3 | Holy Shock (heals a friend, hits an enemy) | Light's Vigil | Seal of Light |
 | 4 | Judgement | Swift Judgement | Stoneform |
-| 5 | Purify, later Cleanse | Blessing of Freedom | Turn Undead |
+| 5 | Purify, later Cleanse | Blessing of Freedom | Seal of Justice |
 | 6 | Seal of the Crusader | Hammer of Justice | Blessing of Protection |
 | 7 | Holy Strike | Repentance | Seal of Wisdom |
 | 8 | Seal of Righteousness (Seal of Command if talented) | Seal of Fury | Righteous Fury |
@@ -51,21 +51,23 @@ One set for every paladin and every spec, built for holy healing. Laid out like 
 ### P1 Holy Light
 ```
 #showtooltip
-/cast [mod:ctrl,@mouseover,help,nodead][mod:ctrl,@target,help,nodead][mod:ctrl,@player] Holy Light(Rank 2); [@mouseover,help,nodead][@target,help,nodead][@player] Holy Light
+/cast [mod:ctrl,mod:shift,@mouseover,help,nodead][mod:ctrl,mod:shift] Blessing of Sacrifice; [mod:ctrl,@mouseover,help,nodead][mod:ctrl] Holy Light(Rank 2); [@mouseover,help,nodead][@target,help,nodead][@player] Holy Light
 ```
+The Ctrl clauses use the short mouseover form to fit in 255 characters. Blessing of Sacrifice is an emergency for a party member taking big hits.
 
 ### P2 Flash
 ```
 #showtooltip
-/cast [mod:ctrl,@mouseover,help,nodead][mod:ctrl,@target,help,nodead][mod:ctrl,@player] Flash of Light(Rank 1); [@mouseover,help,nodead][@target,help,nodead][@player] Flash of Light
+/cast [mod:ctrl,mod:shift,@mouseover,help,nodead][mod:ctrl,mod:shift] Divine Intervention; [mod:ctrl,@mouseover,help,nodead][mod:ctrl] Flash of Light(Rank 1); [@mouseover,help,nodead][@target,help,nodead][@player] Flash of Light
 ```
+Divine Intervention saves a party member when a wipe is coming.
 
 ### P3 Holy Shock
 ```
 #showtooltip
-/cast [mod:ctrl,@mouseover,help,nodead][mod:ctrl,@target,help,nodead][mod:ctrl,@player] Light's Vigil; [@mouseover,exists,nodead][@target,exists,nodead][@player] Holy Shock
+/cast [mod:ctrl,mod:shift] Seal of Light; [mod:ctrl,@mouseover,help,nodead][mod:ctrl,@target,help,nodead][mod:ctrl,@player] Light's Vigil; [@mouseover,exists,nodead][@target,exists,nodead][@player] Holy Shock
 ```
-Holy Shock goes to the mouseover or target whether friend or enemy, so it heals or hits. Light's Vigil is pressed just before it.
+Holy Shock goes to the mouseover or target whether friend or enemy, so it heals or hits. Light's Vigil is pressed just before it. Seal of Light is the healing seal, so it sits with the holy spells.
 
 ### P4 Judgement
 ```
@@ -77,9 +79,9 @@ Stoneform has a long cooldown and is saved for poison and bleeds, so it is on Ct
 ### P5 Cleanse
 ```
 #showtooltip
-/cast [mod:ctrl,mod:shift] Turn Undead; [mod:ctrl,@mouseover,help,nodead][mod:ctrl] Blessing of Freedom; [@mouseover,help,nodead,known:Cleanse][known:Cleanse] Cleanse; [@mouseover,help,nodead][] Purify
+/cast [mod:ctrl,mod:shift] Seal of Justice; [mod:ctrl,@mouseover,help,nodead][mod:ctrl] Blessing of Freedom; [@mouseover,help,nodead,known:Cleanse][known:Cleanse] Cleanse; [@mouseover,help,nodead][] Purify
 ```
-Blessing of Freedom is rarely used and works like a cleanse, so it sits on Ctrl next to the dispel.
+Blessing of Freedom is rarely used and works like a cleanse, so it sits on Ctrl next to the dispel. Seal of Justice (judged to stop a runner fleeing) took Turn Undead's press; Turn Undead is clicked.
 
 ### P6 Crusader
 ```
@@ -130,4 +132,4 @@ Drafted from the in-game dump of a level 20 Dwarf paladin and the Wowhead holy r
 
 - Whether the rank syntax `Holy Light(Rank 2)` still works (it is copied from the existing Holy Light macro). Update the Ctrl ranks as new ranks are learned.
 - Holy Shock on an enemy mouseover.
-- Spells not yet learned (Holy Shock, Light's Vigil, Divine Favor, Seal of Wisdom, Divine Shield, Cleanse, Hammer of Wrath, Holy Wrath, Turn Undead) do nothing until learned. Plain 10 is empty until Divine Favor is learned.
+- Spells not yet learned (Holy Shock, Light's Vigil, Divine Favor, Seal of Wisdom, Seal of Light, Seal of Justice, Blessing of Sacrifice, Divine Intervention, Divine Shield, Cleanse, Hammer of Wrath, Holy Wrath) do nothing until learned. Plain 10 is empty until Divine Favor is learned.
